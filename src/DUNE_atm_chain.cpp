@@ -19,36 +19,6 @@
 #include "mcmc/mcmc.h"
 
 
-std::string getNameNoExt(std::string name, std::string ext)  
-{                                                            
-  std::size_t pos ;                                          
-  pos = name.find(ext);                                      
-  name = name.substr(0,pos);                                 
-  return name ;                                              
-}                                                            
-                                                             
-void saveCanvas(TCanvas* canvas, std::string name, std::string legend)                                                                  
-{                                                            
-  name = getNameNoExt(name, ".root") ;                       
-  name = name + legend + ".root" ;                     
-  canvas -> SaveAs(name.c_str()) ;                           
-                                                             
-  name = getNameNoExt(name, ".root") ;                       
-  name = name + ".png" ;                                     
-  canvas -> SaveAs(name.c_str()) ;                           
-                                                             
-  name = getNameNoExt(name, ".png") ;                        
-  name = name + ".pdf" ;                                     
-  canvas -> SaveAs(name.c_str()) ;                           
-                                                             
-  name = getNameNoExt(name, ".pdf") ;                        
-  name = name + ".eps" ;                                     
-  canvas -> SaveAs(name.c_str()) ;                           
-                                                             
-} 
-
-
-
 int main(int argc, char * argv[]) {
 
   // ----------------------- OPTIONS ---------------------------------------- //
@@ -70,23 +40,13 @@ int main(int argc, char * argv[]) {
   bool asimovfit = true;
 
 
-
   // ----------------------- COVARIANCE AND SAMPLEPDF OBJECTS ---------------------------------------- //
 
   gStyle -> SetPalette(1);
 
   // make file to save plots
 
-
   covarianceXsec *xsec = new covarianceXsec(XsecMatrixName.c_str(), XsecMatrixFile.c_str()) ;
-
-
-  //std::cout << "---------- Printing off nominal parameter values ----------" << std::endl;
-  //std::cout << "Cross section parameters:" << std::endl;
-  // xsec->printNominal();
-
-  //std::cout << "---------- Finished printing nominal parameter values ----------" << std::endl;
-
 
   xsec->setParameters();
 
@@ -138,48 +98,12 @@ int main(int argc, char * argv[]) {
   std::vector<samplePDFDUNEBase*> pdfs;
   samplePDFDUNEBase *numu_pdf = new samplePDFDUNEBase(1.3628319e+23, "configs/AtmSample_numuselec.yaml", xsec);
   samplePDFDUNEBase *nue_pdf = new samplePDFDUNEBase(1.3628319e+23, "configs/AtmSample_nueselec.yaml", xsec);
-  // samplePDFDUNEBase *numu_pdf = new samplePDFDUNEBase(1.3628319e+23, "configs/SamplePDFDune_FHC_numuselec.yaml", xsec);
-  // samplePDFDUNEBase *numubar_pdf = new samplePDFDUNEBase(1.3628319e+23, "configs/SamplePDFDune_RHC_numuselec.yaml", xsec);
-  // samplePDFDUNEBase *nue_pdf = new samplePDFDUNEBase(1.3628319e+23, "configs/SamplePDFDune_FHC_nueselec.yaml", xsec);
-  // samplePDFDUNEBase *nuebar_pdf = new samplePDFDUNEBase(1.3628319e+23, "configs/SamplePDFDune_RHC_nueselec.yaml", xsec);
-
-  // std::cout << "-------- SK event rates for Asimov fit (Asimov fake data) ------------" << std::endl;
-  // std::cout << "FHC 1Rmu:   " << numu_pdf->get1DHist()->Integral() << std::endl;
-  // std::cout << "FHC 1Re:    " << nue_pdf->get1DHist()->Integral() << std::endl;
-  // throw;
 
   numu_pdf->SetOscillator(Oscill);
   nue_pdf->SetOscillator(Oscill);
 
   pdfs.push_back(numu_pdf);
   pdfs.push_back(nue_pdf);
-  // pdfs.push_back(numubar_pdf);
-  // pdfs.push_back(nue_pdf);
-  // pdfs.push_back(nuebar_pdf);
-
-  // From CAFana
-  // const int kNumTrueEnergyBins = 100;
-  
-  // N+1 bin low edges
-  // std::vector<double> edges(kNumTrueEnergyBins+1);
-  
-  // const double Emin = .5; // 500 MeV: there's really no events below there
-  
-  // // How many edges to generate. Allow room for 0-Emin bin
-  // const double N = kNumTrueEnergyBins-1;
-  // const double A = N*Emin;
-  
-  // edges[0] = 0;
-  
-  // for(int i = 1; i <= N; ++i){
-  //   edges[kNumTrueEnergyBins-i] = A/i;
-  // }
-  
-  // edges[kNumTrueEnergyBins] = 120; // Replace the infinity that would be here
-  
-  // numu_pdf -> useBinnedOscReweighting(true, kNumTrueEnergyBins, &edges[0]);
-  // nue_pdf -> useBinnedOscReweighting(true, kNumTrueEnergyBins, &edges[0]);
-  
 
   osc -> setParameters(oscpars);
   std::cout << "oscpars[0] = " << (osc -> getPropPars())[0] << std::endl
@@ -188,11 +112,6 @@ int main(int argc, char * argv[]) {
 	    << "oscpars[3] = " << (osc -> getPropPars())[3] << std::endl
 	    << "oscpars[4] = " << (osc -> getPropPars())[4] << std::endl
 	    << "oscpars[5] = " << (osc -> getPropPars())[5] << std::endl;
-
-  // Setup Oscillation Calculator
-  // for (unsigned sample_i = 0 ; sample_i < pdfs.size() ; ++sample_i) {
-  //   pdfs[sample_i] -> SetupOscCalc(osc->GetPathLength(), osc->GetDensity());
-  // }
 
   //###########################################################################################################
   // Set covariance objects equal to output of previous chain
@@ -283,20 +202,17 @@ int main(int argc, char * argv[]) {
 
   TH2D *numu_asimov_2d = (TH2D*)numu_pdf->get2DHist()->Clone("numu_asimov_2d");
   TH2D *nue_asimov_2d = (TH2D*)nue_pdf->get2DHist()->Clone("nue_asimov_2d");
-  // numubar_pdf->reweight(osc->getPropPars());
-  // TH1D *numubar_asimov = (TH1D*)numubar_pdf->get1DHist()->Clone("numubar_asimov");
-  // nuebar_pdf->reweight(osc->getPropPars());
-  // TH1D *nuebar_asimov = (TH1D*)nuebar_pdf->get1DHist()->Clone("nuebar_asimov");
 
   // Print event rates to check
-  std::cout << "-------- SK event rates for Asimov fit (Asimov fake data) ------------" << std::endl;
-  std::cout << "FHC 1Rmu:   " << numu_asimov->Integral() << std::endl;
-  std::cout << "FHC 1Re:    " << nue_asimov->Integral() << std::endl;
-  // std::cout << "RHC 1Rmu:   " << numubar_asimov->Integral() << std::endl;
-  // std::cout << "RHC 1Re:    " << nuebar_asimov->Integral() << std::endl;
+  std::cout << "-------- DUNE event rates for Asimov fit (Asimov fake data) ------------" << std::endl;
+  std::cout << "mu like:   " << numu_asimov->Integral() << std::endl;
+  std::cout << "e like:    " << nue_asimov->Integral() << std::endl;
 
   numu_pdf->addData(numu_asimov_2d); 
   nue_pdf->addData(nue_asimov_2d); 
+
+	
+  bool statsonly = fitMan->raw()["MCMC"]["StatOnly"].as<bool>(); 
 
     //###########################################################################################################
 
@@ -311,10 +227,14 @@ int main(int argc, char * argv[]) {
       xsec->setParameters(parstarts["xsec"]);
       xsec->acceptStep();
     }
-    else {xsec->setParameters();}
+    //else {xsec->setParameters();}
   }
   else {
-    xsec->setParameters();
+    //xsec->setParameters();
+    //start chain from random position
+    if(!statsonly)
+    	xsec->throwParameters();
+    osc->throwParameters();
   }
 
 
@@ -335,12 +255,8 @@ int main(int argc, char * argv[]) {
   markovChain->addSamplePDF(numu_pdf);
   markovChain->addSamplePDF(nue_pdf);
 
-  //start chain from random position
-  xsec->throwParameters();
-  osc->throwParameters();
 
   // add systematic objects
-  bool statsonly = fitMan->raw()["MCMC"]["StatOnly"].as<bool>(); 
   if (!statsonly) {
     markovChain->addSystObj(xsec);
   }
@@ -351,5 +267,4 @@ int main(int argc, char * argv[]) {
 
   return 0;
  }
-
 
