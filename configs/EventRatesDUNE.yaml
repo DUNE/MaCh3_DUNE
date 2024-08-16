@@ -1,6 +1,6 @@
 General:
   IncludeFD: true
-  IncludeND: true
+  IncludeND: False
   FDPOT: 1.3628319e+23
   NDPOT: 3.85e+21
   #### Asimov A ####

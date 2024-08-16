@@ -71,7 +71,7 @@ int main(int argc, char * argv[]) {
   double NDPOT = fitMan->raw()["General"]["NDPOT"].as<double>(); 
  
   std::string OutFileName = fitMan->raw()["General"]["Output"]["FileName"].as<std::string>();
-  TFile *OutFile = new TFile(OutFileName.c_str() , "RECREATE");
+  TFile *OutFile = TFile::Open(OutFileName.c_str() , "RECREATE");
   
   //###########################################################################################################
   // Covariance Objects

@@ -30,8 +30,9 @@ $ cd build
 Optional flags are described briefly below, options are shown grouped by square brackets and delimited by vertical lines. Default is on the left.
 
 ~~~~~~~~~~~~~~
-$ cmake .. -DCPU_ONLY=[OFF|ON] -DUSE_PROB3=[OFF|ON] -DSINGLE_THREAD_ONLY=[OFF|ON] -DCUDA_SAMPLES=<path_to_cuda>/CentOS/samples
+$ cmake .. -DCPU_ONLY=[OFF|ON] -DGPU_ON=[ON|OFF] -DUSE_PROB3=[OFF|ON] -DSINGLE_THREAD_ONLY=[OFF|ON] -DCUDA_SAMPLES=<path_to_cuda>/CentOS/samples
 $ make
+$ make install
 ~~~~~~~~~~~~~~
 
 A few notes:
@@ -44,6 +45,12 @@ $ -DCPM_MaCh3_SOURCE=/path/to/MaCh3/folder
 ~~~~~~~~~~~~~~
 
 This will overrule the CPMFindPackage command in the CMakeList.txt and will tell CPM to build that instead.
+
+If you have an error about not finding `splineMonolith.h` at the `make install` stage, do: 
+
+~~~~~~~~~~~~~
+$ sed -i "s|splineMonolith|SplineMonolith|g" build/_deps/mach3-src/splines/CMakeLists.txt
+~~~~~~~~~~~~~ 
 
 ###################################
 # Event Rates ######
@@ -58,7 +65,7 @@ Imperial College London lx:
 
 FNAL cluster:
 ~~~~~~~~~~~~~~
-/dune/data/users/lwarsame
+/exp/dune/data/users/lwarsame
 ~~~~~~~~~~~~~~
 
 ComputeCanada Cedar:

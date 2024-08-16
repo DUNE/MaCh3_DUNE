@@ -77,7 +77,7 @@ int main(int argc, char * argv[]) {
 
   // make file to save the variation of xsec params to
   std::string OutputFileName = fitMan->raw()["General"]["Output"]["FileName"].as<std::string>();
-  TFile *OutputFile = new TFile(OutputFileName.c_str() , "RECREATE");
+  TFile *OutputFile = TFile::Open(OutputFileName.c_str() , "RECREATE");
 
   //initialise xsec
   covarianceXsec *xsec = new covarianceXsec(XsecMatrixName.c_str(), XsecMatrixFile.c_str());
@@ -161,7 +161,7 @@ int main(int argc, char * argv[]) {
   std::vector<double> XsecParVals = xsec->getNominalArray();
 
   if(XsecParsAtGen){
-	TFile* XsecFile = new TFile(XsecMatrixFile.c_str(), "READ");
+	TFile *XsecFile = TFile::Open(XsecMatrixFile.c_str() , "READ");
 	TVectorD* XsecGeneratedParamArray = (TVectorD*)XsecFile->Get("xsec_param_nom");
 	std::cout << "Setting xsec systs to their generated values " << std::endl;
 	for (unsigned param_i = 0 ; param_i < XsecParVals.size() ; ++param_i) {

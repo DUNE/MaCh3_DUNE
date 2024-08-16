@@ -130,7 +130,7 @@ int main(int argc, char **argv)
   if(fitMan->raw()["MCMC"]["StartFromPos"].as<bool>()) {
     //Read in paramter names and values from file
     std::cout << "MCMC getting starting position from " << fitMan->raw()["MCMC"]["PosFileName"].as<std::string>() << std::endl;
-    TFile *infile = new TFile(fitMan->raw()["MCMC"]["PosFileName"].as<std::string>().c_str(), "READ");
+    TFile *infile = TFile::Open(fitMan->raw()["MCMC"]["PosFileName"].as<std::string>().c_str(), "READ");
     TTree *posts = (TTree*)infile->Get("posteriors");
     TObjArray* brlis = (TObjArray*)posts->GetListOfBranches();
     int nbr = brlis->GetEntries();

@@ -74,7 +74,7 @@ int main(int argc, char * argv[]) {
 
   // make file to save plots
   std::string OutfileName = fitMan->raw()["General"]["Output"]["FileName"].as<std::string>(); 
-  TFile *Outfile = new TFile(OutfileName.c_str() , "RECREATE");
+  TFile *Outfile = TFile::Open(OutfileName.c_str() , "RECREATE");
 
   //initialise xsec
   covarianceXsec *xsec = new covarianceXsec(XsecMatrixName.c_str(), XsecMatrixFile.c_str());
@@ -159,19 +159,19 @@ int main(int argc, char * argv[]) {
   std::vector<double> XsecParVals = xsec->getNominalArray();
 
   if(XsecParsAtGen){
-	TFile* XsecFile = new TFile(XsecMatrixFile.c_str(), "READ");
-	TVectorD* XsecGeneratedParamArray = (TVectorD*)XsecFile->Get("xsec_param_nom");
-	std::cout << "Setting xsec systs to their generated values " << std::endl;
-	for (unsigned param_i = 0 ; param_i < XsecParVals.size() ; ++param_i) {
-	  std::cout << "Generated value for param " << param_i << " is " << (*XsecGeneratedParamArray)(param_i) << std::endl;
-	  XsecParVals[param_i] = (*XsecGeneratedParamArray)(param_i);
-	  std::cout << "Set parameter " << param_i << " to value " << XsecParVals[param_i] << std::endl;
-	}
+    TFile* XsecFile = TFile::Open(XsecMatrixFile.c_str(), "READ");
+    TVectorD* XsecGeneratedParamArray = (TVectorD*)XsecFile->Get("xsec_param_nom");
+    std::cout << "Setting xsec systs to their generated values " << std::endl;
+    for (unsigned param_i = 0 ; param_i < XsecParVals.size() ; ++param_i) {
+      std::cout << "Generated value for param " << param_i << " is " << (*XsecGeneratedParamArray)(param_i) << std::endl;
+      XsecParVals[param_i] = (*XsecGeneratedParamArray)(param_i);
+      std::cout << "Set parameter " << param_i << " to value " << XsecParVals[param_i] << std::endl;
+    }
   }
   else{
-	std::cout << "Keeping xsec parameters at their prior values" << std::endl;
+    std::cout << "Keeping xsec parameters at their prior values" << std::endl;
   }
-
+  
   xsec->setParameters(XsecParVals);
   xsec->setStepScale(fitMan->raw()["General"]["Systematics"]["XsecStepScale"].as<double>());
 

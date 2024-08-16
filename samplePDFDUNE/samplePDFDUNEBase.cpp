@@ -348,7 +348,7 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile, dunemc_base *duneobj
   std::cout << "-------------------------------------------------------------------" << std::endl;
   std::cout << "input file: " << sampleFile << std::endl;
   
-  _sampleFile = new TFile(sampleFile, "READ");
+  _sampleFile = TFile::Open(sampleFile, "READ");
   _data = (TTree*)_sampleFile->Get("caf");
 
   if(_data){

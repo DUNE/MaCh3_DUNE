@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
   myChain->SetBranchAddress("LogL", &t_LogL);
   myChain->SetBranchAddress("step", &t_step);
   
-  TFile *newfile = new TFile(argv[2],"recreate");
+  TFile *newfile = TFile::Open(argv[2],"recreate");
   TTree *newtree = new TTree("osc_posteriors","oscillation parameter posteriors, marginalized");
 
   newtree->Branch("theta23", &t_sin2th_23, "theta23/D");

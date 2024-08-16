@@ -3,6 +3,7 @@
 # A script to link required files to the proper place i.e. where the sample config files will look for them
 # If running on IC machines this will work out of the box
 # If not change FILESDIR to point to where the files live
+# Check the README to get information on FILESDIR location according to the cluster used 
 
 MACH3DIR=`pwd`
 FILESDIR=/vols/dune/ljw20/
