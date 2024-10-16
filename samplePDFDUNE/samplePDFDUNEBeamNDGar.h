@@ -40,18 +40,16 @@ public:
   double CalcXsecWeightFunc(int iSample, int iEvent) {return 1.;}
   void applyShifts(int iSample, int iEvent) {}
 
-  double* ReturnKinematicParameterByReference(KinematicTypes KinPar, int iSample, int iEvent);
-  double* ReturnKinematicParameterByReference(double KinematicVariable, int iSample, int iEvent);
-  double* ReturnKinematicParameterByReference(std::string KinematicParameter, int iSample, int iEvent);
-  double ReturnKinematicParameter(double KinematicVariable, int iSample, int iEvent);
-  double ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
-  std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameter);
-  std::vector<double> ReturnKinematicParameterBinning(KinematicTypes KinematicParameter);
+  double const& ReturnKinematicParameterByReference(int KinematicParameter, int iSample, int iEvent);
+  double ReturnKinematicParameter(int KinematicParameter, int iSample, int iEvent);
+
+  std::vector<double> ReturnKinematicParameterBinning(int KinematicParameter);
+
   int ReturnKinematicParameterFromString(std::string KinematicParameterStr);
   std::string ReturnStringFromKinematicParameter(int KinematicParameter);
   
   // dunendmc
-  std::vector<struct dunemc_base> dunendgarmcSamples;
+  std::vector<dunemc_base> dunendgarmcSamples;
 
   TFile *_sampleFile;
   TTree *_data;

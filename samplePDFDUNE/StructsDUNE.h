@@ -6,85 +6,88 @@ struct dunemc_base {
   int oscnutype;
   bool signal; // true if signue
   int nEvents; // how many MC events are there
-  int *Target; //Target the interaction was on
+  std::vector<int> Target; //Target the interaction was on
   
-  double *rw_erec;
-  double *rw_erec_shifted;
-  double *rw_erec_had;
-  double *rw_erec_lep;
-  double *rw_yrec;
-  double *rw_eRecoP;
-  double *rw_eRecoPip;
-  double *rw_eRecoPim;
-  double *rw_eRecoPi0;
-  double *rw_eRecoN;
+  std::vector<double> rw_erec;
+  std::vector<double> rw_erec_shifted;
+  std::vector<double> rw_erec_had;
+  std::vector<double> rw_erec_lep;
+  std::vector<double> rw_yrec;
+  std::vector<double> rw_eRecoP;
+  std::vector<double> rw_eRecoPip;
+  std::vector<double> rw_eRecoPim;
+  std::vector<double> rw_eRecoPi0;
+  std::vector<double> rw_eRecoN;
 
-  double *rw_LepE;
-  double *rw_eP;
-  double *rw_ePip;
-  double *rw_ePim;
-  double *rw_ePi0;
-  double *rw_eN;
+  std::vector<double> rw_LepE;
+  std::vector<double> rw_eP;
+  std::vector<double> rw_ePip;
+  std::vector<double> rw_ePim;
+  std::vector<double> rw_ePi0;
+  std::vector<double> rw_eN;
 
-  double *rw_etru;
-  double *rw_mom;
-  double *rw_theta;
-  double *rw_Q2;
+  std::vector<double> rw_etru;
+  std::vector<double> rw_mom;
+  std::vector<double> rw_theta;
+  std::vector<double> rw_Q2;
 
-  double *rw_cvnnumu;
-  double *rw_cvnnue;
-  double *rw_cvnnumu_shifted;
-  double *rw_cvnnue_shifted;
-  int *rw_reco_nue;
-  int *rw_reco_numu;
-  double *rw_berpaacvwgt;
-  int    *rw_isCC;
-  int    *rw_nuPDGunosc;
-  int    *rw_nuPDG;
-  int    *rw_run;
-  bool    *rw_isFHC;
-  double *rw_vtx_x;
-  double *rw_vtx_y;
-  double *rw_vtx_z;
+  std::vector<double> rw_cvnnumu;
+  std::vector<double> rw_cvnnue;
+  std::vector<double> rw_cvnnumu_shifted;
+  std::vector<double> rw_cvnnue_shifted;
+  std::vector<int> rw_reco_nue;
+  std::vector<int> rw_reco_numu;
+  std::vector<double> rw_berpaacvwgt;
+  std::vector<int>    rw_isCC;
+  std::vector<int>    rw_nuPDGunosc;
+  std::vector<int>    rw_nuPDG;
+  std::vector<int>    rw_run;
+  std::vector<bool>    rw_isFHC;
+  std::vector<double> rw_vtx_x;
+  std::vector<double> rw_vtx_y;
+  std::vector<double> rw_vtx_z;
   double dummy_y;
-  double *rw_reco_q;
-  double *reco_numu;
+  std::vector<double> rw_reco_q;
+  std::vector<double> reco_numu;
 
   double pot_s;
   double norm_s;
 
-  double *beam_w;
-  double *flux_w;
+  std::vector<double> beam_w;
+  std::vector<double> flux_w;
 
-  int *mode;
-  int *isbound;
+  std::vector<int> mode;
+  std::vector<int> isbound;
 
-  double *rw_truecz;
+  std::vector<double> rw_truecz;
 
-  int *nproton; ///< number of (post-FSI) primary protons
-  int *nneutron; ///< number of (post-FSI) primary neutrons
-  int *npip; ///< number of (post-FSI) primary pi+
-  int *npim; ///< number of (post-FSI) primary pi-
-  int *npi0; ///< number of (post-FSI) primary pi0
+  std::vector<int> nproton; ///< number of (post-FSI) primary protons
+  std::vector<int> nneutron; ///< number of (post-FSI) primary neutrons
+  std::vector<int> npip; ///< number of (post-FSI) primary pi+
+  std::vector<int> npim; ///< number of (post-FSI) primary pi-
+  std::vector<int> npi0; ///< number of (post-FSI) primary pi0
 
-  int *ntruemuon; //number of true muons
-  int *ntruemuonprim; //number of true primary muons
-  int *nrecomuon; //number of reconstructed muons
-  double *nmuonsratio; //number of reco muons divided by number of true muons
+  std::vector<int> ntruemuon; //number of true muons
+  std::vector<int> ntruemuonprim; //number of true primary muons
+  std::vector<int> nrecomuon; //number of reconstructed muons
+  std::vector<double> nmuonsratio; //number of reco muons divided by number of true muons
 
-  double *rw_lep_pT;  //transverse lepton momentum
-  double *rw_lep_pZ; //parallel lepton momentum
-  double *rw_reco_vtx_x;
-  double *rw_reco_vtx_y;
-  double *rw_reco_vtx_z;
-  double *rw_reco_rad;
-  double *rw_rad;
+  std::vector<double> rw_lep_pT;  //transverse lepton momentum
+  std::vector<double> rw_lep_pZ; //parallel lepton momentum
+  std::vector<double> rw_reco_vtx_x;
+  std::vector<double> rw_reco_vtx_y;
+  std::vector<double> rw_reco_vtx_z;
+  std::vector<double> rw_reco_rad;
+  std::vector<double> rw_rad;
 
-  double *rw_elep_reco;
-  double *rw_elep_true;
+  std::vector<double> rw_elep_reco;
+  std::vector<double> rw_elep_true;
 
-  int *nrecoparticles;
-  bool *in_fdv;
+  std::vector<int> nrecoparticles;
+  //unfortunately std::vector<bool> is a nightmare, leave this as a pointer
+  bool * in_fdv;
+
+  std::vector<double> global_bin_number; //for using generic binning, this value holds the global bin number for each event
 };
 
 // ********************************
