@@ -1,7 +1,13 @@
-set(APPS EventRatesDUNE SigmaVariationsDUNE LLHScansDUNE jointFitDUNE)
+add_custom_target(MaCh3DUNEApps)
 
-foreach(a ${APPS})
-	  add_executable(${a} ${a}.cpp)
-	  target_link_libraries(${a} SamplePDFDUNE)
-	  install(TARGETS ${a} DESTINATION bin)
-endforeach()
+foreach(app
+	EventRates
+	Fit
+)
+    add_executable(${app} ${app}.cpp)
+    target_link_libraries(${app} MaCh3DUNE::All Minuit)
+
+    add_dependencies(MaCh3DUNEApps ${app})
+
+    install(TARGETS ${app} DESTINATION ${CMAKE_BINARY_DIR}/bin)
+endforeach(app)

@@ -1,0 +1,263 @@
+<?xml version="1.0"?>
+<!--
+parameters must have:
+name (name of parameter)
+nom (nominal value)
+prior (prior value)
+lb (lower bound)
+ub (upper bound)
+error (uncertainty)
+renorm (0 or 1; whether or not to have a renormalized value where nom=1 and error and prior are divided by nom)
+type (spline, norm, function)
+detid (bitwise math: 1->ND280, 8->fd 1Re 16->1Rmu)
+fd_spline_name: name of the parameter in the spline file
+
+if a parameter is a spline it must have a splineind
+
+parameters may have the following children:
+correlation (must have a par which is a name that matches another parameter. The text is the correlation between the two)
+mode (relevant for norm parameters, which dictates which mode the normalization applies to, -1 means all modes!)
+element (relevant for norm parameters, which dictates which elements the normalization applies to)
+nupdg (relevant for norm parameters, which dictates which types of neutrinos the normalization applies to)
+
+DUNE XSEC PRIOR VALUES (sigma units):
+
+- MaCCRES:               -0.36
+- NR_nu_np_CC_1Pi:       -1.14
+- nuenuebar_xsec_ratio:   1
+- nuenumu_xsec_ratio:     1
+
+EXCEPTION:
+
+BeRPA_A : Has CV weights but still has a generated value of 0
+
+-->
+
+<data>
+<!-- Pure CCQE parameters -->
+  <parameter name="ZExpA1CCQE" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="zexpa1ccqe" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>0</fd_mode>
+  </parameter>
+  <parameter name="ZExpA2CCQE" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="zexpa2ccqe" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>0</fd_mode>
+  </parameter>
+  <parameter name="ZExpA3CCQE" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="zexpa3ccqe" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>0</fd_mode>
+  </parameter>
+  <parameter name="ZExpA4CCQE" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="zexpa4ccqe" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>0</fd_mode>
+  </parameter>
+
+<!-- Pure RES parameters -->
+  <parameter name="MaCCRES" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="mares" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>3</fd_mode>
+  </parameter>
+
+  <parameter name="MvCCRES" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="mvres" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>3</fd_mode>
+  </parameter>
+
+  <parameter name="MaNCRES" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="mancres" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>16</fd_mode>
+  </parameter>
+
+  <parameter name="MvNCRES" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="mvncres" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>16</fd_mode>
+  </parameter>
+
+
+  <!-- Pure DIS parameters -->
+  <parameter name="AhtBY" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="ahtby" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2 15</fd_mode>
+  </parameter>
+
+  <parameter name="BhtBY" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="bhtby" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2 15</fd_mode>
+  </parameter>
+
+  <parameter name="CV1uBY" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="cv1uby" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2 15</fd_mode>
+  </parameter>
+
+  <parameter name="CV2uBY" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="cv2uby" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2 15</fd_mode>
+  </parameter>
+
+  <!-- DIS and RES parameters -->
+  <parameter name="FrCEx_pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="frcexpi" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2 3 15 16</fd_mode>
+  </parameter>
+
+  <parameter name="FrInel_pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="frinelpi" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2 3 15 16</fd_mode>
+  </parameter>
+
+  <parameter name="FrAbs_pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="frabspi" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2 3 15 16</fd_mode>
+  </parameter>
+
+  <parameter name="FrPiProd_pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="frpiprodpi" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2 3 15 16</fd_mode>
+  </parameter>
+  
+
+<!-- most modes parameters -->
+  <parameter name="FrCEx_N" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="frcexn" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>0 2 3 14 15 16</fd_mode>
+  </parameter>
+
+  <parameter name="FrInel_N" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="frineln" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>0 2 3 14 15 16</fd_mode>
+  </parameter>
+
+  <parameter name="FrAbs_N" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="frabsn" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>0 2 3 14 15 16</fd_mode>
+  </parameter>
+
+  <parameter name="FrPiProd_N" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="frpiprodn" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>0 2 3 14 15 16</fd_mode>
+  </parameter>
+
+  <!-- 2p2h modes -->
+  <parameter name="E2p2h_A_nu" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="e2anu" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>9 22</fd_mode>
+  </parameter>
+
+  <parameter name="E2p2h_B_nu" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="e2bnu" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>9 22</fd_mode>
+  </parameter>
+
+  <parameter name="E2p2h_A_nubar" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="e2anubar" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>9 22</fd_mode>
+  </parameter>
+
+  <parameter name="E2p2h_B_nubar" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="e2bnubar" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>9 22</fd_mode>
+  </parameter>
+
+
+  <parameter name="C12ToAr40_2p2hScaling_nu" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="c12nu" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>9 22</fd_mode>
+  </parameter>
+
+  <parameter name="C12ToAr40_2p2hScaling_nubar" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="c12nubar" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>9 22</fd_mode>
+  </parameter>
+
+  <!-- More DIS Modes -->
+  <parameter name="NR_nu_n_CC_2pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nuncc2" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nu_n_CC_3pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nuncc3" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nu_p_CC_2pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nupcc2" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nu_p_CC_3pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nupcc3" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nu_np_CC_1pi" nom="-1.14" prior="-1.14" lb="-9999" ub="9999" error="0.02" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nunpcc1" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nu_n_NC_1pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nunnc1" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>15</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nu_n_NC_2pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nunnc2" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>15</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nu_n_NC_3pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nunnc3" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>15</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nu_p_NC_1pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nupnc1" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>15</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nu_p_NC_2pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nupnc2" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>15</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nu_p_NC_3pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nupnc3" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>15</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nubar_n_CC_1pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nubarncc1" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nubar_n_CC_2pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nubarncc2" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nubar_n_CC_3pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nubarncc3" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nubar_p_CC_1pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nubarpcc1" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nubar_p_CC_2pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nubarpcc2" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nubar_p_CC_3pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nubarpcc3" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>2</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nubar_n_NC_1pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nubarnnc1" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>15</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nubar_n_NC_2pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nubarnnc2" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>15</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nubar_n_NC_3pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nubarnnc3" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>15</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nubar_p_NC_1pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nubarpnc1" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>15</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nubar_p_NC_2pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nubarpnc2" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>15</fd_mode>
+  </parameter>
+
+  <parameter name="NR_nubar_p_NC_3pi" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nubarpnc3" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>15</fd_mode>
+  </parameter>
+
+  <parameter name="BeRPA_A" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="berpaa" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>0</fd_mode>
+  </parameter>
+
+  <parameter name="BeRPA_B" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="berpab" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>0</fd_mode>
+  </parameter>
+
+  <parameter name="BeRPA_D" nom="0.0" prior="0.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="berpad" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>0</fd_mode>
+  </parameter>
+  
+
+  <parameter name="nuenuebar_xsec_ratio" nom="1.0" prior="1.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nuexsec" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>0 2 3 4 9</fd_mode>
+  </parameter>
+
+  <parameter name="nuemumu_xsec_ratio" nom="1.0" prior="1.0" lb="-9999" ub="9999" error="1.0" renorm="0" type="spline" splineind="0" detid="25" fd_spline_name="nuemuxsec" nd_spline_name="MAQEGraph" stepscale="2.0">
+	<fd_mode>0 2 3 4 9</fd_mode>
+  </parameter>
+
+ <!-- norm pars -->
+
+</data>

@@ -1,19 +1,36 @@
-set(SamplePDFDUNE_implementation_files 
-	samplePDFDUNEBase.cpp
-	samplePDFDUNEBaseND.cpp) 
+set(HEADERS
+  samplePDFDUNEAtm.h
+  samplePDFDUNEBeamFD.h
+  samplePDFDUNEBeamND.h
+  samplePDFDUNEBeamNDGar.h
+  MaCh3DUNEFactory.h 
+)
 
-set(SamplePDFDUNE_header_files 
-	samplePDFDUNEBase.h
-	samplePDFDUNEBaseND.h)
+add_library(SamplePDFDUNE SHARED
+  samplePDFDUNEAtm.cpp
+  samplePDFDUNEBeamFD.cpp
+  samplePDFDUNEBeamND.cpp
+  samplePDFDUNEBeamNDGar.cpp
+  MaCh3DUNEFactory.cpp
+)
 
-add_library(SamplePDFDUNE SHARED ${SamplePDFDUNE_implementation_files})
-target_include_directories(SamplePDFDUNE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
-target_link_libraries(SamplePDFDUNE MaCh3 splinesDUNE)
+set_target_properties(SamplePDFDUNE PROPERTIES
+    PUBLIC_HEADER "${HEADERS}"
+    EXPORT_NAME SamplePDFDUNE)
 
-if(NOT ${CPU_ONLY})
+if(NOT CPU_ONLY)
   set_target_properties(SamplePDFDUNE PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
-  target_link_libraries(SamplePDFDUNE probGpu)
-else()
 endif()
 
-install(TARGETS SamplePDFDUNE DESTINATION lib)
+target_link_libraries(SamplePDFDUNE MaCh3::All MaCh3DUNECompilerOptions duneanaobj::All)
+
+target_include_directories(SamplePDFDUNE PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../>
+  $<INSTALL_INTERFACE:include>)
+
+install(TARGETS SamplePDFDUNE
+        EXPORT mach3dune-targets
+        LIBRARY DESTINATION lib/
+        PUBLIC_HEADER DESTINATION include/samplePDF)
+
+add_library(MACH3DUNE::SamplePDFDUNE ALIAS SamplePDFDUNE)

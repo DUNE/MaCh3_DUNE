@@ -1,73 +1,91 @@
 #ifndef _StructsDUNE_h_
 #define _StructsDUNE_h_
 
-// Run low or high memory versions of structs
-// N.B. for 64 bit systems sizeof(float) == sizeof(double) so not a huge effect
-#define __LOW__MEMORY_STRUCTS__
+struct dunemc_base {
+  int nutype;
+  int oscnutype;
+  bool signal; // true if signue
+  int nEvents; // how many MC events are there
+  int *Target; //Target the interaction was on
+  
+  double *rw_erec;
+  double *rw_erec_shifted;
+  double *rw_erec_had;
+  double *rw_erec_lep;
+  double *rw_yrec;
+  double *rw_eRecoP;
+  double *rw_eRecoPip;
+  double *rw_eRecoPim;
+  double *rw_eRecoPi0;
+  double *rw_eRecoN;
 
-#ifdef __LOW_MEMORY_STRUCTS__
-#define __float__ float
-#define __int__ short int
-#else
-#define __float__ double
-#define __int__ int
-#endif
+  double *rw_LepE;
+  double *rw_eP;
+  double *rw_ePip;
+  double *rw_ePim;
+  double *rw_ePi0;
+  double *rw_eN;
 
-// Include some healthy defines for constructors
-#define __BAD_DOUBLE__ -999.99
-#define __BAD_INT__ -999
+  double *rw_etru;
+  double *rw_mom;
+  double *rw_theta;
+  double *rw_Q2;
 
-#define __LARGE_WEIGHT__ 100
+  double *rw_cvnnumu;
+  double *rw_cvnnue;
+  double *rw_cvnnumu_shifted;
+  double *rw_cvnnue_shifted;
+  int *rw_reco_nue;
+  int *rw_reco_numu;
+  double *rw_berpaacvwgt;
+  int    *rw_isCC;
+  int    *rw_nuPDGunosc;
+  int    *rw_nuPDG;
+  int    *rw_run;
+  bool    *rw_isFHC;
+  double *rw_vtx_x;
+  double *rw_vtx_y;
+  double *rw_vtx_z;
+  double dummy_y;
+  double *rw_reco_q;
+  double *reco_numu;
 
+  double pot_s;
+  double norm_s;
 
+  double *beam_w;
+  double *flux_w;
 
-#include <iostream>
-#include <vector>
-#include <TSpline.h>
-#include <TVector3.h>
-#include <TLorentzVector.h>
-#include <TF1.h>
-#include <sstream>
-#include <fstream>
-#include <iomanip>
-#include <TH2Poly.h>
- // end MaCh3Utils namespace
+  int *mode;
+  int *isbound;
 
+  double *rw_truecz;
 
-enum KinematicTypes {
+  int *nproton; ///< number of (post-FSI) primary protons
+  int *nneutron; ///< number of (post-FSI) primary neutrons
+  int *npip; ///< number of (post-FSI) primary pi+
+  int *npim; ///< number of (post-FSI) primary pi-
+  int *npi0; ///< number of (post-FSI) primary pi0
 
-  kTrueNeutrinoEnergy = 0,
-  kRecoNeutrinoEnergy = 1,
-  kTrueQ2 = 2,
-  kRecoQ2 = 3,
-  kTrueQ0 = 4,
-  kRecoQ0 = 5,
-  kTrueXPos = 6,
-  kTrueYPos = 7,
-  kTrueZPos = 8,
-  kCVNNumu = 9,
-  kCVNNue = 10,
-  kIsCC = 11,
-  kRecoQ = 12,
-  kNKinematicParams
+  int *ntruemuon; //number of true muons
+  int *ntruemuonprim; //number of true primary muons
+  int *nrecomuon; //number of reconstructed muons
+  double *nmuonsratio; //number of reco muons divided by number of true muons
+
+  double *rw_lep_pT;  //transverse lepton momentum
+  double *rw_lep_pZ; //parallel lepton momentum
+  double *rw_reco_vtx_x;
+  double *rw_reco_vtx_y;
+  double *rw_reco_vtx_z;
+  double *rw_reco_rad;
+  double *rw_rad;
+
+  double *rw_elep_reco;
+  double *rw_elep_true;
+
+  int *nrecoparticles;
+  bool *in_fdv;
 };
-
-inline int ReturnKinematicParameterFromString(std::string KinematicParameterStr){
-
-  if (KinematicParameterStr.find("TrueNeutrinoEnergy") != std::string::npos) {return kTrueNeutrinoEnergy;}
-  if (KinematicParameterStr.find("RecoNeutrinoEnergy") != std::string::npos) {return kRecoNeutrinoEnergy;}
-  if (KinematicParameterStr.find("TrueQ2") != std::string::npos) {return kTrueQ2;}
-  if (KinematicParameterStr.find("RecoQ2") != std::string::npos) {return kRecoQ2;}
-  if (KinematicParameterStr.find("TrueXPos") != std::string::npos) {return kTrueXPos;}
-  if (KinematicParameterStr.find("TrueYPos") != std::string::npos) {return kTrueYPos;}
-  if (KinematicParameterStr.find("TrueZPos") != std::string::npos) {return kTrueZPos;}
-  if (KinematicParameterStr.find("CVNNumu") != std::string::npos) {return kCVNNumu;}
-  if (KinematicParameterStr.find("CVNNue") != std::string::npos) {return kCVNNue;}
-  if (KinematicParameterStr.find("IsCC") != std::string::npos) {return kIsCC;}
-  if (KinematicParameterStr.find("RecoQ") != std::string::npos) {return kRecoQ;}
-
-  return kNKinematicParams; 
-}
 
 // ********************************
 // ND Detector Systematic Functions
@@ -1012,14 +1030,6 @@ inline int GENIEMode_ToMaCh3Mode(int GENIE_mode, int isCC) {
   return ReturnMode;
 };
 
-// *****************
-// Enum for detector, used in flux->getBin
-enum Detector_enum {
-  // *****************
-  kND280 = 0,
-  kSK = 1
-};
-
 // *******************************
 // Convert MaCh3 mode to SK name
 inline std::string MaCh3mode_ToDUNEString(MaCh3_Mode i) {
@@ -1122,7 +1132,6 @@ inline std::string MaCh3mode_ToDUNEString(MaCh3_Mode i) {
 enum MaCh3_Spline_Modes {
 
   // ***************************
-
   // CCQE
   kMaCh3_Spline_CCQE              = 0,
   // 1 Kaon
@@ -1185,19 +1194,8 @@ enum MaCh3_Spline_Modes {
 };
 
 inline int MaCh3Mode_to_SplineMode(int iMode){
-
   //No grouping of modes in MaCh3
   return iMode;
 }
-
-// Helper function for calculating unbinned Integral of TH2Poly i.e including overflow
-double OverflowIntegral(TH2Poly*);
-
-// Helper function for calculating binned Integral of TH2Poly i.e not including overflow
-double NoOverflowIntegral(TH2Poly*);
-
-// Poly Projectors
-TH1D* PolyProjectionX(TObject* poly, std::string TempName, std::vector<double> xbins);
-TH1D* PolyProjectionY(TObject* poly, std::string TempName, std::vector<double> ybins);
 
 #endif

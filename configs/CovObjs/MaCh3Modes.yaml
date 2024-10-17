@@ -1,0 +1,12 @@
+#########################################
+Title: "DUNE Interaction modes - Still to Implement"
+
+GeneratorName: "GENIE"
+
+MaCh3Modes: [
+  "NONE",
+  ]
+
+NONE:
+  Name: "NONE"
+  GeneratorMaping: [0]

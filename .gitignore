@@ -1,0 +1,9 @@
+build/
+*.root
+*.tbz2
+*.tgz
+logs/
+jupyter_env
+.history
+Doc
+inputs/Atmospherics/CAFs

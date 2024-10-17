@@ -6,13 +6,12 @@
 class splinesDUNE : virtual public splineFDBase
 {
   public:
-	splinesDUNE(const char *spline, int nutype, int nevents, int DetID, covarianceXsec* xsec_cov = NULL); // constructor for etrue-var1 splines
-	splinesDUNE(const char *spline, int nutype, int nevents, double BinningOpt, int DetID, covarianceXsec* xsec_cov = NULL); // constructor for etrue-var1-var2 splines
-	virtual ~splinesDUNE(){};
-	void SetupSplines();
+	splinesDUNE(covarianceXsec* xsec_cov);
+	virtual ~splinesDUNE();
 	void SetupSplines(int BinningOpt);
-
-	void FindUniqueModes();
+	virtual void FillSampleArray(std::string SampleName, std::vector<std::string> OscChanFileNames) override;
+	virtual std::vector< std::vector<int> > StripDuplicatedModes(std::vector< std::vector<int> > InputVector) override;
+	virtual std::vector< std::vector<int> > GetEventSplines(std::string SampleName, int iOscChan, int EventMode, double Var1Val, double Var2Val, double Var3Val) override;
 };
 
 #endif
