@@ -65,5 +65,8 @@ int main(int argc, char * argv[]) {
   MaCh3Fitter->addSystObj(osc);
   MaCh3Fitter->addSystObj(xsec);
   
-  MaCh3Fitter->RunLLHScan();  
+  if (GetFromManager(FitManager->raw()["General"]["2DLLHScan"], false))
+    MaCh3Fitter->Run2DLLHScan();
+  else
+    MaCh3Fitter->RunLLHScan();
 }
