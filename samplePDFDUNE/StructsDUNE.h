@@ -26,26 +26,75 @@ struct dunemc_base {
   double *rw_eRecoN;
   double *rw_eRecoMuon;
 
-  double *rw_MuMom;
+  double *rw_PMom;
   double *rw_PipMom;
   double *rw_PimMom;
   double *rw_Pi0Mom;
-  double *rw_PMom;
   double *rw_NMom;
+  double *rw_MuMom;
 
-  double *rw_MuMomReco;
-
-  double *rw_MuTheta;
+  double *rw_PTheta;
   double *rw_PipTheta;
   double *rw_PimTheta;
   double *rw_Pi0Theta;
-  double *rw_PTheta;
   double *rw_NTheta;
+  double *rw_MuTheta;
 
+  double *rw_PStartX;
+  double *rw_PStartY;
+  double *rw_PStartZ;
+  double *rw_PEndX;
+  double *rw_PEndY;
+  double *rw_PEndZ;
+
+  double *rw_PipStartX;
+  double *rw_PipStartY;
+  double *rw_PipStartZ;
+  double *rw_PipEndX;
+  double *rw_PipEndY;
+  double *rw_PipEndZ;
+
+  double *rw_PimStartX;
+  double *rw_PimStartY;
+  double *rw_PimStartZ;
+  double *rw_PimEndX;
+  double *rw_PimEndY;
+  double *rw_PimEndZ;
+
+  double *rw_Pi0StartX;
+  double *rw_Pi0StartY;
+  double *rw_Pi0StartZ;
+  double *rw_Pi0EndX;
+  double *rw_Pi0EndY;
+  double *rw_Pi0EndZ;
+
+  double *rw_NStartX;
+  double *rw_NStartY;
+  double *rw_NStartZ;
+  double *rw_NEndX;
+  double *rw_NEndY;
+  double *rw_NEndZ;
+
+  double *rw_MuStartX;
+  double *rw_MuStartY;
+  double *rw_MuStartZ;
+  double *rw_MuEndX;
+  double *rw_MuEndY;
+  double *rw_MuEndZ;
+
+  double *rw_PMomReco;
+  double *rw_PipMomReco;
+  double *rw_PimMomReco;
+  double *rw_Pi0MomReco;
+  double *rw_NMomReco;
+  double *rw_MuMomReco;
+
+  double *rw_PThetaReco;
+  double *rw_PipThetaReco;
+  double *rw_PimThetaReco;
+  double *rw_Pi0ThetaReco;
+  double *rw_NThetaReco;
   double *rw_MuThetaReco;
-
-  double *rw_MuMomTheta;
-  double *rw_PiMomTheta;
 
   double *rw_E_diff;
   double *rw_E_diff_Muon;
