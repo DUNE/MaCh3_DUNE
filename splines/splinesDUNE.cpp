@@ -22,23 +22,19 @@ void splinesDUNE::FillSampleArray(std::string SampleName, std::vector<std::strin
 
   int iSample = getSampleIndex(SampleName);
 
-  enum ModeState {
-    kInConfig = 0,
-    kInConfigAndInFile,
-    kInFile
-  };
+  enum ModeState { kInConfig = 0, kInConfigAndInFile, kInFile };
 
-  std::vector<std::map<std::string,ModeState>> ModeStatus;
+  std::vector<std::map<std::string, ModeState>> ModeStatus;
 
-  //Create map of Mode Status
+  // Create map of Mode Status
   for (unsigned iSyst = 0; iSyst < SplineFileParPrefixNames[iSample].size(); iSyst++)
   {
     auto modes = SplineModeVecs[iSample][iSyst];
     ModeStatus.emplace_back();
 
-	for (auto const & mode : modes) 
+    for (auto const &mode : modes)
     {
-	  //Add Modes from config
+      // Add Modes from config
       ModeStatus.back()[MaCh3mode_ToDUNEString((MaCh3_Mode)mode).c_str()] = kInConfig;
     }
   }
@@ -56,8 +52,9 @@ void splinesDUNE::FillSampleArray(std::string SampleName, std::vector<std::strin
       throw;
     }
 
-    //This is the MC specific part of the code
-    //i.e. we always assume that the splines are just store in  single TDirectory and they're all in there as single objects
+    // This is the MC specific part of the code
+    // i.e. we always assume that the splines are just store in  single TDirectory and they're all
+    // in there as single objects
     TIter Next(File->GetListOfKeys());
     TKey *Key;
 
@@ -68,17 +65,23 @@ void splinesDUNE::FillSampleArray(std::string SampleName, std::vector<std::strin
     {
       TClass *Class = gROOT->GetClass(Key->GetClassName());
 
-      //Skip the TGraphs also in the spline files
-      if (!Class->InheritsFrom("TSpline3")){continue;}
-      const char* keyName = Key->GetName();
+      // Skip the TGraphs also in the spline files
+      if (!Class->InheritsFrom("TSpline3"))
+      {
+        continue;
+      }
+      const char *keyName = Key->GetName();
 
-      char* SplineName = new char[strlen(keyName) + 1];
+      char *SplineName = new char[strlen(keyName) + 1];
       strcpy(SplineName, keyName);
 
       nb_splines += 1;
-	  if(unique_spline_names.count(std::string(SplineName)) > 0){
-		if (std::string(SplineName).find("unknown") == std::string::npos){
-		  //std::cout << "Repeated entry for spline named: " << std::string(SplineName) << std::endl;
+      if (unique_spline_names.count(std::string(SplineName)) > 0)
+      {
+        if (std::string(SplineName).find("unknown") == std::string::npos)
+        {
+          // std::cout << "Repeated entry for spline named: " << std::string(SplineName) <<
+          // std::endl;
           continue;
         }
       }
@@ -95,43 +98,48 @@ void splinesDUNE::FillSampleArray(std::string SampleName, std::vector<std::strin
       Syst = Token;
 
       int SystNum = -1;
-      for (unsigned iSyst = 0; iSyst < SplineFileParPrefixNames[iSample].size(); iSyst++) {
-        if (strcmp(Syst, SplineFileParPrefixNames[iSample][iSyst].c_str()) == 0) {
+      for (unsigned iSyst = 0; iSyst < SplineFileParPrefixNames[iSample].size(); iSyst++)
+      {
+        if (strcmp(Syst, SplineFileParPrefixNames[iSample][iSyst].c_str()) == 0)
+        {
           SystNum = iSyst;
           break;
         }
       }
 
       // If the syst doesn't match any of the spline names then skip it
-      if (SystNum == -1){
+      if (SystNum == -1)
+      {
         continue;
       }
 
       int ModeNum = -1;
       Mode = strtok(NULL, "_");
-	  for (unsigned int iMode = 0; iMode < SplineModeVecs[iSample][SystNum].size(); iMode++) {
-        if (strcmp(Mode, MaCh3mode_ToDUNEString((MaCh3_Mode)SplineModeVecs[iSample][SystNum][iMode]).c_str()) == 0) {
+      for (unsigned int iMode = 0; iMode < SplineModeVecs[iSample][SystNum].size(); iMode++)
+      {
+        if (strcmp(Mode, MaCh3mode_ToDUNEString((MaCh3_Mode)SplineModeVecs[iSample][SystNum][iMode])
+                             .c_str()) == 0)
+        {
           ModeNum = iMode;
           break;
         }
       }
 
-	  //Check if mode has been registered already
-	  if(ModeStatus[SystNum].count(Mode))
+      // Check if mode has been registered already
+      if (ModeStatus[SystNum].count(Mode))
       {
-		//Chech if mode has been found in config
-		if(ModeStatus[SystNum][Mode]!=kInFile) 
+        // Chech if mode has been found in config
+        if (ModeStatus[SystNum][Mode] != kInFile)
         {
-		  ModeStatus[SystNum][Mode]=kInConfigAndInFile;
-        }
-        else
+          ModeStatus[SystNum][Mode] = kInConfigAndInFile;
+        } else
         {
-		  continue; //Skip if mode has been found in file but not config
+          continue; // Skip if mode has been found in file but not config
         }
-      }
-      else
+      } else
       {
-		ModeStatus[SystNum][Mode]=kInFile; //If mode hasn't been registered then skip because it's not in the config 
+        ModeStatus[SystNum][Mode] =
+            kInFile; // If mode hasn't been registered then skip because it's not in the config
         continue;
       }
 
@@ -148,8 +156,7 @@ void splinesDUNE::FillSampleArray(std::string SampleName, std::vector<std::strin
       if (Var3Bin_Char == NULL)
       {
         Var3Bin = 0;
-      }
-      else
+      } else
       {
         Var3Bin = atoi(Var3Bin_Char);
       }
@@ -170,7 +177,8 @@ void splinesDUNE::FillSampleArray(std::string SampleName, std::vector<std::strin
           if (x == -999 || y == -999)
           {
             std::cerr << "Something has gone wrong... knot position is at -999" << std::endl;
-            std::cerr << "This error brought you by the folks at : "<<__FILE__<<" : "<<__LINE__<<std::endl;
+            std::cerr << "This error brought you by the folks at : " << __FILE__ << " : "
+                      << __LINE__ << std::endl;
             throw;
           }
 
@@ -182,8 +190,9 @@ void splinesDUNE::FillSampleArray(std::string SampleName, std::vector<std::strin
           }
         }
 
-        //Rather than keeping a mega vector of splines then converting, this should just keep everything nice in memory!
-        indexvec[iSample][iOscChan][SystNum][ModeNum][Var1Bin][Var2Bin][Var3Bin]=MonolithIndex;
+        // Rather than keeping a mega vector of splines then converting, this should just keep
+        // everything nice in memory!
+        indexvec[iSample][iOscChan][SystNum][ModeNum][Var1Bin][Var2Bin][Var3Bin] = MonolithIndex;
 
         coeffindexvec.push_back(CoeffIndex);
         // Should save memory rather saving [x_i_0 ,... x_i_maxknots] for every spline!
@@ -191,39 +200,43 @@ void splinesDUNE::FillSampleArray(std::string SampleName, std::vector<std::strin
         {
           splinevec_Monolith.push_back(NULL);
           delete Spline;
-        }
-        else{
+        } else
+        {
           splinevec_Monolith.push_back(Spline);
-          int np=Spline->GetNp();
-          uniquecoeffindices.push_back(MonolithIndex); //So we can get the unique coefficients and skip flat splines later on!
-          CoeffIndex+=np;
+          int np = Spline->GetNp();
+          uniquecoeffindices.push_back(MonolithIndex); // So we can get the unique coefficients and
+                                                       // skip flat splines later on!
+          CoeffIndex += np;
         }
 
-        MonolithIndex+=1;
+        MonolithIndex += 1;
       }
-    }//End of loop over all TKeys in file
-    //ETA - I have no idea why but this breaks in ROOT 6.24 :/
-    std::cout << "Got " << nb_splines << " total splines with " << unique_spline_names.size() << " unique names." << std::endl;
+    } // End of loop over all TKeys in file
+    // ETA - I have no idea why but this breaks in ROOT 6.24 :/
+    std::cout << "Got " << nb_splines << " total splines with " << unique_spline_names.size()
+              << " unique names." << std::endl;
     delete File;
-  } //End of oscillation channel loop
+  } // End of oscillation channel loop
 
-  //Find all modes which have been found in the spline file but have not been specified in the config
+  // Find all modes which have been found in the spline file but have not been specified in the
+  // config
   for (unsigned iSyst = 0; iSyst < SplineFileParPrefixNames[iSample].size(); iSyst++)
   {
     std::vector<std::string> MissedModes;
-	for (auto const & ModeUsage : ModeStatus[iSyst])
+    for (auto const &ModeUsage : ModeStatus[iSyst])
     {
-	  if(ModeUsage.second==kInFile)
+      if (ModeUsage.second == kInFile)
       {
         MissedModes.push_back(ModeUsage.first);
       }
     }
 
-	if(MissedModes.size()!=0)
+    if (MissedModes.size() != 0)
     {
-      MACH3LOG_INFO("Parameter {} has splines for {} modes which have not been read in!", SplineFileParPrefixNames[iSample][iSyst].c_str(), MissedModes.size());
+      MACH3LOG_INFO("Parameter {} has splines for {} modes which have not been read in!",
+                    SplineFileParPrefixNames[iSample][iSyst].c_str(), MissedModes.size());
       std::cout << "Modes: ";
-	  for (auto const & Mode : MissedModes)
+      for (auto const &Mode : MissedModes)
       {
         std::cout << Mode << " ";
       }

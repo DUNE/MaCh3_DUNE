@@ -1,6 +1,7 @@
 #ifndef _samplePDFDUNEBeamND_h_
 #define _samplePDFDUNEBeamND_h_
 
+#include <cstddef>
 #include <iostream>
 #include <TTree.h>
 #include <TH1D.h>
@@ -8,6 +9,7 @@
 #include <TMath.h>
 #include <TFile.h>
 #include <TGraph2DErrors.h>
+#include <manager/MaCh3Modes.h>
 #include <vector>
 #include <omp.h>
 #include <list>
@@ -18,6 +20,7 @@
 #include "samplePDF/samplePDFFDBase.h"
 
 #include "StructsDUNE.h"
+#include "samplePDF/Structs.h"
 
 class samplePDFDUNEBeamND : virtual public samplePDFFDBase
 {
@@ -34,6 +37,29 @@ public:
 
   void SetupWeightPointers();
   void SetupSplines();
+
+  // === HH: Functional parameters ===
+  enum FuncParEnum {kTotalEScaleND, kDebugNothing, kDebugShift};
+  void RegisterFunctionalParameters();
+  void SetupFunctionalParameters();
+
+  // Map the name of the functional parameter to funcpar enum
+  std::unordered_map<std::string, FuncParEnum> funcParsNamesMap;
+
+  // Map the funcpar enum to pointer of FuncPars struct
+  std::unordered_map<FuncParEnum, FuncPars*> funcParsMap;
+
+  std::unordered_map<FuncParEnum, FuncParFuncType> funcParsFuncMap;
+
+  // Map the funcpar enum to the value of the functional parameter
+  std::unordered_map<FuncParEnum, double*> funcParsValMap;
+
+  // A grid of vectors of enums for each sample and event
+  std::vector<std::vector<std::vector<FuncParEnum>>> funcParsGrid;
+
+  void TotalEScale(const double * par, std::size_t iSample, std::size_t iEvent);
+  void DebugShift(const double * par, std::size_t iSample, std::size_t iEvent);
+  // =================================
   
   const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent);
   const double* GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent);
@@ -120,8 +146,7 @@ public:
   double n_res_nd_pos;
   double em_res_nd_pos;
 
-  std::vector<const double*> NDDetectorSystPointers;
-  int nNDDetectorSystPointers;
+  int nNDDetectorSystPointers = 0;
 };
 
 #endif

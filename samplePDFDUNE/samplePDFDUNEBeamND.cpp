@@ -1,9 +1,11 @@
 #include <TROOT.h>
 
 #include "samplePDFDUNEBeamND.h"
+#include "StructsDUNE.h"
 #include "TString.h"
 #include <assert.h>
 #include <stdexcept>
+#include <string>
 #include "TMath.h"
 #include "manager/manager.h"
 
@@ -16,6 +18,7 @@ samplePDFDUNEBeamND::~samplePDFDUNEBeamND() {
 
 void samplePDFDUNEBeamND::Init() {
   dunendmcSamples.resize(nSamples,dunemc_base());
+  funcParsGrid.resize(nSamples);
 
   if (CheckNodeExists(SampleManager->raw(), "POT")) {
     pot = SampleManager->raw()["POT"].as<double>();
@@ -28,6 +31,9 @@ void samplePDFDUNEBeamND::Init() {
   SampleDetID = SampleManager->raw()["DetID"].as<int>();
   iselike = SampleManager->raw()["SampleBools"]["iselike"].as<bool>();
 
+  // SetupFunctionalParameters();
+
+  /*
   tot_escale_nd_pos = -999;
   tot_escale_sqrt_nd_pos = -999;
   tot_escale_invsqrt_nd_pos = -999;
@@ -50,7 +56,7 @@ void samplePDFDUNEBeamND::Init() {
 
   std::vector<std::string> funcParsNames = XsecCov->GetParsNamesFromDetID(SampleDetID, SystType::kFunc);
   std::vector<int> funcParsIndex = XsecCov->GetParsIndexFromDetID(SampleDetID, SystType::kFunc);
-  /*
+
   nNDDetectorSystPointers = funcParsIndex.size();
   NDDetectorSystPointers = std::vector<const double*>(nNDDetectorSystPointers);
 
@@ -158,6 +164,126 @@ void samplePDFDUNEBeamND::SetupSplines() {
 
   return;
 }
+
+// === HH: Functional parameters ===
+void samplePDFDUNEBeamND::TotalEScale(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // Debugging couts
+  std::cout << "-------------------------------------------------------------------" <<std::endl;
+  std::cout << "TotalEScaleND: " << *par << std::endl;
+  std::cout << "duneendmcSamples size" << dunendmcSamples.size() << std::endl;
+  std::cout << "iSample: " << iSample << std::endl;
+  std::cout << "iEvent: " << iEvent << std::endl;
+  std::cout << "rw_erec: " << dunendmcSamples[iSample].rw_erec[iEvent] << std::endl;
+  std::cout << "rw_erec_shifted: " << dunendmcSamples[iSample].rw_erec_shifted[iEvent] << std::endl;
+  std::cout << "rw_erec_had: " << dunendmcSamples[iSample].rw_erec_had[iEvent] << std::endl;
+  std::cout << "rw_erec_lep: " << dunendmcSamples[iSample].rw_erec_lep[iEvent] << std::endl;
+  std::cout << "rw_isCC: " << dunendmcSamples[iSample].rw_isCC[iEvent] << std::endl;
+  std::cout << "rw_nuPDG: " << dunendmcSamples[iSample].rw_nuPDG[iEvent] << std::endl;
+  std::cout << "iselike: " << iselike << std::endl;
+  // Apply the scale
+  dunendmcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunendmcSamples[iSample].rw_erec_had[iEvent];
+  // https://github.com/DUNE/lblpwgtools/blob/3d475f50a998fbfa6266df9a0c4eb3056c0cdfe5/CAFAna/Systs/EnergySysts.h#L39
+  if (!(dunendmcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunendmcSamples[iSample].rw_nuPDG[iEvent])==14) && iselike) {
+    dunendmcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunendmcSamples[iSample].rw_erec_lep[iEvent];
+  }
+  std::cout << "New rw_erec_shifted: " << dunendmcSamples[iSample].rw_erec_shifted[iEvent] << std::endl;
+  std::cout << "-------------------------------------------------------------------" <<std::endl;
+}
+
+void samplePDFDUNEBeamND::DebugShift(const double * par, std::size_t iSample, std::size_t iEvent) {
+  if (dunendmcSamples[iSample].rw_erec[iEvent] < 2) {
+  // Debugging couts
+  std::cout << "-------------------------------------------------------------------" <<std::endl;
+  std::cout << "Old rw_erec_shifted: " << dunendmcSamples[iSample].rw_erec_shifted[iEvent] << std::endl;
+    dunendmcSamples[iSample].rw_erec_shifted[iEvent] = 4.0;
+  std::cout << "New rw_erec_shifted: " << dunendmcSamples[iSample].rw_erec_shifted[iEvent] << std::endl;
+  std::cout << "-------------------------------------------------------------------" <<std::endl;
+  }
+}
+
+void samplePDFDUNEBeamND::RegisterFunctionalParameters() {
+  std::cout << "Registering functional parameters" << std::endl;
+  // This function manually populates the map of functional parameters
+  // Maps the name of the functional parameter to the pointer of the function
+  std::vector<std::string> funcParsNamesVec = {};
+  
+  // This is the part where we manually enter things
+  funcParsNamesMap["TotalEScaleND"] = kTotalEScaleND;
+  funcParsNamesVec.push_back("TotalEScaleND");
+  // A lambda function has to be used so we can refer to a non-static member function
+  funcParsFuncMap[kTotalEScaleND] = [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScale(par, iSample, iEvent); };
+
+  funcParsNamesMap["DebugNothing"] = kDebugNothing;
+  funcParsNamesVec.push_back("DebugNothing");
+  funcParsFuncMap[kDebugNothing] = [this](const double * par, std::size_t iSample, std::size_t iEvent) {};
+
+  funcParsNamesMap["DebugShift"] = kDebugShift;
+  funcParsNamesVec.push_back("DebugShift");
+  funcParsFuncMap[kDebugShift] = [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->DebugShift(par, iSample, iEvent); };
+
+  // For every functional parameter in XsecCov that matches the name in funcParsNames, add it to the map
+  for (std::vector<FuncPars>::iterator it = funcParsVec.begin(); it != funcParsVec.end(); ++it) {
+    if (std::find(funcParsNamesVec.begin(), funcParsNamesVec.end(), (*it).name) != funcParsNamesVec.end()) {
+      std::cout << "Adding functional parameter: " << (*it).name << std::endl;
+      std::cout << "Adding it into funcParsMap with key: " << funcParsNamesMap[(*it).name] << std::endl;
+      std::cout << "The address of the function is: " << &(*it) << std::endl;
+      funcParsMap[funcParsNamesMap[(*it).name]] = &(*it);
+    }
+  }
+  // funcParsMap[kTotalEScaleND]->name = "James";
+  // std::cout << "I have changed the name at address: " << &(funcParsMap[kTotalEScaleND]->name) << " to " << funcParsMap[kTotalEScaleND]->name << std::endl;
+}
+
+void samplePDFDUNEBeamND::SetupFunctionalParameters() {
+  std::cout << "Setting up functional parameters" << std::endl;
+  funcParsVec = XsecCov->GetFuncParsFromDetID(SampleDetID);
+  RegisterFunctionalParameters();
+  // HH check: Not sure if SampleDetID is defined at this point
+  // For each event, make a vector of pointers to the functional parameters
+  for (std::size_t iSample = 0; iSample < dunendmcSamples.size(); ++iSample) {
+    funcParsGrid[iSample].resize(static_cast<std::size_t>(dunendmcSamples[iSample].nEvents));
+    for (std::size_t iEvent = 0; iEvent < static_cast<std::size_t>(dunendmcSamples[iSample].nEvents); ++iEvent) {
+      // Now loop over the functional parameters and get a vector of enums corresponding to the functional parameters
+      for (std::vector<FuncPars>::iterator it = funcParsVec.begin(); it != funcParsVec.end(); ++it) {
+        // Check whether the interaction modes match
+        bool ModeMatch = MatchCondition((*it).modes, static_cast<int>(std::round((dunendmcSamples[iSample].mode[iEvent]))));
+        if (!ModeMatch) {
+          MACH3LOG_TRACE("Event {}, missed Mode check ({}) for dial {}", iEvent, (dunendmcSamples[iSample].mode[iEvent]), (*it).name);
+          continue;
+        }
+        // Now check whether within kinematic bounds
+        bool IsSelected = true;
+        if ((*it).hasKinBounds) {
+          for (std::size_t iKinPar = 0; iKinPar < (*it).KinematicVarStr.size(); ++iKinPar) {
+            // Check lower bound
+            if (ReturnKinematicParameter((*it).KinematicVarStr[iKinPar], iSample, iEvent) <= (*it).Selection[iKinPar][0]) {
+              IsSelected = false;
+              MACH3LOG_TRACE("Event {}, missed Kinematic var check ({}) for dial {}", iEvent, (*it).KinematicVarStr[iKinPar], (*it).name);
+              continue;
+            }
+            // Check upper bound
+            else if (ReturnKinematicParameter((*it).KinematicVarStr[iKinPar], iSample, iEvent) > (*it).Selection[iKinPar][1]) {
+              MACH3LOG_TRACE("Event {}, missed Kinematic var check ({}) for dial {}", iEvent, (*it).KinematicVarStr[iKinPar], (*it).name);
+              IsSelected = false;
+              continue;
+            }
+          }
+        }
+        // Need to then break the event loop
+        if(!IsSelected){
+          MACH3LOG_TRACE("Event {}, missed Kinematic var check for dial {}", iEvent, (*it).name);
+          continue;
+        }
+        FuncParEnum funcparenum = funcParsNamesMap[(*it).name];
+        // std::cout << "Adding functional parameter: " << (*it).name << " to funcParsGrid at iSample: " << iSample << " and iEvent: " << iEvent << std::endl;
+        funcParsGrid.at(iSample).at(iEvent).push_back(funcparenum);
+      }
+    }
+  }
+  std::cout << "Finished setting up functional parameters" << std::endl;
+}
+
+// =================================
 
 void samplePDFDUNEBeamND::SetupWeightPointers() {
   for (int i = 0; i < (int)dunendmcSamples.size(); ++i) {
@@ -365,7 +491,8 @@ const double* samplePDFDUNEBeamND::GetPointerToKinematicParameter(KinematicTypes
     KinematicValue = &dunendmcSamples[iSample].rw_reco_q[iEvent];
     break;
   case kRecoNeutrinoEnergy:
-    KinematicValue = &dunendmcSamples[iSample].rw_erec[iEvent];
+    // HH: Changed this to match BeamFD
+    KinematicValue = &dunendmcSamples[iSample].rw_erec_shifted[iEvent];
     break;
   case kIsFHC:
     KinematicValue = &dunendmcSamples[iSample].rw_isFHC[iEvent];
@@ -415,6 +542,19 @@ void samplePDFDUNEBeamND::setupFDMC(int iSample) {
   }
 }
 
+void samplePDFDUNEBeamND::applyShifts(int iSample, int iEvent) {
+  for (std::vector<FuncParEnum>::iterator it = funcParsGrid.at(iSample).at(iEvent).begin(); it != funcParsGrid.at(iSample).at(iEvent).end(); ++it) {
+    // Check if func exists
+    if (funcParsMap.find(*it) == funcParsMap.end()) {
+      MACH3LOG_ERROR("Functional parameter {} not found in map", *it);
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+    funcParsFuncMap[*it](XsecCov->retPointer(funcParsMap[*it]->index), iSample, iEvent);
+  }
+}
+
+
+/*
 void samplePDFDUNEBeamND::applyShifts(int iSample, int iEvent) {
   // reset erec back to original value
   
@@ -476,8 +616,8 @@ void samplePDFDUNEBeamND::applyShifts(int iSample, int iEvent) {
   NResND(NDDetectorSystPointers[17], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoN[iEvent], dunendmcSamples[iSample].rw_eN[iEvent]);
 
   EMResND(NDDetectorSystPointers[18], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoPi0[iEvent], dunendmcSamples[iSample].rw_ePi0[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], dunendmcSamples[iSample].rw_LepE[iEvent], CCnue);
-*/
 }
+*/
 
 std::vector<double> samplePDFDUNEBeamND::ReturnKinematicParameterBinning(std::string KinematicParameterStr) 
 {
