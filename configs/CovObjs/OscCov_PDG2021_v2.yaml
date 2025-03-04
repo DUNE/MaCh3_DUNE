@@ -173,3 +173,57 @@ Systematics:
     StepScale:
       MCMC: 1.0
     Type: Osc
+
+- Systematic:
+    Names:
+      FancyName: energy_dependence
+      ParameterName: energy_dependence
+
+
+    DetID: 984
+    Error: 0.01
+    FlatPrior: true
+    ParameterBounds: [0, 999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 9.48e-18
+      PreFitValue: 9.48e-18
+    StepScale:
+      MCMC: 1.0
+    Type: Osc
+
+      #- Systematic:
+      #Names:
+      #FancyName: reference_energy
+      #ParameterName: reference_energy
+
+
+      #    DetID: 984
+      # Error: 0.01
+      #FlatPrior: true
+      #ParameterBounds: [0, 999]
+      #ParameterGroup: Osc
+      #ParameterValues:
+      #Generated: 1.0e-23
+      #PreFitValue: 1.0e-23
+      #StepScale:
+      #MCMC: 1.0
+      #Type: Osc
+
+- Systematic:
+    Names:
+      FancyName: energy_scale
+      ParameterName: energy_scale
+
+
+    DetID: 984
+    Error: 0.01
+    FlatPrior: true
+    ParameterBounds: [0, 999]
+    ParameterGroup: Osc
+    ParameterValues: 
+      Generated: 2.0
+      PreFitValue: 2.0
+    StepScale:
+      MCMC: 1.0
+    Type: Osc

@@ -22,7 +22,7 @@ InputFiles:
   splinesuffix: "_nueselec_splines.root"
 DetID: 24
 NuOsc:
-  NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
+  NuOscConfigFile: "configs/NuOsc/Binned_NuSQUIDSLinear.yaml"
 NSubSamples: 12
 SubSamples:
   - name: "FHC_numu_x_numu"
