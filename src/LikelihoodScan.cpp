@@ -23,6 +23,15 @@ int main(int argc, char * argv[]) {
   }
   manager* FitManager = new manager(argv[1]);
 
+  // 1D scan on by default, and 2D off
+  const bool do_1d_llhscan = GetFromManager(FitManager->raw()["General"]["1DLLHScan"], true);
+  const bool do_2d_llhscan = GetFromManager(FitManager->raw()["General"]["2DLLHScan"], false);
+
+  if (!do_1d_llhscan && !do_2d_llhscan) {
+    MACH3LOG_ERROR("Neither 1D or 2D llhscan enabled");
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+
   //###############################################################################################################################
   //Create samplePDFFD objects
   
@@ -65,8 +74,8 @@ int main(int argc, char * argv[]) {
   MaCh3Fitter->addSystObj(osc);
   MaCh3Fitter->addSystObj(xsec);
   
-  if (GetFromManager(FitManager->raw()["General"]["2DLLHScan"], false))
-    MaCh3Fitter->Run2DLLHScan();
-  else
+  if (do_1d_llhscan)
     MaCh3Fitter->RunLLHScan();
+  if (do_2d_llhscan)
+    MaCh3Fitter->Run2DLLHScan();
 }
