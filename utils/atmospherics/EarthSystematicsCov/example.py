@@ -1,3 +1,8 @@
+"""
+This code serves as an example of how to use EarthSystematics. 
+Note that sensible results can only be achieved with O(1M) accepted pulls.
+"""
+
 from EarthSystematics import *
 
 EarthSys = EarthSystematics("../../build/_deps/cudaprob3-src/modelsPREM_4layer_quad_v2.dat")
@@ -5,8 +10,8 @@ EarthSys = EarthSystematics("../../build/_deps/cudaprob3-src/modelsPREM_4layer_q
 # Set 10% uncertainty for layer widths, 5% for density weights
 EarthSys.set_sigmas_uniform(0.1, 0.05)
 
-# We don't want a large uncertainty for the last layer, so let's change that
-EarthSys.set_sigma('r_4', 10)
+# We don't want a large uncertainty for the last layer, so let's change that to 10 km
+EarthSys.set_sigma('r_4', 10) 
 
 # Set the number of pulls to be accepted
 EarthSys.set_N_accepted_pulls(100)
