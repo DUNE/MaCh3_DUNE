@@ -136,8 +136,9 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<samplePDFFDBase*> &D
   }
 
   // Adaptive MCMC stuff
-  if(FitManager->raw()["AdaptionOptions"])
-    xsec->initialiseAdaption(FitManager->raw());
+  // HH: Removed the check for AdaptionOptions and left it to Fit.cpp or RunAdaptiveMCMC.cpp
+  // if(FitManager->raw()["AdaptionOptions"])
+  //   xsec->initialiseAdaption(FitManager->raw());
   
   return;
 }

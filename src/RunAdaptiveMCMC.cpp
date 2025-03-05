@@ -16,10 +16,12 @@
 #include "samplePDFDUNE/MaCh3DUNEFactory.h"
 
 int main(int argc, char * argv[]) {
+  // This file is basically the same as Fit.cpp, just that this one checks for 
+  // adaptive MCMC options in the config file and runs adaptive MCMC.
 
   // ----------------------- OPTIONS ---------------------------------------- //
   if(argc == 1){
-    MACH3LOG_INFO("Usage: bin/Fit configs/config.yaml");
+    MACH3LOG_INFO("Usage: bin/RunAdaptiveMCMC configs/config.yaml");
     return 1;
   }
 
@@ -38,6 +40,16 @@ int main(int argc, char * argv[]) {
 
   std::vector<samplePDFFDBase*> DUNEPdfs;
   MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec, osc);
+
+  // Adaptive MCMC stuff
+  if(FitManager->raw()["AdaptionOptions"]){
+    xsec->initialiseAdaption(FitManager->raw());
+  }
+  else {
+    MACH3LOG_ERROR("No adaption options found in config file, are you running the right binary?");
+    throw;
+  }
+
 
   // Some place to store the histograms
   // HH: Add a check for 1D or 2D data
@@ -137,12 +149,6 @@ int main(int argc, char * argv[]) {
   }
   else {
     MaCh3Fitter->addSystObj(xsec);
-  }
-
-  // HH debug: if xsec is still doing AMCMC, throw an error.
-  if (xsec->getUseAdaptive()) {
-    MACH3LOG_ERROR("Fit.cpp is still doing AMCMC!");
-    throw MaCh3Exception(__FILE__ , __LINE__ );
   }
   
   //Run fit

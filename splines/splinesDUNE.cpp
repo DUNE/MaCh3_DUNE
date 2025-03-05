@@ -284,18 +284,18 @@ std::vector< std::vector<int> > splinesDUNE::GetEventSplines(std::string SampleN
         if (Var1Bin < 0 ||
             Var1Bin >= SplineBinning[SampleIndex][iOscChan][0]->GetNbins()) {
           // HH: Removing push back and instead change Var1Bin to the last bin
-          std::cout << "======================================================"
-                    << std::endl;
-          std::cout << "I'm moving event with Var1Val: " << Var1Val
-                    << " to the last Var1Bin!" << std::endl;
-          std::cout << "Sample name: " << SampleName << std::endl;
-          std::cout << "Oscillation channel: " << iOscChan << std::endl;
-          std::cout << "MaCh3 mode: " << Mode << std::endl;
-          std::cout << "Var1Val: " << Var1Val << std::endl;
-          std::cout << "Var2Val: " << Var2Val << std::endl;
-          std::cout << "Var3Val: " << Var3Val << std::endl;
-          std::cout << "======================================================"
-                    << std::endl;
+          // std::cout << "======================================================"
+          //           << std::endl;
+          // std::cout << "I'm moving event with Var1Val: " << Var1Val
+          //           << " to the last Var1Bin!" << std::endl;
+          // std::cout << "Sample name: " << SampleName << std::endl;
+          // std::cout << "Oscillation channel: " << iOscChan << std::endl;
+          // std::cout << "MaCh3 mode: " << Mode << std::endl;
+          // std::cout << "Var1Val: " << Var1Val << std::endl;
+          // std::cout << "Var2Val: " << Var2Val << std::endl;
+          // std::cout << "Var3Val: " << Var3Val << std::endl;
+          // std::cout << "======================================================"
+          //           << std::endl;
           Var1Bin = SplineBinning[SampleIndex][iOscChan][0]->GetNbins() - 1;
           // Explicitly push back with an empty vector
           // ReturnVec.push_back(std::vector<int>());
@@ -307,18 +307,18 @@ std::vector< std::vector<int> > splinesDUNE::GetEventSplines(std::string SampleN
         if (Var2Bin < 0 ||
             Var2Bin >= SplineBinning[SampleIndex][iOscChan][1]->GetNbins()) {
           // HH: Removing push back and instead change Var2Bin to last bin
-          std::cout << "======================================================"
-                    << std::endl;
-          std::cout << "I'm moving event with Var2Val: " << Var2Val
-                    << " to the last Var2Bin!" << std::endl;
-          std::cout << "Sample name: " << SampleName << std::endl;
-          std::cout << "Oscillation channel: " << iOscChan << std::endl;
-          std::cout << "MaCh3 mode: " << Mode << std::endl;
-          std::cout << "Var1Val: " << Var1Val << std::endl;
-          std::cout << "Var2Val: " << Var2Val << std::endl;
-          std::cout << "Var3Val: " << Var3Val << std::endl;
-          std::cout << "======================================================"
-                    << std::endl;
+          // std::cout << "======================================================"
+          //           << std::endl;
+          // std::cout << "I'm moving event with Var2Val: " << Var2Val
+          //           << " to the last Var2Bin!" << std::endl;
+          // std::cout << "Sample name: " << SampleName << std::endl;
+          // std::cout << "Oscillation channel: " << iOscChan << std::endl;
+          // std::cout << "MaCh3 mode: " << Mode << std::endl;
+          // std::cout << "Var1Val: " << Var1Val << std::endl;
+          // std::cout << "Var2Val: " << Var2Val << std::endl;
+          // std::cout << "Var3Val: " << Var3Val << std::endl;
+          // std::cout << "======================================================"
+          //           << std::endl;
           Var2Bin = SplineBinning[SampleIndex][iOscChan][1]->GetNbins() - 1;
           // Explicitly push back with an empty vector
           // ReturnVec.push_back(std::vector<int>());
@@ -331,18 +331,18 @@ std::vector< std::vector<int> > splinesDUNE::GetEventSplines(std::string SampleN
         if (Var3Bin < 0 ||
             Var3Bin >= SplineBinning[SampleIndex][iOscChan][2]->GetNbins()) {
           // HH: Removing push back and instead change Var3Bin to last bin
-          std::cout << "======================================================"
-                    << std::endl;
-          std::cout << "I'm moving event with Var3Val: " << Var3Val
-                    << " to the last Var3Bin!" << std::endl;
-          std::cout << "Sample name: " << SampleName << std::endl;
-          std::cout << "Oscillation channel: " << iOscChan << std::endl;
-          std::cout << "MaCh3 mode: " << Mode << std::endl;
-          std::cout << "Var1Val: " << Var1Val << std::endl;
-          std::cout << "Var2Val: " << Var2Val << std::endl;
-          std::cout << "Var3Val: " << Var3Val << std::endl;
-          std::cout << "======================================================"
-                    << std::endl;
+          // std::cout << "======================================================"
+          //           << std::endl;
+          // std::cout << "I'm moving event with Var3Val: " << Var3Val
+          //           << " to the last Var3Bin!" << std::endl;
+          // std::cout << "Sample name: " << SampleName << std::endl;
+          // std::cout << "Oscillation channel: " << iOscChan << std::endl;
+          // std::cout << "MaCh3 mode: " << Mode << std::endl;
+          // std::cout << "Var1Val: " << Var1Val << std::endl;
+          // std::cout << "Var2Val: " << Var2Val << std::endl;
+          // std::cout << "Var3Val: " << Var3Val << std::endl;
+          // std::cout << "======================================================"
+          //           << std::endl;
           Var3Bin = SplineBinning[SampleIndex][iOscChan][2]->GetNbins() - 1;
           // Explicitly push back with an empty vector
           // ReturnVec.push_back(std::vector<int>());

@@ -6,6 +6,7 @@ foreach(app
 	Projections
 	SigmaVariation
 	LikelihoodScan
+  RunAdaptiveMCMC
       )
       
     add_executable(${app} ${app}.cpp)
