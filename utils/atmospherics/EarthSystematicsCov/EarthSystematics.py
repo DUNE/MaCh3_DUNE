@@ -38,13 +38,16 @@ class EarthSystematics:
         self.PolyCoeffs_c = None
         self.EarthMs = []
         self.EarthIs = []
+
+        # Earth's parameters
         
+        # Ref: H. Moritz, Geodetic Reference System 1980, Journal of Geodesy, vol. 74, pp. 128–133, 2000
         # Earth Radius
         self.R = 6371 #km
-        
+
+        # Ref: A. M. Dziewonski and D. L. Anderson, Preliminary Reference Earth Model, Phys. Earth Planet. Interiors, vol. 25, pp. 297–356, 1981
         # Earth Mass 
         self.M = 5.9722*1e24 #kg
-
         # Earth Moment of Inertia (I/MR^2)
         self.I = 0.3308
 
@@ -110,7 +113,7 @@ class EarthSystematics:
 
     def set_sigma_r_array(self, sigma_arr):
         """
-        Sets the radii uncertainties from an array.
+        Sets the radii uncertainties (in km) from an array.
 
         Args:
             sigma_arr (array(float)): array with radii sigmas
@@ -133,7 +136,7 @@ class EarthSystematics:
 
     def set_sigma(self, ParName, sigma):
         """
-        Sets a specific uncertainty.
+        Sets a specific uncertainty. Radii must be given in km.
 
         Args:
             ParName (string): name of the parameter whose uncertainty is to be set.
