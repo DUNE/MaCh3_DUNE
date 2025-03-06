@@ -16,7 +16,7 @@
 #include "covariance/covarianceXsec.h"
 #include "covariance/covarianceOsc.h"
 #include "samplePDF/samplePDFFDBase.h"
-#include "StandardRecord.h"
+#include "duneanaobj/StandardRecord/StandardRecord.h"
 
 #include "StructsDUNE.h"
 

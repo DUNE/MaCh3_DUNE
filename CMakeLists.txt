@@ -80,7 +80,7 @@ if(MaCh3_DUNE_USE_SRProxy)
 else()
   CPMAddPackage(
     NAME duneanaobj
-    GIT_TAG v03_06_00
+    GIT_TAG tag/legacy_ndgar_cafs_2024
     GITHUB_REPOSITORY "DUNE/duneanaobj"
     DOWNLOAD_ONLY YES
   )
@@ -118,10 +118,12 @@ else()
 
 endif()
 
+cmessage("Now going to try my luck with maCh3")
+
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
-SET(MaCh3_FOUND FALSE)
-find_package(MaCh3 1.4.4 EXACT QUIET)
+#SET(MaCh3_FOUND FALSE)
+#find_package(MaCh3 1.4.4 EXACT)
 
 if(NOT MaCh3_FOUND)
   cmessage(STATUS "Didn't find MaCh3, attempting to use built in MaCh3")
@@ -181,7 +183,7 @@ cmessage(STATUS "CMAKE CXX Standard: ${CMAKE_CXX_STANDARD}")
 add_library(DUNEMaCh3Warnings INTERFACE)
 
 target_compile_options(DUNEMaCh3Warnings INTERFACE
-  -Werror                 # Treat Warnings as Errors
+#  -Werror                 # Treat Warnings as Errors
   -Wextra                 # Enable extra warning flags
   -Wall                   # Enable all standard warning flags
   -Wshadow                # Warn when a variable declaration shadows one from an outer scope

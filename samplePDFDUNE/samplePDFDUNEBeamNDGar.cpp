@@ -25,13 +25,15 @@ void samplePDFDUNEBeamNDGar::SetupSplines() {
   ///@todo move all of the spline setup into core
   if(XsecCov->GetNumParamsFromDetID(SampleDetID, kSpline) > 0){
     MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", XsecCov->GetNumParamsFromDetID(SampleDetID, kSpline));
-    splinesDUNE* DUNESplines = new splinesDUNE(XsecCov);
-    splineFile = (splineFDBase*)DUNESplines;
+    //splinesDUNE* DUNESplines = new splinesDUNE(XsecCov);
+    SplineHandler = std::unique_ptr<splineFDBase>(new splinesDUNE(XsecCov,Modes));
+	//splineFile = (splineFDBase*)DUNESplines;
     InitialiseSplineObject();
   }
   else{
     MACH3LOG_INFO("Found {} splines for this sample so I will not load or evaluate splines", XsecCov->GetNumParamsFromDetID(SampleDetID, kSpline));
-    splineFile = nullptr;
+    //splineFile = nullptr;
+    SplineHandler = nullptr;
   }
 
   return;
@@ -42,8 +44,9 @@ void samplePDFDUNEBeamNDGar::SetupWeightPointers() {
   for (int i = 0; i < (int)dunendgarmcSamples.size(); ++i) {
     for (int j = 0; j < dunendgarmcSamples[i].nEvents; ++j) {
       MCSamples[i].ntotal_weight_pointers[j] = 6;
-      MCSamples[i].total_weight_pointers[j] = new const double*[MCSamples[i].ntotal_weight_pointers[j]];
-      MCSamples[i].total_weight_pointers[j][0] = &(dunendgarmcSamples[i].pot_s);
+      //MCSamples[i].total_weight_pointers[j] = new const double*[MCSamples[i].ntotal_weight_pointers[j]];
+      MCSamples[i].total_weight_pointers[j].resize(MCSamples[i].ntotal_weight_pointers[j]);
+	  MCSamples[i].total_weight_pointers[j][0] = &(dunendgarmcSamples[i].pot_s);
       MCSamples[i].total_weight_pointers[j][1] = &(dunendgarmcSamples[i].norm_s);
       MCSamples[i].total_weight_pointers[j][2] = MCSamples[i].osc_w_pointer[j];
       MCSamples[i].total_weight_pointers[j][3] = &(dunendgarmcSamples[i].rw_berpaacvwgt[j]);
@@ -56,9 +59,9 @@ void samplePDFDUNEBeamNDGar::SetupWeightPointers() {
 int samplePDFDUNEBeamNDGar::setupExperimentMC(int iSample) {
 
   dunemc_base *duneobj = &(dunendgarmcSamples[iSample]);
-  int nutype = sample_nutype[iSample];
-  int oscnutype = sample_oscnutype[iSample];
-  bool signal = sample_signal[iSample];
+  //int nutype = sample_nutype[iSample];
+  //int oscnutype = sample_oscnutype[iSample];
+  //bool signal = sample_signal[iSample];
   
   MACH3LOG_INFO("-------------------------------------------------------------------");
   MACH3LOG_INFO("Input File: {}", mc_files.at(iSample));
@@ -82,9 +85,9 @@ int samplePDFDUNEBeamNDGar::setupExperimentMC(int iSample) {
   duneobj->pot_s = (pot)/1e21;
 
   duneobj->nEvents = _data->GetEntries();
-  duneobj->nutype = nutype;
-  duneobj->oscnutype = oscnutype;
-  duneobj->signal = signal;
+  //duneobj->nutype = nutype;
+  //duneobj->oscnutype = oscnutype;
+  //duneobj->signal = signal;
 
   // allocate memory for dunendgarmc variables
   duneobj->rw_yrec = new double[duneobj->nEvents];
@@ -239,8 +242,10 @@ int samplePDFDUNEBeamNDGar::setupExperimentMC(int iSample) {
     _mode = sr->mc.nu[0].mode;
     _isCC = (int)(sr->mc.nu[0].iscc);
     
-    int mode= TMath::Abs(_mode);       
-    duneobj->mode[i]=(double)GENIEMode_ToMaCh3Mode(mode, _isCC);
+	int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
+    duneobj->mode[i] = M3Mode;
+    //int mode= TMath::Abs(_mode);       
+    //duneobj->mode[i]=(double)GENIEMode_ToMaCh3Mode(mode, _isCC);
     
     duneobj->flux_w[i] = 1.0;
   }
@@ -326,12 +331,12 @@ double samplePDFDUNEBeamNDGar::ReturnKinematicParameter(std::string KinematicPar
 
 void samplePDFDUNEBeamNDGar::setupFDMC(int iSample) {
   dunemc_base *duneobj = &(dunendgarmcSamples[iSample]);
-  fdmc_base *fdobj = &(MCSamples[iSample]);
+  FarDetectorCoreInfo *fdobj = &(MCSamples[iSample]);
   
-  fdobj->nutype = duneobj->nutype;
-  fdobj->oscnutype = duneobj->oscnutype;
-  fdobj->signal = duneobj->signal;
-  fdobj->SampleDetID = SampleDetID;
+  //fdobj->nutype = duneobj->nutype;
+  //fdobj->oscnutype = duneobj->oscnutype;
+  //fdobj->signal = duneobj->signal;
+  //fdobj->SampleDetID = SampleDetID;
   
   for(int iEvent = 0 ;iEvent < fdobj->nEvents ; ++iEvent){
     fdobj->rw_etru[iEvent] = &(duneobj->rw_etru[iEvent]);

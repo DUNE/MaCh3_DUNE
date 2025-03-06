@@ -6,7 +6,7 @@ foreach(app
 	Projections
 	SigmaVariation
 	LikelihoodScan
-  Variations
+	Variations
       )
       
     add_executable(${app} ${app}.cpp)
