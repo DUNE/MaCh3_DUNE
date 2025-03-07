@@ -13,7 +13,7 @@ General:
     XsecAtGen: false 
     OscCovFile: ["configs/CovObjs/OscCov_PDG2021_v2.yaml"]
     OscCovName: "osc_cov"
-    OscFix: ["baseline"]
+    OscFix: ["baseline", "density"]
 
   Fitter:
     FitTestLikelihood: false
