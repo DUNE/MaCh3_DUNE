@@ -21,6 +21,7 @@ jobs:
         uses: github/super-linter@v7
         continue-on-error: true
         env:
+          LINTER_RULES_PATH: .github/linters
           VALIDATE_MARKDOWN: true  # Enable Markdown linting
           VALIDATE_DOCKERFILE: true  # Enable Dockerfile linting
           VALIDATE_YAML: true  # Enable YAML linting
