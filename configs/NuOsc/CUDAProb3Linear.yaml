@@ -3,7 +3,7 @@ General:
   Verbosity: "NONE"
   CosineZIgnored: true
   CalculationType: "Unbinned"
-  
+
 OscProbCalcerSetup:
   ImplementationName: "CUDAProb3Linear"
   OscChannelMapping:

@@ -2,10 +2,9 @@
 
 Systematics:
 
-
-#V2 initial commit
-#WARNING !!!
-#osc covariance require particular order of osc parameters, do not change order of dials here
+# V2 initial commit
+# WARNING !!!
+# osc covariance require particular order of osc parameters, do not change order of dials here
 - Systematic:
     Names:
       FancyName: sin2th_12
@@ -110,7 +109,7 @@ Systematics:
     DetID: 984
     Error: 6.28331122896200340
     FlatPrior: true
-    # It has special treatment as it is continuous param
+    #  It has special treatment as it is continuous param
     ParameterBounds: [-999, 999]
     ParameterGroup: Osc
     ParameterValues:

@@ -74,7 +74,7 @@ CVMFS:
 
 Current (Feburary 2024) FD event rates using DUNE FD TDR inputs are below (ND is still under-development). These are made using xsec systematics at their prior central value. Oscillation parameter values used here are:
 
-#### Oscillation Parameter Values:
+### Oscillation Parameter Values
 <div align="center">
 
 |     Parameter     |       Value       |     Unit     |
@@ -88,7 +88,7 @@ Current (Feburary 2024) FD event rates using DUNE FD TDR inputs are below (ND is
 
 </div>
 
-#### Nominal Integrated Evetn rates:
+### Nominal Integrated Evetn rates
 
 <div align="center">
 

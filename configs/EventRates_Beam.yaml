@@ -2,7 +2,7 @@
 General:
   OutputFile: "DuneEventRates.root"
   DUNESamples: ["configs/Samples/SamplePDFDune_FHC_numuselec.yaml", "configs/Samples/SamplePDFDune_FHC_nueselec.yaml",
-                "configs/Samples/SamplePDFDune_RHC_numuselec.yaml", "configs/Samples/SamplePDFDune_RHC_nueselec.yaml"]	
+                "configs/Samples/SamplePDFDune_RHC_numuselec.yaml", "configs/Samples/SamplePDFDune_RHC_nueselec.yaml"]
   # Nu-FIT
   # OscillationParameters: [0.310, 0.582, 0.224, 7.39E-5, 2.5254E-3, -2.498]
   # T2K-like best-fit
@@ -12,7 +12,7 @@ General:
     XsecCovFile: ["configs/CovObjs/tdr_covs/tdr_covs_grouped.yaml"]
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.05
-    XsecAtGen: false 
+    XsecAtGen: false
     OscCovFile: ["configs/CovObjs/OscCov_PDG2021_v2.yaml"]
     OscCovName: "osc_cov"
 

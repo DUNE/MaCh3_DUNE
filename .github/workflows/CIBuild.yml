@@ -6,7 +6,7 @@ name: Build CI
 # The events that trigger the workflow
 on:
   pull_request:
-    branches: [ develop  ]
+    branches: [develop]
   
 permissions:
   contents: read
@@ -42,6 +42,6 @@ jobs:
       - name: Build the Docker image
         run: |
           docker build . \
-            --file ${{ matrix.file }} \
-            --tag ghcr.io/dune/mach3:${{ matrix.tag }} \
-            --build-arg MACH3_DUNE_VERSION=$MACH3_DUNE_VERSION
+            --file "${{ matrix.file }}" \
+            --tag ghcr.io/dune/mach3:"${{ matrix.tag }}"" \
+            --build-arg MACH3_DUNE_VERSION="${MACH3_DUNE_VERSION}"

@@ -8,7 +8,7 @@ Binned:
   FileName: "./build/Inputs/ExampleAtmosphericBinning.root"
   EnergyAxisHistName: "EnergyAxisBinning"
   CosineZAxisHistName: "CosineZAxisBinning"
-  
+
 OscProbCalcerSetup:
   ImplementationName: "CUDAProb3"
   EarthModelFileName: "build/_deps/cudaprob3-src/models/PREM_4layer.dat"

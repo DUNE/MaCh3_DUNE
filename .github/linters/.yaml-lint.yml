@@ -1,6 +1,8 @@
+---
 # .yamllint
 extends: default
 
 rules:
   indentation: disable  # Disable indentation rule
   line-length: disable
+  truthy: disable
