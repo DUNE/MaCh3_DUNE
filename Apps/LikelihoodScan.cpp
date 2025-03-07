@@ -23,6 +23,15 @@ int main(int argc, char * argv[]) {
   }
   manager* FitManager = new manager(argv[1]);
 
+  // 1D scan on by default, and 2D off
+  const bool do_1d_llhscan = GetFromManager(FitManager->raw()["General"]["1DLLHScan"], true);
+  const bool do_2d_llhscan = GetFromManager(FitManager->raw()["General"]["2DLLHScan"], false);
+
+  if (!do_1d_llhscan && !do_2d_llhscan) {
+    MACH3LOG_ERROR("Neither 1D or 2D llhscan enabled");
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+
   //###############################################################################################################################
   //Create samplePDFFD objects
   
@@ -34,6 +43,9 @@ int main(int argc, char * argv[]) {
 
   //###############################################################################################################################
   //Perform reweight, print total integral, and set data
+  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
+  for (int i = 0; i < oscpars.size(); i++)
+    osc->setPar(i, oscpars.at(i));
 
   std::vector<TH1*> DUNEHists;
   for(auto Sample : DUNEPdfs){
@@ -62,5 +74,8 @@ int main(int argc, char * argv[]) {
   MaCh3Fitter->addSystObj(osc);
   MaCh3Fitter->addSystObj(xsec);
   
-  MaCh3Fitter->RunLLHScan();  
+  if (do_1d_llhscan)
+    MaCh3Fitter->RunLLHScan();
+  if (do_2d_llhscan)
+    MaCh3Fitter->Run2DLLHScan();
 }
