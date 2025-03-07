@@ -1,3 +1,4 @@
+---
 SampleName: "numuselec"
 SampleType: "Atm"
 MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes.yaml"
