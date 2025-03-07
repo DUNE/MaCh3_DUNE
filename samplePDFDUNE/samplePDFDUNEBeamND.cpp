@@ -1,6 +1,11 @@
 #include "samplePDFDUNEBeamND.h"
 
-samplePDFDUNEBeamND::samplePDFDUNEBeamND(std::string mc_version_, covarianceXsec* xsec_cov_, covarianceOsc* osc_cov_) : samplePDFFDBase(mc_version_, xsec_cov_, osc_cov_) {  
+samplePDFDUNEBeamND::samplePDFDUNEBeamND(std::string mc_version_, covarianceXsec* xsec_cov_, covarianceOsc* osc_cov_=nullptr) : samplePDFFDBase(mc_version_, xsec_cov_, osc_cov_) {
+  OscCov = nullptr;
+  
+  KinematicParameters = &KinematicParametersDUNE;
+  ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
+  
   Initialise();
 }
 
@@ -10,8 +15,9 @@ samplePDFDUNEBeamND::~samplePDFDUNEBeamND() {
 void samplePDFDUNEBeamND::Init() {
   dunendmcSamples.resize(nSamples,dunemc_base());
   
-  IsRHC = SampleManager->raw()["SampleBools"]["isrhc"].as<bool>();
+  IsFHC = SampleManager->raw()["SampleBools"]["isFHC"].as<double>();
   iselike = SampleManager->raw()["SampleBools"]["iselike"].as<bool>();
+  pot = SampleManager->raw()["POT"].as<double>();
 
   tot_escale_nd_pos = -999;
   tot_escale_sqrt_nd_pos = -999;
@@ -145,14 +151,13 @@ void samplePDFDUNEBeamND::SetupSplines() {
 void samplePDFDUNEBeamND::SetupWeightPointers() {
   for (size_t i = 0; i < dunendmcSamples.size(); ++i) {
     for (int j = 0; j < dunendmcSamples[i].nEvents; ++j) {
-      MCSamples[i].ntotal_weight_pointers[j] = 6;
+      MCSamples[i].ntotal_weight_pointers[j] = 5;
       MCSamples[i].total_weight_pointers[j].resize(MCSamples[i].ntotal_weight_pointers[j]);
       MCSamples[i].total_weight_pointers[j][0] = &(dunendmcSamples[i].pot_s);
       MCSamples[i].total_weight_pointers[j][1] = &(dunendmcSamples[i].norm_s);
-      MCSamples[i].total_weight_pointers[j][2] = MCSamples[i].osc_w_pointer[j];
-      MCSamples[i].total_weight_pointers[j][3] = &(dunendmcSamples[i].rw_berpaacvwgt[j]);
-      MCSamples[i].total_weight_pointers[j][4] = &(dunendmcSamples[i].flux_w[j]);
-      MCSamples[i].total_weight_pointers[j][5] = &(MCSamples[i].xsec_w[j]);
+      MCSamples[i].total_weight_pointers[j][2] = &(dunendmcSamples[i].rw_berpaacvwgt[j]);
+      MCSamples[i].total_weight_pointers[j][3] = &(dunendmcSamples[i].flux_w[j]);
+      MCSamples[i].total_weight_pointers[j][4] = &(MCSamples[i].xsec_w[j]);
     }
   }
 }
@@ -220,7 +225,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   _data->SetBranchStatus("eN", 1);
   _data->SetBranchAddress("eN", &_eN);
 
-  if (!IsRHC) { 
+  if (IsFHC) { 
     duneobj->norm_s = (1e21/1.5e21);
   } else {
     duneobj->norm_s = (1e21/1.905e21);
@@ -299,9 +304,9 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
     //Assume everything is on Argon for now....
     duneobj->Target[i] = 40;
 
-    //DB TODO FIX - Magic Number 14 comes from SIMB mode handling - would need to adjust for GENIE mode handling
     int M3Mode = Modes->GetModeFromGenerator(std::abs(_mode));
-    if (!_isCC) M3Mode += 14;
+    if (!_isCC) M3Mode += 14; //Account for no ability to distinguish CC/NC
+    if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
     duneobj->mode[i] = M3Mode;
     
     duneobj->flux_w[i] = 1.0;
@@ -317,10 +322,22 @@ const double* samplePDFDUNEBeamND::GetPointerToKinematicParameter(KinematicTypes
   
   switch(KinPar){
   case kTrueNeutrinoEnergy:
-    KinematicValue = &dunendmcSamples[iSample].rw_etru[iEvent]; 
+    KinematicValue = &(dunendmcSamples[iSample].rw_etru[iEvent]);
     break;
-  case kRecoQ:
-    KinematicValue = &dunendmcSamples[iSample].rw_reco_q[iEvent];
+  case kRecoNeutrinoEnergy:
+    KinematicValue = &(dunendmcSamples[iSample].rw_erec_shifted[iEvent]);
+    break;
+  case kyRec:
+    KinematicValue = &(dunendmcSamples[iSample].rw_yrec[iEvent]);
+    break;
+  case kOscChannel:
+    KinematicValue = &(MCSamples[iSample].ChannelIndex);
+    break;
+  case kMode:
+    KinematicValue = &(dunendmcSamples[iSample].mode[iEvent]);
+    break;
+  case kIsFHC:
+    KinematicValue = &(IsFHC);
     break;
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
@@ -364,9 +381,9 @@ void samplePDFDUNEBeamND::setupFDMC(int iSample) {
 
 void samplePDFDUNEBeamND::applyShifts(int iSample, int iEvent) {
   // reset erec back to original value
-  
   dunendmcSamples[iSample].rw_erec_shifted[iEvent] = dunendmcSamples[iSample].rw_erec[iEvent];
 
+  /*
   //Calculate values needed
   double sqrtErecHad =  sqrt(dunendmcSamples[iSample].rw_erec_had[iEvent]);
   double sqrtErecLep =  sqrt(dunendmcSamples[iSample].rw_erec_lep[iEvent]);
@@ -423,11 +440,54 @@ void samplePDFDUNEBeamND::applyShifts(int iSample, int iEvent) {
   NResND(NDDetectorSystPointers[17], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoN[iEvent], dunendmcSamples[iSample].rw_eN[iEvent]);
 
   EMResND(NDDetectorSystPointers[18], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoPi0[iEvent], dunendmcSamples[iSample].rw_ePi0[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], dunendmcSamples[iSample].rw_LepE[iEvent], CCnue);
-
+  */
 }
 
 std::vector<double> samplePDFDUNEBeamND::ReturnKinematicParameterBinning(std::string KinematicParameterStr) {
-  (void)KinematicParameterStr;
-  std::vector<double> binningVector;
-  return binningVector;
+  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameterStr));
+  std::vector<double> ReturnVec;
+
+  switch (KinPar) {
+
+  case kIsFHC:
+    ReturnVec.resize(3);
+    ReturnVec[0] = -0.5;
+    ReturnVec[1] = 0.5;
+    ReturnVec[2] = 1.5;
+    break;
+    
+  case kTrueNeutrinoEnergy:
+    for (int i=0;i<20;i++) {
+      ReturnVec.emplace_back(i);
+    }
+    ReturnVec.emplace_back(100.);
+    ReturnVec.emplace_back(1000.);
+    break;
+
+  case kRecoNeutrinoEnergy:
+    ReturnVec.resize(XBinEdges.size());
+    for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
+    break;
+
+  case kyRec:
+    ReturnVec.resize(YBinEdges.size());
+    for (unsigned int bin_i=0;bin_i<YBinEdges.size();bin_i++) {ReturnVec[bin_i] = YBinEdges[bin_i];}
+    break;
+
+  case kOscChannel:
+    ReturnVec.resize(GetNsamples());
+    for (int bin_i=0;bin_i<GetNsamples();bin_i++) {ReturnVec[bin_i] = bin_i;}
+    break;
+
+  case kMode:
+    ReturnVec.resize(Modes->GetNModes());
+    for (int bin_i=0;bin_i<Modes->GetNModes();bin_i++) {ReturnVec[bin_i] = bin_i;}
+    break;
+
+  default:
+    MACH3LOG_ERROR("Unknown KinPar: {}",static_cast<int>(KinPar));
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+
+  return ReturnVec;
 }

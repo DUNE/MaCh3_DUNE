@@ -1,6 +1,7 @@
 General:
   OutputFile: "DuneEventRates.root"
-  DUNESamples: ["configs/Samples/SamplePDFDune_FHC_numuselec.yaml", "configs/Samples/SamplePDFDune_FHC_nueselec.yaml", "configs/Samples/SamplePDFDune_RHC_numuselec.yaml", "configs/Samples/SamplePDFDune_RHC_nueselec.yaml"]	
+  #DUNESamples: ["configs/Samples/SamplePDFDune_FHC_numuselec.yaml", "configs/Samples/SamplePDFDune_FHC_nueselec.yaml", "configs/Samples/SamplePDFDune_RHC_numuselec.yaml", "configs/Samples/SamplePDFDune_RHC_nueselec.yaml"]
+  DUNESamples: ["configs/Samples/SamplePDFDuneND_FHC_CCnumuselec.yaml"]
   #Nu-FIT
   #OscillationParameters: [0.310, 0.582, 0.224, 7.39E-5, 2.5254E-3, -2.498]
   # T2K-like best-fit
