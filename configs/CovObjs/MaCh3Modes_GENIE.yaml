@@ -154,7 +154,7 @@ NCQE:
 NCDIS:
   Name: "NCDIS"
   GeneratorMaping: [17]
-  IsNC:	true
+  IsNC: true
   PlotColor: 2
   SplineSuffix: "ncdis"
 
