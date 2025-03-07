@@ -1,33 +1,33 @@
 # MaCh3_DUNE
 
-# Building MaCh3 DUNE
+## Building MaCh3 DUNE
 
-Dependencies:
+### Dependencies:
 
 - gcc (tested on 12.2.0)
-- CMake (tested on 3.27.7) 
+- CMake (tested on 3.27.7)
 - ROOT (tested on 6.28.06)
 
 A setup script which pulls cvmfs dependancies is included here:
 ```bash
-$ source setup_dune_env.sh
+source setup_dune_env.sh
 ```
 
-Cloning:
+### Cloning and Building
 
 ```bash
-$ mkdir MaCh3_DUNE
-$ git clone git@github.com:DUNE/MaCh3_DUNE.git MaCh3_DUNE
-$ cd MaCh3_DUNE
-$ mkdir build;
-$ cd build
+mkdir MaCh3_DUNE
+git clone git@github.com:DUNE/MaCh3_DUNE.git MaCh3_DUNE
+cd MaCh3_DUNE
+mkdir build;
+cd build
 ```
 
 Then perform the cmake build command:
 
 ```bash
-$ cmake .. -DCUDAProb3_ENABLED=[ON,OFF] -DCUDAProb3Linear_ENABLED=[ON,OFF]
-$ make install
+cmake .. -DCUDAProb3_ENABLED=[ON,OFF] -DCUDAProb3Linear_ENABLED=[ON,OFF]
+make install
 ```
 
 Additional cmake options are available in the MaCh3-Core README
