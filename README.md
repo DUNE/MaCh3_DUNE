@@ -2,7 +2,7 @@
 
 ## Building MaCh3 DUNE
 
-### Dependencies:
+### Dependencies
 
 - gcc (tested on 12.2.0)
 - CMake (tested on 3.27.7)

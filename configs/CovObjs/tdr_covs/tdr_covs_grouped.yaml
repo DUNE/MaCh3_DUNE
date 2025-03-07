@@ -647,7 +647,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -668,7 +668,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -689,7 +689,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 0.09
     FlatPrior: false
     Names:
@@ -710,7 +710,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -731,7 +731,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -752,7 +752,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -773,7 +773,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -795,7 +795,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -817,7 +817,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -839,7 +839,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -861,7 +861,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -883,7 +883,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -907,7 +907,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -931,7 +931,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -955,7 +955,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -979,7 +979,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1003,7 +1003,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1029,7 +1029,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1055,7 +1055,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1081,7 +1081,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1107,7 +1107,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1133,7 +1133,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1155,7 +1155,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1177,7 +1177,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1199,7 +1199,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1221,7 +1221,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1243,7 +1243,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1265,7 +1265,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1286,7 +1286,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1307,7 +1307,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1328,7 +1328,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1349,7 +1349,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 0.2
     FlatPrior: false
     Names:
@@ -1370,7 +1370,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1391,7 +1391,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1412,7 +1412,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1433,7 +1433,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1454,7 +1454,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1475,7 +1475,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1496,7 +1496,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1517,7 +1517,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1538,7 +1538,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1559,7 +1559,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1580,7 +1580,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1601,7 +1601,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1622,7 +1622,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1643,7 +1643,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1664,7 +1664,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1685,7 +1685,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1706,7 +1706,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1727,7 +1727,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1748,7 +1748,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1769,7 +1769,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1790,7 +1790,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1811,7 +1811,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1836,7 +1836,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND","FD"]
+    DetID: ["ND", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
