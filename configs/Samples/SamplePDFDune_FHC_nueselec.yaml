@@ -21,7 +21,8 @@ Binning:
 
 DUNESampleBools:
   iselike: yes
-
+  isFHC: 1
+  
 InputFiles:
   mtupleprefix: "inputs/DUNE_CAF_files/FD_FHC_ger_"
   mtuplesuffix: "_nueselec.root"

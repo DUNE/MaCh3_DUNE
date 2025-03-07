@@ -21,7 +21,7 @@ public:
   ~samplePDFDUNEBeamFD();
 
   /// @brief Enum to identify kinematics
-  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel};
+  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC};
 
 protected:
   /// @brief Initialises object
@@ -90,6 +90,7 @@ protected:
   /// Value of POT used for sample
   double pot;
   bool iselike;
+  double isFHC;
 
   //Positions of FD Detector systematics
   double tot_escale_fd_pos;
@@ -129,7 +130,8 @@ protected:
     {"CVNNumu",kCVNNumu},
     {"CVNNue",kCVNNue},
     {"Mode",kM3Mode},
-    {"OscillationChannel",kOscChannel}
+    {"OscillationChannel",kOscChannel},
+    {"IsFHC",kIsFHC}
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -141,7 +143,8 @@ protected:
     {kCVNNumu,"CVNNumu"},
     {kCVNNue,"CVNNue"},
     {kM3Mode,"Mode"},
-    {kOscChannel,"OscillationChannel"}
+    {kOscChannel,"OscillationChannel"},
+    {kIsFHC,"IsFHC"}
   };
 };
 
