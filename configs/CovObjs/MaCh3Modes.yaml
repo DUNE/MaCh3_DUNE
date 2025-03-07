@@ -54,7 +54,7 @@ CC1Kaon:
 CCDIS:
   Name: "CCDIS"
   GeneratorMaping: [2]
-  IsNC:	false
+  IsNC: false
   PlotColor: 2
   SplineSuffix: "ccdis"
 
