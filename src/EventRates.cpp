@@ -15,7 +15,7 @@
 #include "samplePDFDUNE/MaCh3DUNEFactory.h"
 #include "samplePDFDUNE/StructsDUNE.h"
 
-void Write1DHistogramsToFile(std::string OutFileName, std::vector<TH1D*> Histograms) {
+void Write1DHistogramsToFile(std::string OutFileName, std::vector<TH1*> Histograms) {
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutFileName.c_str(), "RECREATE"));
   OutputFile->cd();
   for(auto Hist : Histograms){
@@ -24,7 +24,7 @@ void Write1DHistogramsToFile(std::string OutFileName, std::vector<TH1D*> Histogr
   OutputFile->Close();
 }
 
-void Write1DHistogramsToPdf(std::string OutFileName, std::vector<TH1D*> Histograms) {
+void Write1DHistogramsToPdf(std::string OutFileName, std::vector<TH1*> Histograms) {
   //Remove root from end of file
   OutFileName.erase(OutFileName.find('.'));
   OutFileName+=".pdf";
@@ -55,10 +55,13 @@ int main(int argc, char * argv[]) {
   //###############################################################################################################################
   //Perform reweight and print total integral
 
-  std::vector<TH1D*> DUNEHists;
+  std::vector<TH1*> DUNEHists;
   for(auto Sample : DUNEPdfs){
     Sample->reweight();
-    DUNEHists.push_back(Sample->get1DHist());
+    if (Sample->GetNDim() == 1)
+      DUNEHists.push_back(Sample->get1DHist());
+    else if (Sample->GetNDim() == 2)
+      DUNEHists.push_back(Sample->get2DHist());
     
     std::string EventRateString = fmt::format("{:.2f}", Sample->get1DHist()->Integral());
     MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetName(), EventRateString);

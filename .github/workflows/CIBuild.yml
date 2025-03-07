@@ -6,8 +6,8 @@ name: Build CI
 # The events that trigger the workflow
 on:
   pull_request:
-    branches: [ develop ]
-
+    branches: [ develop  ]
+  
 permissions:
   contents: read
   packages: write
@@ -22,9 +22,9 @@ jobs:
           - os: Alma9
             file: doc/MaCh3DockerFiles/Alma9/Dockerfile
             tag: alma9latest
-         # - os: Rocky9
-         #   file: doc/MaCh3DockerFiles/Rocky9/Dockerfile
-         #   tag: rocky9latest
+          - os: Ubuntu22.04
+            file: doc/MaCh3DockerFiles/Ubuntu22.04/Dockerfile
+            tag: ubuntulatest
 
     name: Build CI ${{ matrix.os }}
 

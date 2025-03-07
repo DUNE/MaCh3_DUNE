@@ -23,6 +23,15 @@ int main(int argc, char * argv[]) {
   }
   manager* FitManager = new manager(argv[1]);
 
+  // 1D scan on by default, and 2D off
+  const bool do_1d_llhscan = GetFromManager(FitManager->raw()["General"]["1DLLHScan"], true);
+  const bool do_2d_llhscan = GetFromManager(FitManager->raw()["General"]["2DLLHScan"], false);
+
+  if (!do_1d_llhscan && !do_2d_llhscan) {
+    MACH3LOG_ERROR("Neither 1D or 2D llhscan enabled");
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+
   //###############################################################################################################################
   //Create samplePDFFD objects
   
@@ -34,14 +43,23 @@ int main(int argc, char * argv[]) {
 
   //###############################################################################################################################
   //Perform reweight, print total integral, and set data
+  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
+  for (int i = 0; i < oscpars.size(); i++)
+    osc->setPar(i, oscpars.at(i));
 
-  std::vector<TH1D*> DUNEHists;
+  std::vector<TH1*> DUNEHists;
   for(auto Sample : DUNEPdfs){
     Sample->reweight();
-    DUNEHists.push_back(Sample->get1DHist());
+    if (Sample->GetNDim() == 1)
+      DUNEHists.push_back(Sample->get1DHist());
+    else if (Sample->GetNDim() == 2)
+      DUNEHists.push_back(Sample->get2DHist());
 
     MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetName(), Sample->get1DHist()->Integral());
-    Sample->addData(DUNEHists.back());
+    if (Sample->GetNDim() == 1)
+      Sample->addData((TH1D*)DUNEHists.back());
+    else if (Sample->GetNDim() == 2)
+      Sample->addData((TH2D*)DUNEHists.back());
   }
   std::unique_ptr<FitterBase> MaCh3Fitter = std::make_unique<mcmc>(FitManager);
 
@@ -56,5 +74,8 @@ int main(int argc, char * argv[]) {
   MaCh3Fitter->addSystObj(osc);
   MaCh3Fitter->addSystObj(xsec);
   
-  MaCh3Fitter->RunLLHScan();  
+  if (do_1d_llhscan)
+    MaCh3Fitter->RunLLHScan();
+  if (do_2d_llhscan)
+    MaCh3Fitter->Run2DLLHScan();
 }
