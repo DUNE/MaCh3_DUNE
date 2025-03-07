@@ -109,7 +109,7 @@ Systematics:
     DetID: 984
     Error: 6.28331122896200340
     FlatPrior: true
-    #  It has special treatment as it is continuous param
+    # It has special treatment as it is continuous param
     ParameterBounds: [-999, 999]
     ParameterGroup: Osc
     ParameterValues:

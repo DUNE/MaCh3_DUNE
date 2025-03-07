@@ -6,7 +6,7 @@
 
 version: 2
 updates:
-  - package-ecosystem: "github-actions" # Specify that Dependabot should check for GitHub Actions updates
-    directory: ".github/workflows/" # Location of the GitHub Actions workflow files
+  - package-ecosystem: "github-actions"
+    directory: ".github/workflows/"
     schedule:
-      interval: "weekly" # Check for updates on a weekly basis
+      interval: "weekly"

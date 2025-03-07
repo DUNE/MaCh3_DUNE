@@ -6,3 +6,4 @@ rules:
   indentation: disable  # Disable indentation rule
   line-length: disable
   truthy: disable
+  comments: disable
