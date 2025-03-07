@@ -26,7 +26,7 @@ MaCh3Modes: [
   "NCCOH",
   "NCDiff",
   "NCNuEl",
-  "NCIMD",  
+  "NCIMD",
   "NCAnuGam",
   "NCMEC",
   "NCCOHEL",
@@ -35,7 +35,6 @@ MaCh3Modes: [
   "NCIMDAnn"
   ]
 
-<<<<<<< HEAD
 #CC Interaction Modes
 
 CCQE:
@@ -235,8 +234,3 @@ NCIMDAnn:
   IsNC: true
   PlotColor: 2
   SplineSuffix: "ncimdannihilation"
-=======
-NONE:
-  Name: "NONE"
-  GeneratorMaping: [0]
->>>>>>> origin/develop
