@@ -152,7 +152,7 @@ NCQE:
 #  SplineSuffix: "unknown"
 
 NCDIS:
-  Name:	"NCDIS"
+  Name: "NCDIS"
   GeneratorMaping: [14]
   IsNC:	true
   PlotColor: 2
