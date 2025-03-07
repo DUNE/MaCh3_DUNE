@@ -16,5 +16,5 @@ var searchData=
   ['emescalesqrtnd_13',['EMEScaleSqrtND',['../StructsDUNE_8h.html#a1923d8548f4a36340e977ef93e04234a',1,'StructsDUNE.h']]],
   ['emresfd_14',['EMResFD',['../StructsDUNE_8h.html#ac64ee2d7a2bab1588dc921d8ca600729',1,'StructsDUNE.h']]],
   ['emresnd_15',['EMResND',['../StructsDUNE_8h.html#a2a3e34a4c0d4dc4ac9113ed9cb881490',1,'StructsDUNE.h']]],
-  ['event_20rates_16',['Event Rates',['../index.html#autotoc_md2',1,'']]]
+  ['event_20rates_16',['event rates',['../index.html#autotoc_md4',1,'Event Rates'],['../index.html#autotoc_md6',1,'Nominal Integrated Event rates']]]
 ];
