@@ -5,7 +5,7 @@
   },
   "CHECKS": {
     "prefixes": ["feat: ", "bugfix: ", "tidy: ", "breaking: ", "core_update: ", "patch: "],
-    "regexp": "^(feat|bugfix|tidy|breaking|core_update): .+",
+    "regexp": "^(feat|bugfix|tidy|breaking|core_update|patch): .+",
     "regexpFlags": "i",
     "ignoreLabels" : ["dont-check-PRs-with-this-label", "meta"]
   },
