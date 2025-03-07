@@ -1,108 +1,102 @@
 # MaCh3_DUNE
 
-##################################
-# CMAKE #########
-##################################
+## MaCh3 Build
 
-Dependencies
+### Dependencies
 
-- CMake (version > 3.8). 
+- CMake (version > 3.8).
 - MaCh3 Core tag: DUNECore2024 (To be used until the core version currently being developped gets integrated with MaCh3 DUNE)
 - ROOT (currently tested on 6.18)
 
-Building:
+### CMake
 
-~~~~~~~~~~~~~~
-$ mkdir MaCh3_DUNE
-$ git clone git@github.com:DUNE/MaCh3_DUNE.git MaCh3_DUNE
-$ cd MaCh3_DUNE
-~~~~~~~~~~~~~~
+```bash
+mkdir MaCh3_DUNE
+git clone git@github.com:DUNE/MaCh3_DUNE.git
+cd MaCh3_DUNE
+```
 
 Now setup some dependencies and then actually build MaCh3_DUNE
 
-~~~~~~~~~~~~~~~
-$ source setup.sh # !! Here you need to make sure that ROOTSYS and Cuda libraries are also set !!
-$ source setup_dune_env.sh
-$ mkdir build;
-$ cd build
-~~~~~~~~~~~~~~~
+```bash
+# For clusters with access to CVMFS
+source setup_dune_env.sh
+mkdir build;
+cd build
+```
 
 Optional flags are described briefly below, options are shown grouped by square brackets and delimited by vertical lines. Default is on the left.
 
-~~~~~~~~~~~~~~
-$ cmake .. -DCPU_ONLY=[OFF|ON] -DUSE_PROB3=[OFF|ON] -DSINGLE_THREAD_ONLY=[OFF|ON] -DCUDA_SAMPLES=<path_to_cuda>/CentOS/samples
-$ make
-~~~~~~~~~~~~~~
+```bash
+cmake .. -DGPU_ENABLED=[OFF|ON] -DUSE_PROB3=[OFF|ON] -DSINGLE_THREAD_ONLY=[OFF|ON] -DDEBUG_ENABLED=[OFF|ON] 
+make
+```
 
 A few notes:
 CUDA_SAMPLES not necessary if using CPU_ONLY=ON
 
 If you want to simultaneously develop both the MaCh3 core code and the MaCh3 DUNE code then you can build against a local version of MaCh3 by adding:
 
-~~~~~~~~~~~~~~
-$ -DCPM_MaCh3_SOURCE=/path/to/MaCh3/folder
-~~~~~~~~~~~~~~
+```bash
+-DCPM_MaCh3_SOURCE=/path/to/MaCh3/folder
+```
 
 This will overrule the CPMFindPackage command in the CMakeList.txt and will tell CPM to build that instead.
 
-###################################
-# Event Rates ######
-###################################
+## Event Rates
 
-Once you've got setup you'll then need to setup some symlinks to point to your MC and spline files. You can do this by modifying scripts/link_files.sh script. You'll need to change the FILESDIR variable to point to the relevant folder on your machine. The places these files currently live are listed here:
+Once you've got setup you'll then need to setup some symlinks to point to your MC and spline files. You can do this by modifying `scripts/link_files.sh` script. You'll need to change the FILESDIR variable to point to the relevant folder on your machine. The places these files currently live are listed here:
 
 Imperial College London lx:
-~~~~~~~~~~~~~~
+```bash
 /vols/dune/ljw20/
-~~~~~~~~~~~~~~
+```
 
 FNAL cluster:
-~~~~~~~~~~~~~~
+```bash
 /dune/data/users/lwarsame
-~~~~~~~~~~~~~~
+```
 
 ComputeCanada Cedar:
-~~~~~~~~~~~~~~
+```bash
 /scratch/liban
-~~~~~~~~~~~~~~
+```
 
 NERSC Perlmutter:
-~~~~~~~~~~~~~~
+```bash
 /pscratch/sd/l/lwarsame
-~~~~~~~~~~~~~~
+```
 
 CVMFS:
-~~~~~~~~~~~~~~
+```bash
 /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2
-~~~~~~~~~~~~~~
+```
 
 Current (Feburary 2024) FD event rates using DUNE FD TDR inputs are below (ND is still under-development). These are made using xsec systematics at their prior central value. Oscillation parameter values used here are:
 
-sin2th12 = 0.307
+### Oscillation Parameter Values
+<div align="center">
 
-sin2th23 = 0.52
+|     Parameter     |       Value       |     Unit     |
+|:-----------------:|:-----------------:|:------------:|
+|     sin²θ₁₂       |       0.307       |      -       |
+|     sin²θ₂₃       |       0.52        |      -       |
+|     sin²θ₁₃       |       0.0218      |      -       |
+|     Δm²₃₂         |    7.53 × 10⁻⁵    |     eV²      |
+|     Δm²₁₂         |    2.509 × 10⁻³   |     eV²      |
+|     δCP           |      -1.601       |   radians    |
 
-sin2th13 = 0.0218
+</div>
 
-dm2_32 = 7.53E-5 eV^2
+### Nominal Integrated Event rates
 
-dm2_12 = 2.509E-3 eV^2 
+<div align="center">
 
-dCP = -1.601 radians
+|       Type        |     Unoscillated     |     Oscillated     |
+|:-----------------:|:-------------------:|:-----------------:|
+| FHC ν<sub>μ</sub> |     25941.57467     |     7977.36421    |
+| FHC ν<sub>e</sub> |      390.85150      |     1698.28079    |
+| RHC ν<sub>μ</sub> |     12492.61743     |     4217.78765    |
+| RHC ν<sub>e</sub> |      208.31873      |     447.09673     |
 
-~~~~~~~~~~~~~~~~
-Integrals of nominal hists:
-
-FHC_numu unosc:      25941.57467
-FHC_numu   osc:      7977.36421
- 
-FHC_nue unosc:      390.85150
-FHC_nue   osc:      1698.28079
- 
-RHC_numu unosc:      12492.61743
-RHC_numu   osc:      4217.78765
- 
-RHC_nue unosc:      208.31873
-RHC_nue   osc:      447.09673
-~~~~~~~~~~~~~~~~
-
+</div>

@@ -1,9 +1,10 @@
+---
+
 Systematics:
 
-
-#V2 initial commit
-#WARNING !!!
-#osc covariance require particular order of osc parameters, do not change order of dials here
+# V2 initial commit
+# WARNING !!!
+# osc covariance require particular order of osc parameters, do not change order of dials here
 - Systematic:
     Names:
       FancyName: sin2th_12
