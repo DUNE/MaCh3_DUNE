@@ -20,47 +20,120 @@
 
 #include "StructsDUNE.h"
 
+/// @brief Base class for handling beam ND GAR samples
 class samplePDFDUNEBeamNDGar : virtual public samplePDFFDBase
 {
 public:
+  /// @brief Constructor
+  /// @param mc_version Configuration file
+  /// @param xsec_cov cross-section covariance matrix
   samplePDFDUNEBeamNDGar(std::string mc_version, covarianceXsec* xsec_cov);
+
+  /// @brief destructor
   ~samplePDFDUNEBeamNDGar();
 
+  /// @brief Enum to identify kinematics
   enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kPionMultiplicity, kNRecoParticles, kInFDV, kTrueMinusRecoEnergyRatio, kTrueMinusRecoEnergy, kNTrueMuons, kNRecoMuons};
   
  protected:
+  /// @brief Initialises object 
   void Init();
+
+  /// @brief Function to setup MC from file
+  /// @param iSample sample ID
+  /// @return Total number of events
   int setupExperimentMC(int iSample);
+
+  /// @brief Tells FD base which variables to point to/be set to
+  /// @param iSample Sample ID
   void setupFDMC(int iSample);
 
+  /// @brief Sets up pointers weights for each event (oscillation/xsec/etc.)
   void SetupWeightPointers();
+
+  /// @brief Sets up splines 
   void SetupSplines();
   
-  //DB functions which could be initialised to do something which is non-trivial
+  /// @brief NOT IMPLEMENTED: Dunder method to calculate xsec weights
+  /// @param iSample sample ID
+  /// @param iEvent Event number
   double CalcXsecWeightFunc(int iSample, int iEvent) {return 1.;}
+
+  /// @brief NOT IMPLEMENTED: Apply kinematic shifts
+  /// @param iSample Sample Number
+  /// @param iEvent Event number
   void applyShifts(int iSample, int iEvent) {}
 
+  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
+  /// @param KinPar Kinematic parameter enum val
+  /// @param iSample Sample ID
+  /// @param iEvent Event ID
+  /// @return Pointer to KinPar for a given event
   const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent);
+
+  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
+  /// @param KinematicVariable Kinematic parameter ID as double (gets cast -> int)
+  /// @param iSample Sample ID
+  /// @param iEvent Event ID
+  /// @return Value of kinetmatic parameter corresponding for a given event
   const double* GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent);
+  
+  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
+  /// @param KinematicParameter Kinematic parameter name as string (gets cast -> int)
+  /// @param iSample Sample ID
+  /// @param iEvent Event ID
+  /// @return Value of kinematic parameter corresponding for a given event
   const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
 
+  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
+  /// @param KinematicVariable Kinematic parameter ID as double (gets cast -> int)
+  /// @param iSample Sample ID
+  /// @param iEvent Event ID
+  /// @return Value of kinetmatic parameter corresponding for a given event
   double ReturnKinematicParameter(double KinematicVariable, int iSample, int iEvent);
+  
+  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
+  /// @param KinematicParameter Kinematic parameter name as string (gets cast -> int)
+  /// @param iSample Sample ID
+  /// @param iEvent Event ID
+  /// @return Value of kinematic parameter corresponding for a given event
   double ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
-
+  
+  /// @brief Gets binning for a given parameter
+  /// @param KinematicParameterStr Parameter name
+  /// @return Vector containing parameter bins
   std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameter);
+
+  /// @brief Gets binning for a given parameter
+  /// @param KinPar Parameter ID
+  /// @return Vector containing parameter bins
   std::vector<double> ReturnKinematicParameterBinning(KinematicTypes KinematicParameter);
+
+  /// @brief Get kinematic parameter ID from string name
+  /// @param KinematicStr 
+  /// @return Parameter ID
   int ReturnKinematicParameterFromString(std::string KinematicParameterStr);
+
+  /// @brief Gets name of kinematic parmaeter
+  /// @param KinPar Parameter ID
+  /// @return Name of parameter
   std::string ReturnStringFromKinematicParameter(int KinematicParameter);
   
   // dunendmc
+  /// Array filled with MC samples for each oscillation channel
   std::vector<struct dunemc_base> dunendgarmcSamples;
 
+  /// File containing sample objects
   TFile *_sampleFile;
+  /// TTree containing sample Data
   TTree *_data;
+  /// Value of POT used for sample
+  double pot;
+
+
   TString _nutype;
   int _mode;
 
-  double pot;
 
   // dunendgarmc Variables
   double _ev;

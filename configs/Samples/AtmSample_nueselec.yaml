@@ -1,3 +1,4 @@
+---
 SampleName: "nueselec"
 SampleType: "Atm"
 # SelectionCuts:
@@ -9,9 +10,9 @@ SampleType: "Atm"
 #     Bounds: [ 50.0, 1244.0 ]
 Binning:
   XVarStr: "RecoCosineZ"
-  XVarBins: [-1, -0.78, -0.29, 0.31, 0.80, 1]
+  XVarBins: [-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1]
   YVarStr: "RecoNeutrinoEnergy"
-  YVarBins: [0, 0.11, 0.19, 0.33, 0.62, 1.34, 3.35, 16.28, 1e8]
+  YVarBins: [0, 0.11, 0.17, 0.26, 0.4, 0.63, 1.03, 1.71, 2.94, 5.48, 1e8]
 SampleBools:
   IsELike: yes
 InputFiles:
@@ -22,6 +23,7 @@ InputFiles:
 DetID: 24
 NuOsc:
   NuOscConfigFile: "configs/NuOsc/CUDAProb3.yaml"
+  EqualBinningPerOscChannel: true
 NSubSamples: 12
 SubSamples:
   - name: "nue_x_nue"

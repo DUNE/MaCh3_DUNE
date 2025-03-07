@@ -121,7 +121,7 @@ endif()
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
-find_package(MaCh3 1.3.5 EXACT QUIET)
+find_package(MaCh3 1.3.6 EXACT QUIET)
 
 if(NOT MaCh3_FOUND)
   cmessage(STATUS "Didn't find MaCh3, attempting to use built in MaCh3")
@@ -152,7 +152,7 @@ if(NOT MaCh3_FOUND)
   
   CPMAddPackage(
       NAME MaCh3
-      GIT_TAG "v1.3.5"
+      GIT_TAG "v1.3.6"
       GITHUB_REPOSITORY mach3-software/MaCh3
   )
 else()
@@ -169,12 +169,11 @@ if(NOT TARGET MaCh3::All)
 endif()
 
 ############################  C++ Compiler  ####################################
-if (NOT DEFINED CMAKE_CXX_STANDARD OR "${CMAKE_CXX_STANDARD} " STREQUAL " ")
+get_property(MACH3_CXX_STANDARD GLOBAL PROPERTY MACH3_CXX_STANDARD)
+if(NOT DEFINED MACH3_CXX_STANDARD)
   SET(CMAKE_CXX_STANDARD 14)
-endif()
-
-if(DEFINED ROOT_CXX_STANDARD AND ROOT_CXX_STANDARD GREATER CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD ${ROOT_CXX_STANDARD})
+else()
+  SET(CMAKE_CXX_STANDARD ${MACH3_CXX_STANDARD})
 endif()
 cmessage(STATUS "CMAKE CXX Standard: ${CMAKE_CXX_STANDARD}")
 
