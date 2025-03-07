@@ -43,5 +43,5 @@ jobs:
         run: |
           docker build . \
             --file "${{ matrix.file }}" \
-            --tag ghcr.io/dune/mach3:"${{ matrix.tag }}"" \
+            --tag ghcr.io/dune/mach3:"${{ matrix.tag }}" \
             --build-arg MACH3_DUNE_VERSION="${MACH3_DUNE_VERSION}"
