@@ -1,3 +1,4 @@
+---
 General:
   OutputFile: "parameter_study_sterile/test_2d_var/test_var_sterile_all_param_thetav1_dm41_1e-3_nue_numu_selec_recoE_recoCos.root"
 
@@ -98,7 +99,10 @@ General:
         "Name": "OscillationChannel_Single", 
         "VarString": "OscChannel",
         "Breakdown": [[0.0],  [1.0],  [2.0],  [3.0],  [4.0],  [5.0],  [6.0],  [7.0],  [8.0],  [9.0], [10.0], [11.0]],
-	"Names":     ["nue_x_nue","nue_x_numu","nue_x_nutau","numu_x_nue","numu_x_numu","numu_x_nutau","nuebar_x_nuebar","nuebar_x_numubar","nuebar_x_nutaubar","numubar_x_nuebar","numubar_x_numubar","numubar_x_nutaubar"],
+        "Names": ["nue_x_nue","nue_x_numu","nue_x_nutau","numu_x_nue",
+                  "numu_x_numu","numu_x_nutau","nuebar_x_nuebar",
+                  "nuebar_x_numubar","nuebar_x_nutaubar",
+                  "numubar_x_nuebar","numubar_x_numubar","numubar_x_nutaubar"],
       },
       {
         "Name": "OscillationChannel_Group", 
