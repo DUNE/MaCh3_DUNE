@@ -48,7 +48,7 @@ General:
     "VarBins": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4],
     "KinematicCuts": [
       {
-        "Range": [0.1,0.8],
+        "Range": [0.1, 0.8],
         "Name": "TrueNuEnergy",
         "VarString": "TrueNeutrinoEnergy"
       },
@@ -62,8 +62,8 @@ General:
       {
         "Name": "OscillationChannel_Single",
         "VarString": "OscChannel",
-        "Breakdown": [[0.0], [1.0], [2.0], [3.0], [4.0], [5.0], [6.0], [7.0], [8.0], [9.0],[10.0],[11.0]],
-      	"Names": ["nue_x_nue", "nue_x_numu", "nue_x_nutau", "numu_x_nue",
+        "Breakdown": [[0.0], [1.0], [2.0], [3.0], [4.0], [5.0], [6.0], [7.0], [8.0], [9.0], [10.0], [11.0]],
+        "Names": ["nue_x_nue", "nue_x_numu", "nue_x_nutau", "numu_x_nue",
                   "numu_x_numu", "numu_x_nutau", "nuebar_x_nuebar",
                   "nuebar_x_numubar", "nuebar_x_nutaubar", "numubar_x_nuebar",
                   "numubar_x_numubar", "numubar_x_nutaubar"],

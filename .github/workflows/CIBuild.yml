@@ -7,7 +7,7 @@ name: Build CI
 on:
   pull_request:
     branches: [develop]
-  
+
 permissions:
   contents: read
   packages: write
