@@ -1,9 +1,6 @@
 # MaCh3_DUNE
 
-<<<<<<< HEAD
-##################################
-# Building MaCh3 DUNE    #########
-##################################
+# Building MaCh3 DUNE
 
 Dependencies:
 
@@ -12,67 +9,38 @@ Dependencies:
 - ROOT (tested on 6.28.06)
 
 A setup script which pulls cvmfs dependancies is included here:
+```bash
 $ source setup_dune_env.sh
+```
 
 Cloning:
 
-~~~~~~~~~~~~~~
+```bash
 $ mkdir MaCh3_DUNE
 $ git clone git@github.com:DUNE/MaCh3_DUNE.git MaCh3_DUNE
 $ cd MaCh3_DUNE
 $ mkdir build;
 $ cd build
-~~~~~~~~~~~~~~~
-=======
-## MaCh3 Build
-
-### Dependencies
-
-- CMake (version > 3.8).
-- MaCh3 Core tag: DUNECore2024 (To be used until the core version currently being developped gets integrated with MaCh3 DUNE)
-- ROOT (currently tested on 6.18)
-
-### CMake
-
-```bash
-mkdir MaCh3_DUNE
-git clone git@github.com:DUNE/MaCh3_DUNE.git
-cd MaCh3_DUNE
 ```
-
-Now setup some dependencies and then actually build MaCh3_DUNE
-
-```bash
-# For clusters with access to CVMFS
-source setup_dune_env.sh
-mkdir build;
-cd build
-```
->>>>>>> origin/develop
 
 Then perform the cmake build command:
 
-<<<<<<< HEAD
-~~~~~~~~~~~~~~
+```bash
 $ cmake .. -DCUDAProb3_ENABLED=[ON,OFF] -DCUDAProb3Linear_ENABLED=[ON,OFF]
 $ make install
-~~~~~~~~~~~~~~
+```
+
 Additional cmake options are available in the MaCh3-Core README
 
 - CUDAProb3 should be used as the default for atmospheric neutrino oscillations
 - CUDAProb3Linear should be used as the default for beam oscillations
 
 Then source the installation of MaCh3:
-~~~~~~~~~~~~~~
+```bash
 source build/bin/setup.MaCh3DUNE.sh
-~~~~~~~~~~~~~~
+```
 
 This sets everything needed, and needs to be re-sourced on each terminal session when using MaCh3 (Along with any dependancies)
-=======
-```bash
-cmake .. -DGPU_ENABLED=[OFF|ON] -DUSE_PROB3=[OFF|ON] -DSINGLE_THREAD_ONLY=[OFF|ON] -DDEBUG_ENABLED=[OFF|ON] 
-make
-```
 
 A few notes:
 CUDA_SAMPLES not necessary if using CPU_ONLY=ON
