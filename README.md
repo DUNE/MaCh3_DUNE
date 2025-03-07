@@ -88,7 +88,7 @@ Current (Feburary 2024) FD event rates using DUNE FD TDR inputs are below (ND is
 
 </div>
 
-### Nominal Integrated Evetn rates
+### Nominal Integrated Event rates
 
 <div align="center">
 
