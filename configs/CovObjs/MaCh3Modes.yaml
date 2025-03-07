@@ -52,7 +52,7 @@ CC1Kaon:
   SplineSuffix: "unknown"
 
 CCDIS:
-  Name:	"CCDIS"
+  Name: "CCDIS"
   GeneratorMaping: [2]
   IsNC:	false
   PlotColor: 2
@@ -113,7 +113,7 @@ CCCOHEL:
   IsNC: false
   PlotColor: 2
   SplineSuffix: "cccohel"
-  
+
 CCIBD:
   Name: "CCIBD"
   GeneratorMaping: [7]
@@ -213,7 +213,7 @@ NCCOHEL:
   IsNC: true
   PlotColor: 2
   SplineSuffix: "nccohel"
-  
+
 NCIBD:
   Name: "NCIBD"
   GeneratorMaping: [19]

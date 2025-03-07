@@ -33,7 +33,7 @@ InputFiles:
 NuOsc:
   NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
   EqualBinningPerOscChannel: false
-  
+
 SubSamples:
   - Name: "RHC_numu_x_numu"
     LatexName: "RHC_numu_x_numu"
@@ -48,7 +48,7 @@ SubSamples:
     nutype: 12
     oscnutype: 12
   - Name: "RHC_numubar_x_numubar"
-    LatexName: "RHC_numubar_x_numubar"  
+    LatexName: "RHC_numubar_x_numubar"
     mtuplefile: "numubar_x_numubar"
     splinefile: "numubar_x_numubar"
     nutype: -14
@@ -59,8 +59,8 @@ SubSamples:
     splinefile: "nuebar_x_nuebar"
     nutype: -12
     oscnutype: -12
-  - Name: "RHC_numu_x_nue" 
-    LatexName: "RHC_numu_x_nue" 
+  - Name: "RHC_numu_x_nue"
+    LatexName: "RHC_numu_x_nue"
     mtuplefile: "numu_x_nue"
     splinefile: "numu_x_nue"
     nutype: 14
@@ -70,7 +70,7 @@ SubSamples:
     mtuplefile: "numubar_x_nuebar"
     splinefile: "numubar_x_nuebar"
     nutype: -14
-    oscnutype: -12 
+    oscnutype: -12
   - Name: "RHC_nue_x_numu"
     LatexName: "RHC_nue_x_numu"
     mtuplefile: "nue_x_numu"
@@ -84,25 +84,25 @@ SubSamples:
     nutype: -12
     oscnutype: -14
   - Name: "RHC_numu_x_nutau"
-    LatexName: "RHC_numu_x_nutau"  
+    LatexName: "RHC_numu_x_nutau"
     mtuplefile: "numu_x_nutau"
     splinefile: "numu_x_nutau"
     nutype: 14
     oscnutype: 16
   - Name: "RHC_nue_x_nutau"
-    LatexName: "RHC_nue_x_nutau"  
+    LatexName: "RHC_nue_x_nutau"
     mtuplefile: "nue_x_nutau"
     splinefile: "nue_x_nutau"
     nutype: 12
     oscnutype: 16
   - Name: "RHC_numubar_x_nutaubar"
-    LatexName: "RHC_numubar_x_nutaubar"  
+    LatexName: "RHC_numubar_x_nutaubar"
     mtuplefile: "numubar_x_nutaubar"
     splinefile: "numubar_x_nutaubar"
     nutype: -14
     oscnutype: -16
   - Name: "RHC_nuebar_x_nutaubar"
-    LatexName: "RHC_nuebar_x_nutaubar"  
+    LatexName: "RHC_nuebar_x_nutaubar"
     mtuplefile: "nuebar_x_nutaubar"
     splinefile: "nuebar_x_nutaubar"
     nutype: -12
