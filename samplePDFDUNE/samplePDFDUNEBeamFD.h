@@ -14,6 +14,13 @@ public:
   samplePDFDUNEBeamFD(std::string mc_version, covarianceXsec *xsec_cov);
   ~samplePDFDUNEBeamFD();
 
+  double getPurity_numu();
+  double getEfficiency_numu();
+  double getCut();
+
+  double getPurity_nue();
+  double getEfficiency_nue();
+
   enum KinematicTypes {
     kTrueNeutrinoEnergy,
     kRecoNeutrinoEnergy,
@@ -87,9 +94,6 @@ protected:
   // non-trivial
   double CalcXsecWeightFunc(int iSample, int iEvent) { return 1.; }
   void applyShifts(int iSample, int iEvent);
-
-  //double getEfficiency(double mc_events_passedcut, double mc_true_total);
-  //double getPurity(double mc_events_passedcut, double events_incut);
 
   // dunemc
   std::vector<dunemc_base> dunemcSamples;

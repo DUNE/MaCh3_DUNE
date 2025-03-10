@@ -21,7 +21,7 @@ struct dunemc_base {
   double *rw_eRecoPi0;
   double *rw_eRecoN;
 
-  double *rw_recopdg;
+  double *nu_pdg;
 
   double *rw_LepE;
   double *rw_eP;
