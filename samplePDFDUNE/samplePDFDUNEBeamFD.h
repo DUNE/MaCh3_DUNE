@@ -33,8 +33,7 @@ public:
   /// @brief destructor
   ~samplePDFDUNEBeamFD();
 
-  /// @brief Enum to identify kinematics
-  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel};
+  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC};
 
   //More robust getters to make plots in different variables, mode, osc channel, systematic weighting and with bin range 
 

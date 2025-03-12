@@ -63,7 +63,7 @@ int main(int argc, char * argv[]) {
     }
 
     TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy");
-    outFile<<Sample->GetName()<<" "<<Hist->Integral()<<" ";
+    outFile<<Sample->GetName()<<" "<<Hist->Integral()<<std::endl;
   }
 
   //###############################################################################################################################
@@ -81,7 +81,7 @@ int main(int argc, char * argv[]) {
       SelectionVec.push_back(SelecChannel);
 
       TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy",SelectionVec);
-      outFile<<Sample->GetName()<<" "<<MaCh3mode_ToDUNEString((MaCh3_Mode)iModeChan)<<" "<<Hist->Integral()<<" ";
+      outFile<<Sample->GetName()<<" "<<MaCh3mode_ToDUNEString((MaCh3_Mode)iModeChan)<<" "<<Hist->Integral()<<std::endl;
     }
 
     TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy");

@@ -16,7 +16,7 @@ General:
 
   Tests:
     SkipChecks: False
-    TestResultsFile: test/test_results/EventRatesV2TDR.txt
+    TestResultsFile: tests/test_results/EventRatesV2TDR.txt
 
   Fitter:
     FitTestLikelihood: false

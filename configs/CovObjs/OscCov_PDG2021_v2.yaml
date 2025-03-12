@@ -107,7 +107,7 @@ Systematics:
 
 
     DetID: 984
-    Error: 6.28331122896200340
+    Error: 0.0628331122896200340
     FlatPrior: true
     # It has special treatment as it is continuous param
     ParameterBounds: [-999, 999]
@@ -125,9 +125,9 @@ Systematics:
       FancyName: baseline
       ParameterName: baseline
     DetID: 984
-    Error: 1.0
+    Error: 0.01
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 99999]
     ParameterGroup: Osc
     ParameterValues:
       Generated: 1284.9

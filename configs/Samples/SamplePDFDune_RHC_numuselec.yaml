@@ -16,6 +16,7 @@ Binning:
   XVarBins: [0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
 DUNESampleBools:
   iselike: no
+  isfhc: 0
 InputFiles:
   mtupleprefix: "inputs/DUNE_CAF_files/FD_RHC_ger_"
   mtuplesuffix: "_numuselec.root"
@@ -25,7 +26,6 @@ DetID: 24
 NuOsc:
   NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
   EqualBinningPerOscChannel: false
-
 NSubSamples: 12
 SubSamples:
   - name: "RHC_numu_x_numu"

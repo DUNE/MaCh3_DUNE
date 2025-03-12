@@ -37,13 +37,11 @@ foreach(app
     add_executable(${app} ${app}.cpp)
     target_link_libraries(${app} MaCh3DUNE::All MaCh3DuneTestUtils Minuit)
     add_dependencies(MaCh3DUNEApps ${app})
-    install(TARGETS ${app} DESTINATION test)
+    install(TARGETS ${app} DESTINATION tests)
 
 endforeach(app)
 
 
 # Now copy remaining stuff
-install(DIRECTORY test_configs DESTINATION test)
-install(DIRECTORY test_results DESTINATION test)
-
-
+install(DIRECTORY test_configs DESTINATION tests)
+install(DIRECTORY test_results DESTINATION tests)

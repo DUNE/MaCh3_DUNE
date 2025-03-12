@@ -24,6 +24,13 @@ void samplePDFDUNEBeamFD::Init() {
     MACH3LOG_ERROR("Did not find DUNESampleBools:iselike in {}, please add this", SampleManager->GetFileName());
     throw MaCh3Exception(__FILE__, __LINE__);
   }
+
+  if (CheckNodeExists(SampleManager->raw(), "DUNESampleBools", "isfhc" )) {
+    _isFHC = SampleManager->raw()["DUNESampleBools"]["isfhc"].as<int>();
+  } else{
+    MACH3LOG_ERROR("Did not find DUNESampleBools:isfhc in {}, please add this", SampleManager->GetFileName());
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
   
   if (CheckNodeExists(SampleManager->raw(), "POT")) {
     pot = SampleManager->raw()["POT"].as<double>();
@@ -552,6 +559,9 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(double KinematicVariable, i
   case kM3Mode:
     KinematicValue = dunemcSamples[iSample].mode[iEvent];
     break;
+  case kIsFHC:
+    KinematicValue = _isFHC;
+    break;
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type");
     MACH3LOG_ERROR("Was given a Kinematic Variable of {}", KinematicVariable);
@@ -587,8 +597,11 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(std::string KinematicParame
  case kCVNNue:
    KinematicValue = dunemcSamples[iSample].rw_cvnnue_shifted[iEvent];
    break;
+ case kIsFHC:
+   KinematicValue = _isFHC;
+   break;
  default:
-   MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
+   MACH3LOG_ERROR("Did not recognise Kinematic Parameter type... {}", KinematicParameter);
    throw MaCh3Exception(__FILE__, __LINE__);
  }
  
@@ -639,6 +652,7 @@ int samplePDFDUNEBeamFD::ReturnKinematicParameterFromString(std::string Kinemati
   if (KinematicParameterStr.find("CVNNumu") != std::string::npos) {return kCVNNumu;}
   if (KinematicParameterStr.find("CVNNue") != std::string::npos) {return kCVNNue;}
   if (KinematicParameterStr.find("M3Mode") != std::string::npos) {return kM3Mode;}
+  if (KinematicParameterStr.find("IsFHC") != std::string::npos) {return kIsFHC;}
 }
 
 const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent) {
