@@ -1,4 +1,22 @@
-FHC_numu FHC_numu_x_numu 0 FHC_numu FHC_nue_x_nue -4.38459e+07 FHC_numu FHC_numubar_x_numubar 0 FHC_numu FHC_nuebar_x_nuebar 0 FHC_numu FHC_numu_x_nue 0 FHC_numu FHC_numubar_x_nuebar 0 FHC_numu FHC_nue_x_numu 0 FHC_numu FHC_nuebar_x_numubar 0 FHC_numu FHC_numu_x_nutau 0 FHC_numu FHC_nue_x_nutau 0 FHC_numu FHC_numubar_x_nutaubar 0 FHC_numu FHC_nuebar_x_nutaubar 0 FHC_numu -4.38459e+07
+======
+Event Rates by osc channel
+======
+FHC_numu FHC_numu_x_numu 0
+FHC_numu FHC_nue_x_nue -4.38459e+07
+FHC_numu FHC_numubar_x_numubar 0
+FHC_numu FHC_nuebar_x_nuebar 0
+FHC_numu FHC_numu_x_nue 0
+FHC_numu FHC_numubar_x_nuebar 0
+FHC_numu FHC_nue_x_numu 0
+FHC_numu FHC_nuebar_x_numubar 0
+FHC_numu FHC_numu_x_nutau 0
+FHC_numu FHC_nue_x_nutau 0
+FHC_numu FHC_numubar_x_nutaubar 0
+FHC_numu FHC_nuebar_x_nutaubar 0
+FHC_numu -4.38459e+07
+======
+Event Rates by interaction mode
+======
 FHC_numu ccqe 0
 FHC_numu unknown -4.38459e+07
 FHC_numu ccdis 0
@@ -26,4 +44,4 @@ FHC_numu nccohel 0
 FHC_numu ncibd 0
 FHC_numu ncglasres 0
 FHC_numu ncimdannihilation 0
-FHC_numu -4.38459e+07 
+FHC_numu -4.38459e+07

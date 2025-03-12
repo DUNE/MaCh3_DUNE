@@ -46,6 +46,9 @@ int main(int argc, char * argv[]) {
   // Initialise output file
   std::ofstream outFile("TestNewSampleOut.txt");
 
+  outFile<<"======"<<std::endl;
+  outFile<<"Event Rates by osc channel"<<std::endl;
+  outFile<<"======"<<std::endl;
 
   for(auto Sample : DUNEPdfs) {
     int nOscChannels = Sample->getNMCSamples();
@@ -59,7 +62,7 @@ int main(int argc, char * argv[]) {
       SelectionVec.push_back(SelecChannel);
       
       TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy",SelectionVec);
-      outFile<<Sample->GetName()<<" "<<Sample->getFlavourName(iOscChan)<<" "<<Hist->Integral()<<" ";
+      outFile<<Sample->GetName()<<" "<<Sample->getFlavourName(iOscChan)<<" "<<Hist->Integral()<<std::endl;
     }
 
     TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy");
@@ -68,6 +71,9 @@ int main(int argc, char * argv[]) {
 
   //###############################################################################################################################
   //Make interaction channel breakdown
+  outFile<<"======"<<std::endl;
+  outFile<<"Event Rates by interaction mode"<<std::endl;
+  outFile<<"======"<<std::endl;
 
   for(auto Sample : DUNEPdfs) {
     int nModeChannels = kMaCh3_nModes;
@@ -85,7 +91,7 @@ int main(int argc, char * argv[]) {
     }
 
     TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy");
-    outFile<<Sample->GetName()<<" "<<Hist->Integral()<<" ";
+    outFile<<Sample->GetName()<<" "<<Hist->Integral()<<std::endl;
   }
 
   // Do you want to gener
