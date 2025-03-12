@@ -42,18 +42,6 @@ source build/bin/setup.MaCh3DUNE.sh
 
 This sets everything needed, and needs to be re-sourced on each terminal session when using MaCh3 (Along with any dependancies)
 
-A few notes:
-CUDA_SAMPLES not necessary if using CPU_ONLY=ON
-
-If you want to simultaneously develop both the MaCh3 core code and the MaCh3 DUNE code then you can build against a local version of MaCh3 by adding:
-
-```bash
--DCPM_MaCh3_SOURCE=/path/to/MaCh3/folder
-```
-
-This will overrule the CPMFindPackage command in the CMakeList.txt and will tell CPM to build that instead.
->>>>>>> origin/develop
-
 ## Event Rates
 
 Once you've got setup you'll then need to setup some symlinks to point to your MC and spline files. You can do this by modifying `scripts/link_files.sh` script. You'll need to change the FILESDIR variable to point to the relevant folder on your machine. The places these files currently live are listed here:
