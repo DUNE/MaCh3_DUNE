@@ -23,10 +23,12 @@ protected:
 
   void SetupWeightPointers();
   void SetupSplines();
+
+  void RegisterFunctionalParameters() {};
   
   //DB functions which could be initialised to do something which is non-trivial
   double CalcXsecWeightFunc(int iSample, int iEvent) {return 1.;}
-  void applyShifts(int iSample, int iEvent) {}
+  // void applyShifts(int iSample, int iEvent) {}
   
   const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent);
   const double* GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent);

@@ -41,21 +41,6 @@ public:
   // === HH: Functional parameters ===
   enum FuncParEnum {kTotalEScaleND, kDebugNothing, kDebugShift};
   void RegisterFunctionalParameters();
-  void SetupFunctionalParameters();
-
-  // Map the name of the functional parameter to funcpar enum
-  std::unordered_map<std::string, FuncParEnum> funcParsNamesMap;
-
-  // Map the funcpar enum to pointer of FuncPars struct
-  std::unordered_map<FuncParEnum, FuncPars*> funcParsMap;
-
-  std::unordered_map<FuncParEnum, FuncParFuncType> funcParsFuncMap;
-
-  // Map the funcpar enum to the value of the functional parameter
-  std::unordered_map<FuncParEnum, double*> funcParsValMap;
-
-  // A grid of vectors of enums for each sample and event
-  std::vector<std::vector<std::vector<FuncParEnum>>> funcParsGrid;
 
   void TotalEScale(const double * par, std::size_t iSample, std::size_t iEvent);
   void DebugShift(const double * par, std::size_t iSample, std::size_t iEvent);
@@ -74,7 +59,7 @@ public:
   
   //DB functions which could be initialised to do something which is non-trivial
   double CalcXsecWeightFunc(int iSample, int iEvent) {return 1.;}
-  void applyShifts(int iSample, int iEvent);
+  // void applyShifts(int iSample, int iEvent);
 
   std::vector<struct dunemc_base> dunendmcSamples;
 

@@ -41,6 +41,8 @@ public:
   /// @todo extract this completely to core
   ///@brief Setup our spline file, this calls InitialseSplineObject() under the hood
   void SetupSplines();
+
+  void RegisterFunctionalParameters(){};
   
   double ReturnKinematicParameter (double KinematicVariable, int iSample, int iEvent);
   double ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);

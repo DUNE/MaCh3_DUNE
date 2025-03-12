@@ -1,10 +1,11 @@
 General:
-  OutputFile: "outputs/runs/038_fit.root"
+  OutputFile: "outputs/runs/050_fit.root"
   # OutputFile: "outputs/liban_stepsize/sigma_libanND.root"
   # DUNESamples: ["configs/Samples/SamplePDFDuneND_FHC_numuselec_everything.yaml"] 
   # DUNESamples: ["configs/Samples/SamplePDFDuneND_RHC_numuselec_everything.yaml"] 
   # DUNESamples: ["configs/Samples/SamplePDFDuneND_RHC_numuselec_everything_downsample.yaml"] 
   # DUNESamples: ["configs/Samples/SamplePDFDuneND_RHC_numuselec_onesample.yaml"] 
+  # DUNESamples: ["configs/Samples/SamplePDFDuneND_FHC_numuselec_everything.yaml", "configs/Samples/SamplePDFDuneND_RHC_numuselec_everything.yaml"]
   DUNESamples: ["configs/Samples/SamplePDFDuneND_FHC_numuselec_everything_downsample.yaml", "configs/Samples/SamplePDFDuneND_RHC_numuselec_everything_downsample.yaml"] 
   # DUNESamples: ["configs/Samples/SamplePDFDuneND_RHC_numuselec_everything_downsample.yaml"] 
   # DUNESamples: ["configs/Samples/SamplePDFDuneND_FHC_numuselec.yaml"]
@@ -24,6 +25,8 @@ General:
     # XsecCovFile: ["configs/CovObjs/liban_ND_norm_scale1.yaml"]
     # XsecCovFile: ["configs/CovObjs/liban_covs/Flux_ND_uniform.yaml"]
     XsecCovFile: ["configs/CovObjs/liban_covs/Flux_ND_uniform.yaml", "configs/CovObjs/liban_covs/Xsec_ND+FD_uniform_hack.yaml"]
+    # XsecCovFile: ["configs/CovObjs/liban_covs/Xsec_ND+FD_uniform_hack.yaml"]
+    # XsecCovFile: ["configs/CovObjs/liban_covs/DetSys_ND_uniform_hack.yaml"]
     # XsecCovFile: ["configs/CovObjs/liban_ND_norm_RHC_20241204.yaml"]
     # XsecCovFile: ["configs/CovObjs/liban_ND.yaml", "configs/CovObjs/xsec_covariance_DUNE_systs_2022a_FD_v3_xsec.yaml"]
     XsecCovName: "xsec_cov"
@@ -34,11 +37,11 @@ General:
     # XsecStepScale: 0.00005
     
     # Slightly less small
-    XsecStepScale: 0.0005
+    # XsecStepScale: 0.0005
 
     # Start with a large step scale for adaptive
     # XsecStepScale: 0.2
-    # XsecStepScale: 1
+    XsecStepScale: 1
     XsecAtGen: false 
     OscCovFile: ["configs/CovObjs/OscCov_PDG2021_v2_unoscillated.yaml"]
     OscCovName: "osc_cov"
@@ -46,7 +49,8 @@ General:
   Fitter:
     FitTestLikelihood: false
   MCMC:
-    NSteps: 5000000
+    NSteps: 1000000
+    # NSteps: 30
     AutoSave: 10000
   Output:
     FileName: "TestEventRates.root"
@@ -56,9 +60,9 @@ General:
   Debug: Yes
 
   # Custom throw matrix
-  ThrowMatrixFile: "outputs/runs/037_fit.root"
+  ThrowMatrixFile: "outputs/runs/038_fit.root"
   # Entry in the throw matrix
-  ThrowMatrixName: "AdaptiveFolder/500000_xsec_cov_throw_matrix"
+  ThrowMatrixName: "AdaptiveFolder/5000000_xsec_cov_throw_matrix"
 
 AdaptionOptions:
   Settings:

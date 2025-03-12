@@ -230,57 +230,6 @@ void samplePDFDUNEBeamND::RegisterFunctionalParameters() {
       funcParsMap[funcParsNamesMap[(*it).name]] = &(*it);
     }
   }
-  // funcParsMap[kTotalEScaleND]->name = "James";
-  // std::cout << "I have changed the name at address: " << &(funcParsMap[kTotalEScaleND]->name) << " to " << funcParsMap[kTotalEScaleND]->name << std::endl;
-}
-
-void samplePDFDUNEBeamND::SetupFunctionalParameters() {
-  std::cout << "Setting up functional parameters" << std::endl;
-  funcParsVec = XsecCov->GetFuncParsFromDetID(SampleDetID);
-  RegisterFunctionalParameters();
-  // HH check: Not sure if SampleDetID is defined at this point
-  // For each event, make a vector of pointers to the functional parameters
-  for (std::size_t iSample = 0; iSample < dunendmcSamples.size(); ++iSample) {
-    funcParsGrid[iSample].resize(static_cast<std::size_t>(dunendmcSamples[iSample].nEvents));
-    for (std::size_t iEvent = 0; iEvent < static_cast<std::size_t>(dunendmcSamples[iSample].nEvents); ++iEvent) {
-      // Now loop over the functional parameters and get a vector of enums corresponding to the functional parameters
-      for (std::vector<FuncPars>::iterator it = funcParsVec.begin(); it != funcParsVec.end(); ++it) {
-        // Check whether the interaction modes match
-        bool ModeMatch = MatchCondition((*it).modes, static_cast<int>(std::round((dunendmcSamples[iSample].mode[iEvent]))));
-        if (!ModeMatch) {
-          MACH3LOG_TRACE("Event {}, missed Mode check ({}) for dial {}", iEvent, (dunendmcSamples[iSample].mode[iEvent]), (*it).name);
-          continue;
-        }
-        // Now check whether within kinematic bounds
-        bool IsSelected = true;
-        if ((*it).hasKinBounds) {
-          for (std::size_t iKinPar = 0; iKinPar < (*it).KinematicVarStr.size(); ++iKinPar) {
-            // Check lower bound
-            if (ReturnKinematicParameter((*it).KinematicVarStr[iKinPar], iSample, iEvent) <= (*it).Selection[iKinPar][0]) {
-              IsSelected = false;
-              MACH3LOG_TRACE("Event {}, missed Kinematic var check ({}) for dial {}", iEvent, (*it).KinematicVarStr[iKinPar], (*it).name);
-              continue;
-            }
-            // Check upper bound
-            else if (ReturnKinematicParameter((*it).KinematicVarStr[iKinPar], iSample, iEvent) > (*it).Selection[iKinPar][1]) {
-              MACH3LOG_TRACE("Event {}, missed Kinematic var check ({}) for dial {}", iEvent, (*it).KinematicVarStr[iKinPar], (*it).name);
-              IsSelected = false;
-              continue;
-            }
-          }
-        }
-        // Need to then break the event loop
-        if(!IsSelected){
-          MACH3LOG_TRACE("Event {}, missed Kinematic var check for dial {}", iEvent, (*it).name);
-          continue;
-        }
-        FuncParEnum funcparenum = funcParsNamesMap[(*it).name];
-        // std::cout << "Adding functional parameter: " << (*it).name << " to funcParsGrid at iSample: " << iSample << " and iEvent: " << iEvent << std::endl;
-        funcParsGrid.at(iSample).at(iEvent).push_back(funcparenum);
-      }
-    }
-  }
-  std::cout << "Finished setting up functional parameters" << std::endl;
 }
 
 // =================================
@@ -541,18 +490,6 @@ void samplePDFDUNEBeamND::setupFDMC(int iSample) {
     fdobj->nupdg[iEvent] = &(duneobj->nupdg[iEvent]);
   }
 }
-
-void samplePDFDUNEBeamND::applyShifts(int iSample, int iEvent) {
-  for (std::vector<FuncParEnum>::iterator it = funcParsGrid.at(iSample).at(iEvent).begin(); it != funcParsGrid.at(iSample).at(iEvent).end(); ++it) {
-    // Check if func exists
-    if (funcParsMap.find(*it) == funcParsMap.end()) {
-      MACH3LOG_ERROR("Functional parameter {} not found in map", *it);
-      throw MaCh3Exception(__FILE__, __LINE__);
-    }
-    funcParsFuncMap[*it](XsecCov->retPointer(funcParsMap[*it]->index), iSample, iEvent);
-  }
-}
-
 
 /*
 void samplePDFDUNEBeamND::applyShifts(int iSample, int iEvent) {
