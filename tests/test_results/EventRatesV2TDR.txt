@@ -1,47 +1,93 @@
 ======
+Total Event Rates
+======
+Event rate for FHC_numu: 7977.54
+Event rate for RHC_nue: 448.08
+======
 Event Rates by osc channel
 ======
-FHC_numu FHC_numu_x_numu 0
-FHC_numu FHC_nue_x_nue -4.38459e+07
-FHC_numu FHC_numubar_x_numubar 0
-FHC_numu FHC_nuebar_x_nuebar 0
-FHC_numu FHC_numu_x_nue 0
-FHC_numu FHC_numubar_x_nuebar 0
-FHC_numu FHC_nue_x_numu 0
-FHC_numu FHC_nuebar_x_numubar 0
-FHC_numu FHC_numu_x_nutau 0
-FHC_numu FHC_nue_x_nutau 0
-FHC_numu FHC_numubar_x_nutaubar 0
-FHC_numu FHC_nuebar_x_nutaubar 0
-FHC_numu -4.38459e+07
+FHC_numu FHC_numu_x_numu: 0
+FHC_numu FHC_nue_x_nue: 6910.36
+FHC_numu FHC_numubar_x_numubar: 0
+FHC_numu FHC_nuebar_x_nuebar: 0
+FHC_numu FHC_numu_x_nue: 0
+FHC_numu FHC_numubar_x_nuebar: 0
+FHC_numu FHC_nue_x_numu: 0
+FHC_numu FHC_nuebar_x_numubar: 0
+FHC_numu FHC_numu_x_nutau: 0
+FHC_numu FHC_nue_x_nutau: 0
+FHC_numu FHC_numubar_x_nutaubar: 0
+FHC_numu FHC_nuebar_x_nutaubar: 0
+FHC_numu 6910.36
+RHC_nue RHC_numu_x_numu: 421.581
+RHC_nue RHC_nue_x_nue: 0
+RHC_nue RHC_numubar_x_numubar: 0
+RHC_nue RHC_nuebar_x_nuebar: 0
+RHC_nue RHC_numu_x_nue: 0
+RHC_nue RHC_numubar_x_nuebar: 0
+RHC_nue RHC_nue_x_numu: 0
+RHC_nue RHC_nuebar_x_numubar: 0
+RHC_nue RHC_numu_x_nutau: 0
+RHC_nue RHC_nue_x_nutau: 0
+RHC_nue RHC_numubar_x_nutaubar: 0
+RHC_nue RHC_nuebar_x_nutaubar: 0
+RHC_nue 421.581
 ======
 Event Rates by interaction mode
 ======
-FHC_numu ccqe 0
-FHC_numu unknown -4.38459e+07
-FHC_numu ccdis 0
-FHC_numu ccres 0
-FHC_numu cccoh 0
-FHC_numu ccdiff 0
-FHC_numu ccnueel 0
-FHC_numu ccIMD 0
-FHC_numu ccamnugamma 0
-FHC_numu ccmec 0
-FHC_numu cccohel 0
-FHC_numu ccibd 0
-FHC_numu ccglasres 0
-FHC_numu ccimdannihilation 0
-FHC_numu ncqe 0
-FHC_numu ncdis 0
-FHC_numu ncres 0
-FHC_numu nccoh 0
-FHC_numu ncdiff 0
-FHC_numu ncnueel 0
-FHC_numu ncIMD 0
-FHC_numu ncamnugamma 0
-FHC_numu ncmec 0
-FHC_numu nccohel 0
-FHC_numu ncibd 0
-FHC_numu ncglasres 0
-FHC_numu ncimdannihilation 0
-FHC_numu -4.38459e+07
+FHC_numu ccqe: 0
+FHC_numu unknown: 6910.36
+FHC_numu ccdis: 0
+FHC_numu ccres: 0
+FHC_numu cccoh: 0
+FHC_numu ccdiff: 0
+FHC_numu ccnueel: 0
+FHC_numu ccIMD: 0
+FHC_numu ccamnugamma: 0
+FHC_numu ccmec: 0
+FHC_numu cccohel: 0
+FHC_numu ccibd: 0
+FHC_numu ccglasres: 0
+FHC_numu ccimdannihilation: 0
+FHC_numu ncqe: 0
+FHC_numu ncdis: 0
+FHC_numu ncres: 0
+FHC_numu nccoh: 0
+FHC_numu ncdiff: 0
+FHC_numu ncnueel: 0
+FHC_numu ncIMD: 0
+FHC_numu ncamnugamma: 0
+FHC_numu ncmec: 0
+FHC_numu nccohel: 0
+FHC_numu ncibd: 0
+FHC_numu ncglasres: 0
+FHC_numu ncimdannihilation: 0
+FHC_numu: 6910.36
+RHC_nue ccqe: 421.581
+RHC_nue unknown: 0
+RHC_nue ccdis: 0
+RHC_nue ccres: 0
+RHC_nue cccoh: 0
+RHC_nue ccdiff: 0
+RHC_nue ccnueel: 0
+RHC_nue ccIMD: 0
+RHC_nue ccamnugamma: 0
+RHC_nue ccmec: 0
+RHC_nue cccohel: 0
+RHC_nue ccibd: 0
+RHC_nue ccglasres: 0
+RHC_nue ccimdannihilation: 0
+RHC_nue ncqe: 0
+RHC_nue ncdis: 0
+RHC_nue ncres: 0
+RHC_nue nccoh: 0
+RHC_nue ncdiff: 0
+RHC_nue ncnueel: 0
+RHC_nue ncIMD: 0
+RHC_nue ncamnugamma: 0
+RHC_nue ncmec: 0
+RHC_nue nccohel: 0
+RHC_nue ncibd: 0
+RHC_nue ncglasres: 0
+RHC_nue ncimdannihilation: 0
+RHC_nue: 421.581

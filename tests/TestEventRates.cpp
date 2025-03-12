@@ -47,6 +47,17 @@ int main(int argc, char * argv[]) {
   std::ofstream outFile("TestNewSampleOut.txt");
 
   outFile<<"======"<<std::endl;
+  outFile<<"Total Event Rates"<<std::endl;
+  outFile<<"======"<<std::endl;
+  for(auto Sample : DUNEPdfs){
+    Sample->reweight();
+    
+    std::string EventRateString = fmt::format("{:.2f}", Sample->get1DHist()->Integral());
+    outFile<<"Event rate for "<<Sample->GetName()<<": "<<EventRateString<<std::endl;;
+  }
+
+
+  outFile<<"======"<<std::endl;
   outFile<<"Event Rates by osc channel"<<std::endl;
   outFile<<"======"<<std::endl;
 
@@ -62,7 +73,7 @@ int main(int argc, char * argv[]) {
       SelectionVec.push_back(SelecChannel);
       
       TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy",SelectionVec);
-      outFile<<Sample->GetName()<<" "<<Sample->getFlavourName(iOscChan)<<" "<<Hist->Integral()<<std::endl;
+      outFile<<Sample->GetName()<<" "<<Sample->getFlavourName(iOscChan)<<": "<<Hist->Integral()<<std::endl;
     }
 
     TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy");
@@ -87,11 +98,11 @@ int main(int argc, char * argv[]) {
       SelectionVec.push_back(SelecChannel);
 
       TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy",SelectionVec);
-      outFile<<Sample->GetName()<<" "<<MaCh3mode_ToDUNEString((MaCh3_Mode)iModeChan)<<" "<<Hist->Integral()<<std::endl;
+      outFile<<Sample->GetName()<<" "<<MaCh3mode_ToDUNEString((MaCh3_Mode)iModeChan)<<": "<<Hist->Integral()<<std::endl;
     }
 
     TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy");
-    outFile<<Sample->GetName()<<" "<<Hist->Integral()<<std::endl;
+    outFile<<Sample->GetName()<<": "<<Hist->Integral()<<std::endl;
   }
 
   // Do you want to gener
