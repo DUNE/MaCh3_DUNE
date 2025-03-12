@@ -4,20 +4,24 @@ General:
   CalculationType: "Binned"
 
 Binned:
-  FileName: "./Inputs/ExampleAtmosphericBinning.root"
-  EnergyAxisHistName: "EnergyAxisBinning"
-  CosineZAxisHistName: "CosineZAxisBinning"
+  #FileName: "./inputs/ExampleAtmosphericBinning.root"
+  #EnergyAxisHistName: "EnergyAxisBinning"
+  #CosineZAxisHistName: "CosineZAxisBinning"
+  #FileName: "./inputs/ExampleOscBinning.root"
+  FileName: "./inputs/OscBinning.root"
+  EnergyAxisHistName: "OscBinning"
+  CosineZAxisHistName: ""
 
 OscProbCalcerSetup:
   ImplementationName: "NuSQUIDSLinear"
-  PrecisionLimit: 1e-3
+  #PrecisionLimit: 1e-3
   NumNeutrinoFlavours: 3
   OscModel: "Decoherence" # SM, Decoherence, LIV, NSI
   #NSIMuTauCoupling: 1.0e-2
-  #DecoherenceModel: "RandomizeState"
-  IntegrationStep: "5.0"
-  RelativeError: "1.0e-15"
-  AbsoluteError: "1.0e-15"
+  DecoherenceModel: "RandomizeState" # RandomizePhase, RandomizeState, NeutrinoLoss
+  IntegrationStep: "500.0"
+  RelativeError: "1.0e-5"
+  AbsoluteError: "1.0e-5"
   OscChannelMapping:
     - Entry: "Electron:Electron"
     - Entry: "Electron:Muon"

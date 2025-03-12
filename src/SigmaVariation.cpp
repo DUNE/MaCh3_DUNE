@@ -26,8 +26,8 @@ int main(int argc, char * argv[]) {
   //###############################################################################################################################
 
   //DB Sigma variations in units of each parameters Sigma
-  std::vector<double> sigmaVariations = {-3, -1, 0, 1, 3};
-
+  //std::vector<double> sigmaVariations = {-3, -1, 0, 1, 3};
+  std::vector<double> sigmaVariations = {0.0, 9.48e-10, 9.48e-14, 9.48e-18, 9.48e-22, 9.48e-26};
   //###############################################################################################################################
   //Create samplePDFFD objects
   
@@ -52,7 +52,7 @@ int main(int argc, char * argv[]) {
   //   Consequently have to write out own code
   
   std::vector<covarianceBase*> CovObjs;
-  CovObjs.emplace_back(xsec);
+  //CovObjs.emplace_back(xsec);
   CovObjs.emplace_back(osc);
 
   MACH3LOG_INFO("=======================================================");
@@ -65,6 +65,7 @@ int main(int argc, char * argv[]) {
     
     int nPars = CovObj->getNpars();
     for (int iPar=0;iPar<nPars;iPar++) {
+      if (iPar != 9 || iPar != 10 || iPar != 11) continue;
       std::string ParName = CovObj->GetParName(iPar);
       double VarInit = CovObj->getParInit(iPar);
       double VarSigma = CovObj->getDiagonalError(iPar);
@@ -76,9 +77,10 @@ int main(int argc, char * argv[]) {
       File->cd(ParName.c_str());
       
       for (size_t iSigVar=0;iSigVar<sigmaVariations.size();iSigVar++) {
-	double VarVal = VarInit + sigmaVariations[iSigVar]*VarSigma;
-	if (VarVal < CovObj->GetLowerBound(iPar)) VarVal = CovObj->GetLowerBound(iPar);
-	if (VarVal > CovObj->GetUpperBound(iPar)) VarVal = CovObj->GetUpperBound(iPar);
+	//double VarVal = VarInit + sigmaVariations[iSigVar]*VarSigma;
+        double VarVal = VarInit + sigmaVariations[iSigVar];
+	//if (VarVal < CovObj->GetLowerBound(iPar)) VarVal = CovObj->GetLowerBound(iPar);
+	//if (VarVal > CovObj->GetUpperBound(iPar)) VarVal = CovObj->GetUpperBound(iPar);
 	
 	MACH3LOG_INFO("\t\tVariation {:<5.3f} - Parameter Value : {:<10.7f}",sigmaVariations[iSigVar],VarVal);
 	CovObj->setParProp(iPar,VarVal);
