@@ -63,7 +63,7 @@ jobs:
           run: |
             ${{matrix.repo_linking_command}}
             ls
-            source ./bin/setup.MaCh3.sh
-            source ./bin/setup.NuOscillator.sh
-            source ./bin/setup.MaCh3DUNE.sh
-            ./${{matrix.test_exe}} ${{matrix.test_config}}
+            source ./install/bin/setup.MaCh3.sh
+            source ./install/bin/setup.NuOscillator.sh
+            source ./install/bin/setup.MaCh3DUNE.sh
+            ./install/${{matrix.test_exe}} ${{matrix.test_config}}
