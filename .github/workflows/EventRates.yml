@@ -31,15 +31,11 @@ jobs:
               ln -s \
               /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2/DUNE_2023_FD_CAFs inputs/DUNE_CAF_files
 
-
-
     name: Run Test ${{matrix.name}}
-
     steps:
       # Set up CVMFS
       - name: Set up CVMFS
         uses: cvmfs-contrib/github-action-cvmfs@v4
-
 
       # Checkout the repository code
       - uses: actions/checkout@v4
@@ -56,7 +52,6 @@ jobs:
           --tag ghcr.io/dune/mach3:alma9test \
           --build-arg MACH3_DUNE_VERSION="${MACH3_DUNE_VERSION}" \
           --build-arg MACH3_DUNE_BUILD_ARGS="-DCUDAProb3Linear_ENABLED=ON -DMACH3_BUILD_TESTS=ON"
-
 
       # Run event rates
       - name: Run Event Rates
