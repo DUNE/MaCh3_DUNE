@@ -58,7 +58,7 @@ jobs:
           --file doc/MaCh3DockerFiles/Alma9/Dockerfile \
           --tag ghcr.io/dune/mach3:alma9test \
           --build-arg MACH3_DUNE_VERSION="${MACH3_DUNE_VERSION}" \
-          --build-arg MACH3_DUNE_BUILD_ARGS="-DCUDAProb3Linear_ENABLED=ON -DMACH3_BUILD_TESTS=ON"
+          --build-arg MACH3_DUNE_BUILD_ARGS="-DCUDAProb3Linear_ENABLED=ON -DMACH3_BUILD_TESTS=ON -j8"
 
 
       # Run event rates

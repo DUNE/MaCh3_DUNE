@@ -27,6 +27,7 @@ ENV MACH3_DUNE_VERSION=${MACH3_DUNE_VERSION:-develop}
 ENV MACH3_DUNE_WORK_DIR=/opt/MaCh3DUNE/
 ENV MACH3_DUNE_INSTALL_DIR=${MACH3_DUNE_WORK_DIR}/build
 
+MACH3_DUNE_BUILD_ARGS
 
 RUN --mount=type=ssh git clone https://github.com/DUNE/MaCh3_DUNE.git ${MACH3_DUNE_WORK_DIR}
 
@@ -36,6 +37,6 @@ RUN git checkout ${MACH3_DUNE_VERSION}
 RUN mkdir -p ${MACH3_DUNE_INSTALL_DIR}
 WORKDIR ${MACH3_DUNE_INSTALL_DIR}
 
-RUN cmake ../
+cmake ../ ${MACH3_DUNE_BUILD_ARGS}
 
 RUN make -j && make install
