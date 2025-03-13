@@ -40,6 +40,9 @@ jobs:
         run: echo "MACH3_DUNE_VERSION is set"
 
       - name: Build the Docker image
+        env:
+          MACH3_DUNE_VERSION: ${{ github.head_ref }}
+
         run: |
           docker build . \
             --file "${{ matrix.file }}" \
