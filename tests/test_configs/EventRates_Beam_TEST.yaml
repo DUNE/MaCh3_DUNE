@@ -15,7 +15,7 @@ General:
     OscCovName: "osc_cov"
 
   Tests:
-    SkipChecks: True
+    SkipChecks: False
     TestResultsFile: tests/test_results/EventRatesV2TDR.txt
 
   Fitter:
