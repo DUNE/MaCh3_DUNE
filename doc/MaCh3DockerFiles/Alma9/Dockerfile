@@ -19,6 +19,6 @@ RUN git checkout ${MACH3_DUNE_VERSION}
 RUN mkdir -p ${MACH3_DUNE_INSTALL_DIR}
 WORKDIR ${MACH3_DUNE_INSTALL_DIR}
 
-cmake ../ ${MACH3_DUNE_BUILD_ARGS}
+RUN cmake ../ ${MACH3_DUNE_BUILD_ARGS}
 
 RUN make -j && make install
