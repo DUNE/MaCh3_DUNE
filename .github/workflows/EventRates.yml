@@ -50,7 +50,7 @@ jobs:
       - name: Set environment variable for MACH3_DUNE_VERSION
         env:
           MACH3_DUNE_VERSION: ${{ github.head_ref }}
-        run: echo "MACH3_DUNE_VERSION is set"
+        run: echo "MACH3_DUNE_VERSION is set to {MACH3_DUNE_VERSION}"
 
       - name: start docker container with bind mount cvmfs
         run: |
