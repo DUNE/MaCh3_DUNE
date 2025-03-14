@@ -78,6 +78,7 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<samplePDFFDBase*> &D
   
   osc = new covarianceOsc(OscMatrixFile,OscMatrixName.c_str());
   osc->setName("osc_cov");
+  osc->setParameters(oscpars);
 
   auto OscFixParams    = FitManager->raw()["General"]["Systematics"]["OscFix"].as<std::vector<std::string>>();
   if (OscFixParams.size() == 1 && OscFixParams.at(0) == "All") {
@@ -112,8 +113,6 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<samplePDFFDBase*> &D
   // Fill the parameter values with their nominal values
   // should _ALWAYS_ be done before overriding with fix or flat
   xsec->setParameters();
-  osc->setParameters(oscpars);
-
 
   // Get ND detector covariance matrix
   std::string NDCovMatrixFile;
@@ -129,6 +128,13 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<samplePDFFDBase*> &D
   TMatrixD *nd_fhc_cov = NDCovFile->Get<TMatrixD>("nd_fhc_frac_cov");
   TMatrixD *nd_rhc_cov = NDCovFile->Get<TMatrixD>("nd_rhc_frac_cov");
 
+  if(nd_fhc_cov && nd_rhc_cov){
+    MACH3LOG_INFO("Found ND Detector Covariance Matricies");
+  }
+  else{
+    MACH3LOG_ERROR("Could not find ND Detector Covariance Matricies");
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
   
   //####################################################################################
   //Create samplePDFDUNE Objs
@@ -140,13 +146,13 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<samplePDFFDBase*> &D
 
     manager* tempSampleManager = new manager(DUNESampleConfigs[Sample_i].c_str());
     std::string SampleType = tempSampleManager->raw()["SampleType"].as<std::string>();
+
+	TMatrixD* NDCov = nullptr;
     int isFHC = tempSampleManager->raw()["DUNESampleBools"]["isFHC"].as<int>();
-    
-	if(isFHC) {
-      DUNEPdfs.push_back(GetMaCh3DuneInstance(SampleType, DUNESampleConfigs[Sample_i], xsec, osc, nd_fhc_cov));
-	} else {
-      DUNEPdfs.push_back(GetMaCh3DuneInstance(SampleType, DUNESampleConfigs[Sample_i], xsec, osc, nd_rhc_cov));
-	}
+	if(isFHC) {NDCov = nd_fhc_cov;}
+	else {NDCov = nd_rhc_cov;}
+
+    DUNEPdfs.push_back(GetMaCh3DuneInstance(SampleType, DUNESampleConfigs[Sample_i], xsec, osc, NDCov));
 
     // Pure for debugging, lets us set which weights we don't want via the manager
 #if DEBUG_DUNE_WEIGHTS==1
