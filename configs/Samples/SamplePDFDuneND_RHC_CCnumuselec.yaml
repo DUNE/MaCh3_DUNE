@@ -12,9 +12,8 @@ Binning:
   YVarStr: "yRec"
   YVarBins: [0., 0.1, 0.2, 0.3, 0.4, 0.6, 1.1]
 
-SampleBools:
+DUNESampleBools:
   isFHC: 0
-  isnd: yes
   iselike: no
 
 InputFiles:
@@ -28,16 +27,10 @@ NuOsc:
   EqualBinningPerOscChannel: false
 
 SubSamples:
-  - Name: "RHC_numu_x_numu_0"
-    LatexName: "RHC_numu_x_numu_0"
-    mtuplefile: "numu_x_numu_0"
+  - Name: "RHC_numu_x_numu"
+    LatexName: "RHC_numu_x_numu"
+    mtuplefile: "numu_x_numu_*"
     splinefile: "numu_x_numu_0"
-    nutype: 14
-    oscnutype: 14
-  - Name: "RHC_numu_x_numu_1"
-    LatexName: "RHC_numu_x_numu_1"
-    mtuplefile: "numu_x_numu_1"
-    splinefile: "numu_x_numu_1"
     nutype: 14
     oscnutype: 14
   - Name: "RHC_nue_x_nue"
@@ -46,28 +39,10 @@ SubSamples:
     splinefile: "nue_x_nue"
     nutype: 12
     oscnutype: 12
-  - Name: "RHC_numubar_x_numubar_0"
-    LatexName: "RHC_numubar_x_numubar_0"
-    mtuplefile: "numubar_x_numubar_0"
+  - Name: "RHC_numubar_x_numubar"
+    LatexName: "RHC_numubar_x_numubar"
+    mtuplefile: "numubar_x_numubar_*"
     splinefile: "numubar_x_numubar_0"
-    nutype: -14
-    oscnutype: -14
-  - Name: "RHC_numubar_x_numubar_1"
-    LatexName: "RHC_numubar_x_numubar_1"
-    mtuplefile: "numubar_x_numubar_1"
-    splinefile: "numubar_x_numubar_1"
-    nutype: -14
-    oscnutype: -14
-  - Name: "RHC_numubar_x_numubar_2"
-    LatexName: "RHC_numubar_x_numubar_2"
-    mtuplefile: "numubar_x_numubar_2"
-    splinefile: "numubar_x_numubar_2"
-    nutype: -14
-    oscnutype: -14
-  - Name: "RHC_numubar_x_numubar_3"
-    LatexName: "RHC_numubar_x_numubar_3"
-    mtuplefile: "numubar_x_numubar_3"
-    splinefile: "numubar_x_numubar_3"
     nutype: -14
     oscnutype: -14
   - Name: "RHC_nuebar_x_nuebar"
