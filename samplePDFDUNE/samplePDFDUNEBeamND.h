@@ -36,7 +36,7 @@ public:
   void applyShifts(int iSample, int iEvent);
 
   void setNDCovMatrix();
-  double GetLikelihood();
+  double GetLikelihood() override;
 
   std::vector<struct dunemc_base> dunendmcSamples;
 
@@ -58,11 +58,6 @@ public:
     {kIsFHC,"IsFHC"}
   };
 
-
-  //TFile *_sampleFile;
-  //TTree *_data;
-
-  TChain* _data;
   TString _nutype;
   int _mode;
 
@@ -128,15 +123,13 @@ public:
   double mu_res_nd_pos;
   double n_res_nd_pos;
   double em_res_nd_pos;
-  // The ND detector covariance matrix
-  //
-  TMatrixD *NDCovMatrix;
-  
-  // The inverse ND detector covariance matrix
-  TMatrixD *NDInvCovMatrix;
-  bool isNDCovSet = false;
 
+  bool isNDCovSet = false;
+  // The ND detector covariance matrix
+  TMatrixD *NDCovMatrix;
+  // The inverse ND detector covariance matrix
   double **NDInvertCovMatrix;
+
 
   std::vector<const double*> NDDetectorSystPointers;
   int nNDDetectorSystPointers;

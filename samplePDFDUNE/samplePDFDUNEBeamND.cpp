@@ -1,5 +1,6 @@
 #include "samplePDFDUNEBeamND.h"
 
+//Here nullptr is passed instead of OscCov to prevent oscillation calculations from being performed for the ND Samples
 samplePDFDUNEBeamND::samplePDFDUNEBeamND(std::string mc_version_, covarianceXsec* xsec_cov_,  TMatrixD* nd_cov_, covarianceOsc* osc_cov_=nullptr) : samplePDFFDBase(mc_version_, xsec_cov_, osc_cov_) {
   OscCov = nullptr;
   
@@ -179,7 +180,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   //_sampleFile = TFile::Open(mc_files.at(iSample).c_str(), "READ");
   //_data = _sampleFile->Get<TTree>("caf");
 
-  _data = new TChain("caf");
+  TChain* _data = new TChain("caf");
   _data->Add(mc_files.at(iSample).c_str());
 
   if(_data){
@@ -514,8 +515,15 @@ void samplePDFDUNEBeamND::setNDCovMatrix() {
 
   int nXBins = static_cast<int>(XBinEdges.size()-1);
   int nYBins = static_cast<int>(YBinEdges.size()-1);
-
   int covSize = nXBins*nYBins;
+
+  if (covSize != NDCovMatrix->GetNrows()) {
+    std::cerr << "Sample dimensions do not match ND Detector Covariance!" << std::endl;
+    std::cerr << "Sample XBins * YBins = " << covSize  << std::endl;
+    std::cerr << "ND Detector Covariance = " << NDCovMatrix->GetNrows() << std::endl;
+    std::cerr << __FILE__ << ":" << __LINE__ << std::endl;
+    throw;
+  }
   
   std::vector<double> FlatCV;
   int iter = 0;
@@ -545,7 +553,7 @@ void samplePDFDUNEBeamND::setNDCovMatrix() {
     }
   }
 
-  NDInvCovMatrix=static_cast<TMatrixD*>(NDCovMatrix->Clone());
+  TMatrixD* NDInvCovMatrix=static_cast<TMatrixD*>(NDCovMatrix->Clone());
   NDInvCovMatrix->Invert();
 
  
