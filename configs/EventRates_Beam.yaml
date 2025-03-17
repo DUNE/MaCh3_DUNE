@@ -36,3 +36,8 @@ General:
   ProcessMCMC: No
   Seed: 0
   Debug: No
+
+# Tests
+Tests:
+  SkipChecks: False
+  TestResultsFile: tests/test_results/EventRatesV2TDR.txt
