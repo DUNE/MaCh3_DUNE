@@ -260,62 +260,76 @@ Functions</h2></td></tr>
 <div class="line"><span class="lineno">   68</span>  std::vector&lt;std::string&gt; OscMatrixFile = FitManager-&gt;raw()[<span class="stringliteral">&quot;General&quot;</span>][<span class="stringliteral">&quot;Systematics&quot;</span>][<span class="stringliteral">&quot;OscCovFile&quot;</span>].as&lt;std::vector&lt;std::string&gt;&gt;();</div>
 <div class="line"><span class="lineno">   69</span>  std::string  OscMatrixName = FitManager-&gt;raw()[<span class="stringliteral">&quot;General&quot;</span>][<span class="stringliteral">&quot;Systematics&quot;</span>][<span class="stringliteral">&quot;OscCovName&quot;</span>].as&lt;std::string&gt;(); </div>
 <div class="line"><span class="lineno">   70</span>  std::vector&lt;double&gt; oscpars = FitManager-&gt;raw()[<span class="stringliteral">&quot;General&quot;</span>][<span class="stringliteral">&quot;OscillationParameters&quot;</span>].as&lt;std::vector&lt;double&gt;&gt;();</div>
-<div class="line"><span class="lineno">   71</span>  std::string OscPars = <span class="stringliteral">&quot;&quot;</span>;</div>
-<div class="line"><span class="lineno">   72</span> </div>
-<div class="line"><span class="lineno">   73</span>  <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i=0;i&lt;oscpars.size();i++) {</div>
-<div class="line"><span class="lineno">   74</span>    OscPars+=std::to_string(oscpars[i]);</div>
-<div class="line"><span class="lineno">   75</span>    OscPars+=<span class="stringliteral">&quot;, &quot;</span>;</div>
-<div class="line"><span class="lineno">   76</span>  }</div>
-<div class="line"><span class="lineno">   77</span>  MACH3LOG_INFO(<span class="stringliteral">&quot;Oscillation Parameters being used: {} &quot;</span>, OscPars);</div>
-<div class="line"><span class="lineno">   78</span>  </div>
-<div class="line"><span class="lineno">   79</span>  osc = <span class="keyword">new</span> covarianceOsc(OscMatrixFile,OscMatrixName.c_str());</div>
-<div class="line"><span class="lineno">   80</span>  osc-&gt;setName(<span class="stringliteral">&quot;osc_cov&quot;</span>);</div>
-<div class="line"><span class="lineno">   81</span>  MACH3LOG_INFO(<span class="stringliteral">&quot;Osc cov setup&quot;</span>);</div>
-<div class="line"><span class="lineno">   82</span>  MACH3LOG_INFO(<span class="stringliteral">&quot;------------------------------&quot;</span>);</div>
-<div class="line"><span class="lineno">   83</span>  </div>
-<div class="line"><span class="lineno">   84</span>  <span class="comment">// ==========================================================</span></div>
-<div class="line"><span class="lineno">   85</span>  <span class="comment">//read flat prior, fixed paramas from the config file</span></div>
-<div class="line"><span class="lineno">   86</span>  std::vector&lt;std::string&gt; XsecFixParams   = GetFromManager&lt;std::vector&lt;std::string&gt;&gt;(FitManager-&gt;raw()[<span class="stringliteral">&quot;General&quot;</span>][<span class="stringliteral">&quot;Systematics&quot;</span>][<span class="stringliteral">&quot;XsecFix&quot;</span>], {<span class="stringliteral">&quot;&quot;</span>});</div>
-<div class="line"><span class="lineno">   87</span>  </div>
-<div class="line"><span class="lineno">   88</span>  <span class="comment">// Fixed xsec parameters loop</span></div>
-<div class="line"><span class="lineno">   89</span>  <span class="keywordflow">if</span> (XsecFixParams.size() == 1 &amp;&amp; XsecFixParams.at(0) == <span class="stringliteral">&quot;All&quot;</span>) {</div>
-<div class="line"><span class="lineno">   90</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; xsec-&gt;getNpars(); j++) {</div>
-<div class="line"><span class="lineno">   91</span>      xsec-&gt;toggleFixParameter(j);</div>
+<div class="line"><span class="lineno">   71</span> </div>
+<div class="line"><span class="lineno">   72</span>  std::string OscPars = <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><span class="lineno">   73</span> </div>
+<div class="line"><span class="lineno">   74</span>  <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i=0;i&lt;oscpars.size();i++) {</div>
+<div class="line"><span class="lineno">   75</span>    OscPars+=std::to_string(oscpars[i]);</div>
+<div class="line"><span class="lineno">   76</span>    OscPars+=<span class="stringliteral">&quot;, &quot;</span>;</div>
+<div class="line"><span class="lineno">   77</span>  }</div>
+<div class="line"><span class="lineno">   78</span>  MACH3LOG_INFO(<span class="stringliteral">&quot;Oscillation Parameters being used: {} &quot;</span>, OscPars);</div>
+<div class="line"><span class="lineno">   79</span>  </div>
+<div class="line"><span class="lineno">   80</span>  osc = <span class="keyword">new</span> covarianceOsc(OscMatrixFile,OscMatrixName.c_str());</div>
+<div class="line"><span class="lineno">   81</span>  osc-&gt;setName(<span class="stringliteral">&quot;osc_cov&quot;</span>);</div>
+<div class="line"><span class="lineno">   82</span> </div>
+<div class="line"><span class="lineno">   83</span>  std::vector&lt;std::string&gt; OscFixParams   = GetFromManager&lt;std::vector&lt;std::string&gt;&gt;(FitManager-&gt;raw()[<span class="stringliteral">&quot;General&quot;</span>][<span class="stringliteral">&quot;Systematics&quot;</span>][<span class="stringliteral">&quot;OscFix&quot;</span>], {<span class="stringliteral">&quot;&quot;</span>});</div>
+<div class="line"><span class="lineno">   84</span>  <span class="comment">// Fixed xsec parameters loop</span></div>
+<div class="line"><span class="lineno">   85</span>  <span class="keywordflow">if</span> (OscFixParams.size() == 1 &amp;&amp; OscFixParams.at(0) == <span class="stringliteral">&quot;All&quot;</span>) {</div>
+<div class="line"><span class="lineno">   86</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; osc-&gt;getNpars(); j++) {</div>
+<div class="line"><span class="lineno">   87</span>      osc-&gt;toggleFixParameter(j);</div>
+<div class="line"><span class="lineno">   88</span>    }</div>
+<div class="line"><span class="lineno">   89</span>  } <span class="keywordflow">else</span> {</div>
+<div class="line"><span class="lineno">   90</span>    <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> j = 0; j &lt; OscFixParams.size(); j++) {</div>
+<div class="line"><span class="lineno">   91</span>      osc-&gt;toggleFixParameter(OscFixParams.at(j));</div>
 <div class="line"><span class="lineno">   92</span>    }</div>
-<div class="line"><span class="lineno">   93</span>  } <span class="keywordflow">else</span> {</div>
-<div class="line"><span class="lineno">   94</span>    <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> j = 0; j &lt; XsecFixParams.size(); j++) {</div>
-<div class="line"><span class="lineno">   95</span>      xsec-&gt;toggleFixParameter(XsecFixParams.at(j));</div>
-<div class="line"><span class="lineno">   96</span>    }</div>
-<div class="line"><span class="lineno">   97</span>  }</div>
-<div class="line"><span class="lineno">   98</span>  MACH3LOG_INFO(<span class="stringliteral">&quot;xsec parameters loop done&quot;</span>);</div>
-<div class="line"><span class="lineno">   99</span>  </div>
-<div class="line"><span class="lineno">  100</span>  <span class="comment">// Fill the parameter values with their nominal values</span></div>
-<div class="line"><span class="lineno">  101</span>  <span class="comment">// should _ALWAYS_ be done before overriding with fix or flat</span></div>
-<div class="line"><span class="lineno">  102</span>  xsec-&gt;setParameters();</div>
-<div class="line"><span class="lineno">  103</span>  osc-&gt;setParameters(oscpars); </div>
-<div class="line"><span class="lineno">  104</span>  </div>
-<div class="line"><span class="lineno">  105</span>  <span class="comment">//####################################################################################</span></div>
-<div class="line"><span class="lineno">  106</span>  <span class="comment">//Create samplePDFDUNE Objs</span></div>
-<div class="line"><span class="lineno">  107</span>  MACH3LOG_INFO(<span class="stringliteral">&quot;-------------------------------------------------------------------&quot;</span>);</div>
-<div class="line"><span class="lineno">  108</span>  MACH3LOG_INFO(<span class="stringliteral">&quot;Loading DUNE samples..&quot;</span>);</div>
-<div class="line"><span class="lineno">  109</span>  std::vector&lt;std::string&gt; DUNESampleConfigs = FitManager-&gt;raw()[<span class="stringliteral">&quot;General&quot;</span>][<span class="stringliteral">&quot;DUNESamples&quot;</span>].as&lt;std::vector&lt;std::string&gt;&gt;();</div>
-<div class="line"><span class="lineno">  110</span>  </div>
-<div class="line"><span class="lineno">  111</span>  <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> Sample_i = 0 ; Sample_i &lt; DUNESampleConfigs.size() ; Sample_i++){</div>
-<div class="line"><span class="lineno">  112</span> </div>
-<div class="line"><span class="lineno">  113</span>    manager* tempSampleManager = <span class="keyword">new</span> manager(DUNESampleConfigs[Sample_i].c_str());</div>
-<div class="line"><span class="lineno">  114</span>    std::string SampleType = tempSampleManager-&gt;raw()[<span class="stringliteral">&quot;SampleType&quot;</span>].as&lt;std::string&gt;();</div>
-<div class="line"><span class="lineno">  115</span>    </div>
-<div class="line"><span class="lineno">  116</span>    DUNEPdfs.push_back(<a class="code hl_function" href="MaCh3DUNEFactory_8cpp.html#a9fece0c755cd1cdea165affd3a175f81">GetMaCh3DuneInstance</a>(SampleType, DUNESampleConfigs[Sample_i], xsec, osc));</div>
-<div class="line"><span class="lineno">  117</span> </div>
-<div class="line"><span class="lineno">  118</span>    <span class="comment">// Pure for debugging, lets us set which weights we don&#39;t want via the manager</span></div>
-<div class="line"><span class="lineno">  119</span><span class="preprocessor">#if DEBUG_DUNE_WEIGHTS==1</span></div>
-<div class="line"><span class="lineno">  120</span>    DUNEPdfs.back()-&gt;setWeightSwitchOffVector(FitManager-&gt;getWeightSwitchOffVector());</div>
-<div class="line"><span class="lineno">  121</span>    DUNEPdfs.back()-&gt;setXsecWeightSwitchOffVector(FitManager-&gt;getXsecWeightSwitchOffVector());</div>
-<div class="line"><span class="lineno">  122</span><span class="preprocessor">#endif</span></div>
-<div class="line"><span class="lineno">  123</span>  }</div>
+<div class="line"><span class="lineno">   93</span>  }</div>
+<div class="line"><span class="lineno">   94</span>  </div>
+<div class="line"><span class="lineno">   95</span>  MACH3LOG_INFO(<span class="stringliteral">&quot;Osc cov setup&quot;</span>);</div>
+<div class="line"><span class="lineno">   96</span>  MACH3LOG_INFO(<span class="stringliteral">&quot;------------------------------&quot;</span>);</div>
+<div class="line"><span class="lineno">   97</span>  </div>
+<div class="line"><span class="lineno">   98</span>  <span class="comment">// ==========================================================</span></div>
+<div class="line"><span class="lineno">   99</span>  <span class="comment">//read flat prior, fixed paramas from the config file</span></div>
+<div class="line"><span class="lineno">  100</span>  std::vector&lt;std::string&gt; XsecFixParams   = GetFromManager&lt;std::vector&lt;std::string&gt;&gt;(FitManager-&gt;raw()[<span class="stringliteral">&quot;General&quot;</span>][<span class="stringliteral">&quot;Systematics&quot;</span>][<span class="stringliteral">&quot;XsecFix&quot;</span>], {<span class="stringliteral">&quot;&quot;</span>});</div>
+<div class="line"><span class="lineno">  101</span>  </div>
+<div class="line"><span class="lineno">  102</span>  <span class="comment">// Fixed xsec parameters loop</span></div>
+<div class="line"><span class="lineno">  103</span>  <span class="keywordflow">if</span> (XsecFixParams.size() == 1 &amp;&amp; XsecFixParams.at(0) == <span class="stringliteral">&quot;All&quot;</span>) {</div>
+<div class="line"><span class="lineno">  104</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; xsec-&gt;getNpars(); j++) {</div>
+<div class="line"><span class="lineno">  105</span>      xsec-&gt;toggleFixParameter(j);</div>
+<div class="line"><span class="lineno">  106</span>    }</div>
+<div class="line"><span class="lineno">  107</span>  } <span class="keywordflow">else</span> {</div>
+<div class="line"><span class="lineno">  108</span>    <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> j = 0; j &lt; XsecFixParams.size(); j++) {</div>
+<div class="line"><span class="lineno">  109</span>      xsec-&gt;toggleFixParameter(XsecFixParams.at(j));</div>
+<div class="line"><span class="lineno">  110</span>    }</div>
+<div class="line"><span class="lineno">  111</span>  }</div>
+<div class="line"><span class="lineno">  112</span>  MACH3LOG_INFO(<span class="stringliteral">&quot;xsec parameters loop done&quot;</span>);</div>
+<div class="line"><span class="lineno">  113</span>  </div>
+<div class="line"><span class="lineno">  114</span>  <span class="comment">// Fill the parameter values with their nominal values</span></div>
+<div class="line"><span class="lineno">  115</span>  <span class="comment">// should _ALWAYS_ be done before overriding with fix or flat</span></div>
+<div class="line"><span class="lineno">  116</span>  xsec-&gt;setParameters();</div>
+<div class="line"><span class="lineno">  117</span>  osc-&gt;setParameters(oscpars); </div>
+<div class="line"><span class="lineno">  118</span>  </div>
+<div class="line"><span class="lineno">  119</span>  <span class="comment">//####################################################################################</span></div>
+<div class="line"><span class="lineno">  120</span>  <span class="comment">//Create samplePDFDUNE Objs</span></div>
+<div class="line"><span class="lineno">  121</span>  MACH3LOG_INFO(<span class="stringliteral">&quot;-------------------------------------------------------------------&quot;</span>);</div>
+<div class="line"><span class="lineno">  122</span>  MACH3LOG_INFO(<span class="stringliteral">&quot;Loading DUNE samples..&quot;</span>);</div>
+<div class="line"><span class="lineno">  123</span>  std::vector&lt;std::string&gt; DUNESampleConfigs = FitManager-&gt;raw()[<span class="stringliteral">&quot;General&quot;</span>][<span class="stringliteral">&quot;DUNESamples&quot;</span>].as&lt;std::vector&lt;std::string&gt;&gt;();</div>
 <div class="line"><span class="lineno">  124</span>  </div>
-<div class="line"><span class="lineno">  125</span>  <span class="keywordflow">return</span>;</div>
-<div class="line"><span class="lineno">  126</span>}</div>
+<div class="line"><span class="lineno">  125</span>  <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> Sample_i = 0 ; Sample_i &lt; DUNESampleConfigs.size() ; Sample_i++){</div>
+<div class="line"><span class="lineno">  126</span> </div>
+<div class="line"><span class="lineno">  127</span>    manager* tempSampleManager = <span class="keyword">new</span> manager(DUNESampleConfigs[Sample_i].c_str());</div>
+<div class="line"><span class="lineno">  128</span>    std::string SampleType = tempSampleManager-&gt;raw()[<span class="stringliteral">&quot;SampleType&quot;</span>].as&lt;std::string&gt;();</div>
+<div class="line"><span class="lineno">  129</span>    </div>
+<div class="line"><span class="lineno">  130</span>    DUNEPdfs.push_back(<a class="code hl_function" href="MaCh3DUNEFactory_8cpp.html#a9fece0c755cd1cdea165affd3a175f81">GetMaCh3DuneInstance</a>(SampleType, DUNESampleConfigs[Sample_i], xsec, osc));</div>
+<div class="line"><span class="lineno">  131</span> </div>
+<div class="line"><span class="lineno">  132</span>    <span class="comment">// Pure for debugging, lets us set which weights we don&#39;t want via the manager</span></div>
+<div class="line"><span class="lineno">  133</span><span class="preprocessor">#if DEBUG_DUNE_WEIGHTS==1</span></div>
+<div class="line"><span class="lineno">  134</span>    DUNEPdfs.back()-&gt;setWeightSwitchOffVector(FitManager-&gt;getWeightSwitchOffVector());</div>
+<div class="line"><span class="lineno">  135</span>    DUNEPdfs.back()-&gt;setXsecWeightSwitchOffVector(FitManager-&gt;getXsecWeightSwitchOffVector());</div>
+<div class="line"><span class="lineno">  136</span><span class="preprocessor">#endif</span></div>
+<div class="line"><span class="lineno">  137</span>  }</div>
+<div class="line"><span class="lineno">  138</span>  </div>
+<div class="line"><span class="lineno">  139</span>  <span class="keywordflow">return</span>;</div>
+<div class="line"><span class="lineno">  140</span>}</div>
 <div class="ttc" id="aMaCh3DUNEFactory_8cpp_html_a9fece0c755cd1cdea165affd3a175f81"><div class="ttname"><a href="MaCh3DUNEFactory_8cpp.html#a9fece0c755cd1cdea165affd3a175f81">GetMaCh3DuneInstance</a></div><div class="ttdeci">samplePDFFDBase * GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, covarianceXsec *&amp;xsec, covarianceOsc *&amp;osc)</div><div class="ttdef"><b>Definition</b> <a href="MaCh3DUNEFactory_8cpp_source.html#l00008">MaCh3DUNEFactory.cpp:8</a></div></div>
 </div><!-- fragment -->
 </div>
