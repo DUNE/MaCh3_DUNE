@@ -42,5 +42,4 @@ endforeach(app)
 
 
 # Now copy remaining stuff
-install(DIRECTORY test_configs DESTINATION tests)
 install(DIRECTORY test_results DESTINATION tests)
