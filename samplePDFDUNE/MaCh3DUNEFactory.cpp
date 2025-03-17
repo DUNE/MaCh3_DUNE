@@ -81,7 +81,7 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<samplePDFFDBase*> &D
   osc->setName("osc_cov");
   osc->setParameters(oscpars);
 
-  auto OscFixParams = FitManager->raw()["General"]["Systematics"]["OscFix"].as<std::vector<std::string>>();
+  std::vector<std::string> OscFixParams = GetFromManager<std::vector<std::string>>(FitManager->raw()["General"]["Systematics"]["OscFix"], {});
   if (OscFixParams.size() == 1 && OscFixParams.at(0) == "All") {
     for (int j = 0; j < osc->GetNumParams(); j++) {
       osc->toggleFixParameter(j);
@@ -97,7 +97,7 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<samplePDFFDBase*> &D
   
   // ==========================================================
   //read flat prior, fixed paramas from the config file
-  std::vector<std::string> XsecFixParams = GetFromManager<std::vector<std::string>>(FitManager->raw()["General"]["Systematics"]["XsecFix"], {""});
+  std::vector<std::string> XsecFixParams = GetFromManager<std::vector<std::string>>(FitManager->raw()["General"]["Systematics"]["XsecFix"], {});
   
   // Fixed xsec parameters loop
   if (XsecFixParams.size() == 1 && XsecFixParams.at(0) == "All") {
