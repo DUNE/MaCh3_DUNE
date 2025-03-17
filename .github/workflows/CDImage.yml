@@ -28,7 +28,6 @@ jobs:
             file: doc/MaCh3DockerFiles/Ubuntu22.04/Dockerfile
             tag_latest: ubuntulatest
 
-
     name: Image CD ${{ matrix.os }}
 
     steps:
@@ -44,12 +43,14 @@ jobs:
             docker build . \
               --file "${{ matrix.file }}" \
               --tag "ghcr.io/dune/mach3:${{ matrix.os }}${{ github.ref_name }}" \
-              --build-arg MACH3_DUNE_VERSION="${{ github.ref_name }}"
+              --build-arg MACH3_DUNE_VERSION="${{ github.ref_name }}" \
+              --build-arg MACH3_DUNE_BUILD_ARGS="-DCUDAProb3Linear_ENABLED=ON"
           else
             docker build . \
               --file "${{ matrix.file }}" \
               --tag "ghcr.io/dune/mach3:${{ matrix.tag_latest }}" \
-              --build-arg MACH3_DUNE_VERSION="develop"
+              --build-arg MACH3_DUNE_VERSION="develop" \
+              --build-arg MACH3_DUNE_BUILD_ARGS="-DCUDAProb3Linear_ENABLED=ON"
           fi
 
       - name: Push Docker image

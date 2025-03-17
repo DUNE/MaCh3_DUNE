@@ -68,6 +68,7 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<samplePDFFDBase*> &D
   std::vector<std::string> OscMatrixFile = FitManager->raw()["General"]["Systematics"]["OscCovFile"].as<std::vector<std::string>>();
   std::string  OscMatrixName = FitManager->raw()["General"]["Systematics"]["OscCovName"].as<std::string>(); 
   std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
+
   std::string OscPars = "";
 
   for (unsigned int i=0;i<oscpars.size();i++) {
@@ -78,6 +79,19 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<samplePDFFDBase*> &D
   
   osc = new covarianceOsc(OscMatrixFile,OscMatrixName.c_str());
   osc->setName("osc_cov");
+
+  std::vector<std::string> OscFixParams   = GetFromManager<std::vector<std::string>>(FitManager->raw()["General"]["Systematics"]["OscFix"], {""});
+  // Fixed xsec parameters loop
+  if (OscFixParams.size() == 1 && OscFixParams.at(0) == "All") {
+    for (int j = 0; j < osc->getNpars(); j++) {
+      osc->toggleFixParameter(j);
+    }
+  } else {
+    for (unsigned int j = 0; j < OscFixParams.size(); j++) {
+      osc->toggleFixParameter(OscFixParams.at(j));
+    }
+  }
+  
   MACH3LOG_INFO("Osc cov setup");
   MACH3LOG_INFO("------------------------------");
   
