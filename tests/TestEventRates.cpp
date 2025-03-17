@@ -91,22 +91,22 @@ int main(int argc, char * argv[]) {
     writeToBoth(outFile, "======");
 
     for(auto Sample : DUNEPdfs) {
-        int nModeChannels = kMaCh3_nModes;
-        for (int iModeChan=0;iModeChan<nModeChannels;iModeChan++) {
-            std::vector< std::vector<double> > SelectionVec;
-
-            std::vector<double> SelecChannel(3);
-            SelecChannel[0] = Sample->ReturnKinematicParameterFromString("Mode");
-            SelecChannel[1] = iModeChan;
-            SelecChannel[2] = iModeChan+1;
-            SelectionVec.push_back(SelecChannel);
-
-            TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy",SelectionVec);
-            writeToBoth(outFile, Sample->GetName() + " " + MaCh3mode_ToDUNEString((MaCh3_Mode)iModeChan) + ": " + std::to_string(Hist->Integral()));
-        }
-
-        TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy");
-        writeToBoth(outFile, Sample->GetName() + ": " + std::to_string(Hist->Integral()));
+      int nModeChannels = Sample->GetMaCh3Modes()->GetNModes();
+      for (int iModeChan=0;iModeChan<nModeChannels;iModeChan++) {
+	std::vector< std::vector<double> > SelectionVec;
+	
+	std::vector<double> SelecChannel(3);
+	SelecChannel[0] = Sample->ReturnKinematicParameterFromString("Mode");
+	SelecChannel[1] = iModeChan;
+	SelecChannel[2] = iModeChan+1;
+	SelectionVec.push_back(SelecChannel);
+	
+	TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy",SelectionVec);
+	writeToBoth(outFile, Sample->GetName() + " " + Sample->GetMaCh3Modes()->GetMaCh3ModeName(iModeChan) + ": " + std::to_string(Hist->Integral()));
+      }
+      
+      TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy");
+      writeToBoth(outFile, Sample->GetName() + ": " + std::to_string(Hist->Integral()));
     }
 
     // Do you want to gener
