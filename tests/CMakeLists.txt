@@ -28,7 +28,6 @@ target_include_directories(MaCh3DuneTestUtils PUBLIC
 
 add_library(MACH3DUNE::MaCh3DuneTestUtils ALIAS MaCh3DuneTestUtils)
 
-
 # Now we set up test apps
 foreach(app
     TestEventRates

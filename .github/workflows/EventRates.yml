@@ -24,7 +24,7 @@ jobs:
         include:
           - name: Beam Event Rate Validation
             test_exe: tests/TestEventRates
-            test_config: tests/test_configs/EventRates_Beam_TEST.yaml
+            test_config: configs/EventRates_Beam.yaml
             repo_linking_command: |
               ln -s \
               /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2/DUNE_2021_FD_splines inputs/DUNE_spline_files
