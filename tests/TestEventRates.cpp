@@ -71,7 +71,7 @@ int main(int argc, char * argv[]) {
             std::vector< std::vector<double> > SelectionVec;
 
             std::vector<double> SelecChannel(3);
-            SelecChannel[0] = Sample->ReturnKinematicParameterFromString("OscChannel");
+            SelecChannel[0] = Sample->ReturnKinematicParameterFromString("OscillationChannel");
             SelecChannel[1] = iOscChan;
             SelecChannel[2] = iOscChan+1;
             SelectionVec.push_back(SelecChannel);
