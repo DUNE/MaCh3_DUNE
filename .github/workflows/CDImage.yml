@@ -44,13 +44,13 @@ jobs:
               --file "${{ matrix.file }}" \
               --tag "ghcr.io/dune/mach3:${{ matrix.os }}${{ github.ref_name }}" \
               --build-arg MACH3_DUNE_VERSION="${{ github.ref_name }}" \
-              --build-arg MACH3_DUNE_BUILD_ARGS="-DCUDAProb3Linear_ENABLED=ON -DCUDAProb3_ENABLED"
+              --build-arg MACH3_DUNE_BUILD_ARGS="-DCUDAProb3Linear_ENABLED=ON"
           else
             docker build . \
               --file "${{ matrix.file }}" \
               --tag "ghcr.io/dune/mach3:${{ matrix.tag_latest }}" \
               --build-arg MACH3_DUNE_VERSION="develop" \
-              --build-arg MACH3_DUNE_BUILD_ARGS="-DCUDAProb3Linear_ENABLED=ON -DCUDAProb3_ENABLED"
+              --build-arg MACH3_DUNE_BUILD_ARGS="-DCUDAProb3Linear_ENABLED=ON"
           fi
 
       - name: Push Docker image
