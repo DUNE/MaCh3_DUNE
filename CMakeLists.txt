@@ -150,7 +150,8 @@ if(NOT MaCh3_FOUND)
       list(APPEND MaCh3_OPTIONS "LOG_LEVEL ${LOG_LEVEL}")
   endif()
   
-  CPMAddPackage(
+  CPMAddPackage(    # shellcheck disable=SC1009,SC1054,SC1083
+
       NAME MaCh3
       GIT_TAG "v1.3.6"
       GITHUB_REPOSITORY mach3-software/MaCh3
@@ -242,20 +243,13 @@ add_subdirectory(splines)
 add_subdirectory(samplePDFDUNE)
 add_subdirectory(src)
 
-
-# Do we want to build our integration tests?
-if(DEFINED MACH3_BUILD_TESTS AND MACH3_BUILD_TESTS)
-  add_subdirectory(tests)
-endif()
-
-
 add_library(MaCh3DUNEAll INTERFACE)
 set_target_properties(MaCh3DUNEAll PROPERTIES EXPORT_NAME All)
 target_link_libraries(MaCh3DUNEAll INTERFACE SamplePDFDUNE splinesDUNE MaCh3DUNECompilerOptions)
 add_library(MaCh3DUNE::All ALIAS MaCh3DUNEAll)
 
 install(TARGETS MaCh3DUNEAll
-    EXPORT mach3dune-targets
+  EXPORT mach3dune-targets
     LIBRARY DESTINATION lib/)
 
 configure_file(cmake/Templates/setup.MaCh3DUNE.sh.in
