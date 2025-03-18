@@ -54,12 +54,16 @@ jobs:
       # Link CVMFS directories dynamically
       - name: Link CVMFS repos
         run: |
+          # shellcheck disable=SC1009,SC1054,SC1083
           {% for link in matrix.cvmfs_links %}
           ln -s {{ link.source }} {{ link.target }}
           {% endfor %}
 
       - name: Check CVMFS link validity
-        run: python tests/test_scripts/root_file_corrupt.py {% for link in matrix.cvmfs_links %} {{ link.target }} {% endfor %}
+
+        run: |
+          # shellcheck disable=SC1009,SC1054,SC1083
+          python tests/test_scripts/root_file_corrupt.py {% for link in matrix.cvmfs_links %} {{ link.target }} {% endfor %}
 
       # Run event rates
       - name: Run Event Rates
