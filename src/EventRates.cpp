@@ -112,7 +112,7 @@ int main(int argc, char * argv[]) {
       std::vector< std::vector<double> > SelectionVec;
 
       std::vector<double> SelecChannel(3);
-      SelecChannel[0] = Sample->ReturnKinematicParameterFromString("Mode");
+      SelecChannel[0] = Sample->ReturnKinematicParameterFromString("M3Mode");
       SelecChannel[1] = iModeChan;
       SelecChannel[2] = iModeChan+1;
       SelectionVec.push_back(SelecChannel);
