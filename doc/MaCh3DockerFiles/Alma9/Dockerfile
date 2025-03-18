@@ -16,7 +16,13 @@ ARG MACH3_DUNE_BUILD_ARGS
 RUN git clone https://github.com/DUNE/MaCh3_DUNE.git ${MACH3_DUNE_WORK_DIR}
 
 WORKDIR ${MACH3_DUNE_WORK_DIR}
+
 RUN git checkout ${MACH3_DUNE_VERSION}
+
+# Make a python environment
+RUN virtualenv .env
+RUN source .env/bin/activate
+RUN pip install -r requirements.txt
 
 RUN mkdir -p ${MACH3_DUNE_BUILD_DIR}
 WORKDIR ${MACH3_DUNE_BUILD_DIR}

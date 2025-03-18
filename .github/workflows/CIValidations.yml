@@ -1,12 +1,6 @@
 ---
 name: Event Rates Beam
 
-# To add additional run-time tests add (to matrix)
-# - name: <your test>
-#   test_exe: /test/<your exe>
-#   test_config: path/to/tconfiguration
-#   repo_linking_command: ln -sf /path/to/files/ (usually CAFs + splines)
-
 on:
   pull_request:
     branches: [develop]
@@ -19,17 +13,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         include:
           - name: Beam Event Rate Validation
-            test_exe: tests/TestEventRates
+            test_exe: build/src/EventRates
             test_config: configs/EventRates_Beam.yaml
-            repo_linking_command: |
-              ln -s \
-              /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2/DUNE_2021_FD_splines inputs/DUNE_spline_files
-              ln -s \
-              /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2/DUNE_2023_FD_CAFs inputs/DUNE_CAF_files
+            test_output: beam_valid.txt
+            correct_output: tests/test_results/EventRatesV2TDR.txt
+            build_arg: -DCUDAProb3Linear_ENABLED=ON
+            # Add a list of directories to link
+            cvmfs_links:
+              - source: /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2/DUNE_2021_FD_splines
+                target: inputs/DUNE_spline_files
+              - source: /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2/DUNE_2023_FD_CAFs
+                target: inputs/DUNE_CAF_files
 
     name: Run Test ${{matrix.name}}
     steps:
@@ -43,7 +41,7 @@ jobs:
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: start docker container with bind mount cvmfs
+      - name: Start docker container with bind mount CVMFS
         env:
           MACH3_DUNE_VERSION: ${{ github.head_ref }}
         run: |
@@ -51,7 +49,17 @@ jobs:
           --file doc/MaCh3DockerFiles/Alma9/Dockerfile \
           --tag ghcr.io/dune/mach3:alma9test \
           --build-arg MACH3_DUNE_VERSION="${MACH3_DUNE_VERSION}" \
-          --build-arg MACH3_DUNE_BUILD_ARGS="-DCUDAProb3Linear_ENABLED=ON -DMACH3_BUILD_TESTS=ON"
+          --build-arg MACH3_DUNE_BUILD_ARGS=${{matrix.build_arg}}
+
+      # Link CVMFS directories dynamically
+      - name: Link CVMFS repos
+        run: |
+          {% for link in matrix.cvmfs_links %}
+          ln -s {{ link.source }} {{ link.target }}
+          {% endfor %}
+
+      - name: Check CVMFS link validity
+        run: python tests/test_scripts/root_file_corrupt.py {% for link in matrix.cvmfs_links %} {{ link.target }} {% endfor %}
 
       # Run event rates
       - name: Run Event Rates
@@ -61,9 +69,15 @@ jobs:
           shell: bash
           options: -v /cvmfs:/cvmfs:shared
           run: |
-            ${{matrix.repo_linking_command}}
-            ls
             source ./install/bin/setup.MaCh3.sh
             source ./install/bin/setup.NuOscillator.sh
             source ./install/bin/setup.MaCh3DUNE.sh
-            ./install/${{matrix.test_exe}} ${{matrix.test_config}}
+            ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | tee ${{matrix.test_output}}
+
+      - name: Check that the files are the exact same
+        uses: LouisBrunner/diff-action@v2.0.0
+        with:
+          old: /tests/test_results/${{ matrix.correct_output }}
+          new: ${{ matrix.test_output }}
+          mode: strict
+          tolerance: same
