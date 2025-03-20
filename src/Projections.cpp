@@ -1,3 +1,4 @@
+#include <TDirectory.h>
 #include <vector>
 
 #include <TCanvas.h>
@@ -43,6 +44,11 @@ std::string ReturnFormattedHistogramNameFromProjection(ProjectionVariable Proj) 
 
   ReturnStr += ";" + Proj.Name + ";Events";
   return ReturnStr;
+}
+
+void WriteTH1Histogram(TH1 *Hist, TDirectory *Dir, std::string Name) {
+  Dir->cd();
+  Hist->Write(Name.c_str());
 }
 
 void PrintTH1Histogram(TH1 *Hist, std::string OutputName) {
@@ -91,6 +97,11 @@ void PrintTHStackHistogram(THStack *Hist, std::string OutputName) {
   Canv.Print(OutputName.c_str());
 }
 
+void WriteTHStackHistogram(THStack *Hist, TDirectory *Dir, std::string Name) {
+  Dir->cd();
+  Hist->Write(Name.c_str());
+}
+
 int main(int argc, char *argv[]) {
   if (argc == 1) {
     MACH3LOG_ERROR("Usage: bin/EventRatesDUNEBeam config.cfg");
@@ -126,6 +137,9 @@ int main(int argc, char *argv[]) {
   // Grab Projections from the config
 
   std::vector<ProjectionVariable> Projections;
+
+  std::string OutputFileName = fitMan->raw()["General"]["OutputFile"].as<std::string>();
+  TFile *File = TFile::Open(OutputFileName.c_str(), "RECREATE");
 
   for (auto &ProjectionConfig : fitMan->raw()["Projections"]) {
     std::string VarName = ProjectionConfig["Name"].as<std::string>();
@@ -234,6 +248,8 @@ int main(int argc, char *argv[]) {
 
     for (auto Sample : DUNEPdfs) {
 
+      File->mkdir(Sample->GetName().c_str());
+      TDirectory *dir = File->GetDirectory(Sample->GetName().c_str());
       std::vector<std::vector<double>> SelectionVector;
       for (size_t iCut = 0; iCut < Projections[iProj].KinematicCuts.size(); iCut++) {
         std::vector<double> Selection(3);
@@ -249,11 +265,14 @@ int main(int argc, char *argv[]) {
 
       MACH3LOG_INFO("\tSample: {:<20} - Integral: {:<10}", Sample->GetName(), Hist->Integral());
       PrintTH1Histogram(Hist, Sample->GetName() + "_" + ProjectionVar_Str + ".png");
+      WriteTH1Histogram(Hist, dir, Sample->GetName() + "_" + ProjectionVar_Str);
 
       for (size_t iCat = 0; iCat < Projections[iProj].CategoryCuts.size(); iCat++) {
         MACH3LOG_INFO("\t\tCategory: {:<10} - Name : {:<20}", iCat, Projections[iProj].CategoryCuts[iCat].Name);
 
         Stack = new THStack(Projections[iProj].CategoryCuts[iCat].Name.c_str(), ReturnFormattedHistogramNameFromProjection(Projections[iProj]).c_str());
+        TLegend *leg = new TLegend(0.6, 0.7, 0.88, 0.88);
+        leg->SetHeader(Projections[iProj].CategoryCuts[iCat].Name.c_str());
 
         for (size_t iBreak = 0; iBreak < Projections[iProj].CategoryCuts[iCat].Breakdown.size(); iBreak++) {
 
@@ -277,6 +296,7 @@ int main(int argc, char *argv[]) {
             } else {
               BreakdownHist->Add(Hist);
             }
+            leg->AddEntry(Hist, Projections[iProj].CategoryCuts[iCat].CategoryNames[iBreak].c_str(), "f");
           }
 
           MACH3LOG_INFO("\t\t\tBreakdown: {:<10} - Integral: {:<10}", iBreak, BreakdownHist->Integral());
@@ -284,9 +304,17 @@ int main(int argc, char *argv[]) {
         }
 
         PrintTHStackHistogram(Stack, Sample->GetName() + "_" + ProjectionVar_Str + "_" + Projections[iProj].CategoryCuts[iCat].Name + "_Stack.png");
+
+        // HH: Add the stack to the file
+        TCanvas Canv = TCanvas();
+        Stack->Draw("HIST");
+        leg->Draw();
+        Canv.Write((ProjectionVar_Str + "_" + Projections[iProj].CategoryCuts[iCat].Name + "_Stack_Canvas").c_str());
+        WriteTHStackHistogram(Stack, dir, ProjectionVar_Str + "_" + Projections[iProj].CategoryCuts[iCat].Name + "_Stack");
       }
     }
   }
+  File->Close();
 
   MACH3LOG_INFO("=================================================");
 }
