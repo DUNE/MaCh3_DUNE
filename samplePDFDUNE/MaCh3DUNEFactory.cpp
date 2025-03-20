@@ -2,7 +2,7 @@
 
 //#include "samplePDFDUNE/samplePDFDUNEBeamFD.h"
 //#include "samplePDFDUNE/samplePDFDUNEBeamND.h"
-#include "samplePDFDUNE/samplePDFDUNEBeamNDGar.h"
+#include "samplePDFDUNE/samplePDFDUNEBeamNDGAr.h"
 //#include "samplePDFDUNE/samplePDFDUNEAtm.h"
 
 samplePDFFDBase* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, covarianceXsec* &xsec, covarianceOsc* &osc) {
@@ -12,8 +12,8 @@ samplePDFFDBase* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
   //  FDSample = new samplePDFDUNEBeamFD(SampleConfig, xsec, osc);
   //} else if (SampleType == "BeamND") {
   //  FDSample = new samplePDFDUNEBeamND(SampleConfig, xsec, osc);
-  if (SampleType == "BeamNDGar") {
-    FDSample = new samplePDFDUNEBeamNDGar(SampleConfig, xsec);
+  if (SampleType == "BeamNDGAr") {
+    FDSample = new samplePDFDUNEBeamNDGAr(SampleConfig, xsec);
   //}
   //else if (SampleType == "Atm") {
   //  FDSample = new samplePDFDUNEAtm(SampleConfig, xsec, osc);

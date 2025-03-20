@@ -1,5 +1,6 @@
 #ifndef _StructsDUNE_h_
 #define _StructsDUNE_h_
+#define __DEFAULT_RETURN_VAL__ -999999.123456
 
 struct dunemc_base {
 
@@ -50,10 +51,12 @@ struct dunemc_base {
   double dummy_y;
   double *rw_reco_q;
   double *reco_numu;
+  double *rw_Q0;
+  double *rw_Q3;
 
   double pot_s;
   double norm_s;
-
+  double osc_channel;
   double *beam_w;
   double *flux_w;
 

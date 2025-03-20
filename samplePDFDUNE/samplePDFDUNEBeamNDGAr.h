@@ -1,5 +1,5 @@
-#ifndef _samplePDFDUNEBeamNDGar_h_
-#define _samplePDFDUNEBeamNDGar_h_
+#ifndef _samplePDFDUNEBeamNDGAr_h_
+#define _samplePDFDUNEBeamNDGAr_h_
 
 #include <iostream>
 #include <TTree.h>
@@ -20,13 +20,13 @@
 
 #include "StructsDUNE.h"
 
-class samplePDFDUNEBeamNDGar : virtual public samplePDFFDBase
+class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 {
 public:
-  samplePDFDUNEBeamNDGar(std::string mc_version, covarianceXsec* xsec_cov);
-  ~samplePDFDUNEBeamNDGar();
+  samplePDFDUNEBeamNDGAr(std::string mc_version, covarianceXsec* xsec_cov);
+  ~samplePDFDUNEBeamNDGAr();
 
-  enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kPionMultiplicity, kNRecoParticles, kInFDV, kTrueMinusRecoEnergyRatio, kTrueMinusRecoEnergy, kNTrueMuons, kNRecoMuons};
+  enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kPionMultiplicity, kNRecoParticles, kInFDV, kTrueMinusRecoEnergyRatio, kTrueMinusRecoEnergy, kNTrueMuons, kNRecoMuons, kOscChannel, kTrueQ0, kTrueQ3};
   
  protected:
   void Init();
@@ -49,8 +49,7 @@ public:
 
   std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameter);
   std::vector<double> ReturnKinematicParameterBinning(KinematicTypes KinematicParameter);
-  int ReturnKinematicParameterFromString(std::string KinematicParameterStr);
-  std::string ReturnStringFromKinematicParameter(int KinematicParameter);
+  inline std::string ReturnStringFromKinematicParameter(int KinematicParameter);
   
   // dunendmc
   std::vector<struct dunemc_base> dunendgarmcSamples;
@@ -87,6 +86,50 @@ public:
   float muonscore_threshold; //NK Added so we can optimise muon threshold
 
   caf::StandardRecord* sr = new caf::StandardRecord();
+
+  const std::unordered_map<std::string, int> KinematicParametersDUNE = {
+    {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
+    {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},
+	{"Mode",kMode},
+    {"TrueXPos",kTrueXPos},
+    {"TrueYPos",kTrueYPos},
+    {"TrueZPos",kTrueZPos},
+    {"TrueRad",kTrueRad},
+    {"NMuonsRecoOverTruth",kNMuonsRecoOverTruth},
+    {"RecoLepEnergy",kRecoLepEnergy},
+    {"TrueLepEnergy",kTrueLepEnergy},
+	{"RecoXPos",kRecoXPos},
+	{"RecoYPos",kRecoYPos},
+	{"RecoZPos",kRecoZPos},
+	{"RecoRad",kRecoRad},
+	{"LepPT",kLepPT},
+	{"LepPZ",kLepPZ},
+	{"OscillationChannel",kOscChannel},
+	{"TrueQ0",kTrueQ0},
+	{"TrueQ3",kTrueQ3}
+  };
+
+  const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
+    {kTrueNeutrinoEnergy,"TrueNeutrinoEnergy"},
+    {kRecoNeutrinoEnergy,"RecoNeutrinoEnergy"},
+	{kMode,"Mode"},
+    {kTrueXPos,"TrueXPos"},
+    {kTrueYPos,"TrueYPos"},
+	{kTrueZPos,"TrueZPos"},
+	{kTrueRad,"TrueRad"},
+    {kNMuonsRecoOverTruth,"NMuonsRecoOverTruth"},
+    {kRecoLepEnergy,"RecoLepEnergy"},
+    {kTrueLepEnergy,"TrueLepEnergy"},
+    {kRecoXPos,"RecoXPos"},
+    {kRecoYPos,"RecoYPos"},
+    {kRecoZPos,"RecoZPos"},
+    {kRecoRad,"RecoRad"},
+    {kLepPT,"LepPT"},
+    {kLepPZ,"LepPZ"},
+	{kOscChannel,"OscillationChannel"},
+	{kTrueQ0,"TrueQ0"},
+	{kTrueQ3,"TrueQ3"},
+  };
 };
 
 #endif

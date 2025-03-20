@@ -60,19 +60,21 @@ endif()
 
 #=================== DUNEAnaObj
 
-option(MaCh3_DUNE_USE_SRProxy "Whether to build proxy classes for Standard Record objects" OFF)
+option(MaCh3_DUNE_USE_SRProxy "Whether to build proxy classes for Standard Record objects" ON)
 
 if(MaCh3_DUNE_USE_SRProxy)
-  find_package(duneanaobj)
+#find_package(duneanaobj)
 
-  if(NOT duneanaobj_FOUND)
+#if(NOT duneanaobj_FOUND)
     CPMFindPackage(
       NAME duneanaobj
-      GIT_TAG feature/Clingification_rebase2024
-      GITHUB_REPOSITORY luketpickering/duneanaobj
-      VERSION 4.0.0
+#GIT_TAG feature/Clingification_rebase2024
+#GITHUB_REPOSITORY luketpickering/duneanaobj
+#VERSION 4.0.0
+	  GITHUB_REPOSITORY "naseemkhan99/duneanaobj"
+	  GIT_TAG "main"
     )
-  endif()
+#endif()
 
   if(NOT TARGET duneanaobj::all)
     cmessage(FATAL_ERROR "MaCh3 DUNE Expected dependency target: duneanaobj::all")
@@ -83,6 +85,8 @@ else()
     GIT_TAG tag/legacy_ndgar_cafs_2024
     GITHUB_REPOSITORY "DUNE/duneanaobj"
     DOWNLOAD_ONLY YES
+#	GITHUB_REPOSITORY "naseemkhan99/duneanaobj"
+#   GIT_TAG "main"
   )
 
   include_directories(${duneanaobj_SOURCE_DIR})
