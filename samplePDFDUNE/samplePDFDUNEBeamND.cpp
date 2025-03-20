@@ -4,6 +4,7 @@
 #include "StructsDUNE.h"
 #include "TString.h"
 #include <assert.h>
+#include <manager/MaCh3Logger.h>
 #include <stdexcept>
 #include <string>
 #include "TMath.h"
@@ -167,37 +168,23 @@ void samplePDFDUNEBeamND::SetupSplines() {
 
 // === HH: Functional parameters ===
 void samplePDFDUNEBeamND::TotalEScale(const double * par, std::size_t iSample, std::size_t iEvent) {
-  // Debugging couts
-  std::cout << "-------------------------------------------------------------------" <<std::endl;
-  std::cout << "TotalEScaleND: " << *par << std::endl;
-  std::cout << "duneendmcSamples size" << dunendmcSamples.size() << std::endl;
-  std::cout << "iSample: " << iSample << std::endl;
-  std::cout << "iEvent: " << iEvent << std::endl;
-  std::cout << "rw_erec: " << dunendmcSamples[iSample].rw_erec[iEvent] << std::endl;
-  std::cout << "rw_erec_shifted: " << dunendmcSamples[iSample].rw_erec_shifted[iEvent] << std::endl;
-  std::cout << "rw_erec_had: " << dunendmcSamples[iSample].rw_erec_had[iEvent] << std::endl;
-  std::cout << "rw_erec_lep: " << dunendmcSamples[iSample].rw_erec_lep[iEvent] << std::endl;
-  std::cout << "rw_isCC: " << dunendmcSamples[iSample].rw_isCC[iEvent] << std::endl;
-  std::cout << "rw_nuPDG: " << dunendmcSamples[iSample].rw_nuPDG[iEvent] << std::endl;
-  std::cout << "iselike: " << iselike << std::endl;
-  // Apply the scale
-  dunendmcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunendmcSamples[iSample].rw_erec_had[iEvent];
+  // Total energy scale uncertainties for anything but CC Numu, see: 
   // https://github.com/DUNE/lblpwgtools/blob/3d475f50a998fbfa6266df9a0c4eb3056c0cdfe5/CAFAna/Systs/EnergySysts.h#L39
-  if (!(dunendmcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunendmcSamples[iSample].rw_nuPDG[iEvent])==14) && iselike) {
-    dunendmcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunendmcSamples[iSample].rw_erec_lep[iEvent];
-  }
-  std::cout << "New rw_erec_shifted: " << dunendmcSamples[iSample].rw_erec_shifted[iEvent] << std::endl;
-  std::cout << "-------------------------------------------------------------------" <<std::endl;
+  
+  dunendmcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunendmcSamples[iSample].rw_erec_had[iEvent];
 }
+
+void samplePDFDUNEBeamND::TotalEScaleNotCCNumu(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // A special case for CC Numu, where we don't scale Erec by lepton energy
+  // Since we reconstruct muon energy in a different way, see:
+  // https://github.com/DUNE/lblpwgtools/blob/3d475f50a998fbfa6266df9a0c4eb3056c0cdfe5/CAFAna/Systs/EnergySysts.h#L39
+  dunendmcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunendmcSamples[iSample].rw_erec_lep[iEvent];
+}
+
 
 void samplePDFDUNEBeamND::DebugShift(const double * par, std::size_t iSample, std::size_t iEvent) {
   if (dunendmcSamples[iSample].rw_erec[iEvent] < 2) {
-  // Debugging couts
-  std::cout << "-------------------------------------------------------------------" <<std::endl;
-  std::cout << "Old rw_erec_shifted: " << dunendmcSamples[iSample].rw_erec_shifted[iEvent] << std::endl;
     dunendmcSamples[iSample].rw_erec_shifted[iEvent] = 4.0;
-  std::cout << "New rw_erec_shifted: " << dunendmcSamples[iSample].rw_erec_shifted[iEvent] << std::endl;
-  std::cout << "-------------------------------------------------------------------" <<std::endl;
   }
 }
 
@@ -221,6 +208,10 @@ void samplePDFDUNEBeamND::RegisterFunctionalParameters() {
   funcParsNamesVec.push_back("DebugShift");
   funcParsFuncMap[kDebugShift] = [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->DebugShift(par, iSample, iEvent); };
 
+  funcParsNamesMap["TotalEScaleNotCCNumuND"] = kTotalEScaleNotCCNumu;
+  funcParsNamesVec.push_back("TotalEScaleNotCCNumuND");
+  funcParsFuncMap[kTotalEScaleNotCCNumu] = [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleNotCCNumu(par, iSample, iEvent); };
+
   // For every functional parameter in XsecCov that matches the name in funcParsNames, add it to the map
   for (std::vector<FuncPars>::iterator it = funcParsVec.begin(); it != funcParsVec.end(); ++it) {
     if (std::find(funcParsNamesVec.begin(), funcParsNamesVec.end(), (*it).name) != funcParsNamesVec.end()) {
@@ -232,6 +223,10 @@ void samplePDFDUNEBeamND::RegisterFunctionalParameters() {
   }
 }
 
+// HH: Reset the shifted values to the original values
+void samplePDFDUNEBeamND::resetShifts(int iSample, int iEvent) {
+  dunendmcSamples[iSample].rw_erec_shifted[iEvent] = dunendmcSamples[iSample].rw_erec[iEvent];
+}
 // =================================
 
 void samplePDFDUNEBeamND::SetupWeightPointers() {
@@ -316,6 +311,11 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   _data->SetBranchStatus("eN", 1);
   _data->SetBranchAddress("eN", &_eN);
 
+  _data->SetBranchStatus("reco_nue", 1);
+  _data->SetBranchAddress("reco_nue", &_reco_nue);
+  _data->SetBranchStatus("reco_numu", 1);
+  _data->SetBranchAddress("reco_numu", &_reco_numu);
+
   if (!IsRHC) { 
     duneobj->norm_s = (1e21/1.5e21);
   } else {
@@ -379,6 +379,9 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   duneobj->mode = new double[duneobj->nEvents];
   duneobj->Target = new int[duneobj->nEvents];
 
+  duneobj->rw_reco_numu = new int[duneobj->nEvents];
+  duneobj->rw_reco_nue = new int[duneobj->nEvents];
+
   _data->GetEntry(0);
 
   //FILL DUNE STRUCT
@@ -415,6 +418,9 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
     duneobj->rw_ePi0[i] = (double)_ePi0; 
     duneobj->rw_eN[i] = (double)_eN; 
 
+    duneobj->rw_reco_numu[i] = static_cast<int>(_reco_numu);
+    duneobj->rw_reco_nue[i] = static_cast<int>(_reco_nue);
+
     //Assume everything is on Argon for now....
     duneobj->Target[i] = 40;
     
@@ -431,6 +437,11 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
 
 const double* samplePDFDUNEBeamND::GetPointerToKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent) {
   double* KinematicValue;
+  // HH hack: A hack to get the PDG values as doubles
+  static double numubar = -14.0;
+  static double nuebar = -12.0;
+  static double nue = 12.0;
+  static double numu = 14.0;
   
   switch(KinPar){
   case kTrueNeutrinoEnergy:
@@ -449,6 +460,58 @@ const double* samplePDFDUNEBeamND::GetPointerToKinematicParameter(KinematicTypes
   case kRecoY:
     KinematicValue = &dunendmcSamples[iSample].rw_yrec[iEvent];
     break;
+  case kIsCC:
+    if (dunendmcSamples[iSample].rw_isCC[iEvent] == 1) {
+      KinematicValue = const_cast<double*>(&Unity);
+      break;
+    }
+    KinematicValue = const_cast<double*>(&Zero);
+    break;
+  case kRecoNumu:
+    if (dunendmcSamples[iSample].rw_reco_numu[iEvent] == 1) {
+      KinematicValue = const_cast<double*>(&Unity);
+      break;
+    } 
+    KinematicValue = const_cast<double*>(&Zero);
+    break;
+  case kRecoNue:
+    if (dunendmcSamples[iSample].rw_reco_nue[iEvent] == 1) {
+      KinematicValue = const_cast<double*>(&Unity);
+      break;
+    } 
+    KinematicValue = const_cast<double*>(&Zero);
+    break;
+  case kNuPDG:
+    switch (dunendmcSamples[iSample].rw_nuPDG[iEvent]) {
+      case 12:
+        KinematicValue = &nue;
+        break;
+      case 14:
+        KinematicValue = (&numu);
+        break;
+      case -12:
+        KinematicValue = (&nuebar);
+        break;
+      case -14:
+        KinematicValue = (&numubar);
+        break;
+      default:
+        MACH3LOG_ERROR("Got nuPDG of {} which is not recognised...", dunendmcSamples[iSample].rw_nuPDG[iEvent]);
+        throw MaCh3Exception(__FILE__, __LINE__);
+    }
+    break;
+  case kNotCCNumu:
+    // HH: Adapted from TDR definition
+    // For details see:
+    // https://github.com/DUNE/lblpwgtools/blob/3d475f50a998fbfa6266df9a0c4eb3056c0cdfe5/CAFAna/Systs/EnergySysts.h#L39
+    // Not (CC Numu)
+    if (!(dunendmcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunendmcSamples[iSample].rw_nuPDG[iEvent])==14)){
+      KinematicValue = const_cast<double*>(&Unity);
+        break;
+    }
+    KinematicValue = const_cast<double*>(&Zero);
+    break;
+        
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
     std::cout << KinPar << ReturnStringFromKinematicParameter(KinPar) << std::endl;
@@ -568,6 +631,11 @@ int samplePDFDUNEBeamND::ReturnKinematicParameterFromString(std::string Kinemati
   if(KinematicParameterStr == "RecoNeutrinoEnergy") return kRecoNeutrinoEnergy;
   if(KinematicParameterStr == "IsFHC") return kIsFHC;
   if(KinematicParameterStr == "RecoY") return kRecoY;
+  if(KinematicParameterStr == "IsCC") return kIsCC;
+  if(KinematicParameterStr == "RecoNumu") return kRecoNumu;
+  if(KinematicParameterStr == "RecoNue") return kRecoNue;
+  if(KinematicParameterStr == "NuPDG") return kNuPDG;
+  if(KinematicParameterStr == "NotCCNumu") return kNotCCNumu;
   return -1;
 }
 
@@ -578,6 +646,11 @@ std::string samplePDFDUNEBeamND::ReturnStringFromKinematicParameter(int Kinemati
     case kRecoNeutrinoEnergy: return "RecoNeutrinoEnergy";
     case kIsFHC: return "IsFHC";
     case kRecoY: return "RecoY";
+    case kIsCC: return "IsCC";
+    case kRecoNumu: return "RecoNumu";
+    case kRecoNue: return "RecoNue";
+    case kNuPDG: return "NuPDG";
+    case kNotCCNumu: return "NotCCnumu";
     default: return "";
   }
 }

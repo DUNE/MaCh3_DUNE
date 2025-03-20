@@ -28,7 +28,7 @@ public:
   samplePDFDUNEBeamND(std::string mc_version, covarianceXsec* xsec_cov, covarianceOsc* osc_cov);
   ~samplePDFDUNEBeamND();
 
-  enum KinematicTypes {kTrueNeutrinoEnergy, kRecoQ, kRecoNeutrinoEnergy, kIsFHC, kRecoY};
+  enum KinematicTypes {kTrueNeutrinoEnergy, kRecoQ, kRecoNeutrinoEnergy, kIsFHC, kRecoY, kIsCC, kRecoNumu, kRecoNue, kNuPDG, kNotCCNumu};
   
  protected:
   void Init();
@@ -39,10 +39,12 @@ public:
   void SetupSplines();
 
   // === HH: Functional parameters ===
-  enum FuncParEnum {kTotalEScaleND, kDebugNothing, kDebugShift};
+  enum FuncParEnum {kDebugNothing, kDebugShift, kTotalEScaleND, kTotalEScaleNotCCNumu};
   void RegisterFunctionalParameters();
+  void resetShifts(int iSample, int iEvent);
 
   void TotalEScale(const double * par, std::size_t iSample, std::size_t iEvent);
+  void TotalEScaleNotCCNumu(const double * par, std::size_t iSample, std::size_t iEvent);
   void DebugShift(const double * par, std::size_t iSample, std::size_t iEvent);
   // =================================
   
