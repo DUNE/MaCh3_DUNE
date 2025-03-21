@@ -39,12 +39,16 @@ public:
   void SetupSplines();
 
   // === HH: Functional parameters ===
-  enum FuncParEnum {kDebugNothing, kDebugShift, kTotalEScaleND, kTotalEScaleNotCCNumu};
+  enum FuncParEnum {kDebugNothing, kDebugShift, kTotalEScaleND, kTotalEScaleNotCCNumu, kTotalEScaleSqrt, kTotalEScaleSqrtNotCCNumu, kTotalEScaleInvSqrt, kTotalEScaleInvSqrtNotCCNumu};
   void RegisterFunctionalParameters();
   void resetShifts(int iSample, int iEvent);
 
   void TotalEScale(const double * par, std::size_t iSample, std::size_t iEvent);
   void TotalEScaleNotCCNumu(const double * par, std::size_t iSample, std::size_t iEvent);
+  void TotalEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  void TotalEScaleSqrtNotCCNumu(const double * par, std::size_t iSample, std::size_t iEvent);
+  void TotalEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  void TotalEScaleInvSqrtNotCCNumu(const double * par, std::size_t iSample, std::size_t iEvent);
   void DebugShift(const double * par, std::size_t iSample, std::size_t iEvent);
   // =================================
   

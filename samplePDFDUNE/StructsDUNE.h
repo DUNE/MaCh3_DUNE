@@ -89,6 +89,11 @@ struct dunemc_base {
   double *rw_elep_reco;
   double *rw_elep_true;
 
+  double *rw_erec_had_sqrt;
+  double *rw_erec_lep_sqrt;
+  double *rw_eRecoPi0_sqrt;
+  double *rw_eRecoN_sqrt;
+
   int *nrecoparticles;
   bool *in_fdv;
 };

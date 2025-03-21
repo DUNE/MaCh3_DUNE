@@ -175,10 +175,29 @@ void samplePDFDUNEBeamND::TotalEScale(const double * par, std::size_t iSample, s
 }
 
 void samplePDFDUNEBeamND::TotalEScaleNotCCNumu(const double * par, std::size_t iSample, std::size_t iEvent) {
-  // A special case for CC Numu, where we don't scale Erec by lepton energy
+  // A special case for Not (CC Numu), where we also scale Erec by lepton energy
   // Since we reconstruct muon energy in a different way, see:
   // https://github.com/DUNE/lblpwgtools/blob/3d475f50a998fbfa6266df9a0c4eb3056c0cdfe5/CAFAna/Systs/EnergySysts.h#L39
   dunendmcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunendmcSamples[iSample].rw_erec_lep[iEvent];
+}
+
+void samplePDFDUNEBeamND::TotalEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunendmcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunendmcSamples[iSample].rw_erec_had[iEvent] * dunendmcSamples[iSample].rw_erec_had_sqrt[iEvent];
+}
+
+void samplePDFDUNEBeamND::TotalEScaleSqrtNotCCNumu(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // See comments in TotalEScaleNotCCNumu
+  dunendmcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunendmcSamples[iSample].rw_erec_lep[iEvent] * dunendmcSamples[iSample].rw_erec_lep_sqrt[iEvent];
+}
+
+void samplePDFDUNEBeamND::TotalEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // Erec/sqrt(Erec) = sqrt(Erec)
+  dunendmcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunendmcSamples[iSample].rw_erec_had_sqrt[iEvent];
+}
+
+void samplePDFDUNEBeamND::TotalEScaleInvSqrtNotCCNumu(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // See comments in TotalEScaleNotCCNumu
+  dunendmcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunendmcSamples[iSample].rw_erec_lep_sqrt[iEvent];
 }
 
 
@@ -189,38 +208,43 @@ void samplePDFDUNEBeamND::DebugShift(const double * par, std::size_t iSample, st
 }
 
 void samplePDFDUNEBeamND::RegisterFunctionalParameters() {
-  std::cout << "Registering functional parameters" << std::endl;
+  MACH3LOG_INFO("Registering functional parameters");
   // This function manually populates the map of functional parameters
   // Maps the name of the functional parameter to the pointer of the function
-  std::vector<std::string> funcParsNamesVec = {};
   
   // This is the part where we manually enter things
-  funcParsNamesMap["TotalEScaleND"] = kTotalEScaleND;
-  funcParsNamesVec.push_back("TotalEScaleND");
   // A lambda function has to be used so we can refer to a non-static member function
-  funcParsFuncMap[kTotalEScaleND] = [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScale(par, iSample, iEvent); };
+  RegisterIndividualFuncPar("DebugNothing", 
+                            kDebugNothing, 
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) {});
 
-  funcParsNamesMap["DebugNothing"] = kDebugNothing;
-  funcParsNamesVec.push_back("DebugNothing");
-  funcParsFuncMap[kDebugNothing] = [this](const double * par, std::size_t iSample, std::size_t iEvent) {};
+  RegisterIndividualFuncPar("DebugShift",
+                            kDebugShift, 
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->DebugShift(par, iSample, iEvent); });
 
-  funcParsNamesMap["DebugShift"] = kDebugShift;
-  funcParsNamesVec.push_back("DebugShift");
-  funcParsFuncMap[kDebugShift] = [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->DebugShift(par, iSample, iEvent); };
+  RegisterIndividualFuncPar("TotalEScaleND",
+                            kTotalEScaleND, 
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScale(par, iSample, iEvent); });
 
-  funcParsNamesMap["TotalEScaleNotCCNumuND"] = kTotalEScaleNotCCNumu;
-  funcParsNamesVec.push_back("TotalEScaleNotCCNumuND");
-  funcParsFuncMap[kTotalEScaleNotCCNumu] = [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleNotCCNumu(par, iSample, iEvent); };
+  RegisterIndividualFuncPar("TotalEScaleNotCCNumuND",
+                            kTotalEScaleNotCCNumu, 
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleNotCCNumu(par, iSample, iEvent); });
 
-  // For every functional parameter in XsecCov that matches the name in funcParsNames, add it to the map
-  for (std::vector<FuncPars>::iterator it = funcParsVec.begin(); it != funcParsVec.end(); ++it) {
-    if (std::find(funcParsNamesVec.begin(), funcParsNamesVec.end(), (*it).name) != funcParsNamesVec.end()) {
-      std::cout << "Adding functional parameter: " << (*it).name << std::endl;
-      std::cout << "Adding it into funcParsMap with key: " << funcParsNamesMap[(*it).name] << std::endl;
-      std::cout << "The address of the function is: " << &(*it) << std::endl;
-      funcParsMap[funcParsNamesMap[(*it).name]] = &(*it);
-    }
-  }
+  RegisterIndividualFuncPar("TotalEScaleSqrtND",
+                            kTotalEScaleSqrt, 
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("TotalEScaleSqrtNotCCNumuND",
+                            kTotalEScaleSqrtNotCCNumu, 
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleSqrtNotCCNumu(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("TotalEScaleInvSqrtND",
+                            kTotalEScaleInvSqrt, 
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleInvSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("TotalEScaleInvSqrtNotCCNumuND",
+                            kTotalEScaleInvSqrtNotCCNumu, 
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleInvSqrtNotCCNumu(par, iSample, iEvent); });
 }
 
 // HH: Reset the shifted values to the original values
@@ -382,6 +406,11 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   duneobj->rw_reco_numu = new int[duneobj->nEvents];
   duneobj->rw_reco_nue = new int[duneobj->nEvents];
 
+  duneobj->rw_erec_had_sqrt = new double[duneobj->nEvents];
+  duneobj->rw_erec_lep_sqrt = new double[duneobj->nEvents];
+  duneobj->rw_eRecoN_sqrt = new double[duneobj->nEvents];
+  duneobj->rw_eRecoPi0_sqrt = new double[duneobj->nEvents];
+
   _data->GetEntry(0);
 
   //FILL DUNE STRUCT
@@ -420,6 +449,11 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
 
     duneobj->rw_reco_numu[i] = static_cast<int>(_reco_numu);
     duneobj->rw_reco_nue[i] = static_cast<int>(_reco_nue);
+
+    duneobj->rw_erec_had_sqrt[i] = sqrt(duneobj->rw_erec_had[i]);
+    duneobj->rw_erec_lep_sqrt[i] = sqrt(duneobj->rw_erec_lep[i]);
+    duneobj->rw_eRecoN_sqrt[i] = sqrt(duneobj->rw_eRecoN[i]);
+    duneobj->rw_eRecoPi0_sqrt[i] = sqrt(duneobj->rw_eRecoPi0[i]);
 
     //Assume everything is on Argon for now....
     duneobj->Target[i] = 40;
