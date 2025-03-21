@@ -28,7 +28,7 @@ public:
   samplePDFDUNEBeamND(std::string mc_version, covarianceXsec* xsec_cov, covarianceOsc* osc_cov);
   ~samplePDFDUNEBeamND();
 
-  enum KinematicTypes {kTrueNeutrinoEnergy, kRecoQ, kRecoNeutrinoEnergy, kIsFHC, kRecoY, kIsCC, kRecoNumu, kRecoNue, kNuPDG, kNotCCNumu};
+  enum KinematicTypes {kTrueNeutrinoEnergy, kRecoQ, kRecoNeutrinoEnergy, kIsFHC, kRecoY, kIsCC, kRecoNumu, kRecoNue, kNuPDG, kCCNumu, kCCNue, kNotCCNumu};
   
  protected:
   void Init();
@@ -54,6 +54,7 @@ public:
 
   double ReturnKinematicParameter(double KinematicVariable, int iSample, int iEvent);
   double ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
+  double ReturnKinematicParameter(KinematicTypes Kinpar, int iSample, int iEvent);
 
   std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameter);
   int ReturnKinematicParameterFromString(std::string KinematicParameterStr);

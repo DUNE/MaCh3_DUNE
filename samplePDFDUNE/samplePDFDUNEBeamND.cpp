@@ -437,11 +437,6 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
 
 const double* samplePDFDUNEBeamND::GetPointerToKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent) {
   double* KinematicValue;
-  // HH hack: A hack to get the PDG values as doubles
-  static double numubar = -14.0;
-  static double nuebar = -12.0;
-  static double nue = 12.0;
-  static double numu = 14.0;
   
   switch(KinPar){
   case kTrueNeutrinoEnergy:
@@ -460,58 +455,6 @@ const double* samplePDFDUNEBeamND::GetPointerToKinematicParameter(KinematicTypes
   case kRecoY:
     KinematicValue = &dunendmcSamples[iSample].rw_yrec[iEvent];
     break;
-  case kIsCC:
-    if (dunendmcSamples[iSample].rw_isCC[iEvent] == 1) {
-      KinematicValue = const_cast<double*>(&Unity);
-      break;
-    }
-    KinematicValue = const_cast<double*>(&Zero);
-    break;
-  case kRecoNumu:
-    if (dunendmcSamples[iSample].rw_reco_numu[iEvent] == 1) {
-      KinematicValue = const_cast<double*>(&Unity);
-      break;
-    } 
-    KinematicValue = const_cast<double*>(&Zero);
-    break;
-  case kRecoNue:
-    if (dunendmcSamples[iSample].rw_reco_nue[iEvent] == 1) {
-      KinematicValue = const_cast<double*>(&Unity);
-      break;
-    } 
-    KinematicValue = const_cast<double*>(&Zero);
-    break;
-  case kNuPDG:
-    switch (dunendmcSamples[iSample].rw_nuPDG[iEvent]) {
-      case 12:
-        KinematicValue = &nue;
-        break;
-      case 14:
-        KinematicValue = (&numu);
-        break;
-      case -12:
-        KinematicValue = (&nuebar);
-        break;
-      case -14:
-        KinematicValue = (&numubar);
-        break;
-      default:
-        MACH3LOG_ERROR("Got nuPDG of {} which is not recognised...", dunendmcSamples[iSample].rw_nuPDG[iEvent]);
-        throw MaCh3Exception(__FILE__, __LINE__);
-    }
-    break;
-  case kNotCCNumu:
-    // HH: Adapted from TDR definition
-    // For details see:
-    // https://github.com/DUNE/lblpwgtools/blob/3d475f50a998fbfa6266df9a0c4eb3056c0cdfe5/CAFAna/Systs/EnergySysts.h#L39
-    // Not (CC Numu)
-    if (!(dunendmcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunendmcSamples[iSample].rw_nuPDG[iEvent])==14)){
-      KinematicValue = const_cast<double*>(&Unity);
-        break;
-    }
-    KinematicValue = const_cast<double*>(&Zero);
-    break;
-        
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
     std::cout << KinPar << ReturnStringFromKinematicParameter(KinPar) << std::endl;
@@ -532,11 +475,40 @@ const double* samplePDFDUNEBeamND::GetPointerToKinematicParameter(std::string Ki
 }
 
 double samplePDFDUNEBeamND::ReturnKinematicParameter(double KinematicVariable, int iSample, int iEvent) {
-  return *GetPointerToKinematicParameter(KinematicVariable, iSample, iEvent);
+  KinematicTypes KinPar = (KinematicTypes) std::round(KinematicVariable);
+  return ReturnKinematicParameter(KinPar,iSample,iEvent);
 }
 
 double samplePDFDUNEBeamND::ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent) {
-  return *GetPointerToKinematicParameter(KinematicParameter, iSample, iEvent);
+  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
+  return ReturnKinematicParameter(KinPar,iSample,iEvent);
+}
+
+double samplePDFDUNEBeamND::ReturnKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent) {
+  // HH: Special cases for when we are dealing with ints
+  switch(KinPar){
+    case kIsCC:
+      return static_cast<double>(dunendmcSamples[iSample].rw_isCC[iEvent]);
+    case kRecoNumu:
+      return static_cast<double>(dunendmcSamples[iSample].rw_reco_numu[iEvent]);
+    case kRecoNue:
+      return static_cast<double>(dunendmcSamples[iSample].rw_reco_nue[iEvent]);
+    case kNuPDG:
+      return static_cast<double>(dunendmcSamples[iSample].rw_nuPDG[iEvent]);
+    case kCCNumu:
+      return static_cast<double>(dunendmcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunendmcSamples[iSample].rw_nuPDG[iEvent])==14);
+    case kCCNue:
+      return static_cast<double>(dunendmcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunendmcSamples[iSample].rw_nuPDG[iEvent])==12);
+    case kNotCCNumu:
+      // HH: Adapted from TDR definition
+      // For details see:
+      // https://github.com/DUNE/lblpwgtools/blob/3d475f50a998fbfa6266df9a0c4eb3056c0cdfe5/CAFAna/Systs/EnergySysts.h#L39
+      // Not (CC Numu)
+      return static_cast<double>(!(dunendmcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunendmcSamples[iSample].rw_nuPDG[iEvent])==14));
+    // HH: Otherwise use the old function
+    default:
+      return *GetPointerToKinematicParameter(KinPar, iSample, iEvent);
+  }
 }
 
 void samplePDFDUNEBeamND::setupFDMC(int iSample) {
