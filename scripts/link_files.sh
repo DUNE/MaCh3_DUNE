@@ -26,7 +26,8 @@ if [ ! -d "$MACH3DIR/inputs/DUNE_NDGAr_CAF_files" ]
 then
   mkdir $MACH3DIR/inputs/DUNE_NDGAr_CAF_files
 fi
-ln -sf ${FILESDIR1}/NDGAr_1MCAFs/Outputs/*root inputs/DUNE_NDGAr_CAF_files
+ln -sf ${FILESDIR1}/NDGAr_500kCAFs_2/NDGAr_FHC_ger.root inputs/DUNE_NDGAr_CAF_files
+#ln -sf ${FILESDIR1}/NDGAr_1MCAFs/Outputs/*root inputs/DUNE_NDGAr_CAF_files
 
 
 if [ ! -d "$MACH3DIR/inputs/DUNE_NDGAr_spline_files" ]

@@ -1,12 +1,4 @@
-//#include <TROOT.h>
-
 #include "samplePDFDUNEBeamNDGAr.h"
-//#include "TString.h"
-//#include <assert.h>
-//#include <stdexcept>
-//#include "TMath.h"
-//#include "manager/manager.h"
-//#include "TLeaf.h"
 #include "duneanaobj/StandardRecord/StandardRecord.h"
 
 samplePDFDUNEBeamNDGAr::samplePDFDUNEBeamNDGAr(std::string mc_version_, covarianceXsec* XsecCov_) : samplePDFFDBase(mc_version_, XsecCov_) {
@@ -21,8 +13,33 @@ samplePDFDUNEBeamNDGAr::~samplePDFDUNEBeamNDGAr() {
 
 void samplePDFDUNEBeamNDGAr::Init() {
 	dunendgarmcSamples.resize(nSamples,dunemc_base());
-    pot = SampleManager->raw()["POT"].as<double>();
+	pot = SampleManager->raw()["POT"].as<double>();
 	iscalo_reco = SampleManager->raw()["SampleBools"]["iscalo_reco"].as<bool>(); //NK determine what reco used
+  iselike = SampleManager->raw()["SampleBools"]["iselike"].as<bool>();
+	incl_geant = SampleManager->raw()["SampleBools"]["incl_geant"].as<bool>(); //NK whether to read GEANT files
+  ecal_containment = SampleManager->raw()["SampleBools"]["ecal_containment"].as<bool>(); //NK do we count containment if its stopped in ECAL
+  muonscore_threshold = SampleManager->raw()["SampleCuts"]["muonscore_threshold"].as<float>(); //NK determine what muon score threshold to use
+  protondEdxscore = SampleManager->raw()["SampleCuts"]["protondEdxscore_threshold"].as<float>(); //NK determine what proton score threshold to use
+  protontofscore = SampleManager->raw()["SampleCuts"]["protontofscore_threshold"].as<float>();  //NK determine what muon score threshold to use
+  recovertexradiusthreshold =  SampleManager->raw()["SampleCuts"]["recovertexradius_threshold"].as<float>();  //NK determine what radius threshold to use
+  pionenergy_threshold = (SampleManager->raw()["SampleCuts"]["pionenergy_threshold"].as<float>())/1000; //NK determine what muon score threshold to use
+  B_field = SampleManager->raw()["SampleCuts"]["B_field"].as<float>(); //NK B field value in T
+  momentum_resolution_threshold = SampleManager->raw()["SampleCuts"]["momentum_resolution_threshold"].as<float>(); //NK momentum_resolution threshold, total as a fraction of momentum
+  pixel_spacing = SampleManager->raw()["SampleCuts"]["pixel_spacing"].as<float>(); //NK pixel spacing in mm to find num hits in y,z plane
+  spatial_resolution = SampleManager->raw()["SampleCuts"]["spatial_resolution"].as<float>(); //NK spatial resolution in mm to find  in y,z plane
+  adc_sampling_frequency = SampleManager->raw()["SampleCuts"]["adc_sampling_frequency"].as<float>(); //NK sampling frequency for ADC - needed to find timing resolution and spatial resolution in x dir in MHz
+	drift_velocity = SampleManager->raw()["SampleCuts"]["drift_velocity"].as<float>(); //NK drift velocity of electrons in gas - needed to find timing resolution and spatial resolution in x dir in cm/microsecond
+  //  average_gain = SampleManager->raw()["SampleCuts"]["average_gain"].as<float>();
+  pi0_reco_efficiency = SampleManager->raw()["SampleCuts"]["pi0_reco_efficiency"].as<float>(); //efficiency for pi0 reco in ECAL
+  gamma_reco_efficiency = SampleManager->raw()["SampleCuts"]["gamma_reco_efficiency"].as<float>(); //efficiency for gamma reco in ECAL
+  TPCFidLength = SampleManager->raw()["SampleCuts"]["TPCFidLength"].as<double>();
+  TPCFidRadius = SampleManager->raw()["SampleCuts"]["TPCFidRadius"].as<double>();
+  TPCInstrumentedLength = SampleManager->raw()["SampleCuts"]["TPCInstrumentedLength"].as<double>();
+  TPCInstrumentedRadius = SampleManager->raw()["SampleCuts"]["TPCInstrumentedRadius"].as<double>();
+  ECALInnerRadius = SampleManager->raw()["SampleCuts"]["ECALInnerRadius"].as<double>();
+  ECALOuterRadius = SampleManager->raw()["SampleCuts"]["ECALOuterRadius"].as<double>();
+  ECALEndCapStart = SampleManager->raw()["SampleCuts"]["ECALEndCapStart"].as<double>();
+  ECALEndCapEnd = SampleManager->raw()["SampleCuts"]["ECALEndCapEnd"].as<double>();
 }
 
 void samplePDFDUNEBeamNDGAr::SetupSplines() {
@@ -43,7 +60,6 @@ void samplePDFDUNEBeamNDGAr::SetupSplines() {
 	return;
 }
 
-
 void samplePDFDUNEBeamNDGAr::SetupWeightPointers() {
 	for (int i = 0; i < (int)dunendgarmcSamples.size(); ++i) {
 		for (int j = 0; j < dunendgarmcSamples[i].nEvents; ++j) {
@@ -56,16 +72,104 @@ void samplePDFDUNEBeamNDGAr::SetupWeightPointers() {
 			MCSamples[i].total_weight_pointers[j][3] = &(dunendgarmcSamples[i].rw_berpaacvwgt[j]);
 			MCSamples[i].total_weight_pointers[j][4] = &(dunendgarmcSamples[i].flux_w[j]);
 			MCSamples[i].total_weight_pointers[j][5] = &(MCSamples[i].xsec_w[j]);
-		
-			if (j%1000 == 0) {
-				for (int k=0; k<6; k++) {
-					std::cout << j << ")" << std::endl;
-					std::cout << *MCSamples[i].total_weight_pointers[j][k] << std::endl;
-				}		
-				std::cout << std::endl;
-			}
 		}
 	}
+}
+
+void samplePDFDUNEBeamNDGAr::makePixelGrid(float pixel_spacing_cm){ //make a square pixel grid with spacing defined in yaml file. Spacing must be input in the yaml file in mm, and then is converted to cm later in the code
+  int numpixelrows = floor(TPCInstrumentedRadius*2/(pixel_spacing_cm)); //find number of pixels along y and z axis.
+  float centre_yboundary, centre_zboundary;
+  if(numpixelrows % 2 == 0){centre_yboundary=TPC_centre_y; centre_zboundary=TPC_centre_z;}
+  else{centre_yboundary=TPC_centre_y-(pixel_spacing_cm/2); centre_zboundary=TPC_centre_z-(pixel_spacing_cm/2);}
+  std::cout<<"num pixel rows: "<<numpixelrows<<std::endl;
+  pixelymin = centre_yboundary - floor(numpixelrows/2)*pixel_spacing_cm;
+  pixelymax = centre_yboundary + floor(numpixelrows/2)*pixel_spacing_cm;
+  pixelzmin = centre_zboundary - floor(numpixelrows/2)*pixel_spacing_cm;
+  pixelzmax = centre_zboundary + floor(numpixelrows/2)*pixel_spacing_cm;
+
+  for(int i_pixel = 0; i_pixel<numpixelrows; i_pixel++){
+    yboundarypositions.push_back(pixelymin+i_pixel*pixel_spacing_cm);
+    zboundarypositions.push_back(pixelzmin+i_pixel*pixel_spacing_cm);
+  }
+}
+
+double samplePDFDUNEBeamNDGAr::FindNHits(float pixel_spacing_cm, float centre_circle_y, float centre_circle_z, double rad_curvature){
+  //use the pixel grid method to find number of pixels hit in a track.
+
+  int num_vertices =0; // number of vertices hit. Counting to avoid duplicating
+  int num_intersections =0;
+
+  //equation for circle = (y-y0)^2 + (z-z0)^2 = r^2
+
+  for(int i_intersect = 1; i_intersect<=yboundarypositions.size(); i_intersect++){ //check every boundary line to see if it crossed within the TPC instrumented region
+    float quadratic_ineq_y= pow(rad_curvature*100, 2)-pow((yboundarypositions[i_intersect]-centre_circle_y), 2);
+    if(quadratic_ineq_y > 0){
+      if((pow((pow((centre_circle_z + pow(quadratic_ineq_y, 0.5)-TPC_centre_z), 2) + pow((yboundarypositions[i_intersect]-TPC_centre_y), 2)), 0.5) <=TPCInstrumentedRadius) && (pixelzmin<(centre_circle_z + pow(quadratic_ineq_y, 0.5))<=pixelzmax)){ //check that the z coord is also on pixel plane
+        num_intersections++;
+        if((double)(fmod((centre_circle_z + (float)(pow(quadratic_ineq_y, 0.5)) - pixelzmin), pixel_spacing_cm)) == 0){ // this is the case when a vertex is crossed so to avoid double counting pixels
+          num_vertices++;
+        }
+      }
+      if((pow((pow((centre_circle_z - pow(quadratic_ineq_y, 0.5)-TPC_centre_z), 2) + pow((yboundarypositions[i_intersect]-TPC_centre_y), 2)), 0.5) <TPCInstrumentedRadius) && pixelzmin<(centre_circle_z - pow(quadratic_ineq_y, 0.5))<=pixelzmax){ //check that the z coord is also on pixel plane
+        num_intersections++;
+        if((double)(fmod((centre_circle_z - (float)(pow(quadratic_ineq_y, 0.5)) - pixelzmin), pixel_spacing_cm)) == 0){ // this is the case when a vertex is crossed so to avoid double counting pixels
+          num_vertices++;
+        }
+      }
+    }
+		else if(quadratic_ineq_y == 0){ //when the pixel boundary is a tangent to the circle z = z0
+      num_intersections++;
+    }
+  }
+  for(int i_intersect = 1; i_intersect<=zboundarypositions.size(); i_intersect++){
+    float quadratic_ineq_z = pow(rad_curvature*100, 2)-pow((zboundarypositions[i_intersect]-centre_circle_z), 2);
+    if(quadratic_ineq_z > 0){
+      if( (pow((pow((centre_circle_y + pow(quadratic_ineq_z, 0.5)-TPC_centre_y), 2) + pow((zboundarypositions[i_intersect]-TPC_centre_z), 2)), 0.5) <=TPCInstrumentedRadius) && pixelymin<(centre_circle_y + pow(quadratic_ineq_z, 0.5))<=pixelymax){ //check that the z coord is also on pixel plane
+        num_intersections++;
+      }
+      if((pow((pow((centre_circle_y - pow(quadratic_ineq_z, 0.5)-TPC_centre_y), 2) + pow((zboundarypositions[i_intersect]-TPC_centre_z), 2)), 0.5) <=TPCInstrumentedRadius) && pixelymin<(centre_circle_y - pow(quadratic_ineq_z, 0.5))<=pixelymax){ //check that the z coord is also on pixel plane
+        num_intersections++;
+      }
+      // already checked all vertices for duplicates before so no need to repeat that
+    }
+    else if(quadratic_ineq_z == 0){ //when the pixel boundary is a tangent to the circle y = y0
+      num_intersections++;
+    }
+  }
+  double N_hits = num_intersections - num_vertices + 1; //Add one for the pixel that it starts on
+  return N_hits;
+}
+
+double samplePDFDUNEBeamNDGAr::CalcBeta(double p_mag, double& bg, double& gamma){ //calculate beta (v/c)
+  bg = (double)(p_mag/pdgmass); //beta*gamma
+  gamma = pow((1+bg*bg), 0.5); //gamma
+  double beta = bg/gamma; //beta (velocity)
+  return beta;
+}
+
+double samplePDFDUNEBeamNDGAr::CalcDeDx(double beta, double bg, double gamma){ //calc de/dx in 10bar argon
+  double mer = m_e/pdgmass; //electron mass/mass of particle
+  double tmax = 2.*1000*m_e* bg*bg / (1. + 2.*gamma*mer + mer*mer);  // Maximum delta ray energy (MeV).
+  //Assume tcut = tmax
+  double tcut = tmax;
+  //Find density effect correction (delta). Sternheimer values set in header file
+  double log_bg = std::log10(bg);
+  double delta = 0;
+  if(log_bg >= sternheimer_X0){
+    delta = 2. * std::log(10.)*log_bg - sternheimer_Cbar;
+    if(log_bg < sternheimer_X1){
+      delta += sternheimer_A * std::pow(sternheimer_X1 - log_bg, sternheimer_K);
+    }
+  }
+
+  //Calculate Stopping number, B
+  double B = 0.5 * std::log(2.*1000*m_e*bg*bg*tcut / (1.e-12 * pow(excitationenergy, 0.5)))- 0.5*beta*beta*(1. + tcut / tmax) - 0.5*delta;
+  if(B<1.){B=1.;} //Don't let B become negative
+
+  //Calculate dE/dX 
+  double dedx = density*K_const*18*B / (39.981 * beta*beta); //18 is atomic number and 39.981 is atomic mass in g/mol
+
+  return dedx;
 }
 
 int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
@@ -88,6 +192,36 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
 	else{
 		MACH3LOG_ERROR("Could not find \"caf\" tree in {}", mc_files[iSample]);
 		throw MaCh3Exception(__FILE__, __LINE__);
+	}
+
+	if(incl_geant){
+		std::string geantfile(mc_files.at(iSample));
+
+		std::string prefix = "inputs/DUNE_NDGAr_CAF_files/";
+		std::string::size_type i_prefix = geantfile.find(prefix);
+		if(i_prefix != std::string::npos){
+			geantfile.erase(i_prefix, prefix.length());
+		}
+
+		std::string suffix = ".root";
+		std::string::size_type i_suffix = geantfile.find(suffix);
+		if(i_suffix != std::string::npos){
+			geantfile.erase(i_suffix, suffix.length());
+		}
+
+		std::string geantfilename = "inputs/DUNE_NDGAr_AnaTrees/" + geantfile + "_geant.root"; 
+		_sampleFile_geant = TFile::Open(geantfilename.c_str(),"READ");
+		_data_geant = (TTree*)_sampleFile_geant->Get("GArAnaTree");
+
+		if(_data_geant){
+			MACH3LOG_INFO("Found \"anatree\" tree in {}", geantfilename);
+			MACH3LOG_INFO("With number of entries: {}", _data_geant->GetEntries());
+		}
+		else{
+			MACH3LOG_ERROR("Could not find \"anatree\" tree in {}", geantfilename);
+			throw MaCh3Exception(__FILE__, __LINE__);
+		}
+		_data->AddFriend(_data_geant);
 	}
 
 	_data->SetBranchStatus("*", 1);
@@ -252,7 +386,7 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
 
 		//Assume everything is on Argon for now....
 		duneobj->Target[i] = 40;
-			
+
 		duneobj->rw_Q0[i] = (double)(sr->mc.nu[0].q0);
 		duneobj->rw_Q3[i] = (double)(sr->mc.nu[0].modq);
 

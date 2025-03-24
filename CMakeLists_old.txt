@@ -60,33 +60,33 @@ endif()
 
 #=================== DUNEAnaObj
 
-option(MaCh3_DUNE_USE_SRProxy "Whether to build proxy classes for Standard Record objects" OFF)
+option(MaCh3_DUNE_USE_SRProxy "Whether to build proxy classes for Standard Record objects" ON)
 
 if(MaCh3_DUNE_USE_SRProxy)
-  find_package(duneanaobj)
+	find_package(duneanaobj)
 
-  if(NOT duneanaobj_FOUND)
+if(NOT duneanaobj_FOUND)
     CPMFindPackage(
       NAME duneanaobj
-      GIT_TAG feature/Clingification_rebase2024
-      GITHUB_REPOSITORY luketpickering/duneanaobj
-      VERSION 4.0.0
+#GIT_TAG feature/Clingification_rebase2024
+#GITHUB_REPOSITORY luketpickering/duneanaobj
+#VERSION 4.0.0
+	  GITHUB_REPOSITORY "naseemkhan99/duneanaobj"
+	  GIT_TAG "main"
     )
-  endif()
+endif()
 
   if(NOT TARGET duneanaobj::all)
     cmessage(FATAL_ERROR "MaCh3 DUNE Expected dependency target: duneanaobj::all")
-  endif()
+ endif()
 else()
   CPMAddPackage(
-#    NAME duneanaobj
-#    GIT_TAG "main"
-#    GITHUB_REPOSITORY "naseemkhan99/duneanaobj"
-		 NAME duneanaobj
-		 GIT_TAG tag/legacy_ndgar_cafs_2024
-		 GITHUB_REPOSITORY DUNE/duneanaobj 
-
-		 DOWNLOAD_ONLY YES
+    NAME duneanaobj
+    GIT_TAG "main"
+    GITHUB_REPOSITORY "naseemkhan99/duneanaobj"
+#DOWNLOAD_ONLY YES
+#	GITHUB_REPOSITORY "naseemkhan99/duneanaobj"
+#   GIT_TAG "main"
   )
 
   include_directories(${duneanaobj_SOURCE_DIR})
@@ -122,10 +122,12 @@ else()
 
 endif()
 
+cmessage("Now going to try my luck with maCh3")
+
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
-find_package(MaCh3 1.4.4 EXACT QUIET)
+find_package(MaCh3 1.4.4 EXACT)
 
 if(NOT MaCh3_FOUND)
   cmessage(STATUS "Didn't find MaCh3, attempting to use built in MaCh3")
@@ -156,7 +158,7 @@ if(NOT MaCh3_FOUND)
   
   CPMAddPackage(
       NAME MaCh3
-      GIT_TAG "v1.4.8"
+      GIT_TAG "v1.4.4"
       GITHUB_REPOSITORY mach3-software/MaCh3
   )
 else()
@@ -246,13 +248,6 @@ install(TARGETS MaCh3DUNECompilerOptions
 add_subdirectory(splines)
 add_subdirectory(samplePDFDUNE)
 add_subdirectory(Apps)
-
-
-# Do we want to build our integration tests?
-if(DEFINED MACH3_BUILD_TESTS AND MACH3_BUILD_TESTS)
-  add_subdirectory(tests)
-endif()
-
 
 add_library(MaCh3DUNEAll INTERFACE)
 set_target_properties(MaCh3DUNEAll PROPERTIES EXPORT_NAME All)

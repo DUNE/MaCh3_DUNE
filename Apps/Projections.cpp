@@ -40,8 +40,10 @@ std::string ReturnFormattedHistogramNameFromProjection(ProjectionVariable Proj) 
 		}
 		ReturnStr += Form("(%4.2f < %s < %4.2f)",Proj.KinematicCuts[iKinematicCut].Range[0],Proj.KinematicCuts[iKinematicCut].Name.c_str(),Proj.KinematicCuts[iKinematicCut].Range[1]);
 	}
-
-	ReturnStr += ";"+Proj.Name+";Events";
+	std::string y_axis_title;
+  if (Proj.VarStrings.size()==1) {y_axis_title = "Events";}
+	else {y_axis_title = Proj.VarStrings[1];}
+	ReturnStr += Proj.Name+";"+Proj.VarStrings[0]+";"+y_axis_title+";";
 	return ReturnStr;
 }
 
@@ -130,13 +132,34 @@ int main(int argc, char * argv[]) {
 
 	for (auto &ProjectionConfig: fitMan->raw()["Projections"]) {
 		std::string VarName = ProjectionConfig["Name"].as<std::string>();
+		//JM now a vector of size 1 (for 1d hists) or 2 (for 2d hists)
 		std::vector<std::string> VarStrings = ProjectionConfig["VarStrings"].as< std::vector<std::string> >();
 
 		//Could replace this with uniform [lbin, hbin, nbins] for example
-		std::vector< std::vector<double> > VarBinEdges = ProjectionConfig["VarBins"].as< std::vector< std::vector<double> > >();
+		//JM have done this (as [nbins, lbin, hbin])
+		std::vector< std::vector<double> > VarBinnings = ProjectionConfig["VarBins"].as< std::vector< std::vector<double> > >();
 
 		std::vector<KinematicCut> KinematicCuts;
 		std::vector<CategoryCut> CategoryCuts;
+
+		if ((VarStrings.size()!=1 && VarStrings.size()!=2) || VarStrings.size() != VarBinnings.size()) {
+			MACH3LOG_ERROR("Projections: {} VarStrings specified, {} VarBinnings specified. Specify 1 or 2 of both.", VarStrings.size(), VarBinnings.size());
+      throw MaCh3Exception(__FILE__,__LINE__);
+		}
+		for (int iBinning=0; iBinning<VarBinnings.size(); iBinning++) {
+			if (VarBinnings[iBinning].size() == 3) {
+				double nbins = VarBinnings[iBinning][0];
+				double xmin = VarBinnings[iBinning][1];
+				double xmax = VarBinnings[iBinning][2];
+				double step = (xmax-xmin)/(nbins-1);
+				VarBinnings[iBinning] = {};
+				std::cout << nbins << " " << xmin << " " << xmax << std::endl;
+				for (double iBinEdge=xmin; iBinEdge<=xmax; iBinEdge+=step) {
+					VarBinnings[iBinning].push_back(iBinEdge);
+					//std::cout<<iBinEdge;
+				}
+			}
+		}
 
 		for (auto &KinematicCutConfig: ProjectionConfig["KinematicCuts"]) {
 			std::string KinematicCutName = KinematicCutConfig["Name"].as<std::string>();
@@ -179,7 +202,7 @@ int main(int argc, char * argv[]) {
 			CategoryCuts.emplace_back(Cut);
 		}
 
-		ProjectionVariable Proj = ProjectionVariable{VarName,VarStrings,VarBinEdges,KinematicCuts,CategoryCuts};
+		ProjectionVariable Proj = ProjectionVariable{VarName,VarStrings,VarBinnings,KinematicCuts,CategoryCuts};
 		Projections.emplace_back(Proj);
 	}
 
@@ -189,16 +212,16 @@ int main(int argc, char * argv[]) {
 
 	for (size_t iProj=0;iProj<Projections.size();iProj++) {
 		int histdim = Projections[iProj].VarStrings.size();
-		
+	  	
 		if (histdim == 1) {
-			MACH3LOG_INFO("Projection {:<2} - Name : {:<20} \nVarString : {:<20} , Binning : {}"
-					,iProj,Projections[iProj].Name,Projections[iProj].VarStrings[0],fmt::join(Projections[iProj].BinEdges[0], ", "));
-		} else if (histdim == 2) {
-			MACH3LOG_INFO("Projection {:<2} - Name : {:<20} \nVarString1 : {:<20} , Binning : {} \nVarString2 : {:<20} , Binning : {}"
-					,iProj,Projections[iProj].Name,Projections[iProj].VarStrings[0],fmt::join(Projections[iProj].BinEdges[0], ", "),Projections[iProj].VarStrings[1],fmt::join(Projections[iProj].BinEdges[1], ", "));
+			MACH3LOG_INFO("Projection {:<2} - Name : {} , VarString : {} , Binning : {}, {}, {}"
+					,iProj,Projections[iProj].Name,
+					Projections[iProj].VarStrings[0],Projections[iProj].BinEdges[0].size(),Projections[iProj].BinEdges[0][0],Projections[iProj].BinEdges[0][Projections[iProj].BinEdges[0].size()-1]);
 		} else {
-			MACH3LOG_ERROR("Projection VarStrings vector has size {}. Expected size == 1 or 2.", histdim);
-			throw MaCh3Exception(__FILE__,__LINE__);
+			MACH3LOG_INFO("Projection {:<2} - Name : {} , VarString1 : {} , Binning : {} , {} , {} , VarString2 : {} , Binning : {}, {}, {}"
+					,iProj,Projections[iProj].Name,
+					Projections[iProj].VarStrings[0],Projections[iProj].BinEdges[0].size(),Projections[iProj].BinEdges[0][0],Projections[iProj].BinEdges[0][Projections[iProj].BinEdges[0].size()-1],
+					Projections[iProj].VarStrings[1],Projections[iProj].BinEdges[1].size(),Projections[iProj].BinEdges[1][0],Projections[iProj].BinEdges[1][Projections[iProj].BinEdges[1].size()-1]);
 		}
 
 		if (Projections[iProj].KinematicCuts.size()>0) {
@@ -236,14 +259,14 @@ int main(int argc, char * argv[]) {
 
 	for (size_t iProj=0;iProj<Projections.size();iProj++) {
 		MACH3LOG_INFO("================================");
-		MACH3LOG_INFO("Projection {}/{}",iProj,Projections.size());
+		MACH3LOG_INFO("Projection {}/{}",iProj+1,Projections.size());
 
 		std::vector<std::string> ProjectionVar_Str = Projections[iProj].VarStrings;
 		int histdim = ProjectionVar_Str.size();
 		TAxis AxisX = TAxis(Projections[iProj].BinEdges[0].size()-1,Projections[iProj].BinEdges[0].data());
 		TAxis AxisY;
 		if (histdim == 2) {AxisY = TAxis(Projections[iProj].BinEdges[1].size()-1,Projections[iProj].BinEdges[1].data());}
-		
+
 		for (auto Sample: DUNEPdfs) {
 
 			std::vector< std::vector<double> > SelectionVector;
@@ -259,7 +282,7 @@ int main(int argc, char * argv[]) {
 			std::string outputname;
 			if (histdim==1) {
 				Hist = Sample->get1DVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
-			  outputname = Sample->GetName()+"_"+ProjectionVar_Str[0]+".png";
+				outputname = Sample->GetName()+"_"+ProjectionVar_Str[0]+".png";
 			} 
 			else {
 				Hist = (TH1*)Sample->get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);

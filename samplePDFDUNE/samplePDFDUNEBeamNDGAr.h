@@ -35,7 +35,7 @@ public:
 
   void SetupWeightPointers();
   void SetupSplines();
-  
+ 
   //DB functions which could be initialised to do something which is non-trivial
   double CalcXsecWeightFunc(int iSample, int iEvent) {return 1.;}
   void applyShifts(int iSample, int iEvent) {}
@@ -51,11 +51,18 @@ public:
   std::vector<double> ReturnKinematicParameterBinning(KinematicTypes KinematicParameter);
   inline std::string ReturnStringFromKinematicParameter(int KinematicParameter);
   
-  // dunendmc
+	void makePixelGrid(float pixel_spacing_cm);
+	double FindNHits(float pixel_spacing_cm, float centre_circle_y, float centre_circle_z, double rad_curvature);
+  double CalcBeta(double p_mag, double& bg, double& gamma);
+	double CalcDeDx(double beta, double bg, double gamma);
+
+	// dunendmc
   std::vector<struct dunemc_base> dunendgarmcSamples;
 
   TFile *_sampleFile;
   TTree *_data;
+	TFile *_sampleFile_geant;
+	TTree *_data_geant;
   TString _nutype;
   int _mode;
 
@@ -82,8 +89,67 @@ public:
   double _LepTheta;
   double _Q2;
 
+	double pdgmass;
+  //particle masses in GeV
+  double m_chargedpi = 0.13957039;
+  double m_pi0 = 0.1349768;
+  double m_e = 0.00051099895;
+  double m_mu = 0.1056583755;
+  double m_p = 0.93827208816;
+  double m_n = 0.9395654205;
+  double m_chargedk = 0.493677;
+
+	//TPC dimensions
+	double TPCFidLength;
+  double TPCFidRadius;
+  double TPCInstrumentedLength;
+  double TPCInstrumentedRadius;
+  double ECALInnerRadius;
+  double ECALOuterRadius;
+  double ECALEndCapStart;
+  double ECALEndCapEnd;
+
+	double TPC_centre_x =0.;
+  double TPC_centre_y = -150.;
+  double TPC_centre_z = 1486.;
+
+	double K_const = 0.307075; //4 pi N_A r_e^2 m_e c^2 (MeV cm^2/mol)
+  double sternheimer_A = 0.1956;
+  double sternheimer_K = 3.0000;
+  double sternheimer_X0 = 0.2000;
+  double sternheimer_X1 = 3.0000;
+  double sternheimer_Cbar = 5.2146;
+  double excitationenergy = 188.0; //excitation energy for electrons in argon gas in eV
+  double density = 0.0167; //in g/cm^3
+  double X0 = 1193; //in cm From Federico's Kalman Filter Paper
+
+	//pixel vars
+	double pixelymin;
+  double pixelymax;
+  double pixelzmin;
+  double pixelzmax;
+  std::vector<double> yboundarypositions;
+  std::vector<double> zboundarypositions;
+
   bool iscalo_reco; //NK Added so we can easily change what energy reconstruction we are using
-  float muonscore_threshold; //NK Added so we can optimise muon threshold
+  bool iselike;
+	bool incl_geant; //NK - Added so we can use GArAnaTrees
+	bool ecal_containment; //NK Do we count containment if the particle stops in the ECAL?
+
+	float muonscore_threshold; //NK Added so we can optimise muon threshold
+	float protondEdxscore;
+  float protontofscore;
+  float recovertexradiusthreshold;
+  float pionenergy_threshold; //NK Added so we can find pion energy threshold
+  float B_field;
+  float momentum_resolution_threshold;
+  float pixel_spacing;
+  float spatial_resolution;
+  float adc_sampling_frequency;
+  float drift_velocity;
+//  float hits_per_mm;
+  float pi0_reco_efficiency;  //efficiency for pi0 reco in ECAL 
+  float gamma_reco_efficiency;  //efficiency for gamma reco in ECAL
 
   caf::StandardRecord* sr = new caf::StandardRecord();
 

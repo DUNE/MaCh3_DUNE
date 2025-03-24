@@ -31,7 +31,7 @@ General:
   {
     "Name": "RecoNuEnergy",
     "VarStrings": ["RecoNeutrinoEnergy"],
-    "VarBins": [[0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.2,1.4]],
+    "VarBins": [[20,0.,2.]],
     "KinematicCuts": [
       {
         "Range": [0.1,0.8],
@@ -41,8 +41,8 @@ General:
     ]
   },
   {
-    "Name": "TrueQ0_TrueQ3",
+    "Name": "TrueQ3_TrueQ0",
     "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[0.,0.5,1.,1.5,2.,2.5,3.,3.5,4.],[0.,0.5,1.,1.5,2.,2.5,3.,3.5,4.]]
+    "VarBins": [[100,0.,4.],[100,0.,4.]]
   }
 ]
