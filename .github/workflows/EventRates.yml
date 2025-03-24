@@ -35,7 +35,7 @@ jobs:
     steps:
       # Set up CVMFS
       - name: Set up CVMFS
-        uses: cvmfs-contrib/github-action-cvmfs@v4
+        uses: cvmfs-contrib/github-action-cvmfs@v5
 
       # Checkout the repository code
       - uses: actions/checkout@v4
