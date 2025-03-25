@@ -39,16 +39,58 @@ public:
   void SetupSplines();
 
   // === HH: Functional parameters ===
-  enum FuncParEnum {kDebugNothing, kDebugShift, kTotalEScaleND, kTotalEScaleNotCCNumu, kTotalEScaleSqrt, kTotalEScaleSqrtNotCCNumu, kTotalEScaleInvSqrt, kTotalEScaleInvSqrtNotCCNumu};
+  enum FuncParEnum {kDebugNothing, kDebugShift, 
+    kTotalEScale, kTotalEScaleNotCCNumu, 
+    kTotalEScaleSqrt, kTotalEScaleSqrtNotCCNumu, 
+    kTotalEScaleInvSqrt, kTotalEScaleInvSqrtNotCCNumu,
+    kHadEScale, kHadEScaleSqrt, kHadEScaleInvSqrt,
+    kMuEScale, kMuEScaleSqrt, kMuEScaleInvSqrt,
+    kNEScale, kNEScaleSqrt, kNEScaleInvSqrt,
+    kEMEScale, kEMEScaleCCNue, 
+    kEMEScaleSqrt, kEMEScaleSqrtCCNue,
+    kEMEScaleInvSqrt, kEMEScaleInvSqrtCCNue,
+    kHadRes, kMuRes, kNRes, kEMRes, kEMResCCNue
+  };
   void RegisterFunctionalParameters();
   void resetShifts(int iSample, int iEvent);
 
+  // Global energy scale systematics
   void TotalEScale(const double * par, std::size_t iSample, std::size_t iEvent);
   void TotalEScaleNotCCNumu(const double * par, std::size_t iSample, std::size_t iEvent);
   void TotalEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
   void TotalEScaleSqrtNotCCNumu(const double * par, std::size_t iSample, std::size_t iEvent);
   void TotalEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
   void TotalEScaleInvSqrtNotCCNumu(const double * par, std::size_t iSample, std::size_t iEvent);
+
+  // Particle specific energy uncertainties
+  // Charged hadron
+  void HadEScale(const double * par, std::size_t iSample, std::size_t iEvent);
+  void HadEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  void HadEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  // Muons
+  void MuEScale(const double * par, std::size_t iSample, std::size_t iEvent);
+  void MuEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  void MuEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  // Neutrons
+  void NEScale(const double * par, std::size_t iSample, std::size_t iEvent);
+  void NEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  void NEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  // Electromagnetic showers
+  void EMEScale(const double * par, std::size_t iSample, std::size_t iEvent);
+  void EMEScaleCCNue(const double * par, std::size_t iSample, std::size_t iEvent);
+  void EMEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  void EMEScaleSqrtCCNue(const double * par, std::size_t iSample, std::size_t iEvent);
+  void EMEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  void EMEScaleInvSqrtCCNue(const double * par, std::size_t iSample, std::size_t iEvent);
+
+  // Resolution uncertainties
+  void HadRes(const double * par, std::size_t iSample, std::size_t iEvent);
+  void MuRes(const double * par, std::size_t iSample, std::size_t iEvent);
+  void NRes(const double * par, std::size_t iSample, std::size_t iEvent);
+  void EMRes(const double * par, std::size_t iSample, std::size_t iEvent);
+  void EMResCCNue(const double * par, std::size_t iSample, std::size_t iEvent);
+
+  // Debugging
   void DebugShift(const double * par, std::size_t iSample, std::size_t iEvent);
   // =================================
   

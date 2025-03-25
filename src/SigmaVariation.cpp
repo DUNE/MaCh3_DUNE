@@ -53,7 +53,8 @@ int main(int argc, char * argv[]) {
   
   std::vector<covarianceBase*> CovObjs;
   CovObjs.emplace_back(xsec);
-  CovObjs.emplace_back(osc);
+  if (osc)
+    CovObjs.emplace_back(osc);
 
   MACH3LOG_INFO("=======================================================");
 
