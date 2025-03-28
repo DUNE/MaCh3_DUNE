@@ -28,7 +28,8 @@ public:
   samplePDFDUNEBeamND(std::string mc_version, covarianceXsec* xsec_cov, covarianceOsc* osc_cov);
   ~samplePDFDUNEBeamND();
 
-  enum KinematicTypes {kTrueNeutrinoEnergy, kRecoQ, kRecoNeutrinoEnergy, kIsFHC, kRecoY, kIsCC, kRecoNumu, kRecoNue, kNuPDG, kCCNumu, kCCNue, kNotCCNumu};
+  enum KinematicTypes {kTrueNeutrinoEnergy, kRecoQ, kRecoNeutrinoEnergy, kIsFHC, kRecoY, kIsCC, kRecoNumu, kRecoNue, kNuPDG, kCCNumu, kCCNue, kNotCCNumu, kRecoHadEnergy, kRecoLepEnergy,
+    kRecoPEnergy, kRecoPipEnergy, kRecoPimEnergy, kRecoPi0Energy, kRecoNEnergy};
   
  protected:
   void Init();

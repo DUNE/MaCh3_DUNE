@@ -670,6 +670,27 @@ const double* samplePDFDUNEBeamND::GetPointerToKinematicParameter(KinematicTypes
   case kRecoY:
     KinematicValue = &dunendmcSamples[iSample].rw_yrec[iEvent];
     break;
+  case kRecoHadEnergy:
+    KinematicValue = &dunendmcSamples[iSample].rw_erec_had[iEvent];
+    break;
+  case kRecoLepEnergy:
+    KinematicValue = &dunendmcSamples[iSample].rw_erec_lep[iEvent];
+    break;
+  case kRecoPEnergy:
+    KinematicValue = &dunendmcSamples[iSample].rw_eRecoP[iEvent];
+    break;
+  case kRecoPipEnergy:
+    KinematicValue = &dunendmcSamples[iSample].rw_eRecoPip[iEvent];
+    break;
+  case kRecoPimEnergy:
+    KinematicValue = &dunendmcSamples[iSample].rw_eRecoPim[iEvent];
+    break;
+  case kRecoPi0Energy:
+    KinematicValue = &dunendmcSamples[iSample].rw_eRecoPi0[iEvent];
+    break;
+  case kRecoNEnergy:
+    KinematicValue = &dunendmcSamples[iSample].rw_eRecoN[iEvent];
+    break;
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
     std::cout << KinPar << ReturnStringFromKinematicParameter(KinPar) << std::endl;
@@ -825,6 +846,13 @@ int samplePDFDUNEBeamND::ReturnKinematicParameterFromString(std::string Kinemati
   if(KinematicParameterStr == "NotCCNumu") return kNotCCNumu;
   if(KinematicParameterStr == "CCNumu") return kCCNumu;
   if(KinematicParameterStr == "CCNue") return kCCNue;
+  if(KinematicParameterStr == "RecoHadEnergy") return kRecoHadEnergy;
+  if(KinematicParameterStr == "RecoLepEnergy") return kRecoLepEnergy;
+  if(KinematicParameterStr == "RecoPEnergy") return kRecoPEnergy;
+  if(KinematicParameterStr == "RecoPipEnergy") return kRecoPipEnergy;
+  if(KinematicParameterStr == "RecoPimEnergy") return kRecoPimEnergy;
+  if(KinematicParameterStr == "RecoPi0Energy") return kRecoPi0Energy;
+  if(KinematicParameterStr == "RecoNEnergy") return kRecoNEnergy;
   return -1;
 }
 
@@ -840,6 +868,15 @@ std::string samplePDFDUNEBeamND::ReturnStringFromKinematicParameter(int Kinemati
     case kRecoNue: return "RecoNue";
     case kNuPDG: return "NuPDG";
     case kNotCCNumu: return "NotCCnumu";
+    case kCCNumu: return "CCNumu";
+    case kCCNue: return "CCNue";
+    case kRecoHadEnergy: return "RecoHadEnergy";
+    case kRecoLepEnergy: return "RecoLepEnergy";
+    case kRecoPEnergy: return "RecoPEnergy";
+    case kRecoPipEnergy: return "RecoPipEnergy";
+    case kRecoPimEnergy: return "RecoPimEnergy";
+    case kRecoPi0Energy: return "RecoPi0Energy";
+    case kRecoNEnergy: return "RecoNEnergy";
     default: return "";
   }
 }
