@@ -68,10 +68,9 @@ if(MaCh3_DUNE_USE_SRProxy)
   if(NOT duneanaobj_FOUND)
     CPMFindPackage(
       NAME duneanaobj
-      GIT_TAG feature/Clingification_rebase2024
-      GITHUB_REPOSITORY luketpickering/duneanaobj
-      VERSION 4.0.0
-    )
+      GITHUB_REPOSITORY "naseemkhan99/duneanaobj"
+      GIT_TAG "main"
+		)
   endif()
 
   if(NOT TARGET duneanaobj::all)
@@ -79,16 +78,12 @@ if(MaCh3_DUNE_USE_SRProxy)
   endif()
 else()
   CPMAddPackage(
-#    NAME duneanaobj
-#    GIT_TAG "main"
-#    GITHUB_REPOSITORY "naseemkhan99/duneanaobj"
-		 NAME duneanaobj
-		 GIT_TAG tag/legacy_ndgar_cafs_2024
-		 GITHUB_REPOSITORY DUNE/duneanaobj 
+  	NAME duneanaobj
+		GIT_TAG tag/legacy_ndgar_cafs_2024
+		GITHUB_REPOSITORY DUNE/duneanaobj 
 
-		 DOWNLOAD_ONLY YES
+		DOWNLOAD_ONLY YES
   )
-
   include_directories(${duneanaobj_SOURCE_DIR})
 
   ROOT_GENERATE_DICTIONARY(StandardRecordDict ${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/StandardRecord.h

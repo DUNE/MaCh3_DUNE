@@ -11,6 +11,7 @@
 #include <vector>
 #include <omp.h>
 #include <list>
+#include <random>
 
 #include "splines/splinesDUNE.h"
 #include "covariance/covarianceXsec.h"
@@ -26,7 +27,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 		samplePDFDUNEBeamNDGAr(std::string mc_version, covarianceXsec* xsec_cov);
 		~samplePDFDUNEBeamNDGAr();
 
-		enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kPionMultiplicity, kNRecoParticles, kInFDV, kTrueMinusRecoEnergyRatio, kTrueMinusRecoEnergy, kNTrueMuons, kNRecoMuons, kOscChannel, kTrueQ0, kTrueQ3};
+		enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kTrueQ0, kTrueQ3};
 
 	protected:
 		void Init();
@@ -37,8 +38,8 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 		void SetupSplines();
 
 		//DB functions which could be initialised to do something which is non-trivial
-		double CalcXsecWeightFunc(int iSample, int iEvent) {return 1.;}
-		void applyShifts(int iSample, int iEvent) {}
+		//double CalcXsecWeightFunc(int iSample, int iEvent) {return 1.;}
+		//void applyShifts(int iSample, int iEvent) {}
 
 		const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent);
 		const double* GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent);
@@ -51,12 +52,12 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 		std::vector<double> ReturnKinematicParameterBinning(KinematicTypes KinematicParameter);
 		inline std::string ReturnStringFromKinematicParameter(int KinematicParameter);
 
-		void makePixelGrid(float pixel_spacing_cm);
-		double FindNHits(float pixel_spacing_cm, float centre_circle_y, float centre_circle_z, double rad_curvature);
+		void makePixelGrid(double pixel_spacing_cm);
+		double FindNHits(double pixel_spacing_cm, double centre_circle_y, double centre_circle_z, double rad_curvature);
 		double CalcBeta(double p_mag, double& bg, double& gamma);
-		double CalcDeDx(double beta, double bg, double gamma);
+		double GetMass(int partpdg);
+		bool IsParticleAccepted(dunemc_base *duneobj, int i_event, int i_truepart, double pixel_spacing_cm);
 
-		// dunendmc
 		std::vector<struct dunemc_base> dunendgarmcSamples;
 
 		TFile *_sampleFile;
@@ -89,6 +90,24 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 		double _LepTheta;
 		double _Q2;
 
+		//Geant vectors
+		std::vector<double> *_MCPStartX=0;
+		std::vector<double> *_MCPStartY=0;
+		std::vector<double> *_MCPStartZ=0;
+		std::vector<double> *_MCPEndX=0;
+		std::vector<double> *_MCPEndY=0;
+		std::vector<double> *_MCPEndZ=0;
+		std::vector<double> *_MCPStartPX=0;
+		std::vector<double> *_MCPStartPY=0;
+		std::vector<double> *_MCPStartPZ=0;
+		std::vector<double> *_MCPEndPX=0;
+		std::vector<double> *_MCPEndPY=0;
+		std::vector<double> *_MCPEndPZ=0;
+		std::vector<int> *_PDG = 0;
+		std::vector<int> *_MCPTrkID=0;
+		std::vector<int> *_SimHitTrkID=0;
+		std::vector<double> *_SimHitEnergy=0;
+
 		double pdgmass;
 		//particle masses in GeV
 		double m_chargedpi = 0.13957039;
@@ -98,7 +117,8 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 		double m_p = 0.93827208816;
 		double m_n = 0.9395654205;
 		double m_chargedk = 0.493677;
-
+    double m_k0 = 0.497648;
+		double m_lambda = 1.115683;
 		//TPC dimensions
 		double TPCFidLength;
 		double TPCFidRadius;
@@ -108,19 +128,10 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 		double ECALOuterRadius;
 		double ECALEndCapStart;
 		double ECALEndCapEnd;
-
 		double TPC_centre_x =0.;
 		double TPC_centre_y = -150.;
 		double TPC_centre_z = 1486.;
 
-		double K_const = 0.307075; //4 pi N_A r_e^2 m_e c^2 (MeV cm^2/mol)
-		double sternheimer_A = 0.1956;
-		double sternheimer_K = 3.0000;
-		double sternheimer_X0 = 0.2000;
-		double sternheimer_X1 = 3.0000;
-		double sternheimer_Cbar = 5.2146;
-		double excitationenergy = 188.0; //excitation energy for electrons in argon gas in eV
-		double density = 0.0167; //in g/cm^3
 		double X0 = 1193; //in cm From Federico's Kalman Filter Paper
 
 		//pixel vars
@@ -131,25 +142,26 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 		std::vector<double> yboundarypositions;
 		std::vector<double> zboundarypositions;
 
+		//configurable sample bools
 		bool iscalo_reco; //NK Added so we can easily change what energy reconstruction we are using
 		bool iselike;
 		bool incl_geant; //NK - Added so we can use GArAnaTrees
 		bool ecal_containment; //NK Do we count containment if the particle stops in the ECAL?
 
-		float muonscore_threshold; //NK Added so we can optimise muon threshold
-		float protondEdxscore;
-		float protontofscore;
-		float recovertexradiusthreshold;
-		float pionenergy_threshold; //NK Added so we can find pion energy threshold
-		float B_field;
-		float momentum_resolution_threshold;
-		float pixel_spacing;
-		float spatial_resolution;
-		float adc_sampling_frequency;
-		float drift_velocity;
-		//  float hits_per_mm;
-		float pi0_reco_efficiency;  //efficiency for pi0 reco in ECAL 
-		float gamma_reco_efficiency;  //efficiency for gamma reco in ECAL
+		//configurable sample cuts
+		double muonscore_threshold; //NK Added so we can optimise muon threshold
+		double protondEdxscore;
+		double protontofscore;
+		double recovertexradiusthreshold;
+		double pionenergy_threshold; //NK Added so we can find pion energy threshold
+		double B_field;
+		double momentum_resolution_threshold;
+		double pixel_spacing;
+		double spatial_resolution;
+		double adc_sampling_frequency;
+		double drift_velocity;
+		double pi0_reco_efficiency;  //efficiency for pi0 reco in ECAL 
+		double gamma_reco_efficiency;  //efficiency for gamma reco in ECAL
 
 		caf::StandardRecord* sr = new caf::StandardRecord();
 
@@ -170,7 +182,6 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 			{"RecoRad",kRecoRad},
 			{"LepPT",kLepPT},
 			{"LepPZ",kLepPZ},
-			{"OscillationChannel",kOscChannel},
 			{"TrueQ0",kTrueQ0},
 			{"TrueQ3",kTrueQ3}
 		};
@@ -192,7 +203,6 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 			{kRecoRad,"RecoRad"},
 			{kLepPT,"LepPT"},
 			{kLepPZ,"LepPZ"},
-			{kOscChannel,"OscillationChannel"},
 			{kTrueQ0,"TrueQ0"},
 			{kTrueQ3,"TrueQ3"},
 		};
