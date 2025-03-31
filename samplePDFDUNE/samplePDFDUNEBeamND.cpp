@@ -19,7 +19,6 @@ samplePDFDUNEBeamND::~samplePDFDUNEBeamND() {
 
 void samplePDFDUNEBeamND::Init() {
   dunendmcSamples.resize(nSamples,dunemc_base());
-  funcParsGrid.resize(nSamples);
 
   if (CheckNodeExists(SampleManager->raw(), "POT")) {
     pot = SampleManager->raw()["POT"].as<double>();
