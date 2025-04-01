@@ -66,7 +66,7 @@ int main(int argc, char * argv[]) {
     
     int nPars = CovObj->getNpars();
     for (int iPar=0;iPar<nPars;iPar++) {
-      std::string ParName = CovObj->GetParName(iPar);
+      std::string ParName = CovObj->GetParFancyName(iPar);
       double VarInit = CovObj->getParInit(iPar);
       double VarSigma = CovObj->getDiagonalError(iPar);
       
