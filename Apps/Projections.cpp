@@ -217,11 +217,11 @@ int main(int argc, char * argv[]) {
 		int histdim = Projections[iProj].VarStrings.size();
 	  	
 		if (histdim == 1) {
-			MACH3LOG_INFO("Projection {:<2} - Name : {} , VarString : {} , Binning : {}, {}, {}"
+			MACH3LOG_INFO("Projection {:<2} - Name : {} \nVarString : {} , Binning : {}, {}, {}"
 					,iProj,Projections[iProj].Name,
 					Projections[iProj].VarStrings[0],Projections[iProj].BinEdges[0].size()-1,Projections[iProj].BinEdges[0][0],Projections[iProj].BinEdges[0].back());
 		} else {
-			MACH3LOG_INFO("Projection {:<2} - Name : {} , VarString1 : {} , Binning : {} , {} , {} , VarString2 : {} , Binning : {}, {}, {}"
+			MACH3LOG_INFO("Projection {:<2} - Name : {} \nVarString1 : {} , Binning : {} , {} , {} \nVarString2 : {} , Binning : {}, {}, {}"
 					,iProj,Projections[iProj].Name,
 					Projections[iProj].VarStrings[0],Projections[iProj].BinEdges[0].size()-1,Projections[iProj].BinEdges[0][0],Projections[iProj].BinEdges[0].back(),
 					Projections[iProj].VarStrings[1],Projections[iProj].BinEdges[1].size()-1,Projections[iProj].BinEdges[1][0],Projections[iProj].BinEdges[1].back());
@@ -285,7 +285,7 @@ int main(int argc, char * argv[]) {
 			std::string outputname;
 			if (histdim==1) {
 				Hist = Sample->get1DVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
-				outputname = Sample->GetName()+"_"+ProjectionVar_Str[0]+".png";
+				outputname = Sample->GetName()+"_"+Projections[iProj].Name+".png";
 			} 
 			else {
 				if (ProjectionVar_Str[0].find("Particle_") != std::string::npos) {
@@ -294,7 +294,7 @@ int main(int argc, char * argv[]) {
 				else {
 					Hist = (TH1*)Sample->get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
 				}
-				outputname = Sample->GetName()+"_"+ProjectionVar_Str[0]+"_"+ProjectionVar_Str[1]+".png";
+				outputname = Sample->GetName()+"_"+Projections[iProj].Name+".png";
 			}
 			Hist->Scale(1.0,"Width");
 			Hist->SetTitle(ReturnFormattedHistogramNameFromProjection(Projections[iProj]).c_str());

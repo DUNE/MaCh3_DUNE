@@ -29,13 +29,25 @@ General:
 
 "Projections": [
   {
-    "Name": "TrueQ3_TrueQ0",
+    "Name": "TrueQ3_vs_TrueQ0",
     "VarStrings": ["TrueQ3","TrueQ0"],
     "VarBins": [[100,0.,4.],[100,0.,4.]]
   },
   {
     "Name": "Particle_BAngle_Momentum",
     "VarStrings": ["Particle_BAngle","Particle_Momentum"],
-    "VarBins": [[100,0.,180.],[100,0.,6.]]
+    "VarBins": [[90,0.,180.],[100,0.,6.]]
+  },
+  {
+    "Name": "Particle_BAngle_Momentum_Accepted",
+    "VarStrings": ["Particle_BAngle","Particle_Momentum"],
+    "VarBins": [[90,0.,180.],[100,0.,6.]],
+    "KinematicCuts": [
+      {
+        "Range": [1.,2.],
+        "Name": "Accepted",
+        "VarString": "Particle_IsAccepted"
+      }
+    ]
   }
 ]

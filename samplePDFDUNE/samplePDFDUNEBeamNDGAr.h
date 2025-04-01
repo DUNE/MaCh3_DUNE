@@ -28,7 +28,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 		samplePDFDUNEBeamNDGAr(std::string mc_version, covarianceXsec* xsec_cov);
 		~samplePDFDUNEBeamNDGAr();
 
-		enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kTrueQ0, kTrueQ3, kParticle_Event, kParticle_Momentum, kParticle_BAngle};
+		enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kTrueQ0, kTrueQ3, kParticle_Event, kParticle_Momentum, kParticle_BAngle, kParticle_IsAccepted};
 
 	protected:
 		void Init();
@@ -48,18 +48,18 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 
 		double ReturnKinematicParameter(double KinematicVariable, int iSample, int iEvent);
 		double ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
+		double ReturnKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent);
 
 		std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameter);
 		std::vector<double> ReturnKinematicParameterBinning(KinematicTypes KinematicParameter);
-		inline std::string ReturnStringFromKinematicParameter(int KinematicParameter);
 
 		void makePixelGrid(double pixel_spacing_cm);
 		double FindNHits(double pixel_spacing_cm, double centre_circle_y, double centre_circle_z, double rad_curvature);
 		double CalcBeta(double p_mag, double& bg, double& gamma);
 		double GetMass(int partpdg);
 		bool IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, int i_truepart, double pixel_spacing_cm);
-		TH2* get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY);
-
+		TH2* get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY) override;
+		bool IsParticleSelected(const int iSample, const int iEvent, const int iParticle);
 		std::vector<struct dunemc_base> dunendgarmcSamples;
 
 		TFile *_sampleFile;
@@ -187,9 +187,10 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 			{"LepPZ",kLepPZ},
 			{"TrueQ0",kTrueQ0},
 			{"TrueQ3",kTrueQ3},
-			{"Particle_Event", kParticle_Event},
+			{"Particle_Event",kParticle_Event},
 			{"Particle_Momentum",kParticle_Momentum},
-			{"Particle_BAngle", kParticle_BAngle},
+			{"Particle_BAngle",kParticle_BAngle},
+			{"Particle_IsAccepted",kParticle_IsAccepted},
 		};
 
 		const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -214,6 +215,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 			{kParticle_Event, "Particle_Event"},
 			{kParticle_Momentum,"Particle_Momentum"},
 			{kParticle_BAngle,"Particle_BAngle"},
+			{kParticle_IsAccepted,"Particle_IsAccepted"},
 		};
 };
 

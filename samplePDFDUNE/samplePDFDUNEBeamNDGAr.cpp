@@ -224,11 +224,10 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
 		}
 		nummatched++;
 	
-  	//Ignore neutrons, neutrinos and particles starting outside the fiducial volume
+  	//Ignore neutrons and neutrinos
 		double start_radius =pow((pow(_MCPStartY->at(i_anapart)-TPC_centre_y, 2)+pow(_MCPStartZ->at(i_anapart)-TPC_centre_z, 2)), 0.5);
-		if(std::abs(pdgcaf) == 2112 || std::abs(pdgcaf) == 14 || std::abs(pdgcaf) == 12 ||
-			(std::abs(_MCPStartX->at(i_anapart))-TPC_centre_x)>=TPCFidLength || start_radius>=TPCFidRadius){
-			isAccepted = false;
+		if(std::abs(pdgcaf) == 2112 || std::abs(pdgcaf) == 14 || std::abs(pdgcaf) == 12 /*||
+			(std::abs(_MCPStartX->at(i_anapart))-TPC_centre_x)>=TPCFidLength || start_radius>=TPCFidRadius*/){
 			continue;
 		}
 		
@@ -243,27 +242,28 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
 		double mom_tot = pow(pow(_MCPStartPX->at(i_anapart), 2)+pow(_MCPStartPY->at(i_anapart), 2)+pow(_MCPStartPZ->at(i_anapart), 2), 0.5);
 		double transverse_mom = pow(pow(_MCPStartPY->at(i_anapart), 2)+pow(_MCPStartPZ->at(i_anapart), 2), 0.5);//Transverse to B-field
 
-		//Fill particle-level kinematic variables
-		duneobj->particle_event->push_back(static_cast<double>(i_event));
+		//Fill particle-level kinematic variables with default or actual (if possible at this stage) values
+		duneobj->particle_event->push_back(i_event);
 		duneobj->particle_pdg->push_back(pdgcaf);
 		duneobj->particle_energy->push_back(static_cast<double>(sr->mc.nu[0].prim[i_truepart].p.E));
 		duneobj->particle_momentum->push_back(mom_tot);
 		duneobj->particle_bangle->push_back(acos(_MCPStartPX->at(i_anapart)/mom_tot)*180/M_PI);//Angle to B-field
 		duneobj->particle_startx->push_back(_MCPStartX->at(i_anapart)-TPC_centre_x);
 		duneobj->particle_startr2->push_back(start_radius*start_radius);
-		duneobj->particle_isstoppedingap->push_back(false);
-		duneobj->particle_isstoppedinbarrelgap->push_back(false);
-		duneobj->particle_isstoppedinendgap->push_back(false);
-		duneobj->particle_isstoppedinecal->push_back(false);
-		duneobj->particle_isstoppedinbarrel->push_back(false);
-		duneobj->particle_isstoppedinendcap->push_back(false);
-		duneobj->particle_isstoppedintpc->push_back(false);
+		duneobj->particle_isaccepted->push_back(true); //default (updates later)
+		duneobj->particle_isstoppedingap->push_back(false); //default (updates later)
+		duneobj->particle_isstoppedinbarrelgap->push_back(false); //default (updates later)
+		duneobj->particle_isstoppedinendgap->push_back(false); //default (updates later)
+		duneobj->particle_isstoppedinecal->push_back(false); //default (updates later)
+		duneobj->particle_isstoppedinbarrel->push_back(false); //default (updates later)
+		duneobj->particle_isstoppedinendcap->push_back(false); //default (updates later)
+		duneobj->particle_isstoppedintpc->push_back(false); //default (updates later)
 		duneobj->particle_startx->push_back(_MCPStartX->at(i_anapart)-TPC_centre_x);
 		duneobj->particle_startr2->push_back(start_radius*start_radius);
-		duneobj->particle_momresms->push_back(std::numeric_limits<double>::quiet_NaN());
-		duneobj->particle_momrestransfrac->push_back(std::numeric_limits<double>::quiet_NaN());
-		duneobj->particle_momrestrans->push_back(std::numeric_limits<double>::quiet_NaN());
-		duneobj->particle_ecaldepositfraction->push_back(std::numeric_limits<double>::quiet_NaN());
+		duneobj->particle_momresms->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
+		duneobj->particle_momrestransfrac->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
+		duneobj->particle_momrestrans->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
+		duneobj->particle_ecaldepositfraction->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
 		nparticlesinsample[i_sample]++;
 
 		//If particle is not stopped in the tpc or ecal 
@@ -425,6 +425,7 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
 		}
 		else {duneobj->particle_isstoppedintpc->back() = true;}
 		//break;
+		if (isAccepted == false) {duneobj->particle_isaccepted->back() = false;}
 	}
 	if(nummatched != 1){
 
@@ -512,7 +513,7 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
 	duneobj->norm_s = 1.;
 	double downsampling = 0.01;
 	duneobj->pot_s = pot/(downsampling*1e21);
-	duneobj->nEvents = static_cast<int>(downsampling*static_cast<double>(_data->GetEntries()));
+	duneobj->nEvents = static_cast<int>(std::round(downsampling*static_cast<double>(_data->GetEntries())));
 	
 	// allocate memory for dunendgarmc variables
 	duneobj->rw_yrec = new double[duneobj->nEvents];
@@ -564,7 +565,7 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
 	duneobj->is_accepted = new bool[duneobj->nEvents];
 
 	//Particle-level kinematic variables
-	duneobj->particle_event = new std::vector<double>;
+	duneobj->particle_event = new std::vector<int>;
 	duneobj->particle_event->reserve(7*duneobj->nEvents);
 	duneobj->particle_ecaldepositfraction = new std::vector<double>;
 	duneobj->particle_ecaldepositfraction->reserve(7*duneobj->nEvents);
@@ -575,7 +576,9 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
 	duneobj->particle_momentum = new std::vector<double>;
 	duneobj->particle_momentum->reserve(7*duneobj->nEvents); 
 	duneobj->particle_bangle = new std::vector<double>;
-	duneobj->particle_bangle->reserve(7*duneobj->nEvents); 
+	duneobj->particle_bangle->reserve(7*duneobj->nEvents);
+	duneobj->particle_isaccepted = new std::vector<bool>;
+	duneobj->particle_isaccepted->reserve(7*duneobj->nEvents);
 	duneobj->particle_isstoppedintpc = new std::vector<bool>;
 	duneobj->particle_isstoppedintpc->reserve(7*duneobj->nEvents); 
 	duneobj->particle_isstoppedinecal = new std::vector<bool>;
@@ -763,78 +766,52 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
 }
 
 const double* samplePDFDUNEBeamNDGAr::GetPointerToKinematicParameter(KinematicTypes KinematicParameter, int iSample, int iEvent) {
-	double* KinematicValue;
-
 	switch(KinematicParameter) {
 		case kTrueNeutrinoEnergy:
-			KinematicValue = &dunendgarmcSamples[iSample].rw_etru[iEvent]; 
-			break;
+			return &dunendgarmcSamples[iSample].rw_etru[iEvent]; 
 		case kRecoNeutrinoEnergy:
-			KinematicValue = &dunendgarmcSamples[iSample].rw_erec[iEvent];
-			break;
+			return &dunendgarmcSamples[iSample].rw_erec[iEvent];
 		case kMode:
-			KinematicValue = &dunendgarmcSamples[iSample].mode[iEvent];
-			break;
+			return &dunendgarmcSamples[iSample].mode[iEvent];
 		case kTrueXPos:
-			KinematicValue = &dunendgarmcSamples[iSample].rw_vtx_x[iEvent];
-			break;
+			return &dunendgarmcSamples[iSample].rw_vtx_x[iEvent];
 		case kTrueYPos:
-			KinematicValue = &dunendgarmcSamples[iSample].rw_vtx_y[iEvent];
-			break;
+			return &dunendgarmcSamples[iSample].rw_vtx_y[iEvent];
 		case kTrueZPos:
-			KinematicValue = &dunendgarmcSamples[iSample].rw_vtx_z[iEvent];
-			break;
+			return &dunendgarmcSamples[iSample].rw_vtx_z[iEvent];
 		case kTrueRad:
-			KinematicValue = &dunendgarmcSamples[iSample].rw_rad[iEvent];
-			break;
+			return &dunendgarmcSamples[iSample].rw_rad[iEvent];
 		case kNMuonsRecoOverTruth:
-			KinematicValue = &dunendgarmcSamples[iSample].nmuonsratio[iEvent];
-			break;
+			return &dunendgarmcSamples[iSample].nmuonsratio[iEvent];
 		case kRecoLepEnergy:
-			KinematicValue = &dunendgarmcSamples[iSample].rw_elep_reco[iEvent];
-			break;
+			return &dunendgarmcSamples[iSample].rw_elep_reco[iEvent];
 		case kTrueLepEnergy:
-			KinematicValue = &dunendgarmcSamples[iSample].rw_elep_true[iEvent];
-			break;
+			return &dunendgarmcSamples[iSample].rw_elep_true[iEvent];
 		case kRecoXPos:
-			KinematicValue = &dunendgarmcSamples[iSample].rw_reco_vtx_x[iEvent];
-			break;
+			return &dunendgarmcSamples[iSample].rw_reco_vtx_x[iEvent];
 		case kRecoYPos:
-			KinematicValue = &dunendgarmcSamples[iSample].rw_reco_vtx_y[iEvent];
-			break;
+			return &dunendgarmcSamples[iSample].rw_reco_vtx_y[iEvent];
 		case kRecoZPos:
-			KinematicValue = &dunendgarmcSamples[iSample].rw_reco_vtx_z[iEvent];
-			break;
+			return &dunendgarmcSamples[iSample].rw_reco_vtx_z[iEvent];
 		case kRecoRad:
-			KinematicValue = &dunendgarmcSamples[iSample].rw_reco_rad[iEvent];
-			break;
+			return &dunendgarmcSamples[iSample].rw_reco_rad[iEvent];
 		case kLepPT:
-			KinematicValue = &dunendgarmcSamples[iSample].rw_lep_pT[iEvent];
-			break;
+			return &dunendgarmcSamples[iSample].rw_lep_pT[iEvent];
 		case kLepPZ:
-			KinematicValue = &dunendgarmcSamples[iSample].rw_lep_pZ[iEvent];
-			break;
+			return &dunendgarmcSamples[iSample].rw_lep_pZ[iEvent];
 		case kTrueQ0:
-			KinematicValue = &dunendgarmcSamples[iSample].rw_Q0[iEvent];
-			break;
+			return &dunendgarmcSamples[iSample].rw_Q0[iEvent];
 		case kTrueQ3:
-			KinematicValue = &dunendgarmcSamples[iSample].rw_Q3[iEvent];
-			break;
-		case kParticle_Event:
-			KinematicValue = &dunendgarmcSamples[iSample].particle_event->at(iEvent);
-			break;
+			return &dunendgarmcSamples[iSample].rw_Q3[iEvent];
 		case kParticle_Momentum:
-			KinematicValue = &dunendgarmcSamples[iSample].particle_momentum->at(iEvent);
-			break;
-		case kParticle_BAngle:
-			KinematicValue = &dunendgarmcSamples[iSample].particle_bangle->at(iEvent);
-			break;
-		default:
+      return &dunendgarmcSamples[iSample].particle_momentum->at(iEvent);
+    case kParticle_BAngle:
+      return &dunendgarmcSamples[iSample].particle_bangle->at(iEvent);
+    default:
 			MACH3LOG_ERROR("Did not recognise Kinematic Parameter {}", KinematicParameter);
 			throw MaCh3Exception(__FILE__, __LINE__);
+			return nullptr;
 	}
-
-	return KinematicValue;
 }
 
 const double* samplePDFDUNEBeamNDGAr::GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent) {
@@ -848,11 +825,25 @@ const double* samplePDFDUNEBeamNDGAr::GetPointerToKinematicParameter(std::string
 }
 
 double samplePDFDUNEBeamNDGAr::ReturnKinematicParameter(double KinematicVariable, int iSample, int iEvent) {
-	return *GetPointerToKinematicParameter(KinematicVariable, iSample, iEvent);
+  KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
+  return ReturnKinematicParameter(KinPar,iSample,iEvent);
 }
 
 double samplePDFDUNEBeamNDGAr::ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent) {
-	return *GetPointerToKinematicParameter(KinematicParameter, iSample, iEvent);
+  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
+  return ReturnKinematicParameter(KinPar,iSample,iEvent);
+}
+
+double samplePDFDUNEBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent) {
+  //HH: Special cases for dealing with non-doubles
+	switch(KinPar) {
+		case kParticle_Event:
+      return static_cast<double>(dunendgarmcSamples[iSample].particle_event->at(iEvent));
+    case kParticle_IsAccepted:
+      return static_cast<double>(dunendgarmcSamples[iSample].particle_isaccepted->at(iEvent));
+    default:
+			return *GetPointerToKinematicParameter(KinPar, iSample, iEvent);
+	}
 }
 
 void samplePDFDUNEBeamNDGAr::setupFDMC(int iSample) {
@@ -1002,7 +993,7 @@ TH2* samplePDFDUNEBeamNDGAr::get2DParticleVarHist(std::string ProjectionVar_StrX
 	for (int iSample=0;iSample<getNMCSamples();iSample++) {
 		for (int iParticle=0;iParticle<nparticlesinsample[iSample];iParticle++) {
 			int event = static_cast<int>(std::round(ReturnKinematicParameter("Particle_Event", iSample, iParticle)));
-			if (IsEventSelected(iSample,event)) {
+			if (IsParticleSelected(iSample,event,iParticle)) {
 				double Weight = GetEventWeight(iSample,event);
 				if (WeightStyle==1) {
 					Weight = 1.;
@@ -1018,4 +1009,21 @@ TH2* samplePDFDUNEBeamNDGAr::get2DParticleVarHist(std::string ProjectionVar_StrX
 	Selection = tmp_Selection;
 
 	return _h2DVar;
+}
+
+bool samplePDFDUNEBeamNDGAr::IsParticleSelected(const int iSample, const int iEvent, const int iParticle) {
+  double Val;
+  for (unsigned int iSelection=0;iSelection < Selection.size() ;iSelection++) {
+		std::string SelecVarStr = ReturnStringFromKinematicParameter(static_cast<int>(std::round(Selection[iSelection][0])));
+		int SelectionVarElement;
+
+		if (SelecVarStr.find("Particle_") != std::string::npos) {SelectionVarElement = iParticle;}
+		else {SelectionVarElement = iEvent;}
+
+		Val = ReturnKinematicParameter(Selection[iSelection][0], iSample, SelectionVarElement);
+		if ((Val<Selection[iSelection][1])||(Val>=Selection[iSelection][2])) {
+			return false;
+		}
+	}
+	return true;
 }

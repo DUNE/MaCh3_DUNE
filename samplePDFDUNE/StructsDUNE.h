@@ -95,13 +95,14 @@ struct dunemc_base {
 
 	//Particle-level kinematic parameters (JM for NDGAr)
 	std::vector<double> *particle_ecaldepositfraction;
-  std::vector<double> *particle_event;
+  std::vector<int> *particle_event;
   std::vector<int> *particle_pdg;
   std::vector<double> *particle_energy;
   std::vector<double> *particle_theta;
   std::vector<double> *particle_bangle;
   std::vector<double> *particle_dedx;
   std::vector<double> *particle_momentum;
+	std::vector<bool> *particle_isaccepted;
   std::vector<bool> *particle_isstoppedintpc;
   std::vector<bool> *particle_isstoppedinecal;
   std::vector<bool> *particle_isstoppedingap;
