@@ -29,20 +29,13 @@ General:
 
 "Projections": [
   {
-    "Name": "RecoNuEnergy",
-    "VarStrings": ["RecoNeutrinoEnergy"],
-    "VarBins": [[20,0.,2.]],
-    "KinematicCuts": [
-      {
-        "Range": [0.1,0.8],
-        "Name": "TrueNuEnergy",
-        "VarString": "TrueNeutrinoEnergy"
-      }
-    ]
-  },
-  {
     "Name": "TrueQ3_TrueQ0",
     "VarStrings": ["TrueQ3","TrueQ0"],
     "VarBins": [[100,0.,4.],[100,0.,4.]]
+  },
+  {
+    "Name": "Particle_BAngle_Momentum",
+    "VarStrings": ["Particle_BAngle","Particle_Momentum"],
+    "VarBins": [[100,0.,180.],[100,0.,6.]]
   }
 ]

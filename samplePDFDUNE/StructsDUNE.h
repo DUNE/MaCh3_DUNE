@@ -1,32 +1,6 @@
 #ifndef _StructsDUNE_h_
 #define _StructsDUNE_h_
 #define __DEFAULT_RETURN_VAL__ -999999.123456
-struct particlevar {
-	int nparticles;
-	double *ecaldepositfraction;
-	int *event;
-	int *pdg;
-	int *accpdg;
-	double *energy;
-	double *theta;
-	double *bangle;
-	double *accbangle;
-	double *dedx;
-	double *momentum;
-	double *accmomentum;
-	bool *isstoppedintpc;
-	bool *isstoppedinecal;
-	bool *isstoppedingap;
-	bool *isstoppedinbarrelgap;
-	bool *isstoppedinendgap;
-	bool *isstoppedinbarrel;
-	bool *isstoppedinendcap;
-	double *rejx;
-	double *rejr2;
-	double *momresms;
-	double *momrestransfrac;
-	double *momrestrans;
-};
 
 struct dunemc_base {
 
@@ -118,8 +92,28 @@ struct dunemc_base {
 	int *nrecoparticles;
 	bool *in_fdv;
 	bool *is_accepted;
+
 	//Particle-level kinematic parameters (JM for NDGAr)
-	particlevar *particle;
+	std::vector<double> *particle_ecaldepositfraction;
+  std::vector<double> *particle_event;
+  std::vector<int> *particle_pdg;
+  std::vector<double> *particle_energy;
+  std::vector<double> *particle_theta;
+  std::vector<double> *particle_bangle;
+  std::vector<double> *particle_dedx;
+  std::vector<double> *particle_momentum;
+  std::vector<bool> *particle_isstoppedintpc;
+  std::vector<bool> *particle_isstoppedinecal;
+  std::vector<bool> *particle_isstoppedingap;
+  std::vector<bool> *particle_isstoppedinbarrelgap;
+  std::vector<bool> *particle_isstoppedinendgap;
+  std::vector<bool> *particle_isstoppedinbarrel;
+  std::vector<bool> *particle_isstoppedinendcap;
+  std::vector<double> *particle_startx;
+  std::vector<double> *particle_startr2;
+  std::vector<double> *particle_momresms;
+  std::vector<double> *particle_momrestransfrac;
+  std::vector<double> *particle_momrestrans;
 };
 
 // ********************************

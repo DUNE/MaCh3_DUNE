@@ -12,6 +12,7 @@
 #include <omp.h>
 #include <list>
 #include <random>
+#include <limits>
 
 #include "splines/splinesDUNE.h"
 #include "covariance/covarianceXsec.h"
@@ -27,7 +28,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 		samplePDFDUNEBeamNDGAr(std::string mc_version, covarianceXsec* xsec_cov);
 		~samplePDFDUNEBeamNDGAr();
 
-		enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kTrueQ0, kTrueQ3};
+		enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kTrueQ0, kTrueQ3, kParticle_Event, kParticle_Momentum, kParticle_BAngle};
 
 	protected:
 		void Init();
@@ -56,7 +57,8 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 		double FindNHits(double pixel_spacing_cm, double centre_circle_y, double centre_circle_z, double rad_curvature);
 		double CalcBeta(double p_mag, double& bg, double& gamma);
 		double GetMass(int partpdg);
-		bool IsParticleAccepted(dunemc_base *duneobj, int i_event, int i_truepart, double pixel_spacing_cm);
+		bool IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, int i_truepart, double pixel_spacing_cm);
+		TH2* get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY);
 
 		std::vector<struct dunemc_base> dunendgarmcSamples;
 
@@ -68,7 +70,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 		int _mode;
 
 		double pot;
-
+		int *nparticlesinsample;
 		// dunendgarmc Variables
 		double _ev;
 		double _erec;
@@ -89,7 +91,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 		double _vtx_z;
 		double _LepTheta;
 		double _Q2;
-
+		
 		//Geant vectors
 		std::vector<double> *_MCPStartX=0;
 		std::vector<double> *_MCPStartY=0;
@@ -119,6 +121,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 		double m_chargedk = 0.493677;
     double m_k0 = 0.497648;
 		double m_lambda = 1.115683;
+		
 		//TPC dimensions
 		double TPCFidLength;
 		double TPCFidRadius;
@@ -183,7 +186,10 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 			{"LepPT",kLepPT},
 			{"LepPZ",kLepPZ},
 			{"TrueQ0",kTrueQ0},
-			{"TrueQ3",kTrueQ3}
+			{"TrueQ3",kTrueQ3},
+			{"Particle_Event", kParticle_Event},
+			{"Particle_Momentum",kParticle_Momentum},
+			{"Particle_BAngle", kParticle_BAngle},
 		};
 
 		const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -205,6 +211,9 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 			{kLepPZ,"LepPZ"},
 			{kTrueQ0,"TrueQ0"},
 			{kTrueQ3,"TrueQ3"},
+			{kParticle_Event, "Particle_Event"},
+			{kParticle_Momentum,"Particle_Momentum"},
+			{kParticle_BAngle,"Particle_BAngle"},
 		};
 };
 
