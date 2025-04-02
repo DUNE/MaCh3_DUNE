@@ -39,7 +39,7 @@ std::string ReturnFormattedHistogramNameFromProjection(ProjectionVariable Proj) 
 		if (iKinematicCut > 0) {
 			ReturnStr += " && ";
 		}
-		ReturnStr += Form("(%4.2f < %s < %4.2f)",Proj.KinematicCuts[iKinematicCut].Range[0],Proj.KinematicCuts[iKinematicCut].Name.c_str(),Proj.KinematicCuts[iKinematicCut].Range[1]);
+		//ReturnStr += Form("(%4.2f <= %s < %4.2f)",Proj.KinematicCuts[iKinematicCut].Range[0],Proj.KinematicCuts[iKinematicCut].Name.c_str(),Proj.KinematicCuts[iKinematicCut].Range[1]);
 	}
 	std::string y_axis_title;
 	if (Proj.VarStrings.size()==1) {y_axis_title = "Events";}
@@ -64,7 +64,7 @@ void PrintCategoryLegends(std::vector<ProjectionVariable> Projections) {
 
 	TCanvas Canv = TCanvas();
 
-	std::vector<TH1D *> HistVec;
+	std::vector<TH1D*> HistVec;
 
 	for (size_t iProj = 0; iProj < Projections.size(); iProj++) {
 		for (size_t iCat = 0; iCat < Projections[iProj].CategoryCuts.size(); iCat++) {
@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
 	// Perform reweight and print total integral for sanity check
 
 	MACH3LOG_INFO("=================================================");
-	std::vector<TH1D *> DUNEHists;
+	std::vector<TH1D*> DUNEHists;
 	for (auto Sample : DUNEPdfs) {
 		Sample->reweight();
 		DUNEHists.push_back(Sample->get1DHist());
@@ -164,12 +164,15 @@ int main(int argc, char *argv[]) {
 				double nbins = VarBinnings[iBinning][0];
 				double xmin = VarBinnings[iBinning][1];
 				double xmax = VarBinnings[iBinning][2];
-				double step = (xmax-xmin)/(nbins-1);
+				double step = (xmax-xmin)/nbins;
 				VarBinnings[iBinning] = {};
-				std::cout << nbins << " " << xmin << " " << xmax << std::endl;
 				for (double iBinEdge=xmin; iBinEdge<=xmax; iBinEdge+=step) {
 					VarBinnings[iBinning].push_back(iBinEdge);
-					//std::cout<<iBinEdge;
+				}
+				if (VarBinnings[iBinning].size() == nbins+1) {
+					VarBinnings[iBinning].back() = xmax;
+				} else {
+					VarBinnings[iBinning].push_back(xmax);
 				}
 			}
 		}
@@ -229,14 +232,14 @@ int main(int argc, char *argv[]) {
 		int histdim = Projections[iProj].VarStrings.size();
 
 		if (histdim == 1) {
-			MACH3LOG_INFO("Projection {:<2} - Name : {} , VarString : {} , Binning : {}, {}, {}"
+			MACH3LOG_INFO("Projection {:<2} - Name : {} \nVarString : {} , Binning : {}, {}, {}"
 					,iProj,Projections[iProj].Name,
-					Projections[iProj].VarStrings[0],Projections[iProj].BinEdges[0].size(),Projections[iProj].BinEdges[0][0],Projections[iProj].BinEdges[0][Projections[iProj].BinEdges[0].size()-1]);
+					Projections[iProj].VarStrings[0],Projections[iProj].BinEdges[0].size()-1,Projections[iProj].BinEdges[0][0],Projections[iProj].BinEdges[0].back());
 		} else {
-			MACH3LOG_INFO("Projection {:<2} - Name : {} , VarString1 : {} , Binning : {} , {} , {} , VarString2 : {} , Binning : {}, {}, {}"
+			MACH3LOG_INFO("Projection {:<2} - Name : {} \nVarString1 : {} , Binning : {} , {} , {} \nVarString2 : {} , Binning : {}, {}, {}"
 					,iProj,Projections[iProj].Name,
-					Projections[iProj].VarStrings[0],Projections[iProj].BinEdges[0].size(),Projections[iProj].BinEdges[0][0],Projections[iProj].BinEdges[0][Projections[iProj].BinEdges[0].size()-1],
-					Projections[iProj].VarStrings[1],Projections[iProj].BinEdges[1].size(),Projections[iProj].BinEdges[1][0],Projections[iProj].BinEdges[1][Projections[iProj].BinEdges[1].size()-1]);
+					Projections[iProj].VarStrings[0],Projections[iProj].BinEdges[0].size()-1,Projections[iProj].BinEdges[0][0],Projections[iProj].BinEdges[0].back(),
+					Projections[iProj].VarStrings[1],Projections[iProj].BinEdges[1].size()-1,Projections[iProj].BinEdges[1][0],Projections[iProj].BinEdges[1].back());
 		}
 
 		if (Projections[iProj].KinematicCuts.size() > 0) {
@@ -274,7 +277,7 @@ int main(int argc, char *argv[]) {
 
 	for (size_t iProj=0;iProj<Projections.size();iProj++) {
 		MACH3LOG_INFO("================================");
-		MACH3LOG_INFO("Projection {}/{}",iProj+1,Projections.size());
+		MACH3LOG_INFO("Projection {}/{}",iProj,Projections.size()-1);
 
 		std::vector<std::string> ProjectionVar_Str = Projections[iProj].VarStrings;
 		int histdim = ProjectionVar_Str.size();
@@ -299,17 +302,22 @@ int main(int argc, char *argv[]) {
 			std::string outputname;
 			if (histdim==1) {
 				Hist = Sample->get1DVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
-				outputname = Sample->GetName()+"_"+ProjectionVar_Str[0]+".png";
+				outputname = Sample->GetName()+"_"+Projections[iProj].Name;
 			} 
 			else {
-				Hist = (TH1*)Sample->get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
-				outputname = Sample->GetName()+"_"+ProjectionVar_Str[0]+"_"+ProjectionVar_Str[1]+".png";
+				if (ProjectionVar_Str[0].find("Particle_") != std::string::npos) {
+					Hist = (TH1*)Sample->get2DParticleVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
+				}
+				else {
+					Hist = (TH1*)Sample->get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
+				}
+				outputname = Sample->GetName()+"_"+Projections[iProj].Name;
 			}
 			Hist->Scale(1.0,"Width");
 			Hist->SetTitle(ReturnFormattedHistogramNameFromProjection(Projections[iProj]).c_str());
 			MACH3LOG_INFO("\tSample: {:<20} - Integral: {:<10}",Sample->GetName(),Hist->Integral());
-			PrintTH1Histogram(Hist,outputname);
-			WriteTH1Histogram(Hist, dir, Sample->GetName() + "_" + ProjectionVar_Str);
+			PrintTH1Histogram(Hist,outputname+".png");
+			WriteTH1Histogram(Hist, dir, outputname);
 
 			for (size_t iCat=0;iCat<Projections[iProj].CategoryCuts.size();iCat++) {
 				MACH3LOG_INFO("\t\tCategory: {:<10} - Name : {:<20}",iCat,Projections[iProj].CategoryCuts[iCat].Name);
@@ -350,19 +358,22 @@ int main(int argc, char *argv[]) {
 					MACH3LOG_INFO("\t\t\tBreakdown: {:<10} - Integral: {:<10}", iBreak, BreakdownHist->Integral());
 					Stack->Add(BreakdownHist);
 				}
-
-				if (histdim==1) {
-					PrintTHStackHistogram(Stack,Sample->GetName()+"_"+ProjectionVar_Str[0]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack.png");
-				}
-				else {
-					PrintTHStackHistogram(Stack,Sample->GetName()+"_"+ProjectionVar_Str[0]+"_"+ProjectionVar_Str[1]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack.png");
-				}
+				
 				// HH: Add the stack to the file
 				TCanvas Canv = TCanvas();
 				Stack->Draw("HIST");
 				leg->Draw();
-				Canv.Write((ProjectionVar_Str + "_" + Projections[iProj].CategoryCuts[iCat].Name + "_Stack_Canvas").c_str());
-				WriteTHStackHistogram(Stack, dir, ProjectionVar_Str + "_" + Projections[iProj].CategoryCuts[iCat].Name + "_Stack");
+				std::string histstackname;
+				if (histdim==1) {
+					histstackname = Sample->GetName()+"_"+ProjectionVar_Str[0]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack";
+				}
+				else {
+					histstackname = Sample->GetName()+"_"+ProjectionVar_Str[0]+"_"+ProjectionVar_Str[1]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack";
+				}
+				PrintTHStackHistogram(Stack,histstackname+".png");
+				Canv.Write((histstackname+"_Canvas").c_str());
+				WriteTHStackHistogram(Stack, dir, histstackname);
+
 			}
 		}
 	}
