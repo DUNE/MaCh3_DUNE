@@ -69,10 +69,10 @@ void splinesDUNE::FillSampleArray(std::string SampleName, std::vector<std::strin
       std::string FullSplineName = std::string(Key->GetName());
       
       if (SplineFileNames.count(FullSplineName) > 0) {
-	if (FullSplineName.find("unknown") == std::string::npos) {
+	//if (FullSplineName.find("unknown") == std::string::npos) {
 	  MACH3LOG_CRITICAL("Skipping spline - Found a spline whose name has already been encountered before: {}", FullSplineName); 
 	  continue;
-	}
+	  //}
       }
       SplineFileNames.insert(FullSplineName);
 

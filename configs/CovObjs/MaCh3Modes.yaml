@@ -1,3 +1,4 @@
+---
 #########################################
 Title: "DUNE Interaction modes"
 
@@ -25,7 +26,7 @@ MaCh3Modes: [
   "NCCOH",
   "NCDiff",
   "NCNuEl",
-  "NCIMD",  
+  "NCIMD",
   "NCAnuGam",
   "NCMEC",
   "NCCOHEL",
@@ -51,9 +52,9 @@ CC1Kaon:
   SplineSuffix: "unknown"
 
 CCDIS:
-  Name:	"CCDIS"
+  Name: "CCDIS"
   GeneratorMaping: [2]
-  IsNC:	false
+  IsNC: false
   PlotColor: 2
   SplineSuffix: "ccdis"
 
@@ -112,7 +113,7 @@ CCCOHEL:
   IsNC: false
   PlotColor: 2
   SplineSuffix: "cccohel"
-  
+
 CCIBD:
   Name: "CCIBD"
   GeneratorMaping: [7]
@@ -151,9 +152,9 @@ NCQE:
 #  SplineSuffix: "unknown"
 
 NCDIS:
-  Name:	"NCDIS"
+  Name: "NCDIS"
   GeneratorMaping: [14]
-  IsNC:	true
+  IsNC: true
   PlotColor: 2
   SplineSuffix: "ncdis"
 
@@ -212,7 +213,7 @@ NCCOHEL:
   IsNC: true
   PlotColor: 2
   SplineSuffix: "nccohel"
-  
+
 NCIBD:
   Name: "NCIBD"
   GeneratorMaping: [19]

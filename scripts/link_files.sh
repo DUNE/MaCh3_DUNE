@@ -7,6 +7,8 @@ MACH3DIR=`pwd`
 FILESDIR=/vols/dune/ljw20/
 FILESDIR1=/vols/dune/nk3717/data/
 
+#mkdir -p "$MACH3DIR/inputs"
+
 if [ ! -d "$MACH3DIR/inputs/DUNE_CAF_files" ]
 then
   mkdir $MACH3DIR/inputs/DUNE_CAF_files
@@ -42,3 +44,17 @@ then
   mkdir $MACH3DIR/inputs/DUNE_NDGAr_AnaTrees
 fi
 ln -sf ${FILESDIR1}/NDGAr_1MCAFs/AnaTreesOutputs/*root inputs/DUNE_NDGAr_AnaTrees
+
+# if [ ! -d "$MACH3DIR/inputs/DUNE_ND_CAF_files" ]
+# then
+#   mkdir $MACH3DIR/inputs/DUNE_ND_CAF_files
+# fi
+# ln -sf ${FILESDIR}/DUNE_2023_ND_CAFs_FV_CCINC_Q/*root inputs/DUNE_ND_CAF_files
+
+
+
+# if [ ! -d "$MACH3DIR/inputs/DUNE_ND_spline_files" ]
+# then
+#   mkdir $MACH3DIR/inputs/DUNE_ND_spline_files
+# fi
+# ln -sf ${FILESDIR}/DUNE_2023_ND_splines/*root inputs/DUNE_ND_spline_files

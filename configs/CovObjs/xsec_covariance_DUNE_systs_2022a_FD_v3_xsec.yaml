@@ -1,3 +1,4 @@
+---
 Systematics:
 - Systematic:
     DetID: ["ND", "FD", "ATM"]
@@ -1197,7 +1198,7 @@ Systematics:
       Generated: 1.0
       PreFitValue: 1.0
     SplineInformation:
-      Mode: [0, 1, 2, 3, 4,5, 6,7,8, 9, 10, 11, 12, 13]
+      Mode: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
       SplineName: nuexsec
     StepScale:
       MCMC: 0.1
@@ -1217,7 +1218,7 @@ Systematics:
       Generated: 1.0
       PreFitValue: 1.0
     SplineInformation:
-      Mode: [0, 1, 2, 3, 4,5, 6,7,8, 9, 10, 11, 12, 13]
+      Mode: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
       SplineName: nuemuxsec
     StepScale:
       MCMC: 0.1

@@ -120,7 +120,7 @@ endif()
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
-find_package(MaCh3 1.4.4 EXACT QUIET)
+find_package(MaCh3 1.4.8 EXACT QUIET)
 
 if(NOT MaCh3_FOUND)
   cmessage(STATUS "Didn't find MaCh3, attempting to use built in MaCh3")

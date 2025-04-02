@@ -66,6 +66,7 @@ export MaCh3DUNE_VERSION=@MaCh3DUNE_VERSION@
 
 add_to_PATH "${MACH3DUNE_ROOT}/bin"
 add_to_LD_LIBRARY_PATH ${MACH3DUNE_ROOT}/lib
+add_to_LD_LIBRARY_PATH ${MACH3DUNE_ROOT}/lib64
 
 if [ -f "${MACH3DUNE_ROOT}/bin/setup.MaCh3.sh" ]; then
   echo "Sourcing MaCh3 Core"

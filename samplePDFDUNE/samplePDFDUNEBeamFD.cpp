@@ -19,6 +19,13 @@ void samplePDFDUNEBeamFD::Init() {
     MACH3LOG_ERROR("Did not find DUNESampleBools:iselike in {}, please add this", SampleManager->GetFileName());
     throw MaCh3Exception(__FILE__, __LINE__);
   }
+
+  if (CheckNodeExists(SampleManager->raw(), "DUNESampleBools", "isFHC" )) {
+    isFHC = SampleManager->raw()["DUNESampleBools"]["isFHC"].as<double>();
+  } else{
+    MACH3LOG_ERROR("Did not find DUNESampleBools:isFHC in {}, please add this", SampleManager->GetFileName());
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
   
   if (CheckNodeExists(SampleManager->raw(), "POT")) {
     pot = SampleManager->raw()["POT"].as<double>();
@@ -448,6 +455,9 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(double KinematicVariable, i
   case kOscChannel:
     KinematicValue = MCSamples[iSample].ChannelIndex;
     break;
+  case kIsFHC:
+    KinematicValue = isFHC;
+    break;
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", static_cast<int>(KinPar));
     MACH3LOG_ERROR("Was given a Kinematic Variable of {}", KinematicVariable);
@@ -488,6 +498,9 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(std::string KinematicParame
     break;
  case kOscChannel:
     KinematicValue = MCSamples[iSample].ChannelIndex;
+    break;
+ case kIsFHC:
+    KinematicValue = isFHC;
     break;
  default:
    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type {}", KinematicParameter);
@@ -530,6 +543,9 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(std::string Ki
  case kOscChannel:
    KinematicValue = &(MCSamples[iSample].ChannelIndex);
    break;
+ case kIsFHC:
+   KinematicValue = &(isFHC);
+   break;
  default:
    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", KinematicParameter);
    throw MaCh3Exception(__FILE__, __LINE__);
@@ -569,6 +585,9 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(double Kinemat
     break;
   case kOscChannel:
     KinematicValue = &(MCSamples[iSample].ChannelIndex);
+    break;
+  case kIsFHC:
+    KinematicValue = &(isFHC);
     break;
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", KinematicVariable);
@@ -681,6 +700,13 @@ std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::st
   std::vector<double> ReturnVec;
   
   switch(KinematicParameter){
+  case kIsFHC:
+    ReturnVec.resize(3);
+    ReturnVec[0] = -0.5;
+    ReturnVec[1] = 0.5;
+    ReturnVec[2] = 1.5;
+    break;
+    
   case kTrueNeutrinoEnergy:
   case kRecoNeutrinoEnergy:
     ReturnVec.resize(XBinEdges.size());

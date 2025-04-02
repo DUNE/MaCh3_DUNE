@@ -62,7 +62,7 @@ int main(int argc, char * argv[]) {
       DUNEHists.push_back(Sample->get1DHist());
     else if (Sample->GetNDim() == 2)
       DUNEHists.push_back(Sample->get2DHist());
-    
+
     std::string EventRateString = fmt::format("{:.2f}", Sample->get1DHist()->Integral());
     MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetName(), EventRateString);
 

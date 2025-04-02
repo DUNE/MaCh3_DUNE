@@ -1,3 +1,4 @@
+---
 SampleName: "nueselec"
 SampleType: "Atm"
 MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes.yaml"
@@ -7,7 +8,7 @@ Binning:
   XVarStr: "RecoCosineZ"
   XVarBins: [-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1]
   YVarStr: "RecoNeutrinoEnergy"
-  YVarBins: [0, 0.11, 0.19, 0.33, 0.62, 1.34, 3.35, 16.28, 1e8]
+  YVarBins: [0, 0.11, 0.17, 0.26, 0.4, 0.63, 1.03, 1.71, 2.94, 5.48, 1e8]
 
 SampleBools:
   IsELike: yes
@@ -76,4 +77,23 @@ SubSamples:
     mtuplefile: "nuebar_x_nutaubar"
     splinefile: "nuebar_x_nutaubar"
     nutype: -12
+    oscnutype: -16
+  - Name: "numubar_x_nuebar"
+    LatexName: "numubar_x_nuebar"
+    mtuplefile: "numubar_x_nuebar"
+    splinefile: "numubar_x_nuebar"
+    nutype: -14
+    oscnutype: -12
+  - Name: "numubar_x_numubar"
+    LatexName: "numubar_x_numubar"
+    mtuplefile: "numubar_x_numubar"
+    splinefile: "numubar_x_numubar"
+    nutype: -14
+    oscnutype: -14
+  - Name: "numubar_x_nutaubar"
+    LatexName: "numubar_x_nutaubar"
+    mtuplefile: "numubar_x_nutaubar"
+    splinefile: "numubar_x_nutaubar"
+    samplevecno: 11
+    nutype: -14
     oscnutype: -16

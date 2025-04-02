@@ -1,16 +1,17 @@
+---
 General:
   Verbosity: "NONE"
   CosineZIgnored: false
   CalculationType: "Binned"
 
 Binned:
-  FileName: "./build/Inputs/ExampleAtmosphericBinning.root"
+  FileName: "./inputs/Atmospherics/ExampleAtmosphericBinning.root"
   EnergyAxisHistName: "EnergyAxisBinning"
   CosineZAxisHistName: "CosineZAxisBinning"
-  
+
 OscProbCalcerSetup:
   ImplementationName: "CUDAProb3"
-  EarthModelFileName: "build/_deps/cudaprob3-src/models/PREM_4layer.dat"
+  EarthModelFileName: "./inputs/Atmospherics/PREM_4layer.dat"
   UseProductionHeightsAveraging: false
   OscChannelMapping:
     - Entry: "Electron:Electron"
