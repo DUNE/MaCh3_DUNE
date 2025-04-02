@@ -62,9 +62,11 @@ int main(int argc, char * argv[]) {
       DUNEHists.push_back(Sample->get1DHist());
     else if (Sample->GetNDim() == 2)
       DUNEHists.push_back(Sample->get2DHist());
-    
+
     std::string EventRateString = fmt::format("{:.2f}", Sample->get1DHist()->Integral());
     MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetName(), EventRateString);
+
+    Sample->PrintIntegral();
   }
 
   std::string OutFileName = GetFromManager<std::string>(fitMan->raw()["General"]["OutputFile"], "EventRatesOutput.root");
@@ -85,16 +87,16 @@ int main(int argc, char * argv[]) {
       std::vector< std::vector<double> > SelectionVec;
 
       std::vector<double> SelecChannel(3);
-      SelecChannel[0] = Sample->ReturnKinematicParameterFromString("OscChannel");
+      SelecChannel[0] = Sample->ReturnKinematicParameterFromString("OscillationChannel");
       SelecChannel[1] = iOscChan;
       SelecChannel[2] = iOscChan+1;
       SelectionVec.push_back(SelecChannel);
       
-      TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy",SelectionVec);
+      TH1* Hist = Sample->get1DVarHist(Sample->GetXBinVarName(),SelectionVec);
       MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetName(),Sample->getFlavourName(iOscChan),Hist->Integral());
     }
 
-    TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy");
+    TH1* Hist = Sample->get1DVarHist(Sample->GetXBinVarName());
     MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetName(),Hist->Integral());
   }
 
@@ -107,7 +109,9 @@ int main(int argc, char * argv[]) {
 
   for(auto Sample : DUNEPdfs) {
     MACH3LOG_INFO("======================");
-    int nModeChannels = kMaCh3_nModes;
+
+    MaCh3Modes* Modes = Sample->GetMaCh3Modes();
+    int nModeChannels = Modes->GetNModes();
     for (int iModeChan=0;iModeChan<nModeChannels;iModeChan++) {
       std::vector< std::vector<double> > SelectionVec;
 
@@ -117,11 +121,11 @@ int main(int argc, char * argv[]) {
       SelecChannel[2] = iModeChan+1;
       SelectionVec.push_back(SelecChannel);
 
-      TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy",SelectionVec);
-      MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetName(),MaCh3mode_ToDUNEString((MaCh3_Mode)iModeChan),Hist->Integral());
+      TH1* Hist = Sample->get1DVarHist(Sample->GetXBinVarName(),SelectionVec);
+      MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetName(),Modes->GetMaCh3ModeName(iModeChan),Hist->Integral());
     }
 
-    TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy");
+    TH1* Hist = Sample->get1DVarHist(Sample->GetXBinVarName());
     MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetName(),Hist->Integral());
   }
 

@@ -18,7 +18,7 @@ InputFiles:
   mtuplesuffix: ".root"
   splineprefix: ""
   splinesuffix: ""
-DetID: 24
+DetID: "ATM"
 NuOsc:
   NuOscConfigFile: "configs/NuOsc/CUDAProb3.yaml"
   EqualBinningPerOscChannel: true
