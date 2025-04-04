@@ -42,7 +42,10 @@ public:
     kPipTheta, 
     kMuonEDiff, 
     kPipEDiff, 
-    kEDiff 
+    kEDiff,
+    kStartX,
+    kStartY,
+    kStartZ
   };
   
  protected:

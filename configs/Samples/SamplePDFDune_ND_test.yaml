@@ -10,17 +10,846 @@ SampleBools:
   iselike: no
 InputFiles:
   # mtupleprefix: "inputs/DUNE_ND_CAF_files/MicroProdN3p1_NDLAr_2E18_FHC.caf.nu.0000001.CAF" #name of file
-  mtupleprefix: "inputs/DUNE_ND_CAF_files/MicroProdN3p1_NDLAr_2E18_FHC.caf.nu.hadded." #name of file
+  # mtupleprefix: "inputs/DUNE_ND_spline_files/MicroProdN3p1_NDLAr_2E18_FHC.caf.nu.hadded." #name of file
+  mtupleprefix: "inputs/DUNE_ND_CAF_files/MicroProdN3p1_NDLAr_2E18_FHC.caf.nu." #name of file
   mtuplesuffix: ".root"
   splineprefix: ""
   splinesuffix: ""
 NuOsc:
   NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
 DetID: 1 #1 is for ND-LAr
-NSubSamples: 1
+NSubSamples: 139
 SubSamples:
   - name: "0000001.CAF"
     mtuplefile: "0000001.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000002.CAF"
+    mtuplefile: "0000002.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000007.CAF"
+    mtuplefile: "0000007.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000008.CAF"
+    mtuplefile: "0000008.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000010.CAF"
+    mtuplefile: "0000010.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000012.CAF"
+    mtuplefile: "0000012.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000016.CAF"
+    mtuplefile: "0000016.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000017.CAF"
+    mtuplefile: "0000017.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000018.CAF"
+    mtuplefile: "0000018.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000019.CAF"
+    mtuplefile: "0000019.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000021.CAF"
+    mtuplefile: "0000021.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000023.CAF"
+    mtuplefile: "0000023.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000025.CAF"
+    mtuplefile: "0000025.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000026.CAF"
+    mtuplefile: "0000026.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000029.CAF"
+    mtuplefile: "0000029.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000030.CAF"
+    mtuplefile: "0000030.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000031.CAF"
+    mtuplefile: "0000031.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000033.CAF"
+    mtuplefile: "0000033.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000034.CAF"
+    mtuplefile: "0000034.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000036.CAF"
+    mtuplefile: "0000036.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000037.CAF"
+    mtuplefile: "0000037.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000038.CAF"
+    mtuplefile: "0000038.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000039.CAF"
+    mtuplefile: "0000039.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000045.CAF"
+    mtuplefile: "0000045.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000046.CAF"
+    mtuplefile: "0000046.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000051.CAF"
+    mtuplefile: "0000051.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000052.CAF"
+    mtuplefile: "0000052.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000060.CAF"
+    mtuplefile: "0000060.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000062.CAF"
+    mtuplefile: "0000062.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000064.CAF"
+    mtuplefile: "0000064.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000065.CAF"
+    mtuplefile: "0000065.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000067.CAF"
+    mtuplefile: "0000067.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000068.CAF"
+    mtuplefile: "0000068.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000069.CAF"
+    mtuplefile: "0000069.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000070.CAF"
+    mtuplefile: "0000070.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000071.CAF"
+    mtuplefile: "0000071.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000074.CAF"
+    mtuplefile: "0000074.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000076.CAF"
+    mtuplefile: "0000076.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000077.CAF"
+    mtuplefile: "0000077.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000078.CAF"
+    mtuplefile: "0000078.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000083.CAF"
+    mtuplefile: "0000083.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000085.CAF"
+    mtuplefile: "0000085.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000086.CAF"
+    mtuplefile: "0000086.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000087.CAF"
+    mtuplefile: "0000087.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000089.CAF"
+    mtuplefile: "0000089.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000090.CAF"
+    mtuplefile: "0000090.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000091.CAF"
+    mtuplefile: "0000091.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000095.CAF"
+    mtuplefile: "0000095.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000096.CAF"
+    mtuplefile: "0000096.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000097.CAF"
+    mtuplefile: "0000097.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000100.CAF"
+    mtuplefile: "0000100.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000103.CAF"
+    mtuplefile: "0000103.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000104.CAF"
+    mtuplefile: "0000104.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000105.CAF"
+    mtuplefile: "0000105.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000106.CAF"
+    mtuplefile: "0000106.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000107.CAF"
+    mtuplefile: "0000107.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000108.CAF"
+    mtuplefile: "0000108.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000109.CAF"
+    mtuplefile: "0000109.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000110.CAF"
+    mtuplefile: "0000110.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000111.CAF"
+    mtuplefile: "0000111.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000113.CAF"
+    mtuplefile: "0000113.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000114.CAF"
+    mtuplefile: "0000114.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000115.CAF"
+    mtuplefile: "0000115.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000116.CAF"
+    mtuplefile: "0000116.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000118.CAF"
+    mtuplefile: "0000118.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000119.CAF"
+    mtuplefile: "0000119.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000122.CAF"
+    mtuplefile: "0000122.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000123.CAF"
+    mtuplefile: "0000123.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000125.CAF"
+    mtuplefile: "0000125.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000126.CAF"
+    mtuplefile: "0000126.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000127.CAF"
+    mtuplefile: "0000127.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000129.CAF"
+    mtuplefile: "0000129.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000130.CAF"
+    mtuplefile: "0000130.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000131.CAF"
+    mtuplefile: "0000131.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000132.CAF"
+    mtuplefile: "0000132.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000133.CAF"
+    mtuplefile: "0000133.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000134.CAF"
+    mtuplefile: "0000134.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000137.CAF"
+    mtuplefile: "0000137.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000139.CAF"
+    mtuplefile: "0000139.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000140.CAF"
+    mtuplefile: "0000140.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000141.CAF"
+    mtuplefile: "0000141.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000144.CAF"
+    mtuplefile: "0000144.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000145.CAF"
+    mtuplefile: "0000145.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000147.CAF"
+    mtuplefile: "0000147.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000152.CAF"
+    mtuplefile: "0000152.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000153.CAF"
+    mtuplefile: "0000153.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000154.CAF"
+    mtuplefile: "0000154.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000156.CAF"
+    mtuplefile: "0000156.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000157.CAF"
+    mtuplefile: "0000157.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000158.CAF"
+    mtuplefile: "0000158.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000159.CAF"
+    mtuplefile: "0000159.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000162.CAF"
+    mtuplefile: "0000162.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000163.CAF"
+    mtuplefile: "0000163.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000167.CAF"
+    mtuplefile: "0000167.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000168.CAF"
+    mtuplefile: "0000168.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000170.CAF"
+    mtuplefile: "0000170.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000171.CAF"
+    mtuplefile: "0000171.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000172.CAF"
+    mtuplefile: "0000172.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000176.CAF"
+    mtuplefile: "0000176.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000179.CAF"
+    mtuplefile: "0000179.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000181.CAF"
+    mtuplefile: "0000181.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000182.CAF"
+    mtuplefile: "0000182.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000185.CAF"
+    mtuplefile: "0000185.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000186.CAF"
+    mtuplefile: "0000186.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000187.CAF"
+    mtuplefile: "0000187.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000188.CAF"
+    mtuplefile: "0000188.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000190.CAF"
+    mtuplefile: "0000190.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000193.CAF"
+    mtuplefile: "0000193.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000194.CAF"
+    mtuplefile: "0000194.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000196.CAF"
+    mtuplefile: "0000196.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000197.CAF"
+    mtuplefile: "0000197.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000198.CAF"
+    mtuplefile: "0000198.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000199.CAF"
+    mtuplefile: "0000199.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000201.CAF"
+    mtuplefile: "0000201.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000202.CAF"
+    mtuplefile: "0000202.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000208.CAF"
+    mtuplefile: "0000208.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000209.CAF"
+    mtuplefile: "0000209.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000211.CAF"
+    mtuplefile: "0000211.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000216.CAF"
+    mtuplefile: "0000216.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000217.CAF"
+    mtuplefile: "0000217.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000218.CAF"
+    mtuplefile: "0000218.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000220.CAF"
+    mtuplefile: "0000220.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000223.CAF"
+    mtuplefile: "0000223.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000228.CAF"
+    mtuplefile: "0000228.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000231.CAF"
+    mtuplefile: "0000231.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000233.CAF"
+    mtuplefile: "0000233.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000234.CAF"
+    mtuplefile: "0000234.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000236.CAF"
+    mtuplefile: "0000236.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000237.CAF"
+    mtuplefile: "0000237.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000238.CAF"
+    mtuplefile: "0000238.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000240.CAF"
+    mtuplefile: "0000240.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000241.CAF"
+    mtuplefile: "0000241.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000243.CAF"
+    mtuplefile: "0000243.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000245.CAF"
+    mtuplefile: "0000245.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000247.CAF"
+    mtuplefile: "0000247.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000249.CAF"
+    mtuplefile: "0000249.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000250.CAF"
+    mtuplefile: "0000250.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000252.CAF"
+    mtuplefile: "0000252.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+  - name: "0000254.CAF"
+    mtuplefile: "0000254.CAF"
     splinefile: ""
     samplevecno: 0
     nutype: 14

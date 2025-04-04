@@ -535,6 +535,15 @@ const double* samplePDFDUNEBeamND::GetPointerToKinematicParameter(KinematicTypes
   case kEDiff:
     KinematicValue = &dunendmcSamples[iSample].rw_E_diff[iEvent];
     break;
+  case kStartX:
+    KinematicValue = &dunendmcSamples[iSample].rw_vtx_x[iEvent];
+    break;
+  case kStartY:
+    KinematicValue = &dunendmcSamples[iSample].rw_vtx_y[iEvent];
+    break;
+  case kStartZ:
+    KinematicValue = &dunendmcSamples[iSample].rw_vtx_z[iEvent];
+    break;
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
     std::cout << KinPar << ReturnStringFromKinematicParameter(KinPar) << std::endl;
@@ -659,6 +668,9 @@ int samplePDFDUNEBeamND::ReturnKinematicParameterFromString(std::string Kinemati
   if(KinematicParameterStr == "MuonEDiff") return kMuonEDiff;
   if(KinematicParameterStr == "PipEDiff") return kPipEDiff;
   if(KinematicParameterStr == "EDiff") return kEDiff;
+  if(KinematicParameterStr == "StartX") return kStartX;
+  if(KinematicParameterStr == "StartY") return kStartY;
+  if(KinematicParameterStr == "StartZ") return kStartZ;
 
   return -1;
 }
@@ -682,6 +694,9 @@ std::string samplePDFDUNEBeamND::ReturnStringFromKinematicParameter(int Kinemati
     case kMuonEDiff: return "MuonEDiff";
     case kPipEDiff: return "PipEDiff";
     case kEDiff: return "EDiff";
+    case kStartX: return "StartX";
+    case kStartY: return "StartY";
+    case kStartZ: return "StartZ";
     default: return "";
   }
 }
