@@ -1,20 +1,7 @@
 #ifndef _samplePDFDUNEBeamND_h_
 #define _samplePDFDUNEBeamND_h_
 
-#include <iostream>
-#include <TTree.h>
-#include <TH1D.h>
-#include <TH2D.h>
-#include <TMath.h>
-#include <TFile.h>
-#include <TGraph2DErrors.h>
-#include <vector>
-#include <omp.h>
-#include <list>
-
 #include "splines/splinesDUNE.h"
-#include "covariance/covarianceXsec.h"
-#include "covariance/covarianceOsc.h"
 #include "samplePDF/samplePDFFDBase.h"
 
 #include "StructsDUNE.h"
@@ -22,14 +9,15 @@
 class samplePDFDUNEBeamND : virtual public samplePDFFDBase
 {
 public:
-  samplePDFDUNEBeamND(std::string mc_version, covarianceXsec* xsec_cov, covarianceOsc* osc_cov);
+  samplePDFDUNEBeamND(std::string mc_version, covarianceXsec* xsec_cov, TMatrixD* nd_cov, covarianceOsc* osc_cov) ;
   ~samplePDFDUNEBeamND();
 
   enum KinematicTypes {
     kTrueNeutrinoEnergy, 
     kRecoQ, 
     kRecoNeutrinoEnergy, 
-    kIsFHC, 
+    kIsFHC,
+    kyRec, 
     kOscChannel, 
     kMode, 
     kMuonMom, 
@@ -46,8 +34,7 @@ public:
     kStartX,
     kStartY,
     kStartZ
-  };
-  
+  };  
  protected:
   void Init();
   int setupExperimentMC(int iSample);
@@ -64,17 +51,34 @@ public:
   double ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
 
   std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameter);
-  int ReturnKinematicParameterFromString(std::string KinematicParameterStr);
-  std::string ReturnStringFromKinematicParameter(int KinematicParameter);
   
   //DB functions which could be initialised to do something which is non-trivial
-  double CalcXsecWeightFunc(int iSample, int iEvent) {return 1.;}
+  double CalcXsecWeightFunc(int iSample, int iEvent) {return 1.; (void)iSample; (void)iEvent;}
   void applyShifts(int iSample, int iEvent);
+
+  void setNDCovMatrix();
+  double GetLikelihood() override;
 
   std::vector<struct dunemc_base> dunendmcSamples;
 
-  TFile *_sampleFile;
-  TTree *_data;
+  const std::unordered_map<std::string, int> KinematicParametersDUNE = {
+    {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
+    {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},
+    {"yRec",kyRec},
+    {"OscillationChannel",kOscChannel},
+    {"Mode",kMode},
+    {"IsFHC",kIsFHC}
+  };
+
+  const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
+    {kTrueNeutrinoEnergy,"TrueNeutrinoEnergy"},
+    {kRecoNeutrinoEnergy,"RecoNeutrinoEnergy"},
+    {kyRec,"yRec"},
+    {kOscChannel,"OscillationChannel"},
+    {kMode,"Mode"},
+    {kIsFHC,"IsFHC"}
+  };
+
   TString _nutype;
   int _mode;
 
@@ -221,7 +225,7 @@ public:
   // configuration 
   bool IsELike;
   bool isND;
-  bool IsRHC;
+  double IsFHC;
 
   //Positions of ND Detector systematics
   double tot_escale_nd_pos;
@@ -243,6 +247,13 @@ public:
   double mu_res_nd_pos;
   double n_res_nd_pos;
   double em_res_nd_pos;
+
+  bool isNDCovSet = false;
+  // The ND detector covariance matrix
+  TMatrixD *NDCovMatrix;
+  // The inverse ND detector covariance matrix
+  double **NDInvertCovMatrix;
+
 
   std::vector<const double*> NDDetectorSystPointers;
   int nNDDetectorSystPointers;

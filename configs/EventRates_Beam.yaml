@@ -1,3 +1,4 @@
+---
 General:
   OutputFile: "NewEventRates.root"
   DUNESamples: ["configs/Samples/SamplePDFDune_ND_test.yaml"]	
@@ -9,10 +10,12 @@ General:
   Systematics:
     XsecCovFile: ["configs/CovObjs/Flux_ND.yaml"]
     XsecCovName: "xsec_cov"
-    XsecStepScale: 0.1
-    XsecAtGen: false 
+    XsecStepScale: 0.05
+    XsecAtGen: false
+    NDCovFile: "configs/CovObjs/tdr_covs/det_sys_cov.root"
     OscCovFile: ["configs/CovObjs/OscCov_PDG2021_v2.yaml"]
     OscCovName: "osc_cov"
+    OscFix: ["baseline", "density"]
 
   Fitter:
     FitTestLikelihood: false

@@ -22,7 +22,11 @@ def convert_parameter(param:"dict[str, str]") -> dict:
 
     yaml_param['DetID'] = int(param['detid'])
     yaml_param['Error'] = float(param['error'])
-    yaml_param['Type'] = param['type'].capitalize()
+    # HH: Add a check to rename function to Functional
+    param_type = param['type']
+    if param_type == 'function':
+        param_type = 'functional'
+    yaml_param['Type'] = param_type.capitalize()
     yaml_param['FlatPrior'] = False
 
     if 'Spline' in yaml_param['Type']:
@@ -38,6 +42,31 @@ def convert_parameter(param:"dict[str, str]") -> dict:
             param['kinematic_cut'] = [param['kinematic_cut']]
         for cut in param['kinematic_cut']:
             yaml_param['KinematicCuts'].append({cut['var']: list(map(float, cut['value'].split()))})
+    
+    # --- HH: Add horncurrent and prod_nupdg to KinematicCuts ---
+    if 'horncurrent' in param:
+        if 'KinematicCuts' not in yaml_param:
+            yaml_param['KinematicCuts'] = []
+        horn_current = param['horncurrent']
+        if len(horn_current) > 1:
+            raise ValueError("I don't know why there are more than one horn current")
+        horn_current_val = int(horn_current[0]['value'])
+        # Have to set bounds for the KinematicCuts because mach3 currently only takes in bounds for the cuts
+        # isFHC in the CAF is 1 for horncurrent=1 and 0 for horncurrent=-1
+        if horn_current_val == 1:
+            is_fhc_bounds = [0.9, 1.1]
+        elif horn_current_val == -1:
+            is_fhc_bounds = [-0.1, 0.1]
+        else:
+            raise ValueError(f"Invalid horn current value: {horn_current_val}")
+        yaml_param['KinematicCuts'].append({'IsFHC': is_fhc_bounds})
+
+    if 'prod_nupdg' in param:
+        prod_nupdg = param['prod_nupdg']
+        if len(prod_nupdg) > 1:
+            raise ValueError("I don't know why there are more than one prod_nupdg")
+        yaml_param['NeutrinoFlavourUnosc'] = [int(param['prod_nupdg'][0]['value'])]
+    # ------
 
     if 'correlation' in param:
         yaml_param['Correlations'] = []

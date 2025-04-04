@@ -1,99 +1,109 @@
+---
 SampleName: "FHC_nue"
 SampleType: "BeamFD"
+
 POT: 1.3628319e+23
+MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes.yaml"
+DetID: "FD"
+
 SelectionCuts:
   - KinematicStr: "TrueXPos"
-    Bounds: [ -310.0, 310.0 ]
+    Bounds: [-310.0, 310.0]
   - KinematicStr: "TrueYPos"
-    Bounds: [ -550.0, 550.0 ]
+    Bounds: [-550.0, 550.0]
   - KinematicStr: "TrueZPos"
-    Bounds: [ 50.0, 1244.0 ]
+    Bounds: [50.0, 1244.0]
   - KinematicStr: "CVNNue"
-    Bounds: [ 0.85, 999. ]
+    Bounds: [0.85, 999.]
+
 Binning:
-  XVarStr: "RecoNeutrinoEnergy" 
-  XVarBins: [0.,  0.5,  1.,  1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
+  XVarStr: "RecoNeutrinoEnergy"
+  XVarBins: [0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
+
 DUNESampleBools:
   iselike: yes
+  isFHC: 1
+
 InputFiles:
   mtupleprefix: "inputs/DUNE_CAF_files/FD_FHC_ger_"
   mtuplesuffix: "_nueselec.root"
   splineprefix: "inputs/DUNE_spline_files/FD_FHC_ger_"
   splinesuffix: "_nueselec_splines.root"
-DetID: 24
+
 NuOsc:
   NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
-NSubSamples: 12
+  EqualBinningPerOscChannel: false
+
 SubSamples:
-  - name: "FHC_numu_x_numu"
+  - Name: "FHC_numu_x_numu"
+    LatexName: "FHC_numu_x_numu"
     mtuplefile: "numu_x_numu"
     splinefile: "numu_x_numu"
-    samplevecno: 0
     nutype: 14
     oscnutype: 14
-  - name: "FHC_nue_x_nue"
+  - Name: "FHC_nue_x_nue"
+    LatexName: "FHC_nue_x_nue"
     mtuplefile: "nue_x_nue"
     splinefile: "nue_x_nue"
-    samplevecno: 1
     nutype: 12
     oscnutype: 12
-  - name: "FHC_numubar_x_numubar"
+  - Name: "FHC_numubar_x_numubar"
+    LatexName: "FHC_numubar_x_numubar"
     mtuplefile: "numubar_x_numubar"
     splinefile: "numubar_x_numubar"
-    samplevecno: 2
     nutype: -14
     oscnutype: -14
-  - name: "FHC_nuebar_x_nuebar"
+  - Name: "FHC_nuebar_x_nuebar"
+    LatexName: "FHC_nuebar_x_nuebar"
     mtuplefile: "nuebar_x_nuebar"
     splinefile: "nuebar_x_nuebar"
-    samplevecno: 3
     nutype: -12
     oscnutype: -12
-  - name: "FHC_numu_x_nue"
+  - Name: "FHC_numu_x_nue"
+    LatexName: "FHC_numu_x_nue"
     mtuplefile: "numu_x_nue"
     splinefile: "numu_x_nue"
-    samplevecno: 4
     nutype: 14
     oscnutype: 12
-  - name: "FHC_numubar_x_nuebar"
+  - Name: "FHC_numubar_x_nuebar"
+    LatexName: "FHC_numubar_x_nuebar"
     mtuplefile: "numubar_x_nuebar"
     splinefile: "numubar_x_nuebar"
-    samplevecno: 5
     nutype: -14
-    oscnutype: -12 
-  - name: "FHC_nue_x_numu"
+    oscnutype: -12
+  - Name: "FHC_nue_x_numu"
+    LatexName: "FHC_nue_x_numu"
     mtuplefile: "nue_x_numu"
     splinefile: "nue_x_numu"
-    samplevecno: 6
     nutype: 12
     oscnutype: 14
-  - name: "FHC_nuebar_x_numubar"
+  - Name: "FHC_nuebar_x_numubar"
+    LatexName: "FHC_nuebar_x_numubar"
     mtuplefile: "nuebar_x_numubar"
     splinefile: "nuebar_x_numubar"
-    samplevecno: 7
     nutype: -12
     oscnutype: -14
-  - name: "FHC_numu_x_nutau"
+  - Name: "FHC_numu_x_nutau"
+    LatexName: "FHC_numu_x_nutau"
     mtuplefile: "numu_x_nutau"
     splinefile: "numu_x_nutau"
-    samplevecno: 8
     nutype: 14
     oscnutype: 16
-  - name: "FHC_nue_x_nutau"
+  - Name: "FHC_nue_x_nutau"
+    LatexName: "FHC_nue_x_nutau"
     mtuplefile: "nue_x_nutau"
     splinefile: "nue_x_nutau"
-    samplevecno: 9
     nutype: 12
     oscnutype: 16
-  - name: "FHC_numubar_x_nutaubar"
+  - Name: "FHC_numubar_x_nutaubar"
+    LatexName: "FHC_numubar_x_nutaubar"
     mtuplefile: "numubar_x_nutaubar"
     splinefile: "numubar_x_nutaubar"
-    samplevecno: 10
     nutype: -14
     oscnutype: -16
-  - name: "FHC_nuebar_x_nutaubar"
+  - Name: "FHC_nuebar_x_nutaubar"
+    LatexName: "FHC_nuebar_x_nutaubar"
     mtuplefile: "nuebar_x_nutaubar"
     splinefile: "nuebar_x_nutaubar"
-    samplevecno: 11
     nutype: -12
     oscnutype: -16

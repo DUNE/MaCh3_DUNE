@@ -1,14 +1,20 @@
 #include "samplePDFDUNEBeamND.h"
-
-//Standard Record includes
 #include "duneanaobj/StandardRecord/StandardRecord.h"
-
-//ROOT includes
 #include "TError.h"
 
-samplePDFDUNEBeamND::samplePDFDUNEBeamND(std::string mc_version_, covarianceXsec* xsec_cov_, covarianceOsc* osc_cov_) : samplePDFFDBase(mc_version_, xsec_cov_, osc_cov_) {  
-  Initialise();
-}
+//Here nullptr is passed instead of OscCov to prevent oscillation calculations from being performed for the ND Samples
+samplePDFDUNEBeamND::samplePDFDUNEBeamND(std::string mc_version_, covarianceXsec* xsec_cov_,  TMatrixD* nd_cov_, covarianceOsc* osc_cov_=nullptr) : samplePDFFDBase(mc_version_, xsec_cov_, osc_cov_) {
+  OscCov = nullptr;
+  
+  if(!nd_cov_){
+    MACH3LOG_ERROR("You've passed me a nullptr to a ND covarince matrix... ");
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  
+  NDCovMatrix = nd_cov_;
+
+  KinematicParameters = &KinematicParametersDUNE;
+  ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
 
 samplePDFDUNEBeamND::~samplePDFDUNEBeamND() {
 }
@@ -16,9 +22,9 @@ samplePDFDUNEBeamND::~samplePDFDUNEBeamND() {
 void samplePDFDUNEBeamND::Init() {
   dunendmcSamples.resize(nSamples,dunemc_base());
   
-  IsRHC = SampleManager->raw()["SampleBools"]["isrhc"].as<bool>();
-  SampleDetID = SampleManager->raw()["DetID"].as<int>();
-  IsELike = SampleManager->raw()["SampleBools"]["iselike"].as<bool>();
+  IsFHC = SampleManager->raw()["DUNESampleBools"]["isFHC"].as<double>();
+  IsELike = SampleManager->raw()["DUNESampleBools"]["iselike"].as<bool>();
+  pot = SampleManager->raw()["POT"].as<double>();
 
   tot_escale_nd_pos = -999;
   tot_escale_sqrt_nd_pos = -999;
@@ -48,7 +54,7 @@ void samplePDFDUNEBeamND::SetupSplines() {
   ///@todo move all of the spline setup into core
   if(XsecCov->GetNumParamsFromDetID(SampleDetID, kSpline) > 0){
     MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", XsecCov->GetNumParamsFromDetID(SampleDetID, kSpline));
-    SplineHandler = std::unique_ptr<splineFDBase>(new splinesDUNE(XsecCov));
+    SplineHandler = std::unique_ptr<splineFDBase>(new splinesDUNE(XsecCov,Modes));
     InitialiseSplineObject();
   }
   else{
@@ -60,7 +66,7 @@ void samplePDFDUNEBeamND::SetupSplines() {
 }
 
 void samplePDFDUNEBeamND::SetupWeightPointers() {
-  for (int i = 0; i < (int)dunendmcSamples.size(); ++i) {
+  for (size_t i = 0; i < dunendmcSamples.size(); ++i) {
     for (int j = 0; j < dunendmcSamples[i].nEvents; ++j) {
       MCSamples[i].ntotal_weight_pointers[j] = 5;
       MCSamples[i].total_weight_pointers[j].resize(MCSamples[i].ntotal_weight_pointers[j]);
@@ -91,6 +97,24 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   TTree* Tree = File->Get<TTree>("cafTree");
   if (!Tree){
     MACH3LOG_ERROR("Did not find Tree::cafTree in File: {}",FileName);
+
+  dunemc_base *duneobj = &(dunendmcSamples[iSample]);
+  
+  MACH3LOG_INFO("-------------------------------------------------------------------");
+  MACH3LOG_INFO("input file: {}", mc_files.at(iSample));
+  
+  //_sampleFile = TFile::Open(mc_files.at(iSample).c_str(), "READ");
+  //_data = _sampleFile->Get<TTree>("caf");
+
+  TChain* _data = new TChain("caf");
+  _data->Add(mc_files.at(iSample).c_str());
+
+  if(_data){
+    MACH3LOG_INFO("Found \"caf\" tree in {}", mc_files[iSample]);
+    MACH3LOG_INFO("With number of entries: {}", _data->GetEntries());
+  }
+  else{
+    MACH3LOG_ERROR("Could not find \"caf\" tree in {}", mc_files[iSample]);
     throw MaCh3Exception(__FILE__, __LINE__);
   }
   
@@ -104,14 +128,14 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   Tree->SetBranchStatus("*", 1);
   Tree->SetBranchAddress("rec", &sr);
 
-  if (!IsRHC) { 
+  if (IsFHC) { 
     duneobj->norm_s = (1e21/1.5e21);
   } else {
     duneobj->norm_s = (1e21/1.905e21);
   }
   duneobj->pot_s = 1;
 
-  duneobj->nEvents = Tree->GetEntries();
+  duneobj->nEvents = static_cast<int>(Tree->GetEntries());
   duneobj->rw_isCC = new int[duneobj->nEvents];
   duneobj->rw_iscontained = new int[duneobj->nEvents];
   duneobj->nupdg = new int[duneobj->nEvents];
@@ -554,7 +578,7 @@ const double* samplePDFDUNEBeamND::GetPointerToKinematicParameter(KinematicTypes
 }
 
 const double* samplePDFDUNEBeamND::GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent) {
-  KinematicTypes KinPar = (KinematicTypes) std::round(KinematicVariable);
+  KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
   return GetPointerToKinematicParameter(KinPar,iSample,iEvent);
 }
 
@@ -620,9 +644,9 @@ void samplePDFDUNEBeamND::setupFDMC(int iSample) {
 
 void samplePDFDUNEBeamND::applyShifts(int iSample, int iEvent) {
   // reset erec back to original value
-  
   dunendmcSamples[iSample].rw_erec_shifted[iEvent] = dunendmcSamples[iSample].rw_erec[iEvent];
 
+  /*
   //Calculate values needed
   double sqrtErecHad =  sqrt(dunendmcSamples[iSample].rw_erec_had[iEvent]);
   double sqrtErecLep =  sqrt(dunendmcSamples[iSample].rw_erec_lep[iEvent]);
@@ -637,20 +661,169 @@ void samplePDFDUNEBeamND::applyShifts(int iSample, int iEvent) {
   double invSqrteRecoN =  1/(sqrteRecoN+0.1);
   double invSqrtSumEhad =  1/(sqrtSumEhad+0.1);
 
-  bool CCnumu {dunendmcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunendmcSamples[iSample].nupdg[iEvent])==14 && dunendmcSamples[iSample].nupdgUnosc[iEvent]==2};
-  bool CCnue {dunendmcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunendmcSamples[iSample].nupdg[iEvent])==12 && dunendmcSamples[iSample].nupdgUnosc[iEvent]==1};
-  bool NotCCnumu {!(dunendmcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunendmcSamples[iSample].nupdg[iEvent])==14) && dunendmcSamples[iSample].nupdgUnosc[iEvent]==2};
+  bool CCnumu {dunendmcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunendmcSamples[iSample].rw_nuPDG[iEvent])==14 && dunendmcSamples[iSample].nupdgUnosc[iEvent]==2};
+  bool CCnue {dunendmcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunendmcSamples[iSample].rw_nuPDG[iEvent])==12 && dunendmcSamples[iSample].nupdgUnosc[iEvent]==1};
+  bool NotCCnumu {!(dunendmcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunendmcSamples[iSample].rw_nuPDG[iEvent])==14) && dunendmcSamples[iSample].nupdgUnosc[iEvent]==2};
+
+
+  TotalEScaleND(NDDetectorSystPointers[0], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_erec_had[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], NotCCnumu);
+
+  TotalEScaleSqrtND(NDDetectorSystPointers[1], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_erec_had[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], sqrtErecHad, sqrtErecLep, NotCCnumu);
+
+  TotalEScaleInvSqrtND(NDDetectorSystPointers[2], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_erec_had[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], invSqrtErecHad, invSqrtErecLep, NotCCnumu);
+
+  HadEScaleND(NDDetectorSystPointers[3], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], sumEhad);
+
+  HadEScaleSqrtND(NDDetectorSystPointers[4], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], sumEhad, sqrtSumEhad);
+
+  HadEScaleInvSqrtND(NDDetectorSystPointers[5], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], sumEhad, invSqrtSumEhad);
+
+  MuEScaleND(NDDetectorSystPointers[6], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], CCnumu);
+
+  MuEScaleSqrtND(NDDetectorSystPointers[7], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], sqrtErecLep, CCnumu);
+
+  MuEScaleInvSqrtND(NDDetectorSystPointers[8], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], invSqrtErecLep, CCnumu);
+
+  NEScaleND(NDDetectorSystPointers[9], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoN[iEvent]);
+
+  NEScaleSqrtND(NDDetectorSystPointers[10], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoN[iEvent], sqrteRecoN);
+
+  NEScaleInvSqrtND(NDDetectorSystPointers[11], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoN[iEvent], invSqrteRecoN);
+
+  EMEScaleND(NDDetectorSystPointers[12], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoPi0[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], CCnue);
+
+  EMEScaleSqrtND(NDDetectorSystPointers[13], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoPi0[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], sqrtErecLep, sqrteRecoPi0, CCnue);
+
+  EMEScaleInvSqrtND(NDDetectorSystPointers[14], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoPi0[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], invSqrtErecLep, invSqrteRecoPi0, CCnue);
+
+  HadResND(NDDetectorSystPointers[15], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoP[iEvent], dunendmcSamples[iSample].rw_eRecoPip[iEvent], dunendmcSamples[iSample].rw_eRecoPim[iEvent], dunendmcSamples[iSample].rw_eP[iEvent], dunendmcSamples[iSample].rw_ePip[iEvent], dunendmcSamples[iSample].rw_ePim[iEvent]);
+
+  MuResND(NDDetectorSystPointers[16], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], dunendmcSamples[iSample].rw_LepE[iEvent], CCnumu);
+
+  NResND(NDDetectorSystPointers[17], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoN[iEvent], dunendmcSamples[iSample].rw_eN[iEvent]);
+
+  EMResND(NDDetectorSystPointers[18], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoPi0[iEvent], dunendmcSamples[iSample].rw_ePi0[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], dunendmcSamples[iSample].rw_LepE[iEvent], CCnue);
+  */
+}
+
+std::vector<double> samplePDFDUNEBeamND::ReturnKinematicParameterBinning(std::string KinematicParameterStr) {
+  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameterStr));
+  std::vector<double> ReturnVec;
+
+  switch (KinPar) {
+
+  case kIsFHC:
+    ReturnVec.resize(3);
+    ReturnVec[0] = -0.5;
+    ReturnVec[1] = 0.5;
+    ReturnVec[2] = 1.5;
+    break;
+    
+  case kTrueNeutrinoEnergy:
+    for (int i=0;i<20;i++) {
+      ReturnVec.emplace_back(i);
+    }
+    ReturnVec.emplace_back(100.);
+    ReturnVec.emplace_back(1000.);
+    break;
+
+  case kRecoNeutrinoEnergy:
+    ReturnVec.resize(XBinEdges.size());
+    for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
+    break;
+
+  case kyRec:
+    ReturnVec.resize(YBinEdges.size());
+    for (unsigned int bin_i=0;bin_i<YBinEdges.size();bin_i++) {ReturnVec[bin_i] = YBinEdges[bin_i];}
+    break;
+
+  case kOscChannel:
+    ReturnVec.resize(GetNsamples());
+    for (int bin_i=0;bin_i<GetNsamples();bin_i++) {ReturnVec[bin_i] = bin_i;}
+    break;
+
+  case kMode:
+    ReturnVec.resize(Modes->GetNModes());
+    for (int bin_i=0;bin_i<Modes->GetNModes();bin_i++) {ReturnVec[bin_i] = bin_i;}
+    break;
+
+  default:
+    MACH3LOG_ERROR("Unknown KinPar: {}",static_cast<int>(KinPar));
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+
+  return ReturnVec;
+}
+
+// Set the covariance matrix for this class
+void samplePDFDUNEBeamND::setNDCovMatrix() {
+  if (NDCovMatrix == NULL) {
+    std::cerr << "Could not find ND Detector covariance matrix you provided to setCovMatrix" << std::endl;
+    std::cerr << __FILE__ << ":" << __LINE__ << std::endl;
+    throw;
+  }
+
+  int nXBins = static_cast<int>(XBinEdges.size()-1);
+  int nYBins = static_cast<int>(YBinEdges.size()-1);
+  int covSize = nXBins*nYBins;
+
+  if (covSize != NDCovMatrix->GetNrows()) {
+    std::cerr << "Sample dimensions do not match ND Detector Covariance!" << std::endl;
+    std::cerr << "Sample XBins * YBins = " << covSize  << std::endl;
+    std::cerr << "ND Detector Covariance = " << NDCovMatrix->GetNrows() << std::endl;
+    std::cerr << __FILE__ << ":" << __LINE__ << std::endl;
+    throw;
+  }
+  
+  std::vector<double> FlatCV;
+  int iter = 0;
+
+  // 2D -> 1D Array
+  for (int xBin = 0; xBin < nXBins; xBin++) 
+  {
+    for (int yBin = 0; yBin < nYBins; yBin++) 
+    {
+        double CV = samplePDFFD_data[yBin][xBin];
+        FlatCV.push_back(CV);
+
+        if(CV>0) (*NDCovMatrix)(iter,iter) += 1/CV;
+
+	    iter++;
+	}
+  }
+
+  NDInvertCovMatrix = new double*[covSize]();
+  // Set the defaults to true
+  for(int i = 0; i < covSize; i++)
+  {
+    NDInvertCovMatrix[i] = new double[covSize]();
+    for (int j = 0; j < covSize; j++)
+    {
+        NDInvertCovMatrix[i][j] = 0.;
+    }
+  }
+
+  TMatrixD* NDInvCovMatrix=static_cast<TMatrixD*>(NDCovMatrix->Clone());
+  NDInvCovMatrix->Invert();
+
+ 
+  //Scale back to inverse absolute cov and use standard double
+  for (int i = 0; i < covSize; i++) {
+    for (int j = 0; j < covSize; ++j) {
+      const double f = FlatCV[i] * FlatCV[j];
+      if(f != 0) NDInvertCovMatrix[i][j] = (*NDInvCovMatrix)(i,j)/f;
+      else NDInvertCovMatrix[i][j] = 0.;
+	}
+  }
 
 }
 
-std::vector<double> samplePDFDUNEBeamND::ReturnKinematicParameterBinning(std::string KinematicParameterStr) 
+//New likelihood calculation for ND samples using detector covariance matrix
+double samplePDFDUNEBeamND::GetLikelihood()
 {
-  std::vector<double> binningVector;
-  return binningVector;
-}
-
-int samplePDFDUNEBeamND::ReturnKinematicParameterFromString(std::string KinematicParameterStr) {
-
+  if (samplePDFFD_data == NULL) {
+      std::cerr << "data sample is empty!" << std::endl;
+    
   if(KinematicParameterStr == "TrueNeutrinoEnergy") return kTrueNeutrinoEnergy;
   if(KinematicParameterStr == "RecoQ") return kRecoQ;
   if(KinematicParameterStr == "RecoNeutrinoEnergy") return kRecoNeutrinoEnergy;
@@ -673,8 +846,54 @@ int samplePDFDUNEBeamND::ReturnKinematicParameterFromString(std::string Kinemati
   if(KinematicParameterStr == "StartZ") return kStartZ;
 
   return -1;
-}
+  }
 
+  //if (NDInvertCovMatrix == NULL) {
+  //setNDCovMatrix();
+  //}
+
+  if (!isNDCovSet) {
+    setNDCovMatrix();
+    isNDCovSet = true;
+  }
+
+  int nXBins = static_cast<int>(XBinEdges.size()-1);
+  int nYBins = static_cast<int>(YBinEdges.size()-1);
+
+  int covSize = nXBins*nYBins;
+
+  std::vector<double> FlatData;
+  std::vector<double> FlatMCPred;
+
+  //2D -> 1D 
+  for (int xBin = 0; xBin < nXBins; xBin++) 
+  {
+    for (int yBin = 0; yBin < nYBins; yBin++) 
+    {
+        double MCPred = samplePDFFD_array[yBin][xBin];
+        FlatMCPred.push_back(MCPred);
+
+        double DataVal = samplePDFFD_data[yBin][xBin];
+        FlatData.push_back(DataVal);
+    }
+  }
+
+
+  double negLogL = 0.;
+#ifdef MULTITHREAD
+#pragma omp parallel for reduction(+:negLogL)
+#endif
+
+  for (int i = 0; i < covSize; i++) {
+    for (int j = 0; j <= i; ++j) {
+        //KS: Since matrix is symetric we can calcaute non daigonal elements only once and multiply by 2, can bring up to factor speed decrease.   
+        int scale = 1;
+        if(i != j) scale = 2;
+        negLogL += scale * 0.5*(FlatData[i] - FlatMCPred[i])*(FlatData[j] - FlatMCPred[j])*NDInvertCovMatrix[i][j];
+      }
+  }
+
+  return negLogL;
 std::string samplePDFDUNEBeamND::ReturnStringFromKinematicParameter(int KinematicParameter) {
   switch(KinematicParameter){
     case kTrueNeutrinoEnergy: return "TrueNeutrinoEnergy";

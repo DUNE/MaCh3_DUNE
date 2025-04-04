@@ -120,7 +120,7 @@ endif()
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
-find_package(MaCh3 1.3.5 EXACT QUIET)
+find_package(MaCh3 1.4.8 EXACT QUIET)
 
 if(NOT MaCh3_FOUND)
   cmessage(STATUS "Didn't find MaCh3, attempting to use built in MaCh3")
@@ -151,7 +151,7 @@ if(NOT MaCh3_FOUND)
   
   CPMAddPackage(
       NAME MaCh3
-      GIT_TAG "v1.3.5"
+      GIT_TAG "v1.4.8"
       GITHUB_REPOSITORY mach3-software/MaCh3
   )
 else()
@@ -168,12 +168,11 @@ if(NOT TARGET MaCh3::All)
 endif()
 
 ############################  C++ Compiler  ####################################
-if (NOT DEFINED CMAKE_CXX_STANDARD OR "${CMAKE_CXX_STANDARD} " STREQUAL " ")
+get_property(MACH3_CXX_STANDARD GLOBAL PROPERTY MACH3_CXX_STANDARD)
+if(NOT DEFINED MACH3_CXX_STANDARD)
   SET(CMAKE_CXX_STANDARD 14)
-endif()
-
-if(DEFINED ROOT_CXX_STANDARD AND ROOT_CXX_STANDARD GREATER CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD ${ROOT_CXX_STANDARD})
+else()
+  SET(CMAKE_CXX_STANDARD ${MACH3_CXX_STANDARD})
 endif()
 cmessage(STATUS "CMAKE CXX Standard: ${CMAKE_CXX_STANDARD}")
 
@@ -181,6 +180,7 @@ cmessage(STATUS "CMAKE CXX Standard: ${CMAKE_CXX_STANDARD}")
 add_library(DUNEMaCh3Warnings INTERFACE)
 
 target_compile_options(DUNEMaCh3Warnings INTERFACE
+  -Werror                 # Treat Warnings as Errors
   -Wextra                 # Enable extra warning flags
   -Wall                   # Enable all standard warning flags
   -Wshadow                # Warn when a variable declaration shadows one from an outer scope
@@ -197,7 +197,7 @@ target_compile_options(DUNEMaCh3Warnings INTERFACE
   -Wconversion            # Warn on type conversions that may lose data
   -Wformat-security       # Warn on functions that are potentially insecure for formatting
   -Walloca                # Warn if `alloca` is used, as it can lead to stack overflows
-  #-Wswitch-enum           # Warn if a `switch` statement on an enum does not cover all values
+  -Wswitch-enum           # Warn if a `switch` statement on an enum does not cover all values
   #-Wfloat-equal          # Warn if floating-point values are compared directly
   #-Wpadded               # Warn when padding is added to a structure or class for alignment
 )
@@ -230,7 +230,7 @@ set_target_properties(MaCh3DUNECompilerOptions PROPERTIES EXPORT_NAME CompilerOp
 
 target_include_directories(MaCh3DUNECompilerOptions
   INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/Apps>
     $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
     $<INSTALL_INTERFACE:include>)
 
@@ -240,7 +240,14 @@ install(TARGETS MaCh3DUNECompilerOptions
 
 add_subdirectory(splines)
 add_subdirectory(samplePDFDUNE)
-add_subdirectory(src)
+add_subdirectory(Apps)
+
+
+# Do we want to build our integration tests?
+if(DEFINED MACH3_BUILD_TESTS AND MACH3_BUILD_TESTS)
+  add_subdirectory(tests)
+endif()
+
 
 add_library(MaCh3DUNEAll INTERFACE)
 set_target_properties(MaCh3DUNEAll PROPERTIES EXPORT_NAME All)

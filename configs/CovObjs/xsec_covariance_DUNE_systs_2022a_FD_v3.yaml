@@ -1,6 +1,7 @@
+---
 Systematics:
 - Systematic:
-    DetID: 24
+    DetID: ["ATM"]
     Error: 0.123224219401
     FlatPrior: false
     KinematicCuts:

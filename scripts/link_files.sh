@@ -6,6 +6,8 @@ MACH3DIR=`pwd`
 #FILESDIR=/vols/t2k/users/ljw20/data/DUNE_2021/DUNE_2021_splines_tdr_v8
 FILESDIR=/vols/dune/tta20/CAF_example
 
+mkdir -p "$MACH3DIR/inputs"
+
 if [ ! -d "$MACH3DIR/inputs/DUNE_CAF_files" ]
 then
   mkdir $MACH3DIR/inputs/DUNE_CAF_files
