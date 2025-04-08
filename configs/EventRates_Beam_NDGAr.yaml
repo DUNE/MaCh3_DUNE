@@ -207,31 +207,31 @@ General:
       }
     ]
   },
-#  {
-#    "Name": "Particle_PDG_Accepted",
-#    "VarStrings": ["Particle_PDG"],
-#    "VarBins": [[6444,-3222.5,3222.5]],
-#    "KinematicCuts": [
-#      {
-#        "Range": [1.,2.],
-#        "Name": "InFDV",
-#        "VarString": "InFDV"
-#      },
-#      {
-#        "Range": [1.,2.],
-#        "Name": "IsCC",
-#        "VarString": "IsCC"
-#      },
-#      {
-#        "Range": [1.,5.],
-#        "Name": "Enu",
-#        "VarString": "TrueNeutrinoEnergy"
-#      },
-#      {
-#        "Range": [1.,2.],
-#        "Name": "Accepted",
-#        "VarString": "Particle_IsAccepted"
-#      }
-#    ]
-#  },
+  {
+    "Name": "Particle_PDG_Accepted",
+    "VarStrings": ["Particle_PDG"],
+    "VarBins": [[6444,-3222.5,3222.5]],
+    "KinematicCuts": [
+      {
+        "Range": [1.,2.],
+        "Name": "InFDV",
+        "VarString": "InFDV"
+      },
+      {
+        "Range": [1.,2.],
+        "Name": "IsCC",
+        "VarString": "IsCC"
+      },
+      {
+        "Range": [1.,5.],
+        "Name": "Enu",
+        "VarString": "TrueNeutrinoEnergy"
+      },
+      {
+        "Range": [1.,2.],
+        "Name": "Accepted",
+        "VarString": "Particle_IsAccepted"
+      }
+    ]
+  },
 ]

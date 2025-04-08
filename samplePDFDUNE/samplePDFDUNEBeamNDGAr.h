@@ -58,6 +58,8 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 		double CalcBeta(double p_mag, double& bg, double& gamma);
 		double GetMass(int partpdg);
 		bool IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, int i_truepart, double pixel_spacing_cm);
+
+		TH1* get1DParticleVarHist(std::string ProjectionVar_StrX, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX) override;
 		TH2* get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY) override;
 		bool IsParticleSelected(const int iSample, const int iEvent, const int iParticle);
 		std::vector<struct dunemc_base> dunendgarmcSamples;

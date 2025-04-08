@@ -512,7 +512,7 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
 		_data->SetBranchAddress("SimHitEnergy", &_SimHitEnergy);
 	}
 	duneobj->norm_s = 1.;
-	double downsampling = 0.01;
+	double downsampling = 1;
 	duneobj->pot_s = pot/(downsampling*1e21);
 	duneobj->nEvents = static_cast<int>(std::round(downsampling*static_cast<double>(_data->GetEntries())));
 
@@ -956,6 +956,66 @@ std::vector<double> samplePDFDUNEBeamNDGAr::ReturnKinematicParameterBinning(Kine
 	}
 
 	return binningVector;
+}
+
+TH1* samplePDFDUNEBeamNDGAr::get1DParticleVarHist(std::string ProjectionVar_Str, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* Axis) {
+  //DB Grab the associated enum with the argument string
+  int ProjectionVar_Int = ReturnKinematicParameterFromString(ProjectionVar_Str);
+
+  //DB Need to overwrite the Selection member variable so that IsEventSelected function operates correctly.
+  //   Consequently, store the selection cuts already saved in the sample, overwrite the Selection variable, then reset
+  std::vector< std::vector<double> > tmp_Selection = Selection;
+  std::vector< std::vector<double> > SelectionVecToApply;
+
+  //DB Add all the predefined selections to the selection vector which will be applied
+  for (size_t iSelec=0;iSelec<Selection.size();iSelec++) {
+    SelectionVecToApply.emplace_back(Selection[iSelec]);
+  }
+
+  //DB Add all requested cuts from the argument to the selection vector which will be applied
+  for (size_t iSelec=0;iSelec<SelectionVec.size();iSelec++) {
+    SelectionVecToApply.emplace_back(SelectionVec[iSelec]);
+  }
+
+	//DB Check the formatting of all requested cuts, should be [cutPar,lBound,uBound]
+  for (size_t iSelec=0;iSelec<SelectionVecToApply.size();iSelec++) {
+    if (SelectionVecToApply[iSelec].size()!=3) {
+      MACH3LOG_ERROR("Selection Vector[{}] is not formed correctly. Expect size == 3, given: {}",iSelec,SelectionVecToApply[iSelec].size());
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+  }
+
+  //DB Set the member variable to be the cuts to apply
+  Selection = SelectionVecToApply;
+
+  //DB Define the histogram which will be returned
+  TH1D* _h1DVar;
+  if (Axis) {
+    _h1DVar = new TH1D("","",Axis->GetNbins(),Axis->GetXbins()->GetArray());
+  } else {
+    std::vector<double> xBinEdges = ReturnKinematicParameterBinning(ProjectionVar_Str);
+    _h1DVar = new TH1D("", "", int(xBinEdges.size())-1, xBinEdges.data());
+  }
+
+  //Loop over all particles
+  for (int iSample=0;iSample<getNMCSamples();iSample++) {
+		for (int iParticle=0;iParticle<nparticlesinsample[iSample];iParticle++) {
+      int event = static_cast<int>(std::round(ReturnKinematicParameter("Particle_Event", iSample, iParticle)));
+      if (IsParticleSelected(iSample,event,iParticle)) {
+        double Weight = GetEventWeight(iSample,event);
+        if (WeightStyle==1) {
+          Weight = 1.;
+        }
+        double Var = ReturnKinematicParameter(ProjectionVar_Int,iSample,event);
+        _h1DVar->Fill(Var,Weight);
+      }
+    }
+  }
+
+  //DB Reset the saved selection
+  Selection = tmp_Selection;
+
+  return _h1DVar;
 }
 
 TH2* samplePDFDUNEBeamNDGAr::get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY) {
