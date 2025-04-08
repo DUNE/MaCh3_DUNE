@@ -26,7 +26,7 @@ cd build
 Then perform the cmake build command:
 
 ```bash
-cmake .. -DCUDAProb3_ENABLED=[ON,OFF] -DCUDAProb3Linear_ENABLED=[ON,OFF]
+cmake .. -DBuild_NDGAr=ON
 make install
 ```
 
