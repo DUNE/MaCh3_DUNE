@@ -173,6 +173,14 @@ double samplePDFDUNEBeamNDGAr::GetMass(int partpdg){
 			mass = 1.197449; break;
 		case 3212: //sig0
 			mass = 1.192642; break;
+		case 130: //K_l
+		case 310: //K_s
+			mass = 0.497611; break;
+		case 12: //nue
+		case 14: //numu
+		case 16: //nutau
+		case 22: //gamma
+			mass = 0.; break;
 		case 1000180400: //Ar40 
 			mass = 37.27272; break;
 		case 1000060120: //C12
@@ -189,14 +197,6 @@ double samplePDFDUNEBeamNDGAr::GetMass(int partpdg){
 			mass = 26.19938; break;
 		case 1000070140: //N14
 			mass = 13043.78; break;
-		case 130: //K_l
-		case 310: //K_s
-			mass = 0.497611; break;
-		case 12: //nue
-		case 14: //numu
-		case 16: //nutau
-		case 22: //gamma
-			mass = 0.; break;
 		default:
 			MACH3LOG_INFO("Particle mass not assigned: PDG = {}", partpdg);
 			break;
@@ -211,7 +211,7 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
 
 	bool isAccepted = true;
 	int nummatched = 0;
-  int pdgcaf = sr->mc.nu[0].prim[i_truepart].pdg;
+	int pdgcaf = sr->mc.nu[0].prim[i_truepart].pdg;
 	//Loop through particles in anatree
 	for(unsigned int i_anapart =0; i_anapart<_MCPStartPX->size(); i_anapart++){
 
@@ -223,15 +223,10 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
 			continue;
 		}
 		nummatched++;
-	
-  	//Ignore neutrons and neutrinos
-		double start_radius =pow((pow(_MCPStartY->at(i_anapart)-TPC_centre_y, 2)+pow(_MCPStartZ->at(i_anapart)-TPC_centre_z, 2)), 0.5);
-		if(std::abs(pdgcaf) == 2112 || std::abs(pdgcaf) == 14 || std::abs(pdgcaf) == 12 /*||
-			(std::abs(_MCPStartX->at(i_anapart))-TPC_centre_x)>=TPCFidLength || start_radius>=TPCFidRadius*/){
-			continue;
-		}
-		
+
+
 		//Determine if stopped in ecal length/radius
+		double start_radius =pow((pow(_MCPStartY->at(i_anapart)-TPC_centre_y, 2)+pow(_MCPStartZ->at(i_anapart)-TPC_centre_z, 2)), 0.5);
 		bool stopsinecal_radius = false;
 		bool stopsinecal_length = false;
 		double end_radius = pow((pow(_MCPEndY->at(i_anapart)-TPC_centre_y, 2)+pow(_MCPEndZ->at(i_anapart)-TPC_centre_z, 2)), 0.5);
@@ -265,6 +260,12 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
 		duneobj->particle_momrestrans->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
 		duneobj->particle_ecaldepositfraction->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
 		nparticlesinsample[i_sample]++;
+
+		//Ignore neutrons and neutrinos
+		if(std::abs(pdgcaf) == 2112 || std::abs(pdgcaf) == 14 || std::abs(pdgcaf) == 12 
+				/*||(std::abs(_MCPStartX->at(i_anapart))-TPC_centre_x)>=TPCFidLength || start_radius>=TPCFidRadius*/){
+			continue;
+		}
 
 		//If particle is not stopped in the tpc or ecal 
 		if((std::abs(end_length)>TPCInstrumentedLength && !stopsinecal_length) || (end_radius>TPCInstrumentedRadius && !stopsinecal_radius)){
@@ -514,7 +515,7 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
 	double downsampling = 0.01;
 	duneobj->pot_s = pot/(downsampling*1e21);
 	duneobj->nEvents = static_cast<int>(std::round(downsampling*static_cast<double>(_data->GetEntries())));
-	
+
 	// allocate memory for dunendgarmc variables
 	duneobj->rw_yrec = new double[duneobj->nEvents];
 	duneobj->rw_elep_reco = new double[duneobj->nEvents];
@@ -604,13 +605,14 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
 	duneobj->particle_momrestrans= new std::vector<double>;
 	duneobj->particle_momrestrans->reserve(7*duneobj->nEvents);
 
-	int num_no_ixns =0;
+	int numCC = 0;
+	int num_no_ixns = 0;
 	int num_no_recparticles = 0;
 	int num_in_fdv = 0;
 	int num_in_fdv_noreco = 0;
-	int num_notin_fdv =0;
-	int num_nanenergy =0;
-	int num_nanparticles =0;
+	int num_notin_fdv = 0;
+	int num_nanenergy = 0;
+	int num_nanparticles = 0;
 
 	double pixel_spacing_cm = pixel_spacing/10; //convert to cm
 	makePixelGrid(pixel_spacing_cm); //make square pixel grid and fill vectors with y and z pixel boundaries	
@@ -699,6 +701,9 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
 		duneobj->npip[i_event] = sr->mc.nu[0].npip;
 		duneobj->npim[i_event] = sr->mc.nu[0].npim;
 		duneobj->npi0[i_event] = sr->mc.nu[0].npi0;
+		duneobj->rw_vtx_x[i_event] = static_cast<double>(sr->mc.nu[0].vtx.x);
+		duneobj->rw_vtx_y[i_event] = static_cast<double>(sr->mc.nu[0].vtx.y);
+		duneobj->rw_vtx_z[i_event] = static_cast<double>(sr->mc.nu[0].vtx.z);
 
 		double muonenergy = 0.;
 		bool isEventAccepted = true;
@@ -735,12 +740,8 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
 		}
 
 		duneobj->nmuonsratio[i_event] = static_cast<double>(duneobj->nrecomuon[i_event])/static_cast<double>(duneobj->ntruemuonprim[i_event]);
-		duneobj->rw_vtx_x[i_event] = static_cast<double>(sr->mc.nu[0].vtx.x);
-		duneobj->rw_vtx_y[i_event] = static_cast<double>(sr->mc.nu[0].vtx.y);
-		duneobj->rw_vtx_z[i_event] = static_cast<double>(sr->mc.nu[0].vtx.z);
-
-		duneobj->rw_rad[i_event] = pow((pow((duneobj->rw_vtx_y[i_event]+150),2) + pow((duneobj->rw_vtx_z[i_event]-1486),2)),0.5);
-		duneobj->rw_reco_rad[i_event] = pow(pow((duneobj->rw_reco_vtx_y[i_event]+150),2) + pow((duneobj->rw_reco_vtx_z[i_event]-1486), 2), 0.5);
+		duneobj->rw_rad[i_event] = pow((pow((duneobj->rw_vtx_y[i_event]-TPC_centre_y),2) + pow((duneobj->rw_vtx_z[i_event]-TPC_centre_x),2)),0.5);
+		duneobj->rw_reco_rad[i_event] = pow(pow((duneobj->rw_reco_vtx_y[i_event]-TPC_centre_y),2) + pow((duneobj->rw_reco_vtx_z[i_event]-TPC_centre_x), 2), 0.5);
 
 		//Assume everything is on Argon for now....
 		duneobj->Target[i_event] = 40;
@@ -758,8 +759,9 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
 		//duneobj->mode[i_event]=static_cast<double>GENIEMode_ToMaCh3Mode(mode, _isCC);
 
 		duneobj->flux_w[i_event] = 1.0;
+		if(duneobj->rw_isCC[i_event] == 1) numCC++;
 	}
-
+	MACH3LOG_INFO("nEvents = {}, numCC = {}, numFDV = {}", duneobj->nEvents, numCC, num_in_fdv);
 	_sampleFile->Close();
 	_sampleFile_geant->Close();
 	return duneobj->nEvents;
@@ -804,10 +806,10 @@ const double* samplePDFDUNEBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
 		case kTrueQ3:
 			return &dunendgarmcSamples[iSample].rw_Q3[iEvent];
 		case kParticle_Momentum:
-      return &dunendgarmcSamples[iSample].particle_momentum->at(iEvent);
-    case kParticle_BAngle:
-      return &dunendgarmcSamples[iSample].particle_bangle->at(iEvent);
-    default:
+			return &dunendgarmcSamples[iSample].particle_momentum->at(iEvent);
+		case kParticle_BAngle:
+			return &dunendgarmcSamples[iSample].particle_bangle->at(iEvent);
+		default:
 			MACH3LOG_ERROR("Did not recognise Kinematic Parameter {}", KinematicParameter);
 			throw MaCh3Exception(__FILE__, __LINE__);
 			return nullptr;
@@ -825,23 +827,31 @@ const double* samplePDFDUNEBeamNDGAr::GetPointerToKinematicParameter(std::string
 }
 
 double samplePDFDUNEBeamNDGAr::ReturnKinematicParameter(double KinematicVariable, int iSample, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
-  return ReturnKinematicParameter(KinPar,iSample,iEvent);
+	KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
+	return ReturnKinematicParameter(KinPar,iSample,iEvent);
 }
 
 double samplePDFDUNEBeamNDGAr::ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
-  return ReturnKinematicParameter(KinPar,iSample,iEvent);
+	KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
+	return ReturnKinematicParameter(KinPar,iSample,iEvent);
 }
 
 double samplePDFDUNEBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent) {
-  //HH: Special cases for dealing with non-doubles
+	//HH: Special cases for dealing with non-doubles
 	switch(KinPar) {
+		case kEvent_IsAccepted:
+			return static_cast<double>(dunendgarmcSamples[iSample].is_accepted[iEvent]);
+		case kIsCC:
+			return static_cast<double>(dunendgarmcSamples[iSample].rw_isCC[iEvent]);
+		case kInFDV:
+			return static_cast<double>(dunendgarmcSamples[iSample].in_fdv[iEvent]);
 		case kParticle_Event:
-      return static_cast<double>(dunendgarmcSamples[iSample].particle_event->at(iEvent));
-    case kParticle_IsAccepted:
-      return static_cast<double>(dunendgarmcSamples[iSample].particle_isaccepted->at(iEvent));
-    default:
+			return static_cast<double>(dunendgarmcSamples[iSample].particle_event->at(iEvent));
+		case kParticle_IsAccepted:
+			return static_cast<double>(dunendgarmcSamples[iSample].particle_isaccepted->at(iEvent));
+		case kParticle_PDG:
+			return static_cast<double>(dunendgarmcSamples[iSample].particle_pdg->at(iEvent));
+		default:
 			return *GetPointerToKinematicParameter(KinPar, iSample, iEvent);
 	}
 }
@@ -989,7 +999,7 @@ TH2* samplePDFDUNEBeamNDGAr::get2DParticleVarHist(std::string ProjectionVar_StrX
 		_h2DVar = new TH2D("", "", int(xBinEdges.size())-1, xBinEdges.data(), int(yBinEdges.size())-1, yBinEdges.data());
 	}
 
-	//DB Loop over all particles
+	//JM Loop over all particles
 	for (int iSample=0;iSample<getNMCSamples();iSample++) {
 		for (int iParticle=0;iParticle<nparticlesinsample[iSample];iParticle++) {
 			int event = static_cast<int>(std::round(ReturnKinematicParameter("Particle_Event", iSample, iParticle)));
@@ -1012,8 +1022,8 @@ TH2* samplePDFDUNEBeamNDGAr::get2DParticleVarHist(std::string ProjectionVar_StrX
 }
 
 bool samplePDFDUNEBeamNDGAr::IsParticleSelected(const int iSample, const int iEvent, const int iParticle) {
-  double Val;
-  for (unsigned int iSelection=0;iSelection < Selection.size() ;iSelection++) {
+	double Val;
+	for (unsigned int iSelection=0;iSelection < Selection.size() ;iSelection++) {
 		std::string SelecVarStr = ReturnStringFromKinematicParameter(static_cast<int>(std::round(Selection[iSelection][0])));
 		int SelectionVarElement;
 

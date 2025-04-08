@@ -28,7 +28,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 		samplePDFDUNEBeamNDGAr(std::string mc_version, covarianceXsec* xsec_cov);
 		~samplePDFDUNEBeamNDGAr();
 
-		enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kTrueQ0, kTrueQ3, kParticle_Event, kParticle_Momentum, kParticle_BAngle, kParticle_IsAccepted};
+		enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kParticle_Event, kParticle_Momentum, kParticle_BAngle, kParticle_IsAccepted, kParticle_PDG, kInFDV, kIsCC};
 
 	protected:
 		void Init();
@@ -187,10 +187,14 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 			{"LepPZ",kLepPZ},
 			{"TrueQ0",kTrueQ0},
 			{"TrueQ3",kTrueQ3},
+			{"Event_IsAccepted",kEvent_IsAccepted},
 			{"Particle_Event",kParticle_Event},
 			{"Particle_Momentum",kParticle_Momentum},
 			{"Particle_BAngle",kParticle_BAngle},
 			{"Particle_IsAccepted",kParticle_IsAccepted},
+			{"Particle_PDG",kParticle_PDG},
+		  {"InFDV",kInFDV},
+		  {"IsCC",kIsCC},
 		};
 
 		const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -212,10 +216,14 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 			{kLepPZ,"LepPZ"},
 			{kTrueQ0,"TrueQ0"},
 			{kTrueQ3,"TrueQ3"},
+			{kEvent_IsAccepted,"Event_IsAccepted"},
 			{kParticle_Event, "Particle_Event"},
 			{kParticle_Momentum,"Particle_Momentum"},
 			{kParticle_BAngle,"Particle_BAngle"},
 			{kParticle_IsAccepted,"Particle_IsAccepted"},
+			{kParticle_PDG,"Particle_PDG"},
+		  {kInFDV,"InFDV"},
+			{kIsCC,"IsCC"},
 		};
 };
 

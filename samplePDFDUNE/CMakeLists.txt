@@ -1,18 +1,34 @@
-set(HEADERS
-#  samplePDFDUNEAtm.h
-#  samplePDFDUNEBeamFD.h
-#  samplePDFDUNEBeamND.h
-  samplePDFDUNEBeamNDGAr.h
-  MaCh3DUNEFactory.h 
-)
+if (Build_NDGAr)
+	message("Building NDGAr files only.")
+	set(HEADERS
+		samplePDFDUNEBeamNDGAr.h
+  	MaCh3DUNEFactory.h
+	)
+	set(SOURCE_FILES
+		samplePDFDUNEBeamNDGAr.cpp
+    MaCh3DUNEFactory.cpp
+	)
+else()
+	message("Building Atm, BeamFD and BeamND files.")
+	set(HEADERS
+		samplePDFDUNEAtm.h
+  	samplePDFDUNEBeamFD.h
+  	samplePDFDUNEBeamND.h
+		MaCh3DUNEFactory.h
+	)
+	set(SOURCE_FILES
+		samplePDFDUNEAtm.cpp
+    samplePDFDUNEBeamFD.cpp
+    samplePDFDUNEBeamND.cpp
+    MaCh3DUNEFactory.cpp
+	)
+endif()
 
 add_library(SamplePDFDUNE SHARED
-#  samplePDFDUNEAtm.cpp
-#  samplePDFDUNEBeamFD.cpp
-#  samplePDFDUNEBeamND.cpp
-  samplePDFDUNEBeamNDGAr.cpp
-  MaCh3DUNEFactory.cpp
+	${SOURCE_FILES}
 )
+
+target_compile_definitions(SamplePDFDUNE PRIVATE $<$<BOOL:${Build_NDGAr}>:BUILD_NDGAR>)
 
 set_target_properties(SamplePDFDUNE PROPERTIES
     PUBLIC_HEADER "${HEADERS}"

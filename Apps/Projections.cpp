@@ -36,9 +36,9 @@ std::string ReturnFormattedHistogramNameFromProjection(ProjectionVariable Proj) 
 	std::string ReturnStr;
 
 	for (size_t iKinematicCut=0;iKinematicCut<Proj.KinematicCuts.size();iKinematicCut++) {
-		if (iKinematicCut > 0) {
-			ReturnStr += " && ";
-		}
+		//if (iKinematicCut > 0) {
+		//	ReturnStr += " && ";
+		//}
 		//ReturnStr += Form("(%4.2f <= %s < %4.2f)",Proj.KinematicCuts[iKinematicCut].Range[0],Proj.KinematicCuts[iKinematicCut].Name.c_str(),Proj.KinematicCuts[iKinematicCut].Range[1]);
 	}
 	std::string y_axis_title;
@@ -48,14 +48,14 @@ std::string ReturnFormattedHistogramNameFromProjection(ProjectionVariable Proj) 
 	return ReturnStr;
 }
 
-void WriteTH1Histogram(TH1 *Hist, TDirectory *Dir, std::string Name) {
-	Dir->cd();
+void WriteTH1Histogram(TH1 *Hist, std::string Name, TDirectory *Dir = nullptr) {
+	if (Dir) Dir->cd();
 	Hist->Write(Name.c_str());
 }
 
 void PrintTH1Histogram(TH1 *Hist, std::string OutputName) {
 	TCanvas Canv = TCanvas();
-	Hist->Draw();
+	Hist->Draw("COLZ");
 	Canv.Print(OutputName.c_str());
 }
 
@@ -99,8 +99,8 @@ void PrintTHStackHistogram(THStack *Hist, std::string OutputName) {
 	Canv.Print(OutputName.c_str());
 }
 
-void WriteTHStackHistogram(THStack *Hist, TDirectory *Dir, std::string Name) {
-	Dir->cd();
+void WriteTHStackHistogram(THStack *Hist, std::string Name, TDirectory *Dir = nullptr) {
+	if (Dir) Dir->cd();
 	Hist->Write(Name.c_str());
 }
 
@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) {
 	auto fitMan = std::unique_ptr<manager>(new manager(argv[1]));
 
 	int WeightStyle = 1;
-
+	gStyle->SetPalette(1);
 	// ###############################################################################################################################
 	// Create samplePDFFD objects
 
@@ -287,8 +287,8 @@ int main(int argc, char *argv[]) {
 
 		for (auto Sample : DUNEPdfs) {
 
-			File->mkdir(Sample->GetName().c_str());
-			TDirectory *dir = File->GetDirectory(Sample->GetName().c_str());
+			//File->mkdir(Sample->GetName().c_str());
+			//TDirectory *dir = File->GetDirectory(Sample->GetName().c_str());
 			std::vector< std::vector<double> > SelectionVector;
 			for (size_t iCut=0;iCut<Projections[iProj].KinematicCuts.size();iCut++) {
 				std::vector<double> Selection(3);
@@ -317,7 +317,8 @@ int main(int argc, char *argv[]) {
 			Hist->SetTitle(ReturnFormattedHistogramNameFromProjection(Projections[iProj]).c_str());
 			MACH3LOG_INFO("\tSample: {:<20} - Integral: {:<10}",Sample->GetName(),Hist->Integral());
 			PrintTH1Histogram(Hist,outputname+".png");
-			WriteTH1Histogram(Hist, dir, outputname);
+			//WriteTH1Histogram(Hist, outputname, dir);
+			WriteTH1Histogram(Hist, outputname);
 
 			for (size_t iCat=0;iCat<Projections[iProj].CategoryCuts.size();iCat++) {
 				MACH3LOG_INFO("\t\tCategory: {:<10} - Name : {:<20}",iCat,Projections[iProj].CategoryCuts[iCat].Name);
@@ -358,7 +359,6 @@ int main(int argc, char *argv[]) {
 					MACH3LOG_INFO("\t\t\tBreakdown: {:<10} - Integral: {:<10}", iBreak, BreakdownHist->Integral());
 					Stack->Add(BreakdownHist);
 				}
-				
 				// HH: Add the stack to the file
 				TCanvas Canv = TCanvas();
 				Stack->Draw("HIST");
@@ -372,7 +372,8 @@ int main(int argc, char *argv[]) {
 				}
 				PrintTHStackHistogram(Stack,histstackname+".png");
 				Canv.Write((histstackname+"_Canvas").c_str());
-				WriteTHStackHistogram(Stack, dir, histstackname);
+				//WriteTHStackHistogram(Stack, histstackname, dir);
+				WriteTHStackHistogram(Stack, histstackname);
 
 			}
 		}

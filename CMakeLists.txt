@@ -59,32 +59,41 @@ if(DEFINED ROOT_CXX_STANDARD AND ROOT_CXX_STANDARD GREATER CMAKE_CXX_STANDARD)
 endif()
 
 #=================== DUNEAnaObj
-
+option(Build_NDGAr "Whether to build ndgar samplepdf class or all others" OFF)
 option(MaCh3_DUNE_USE_SRProxy "Whether to build proxy classes for Standard Record objects" OFF)
 
 if(MaCh3_DUNE_USE_SRProxy)
   find_package(duneanaobj)
-
+	
   if(NOT duneanaobj_FOUND)
-    CPMFindPackage(
-      NAME duneanaobj
-      GITHUB_REPOSITORY "naseemkhan99/duneanaobj"
-      GIT_TAG "main"
-		)
+		CPMFindPackage(
+    	NAME duneanaobj
+    	GIT_TAG feature/Clingification_rebase2024
+    	GITHUB_REPOSITORY luketpickering/duneanaobj
+    	VERSION 4.0.0
+    )
   endif()
 
   if(NOT TARGET duneanaobj::all)
     cmessage(FATAL_ERROR "MaCh3 DUNE Expected dependency target: duneanaobj::all")
   endif()
 else()
-  CPMAddPackage(
-  	NAME duneanaobj
-		GIT_TAG tag/legacy_ndgar_cafs_2024
-		GITHUB_REPOSITORY DUNE/duneanaobj 
-
-		DOWNLOAD_ONLY YES
-  )
-  include_directories(${duneanaobj_SOURCE_DIR})
+	if(Build_NDGAr)
+  	CPMAddPackage(
+  		NAME duneanaobj
+			GIT_TAG tag/legacy_ndgar_cafs_2024
+			GITHUB_REPOSITORY DUNE/duneanaobj 
+			DOWNLOAD_ONLY YES
+  	)
+	else()
+  	CPMAddPackage(
+   	 	NAME duneanaobj
+    	GIT_TAG v03_06_00
+    	GITHUB_REPOSITORY "DUNE/duneanaobj"
+    	DOWNLOAD_ONLY YES
+  	)
+	endif()
+	include_directories(${duneanaobj_SOURCE_DIR})
 
   ROOT_GENERATE_DICTIONARY(StandardRecordDict ${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/StandardRecord.h
     LINKDEF ${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/classes_def.xml)

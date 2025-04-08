@@ -1,46 +1,51 @@
 #include "samplePDFDUNE/MaCh3DUNEFactory.h"
 
-//#include "samplePDFDUNE/samplePDFDUNEBeamFD.h"
-//#include "samplePDFDUNE/samplePDFDUNEBeamND.h"
+#ifdef BUILD_NDGAR
 #include "samplePDFDUNE/samplePDFDUNEBeamNDGAr.h"
-//#include "samplePDFDUNE/samplePDFDUNEAtm.h"
+#else
+#include "samplePDFDUNE/samplePDFDUNEBeamFD.h"
+#include "samplePDFDUNE/samplePDFDUNEBeamND.h"
+#include "samplePDFDUNE/samplePDFDUNEAtm.h"
+#endif
 
 samplePDFFDBase* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, covarianceXsec* &xsec, covarianceOsc* &osc, TMatrixD* NDCov_FHC, TMatrixD* NDCov_RHC) {
 
 	samplePDFFDBase *Sample;
+	
+#ifdef BUILD_NDGAR
 	if (SampleType == "BeamNDGAr") {
 		Sample = new samplePDFDUNEBeamNDGAr(SampleConfig, xsec);
 	} else {
 		MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
+    throw MaCh3Exception(__FILE__, __LINE__);
+	}
+#else
+	if (SampleType == "BeamFD") {
+		Sample = new samplePDFDUNEBeamFD(SampleConfig, xsec, osc);
+	} 
+	else if (SampleType == "BeamND") {
+
+		if (NDCov_FHC == nullptr || NDCov_RHC == nullptr) {
+			MACH3LOG_ERROR("NDCov objects are not defined");
+			throw MaCh3Exception(__FILE__, __LINE__);
+		}
+
+		TMatrixD* NDCov = nullptr;
+		manager* tempSampleManager = new manager(SampleConfig.c_str());
+		int isFHC = tempSampleManager->raw()["DUNESampleBools"]["isFHC"].as<int>();
+		if(isFHC) {NDCov = NDCov_FHC;}
+		else {NDCov = NDCov_RHC;}
+
+		Sample = new samplePDFDUNEBeamND(SampleConfig, xsec, NDCov, osc);
+	}
+	else if (SampleType == "Atm") {
+		Sample = new samplePDFDUNEAtm(SampleConfig, xsec, osc);
+	}
+	else {
+		MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
 		throw MaCh3Exception(__FILE__, __LINE__);
 	}
-
-//	if (SampleType == "BeamFD") {
-//		Sample = new samplePDFDUNEBeamFD(SampleConfig, xsec, osc);
-//	} 
-//	else if (SampleType == "BeamND") {
-//
-//		if (NDCov_FHC == nullptr || NDCov_RHC == nullptr) {
-//			MACH3LOG_ERROR("NDCov objects are not defined");
-//			throw MaCh3Exception(__FILE__, __LINE__);
-//		}
-//
-//		TMatrixD* NDCov = nullptr;
-//		manager* tempSampleManager = new manager(SampleConfig.c_str());
-//		int isFHC = tempSampleManager->raw()["DUNESampleBools"]["isFHC"].as<int>();
-//		if(isFHC) {NDCov = NDCov_FHC;}
-//		else {NDCov = NDCov_RHC;}
-//
-//		Sample = new samplePDFDUNEBeamND(SampleConfig, xsec, NDCov, osc);
-//	} else if (SampleType == "Atm") {
-//		Sample = new samplePDFDUNEAtm(SampleConfig, xsec, osc);
-//	} else if (SampleType == "BeamNDGar") {
-//		Sample = new samplePDFDUNEBeamNDGAr(SampleConfig, xsec);
-//	} else {
-//		MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
-//		throw MaCh3Exception(__FILE__, __LINE__);
-//	} 
-
+#endif
 	return Sample;
 }
 
