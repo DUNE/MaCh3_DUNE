@@ -10,4 +10,4 @@ jupyter_env
 .history
 Doc
 inputs/Atmospherics/CAFs
-output.txt
+output*.txt
