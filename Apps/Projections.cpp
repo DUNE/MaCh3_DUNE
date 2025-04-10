@@ -176,7 +176,16 @@ int main(int argc, char *argv[]) {
         }
       }
     }
+    for (auto &KinematicCutConfig: fitMan->raw()["GeneralKinematicCuts"]) {
+      if (VarStrings[0].find("Particle_") == std::string::npos && KinematicCutConfig["VarString"].as<std::string>().find("Particle_") != std::string::npos) continue;
 
+      std::string KinematicCutName = KinematicCutConfig["Name"].as<std::string>();
+      std::string KinematicCutVarString = KinematicCutConfig["VarString"].as<std::string>();
+      std::vector<double> KinematicCutRange = KinematicCutConfig["Range"].as< std::vector<double> >();
+
+      KinematicCut Cut = KinematicCut{KinematicCutName,KinematicCutVarString,KinematicCutRange};
+      KinematicCuts.emplace_back(Cut);
+    }
     for (auto &KinematicCutConfig: ProjectionConfig["KinematicCuts"]) {
       std::string KinematicCutName = KinematicCutConfig["Name"].as<std::string>();
       std::string KinematicCutVarString = KinematicCutConfig["VarString"].as<std::string>();
@@ -264,7 +273,7 @@ int main(int argc, char *argv[]) {
     MACH3LOG_INFO("================================");
   }
 
-  PrintCategoryLegends(Projections);
+  //PrintCategoryLegends(Projections);
 
   // ###############################################################################################################################
   // Make the plots..
@@ -316,7 +325,7 @@ int main(int argc, char *argv[]) {
       Hist->Scale(1.0,"Width");
       Hist->SetTitle(ReturnFormattedHistogramNameFromProjection(Projections[iProj]).c_str());
       MACH3LOG_INFO("\tSample: {:<20} - Integral: {:<10}",Sample->GetName(),Hist->Integral());
-      PrintTH1Histogram(Hist,outputname+".png");
+      //PrintTH1Histogram(Hist,outputname+".png");
       //WriteTH1Histogram(Hist, outputname, dir);
       WriteTH1Histogram(Hist, outputname);
 
@@ -370,7 +379,7 @@ int main(int argc, char *argv[]) {
         else {
           histstackname = Sample->GetName()+"_"+ProjectionVar_Str[0]+"_"+ProjectionVar_Str[1]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack";
         }
-        PrintTHStackHistogram(Stack,histstackname+".png");
+        //PrintTHStackHistogram(Stack,histstackname+".png");
         Canv.Write((histstackname+"_Canvas").c_str());
         //WriteTHStackHistogram(Stack, histstackname, dir);
         WriteTHStackHistogram(Stack, histstackname);

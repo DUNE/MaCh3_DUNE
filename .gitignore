@@ -10,4 +10,5 @@ jupyter_env
 .history
 Doc
 inputs/Atmospherics/CAFs
+nohup.out
 output*.txt

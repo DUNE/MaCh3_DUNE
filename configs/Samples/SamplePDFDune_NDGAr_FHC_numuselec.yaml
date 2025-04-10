@@ -64,7 +64,6 @@ SubSamples:
   - Name: "FHC_numu_x_numu"
     LatexName: "FHC_numu_x_numu"
     mtuplefile: "numu_x_numu"
-#mtuplefile: ""
     splinefile: "numu_x_numu"
     nutype: 14
     oscnutype: 14

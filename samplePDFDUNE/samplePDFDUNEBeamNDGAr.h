@@ -28,7 +28,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     samplePDFDUNEBeamNDGAr(std::string mc_version, covarianceXsec* xsec_cov);
     ~samplePDFDUNEBeamNDGAr();
 
-    enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kParticle_Event, kParticle_Momentum, kParticle_BAngle, kParticle_IsAccepted, kParticle_PDG, kInFDV, kIsCC};
+    enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kParticle_Event, kParticle_Momentum, kParticle_BAngle, kParticle_IsAccepted, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_MomResMS, kParticle_MomResTrans};
 
   protected:
     void Init();
@@ -197,6 +197,11 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
       {"Particle_PDG",kParticle_PDG},
       {"InFDV",kInFDV},
       {"IsCC",kIsCC},
+      {"Particle_IsStoppedInTPC",kParticle_IsStoppedInTPC},
+      {"Particle_IsStoppedInECal",kParticle_IsStoppedInECal},
+      {"Particle_IsStoppedInGap",kParticle_IsStoppedInGap},
+      {"Particle_MomResMS",kParticle_MomResMS},
+      {"Particle_MomResTrans",kParticle_MomResTrans},
     };
 
     const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -226,6 +231,11 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
       {kParticle_PDG,"Particle_PDG"},
       {kInFDV,"InFDV"},
       {kIsCC,"IsCC"},
+      {kParticle_IsStoppedInTPC,"Particle_IsStoppedInTPC"},
+      {kParticle_IsStoppedInECal,"Particle_IsStoppedInECal"},
+      {kParticle_IsStoppedInGap,"Particle_IsStoppedInGap"},
+      {kParticle_MomResMS,"Particle_MomResMS"},
+      {kParticle_MomResTrans,"Particle_MomResTrans"},
     };
 };
 

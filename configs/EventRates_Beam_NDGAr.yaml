@@ -1,5 +1,6 @@
 General:
-  OutputFile: "outputs/DuneEventRates.root"
+  OutputFile: "outputs/NDGAr_EventRates_CC_BField0_5_FidRad_160_FidLen_209_InstrRad_249_45_InstrLen_259_WithECal_Enu_1to5.root"
+  #OutputFile: "outputs/_TEST_i_anatree.root"
   DUNESamples: ["configs/Samples/SamplePDFDune_NDGAr_FHC_numuselec.yaml"]	
   #Nu-FIT
   #OscillationParameters: [0.310, 0.582, 0.224, 7.39E-5, 2.5254E-3, -2.498]
@@ -27,28 +28,31 @@ General:
   Seed: 0
   Debug: No
 
+GeneralKinematicCuts:
+- Name: "InFDV"
+  VarString: "InFDV"
+  Range: [1.,2.]
+- Name: "IsCC"
+  VarString: "IsCC"
+  Range: [1.,2.]
+- Name: "Enu"
+  VarString: "TrueNeutrinoEnergy"
+  Range: [1.,5.]
+#- Name: "StoppedInTPC"
+#  VarString: "Particle_IsStoppedInTPC"
+#  Range: [1.,2.]
+#- Name: "StoppedInECal"
+#  VarString: "Particle_IsStoppedInECal"
+#  Range: [1.,2.]
+#- Name: "StoppedInGap"
+#  VarString: "Particle_IsStoppedInGap"
+#  Range: [1.,2.]
+
 "Projections": [
   {
     "Name": "TrueQ3_vs_TrueQ0",
     "VarStrings": ["TrueQ3","TrueQ0"],
     "VarBins": [[100,0.,3.],[100,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "InFDV",
-        "VarString": "InFDV"
-      },
-      {
-        "Range": [1.,2.],
-        "Name": "IsCC",
-        "VarString": "IsCC"
-      },
-      {
-        "Range": [1.,5.],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy"
-      }
-    ]
   },
   {
     "Name": "TrueQ3_vs_TrueQ0_Accepted",
@@ -57,68 +61,55 @@ General:
     "KinematicCuts": [
       {
         "Range": [1.,2.],
-        "Name": "InFDV",
-        "VarString": "InFDV"
-      },
-      {
-        "Range": [1.,2.],
-        "Name": "IsCC",
-        "VarString": "IsCC"
-      },
-      {
-        "Range": [1.,5.],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy"
-      },
-      {
-        "Range": [1.,2.],
         "Name": "Accepted",
         "VarString": "Event_IsAccepted"
       }
     ]
   },
   {
-    "Name": "Particle_BAngle_Momentum",
-    "VarStrings": ["Particle_BAngle","Particle_Momentum"],
-    "VarBins": [[90,0.,180.],[200,0.,6.]],
+    "Name": "Particle_BAngle_MomResMS",
+    "VarStrings": ["Particle_BAngle","Particle_MomResMS"],
+    "VarBins":[[90,0.,180.],[100,0.,0.2]]
+  },
+  {
+    "Name": "Particle_BAngle_MomResMS_Accepted",
+    "VarStrings": ["Particle_BAngle","Particle_MomResMS"],
+    "VarBins":[[90,0.,180.],[100,0.,0.2]],
     "KinematicCuts": [
       {
         "Range": [1.,2.],
-        "Name": "InFDV",
-        "VarString": "InFDV"
-      },
-      {
-        "Range": [1.,2.],
-        "Name": "IsCC",
-        "VarString": "IsCC"
-      },
-      {
-        "Range": [1.,5.],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy"
+        "Name": "Accepted",
+        "VarString": "Particle_IsAccepted"
       }
     ]
+  },
+  {
+    "Name": "Particle_BAngle_MomResTrans",
+    "VarStrings": ["Particle_BAngle","Particle_MomResTrans"],
+    "VarBins":[[90,0.,180.],[100,0.,1.]]
+  },
+  {
+    "Name": "Particle_BAngle_MomResTrans_Accepted",
+    "VarStrings": ["Particle_BAngle","Particle_MomResTrans"],
+    "VarBins":[[90,0.,180.],[100,0.,1.]],
+    "KinematicCuts": [
+      {
+        "Range": [1.,2.],
+        "Name": "Accepted",
+        "VarString": "Particle_IsAccepted"
+      }
+    ]
+  },
+{
+    "Name": "Particle_BAngle_Momentum",
+    "VarStrings": ["Particle_BAngle","Particle_Momentum"],
+    "VarBins": [[90,0.,180.],[200,0.,6.]],
   },
   {
     "Name": "Particle_BAngle_Momentum_Accepted",
     "VarStrings": ["Particle_BAngle","Particle_Momentum"],
     "VarBins": [[90,0.,180.],[200,0.,6.]],
     "KinematicCuts": [
-      { 
-        "Range": [1.,2.],
-        "Name": "InFDV",
-        "VarString": "InFDV"
-      },
-      {
-        "Range": [1.,2.],
-        "Name": "IsCC",
-        "VarString": "IsCC"
-      },
-      {
-        "Range": [1.,5.],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy"
-      },
       {
         "Range": [1.,2.],
         "Name": "Accepted",
@@ -132,21 +123,6 @@ General:
     "VarBins": [[90,0.,180.],[200,0.,6.]],
     "KinematicCuts": [
       {
-        "Range": [1.,2.],
-        "Name": "InFDV",
-        "VarString": "InFDV"
-      },
-      {
-        "Range": [1.,2.],
-        "Name": "IsCC",
-        "VarString": "IsCC"
-      },
-      {
-        "Range": [1.,5.],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy"
-      },
-      {
         "Range": [2211.5,2212.5],
         "Name": "Protons",
         "VarString": "Particle_PDG"
@@ -158,21 +134,6 @@ General:
     "VarStrings": ["Particle_BAngle","Particle_Momentum"],
     "VarBins": [[90,0.,180.],[200,0.,6.]],
     "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "InFDV",
-        "VarString": "InFDV"
-      },
-      {
-        "Range": [1.,2.],
-        "Name": "IsCC",
-        "VarString": "IsCC"
-      },
-      {
-        "Range": [1.,5.],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy"
-      },
       {
         "Range": [2211.5,2212.5],
         "Name": "Protons",
@@ -191,21 +152,6 @@ General:
     "VarBins": [[90,0.,180.],[200,0.,6.]],
     "KinematicCuts": [
       {
-        "Range": [1.,2.],
-        "Name": "InFDV",
-        "VarString": "InFDV"
-      },
-      {
-        "Range": [1.,2.],
-        "Name": "IsCC",
-        "VarString": "IsCC"
-      },
-      {
-        "Range": [1.,5.],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy"
-      },
-      {
         "Range": [210.5,211.5],
         "Name": "Pi+",
         "VarString": "Particle_PDG"
@@ -217,21 +163,6 @@ General:
     "VarStrings": ["Particle_BAngle","Particle_Momentum"],
     "VarBins": [[90,0.,180.],[200,0.,6.]],
     "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "InFDV",
-        "VarString": "InFDV"
-      },
-      {
-        "Range": [1.,2.],
-        "Name": "IsCC",
-        "VarString": "IsCC"
-      },
-      {
-        "Range": [1.,5.],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy"
-      },
       {
         "Range": [210.5,211.5],
         "Name": "Pi+",
@@ -250,21 +181,6 @@ General:
     "VarBins": [[90,0.,180.],[200,0.,6.]],
     "KinematicCuts": [
       {
-        "Range": [1.,2.],
-        "Name": "InFDV",
-        "VarString": "InFDV"
-      },
-      {
-        "Range": [1.,2.],
-        "Name": "IsCC",
-        "VarString": "IsCC"
-      },
-      {
-        "Range": [1.,5.],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy"
-      },
-      {
         "Range": [-211.5,-210.5],
         "Name": "Pi-",
         "VarString": "Particle_PDG"
@@ -276,22 +192,7 @@ General:
     "VarStrings": ["Particle_BAngle","Particle_Momentum"],
     "VarBins": [[90,0.,180.],[200,0.,6.]],
     "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "InFDV",
-        "VarString": "InFDV"
-      },
-      {
-        "Range": [1.,2.],
-        "Name": "IsCC",
-        "VarString": "IsCC"
-      },
-      {
-        "Range": [1.,5.],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy"
-      },
-      {
+      { 
         "Range": [-211.5,-210.5],
         "Name": "Pi-",
         "VarString": "Particle_PDG"
@@ -309,21 +210,6 @@ General:
     "VarBins": [[90,0.,180.],[200,0.,6.]],
     "KinematicCuts": [
       {
-        "Range": [1.,2.],
-        "Name": "InFDV",
-        "VarString": "InFDV"
-      },
-      {
-        "Range": [1.,2.],
-        "Name": "IsCC",
-        "VarString": "IsCC"
-      },
-      {
-        "Range": [1.,5.],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy"
-      },
-      {
         "Range": [12.5,13.5],
         "Name": "Mu-",
         "VarString": "Particle_PDG"
@@ -335,21 +221,6 @@ General:
     "VarStrings": ["Particle_BAngle","Particle_Momentum"],
     "VarBins": [[90,0.,180.],[200,0.,6.]],
     "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "InFDV",
-        "VarString": "InFDV"
-      },
-      {
-        "Range": [1.,2.],
-        "Name": "IsCC",
-        "VarString": "IsCC"
-      },
-      {
-        "Range": [1.,5.],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy"
-      },
       {
         "Range": [12.5,13.5],
         "Name": "Mu-",
@@ -366,44 +237,12 @@ General:
     "Name": "Particle_PDG",
     "VarStrings": ["Particle_PDG"],
     "VarBins": [[6444,-3222.5,3222.5]],
-    "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "InFDV",
-        "VarString": "InFDV"
-      },
-      {
-        "Range": [1.,2.],
-        "Name": "IsCC",
-        "VarString": "IsCC"
-      },
-      {
-        "Range": [1.,5.],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy"
-      }
-    ]
   },
   {
     "Name": "Particle_PDG_Accepted",
     "VarStrings": ["Particle_PDG"],
     "VarBins": [[6444,-3222.5,3222.5]],
     "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "InFDV",
-        "VarString": "InFDV"
-      },
-      {
-        "Range": [1.,2.],
-        "Name": "IsCC",
-        "VarString": "IsCC"
-      },
-      {
-        "Range": [1.,5.],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy"
-      },
       {
         "Range": [1.,2.],
         "Name": "Accepted",
