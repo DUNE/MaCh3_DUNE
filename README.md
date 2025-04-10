@@ -26,7 +26,7 @@ cd build
 Then perform the cmake build command:
 
 ```bash
-cmake .. -DCUDAProb3_ENABLED=[ON,OFF] -DCUDAProb3Linear_ENABLED=[ON,OFF]
+cmake .. -DCUDAProb3_ENABLED=[ON,OFF] -DCUDAProb3Linear_ENABLED=[ON,OFF] -DMaCh3_CORE_BRANCH=["v1_github_core_branch_name"]
 make install
 ```
 
