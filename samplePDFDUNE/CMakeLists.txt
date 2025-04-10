@@ -28,8 +28,6 @@ add_library(SamplePDFDUNE SHARED
 	${SOURCE_FILES}
 )
 
-target_compile_definitions(SamplePDFDUNE PRIVATE $<$<BOOL:${Build_NDGAr}>:BUILD_NDGAR>)
-
 set_target_properties(SamplePDFDUNE PROPERTIES
     PUBLIC_HEADER "${HEADERS}"
     EXPORT_NAME SamplePDFDUNE)

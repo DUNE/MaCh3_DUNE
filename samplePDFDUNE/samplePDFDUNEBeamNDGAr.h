@@ -28,6 +28,9 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     samplePDFDUNEBeamNDGAr(std::string mc_version, covarianceXsec* xsec_cov);
     ~samplePDFDUNEBeamNDGAr();
 
+    TH1* get1DParticleVarHist(std::string ProjectionVar_StrX, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX);
+    TH2* get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY);
+    
     enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kParticle_Event, kParticle_Momentum, kParticle_BAngle, kParticle_IsAccepted, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_MomResMS, kParticle_MomResTrans};
 
   protected:
@@ -59,8 +62,6 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     double GetMass(int partpdg);
     bool IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, int i_truepart, double pixel_spacing_cm);
 
-    TH1* get1DParticleVarHist(std::string ProjectionVar_StrX, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX) override;
-    TH2* get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY) override;
     bool IsParticleSelected(const int iSample, const int iEvent, const int iParticle);
     std::vector<struct dunemc_base> dunendgarmcSamples;
 

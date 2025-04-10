@@ -237,29 +237,11 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
       continue;
     }
     nummatched++;
+
     /*auto it = std::find(_MCPTrkID->begin(), _MCPTrkID->end(), sr->mc.nu[0].prim[i_truepart].G4ID+1);
       int i_anapart;
       if (it != _MCPTrkID->end()) {
       i_anapart = it - _MCPTrkID->begin();
-      }
-      else {
-      std::cout << "Dip :(" << std::endl;
-      std::cout << "_MCPTrkID contains: " << std::endl;
-      for (int i=0; i<_MCPTrkID->size(); i++) {
-      std::cout << _MCPTrkID->at(i) << "  ";
-      }
-      std::cout << "\n\n_SimHitTrkID contains: " << std::endl;
-      for (int i=0; i<_SimHitTrkID->size(); i++) {
-      std::cout << _SimHitTrkID->at(i) << "  ";
-      }
-      std::cout << "\n\nsr->bla bla contains: " << std::endl;
-      for (int i=0; i<sr->mc.nu[0].prim.size(); i++) {
-      std::cout << sr->mc.nu[0].prim[i].G4ID << " ";
-      }
-      throw MaCh3Exception(__FILE__, __LINE__);
-      }
-      if(i_anapart != i_truepart) {
-      MACH3LOG_INFO("anaparticle index {} different from caf particle index {}", i_anapart, i_truepart);
       }
       if((_PDG->at(i_anapart) != pdgcaf) || 
       (std::abs(_MCPStartPX->at(i_anapart)-static_cast<double>(sr->mc.nu[0].prim[i_truepart].p.px))>0.001*std::abs(_MCPStartPX->at(i_anapart))) ||
@@ -273,13 +255,13 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
       for (int i=0; i<_MCPTrkID->size(); i++) {
       std::cout << _MCPTrkID->at(i) << "  ";
       }
-      std::cout << "\n\n_SimHitTrkID contains: " << std::endl;
-      for (int i=0; i<_SimHitTrkID->size(); i++) {
-      std::cout << _SimHitTrkID->at(i) << "  ";
-      }
-      std::cout << "\n\nsr->bla bla contains: " << std::endl;
+      std::cout << "\n\nsr prim g4ID contains: " << std::endl;
       for (int i=0; i<sr->mc.nu[0].prim.size(); i++) {
       std::cout << sr->mc.nu[0].prim[i].G4ID << " ";
+      }
+      std::cout << "\n\nsr sec g4ID contains: " << std::endl;
+      for (int i=0; i<sr->mc.nu[0].sec.size(); i++) {
+      std::cout << sr->mc.nu[0].sec[i].G4ID << " ";
       }
 
     //throw MaCh3Exception(__FILE__, __LINE__);
@@ -375,17 +357,17 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
         double quadraticformula_c = (a_const - TPC_centre_y)*(a_const - TPC_centre_y) + TPC_centre_z*TPC_centre_z - TPCInstrumentedRadius*TPCInstrumentedRadius;
 
         double z_intersect_1, y_intersect_1, z_intersect_2, y_intersect_2, theta_1, theta_2, theta_start, theta_chosen, theta_diff_1, theta_diff_2;
-        
+
         if(quadraticformula_b*quadraticformula_b - 4*quadraticformula_a*quadraticformula_c > 0){
           z_intersect_1 = (-quadraticformula_b + std::sqrt(quadraticformula_b*quadraticformula_b - 4*quadraticformula_a*quadraticformula_c))/(2*quadraticformula_a);
           y_intersect_1 = -m_const*z_intersect_1 + a_const;
           z_intersect_2 = (-quadraticformula_b - std::sqrt(quadraticformula_b*quadraticformula_b - 4*quadraticformula_a*quadraticformula_c))/(2*quadraticformula_a);
           y_intersect_2 = -m_const*z_intersect_2 + a_const;
-          
+
           theta_1 = std::abs(atan((y_intersect_1 - centre_circle_y)/(z_intersect_1 - centre_circle_z)));
           theta_2 = std::abs(atan((y_intersect_2 - centre_circle_y)/(z_intersect_2 - centre_circle_z)));
           theta_start = std::abs(atan((_MCPStartY->at(i_anapart) - centre_circle_y)/(_MCPStartZ->at(i_anapart) - centre_circle_z)));
-          
+
           //Adjust angles based on quadrants
           if((z_intersect_2-centre_circle_z)<0 && (y_intersect_2-centre_circle_y)<0){theta_2 = M_PI+theta_2;}
           else if((y_intersect_2-centre_circle_y)<0){theta_2 = 2*M_PI-theta_2;}
@@ -489,11 +471,10 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
       }
       duneobj->particle_ecaldepositfraction->back() = energydepsum/(sr->mc.nu[0].prim[i_truepart].p.E);
     }
-    //break;
     if (isAccepted == false) {duneobj->particle_isaccepted->back() = false;}
+    break;
   }
   if(nummatched != 1){
-
     MACH3LOG_INFO("Found {} matching particles in anatree", nummatched);
     MACH3LOG_INFO("PDG: {}, momentum: ({},{},{})",pdgcaf,sr->mc.nu[0].prim[i_truepart].p.px,sr->mc.nu[0].prim[i_truepart].p.py,sr->mc.nu[0].prim[i_truepart].p.pz);
   }
@@ -576,7 +557,7 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
     _data->SetBranchAddress("SimHitEnergy", &_SimHitEnergy);
   }
   duneobj->norm_s = 1.;
-  double downsampling = 1;
+  double downsampling = 0.001;
   duneobj->pot_s = pot/(downsampling*1e21);
   duneobj->nEvents = static_cast<int>(std::round(downsampling*static_cast<double>(_data->GetEntries())));
 

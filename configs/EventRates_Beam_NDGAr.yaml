@@ -1,6 +1,6 @@
 General:
-  OutputFile: "outputs/NDGAr_EventRates_CC_BField0_5_FidRad_160_FidLen_209_InstrRad_249_45_InstrLen_259_WithECal_Enu_1to5.root"
-  #OutputFile: "outputs/_TEST_i_anatree.root"
+  #OutputFile: "outputs/NDGAr_EventRates_CC_BField0_5_FidRad_160_FidLen_209_InstrRad_249_45_InstrLen_259_WithECal_Enu_1to5.root"
+  OutputFile: "outputs/_TEST_.root"
   DUNESamples: ["configs/Samples/SamplePDFDune_NDGAr_FHC_numuselec.yaml"]	
   #Nu-FIT
   #OscillationParameters: [0.310, 0.582, 0.224, 7.39E-5, 2.5254E-3, -2.498]

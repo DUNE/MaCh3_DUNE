@@ -313,7 +313,7 @@ int main(int argc, char *argv[]) {
       if (histdim==1) {
 #ifdef BUILD_NDGAR
         if (ProjectionVar_Str[0].find("Particle_") != std::string::npos) {
-          Hist = (TH1*)Sample->get1DParticleVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
+          Hist = (TH1*)dynamic_cast<samplePDFDUNEBeamNDGAr*>(Sample)->get1DParticleVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
         }
         else {
           Hist = (TH1*)Sample->get1DVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
@@ -326,7 +326,7 @@ int main(int argc, char *argv[]) {
       else {
 #ifdef BUILD_NDGAR
         if (ProjectionVar_Str[0].find("Particle_") != std::string::npos) {
-          Hist = (TH1*)Sample->get2DParticleVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
+          Hist = (TH1*)dynamic_cast<samplePDFDUNEBeamNDGAr*>(Sample)->get2DParticleVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
         }
         else {
           Hist = (TH1*)Sample->get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);

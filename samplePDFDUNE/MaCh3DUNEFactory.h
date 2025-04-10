@@ -1,5 +1,13 @@
 #pragma once
 
+#ifdef BUILD_NDGAR
+#include "samplePDFDUNE/samplePDFDUNEBeamNDGAr.h"
+#else
+#include "samplePDFDUNE/samplePDFDUNEBeamFD.h"
+#include "samplePDFDUNE/samplePDFDUNEBeamND.h"
+#include "samplePDFDUNE/samplePDFDUNEAtm.h"
+#endif
+
 // Include the input manager
 #include "manager/manager.h"
 

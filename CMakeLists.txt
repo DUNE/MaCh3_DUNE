@@ -60,6 +60,10 @@ endif()
 
 #=================== DUNEAnaObj
 option(Build_NDGAr "Whether to build ndgar samplepdf class or all others" OFF)
+if (Build_NDGAr)
+  add_compile_definitions(BUILD_NDGAR)
+endif()
+
 option(MaCh3_DUNE_USE_SRProxy "Whether to build proxy classes for Standard Record objects" OFF)
 
 if(MaCh3_DUNE_USE_SRProxy)

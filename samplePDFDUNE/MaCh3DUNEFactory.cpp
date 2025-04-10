@@ -1,13 +1,5 @@
 #include "samplePDFDUNE/MaCh3DUNEFactory.h"
 
-#ifdef BUILD_NDGAR
-#include "samplePDFDUNE/samplePDFDUNEBeamNDGAr.h"
-#else
-#include "samplePDFDUNE/samplePDFDUNEBeamFD.h"
-#include "samplePDFDUNE/samplePDFDUNEBeamND.h"
-#include "samplePDFDUNE/samplePDFDUNEAtm.h"
-#endif
-
 samplePDFFDBase* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, covarianceXsec* &xsec, covarianceOsc* &osc, TMatrixD* NDCov_FHC, TMatrixD* NDCov_RHC) {
 
 	samplePDFFDBase *Sample;
