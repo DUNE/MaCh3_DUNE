@@ -184,6 +184,7 @@ cmessage(STATUS "CMAKE CXX Standard: ${CMAKE_CXX_STANDARD}")
 add_library(DUNEMaCh3Warnings INTERFACE)
 
 target_compile_options(DUNEMaCh3Warnings INTERFACE
+  -Werror                 # Treat Warnings as Errors
   -Wextra                 # Enable extra warning flags
   -Wall                   # Enable all standard warning flags
   -Wshadow                # Warn when a variable declaration shadows one from an outer scope
@@ -200,7 +201,7 @@ target_compile_options(DUNEMaCh3Warnings INTERFACE
   -Wconversion            # Warn on type conversions that may lose data
   -Wformat-security       # Warn on functions that are potentially insecure for formatting
   -Walloca                # Warn if `alloca` is used, as it can lead to stack overflows
-  #-Wswitch-enum           # Warn if a `switch` statement on an enum does not cover all values
+  -Wswitch-enum           # Warn if a `switch` statement on an enum does not cover all values
   #-Wfloat-equal          # Warn if floating-point values are compared directly
   #-Wpadded               # Warn when padding is added to a structure or class for alignment
 )
@@ -233,7 +234,7 @@ set_target_properties(MaCh3DUNECompilerOptions PROPERTIES EXPORT_NAME CompilerOp
 
 target_include_directories(MaCh3DUNECompilerOptions
   INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/Apps>
     $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
     $<INSTALL_INTERFACE:include>)
 
@@ -243,7 +244,7 @@ install(TARGETS MaCh3DUNECompilerOptions
 
 add_subdirectory(splines)
 add_subdirectory(samplePDFDUNE)
-add_subdirectory(src)
+add_subdirectory(Apps)
 
 
 # Do we want to build our integration tests?

@@ -1,102 +1,97 @@
 #include "splinesDUNE.h"
-#include "samplePDFDUNE/StructsDUNE.h"
-
-#include "TKey.h"
 #include "TROOT.h"
 
-splinesDUNE::splinesDUNE(covarianceXsec* xsec_cov) : splineFDBase(xsec_cov) {
-  MACH3LOG_INFO("Created splinesDUNE object");
+splinesDUNE::splinesDUNE(covarianceXsec* xsec_cov, MaCh3Modes* Modes_) : splineFDBase(xsec_cov, Modes_) {
 }
 
-splinesDUNE::~splinesDUNE(){
-  MACH3LOG_INFO("Deleting splineSKBase object");
+splinesDUNE::~splinesDUNE() {
 }
 
-//****************************************
-void splinesDUNE::FillSampleArray(std::string SampleName, std::vector<std::string> OscChanFileNames)
-// Performs two jobs
-//  1. Fills indexing/each sample
-//  2. Creates the big spline vector
-//****************************************
-{
+std::vector<std::string> splinesDUNE::GetTokensFromSplineName(std::string FullSplineName) {
+  std::vector<std::string> ReturnVec(TokenOrdering::kNTokens);
 
-  int iSample = getSampleIndex(SampleName);
-
-  enum ModeState {
-    kInConfig = 0,
-    kInConfigAndInFile,
-    kInFile
-  };
-
-  std::vector<std::map<std::string,ModeState>> ModeStatus;
-
-  //Create map of Mode Status
-  for (unsigned iSyst = 0; iSyst < SplineFileParPrefixNames[iSample].size(); iSyst++) 
-  {
-    auto modes = SplineModeVecs[iSample][iSyst];
-	ModeStatus.emplace_back();
-
-	for (auto const & mode : modes) 
-	{
-	  //Add Modes from config
-	  ModeStatus.back()[MaCh3mode_ToDUNEString((MaCh3_Mode)mode).c_str()] = kInConfig;
-	}
+  TObjArray *tokens = TString(FullSplineName).Tokenize("_");
+  
+  ReturnVec[TokenOrdering::kSystToken] = ((TObjString *)(tokens->At(1)))->GetString();
+  ReturnVec[TokenOrdering::kModeToken] = ((TObjString *)(tokens->At(2)))->GetString();
+  // Skip 3 because it's "sp"
+  ReturnVec[TokenOrdering::kVar1BinToken] = ((TObjString *)(tokens->At(4)))->GetString();
+  ReturnVec[TokenOrdering::kVar2BinToken] = ((TObjString *)(tokens->At(5)))->GetString();
+  ReturnVec[TokenOrdering::kVar3BinToken] = "0";
+  
+  if (tokens->GetEntries() == 7) {
+    ReturnVec[TokenOrdering::kVar3BinToken] = ((TObjString *)(tokens->At(6)))->GetString();
   }
 
+  return ReturnVec;
+}
+
+/*
+///
+DB: Warning to anyone looking at the below function and thinking why doesn't it exist in core?
+    - It's because there are duplicate splines and special treatment for the unknown spline mode
+      I have zero idea of why unknown spline modes even exist for one thing..
+      It's such a mess - the DUNE splines need remaking to be renamed properly and duplicates removed
+      Then the below can be removed
+///
+*/
+
+void splinesDUNE::FillSampleArray(std::string SampleName, std::vector<std::string> OscChanFileNames) {
+  int iSample = getSampleIndex(SampleName);
   int nOscChannels = nOscChans[iSample];
+  
+  for (int iOscChan = 0; iOscChan < nOscChannels; iOscChan++) {
+    MACH3LOG_INFO("Processing: {}", OscChanFileNames[iOscChan]);
+    TSpline3* mySpline = nullptr;
+    TSpline3_red* Spline = nullptr;
+    TString Syst, Mode;
+    int nKnots, SystNum, ModeNum, Var1Bin, Var2Bin, Var3Bin = M3::_BAD_INT_;
+    double x,y, Eval = M3::_BAD_DOUBLE_;
+    bool isFlat = true;
 
-  for (int iOscChan = 0; iOscChan < nOscChannels; iOscChan++)
-  {
-    std::cout << "Processing:" << OscChanFileNames[iOscChan] << std::endl;
+    std::set<std::string> SplineFileNames;
+    auto File = std::unique_ptr<TFile>(TFile::Open(OscChanFileNames[iOscChan].c_str()));
 
-    TFile *File = new TFile(OscChanFileNames[iOscChan].c_str(), "READ");
-    if (!File || File->IsZombie())
-    {
-      std::cerr << "File " << OscChanFileNames[iOscChan] << " not found" << std::endl;
-      throw;
+    if (!File || File->IsZombie()) {
+      MACH3LOG_ERROR("File {} not found", OscChanFileNames[iOscChan]);
+      throw MaCh3Exception(__FILE__, __LINE__);
     }
 
     //This is the MC specific part of the code
-    //i.e. we always assume that the splines are just store in  single TDirectory and they're all in there as single objects
-    TIter Next(File->GetListOfKeys());
-    TKey *Key;
+    //i.e. we always assume that the splines are just store in  single TDirectory and they're all in there as single objects   
+    for (auto k : *File->GetListOfKeys()) {
+      auto Key = static_cast<TKey*>(k);
+      TClass *Class = gROOT->GetClass(Key->GetClassName(), false);
+      if(!Class->InheritsFrom("TSpline3")) {
+        continue;
+      }
 
-    std::set<std::string> unique_spline_names;
-    int nb_splines = 0;
+      std::string FullSplineName = std::string(Key->GetName());
+      
+      if (SplineFileNames.count(FullSplineName) > 0) {
+	//if (FullSplineName.find("unknown") == std::string::npos) {
+	  MACH3LOG_CRITICAL("Skipping spline - Found a spline whose name has already been encountered before: {}", FullSplineName); 
+	  continue;
+	  //}
+      }
+      SplineFileNames.insert(FullSplineName);
 
-    while ((Key = (TKey *)Next()))
-    {
-      TClass *Class = gROOT->GetClass(Key->GetClassName());
+      std::vector<std::string> Tokens = GetTokensFromSplineName(FullSplineName);
 
-      //Skip the TGraphs also in the spline files
-      if (!Class->InheritsFrom("TSpline3")){continue;}
-      const char* keyName = Key->GetName();
+      if (Tokens.size() != kNTokens) {
+        MACH3LOG_ERROR("Invalid tokens from spline name - Expected {} tokens. Check implementation in GetTokensFromSplineName()", static_cast<int>(kNTokens));
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+      
+      Syst = Tokens[kSystToken];
+      Mode = Tokens[kModeToken];
+      Var1Bin = std::stoi(Tokens[kVar1BinToken]);
+      Var2Bin = std::stoi(Tokens[kVar2BinToken]);
+      Var3Bin = std::stoi(Tokens[kVar3BinToken]);
 
-      char* SplineName = new char[strlen(keyName) + 1];
-      strcpy(SplineName, keyName);
-
-      nb_splines += 1;
-	  if(unique_spline_names.count(std::string(SplineName)) > 0){
-		if (std::string(SplineName).find("unknown") == std::string::npos){
-		  //std::cout << "Repeated entry for spline named: " << std::string(SplineName) << std::endl;
-		  continue;
-		}
-	  }
-      unique_spline_names.insert(std::string(SplineName));
-
-      char *Syst;
-      char *Mode;
-      int Var1Bin;
-      int Var2Bin;
-      int Var3Bin;
-
-      char *Token = strtok(SplineName, "_");
-      Token = strtok(NULL, "_");
-      Syst = Token;
-
-      int SystNum = -1;
+      SystNum = -1;
       for (unsigned iSyst = 0; iSyst < SplineFileParPrefixNames[iSample].size(); iSyst++) {
-        if (strcmp(Syst, SplineFileParPrefixNames[iSample][iSyst].c_str()) == 0) {
+        if (Syst == SplineFileParPrefixNames[iSample][iSyst]) {
           SystNum = iSyst;
           break;
         }
@@ -104,77 +99,37 @@ void splinesDUNE::FillSampleArray(std::string SampleName, std::vector<std::strin
 
       // If the syst doesn't match any of the spline names then skip it
       if (SystNum == -1){
-		continue;
+        MACH3LOG_WARN("Couldn't match!!");
+        MACH3LOG_DEBUG("Couldn't Match any systematic name in xsec yaml with spline name: {}" , FullSplineName);
+        continue;
       }
 
-      int ModeNum = -1;
-      Mode = strtok(NULL, "_");
-	  for (unsigned int iMode = 0; iMode < SplineModeVecs[iSample][SystNum].size(); iMode++) {
-        if (strcmp(Mode, MaCh3mode_ToDUNEString((MaCh3_Mode)SplineModeVecs[iSample][SystNum][iMode]).c_str()) == 0) {
+      ModeNum = -1;
+      for (unsigned int iMode = 0; iMode < SplineModeVecs[iSample][SystNum].size(); iMode++) {
+        if (Mode == Modes->GetSplineSuffixFromMaCh3Mode(SplineModeVecs[iSample][SystNum][iMode])) {
           ModeNum = iMode;
           break;
         }
       }
 
-	  //Check if mode has been registered already
-	  if(ModeStatus[SystNum].count(Mode))
-	  {
-		//Chech if mode has been found in config
-		if(ModeStatus[SystNum][Mode]!=kInFile) 
-		{
-		  ModeStatus[SystNum][Mode]=kInConfigAndInFile;
-		}
-		else 
-		{
-		  continue; //Skip if mode has been found in file but not config
-		}
-	  }
-	  else
-	  {
-		ModeStatus[SystNum][Mode]=kInFile; //If mode hasn't been registered then skip because it's not in the config 
-		continue;
-	  }
-
-      TSpline3 *Obj = (TSpline3 *)Key->ReadObj();
-      TSpline3_red *Spline = new TSpline3_red(Obj);
-      delete Obj;
-      
-      Token = strtok(NULL, "_"); // DB Needed to remove sp from spline name
-
-      Var1Bin = atoi(strtok(NULL, "_"));
-      Var2Bin = atoi(strtok(NULL, "_"));
-
-      char *Var3Bin_Char = strtok(NULL, "_");
-      if (Var3Bin_Char == NULL)
-      {
-        Var3Bin = 0;
-      }
-      else
-      {
-        Var3Bin = atoi(Var3Bin_Char);
+      if (ModeNum == -1) {
+	//DB - If you have splines in the root file that you don't want to use (e.g. removing a mode from a syst), this will cause a throw
+	//     Therefore include as debug warning and continue instead
+        MACH3LOG_DEBUG("Couldn't find mode for {} in {}. Problem Spline is : {} ", Mode, Syst, FullSplineName);
+	continue;
       }
 
-      if (isValidSplineIndex(SampleName, iOscChan, SystNum, ModeNum, Var1Bin, Var2Bin, Var3Bin))
-      {
-        // loop over all the spline knots and check their value
+      mySpline = Key->ReadObject<TSpline3>();
+
+      if (isValidSplineIndex(SampleName, iOscChan, SystNum, ModeNum, Var1Bin, Var2Bin, Var3Bin)) { // loop over all the spline knots and check their value
+        MACH3LOG_DEBUG("Pushed back monolith for spline {}", FullSplineName);
         // if the value is 1 then set the flat bool to false
-        int nKnots = Spline->GetNp();
-        bool isFlat = true;
+        nKnots = mySpline->GetNp();
+        isFlat = true;
+        for (int iKnot = 0; iKnot < nKnots; iKnot++) {
+          mySpline->GetKnot(iKnot, x, y);
 
-        for (int iKnot = 0; iKnot < nKnots; iKnot++)
-        {
-          double x = -999;
-          double y = -999;
-          Spline->GetKnot(iKnot, x, y);
-
-          if (x == -999 || y == -999)
-          {
-            std::cerr << "Something has gone wrong... knot position is at -999" << std::endl;
-            std::cerr << "This error brought you by the folks at : "<<__FILE__<<" : "<<__LINE__<<std::endl;
-            throw;
-          }
-
-          double Eval = Spline->Eval(x);
+          Eval = mySpline->Eval(x);
           if (Eval < 0.99999 || Eval > 1.00001)
           {
             isFlat = false;
@@ -184,162 +139,29 @@ void splinesDUNE::FillSampleArray(std::string SampleName, std::vector<std::strin
 
         //Rather than keeping a mega vector of splines then converting, this should just keep everything nice in memory!
         indexvec[iSample][iOscChan][SystNum][ModeNum][Var1Bin][Var2Bin][Var3Bin]=MonolithIndex;
-
         coeffindexvec.push_back(CoeffIndex);
         // Should save memory rather saving [x_i_0 ,... x_i_maxknots] for every spline!
-        if (isFlat)
-        {
-          splinevec_Monolith.push_back(NULL);
-          delete Spline;
-        }
-        else{
+        if (isFlat) {
+          splinevec_Monolith.push_back(nullptr);
+          delete mySpline;
+        } else {
+          Spline = new TSpline3_red(mySpline, SplineInterpolationTypes[iSample][SystNum]);
+          delete mySpline;
+
           splinevec_Monolith.push_back(Spline);
-          int np=Spline->GetNp();
           uniquecoeffindices.push_back(MonolithIndex); //So we can get the unique coefficients and skip flat splines later on!
-          CoeffIndex+=np;
+          CoeffIndex+=nKnots;
         }
-	
+        //Incrementing MonolithIndex to keep track of number of valid spline indices
         MonolithIndex+=1;
+      } else {
+        //Potentially you are not a valid spline index
+        delete mySpline;
       }
     }//End of loop over all TKeys in file
-    //ETA - I have no idea why but this breaks in ROOT 6.24 :/
-    std::cout << "Got " << nb_splines << " total splines with " << unique_spline_names.size() << " unique names." << std::endl;
-    delete File;
+
+    //A bit of clean up
+    File->Delete("*");
+    File->Close();
   } //End of oscillation channel loop
-
-  //Find all modes which have been found in the spline file but have not been specified in the config
-  for (unsigned iSyst = 0; iSyst < SplineFileParPrefixNames[iSample].size(); iSyst++) 
-  {
-    std::vector<std::string> MissedModes;
-	for (auto const & ModeUsage : ModeStatus[iSyst])
-	{
-	  if(ModeUsage.second==kInFile)
-	  {
-		MissedModes.push_back(ModeUsage.first);
-	  }
-	}
-
-	if(MissedModes.size()!=0)
-	{
-      MACH3LOG_INFO("Parameter {} has splines for {} modes which have not been read in!", SplineFileParPrefixNames[iSample][iSyst].c_str(), MissedModes.size());
-	  std::cout << "Modes: ";  
-	  for (auto const & Mode : MissedModes)
-	  {
-	    std::cout << Mode << " ";  
-	  }
-	  std::cout << std::endl;
-    }
-  } 
-  
-  return;
-}
-
-//****************************************
-std::vector< std::vector<int> > splinesDUNE::GetEventSplines(std::string SampleName, int iOscChan, int EventMode, double Var1Val, double Var2Val, double Var3Val)
-//****************************************
-{
-  std::vector<std::vector<int>> ReturnVec;
-  int SampleIndex = -1;
-  for (unsigned int iSample = 0; iSample < SampleNames.size(); iSample++) {
-    if (SampleName == SampleNames[iSample]) {
-      SampleIndex = iSample;
-    }
-  }
-
-  if (SampleIndex == -1)
-  {
-	MACH3LOG_ERROR("Sample not found: {}", SampleName);
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-
-  int nSplineSysts = (int)indexvec[SampleIndex][iOscChan].size();
-  //ETA- this is already a MaCh3 mode
-  //int Mode = MaCh3Mode_to_SplineMode(MaCh3_Mode(EventMode));
-  int Mode = MaCh3_Mode(EventMode);
-
-  int Var1Bin = SplineBinning[SampleIndex][iOscChan][0]->FindBin(Var1Val)-1;
-  if (Var1Bin < 0 || Var1Bin >= SplineBinning[SampleIndex][iOscChan][0]->GetNbins()){
-	//Explicitly push back with an empty vector
-	ReturnVec.push_back(std::vector<int>());
-    return ReturnVec;
-  }
-
-  int Var2Bin = SplineBinning[SampleIndex][iOscChan][1]->FindBin(Var2Val)-1;
-  if (Var2Bin < 0 || Var2Bin >= SplineBinning[SampleIndex][iOscChan][1]->GetNbins()){
-	//Explicitly push back with an empty vector
-	ReturnVec.push_back(std::vector<int>());
-    return ReturnVec;
-  }
-
-  int Var3Bin = SplineBinning[SampleIndex][iOscChan][2]->FindBin(Var3Val)-1;
-
-  if (Var3Bin < 0 || Var3Bin >= SplineBinning[SampleIndex][iOscChan][2]->GetNbins()){
-	//Explicitly push back with an empty vector
-	ReturnVec.push_back(std::vector<int>());
-    return ReturnVec;
-  }
-
-  for(int iSyst=0; iSyst<nSplineSysts; iSyst++){
-    std::vector<int> spline_modes = SplineModeVecs[SampleIndex][iSyst];
-    int nSampleModes = (int)spline_modes.size();
-
-    //ETA - look here at the length of spline_modes and what you're actually comparing against
-    for(int iMode = 0; iMode<nSampleModes ; iMode++){
-      if(Mode == spline_modes[iMode]){
-        std::vector<int> event_vec(7);
-        event_vec[0]=SampleIndex;
-        event_vec[1]=iOscChan;
-        event_vec[2]=iSyst;
-        event_vec[3]=iMode;
-        event_vec[4]=Var1Bin;
-        event_vec[5]=Var2Bin;
-        event_vec[6]=Var3Bin;
-        int splineID=indexvec[SampleIndex][iOscChan][iSyst][iMode][Var1Bin][Var2Bin][Var3Bin];
-        if(!isflatarray[splineID]){
-          ReturnVec.push_back(event_vec);
-        }
-      }
-    }
-  }
-
-  return ReturnVec;
-}
-
-// Converts MaCh3 modes to unique modes that splines apply to
-// (for example if CCRES and CCCoherent are treated as one spline mode)
-std::vector< std::vector<int> > splinesDUNE::StripDuplicatedModes(std::vector< std::vector<int> > InputVector) {
-  
-  //ETA - this is of size nPars from the xsec model 
-  int InputVectorSize = InputVector.size();
-  std::vector< std::vector<int> > ReturnVec(InputVectorSize);
-
-  //ETA - loop over all systematics
-  for (int iVec=0;iVec<InputVectorSize;iVec++) {
-    std::vector<int> TmpVec;
-	
-	//Loop over the modes that we've listed in xsec cov
-	for (unsigned int iMode = 0 ; iMode < InputVector[iVec].size() ; iMode++){
-	  //Convert the MaCh3 mode to spline mode (could use MaCh3Mode_SplineMode_Map here)
-	  int iSplineMode = MaCh3Mode_to_SplineMode(InputVector[iVec][iMode]);
-	  bool IncludeMode = true;
-
-	  //Now check to see if we've already included this unique spline mode
-	  for(unsigned int entry_i = 0 ; entry_i < TmpVec.size() ; entry_i++){
-	    //Check to see if we've already included this unique SK spline mode
-	    if(iSplineMode == TmpVec[entry_i]){
-	      IncludeMode = false;
-	    }
-	  }
-	  
-	  if(IncludeMode){
-	    //Push back with the spline mode a systematic applies to
-	    TmpVec.push_back(iSplineMode);
-	  }
-	  
-	}//end of loop over modes for a syst
-	
-	ReturnVec[iVec] = TmpVec;
-  }//end of loop over systs
-  
-  return ReturnVec;
 }

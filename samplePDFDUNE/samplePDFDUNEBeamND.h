@@ -1,136 +1,67 @@
 #ifndef _samplePDFDUNEBeamND_h_
 #define _samplePDFDUNEBeamND_h_
 
-#include <iostream>
-#include <TTree.h>
-#include <TH1D.h>
-#include <TH2D.h>
-#include <TMath.h>
-#include <TFile.h>
-#include <TGraph2DErrors.h>
-#include <vector>
-#include <omp.h>
-#include <list>
-
 #include "splines/splinesDUNE.h"
-#include "covariance/covarianceXsec.h"
-#include "covariance/covarianceOsc.h"
 #include "samplePDF/samplePDFFDBase.h"
 
 #include "StructsDUNE.h"
 
-/// @brief Base class for handling beam ND LAR samples
 class samplePDFDUNEBeamND : virtual public samplePDFFDBase
 {
 public:
-  /// @brief samplePDFDUNE ND beam Constructor
-  /// @param mc_version Config Name
-  /// @param xsec_cov Cross-section covariance matrix
-  /// @param osc_cov Oscillation covariance matrix
-  samplePDFDUNEBeamND(std::string mc_version, covarianceXsec* xsec_cov, covarianceOsc* osc_cov);
-
-/// @brief destructor
+  samplePDFDUNEBeamND(std::string mc_version, covarianceXsec* xsec_cov, TMatrixD* nd_cov, covarianceOsc* osc_cov) ;
   ~samplePDFDUNEBeamND();
 
-  /// @brief Enum to identify kinematics
-  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoQ};
+  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kyRec,kOscChannel,kMode,kIsFHC};
   
  protected:
-  /// @brief Initialises object
   void Init();
-
-  /// @brief Function to setup MC from file
-  /// @param iSample sample ID
-  /// @return Total number of events
   int setupExperimentMC(int iSample);
-
-  /// @brief Tells FD base which variables to point to/be set to
-  /// @param iSample Sample ID
   void setupFDMC(int iSample);
 
-  /// @brief Sets up pointers weights for each event (oscillation/xsec/etc.)
   void SetupWeightPointers();
-
-  /// @brief Sets up splines 
   void SetupSplines();
-
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinPar Kinematic parameter enum val
-  /// @param iSample Sample ID
-  /// @param iEvent Event ID
-  /// @return Pointer to KinPar for a given event
+  
   const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent);
-
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinematicVariable Kinematic parameter as double (gets cast -> int)
-  /// @param iSample Sample ID
-  /// @param iEvent Event ID
-  /// @return Pointer to KinPar for a given event
   const double* GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent);
-
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinematicParameter Kinematic parameter name as string (gets cast -> int)
-  /// @param iSample Sample ID
-  /// @param iEvent Event ID
-  /// @return Pointer to KinPar for a given event
   const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
 
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinematicVariable Kinematic parameter ID as double (gets cast -> int)
-  /// @param iSample Sample ID
-  /// @param iEvent Event ID
-  /// @return Value of kinetmatic parameter corresponding for a given event
   double ReturnKinematicParameter(double KinematicVariable, int iSample, int iEvent);
-
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinematicParameter Kinematic parameter name as string (gets cast -> int)
-  /// @param iSample Sample ID
-  /// @param iEvent Event ID
-  /// @return Value of kinematic parameter corresponding for a given event
   double ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
 
-  /// @brief Gets binning for a given parameter
-  /// @param KinematicParameterStr Parameter name
-  /// @return Vector containing parameter bins
   std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameter);
-
-  /// @brief Gets name of kinematic parmaeter
-  /// @param KinPar Parameter ID
-  /// @return Name of parameter
-  std::string ReturnStringFromKinematicParameter(int KinematicParameter);
-  
-  /// @brief Get kinematic parameter ID from string name
-  /// @param KinematicStr 
-  /// @return Parameter ID
-  int ReturnKinematicParameterFromString(std::string KinematicParameterStr);
   
   //DB functions which could be initialised to do something which is non-trivial
-
-  /// @brief NOT IMPLEMENTED: Dunder method to calculate xsec weights
-  /// @param iSample sample ID
-  /// @param iEvent Event number
-  double CalcXsecWeightFunc(int iSample, int iEvent) {return 1.;}
-
-  /// @brief NOT IMPLEMENTED: Apply kinematic shifts
-  /// @param iSample Sample Number
-  /// @param iEvent Event number
+  double CalcXsecWeightFunc(int iSample, int iEvent) {return 1.; (void)iSample; (void)iEvent;}
   void applyShifts(int iSample, int iEvent);
 
-  /// Array filled with MC samples for each oscillation channel
+  void setNDCovMatrix();
+  double GetLikelihood() override;
+
   std::vector<struct dunemc_base> dunendmcSamples;
 
-  /// File containing sample objects
-  TFile *_sampleFile;
+  const std::unordered_map<std::string, int> KinematicParametersDUNE = {
+    {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
+    {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},
+    {"yRec",kyRec},
+    {"OscillationChannel",kOscChannel},
+    {"Mode",kMode},
+    {"IsFHC",kIsFHC}
+  };
 
-  /// TTree containing sample Data
-  TTree *_data;
-
-  /// Value of POT used for sample
-  double pot;
+  const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
+    {kTrueNeutrinoEnergy,"TrueNeutrinoEnergy"},
+    {kRecoNeutrinoEnergy,"RecoNeutrinoEnergy"},
+    {kyRec,"yRec"},
+    {kOscChannel,"OscillationChannel"},
+    {kMode,"Mode"},
+    {kIsFHC,"IsFHC"}
+  };
 
   TString _nutype;
-
   int _mode;
+
+  double pot;
 
   // dunendmc Variables
   double _ev;
@@ -170,7 +101,7 @@ public:
   // configuration 
   bool iselike;
   bool isND;
-  bool IsRHC;
+  double IsFHC;
 
   //Positions of ND Detector systematics
   double tot_escale_nd_pos;
@@ -193,10 +124,14 @@ public:
   double n_res_nd_pos;
   double em_res_nd_pos;
 
-  /// ND Detector Systematics
-  std::vector<const double*> NDDetectorSystPointers;
+  bool isNDCovSet = false;
+  // The ND detector covariance matrix
+  TMatrixD *NDCovMatrix;
+  // The inverse ND detector covariance matrix
+  double **NDInvertCovMatrix;
 
-  /// Number of FD Detector Systematics
+
+  std::vector<const double*> NDDetectorSystPointers;
   int nNDDetectorSystPointers;
 };
 
