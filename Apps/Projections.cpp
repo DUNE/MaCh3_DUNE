@@ -177,8 +177,9 @@ int main(int argc, char *argv[]) {
       }
     }
     for (auto &KinematicCutConfig: fitMan->raw()["GeneralKinematicCuts"]) {
+#ifdef BUILD_NDGAR
       if (VarStrings[0].find("Particle_") == std::string::npos && KinematicCutConfig["VarString"].as<std::string>().find("Particle_") != std::string::npos) continue;
-
+#endif
       std::string KinematicCutName = KinematicCutConfig["Name"].as<std::string>();
       std::string KinematicCutVarString = KinematicCutConfig["VarString"].as<std::string>();
       std::vector<double> KinematicCutRange = KinematicCutConfig["Range"].as< std::vector<double> >();
@@ -310,16 +311,29 @@ int main(int argc, char *argv[]) {
 
       std::string outputname;
       if (histdim==1) {
-        Hist = Sample->get1DVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
+#ifdef BUILD_NDGAR
+        if (ProjectionVar_Str[0].find("Particle_") != std::string::npos) {
+          Hist = (TH1*)Sample->get1DParticleVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
+        }
+        else {
+          Hist = (TH1*)Sample->get1DVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
+        }
+#else
+        Hist = (TH1*)Sample->get1DVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
+#endif
         outputname = Sample->GetName()+"_"+Projections[iProj].Name;
       } 
       else {
+#ifdef BUILD_NDGAR
         if (ProjectionVar_Str[0].find("Particle_") != std::string::npos) {
           Hist = (TH1*)Sample->get2DParticleVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
         }
         else {
           Hist = (TH1*)Sample->get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
         }
+#else
+        Hist = (TH1*)Sample->get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
+#endif
         outputname = Sample->GetName()+"_"+Projections[iProj].Name;
       }
       Hist->Scale(1.0,"Width");
