@@ -61,22 +61,53 @@ public:
 
   std::vector<struct dunemc_base> dunendmcSamples;
 
-  const std::unordered_map<std::string, int> KinematicParametersDUNE = {
-    {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
-    {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},
-    {"yRec",kyRec},
-    {"OscillationChannel",kOscChannel},
-    {"Mode",kMode},
-    {"IsFHC",kIsFHC}
+  const std::unordered_map<std::string, KinematicTypes> KinematicParameterMap = {
+    {"yRec", kyRec},
+    {"TrueNeutrinoEnergy", kTrueNeutrinoEnergy},
+    {"RecoQ", kRecoQ},
+    {"RecoNeutrinoEnergy", kRecoNeutrinoEnergy},
+    {"IsFHC", kIsFHC},
+    {"OscChannel", kOscChannel},
+    {"Mode", kMode},
+    {"MuonMom", kMuonMom},
+    {"MuonEnergy", kMuonEnergy},
+    {"MuonTheta", kMuonTheta},
+    {"RecoMuonEnergy", kRecoMuonEnergy},
+    {"PipMom", kPipMom},
+    {"PipEnergy", kPipEnergy},
+    {"RecoPipEnergy", kRecoPipEnergy},
+    {"PipTheta", kPipTheta},
+    {"MuonEDiff", kMuonEDiff},
+    {"PipEDiff", kPipEDiff},
+    {"EDiff", kEDiff},
+    {"StartX", kStartX},
+    {"StartY", kStartY},
+    {"StartZ", kStartZ}
   };
 
-  const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
-    {kTrueNeutrinoEnergy,"TrueNeutrinoEnergy"},
-    {kRecoNeutrinoEnergy,"RecoNeutrinoEnergy"},
-    {kyRec,"yRec"},
-    {kOscChannel,"OscillationChannel"},
-    {kMode,"Mode"},
-    {kIsFHC,"IsFHC"}
+  const std::unordered_map<KinematicTypes, std::string> KinematicParameterToStringMap = {
+    {kTrueNeutrinoEnergy, "TrueNeutrinoEnergy"},
+    {kyRec, "yRec"},
+    {kRecoQ, "RecoQ"},
+    {kRecoNeutrinoEnergy, "RecoNeutrinoEnergy"},
+    {kIsFHC, "IsFHC"},
+    {kyRec, "yRec"},
+    {kOscChannel, "OscChannel"},
+    {kMode, "Mode"},
+    {kMuonMom, "MuonMom"},
+    {kMuonEnergy, "MuonEnergy"},
+    {kRecoMuonEnergy, "RecoMuonEnergy"},
+    {kMuonTheta, "MuonTheta"},
+    {kPipMom, "PipMom"},
+    {kPipEnergy, "PipEnergy"},
+    {kRecoPipEnergy, "RecoPipEnergy"},
+    {kPipTheta, "PipTheta"},
+    {kMuonEDiff, "MuonEDiff"},
+    {kPipEDiff, "PipEDiff"},
+    {kEDiff, "EDiff"},
+    {kStartX, "StartX"},
+    {kStartY, "StartY"},
+    {kStartZ, "StartZ"}
   };
 
   TString _nutype;
@@ -257,6 +288,10 @@ public:
 
   std::vector<const double*> NDDetectorSystPointers;
   int nNDDetectorSystPointers;
+
+  TH2* get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY);
+
+
 };
 
 #endif
