@@ -31,121 +31,28 @@ void samplePDFDUNEBeamND::Init() {
   SampleDetID = SampleManager->raw()["DetID"].as<int>();
   iselike = SampleManager->raw()["SampleBools"]["iselike"].as<bool>();
 
-  // SetupFunctionalParameters();
 
-  /*
-  tot_escale_nd_pos = -999;
-  tot_escale_sqrt_nd_pos = -999;
-  tot_escale_invsqrt_nd_pos = -999;
-  had_escale_nd_pos = -999;
-  had_escale_sqrt_nd_pos = -999;
-  had_escale_invsqrt_nd_pos = -999;
-  mu_escale_nd_pos = -999;
-  mu_escale_sqrt_nd_pos = -999;
-  mu_escale_invsqrt_nd_pos = -999;
-  n_escale_nd_pos = -999;
-  n_escale_sqrt_nd_pos = -999;
-  n_escale_invsqrt_nd_pos = -999;
-  em_escale_nd_pos = -999;
-  em_escale_sqrt_nd_pos = -999;
-  em_escale_invsqrt_nd_pos = -999;
-  had_res_nd_pos = -999;
-  mu_res_nd_pos = -999;
-  n_res_nd_pos = -999;
-  em_res_nd_pos = -999;
-
-  std::vector<std::string> funcParsNames = XsecCov->GetParsNamesFromDetID(SampleDetID, SystType::kFunc);
-  std::vector<int> funcParsIndex = XsecCov->GetParsIndexFromDetID(SampleDetID, SystType::kFunc);
-
-  nNDDetectorSystPointers = funcParsIndex.size();
-  NDDetectorSystPointers = std::vector<const double*>(nNDDetectorSystPointers);
-
-  int func_it = 0;
-  for (std::vector<int>::iterator it = funcParsIndex.begin(); it != funcParsIndex.end(); ++it, ++func_it) {
-    std::string name = funcParsNames.at(func_it);
-    
-    if (name == "TotalEScaleND") {
-      tot_escale_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(tot_escale_nd_pos);
-    }
-    else if (name == "TotalEScaleSqrtND") {
-      tot_escale_sqrt_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(tot_escale_sqrt_nd_pos);
-    }
-    else if (name == "TotalEScaleInvSqrtND") {
-      tot_escale_invsqrt_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(tot_escale_invsqrt_nd_pos);
-    }
-    else if (name == "HadEScaleND") {
-      had_escale_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(had_escale_nd_pos);
-    }
-    else if (name == "HadEScaleSqrtND") {
-      had_escale_sqrt_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(had_escale_sqrt_nd_pos);
-    }
-    else if (name == "HadEScaleInvSqrtND") {
-      had_escale_invsqrt_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(had_escale_invsqrt_nd_pos);
-    }
-    else if (name == "MuEScaleND") {
-      mu_escale_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(mu_escale_nd_pos);
-    }
-    else if (name == "MuEScaleSqrtND") {
-      mu_escale_sqrt_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(mu_escale_sqrt_nd_pos);
-    }
-    else if (name == "MuEScaleInvSqrtND") {
-      mu_escale_invsqrt_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(mu_escale_invsqrt_nd_pos);
-    }
-    else if (name == "NEScaleND") {
-      n_escale_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(n_escale_nd_pos);
-    }
-    else if (name == "NEScaleSqrtND") {
-      n_escale_sqrt_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(n_escale_sqrt_nd_pos);
-    }
-    else if (name == "NEScaleInvSqrtND") {
-      n_escale_invsqrt_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(n_escale_invsqrt_nd_pos);
-    }
-    else if (name == "EMEScaleND") {
-      em_escale_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(em_escale_nd_pos);
-    }
-    else if (name == "EMEScaleSqrtND") {
-      em_escale_sqrt_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(em_escale_sqrt_nd_pos);
-    }
-    else if (name == "EMEScaleInvSqrtND") {
-      em_escale_invsqrt_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(em_escale_invsqrt_nd_pos);
-    }
-    else if (name == "HadResND") {
-      had_res_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(had_res_nd_pos);
-    }
-    else if (name == "MuResND") {
-      mu_res_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(mu_res_nd_pos);
-    }
-    else if (name == "NResND") {
-      n_res_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(n_res_nd_pos);
-    }
-    else if (name == "EMResND") {
-      em_res_nd_pos = *it;
-      NDDetectorSystPointers[func_it] = XsecCov->retPointer(em_res_nd_pos);
-    }
-    else { 
-      MACH3LOG_ERROR("Found a functional parameter which wasn't specified in the xml | samplePDFDUNEBeamND: {}",name);
+  std::string nd_detsys_cov_filename = GetFromManager<std::string>(SampleManager->raw()["NDDetSysCovFile"], "");
+  std::string nd_detsys_cov_matrixname = GetFromManager<std::string>(SampleManager->raw()["NDDetSysCovMatrix"], "");
+  if (nd_detsys_cov_filename == "") {
+    MACH3LOG_ERROR("No NDDetSysCovFile found in {}", SampleManager->GetFileName());
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  else {
+    TFile *nd_detsys_cov_file = new TFile(nd_detsys_cov_filename.c_str(), "READ");
+    if (nd_detsys_cov_file->IsZombie()) {
+      MACH3LOG_ERROR("Could not open NDDetSysCovFile {}, please check the file name", nd_detsys_cov_filename);
       throw MaCh3Exception(__FILE__, __LINE__);
     }
+    MACH3LOG_INFO("Loading NDDetSysCovMatrix from {}", nd_detsys_cov_filename);
+    NDCovMatrix = nd_detsys_cov_file->Get<TMatrixD>(nd_detsys_cov_matrixname.c_str());
+    if (NDCovMatrix == nullptr) {
+      MACH3LOG_ERROR("Could not find {}, please check the matrix name", nd_detsys_cov_matrixname);
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+    nd_detsys_cov_file->Close();
   }
-  */
+  MACH3LOG_INFO("Using custom likelihood for ND!");
   
   std::cout << "-------------------------------------------------------------------" <<std::endl;
 }
@@ -454,6 +361,9 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   _sampleFile = TFile::Open(mc_files.at(iSample).c_str(), "READ");
   _data = (TTree*)_sampleFile->Get("caf");
 
+  TChain* _data = new TChain("caf");
+  _data->Add(mc_files.at(iSample).c_str());
+
   if(_data){
     MACH3LOG_INFO("Found \"caf\" tree in {}", mc_files[iSample]);
     MACH3LOG_INFO("With number of entries: {}", _data->GetEntries());
@@ -761,71 +671,6 @@ void samplePDFDUNEBeamND::setupFDMC(int iSample) {
   }
 }
 
-/*
-void samplePDFDUNEBeamND::applyShifts(int iSample, int iEvent) {
-  // reset erec back to original value
-  
-  dunendmcSamples[iSample].rw_erec_shifted[iEvent] = dunendmcSamples[iSample].rw_erec[iEvent];
-
-  //Calculate values needed
-  double sqrtErecHad =  sqrt(dunendmcSamples[iSample].rw_erec_had[iEvent]);
-  double sqrtErecLep =  sqrt(dunendmcSamples[iSample].rw_erec_lep[iEvent]);
-  double sqrteRecoPi0 = sqrt(dunendmcSamples[iSample].rw_eRecoPi0[iEvent]);
-  double sqrteRecoN = sqrt(dunendmcSamples[iSample].rw_eRecoN[iEvent]);
-  double sumEhad = dunendmcSamples[iSample].rw_eRecoP[iEvent] + dunendmcSamples[iSample].rw_eRecoPip[iEvent] + dunendmcSamples[iSample].rw_eRecoPim[iEvent];
-  double sqrtSumEhad = sqrt(sumEhad);
-
-  double invSqrtErecHad =  1/(sqrtErecHad+0.1);
-  double invSqrtErecLep =  1/(sqrtErecLep+0.1);
-  double invSqrteRecoPi0 =  1/(sqrteRecoPi0+0.1);
-  double invSqrteRecoN =  1/(sqrteRecoN+0.1);
-  double invSqrtSumEhad =  1/(sqrtSumEhad+0.1);
-
-  bool CCnumu {dunendmcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunendmcSamples[iSample].rw_nuPDG[iEvent])==NuPDG::kNumu && dunendmcSamples[iSample].rw_nuPDGunosc[iEvent]==NuPDG::kNumu};
-  bool CCnue {dunendmcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunendmcSamples[iSample].rw_nuPDG[iEvent])==NuPDG::kNue && dunendmcSamples[iSample].rw_nuPDGunosc[iEvent]==NuPDG::kNue};
-  bool NotCCnumu {!(dunendmcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunendmcSamples[iSample].rw_nuPDG[iEvent])==14) && dunendmcSamples[iSample].rw_nuPDGunosc[iEvent]==NuPDG::kNumu};
-
-/*
-  TotalEScaleND(NDDetectorSystPointers[0], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_erec_had[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], NotCCnumu);
-
-  TotalEScaleSqrtND(NDDetectorSystPointers[1], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_erec_had[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], sqrtErecHad, sqrtErecLep, NotCCnumu);
-
-  TotalEScaleInvSqrtND(NDDetectorSystPointers[2], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_erec_had[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], invSqrtErecHad, invSqrtErecLep, NotCCnumu);
-
-  HadEScaleND(NDDetectorSystPointers[3], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], sumEhad);
-
-  HadEScaleSqrtND(NDDetectorSystPointers[4], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], sumEhad, sqrtSumEhad);
-
-  HadEScaleInvSqrtND(NDDetectorSystPointers[5], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], sumEhad, invSqrtSumEhad);
-
-  MuEScaleND(NDDetectorSystPointers[6], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], CCnumu);
-
-  MuEScaleSqrtND(NDDetectorSystPointers[7], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], sqrtErecLep, CCnumu);
-
-  MuEScaleInvSqrtND(NDDetectorSystPointers[8], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], invSqrtErecLep, CCnumu);
-
-  NEScaleND(NDDetectorSystPointers[9], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoN[iEvent]);
-
-  NEScaleSqrtND(NDDetectorSystPointers[10], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoN[iEvent], sqrteRecoN);
-
-  NEScaleInvSqrtND(NDDetectorSystPointers[11], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoN[iEvent], invSqrteRecoN);
-
-  EMEScaleND(NDDetectorSystPointers[12], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoPi0[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], CCnue);
-
-  EMEScaleSqrtND(NDDetectorSystPointers[13], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoPi0[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], sqrtErecLep, sqrteRecoPi0, CCnue);
-
-  EMEScaleInvSqrtND(NDDetectorSystPointers[14], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoPi0[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], invSqrtErecLep, invSqrteRecoPi0, CCnue);
-
-  HadResND(NDDetectorSystPointers[15], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoP[iEvent], dunendmcSamples[iSample].rw_eRecoPip[iEvent], dunendmcSamples[iSample].rw_eRecoPim[iEvent], dunendmcSamples[iSample].rw_eP[iEvent], dunendmcSamples[iSample].rw_ePip[iEvent], dunendmcSamples[iSample].rw_ePim[iEvent]);
-
-  MuResND(NDDetectorSystPointers[16], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], dunendmcSamples[iSample].rw_LepE[iEvent], CCnumu);
-
-  NResND(NDDetectorSystPointers[17], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoN[iEvent], dunendmcSamples[iSample].rw_eN[iEvent]);
-
-  EMResND(NDDetectorSystPointers[18], &dunendmcSamples[iSample].rw_erec_shifted[iEvent], dunendmcSamples[iSample].rw_eRecoPi0[iEvent], dunendmcSamples[iSample].rw_ePi0[iEvent], dunendmcSamples[iSample].rw_erec_lep[iEvent], dunendmcSamples[iSample].rw_LepE[iEvent], CCnue);
-}
-*/
-
 std::vector<double> samplePDFDUNEBeamND::ReturnKinematicParameterBinning(std::string KinematicParameterStr) 
 {
   std::vector<double> binningVector;
@@ -878,4 +723,89 @@ std::string samplePDFDUNEBeamND::ReturnStringFromKinematicParameter(int Kinemati
     case kRecoNEnergy: return "RecoNEnergy";
     default: return "";
   }
+}
+
+// Set the covariance matrix for this class
+void samplePDFDUNEBeamND::setNDCovMatrix() {
+  nXBins = static_cast<int>(XBinEdges.size()-1);
+  nYBins = static_cast<int>(YBinEdges.size()-1);
+  covSize = nXBins*nYBins;
+
+  if (covSize != NDCovMatrix->GetNrows()) {
+    MACH3LOG_ERROR("Sample dimensions do not match ND Detector Covariance!");
+    MACH3LOG_ERROR("Sample XBins * YBins = {} and ND Detector Covariance = {}", covSize, NDCovMatrix->GetNrows());
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+
+  std::vector<double> FlatCV;
+  int iter = 0;
+
+  if (samplePDFFD_data == nullptr) {
+    MACH3LOG_ERROR("SamplePDFFD_data is not set!");
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+
+  // 2D -> 1D Array
+  for (size_t xBin = 0; xBin < nXBins; xBin++) 
+  {
+    for (size_t yBin = 0; yBin < nYBins; yBin++) 
+    {
+      double CV = samplePDFFD_data[yBin][xBin];
+      FlatCV.push_back(CV);
+
+      if(CV>0) (*NDCovMatrix)(iter,iter) += 1/CV;
+
+      iter++;
+    }
+  }
+
+  NDInvertCovMatrix.resize(covSize, std::vector<double>(covSize, 0.));
+
+  TMatrixD* NDInvCovMatrix=static_cast<TMatrixD*>(NDCovMatrix->Clone());
+  NDInvCovMatrix->Invert();
+
+  //Scale back to inverse absolute cov and use standard double
+  for (int i = 0; i < covSize; i++) {
+    for (int j = 0; j < covSize; ++j) {
+      const double f = FlatCV[i] * FlatCV[j];
+      if(f != 0) NDInvertCovMatrix[i][j] = (*NDInvCovMatrix)(i,j)/f;
+      else NDInvertCovMatrix[i][j] = 0.;
+    }
+  }
+
+  // Initialise size of FlatDataMCDiff
+  FlatDataMCDiff.resize(covSize, 0.);
+}
+
+double samplePDFDUNEBeamND::GetLikelihood() {
+
+  if (!isNDCovSet) {
+    setNDCovMatrix();
+    isNDCovSet = true;
+  }
+
+  #ifdef MULTITHREAD 
+    #pragma omp parallel for 
+  #endif
+  //2D -> 1D 
+  for (int xBin = 0; xBin < nXBins; xBin++) {
+    for (int yBin = 0; yBin < nYBins; yBin++) {
+      double MCPred = samplePDFFD_array[yBin][xBin];
+      double DataVal = samplePDFFD_data[yBin][xBin];
+      FlatDataMCDiff[xBin*nYBins+yBin] = DataVal - MCPred;
+    }
+  }
+  double negLogL = 0.;
+  #ifdef MULTITHREAD 
+    #pragma omp parallel for reduction(+:negLogL)
+  #endif
+  for (int i = 0; i < covSize; i++) {
+    for (int j = 0; j <= i; ++j) {
+        //KS: Since matrix is symetric we can calcaute non daigonal elements only once and multiply by 2, can bring up to factor speed decrease.   
+        int scale = 1;
+        if(i != j) scale = 2;
+        negLogL += scale * 0.5*FlatDataMCDiff[i]*FlatDataMCDiff[j]*NDInvertCovMatrix[i][j];
+      }
+  }
+  return negLogL;
 }

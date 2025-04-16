@@ -109,7 +109,15 @@ public:
   
   //DB functions which could be initialised to do something which is non-trivial
   double CalcXsecWeightFunc(int iSample, int iEvent) {return 1.;}
-  // void applyShifts(int iSample, int iEvent);
+
+  // HH - Replacing poisson likelihood with gaussian for ND
+  double GetLikelihood() override;
+  TMatrixD *NDCovMatrix;
+  std::vector<std::vector<double>> NDInvertCovMatrix;
+  std::vector<double> FlatDataMCDiff;
+  void setNDCovMatrix();
+  bool isNDCovSet = false;
+  int nXBins, nYBins, covSize;
 
   std::vector<struct dunemc_base> dunendmcSamples;
 
@@ -160,28 +168,28 @@ public:
   bool isND;
   bool IsRHC;
 
-  //Positions of ND Detector systematics
-  double tot_escale_nd_pos;
-  double tot_escale_sqrt_nd_pos;
-  double tot_escale_invsqrt_nd_pos;
-  double had_escale_nd_pos;
-  double had_escale_sqrt_nd_pos;
-  double had_escale_invsqrt_nd_pos;
-  double mu_escale_nd_pos;
-  double mu_escale_sqrt_nd_pos;
-  double mu_escale_invsqrt_nd_pos;
-  double n_escale_nd_pos;
-  double n_escale_sqrt_nd_pos;
-  double n_escale_invsqrt_nd_pos;
-  double em_escale_nd_pos;
-  double em_escale_sqrt_nd_pos;
-  double em_escale_invsqrt_nd_pos;
-  double had_res_nd_pos;
-  double mu_res_nd_pos;
-  double n_res_nd_pos;
-  double em_res_nd_pos;
+  // //Positions of ND Detector systematics
+  // double tot_escale_nd_pos;
+  // double tot_escale_sqrt_nd_pos;
+  // double tot_escale_invsqrt_nd_pos;
+  // double had_escale_nd_pos;
+  // double had_escale_sqrt_nd_pos;
+  // double had_escale_invsqrt_nd_pos;
+  // double mu_escale_nd_pos;
+  // double mu_escale_sqrt_nd_pos;
+  // double mu_escale_invsqrt_nd_pos;
+  // double n_escale_nd_pos;
+  // double n_escale_sqrt_nd_pos;
+  // double n_escale_invsqrt_nd_pos;
+  // double em_escale_nd_pos;
+  // double em_escale_sqrt_nd_pos;
+  // double em_escale_invsqrt_nd_pos;
+  // double had_res_nd_pos;
+  // double mu_res_nd_pos;
+  // double n_res_nd_pos;
+  // double em_res_nd_pos;
 
-  int nNDDetectorSystPointers = 0;
+  // int nNDDetectorSystPointers = 0;
 };
 
 #endif
