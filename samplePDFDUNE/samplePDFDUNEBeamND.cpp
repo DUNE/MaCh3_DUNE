@@ -26,6 +26,7 @@ void samplePDFDUNEBeamND::Init() {
   IsELike = SampleManager->raw()["DUNESampleBools"]["iselike"].as<bool>();
   pot = SampleManager->raw()["POT"].as<double>();
 
+  nparticlesinsample =  new int[nSamples]();
   tot_escale_nd_pos = -999;
   tot_escale_sqrt_nd_pos = -999;
   tot_escale_invsqrt_nd_pos = -999;
@@ -233,6 +234,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   duneobj->rw_reco_px = new double[duneobj->nEvents];
   duneobj->rw_reco_py = new double[duneobj->nEvents];
   duneobj->rw_reco_pz = new double[duneobj->nEvents];
+  nparticlesinsample[iSample]++;
 
   /*
   -----------------------------------------------------------------------------------------------------
@@ -690,65 +692,129 @@ std::vector<double> samplePDFDUNEBeamND::ReturnKinematicParameterBinning(std::st
   std::vector<double> ReturnVec;
 
   switch (KinPar) {
+    case kIsFHC:
+      ReturnVec.resize(3);
+      ReturnVec[0] = -0.5;
+      ReturnVec[1] = 0.5;
+      ReturnVec[2] = 1.5;
+      break;
 
-  case kIsFHC:
-    ReturnVec.resize(3);
-    ReturnVec[0] = -0.5;
-    ReturnVec[1] = 0.5;
-    ReturnVec[2] = 1.5;
-    break;
-    
-  case kTrueNeutrinoEnergy:
-    for (int i=0;i<20;i++) {
-      ReturnVec.emplace_back(i);
-    }
-    ReturnVec.emplace_back(100.);
-    ReturnVec.emplace_back(1000.);
-    break;
+    case kTrueNeutrinoEnergy:
+      for (int i = 0; i < 20; i++) {
+        ReturnVec.emplace_back(i);
+      }
+      ReturnVec.emplace_back(100.);
+      ReturnVec.emplace_back(1000.);
+      break;
 
-  case kRecoNeutrinoEnergy:
-    ReturnVec.resize(XBinEdges.size());
-    for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
-    break;
+    case kRecoNeutrinoEnergy:
+      ReturnVec.resize(XBinEdges.size());
+      for (unsigned int bin_i = 0; bin_i < XBinEdges.size(); bin_i++) {
+        ReturnVec[bin_i] = XBinEdges[bin_i];
+      }
+      break;
 
-  case kyRec:
-    ReturnVec.resize(YBinEdges.size());
-    for (unsigned int bin_i=0;bin_i<YBinEdges.size();bin_i++) {ReturnVec[bin_i] = YBinEdges[bin_i];}
-    break;
+    case kyRec:
+      ReturnVec.resize(YBinEdges.size());
+      for (unsigned int bin_i = 0; bin_i < YBinEdges.size(); bin_i++) {
+        ReturnVec[bin_i] = YBinEdges[bin_i];
+      }
+      break;
 
-  case kOscChannel:
-    ReturnVec.resize(GetNsamples());
-    for (int bin_i=0;bin_i<GetNsamples();bin_i++) {ReturnVec[bin_i] = bin_i;}
-    break;
+    case kOscChannel:
+      ReturnVec.resize(GetNsamples());
+      for (int bin_i = 0; bin_i < GetNsamples(); bin_i++) {
+        ReturnVec[bin_i] = bin_i;
+      }
+      break;
 
-  case kMode:
-    ReturnVec.resize(Modes->GetNModes());
-    for (int bin_i=0;bin_i<Modes->GetNModes();bin_i++) {ReturnVec[bin_i] = bin_i;}
-    break;
-  case kRecoQ:
-  case kMuonMom:
-  case kMuonEnergy:
-  case kMuonTheta:
-  case kRecoMuonEnergy:
-  case kPipMom:
-  case kPipEnergy:
-  case kRecoPipEnergy:
-  case kPipTheta:
-  case kMuonEDiff:
-  case kPipEDiff:
-  case kEDiff:
-  case kStartX:
-  case kStartY:
-  case kStartZ:
-    break;
+    case kMode:
+      ReturnVec.resize(Modes->GetNModes());
+      for (int bin_i = 0; bin_i < Modes->GetNModes(); bin_i++) {
+        ReturnVec[bin_i] = bin_i;
+      }
+      break;
 
-  default:
-    MACH3LOG_ERROR("Unknown KinPar: {}",static_cast<int>(KinPar));
-    throw MaCh3Exception(__FILE__, __LINE__);
+    case kRecoQ:
+    case kMuonMom:
+    case kMuonEnergy:
+    case kMuonTheta:
+    case kRecoMuonEnergy:
+    case kPipMom:
+    case kPipEnergy:
+    case kRecoPipEnergy:
+    case kPipTheta:
+    case kMuonEDiff:
+    case kPipEDiff:
+    case kEDiff:
+    case kStartX:
+    case kStartY:
+    case kStartZ:
+      break;
+
+    default:
+      MACH3LOG_ERROR("Unknown KinPar: {}", static_cast<int>(KinPar));
+      throw MaCh3Exception(__FILE__, __LINE__);
   }
 
   return ReturnVec;
 }
+
+// Move the definition of get2DParticleVarHist here
+TH2* samplePDFDUNEBeamND::get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY,
+                                               std::vector<std::vector<double>> SelectionVec, int WeightStyle,
+                                               TAxis* AxisX, TAxis* AxisY) {
+  // Implementation of get2DParticleVarHist
+  int ProjectionVar_IntX = ReturnKinematicParameterFromString(ProjectionVar_StrX);
+  int ProjectionVar_IntY = ReturnKinematicParameterFromString(ProjectionVar_StrY);
+
+  std::vector<std::vector<double>> tmp_Selection = Selection;
+  std::vector<std::vector<double>> SelectionVecToApply;
+
+  for (size_t iSelec = 0; iSelec < Selection.size(); iSelec++) {
+    SelectionVecToApply.emplace_back(Selection[iSelec]);
+  }
+
+  for (size_t iSelec = 0; iSelec < SelectionVec.size(); iSelec++) {
+    SelectionVecToApply.emplace_back(SelectionVec[iSelec]);
+  }
+
+  for (size_t iSelec = 0; iSelec < SelectionVecToApply.size(); iSelec++) {
+    if (SelectionVecToApply[iSelec].size() != 3) {
+      MACH3LOG_ERROR("Selection Vector[{}] is not formed correctly. Expect size == 3, given: {}", iSelec, SelectionVecToApply[iSelec].size());
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+  }
+
+  Selection = SelectionVecToApply;
+
+  TH2D* _h2DVar;
+  if (AxisX && AxisY) {
+    _h2DVar = new TH2D("", "", AxisX->GetNbins(), AxisX->GetXbins()->GetArray(), AxisY->GetNbins(), AxisY->GetXbins()->GetArray());
+  } else {
+    std::vector<double> xBinEdges = ReturnKinematicParameterBinning(ProjectionVar_StrX);
+    std::vector<double> yBinEdges = ReturnKinematicParameterBinning(ProjectionVar_StrY);
+    _h2DVar = new TH2D("", "", int(xBinEdges.size()) - 1, xBinEdges.data(), int(yBinEdges.size()) - 1, yBinEdges.data());
+  }
+
+  for (int iSample = 0; iSample < getNMCSamples(); iSample++) {
+    for (int iParticle = 0; iParticle < nparticlesinsample[iSample]; iParticle++) {
+      int event = static_cast<int>(std::round(ReturnKinematicParameter("Particle_Event", iSample, iParticle)));
+      double Weight = GetEventWeight(iSample, event);
+      if (WeightStyle == 1) {
+        Weight = 1.;
+      }
+      double VarX = ReturnKinematicParameter(ProjectionVar_IntX, iSample, iParticle);
+      double VarY = ReturnKinematicParameter(ProjectionVar_IntY, iSample, iParticle);
+      _h2DVar->Fill(VarX, VarY, Weight);
+    }
+  }
+
+  Selection = tmp_Selection;
+
+  return _h2DVar;
+}
+
 
 // Set the covariance matrix for this class
 void samplePDFDUNEBeamND::setNDCovMatrix() {
@@ -865,3 +931,6 @@ double samplePDFDUNEBeamND::GetLikelihood()
   return negLogL;
 
 }
+
+
+

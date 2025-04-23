@@ -278,7 +278,7 @@ public:
   double mu_res_nd_pos;
   double n_res_nd_pos;
   double em_res_nd_pos;
-
+  int nparticlesinsample;
   bool isNDCovSet = false;
   // The ND detector covariance matrix
   TMatrixD *NDCovMatrix;
@@ -289,7 +289,7 @@ public:
   std::vector<const double*> NDDetectorSystPointers;
   int nNDDetectorSystPointers;
 
-  TH2* get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY);
+  TH2* get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY) override;
 
 
 };
