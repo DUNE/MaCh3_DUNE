@@ -31,7 +31,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     TH1* get1DParticleVarHist(std::string ProjectionVar_StrX, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX);
     TH2* get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY);
     
-    enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kParticle_Event, kParticle_Momentum, kParticle_BAngle, kParticle_IsAccepted, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_MomResMS, kParticle_MomResTrans};
+    enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kIsGoodCAFEvent, kParticle_Event, kParticle_Momentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_IsAccepted, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_NHits, kParticle_NTurns, kParticle_MomResMS, kParticle_MomResTrans};
 
   protected:
     void Init();
@@ -60,7 +60,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     double FindNHits(double pixel_spacing_cm, double centre_circle_y, double centre_circle_z, double rad_curvature);
     double CalcBeta(double p_mag, double& bg, double& gamma);
     double GetMass(int partpdg);
-    bool IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, int i_truepart, double pixel_spacing_cm);
+    bool IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, int i_truepart, double pixel_spacing_cm, bool *isgoodcafparticle);
 
     bool IsParticleSelected(const int iSample, const int iEvent, const int iParticle);
     std::vector<struct dunemc_base> dunendgarmcSamples;
@@ -191,8 +191,10 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
       {"TrueQ0",kTrueQ0},
       {"TrueQ3",kTrueQ3},
       {"Event_IsAccepted",kEvent_IsAccepted},
+      {"IsGoodCAFEvent",kIsGoodCAFEvent},
       {"Particle_Event",kParticle_Event},
       {"Particle_Momentum",kParticle_Momentum},
+      {"Particle_TransverseMomentum",kParticle_TransverseMomentum},
       {"Particle_BAngle",kParticle_BAngle},
       {"Particle_IsAccepted",kParticle_IsAccepted},
       {"Particle_PDG",kParticle_PDG},
@@ -201,6 +203,9 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
       {"Particle_IsStoppedInTPC",kParticle_IsStoppedInTPC},
       {"Particle_IsStoppedInECal",kParticle_IsStoppedInECal},
       {"Particle_IsStoppedInGap",kParticle_IsStoppedInGap},
+      {"Particle_IsStoppedInEndGap",kParticle_IsStoppedInEndGap},
+      {"Particle_NHits",kParticle_NHits},
+      {"Particle_NTurns",kParticle_NTurns},
       {"Particle_MomResMS",kParticle_MomResMS},
       {"Particle_MomResTrans",kParticle_MomResTrans},
     };
@@ -225,8 +230,10 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
       {kTrueQ0,"TrueQ0"},
       {kTrueQ3,"TrueQ3"},
       {kEvent_IsAccepted,"Event_IsAccepted"},
+      {kIsGoodCAFEvent,"IsGoodCAFEvent"},
       {kParticle_Event, "Particle_Event"},
       {kParticle_Momentum,"Particle_Momentum"},
+      {kParticle_TransverseMomentum,"Particle_TransverseMomentum"},
       {kParticle_BAngle,"Particle_BAngle"},
       {kParticle_IsAccepted,"Particle_IsAccepted"},
       {kParticle_PDG,"Particle_PDG"},
@@ -235,6 +242,9 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
       {kParticle_IsStoppedInTPC,"Particle_IsStoppedInTPC"},
       {kParticle_IsStoppedInECal,"Particle_IsStoppedInECal"},
       {kParticle_IsStoppedInGap,"Particle_IsStoppedInGap"},
+      {kParticle_IsStoppedInEndGap,"Particle_IsStoppedInEndGap"},
+      {kParticle_NHits,"Particle_NHits"},
+      {kParticle_NTurns,"Particle_NTurns"},
       {kParticle_MomResMS,"Particle_MomResMS"},
       {kParticle_MomResTrans,"Particle_MomResTrans"},
     };
