@@ -4,6 +4,8 @@ name: Event Rates Beam
 on:
   pull_request:
     branches: [develop]
+  push:
+   branches: ["hwallace/patch/event_rate_bot"]
 
 permissions:
   contents: read
