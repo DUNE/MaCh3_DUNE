@@ -45,7 +45,7 @@ jobs:
 
       - name: Start docker container with bind mount CVMFS
         env:
-          MACH3_DUNE_VERSION: ${{ github.head_ref }}
+          MACH3_DUNE_VERSION: ${{ github.event.pull_request.head.ref || github.ref_name }}
         run: |
           docker build . \
           --file doc/MaCh3DockerFiles/Alma9/Dockerfile \
