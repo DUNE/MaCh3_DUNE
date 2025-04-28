@@ -21,7 +21,7 @@ RUN git checkout ${MACH3_DUNE_VERSION}
 
 # Make a python work [hopefully] 
 COPY ./requirements.txt ${MACH3_DUNE_WORK_DIR}/requirements.txt
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r  ${MACH3_DUNE_WORK_DIR}/requirements.txt
 
 RUN mkdir -p ${MACH3_DUNE_BUILD_DIR}
 WORKDIR ${MACH3_DUNE_BUILD_DIR}
