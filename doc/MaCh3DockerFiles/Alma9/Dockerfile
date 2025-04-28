@@ -10,9 +10,12 @@ ENV MACH3_DUNE_WORK_DIR=/opt/MaCh3DUNE/
 ENV MACH3_DUNE_BUILD_DIR=${MACH3_DUNE_WORK_DIR}/build
 ENV MACH3_DUNE_INSTALL_DIR=${MACH3_DUNE_WORK_DIR}/install
 
+# Create and activate a virtual environment
+ENV VIRTUAL_ENV=/opt/venv
+RUN python -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 ARG MACH3_DUNE_BUILD_ARGS
-
 RUN git clone https://github.com/DUNE/MaCh3_DUNE.git ${MACH3_DUNE_WORK_DIR}
 
 WORKDIR ${MACH3_DUNE_WORK_DIR}
@@ -20,7 +23,10 @@ WORKDIR ${MACH3_DUNE_WORK_DIR}
 RUN git checkout ${MACH3_DUNE_VERSION}
 
 # Make a python environment
-RUN pip install -r requirements.txt
+# Install requirements in the virtual environment
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
+
 
 RUN mkdir -p ${MACH3_DUNE_BUILD_DIR}
 WORKDIR ${MACH3_DUNE_BUILD_DIR}

@@ -35,7 +35,9 @@ WORKDIR ${MACH3_DUNE_WORK_DIR}
 RUN git checkout ${MACH3_DUNE_VERSION}
 
 # Make a python environment
-RUN pip install -r requirements.txt
+FROM python:3
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
 RUN mkdir -p ${MACH3_DUNE_INSTALL_DIR}
 WORKDIR ${MACH3_DUNE_INSTALL_DIR}
