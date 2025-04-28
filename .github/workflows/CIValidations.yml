@@ -45,14 +45,19 @@ jobs:
 
       - name: Start docker container with bind mount CVMFS
         env:
-          MACH3_DUNE_VERSION: ${{ github.event.pull_request.head.ref || github.ref_name }}
+        MACH3_DUNE_VERSION: ${{ github.event.pull_request.head.ref || github.ref_name }}
         run: |
           docker build . \
           --file doc/MaCh3DockerFiles/Alma9/Dockerfile \
           --tag ghcr.io/dune/mach3:alma9test \
           --build-arg MACH3_DUNE_VERSION="${MACH3_DUNE_VERSION}" \
           --build-arg MACH3_DUNE_BUILD_ARGS=${{matrix.build_arg}}
-
+      - name: Link CVMFS repos
+        run: |
+          # Create target directories if they don't exist
+          mkdir -p inputs
+          # Create symlinks using proper JSON handling
+          echo '${{ toJSON(matrix.cvmfs_links) }}' | jq -r '.[] | "ln -svf \(.source) \(.target)"' | bash
       # Link CVMFS directories dynamically
       - name: Link CVMFS repos
         run: |
