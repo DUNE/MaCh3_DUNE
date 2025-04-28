@@ -64,6 +64,7 @@ jobs:
       - name: Check CVMFS link validity
         run: |
           # Check each target
+          ls -A
           . .env/bin/activate
           python tests/test_scripts/root_file_corrupt.py ${{matrix.mc_files.target}}
           python tests/test_scripts/root_file_corrupt.py ${{matrix.splines.target}}
