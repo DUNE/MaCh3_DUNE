@@ -35,9 +35,6 @@ WORKDIR ${MACH3_DUNE_WORK_DIR}
 RUN git checkout ${MACH3_DUNE_VERSION}
 
 # Make a python environment
-RUN pip install virtualenv
-RUN virtualenv .env
-RUN source .env/bin/activate
 RUN pip install -r requirements.txt
 
 RUN mkdir -p ${MACH3_DUNE_INSTALL_DIR}
