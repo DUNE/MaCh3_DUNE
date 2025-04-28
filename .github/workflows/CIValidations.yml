@@ -25,11 +25,12 @@ jobs:
             correct_output: tests/test_results/EventRatesV2TDR.txt
             build_arg: -DCUDAProb3Linear_ENABLED=ON
             # Add a list of directories to link
-            cvmfs_links:
-              - source: /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2/DUNE_2021_FD_splines
-                target: inputs/DUNE_spline_files
-              - source: /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2/DUNE_2023_FD_CAFs
-                target: inputs/DUNE_CAF_files
+            splines:
+              source: /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2/DUNE_2021_FD_splines
+              target: inputs/DUNE_spline_files
+            mc_files:
+              source: /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2/DUNE_2023_FD_CAFs
+              target: inputs/DUNE_CAF_files
 
     name: Run Test ${{matrix.name}}
     steps:
@@ -57,19 +58,14 @@ jobs:
           # Create target directories if they don't exist
           mkdir -p inputs
           # Create symlinks using proper JSON handling
-          echo '${{ toJSON(matrix.cvmfs_links) }}' | jq -r '.[] | "ln -svf \(.source) \(.target)"' | bash
-      # Link CVMFS directories dynamically
-      - name: Link CVMFS repos
-        run: |
-          # Create target directories if they don't exist
-          mkdir -p inputs
-          # Create symlinks
-          ${{ toJSON(matrix.cvmfs_links) }} | jq -r '.[] | "ln -s \(.source) \(.target)"' | bash
+          ln -sf ${{ matrix.mc_files.source }} ${{ matrix.mc_files.target }}
+          ln -sf ${{ matrix.splines.source }} ${{ matrix.splines.target }}
 
       - name: Check CVMFS link validity
         run: |
           # Check each target
-          ${{ toJSON(matrix.cvmfs_links) }} | jq -r '.[].target' | xargs python tests/test_scripts/root_file_corrupt.py
+          python root_file_corrupt.py ${{matix.mc_files.target}}
+          python root_file_corrupt.py ${{matrix.splines.target}}
 
       # Run event rates
       - name: Run Event Rates
