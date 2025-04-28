@@ -92,5 +92,5 @@ jobs:
           image: ghcr.io/dune/mach3:alma9test
           shell: bash
           options: -v /cvmfs:/cvmfs:shared
-          run: |
-            diff -q tests/test_results/${{ matrix.correct_output }} ${{ matrix.test_output }}
+        run: |
+          diff -q tests/test_results/${{ matrix.correct_output }} ${{ matrix.test_output }}
