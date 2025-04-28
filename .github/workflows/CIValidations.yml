@@ -62,6 +62,10 @@ jobs:
           ln -sf ${{ matrix.mc_files.source }} ${{ matrix.mc_files.target }}
           ln -sf ${{ matrix.splines.source }} ${{ matrix.splines.target }}
 
+          # DEBUG AGH
+          which python
+          pip list
+
           # Validate the symlinks
           python3 tests/test_scripts/root_file_corrupt.py ${{matrix.mc_files.target}}
           python3 tests/test_scripts/root_file_corrupt.py ${{matrix.splines.target}}
