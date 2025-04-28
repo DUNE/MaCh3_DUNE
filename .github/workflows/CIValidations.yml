@@ -64,7 +64,7 @@ jobs:
       - name: Check CVMFS link validity
         run: |
           # Check each target
-          python root_file_corrupt.py ${{matix.mc_files.target}}
+          python root_file_corrupt.py ${{matrix.mc_files.target}}
           python root_file_corrupt.py ${{matrix.splines.target}}
 
       # Run event rates
