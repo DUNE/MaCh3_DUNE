@@ -1,5 +1,5 @@
 General:
-  OutputFile: "outputs/NDGAr_EventRates_CC_BField0_5_FidRad_160_FidLen_209_InstrRad_249_45_InstrLen_259_WithECal_Enu_1to5GeV_mode.root"
+  OutputFile: "outputs/Projections_CC_BField0_5_FidRad_160_FidLen_209_InstRad_249_45_InstLen_259_WithECal_Enu_1to5GeV_escaped.root"
   #OutputFile: "outputs/FinalComparison_endgap.root"
   DUNESamples: ["configs/Samples/SamplePDFDune_NDGAr_FHC_numuselec.yaml"]	
   #Nu-FIT
@@ -38,17 +38,20 @@ GeneralKinematicCuts:
 - Name: "Enu"
   VarString: "TrueNeutrinoEnergy"
   Range: [1.,5.]
-#- Name: "StoppedInTPC"
-#  VarString: "Particle_IsStoppedInTPC"
-#  Range: [1.,2.]
-#- Name: "StoppedInECal"
-#  VarString: "Particle_IsStoppedInECal"
-#  Range: [1.,2.]
-#- Name: "StoppedInGap"
-#  VarString: "Particle_IsStoppedInGap"
-#  Range: [1.,2.]
+- Name: "StoppedInTPC"
+  VarString: "Particle_IsStoppedInTPC"
+  Range: [0.,1.]
+- Name: "StoppedInECal"
+  VarString: "Particle_IsStoppedInECal"
+  Range: [0.,1.]
+- Name: "StoppedInGap"
+  VarString: "Particle_IsStoppedInGap"
+  Range: [0.,1.]
 #- Name: "StoppedInEndGap"
 #  VarString: "Particle_IsStoppedInEndGap"
+#  Range: [1.,2.]
+#- Name: "StoppedInBarrelGap"
+#  VarString: "Particle_IsStoppedInBarrelGap"
 #  Range: [1.,2.]
 
 "Projections": [
@@ -276,19 +279,71 @@ GeneralKinematicCuts:
   {
     "Name": "Particle_N_Helix_Turns",
     "VarStrings": ["Particle_NTurns"],
-    "VarBins": [[100,0.,10]],
+    "VarBins": [[100,0.,6.]],
+  },
+  {
+    "Name": "Particle_N_Helix_Turns_p+",
+    "VarStrings": ["Particle_NTurns"],
+    "VarBins": [[100,0.,6.]],
+    "KinematicCuts": [
+      {
+        "Range": [2211.5,2212.5],
+        "Name": "p+",
+        "VarString": "Particle_PDG"
+      }
+    ]
+  },
+  {
+    "Name": "Particle_N_Helix_Turns_mu-",
+    "VarStrings": ["Particle_NTurns"],
+    "VarBins": [[100,0.,6.]],
+    "KinematicCuts": [
+      {
+        "Range": [12.5,13.5],
+        "Name": "mu-",
+        "VarString": "Particle_PDG"
+      }
+    ]
+  },
+  {
+    "Name": "Particle_N_Helix_Turns_pi+",
+    "VarStrings": ["Particle_NTurns"],
+    "VarBins": [[100,0.,6.]],
+    "KinematicCuts": [
+      {
+        "Range": [210.5,211.5],
+        "Name": "pi+",
+        "VarString": "Particle_PDG"
+      }
+    ]
+  },
+  {
+    "Name": "Particle_N_Helix_Turns_pi-",
+    "VarStrings": ["Particle_NTurns"],
+    "VarBins": [[100,0.,6.]],
+    "KinematicCuts": [
+      {
+        "Range": [-211.5,-210.5],
+        "Name": "pi-",
+        "VarString": "Particle_PDG"
+      }
+    ]
   },
   {
     "Name": "Interaction Mode",
     "VarStrings": ["Mode"],
-    "VarBins": [[50,-0.5,49.5]],
-    "CategoryCuts": [
-      {
-        "Name": "Good CAF Event",
-        "VarString": "IsGoodCAFEvent",
-        "Breakdown": [[0],[1]],
-        "Names": ["Bad, Good"],
+    "VarBins": [[20,-0.5,19.5]],
+  },
+  {
+    "Name": "Interaction Mode (bad caf events)",
+    "VarStrings": ["Mode"],
+    "VarBins": [[20,-0.5,19.5]],
+    "KinematicCuts": [
+      { 
+        "Range": [0.,0.5],
+        "Name": "Bad CAF Event",
+        "VarString": "IsGoodCAFEvent"
       }
-    ],
+    ]
   },
 ]

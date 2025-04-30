@@ -241,6 +241,13 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
     
     auto it = std::find(_MCPTrkID->begin(), _MCPTrkID->end(), sr->mc.nu[0].prim[i_truepart].G4ID+1);
     if (i_anapart == it - _MCPTrkID->begin()) *isgoodcafparticle = true;
+
+    //Ignore neutrons and neutrinos (they will be accepted by default for now but will not appear on particle-level plots)
+    if(std::abs(pdgcaf) == 2112 || std::abs(pdgcaf) == 14 || std::abs(pdgcaf) == 12 
+        /*||(std::abs(_MCPStartX->at(i_anapart))-TPC_centre_x)>=TPCFidLength || start_radius>=TPCFidRadius*/){
+      continue;
+    }
+
     /*auto it = std::find(_MCPTrkID->begin(), _MCPTrkID->end(), sr->mc.nu[0].prim[i_truepart].G4ID+1);
       int i_anapart;
       if (it != _MCPTrkID->end()) {
@@ -314,14 +321,8 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
     duneobj->particle_nturns->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
     nparticlesinsample[i_sample]++;
 
-    //Ignore neutrons and neutrinos
-    if(std::abs(pdgcaf) == 2112 || std::abs(pdgcaf) == 14 || std::abs(pdgcaf) == 12 
-        /*||(std::abs(_MCPStartX->at(i_anapart))-TPC_centre_x)>=TPCFidLength || start_radius>=TPCFidRadius*/){
-      continue;
-    }
-
     //If particle is not stopped in the tpc or ecal 
-    if(!stops_in_tpc && (stops_before_ecal || stops_beyond_ecal)){
+    if(!stops_in_tpc && !stops_in_ecal){
       //Check if charged (p +/- , pi +/- , mu +/- , e +/- , K +/-)
       //JM why not more (eg. sig +/-)
       if(std::abs(pdgcaf) == 2212 || std::abs(pdgcaf) == 211 || std::abs(pdgcaf) == 13 || std::abs(pdgcaf) == 11 || std::abs(pdgcaf) == 321) {
@@ -821,7 +822,7 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
     _isCC = static_cast<int>(sr->mc.nu[0].iscc);
 
     int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
-    duneobj->mode[i_event] = M3Mode;
+    duneobj->mode[i_event] = sr->mc.nu[0].mode;
     //int mode= TMath::Abs(_mode);       
     //duneobj->mode[i_event]=static_cast<double>GENIEMode_ToMaCh3Mode(mode, _isCC);
 
@@ -939,6 +940,8 @@ double samplePDFDUNEBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, i
       return static_cast<double>(dunendgarmcSamples[iSample].particle_isstoppedingap->at(iEvent));
     case kParticle_IsStoppedInEndGap:
       return static_cast<double>(dunendgarmcSamples[iSample].particle_isstoppedinendgap->at(iEvent));
+    case kParticle_IsStoppedInBarrelGap:
+      return static_cast<double>(dunendgarmcSamples[iSample].particle_isstoppedinbarrelgap->at(iEvent));
     default:
       return *GetPointerToKinematicParameter(KinPar, iSample, iEvent);
   }
