@@ -322,6 +322,7 @@ int main(int argc, char *argv[]) {
         Hist = (TH1*)Sample->get1DVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
 #endif
         outputname = Sample->GetName()+"_"+Projections[iProj].Name;
+        Hist->Scale(1.0,"Width");
       } 
       else {
 #ifdef BUILD_NDGAR
@@ -335,7 +336,6 @@ int main(int argc, char *argv[]) {
         Hist = (TH1*)Sample->get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
 #endif
         outputname = Sample->GetName()+"_"+Projections[iProj].Name;
-        Hist->Scale(1.0,"Width");
       }
       Hist->SetTitle(ReturnFormattedHistogramNameFromProjection(Projections[iProj]).c_str());
       MACH3LOG_INFO("\tSample: {:<20} - Integral: {:<10}",Sample->GetName(),Hist->Integral());

@@ -38,15 +38,15 @@ GeneralKinematicCuts:
 - Name: "Enu"
   VarString: "TrueNeutrinoEnergy"
   Range: [1.,5.]
-#- Name: "StoppedInTPC"
-#  VarString: "Particle_IsStoppedInTPC"
-#  Range: [1.,2.]
-#- Name: "StoppedInECal"
-#  VarString: "Particle_IsStoppedInECal"
-#  Range: [1.,2.]
-#- Name: "StoppedInGap"
-#  VarString: "Particle_IsStoppedInGap"
-#  Range: [1.,2.]
+- Name: "StoppedInTPC"
+  VarString: "Particle_IsStoppedInTPC"
+  Range: [0.,1.]
+- Name: "StoppedInECal"
+  VarString: "Particle_IsStoppedInECal"
+  Range: [0.,1.]
+- Name: "StoppedInGap"
+  VarString: "Particle_IsStoppedInGap"
+  Range: [0.,1.]
 #- Name: "StoppedInEndGap"
 #  VarString: "Particle_IsStoppedInEndGap"
 #  Range: [1.,2.]
