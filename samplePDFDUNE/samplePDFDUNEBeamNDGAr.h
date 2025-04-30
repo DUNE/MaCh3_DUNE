@@ -31,7 +31,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     TH1* get1DParticleVarHist(std::string ProjectionVar_StrX, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX);
     TH2* get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY);
     
-    enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kIsGoodCAFEvent, kParticle_Event, kParticle_Momentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_IsAccepted, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_NHits, kParticle_NTurns, kParticle_MomResMS, kParticle_MomResTrans};
+    enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kIsGoodCAFEvent, kParticle_Event, kParticle_Momentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_IsAccepted, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_NHits, kParticle_NTurns, kParticle_MomResMS, kParticle_MomResTrans};
 
   protected:
     void Init();
@@ -204,6 +204,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
       {"Particle_IsStoppedInECal",kParticle_IsStoppedInECal},
       {"Particle_IsStoppedInGap",kParticle_IsStoppedInGap},
       {"Particle_IsStoppedInEndGap",kParticle_IsStoppedInEndGap},
+      {"Particle_IsStoppedInBarrelGap",kParticle_IsStoppedInBarrelGap},
       {"Particle_NHits",kParticle_NHits},
       {"Particle_NTurns",kParticle_NTurns},
       {"Particle_MomResMS",kParticle_MomResMS},
@@ -243,6 +244,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
       {kParticle_IsStoppedInECal,"Particle_IsStoppedInECal"},
       {kParticle_IsStoppedInGap,"Particle_IsStoppedInGap"},
       {kParticle_IsStoppedInEndGap,"Particle_IsStoppedInEndGap"},
+      {kParticle_IsStoppedInBarrelGap,"Particle_IsStoppedInBarrelGap"},
       {kParticle_NHits,"Particle_NHits"},
       {kParticle_NTurns,"Particle_NTurns"},
       {kParticle_MomResMS,"Particle_MomResMS"},
