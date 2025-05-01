@@ -177,9 +177,6 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   MACH3LOG_INFO("-------------------------------------------------------------------");
   MACH3LOG_INFO("input file: {}", mc_files.at(iSample));
   
-  //_sampleFile = TFile::Open(mc_files.at(iSample).c_str(), "READ");
-  //_data = _sampleFile->Get<TTree>("caf");
-
   TChain* _data = new TChain("caf");
   _data->Add(mc_files.at(iSample).c_str());
 
@@ -237,9 +234,9 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   _data->SetBranchAddress("eN", &_eN);
 
   if (IsFHC) { 
-    duneobj->norm_s = (1e21/1.5e21);
-  } else {
     duneobj->norm_s = (1e21/1.905e21);
+  } else {
+    duneobj->norm_s = (1e21/1.5e21);
   }
   duneobj->pot_s = (pot)/1e21;
 
