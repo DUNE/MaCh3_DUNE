@@ -63,14 +63,8 @@ jobs:
           shell: bash
           options: -v /cvmfs:/cvmfs:shared
           run: |
-            # Create target directories if they don't exist
-            mkdir -p inputs
-            # Create symlinks using proper JSON handling
             ln -sf ${{ matrix.mc_files.source }} ${{ matrix.mc_files.target }}
             ln -sf ${{ matrix.splines.source }} ${{ matrix.splines.target }}
-
-            ls
-            echo $(pwd)
 
             # Validate the symlinks
             root -l -q -b '../tests/test_scripts/root_file_corrupt.C("${{matrix.mc_files.target}}")'
