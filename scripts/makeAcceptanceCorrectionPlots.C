@@ -29,8 +29,8 @@ void movePalette(TH1* hist) {
   gPad->Update(); // palette doesn't exist until after first draw
   TPaletteAxis* palette = (TPaletteAxis*)hist->GetListOfFunctions()->FindObject("palette");
   if (palette) {
-    palette->SetX1NDC(0.85);  // Left edge
-    palette->SetX2NDC(0.88);  // Right edge
+    palette->SetX1NDC(0.87);  // Left edge
+    palette->SetX2NDC(0.9);  // Right edge
   }
 }
 
@@ -46,6 +46,8 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename, const char* output
   gStyle->SetOptStat(0);
   gStyle->SetPaintTextFormat("1.2f");
   gStyle->SetPadRightMargin(0.15);
+  gStyle->SetPadLeftMargin(0.15);
+  gStyle->SetNumberContours(128);
   TCanvas* canvas = new TCanvas("canvas", "Acceptance Correction Plots", 800, 800);
   canvas->Print(Form("%s[", outputfilename));
 
