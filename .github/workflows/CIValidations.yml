@@ -37,7 +37,6 @@ jobs:
           --tag ghcr.io/dune/mach3:alma9test \
           --build-arg MACH3_DUNE_VERSION="${MACH3_DUNE_VERSION}" \
           --build-arg MACH3_DUNE_BUILD_ARGS=${{ matrix.build_arg }}
-          echo "image_tag=ghcr.io/dune/mach3:alma9test" >> $GITHUB_OUTPUT
 
   run-validations:
     needs: build-container
