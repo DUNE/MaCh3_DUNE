@@ -5,6 +5,12 @@
 #include <iostream>
 #include <vector>
 
+/*
+    HW: ROOT macro script, literally just loops over files in a directory and opens then, if thye're borken raises error. 
+    Goes through full directory to ensure nothing is broken. Developed since CVMFS can have some issues with the CI
+*/
+
+
 void check_corrupt(const char* filename) {
     TFile* file = TFile::Open(filename);
     if (file && !file->IsZombie()) {
