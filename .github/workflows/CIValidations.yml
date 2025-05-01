@@ -22,7 +22,7 @@ jobs:
             test_exe: src/EventRates
             test_config: configs/EventRates_Beam.yaml
             test_output: beam_valid.txt
-            correct_output: tests/test_results/EventRatesV2TDR.txt
+            correct_output: EventRatesV2TDR.txt
             build_arg: -DCUDAProb3Linear_ENABLED=ON
             # Add a list of directories to link
             splines:
@@ -81,8 +81,8 @@ jobs:
             source ./bin/setup.NuOscillator.sh
             source ./bin/setup.MaCh3DUNE.sh
 
-            cp ${{matrix.correct_output}}  DOWNLOAD_DIR
-            ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | tee DOWNLOAD_DIR/${{matrix.test_output}}
+            cp tests/test_results/${{matrix.correct_output}}  ${DOWNLOAD_DIR}
+            ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | tee ${DOWNLOAD_DIR}/${{matrix.test_output}}
 
       - name: Check output
         uses: LouisBrunner/diff-action@v2.0.0
