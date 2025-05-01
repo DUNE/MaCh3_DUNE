@@ -9,7 +9,6 @@ class splinesDUNE : virtual public splineFDBase {
   virtual ~splinesDUNE();
   
   std::vector<std::string> GetTokensFromSplineName(std::string FullSplineName);
-  void FillSampleArray(std::string SampleName, std::vector<std::string> OscChanFileNames) override;
 };
 
 #endif
