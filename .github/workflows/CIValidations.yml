@@ -68,7 +68,7 @@ jobs:
       - name: Link CVMFS repos, validate and run
         uses: addnab/docker-run-action@v3
         with:
-          image: ${{ needs.build-container.outputs.image_tag }}
+          image: ghcr.io/dune/mach3:alma9test
           shell: bash
           options: -v /cvmfs:/cvmfs:shared:/github/workspace/
           run: |
