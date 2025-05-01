@@ -61,6 +61,8 @@ void check_root_files(const char* directory) {
 }
 
 void root_file_corrupt(const char* directory = nullptr) {
+    // Set error handling
+    gErrorIgnoreLevel = kWarning;
     if (!directory) {
         std::cerr << "Usage: .root -l -b -q root_file_corrupt.C+\"<directory>\"" << std::endl;
         throw std::runtime_error("No directory provided");
