@@ -26,8 +26,8 @@ cd build
 Then perform the cmake build command:
 
 ```bash
-cmake .. -DGPU_ENABLED=[OFF|ON] -DUSE_PROB3=[OFF|ON] -DSINGLE_THREAD_ONLY=[OFF|ON] -DDEBUG_ENABLED=[OFF|ON] -DBuild_NDGAr=[OFF|ON]
-make
+cmake .. -DCUDAProb3_ENABLED=[ON,OFF] -DCUDAProb3Linear_ENABLED=[ON,OFF] -DMaCh3_CORE_BRANCH="v1.4.8" -DBuild_NDGAr=[OFF|ON] -DDUNE_ANAOBJ_BRANCH="v03_06_00"
+make install
 ```
 
 Additional cmake options are available in the MaCh3-Core README
