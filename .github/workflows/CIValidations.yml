@@ -82,10 +82,10 @@ jobs:
             cp ${{matrix.correct_output}}  /github/workspace/
             ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | tee /github/workspace/${{matrix.test_output}}
 
-      - name: Check that there are only additions in file2.txt
+      - name: Check output
         uses: LouisBrunner/diff-action@v2.0.0
         with:
-          old:  /github/workspace/$${{ matrix.correct_output }} 
+          old:  /github/workflow/$${{ matrix.correct_output }} 
           new:  /github/workspace/$/${{ matrix.test_output }}
           mode: addition
           tolerance: better
