@@ -55,7 +55,7 @@ void check_root_files(const char* directory) {
     }
     
     if (fail > 0) {
-        std::cerr << "\033[1;33m Warning, failed check on \033[0m \033[1;31m" << fail << " files\033[0m" << std::endl;
+        Throw("\033[1;33m Warning, failed check on \033[0m \033[1;31m" << fail << " files\033[0m")
         // To match Python's behavior of raising an exception
     }
 }
