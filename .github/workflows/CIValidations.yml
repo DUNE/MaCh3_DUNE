@@ -59,7 +59,7 @@ jobs:
         with:
           image: ghcr.io/dune/mach3:alma9test
           shell: bash
-          options: -v /cvmfs:/cvmfs:shared:~
+          options: -v /cvmfs:/cvmfs:shared:/tmp/
           run: |
             # Create target directories if they don't exist
             
@@ -73,12 +73,12 @@ jobs:
             # Run the code
             source ./install/bin/setup.MaCh3.sh
             source ./install/bin/setup.MaCh3DUNE.sh
-            ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | tee ~/${{matrix.test_output}}
+            ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | tee /tmp/${{matrix.test_output}}
 
       - name: Check that the files are the exact same
         uses: LouisBrunner/diff-action@v2.0.0
         with:
-          old: ~/{{ matrix.correct_output }}
-          new: ~/${{ matrix.correct_output }}
+          old: /tmp/{{ matrix.correct_output }}
+          new: /tmp/${{ matrix.correct_output }}
           mode: strict
           tolerance: same
