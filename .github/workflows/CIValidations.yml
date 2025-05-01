@@ -55,6 +55,8 @@ jobs:
           --build-arg CMAKE_OPTIONS=${{matrix.build_arg}}
 
       - name: Link CVMFS repos, validate and run
+        env: 
+          DOWNLOAD_DIR: ${{ github.workspace }}
         uses: addnab/docker-run-action@v3
         with:
           image: ghcr.io/dune/mach3:alma9test
@@ -79,14 +81,14 @@ jobs:
             source ./bin/setup.NuOscillator.sh
             source ./bin/setup.MaCh3DUNE.sh
 
-            cp ${{matrix.correct_output}}  ${GITHUB_WORKSPACE}
-            ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | tee ${GITHUB_WORKSPACE}/${{matrix.test_output}}
+            cp ${{matrix.correct_output}}  DOWNLOAD_DIR
+            ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | tee DOWNLOAD_DIR/${{matrix.test_output}}
 
       - name: Check output
         uses: LouisBrunner/diff-action@v2.0.0
         with:
-          old:  ${GITHUB_WORKSPACE}/${{ matrix.correct_output }} 
-          new:  ${GITHUB_WORKSPACE}/${{ matrix.test_output }}
+          old:  ${{ github.workspace }}/${{ matrix.correct_output }} 
+          new:  ${{ github.workspace }}/${{ matrix.test_output }}
           mode: addition
           tolerance: better
           output: out2.txt
