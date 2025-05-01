@@ -13,7 +13,7 @@ else()
 	set(HEADERS
 		samplePDFDUNEAtm.h
   	samplePDFDUNEBeamFD.h
-  	samplePDFDUNEBeamND.h
+   	samplePDFDUNEBeamND.h
 		MaCh3DUNEFactory.h
 	)
 	set(SOURCE_FILES
