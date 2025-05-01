@@ -5,7 +5,7 @@ General:
   CalculationType: "Binned"
 
 Binned:
-  FileName: "./inputs/Atmospherics/ExampleAtmosphericBinning.root"
+  FileName: "./build/Inputs/ExampleAtmosphericBinning.root"
   EnergyAxisHistName: "EnergyAxisBinning"
   CosineZAxisHistName: "CosineZAxisBinning"
 

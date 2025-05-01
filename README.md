@@ -26,8 +26,8 @@ cd build
 Then perform the cmake build command:
 
 ```bash
-cmake .. -DBuild_NDGAr=ON
-make install
+cmake .. -DGPU_ENABLED=[OFF|ON] -DUSE_PROB3=[OFF|ON] -DSINGLE_THREAD_ONLY=[OFF|ON] -DDEBUG_ENABLED=[OFF|ON] -DBuild_NDGAr=[OFF|ON]
+make
 ```
 
 Additional cmake options are available in the MaCh3-Core README

@@ -14,5 +14,5 @@ foreach(app
 
     add_dependencies(MaCh3DUNEApps ${app})
 
-    install(TARGETS ${app} DESTINATION bin)
+    install(TARGETS ${app} DESTINATION ${CMAKE_BINARY_DIR}/bin)
 endforeach(app)

@@ -1,6 +1,5 @@
 #ifndef _StructsDUNE_h_
 #define _StructsDUNE_h_
-#define __DEFAULT_RETURN_VAL__ -999999.123456
 
 struct dunemc_base {
 
