@@ -59,7 +59,7 @@ jobs:
         with:
           image: ghcr.io/dune/mach3:alma9test
           shell: bash
-          options: -v /cvmfs:/cvmfs:shared:/github/workspace
+          options: -v /cvmfs:/cvmfs:shared:/github/workflow
           run: |
             # Create target directories if they don't exist
             mkdir -p inputs
@@ -79,14 +79,14 @@ jobs:
             source ./bin/setup.NuOscillator.sh
             source ./bin/setup.MaCh3DUNE.sh
 
-            cp ${{matrix.correct_output}}  /github/workspace/
-            ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | tee /github/workspace/${{matrix.test_output}}
+            cp ${{matrix.correct_output}}  /github/workflow/
+            ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | tee /github/workflow/${{matrix.test_output}}
 
       - name: Check output
         uses: LouisBrunner/diff-action@v2.0.0
         with:
           old:  /github/workflow/$${{ matrix.correct_output }} 
-          new:  /github/workspace/$/${{ matrix.test_output }}
+          new:  /github/workflow/$/${{ matrix.test_output }}
           mode: addition
           tolerance: better
           output: out2.txt
