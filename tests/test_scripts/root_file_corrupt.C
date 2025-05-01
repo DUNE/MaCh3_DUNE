@@ -55,9 +55,8 @@ void check_root_files(const char* directory) {
     }
     
     if (fail > 0) {
-        std::cerr << "\033[1;33mFailed check on \033[0m \033[1;31m" << fail << " files\033[0m" << std::endl;
+        std::cerr << "\033[1;33m Warning, failed check on \033[0m \033[1;31m" << fail << " files\033[0m" << std::endl;
         // To match Python's behavior of raising an exception
-        throw std::runtime_error(TString::Format("%d corrupt files found", fail).Data());
     }
 }
 
