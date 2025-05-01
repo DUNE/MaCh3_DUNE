@@ -59,17 +59,12 @@ jobs:
         with:
           image: ghcr.io/dune/mach3:alma9test
           shell: bash
-          options: -v /cvmfs:/cvmfs:shared
+          options: -v /cvmfs:/cvmfs:shared:~
           run: |
             # Create target directories if they don't exist
-            mkdir -p inputs
-            # Create symlinks using proper JSON handling
+            
             ln -sf ${{ matrix.mc_files.source }} ${{ matrix.mc_files.target }}
             ln -sf ${{ matrix.splines.source }} ${{ matrix.splines.target }}
-
-            # DEBUG AGH
-            which python
-            pip list
 
             # Validate the symlinks
             root -l -q -b 'tests/test_scripts/root_file_corrupt.C("${{matrix.mc_files.target}}")'
@@ -77,9 +72,13 @@ jobs:
 
             # Run the code
             source ./install/bin/setup.MaCh3.sh
-            source ./install/bin/setup.NuOscillator.sh
             source ./install/bin/setup.MaCh3DUNE.sh
-            ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | tee ${{matrix.test_output}}
+            ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | tee ~/${{matrix.test_output}}
 
-            # Check do diffs
-            diff -q tests/test_results/${{ matrix.correct_output }} ${{ matrix.test_output }}
+      - name: Check that the files are the exact same
+        uses: LouisBrunner/diff-action@v2.0.0
+        with:
+          old: ~/{{ matrix.correct_output }}
+          new: ~/${{ matrix.correct_output }}
+          mode: strict
+          tolerance: same
