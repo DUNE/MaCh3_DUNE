@@ -43,7 +43,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Doxygen Action
-        uses: mattnotmitt/doxygen-action@1.9.8
+        uses: mattnotmitt/doxygen-action@v1.12.0
         with:
           doxyfile-path: './doc/Doxyfile'
           working-directory: .

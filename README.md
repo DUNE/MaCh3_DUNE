@@ -26,7 +26,7 @@ cd build
 Then perform the cmake build command:
 
 ```bash
-cmake .. -DCUDAProb3_ENABLED=[ON,OFF] -DCUDAProb3Linear_ENABLED=[ON,OFF]
+cmake .. -DCUDAProb3_ENABLED=[ON,OFF] -DCUDAProb3Linear_ENABLED=[ON,OFF] -DMaCh3_CORE_BRANCH="v1.4.8"
 make install
 ```
 
@@ -41,18 +41,6 @@ source build/bin/setup.MaCh3DUNE.sh
 ```
 
 This sets everything needed, and needs to be re-sourced on each terminal session when using MaCh3 (Along with any dependancies)
-
-A few notes:
-CUDA_SAMPLES not necessary if using CPU_ONLY=ON
-
-If you want to simultaneously develop both the MaCh3 core code and the MaCh3 DUNE code then you can build against a local version of MaCh3 by adding:
-
-```bash
--DCPM_MaCh3_SOURCE=/path/to/MaCh3/folder
-```
-
-This will overrule the CPMFindPackage command in the CMakeList.txt and will tell CPM to build that instead.
->>>>>>> origin/develop
 
 ## Event Rates
 

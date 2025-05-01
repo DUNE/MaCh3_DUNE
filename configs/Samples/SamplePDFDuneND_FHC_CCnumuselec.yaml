@@ -15,8 +15,8 @@ Binning:
   YVarBins: [0., 0.1, 0.2, 0.3, 0.4, 0.6, 1.1]
 
 DUNESampleBools:
-  iselike: no
   isFHC: 1
+  iselike: no
 
 InputFiles:
   mtupleprefix: "inputs/DUNE_ND_CAF_files/ND_FHC_ger_"
@@ -33,27 +33,23 @@ SubSamples:
     LatexName: "FHC_numu_x_numu"
     mtuplefile: "numu_x_numu_*"
     splinefile: "numu_x_numu"
-    samplevecno: 0
     nutype: 14
     oscnutype: 14
   - Name: "FHC_nue_x_nue"
     LatexName: "FHC_nue_x_nue"
     mtuplefile: "nue_x_nue"
     splinefile: "nue_x_nue"
-    samplevecno: 1
     nutype: 12
     oscnutype: 12
   - Name: "FHC_numubar_x_numubar"
     LatexName: "FHC_numubar_x_numubar"
     mtuplefile: "numubar_x_numubar"
     splinefile: "numubar_x_numubar"
-    samplevecno: 2
     nutype: -14
     oscnutype: -14
   - Name: "FHC_nuebar_x_nuebar"
     LatexName: "FHC_nuebar_x_nuebar"
     mtuplefile: "nuebar_x_nuebar"
     splinefile: "nuebar_x_nuebar"
-    samplevecno: 3
     nutype: -12
     oscnutype: -12

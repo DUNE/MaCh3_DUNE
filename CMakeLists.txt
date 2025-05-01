@@ -122,6 +122,8 @@ endif()
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
 find_package(MaCh3 1.4.8 EXACT QUIET)
+set(MaCh3_CORE_BRANCH v1.4.8 CACHE STRING "Specify the MaCh3 core branch to use")
+message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 
 if(NOT MaCh3_FOUND)
   cmessage(STATUS "Didn't find MaCh3, attempting to use built in MaCh3")
@@ -143,6 +145,7 @@ if(NOT MaCh3_FOUND)
       "USE_CPU ${USE_CPU}"
       "MaCh3_DEBUG_ENABLED ${DEBUG_ENABLED}"
       "MaCh3_MULTITHREAD_ENABLED ${MULTITHREAD_ENABLED}"
+      "MaCh3_CORE_BRANCH ${MaCh3_CORE_BRANCH}"
   )
 
   # Add LOG_LEVEL if defined
@@ -152,7 +155,7 @@ if(NOT MaCh3_FOUND)
   
   CPMAddPackage(
       NAME MaCh3
-      GIT_TAG "v1.4.8"
+      GIT_TAG ${MaCh3_CORE_BRANCH}
       GITHUB_REPOSITORY mach3-software/MaCh3
   )
 else()
@@ -242,6 +245,13 @@ install(TARGETS MaCh3DUNECompilerOptions
 add_subdirectory(splines)
 add_subdirectory(samplePDFDUNE)
 add_subdirectory(Apps)
+
+
+# Do we want to build our integration tests?
+if(DEFINED MACH3_BUILD_TESTS AND MACH3_BUILD_TESTS)
+  add_subdirectory(tests)
+endif()
+
 
 add_library(MaCh3DUNEAll INTERFACE)
 set_target_properties(MaCh3DUNEAll PROPERTIES EXPORT_NAME All)
