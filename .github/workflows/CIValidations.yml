@@ -72,13 +72,13 @@ jobs:
             pip list
 
             # Validate the symlinks
-            root -l -q -b 'tests/test_scripts/root_file_corrupt.C("${{matrix.mc_files.target}}")'
-            root -l -q -b 'tests/test_scripts/root_file_corrupt.C("${{matrix.splines.target}}")'
+            root -l -q -b '../tests/test_scripts/root_file_corrupt.C("${{matrix.mc_files.target}}")'
+            root -l -q -b '../tests/test_scripts/root_file_corrupt.C("${{matrix.splines.target}}")'
 
             # Run the code
-            source ./install/bin/setup.MaCh3.sh
-            source ./install/bin/setup.NuOscillator.sh
-            source ./install/bin/setup.MaCh3DUNE.sh
+            source ./bin/setup.MaCh3.sh
+            source ./bin/setup.NuOscillator.sh
+            source ./bin/setup.MaCh3DUNE.sh
             ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | tee ${{matrix.test_output}}
 
             # Check do diffs
