@@ -67,8 +67,8 @@ jobs:
           pip list
 
           # Validate the symlinks
-          python3 tests/test_scripts/root_file_corrupt.py ${{matrix.mc_files.target}}
-          python3 tests/test_scripts/root_file_corrupt.py ${{matrix.splines.target}}
+          root -l -q -b 'tests/test_scripts/root_file_corrupt.C("${{matrix.mc_files.target}}")'
+          root -l -q -b 'tests/test_scripts/root_file_corrupt.C("${{matrix.splines.target}}")'
 
           # Run the code
           source ./install/bin/setup.MaCh3.sh
