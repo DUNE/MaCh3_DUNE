@@ -5,6 +5,9 @@
 
 // Include the samplePDFs
 #include "samplePDF/samplePDFFDBase.h"
+#include "samplePDFDUNE/samplePDFDUNEBeamND.h"
+#include "samplePDFDUNE/samplePDFDUNEBeamFD.h"
+#include "samplePDFDUNE/samplePDFDUNEAtm.h"
 
 /// @brief Factory function that generates MaCh3 DUNE instance including configured samples
 /// @param fitMan Configuration Manager 

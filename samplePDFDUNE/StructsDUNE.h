@@ -8,6 +8,8 @@ struct dunemc_base {
 
   int *nupdg;
   int *nupdgUnosc;
+
+  int *nparticlesinsample;
   
   double *rw_erec;
   double *rw_erec_shifted;
@@ -21,61 +23,61 @@ struct dunemc_base {
   double *rw_eRecoN;
   double *rw_eRecoMuon;
 
-  double *rw_PMom;
-  double *rw_PipMom;
-  double *rw_PimMom;
-  double *rw_Pi0Mom;
-  double *rw_NMom;
-  double *rw_MuMom;
+  std::vector<double> *rw_particle_PMom;
+  std::vector<double> *rw_particle_PipMom;
+  std::vector<double> *rw_particle_PimMom;
+  std::vector<double> *rw_particle_Pi0Mom;
+  std::vector<double> *rw_particle_NMom;
+  std::vector<double> *rw_particle_MuMom;
 
-  double *rw_PTheta;
-  double *rw_PipTheta;
-  double *rw_PimTheta;
-  double *rw_Pi0Theta;
-  double *rw_NTheta;
-  double *rw_MuTheta;
+  std::vector<double> *rw_particle_PTheta;
+  std::vector<double> *rw_particle_PipTheta;
+  std::vector<double> *rw_particle_PimTheta;
+  std::vector<double> *rw_particle_Pi0Theta;
+  std::vector<double> *rw_particle_NTheta;
+  std::vector<double> *rw_particle_MuTheta;
 
-  double *rw_PStartX;
-  double *rw_PStartY;
-  double *rw_PStartZ;
-  double *rw_PEndX;
-  double *rw_PEndY;
-  double *rw_PEndZ;
+  std::vector<double> *rw_particle_PStartX;
+  std::vector<double> *rw_particle_PStartY;
+  std::vector<double> *rw_particle_PStartZ;
+  std::vector<double> *rw_particle_PEndX;
+  std::vector<double> *rw_particle_PEndY;
+  std::vector<double> *rw_particle_PEndZ;
 
-  double *rw_PipStartX;
-  double *rw_PipStartY;
-  double *rw_PipStartZ;
-  double *rw_PipEndX;
-  double *rw_PipEndY;
-  double *rw_PipEndZ;
+  std::vector<double> *rw_particle_PipStartX;
+  std::vector<double> *rw_particle_PipStartY;
+  std::vector<double> *rw_particle_PipStartZ;
+  std::vector<double> *rw_particle_PipEndX;
+  std::vector<double> *rw_particle_PipEndY;
+  std::vector<double> *rw_particle_PipEndZ;
 
-  double *rw_PimStartX;
-  double *rw_PimStartY;
-  double *rw_PimStartZ;
-  double *rw_PimEndX;
-  double *rw_PimEndY;
-  double *rw_PimEndZ;
+  std::vector<double> *rw_particle_PimStartX;
+  std::vector<double> *rw_particle_PimStartY;
+  std::vector<double> *rw_particle_PimStartZ;
+  std::vector<double> *rw_particle_PimEndX;
+  std::vector<double> *rw_particle_PimEndY;
+  std::vector<double> *rw_particle_PimEndZ;
 
-  double *rw_Pi0StartX;
-  double *rw_Pi0StartY;
-  double *rw_Pi0StartZ;
-  double *rw_Pi0EndX;
-  double *rw_Pi0EndY;
-  double *rw_Pi0EndZ;
+  std::vector<double> *rw_particle_Pi0StartX;
+  std::vector<double> *rw_particle_Pi0StartY;
+  std::vector<double> *rw_particle_Pi0StartZ;
+  std::vector<double> *rw_particle_Pi0EndX;
+  std::vector<double> *rw_particle_Pi0EndY;
+  std::vector<double> *rw_particle_Pi0EndZ;
 
-  double *rw_NStartX;
-  double *rw_NStartY;
-  double *rw_NStartZ;
-  double *rw_NEndX;
-  double *rw_NEndY;
-  double *rw_NEndZ;
+  std::vector<double> *rw_particle_NStartX;
+  std::vector<double> *rw_particle_NStartY;
+  std::vector<double> *rw_particle_NStartZ;
+  std::vector<double> *rw_particle_NEndX;
+  std::vector<double> *rw_particle_NEndY;
+  std::vector<double> *rw_particle_NEndZ;
 
-  double *rw_MuStartX;
-  double *rw_MuStartY;
-  double *rw_MuStartZ;
-  double *rw_MuEndX;
-  double *rw_MuEndY;
-  double *rw_MuEndZ;
+  std::vector<double> *rw_particle_MuStartX;
+  std::vector<double> *rw_particle_MuStartY;
+  std::vector<double> *rw_particle_MuStartZ;
+  std::vector<double> *rw_particle_MuEndX;
+  std::vector<double> *rw_particle_MuEndY;
+  std::vector<double> *rw_particle_MuEndZ;
 
   double *rw_PMomReco;
   double *rw_PipMomReco;
@@ -100,6 +102,12 @@ struct dunemc_base {
   double *rw_E_diff_N;
 
   double *rw_LepE;
+  std::vector<double> *rw_particle_eP;
+  std::vector<double> *rw_particle_ePip;
+  std::vector<double> *rw_particle_ePim;
+  std::vector<double> *rw_particle_ePi0;
+  std::vector<double> *rw_particle_eN;
+  std::vector<double> *rw_particle_eMuon;
   double *rw_eP;
   double *rw_ePip;
   double *rw_ePim;

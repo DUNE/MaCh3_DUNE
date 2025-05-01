@@ -12,6 +12,8 @@ public:
   samplePDFDUNEBeamND(std::string mc_version, covarianceXsec* xsec_cov, TMatrixD* nd_cov, covarianceOsc* osc_cov) ;
   ~samplePDFDUNEBeamND();
 
+  TH2* get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY);
+
   enum KinematicTypes {
     kTrueNeutrinoEnergy, 
     kRecoQ, 
@@ -20,14 +22,14 @@ public:
     kyRec, 
     kOscChannel, 
     kMode, 
-    kMuonMom, 
-    kMuonEnergy, 
+    kParticle_MuonMom, 
+    kParticle_MuonEnergy, 
     kRecoMuonEnergy, 
-    kMuonTheta, 
-    kPipMom,
-    kPipEnergy,
+    kParticle_MuonTheta, 
+    kParticle_PipMom,
+    kParticle_PipEnergy,
     kRecoPipEnergy, 
-    kPipTheta, 
+    kParticle_PipTheta, 
     kMuonEDiff, 
     kPipEDiff, 
     kEDiff,
@@ -69,14 +71,14 @@ public:
     {"IsFHC", kIsFHC},
     {"OscChannel", kOscChannel},
     {"Mode", kMode},
-    {"MuonMom", kMuonMom},
-    {"MuonEnergy", kMuonEnergy},
-    {"MuonTheta", kMuonTheta},
+    {"MuonMom", kParticle_MuonMom},
+    {"MuonEnergy", kParticle_MuonEnergy},
+    {"MuonTheta", kParticle_MuonTheta},
     {"RecoMuonEnergy", kRecoMuonEnergy},
-    {"PipMom", kPipMom},
-    {"PipEnergy", kPipEnergy},
+    {"PipMom", kParticle_PipMom},
+    {"PipEnergy", kParticle_PipEnergy},
     {"RecoPipEnergy", kRecoPipEnergy},
-    {"PipTheta", kPipTheta},
+    {"PipTheta", kParticle_PipTheta},
     {"MuonEDiff", kMuonEDiff},
     {"PipEDiff", kPipEDiff},
     {"EDiff", kEDiff},
@@ -94,14 +96,14 @@ public:
     {kyRec, "yRec"},
     {kOscChannel, "OscChannel"},
     {kMode, "Mode"},
-    {kMuonMom, "MuonMom"},
-    {kMuonEnergy, "MuonEnergy"},
+    {kParticle_MuonMom, "Particle_MuonMom"},
+    {kParticle_MuonEnergy, "Particle_MuonEnergy"},
     {kRecoMuonEnergy, "RecoMuonEnergy"},
-    {kMuonTheta, "MuonTheta"},
-    {kPipMom, "PipMom"},
-    {kPipEnergy, "PipEnergy"},
+    {kParticle_MuonTheta, "Particle_MuonTheta"},
+    {kParticle_PipMom, "Particle_PipMom"},
+    {kParticle_PipEnergy, "Particle_PipEnergy"},
     {kRecoPipEnergy, "RecoPipEnergy"},
-    {kPipTheta, "PipTheta"},
+    {kParticle_PipTheta, "Particle_PipTheta"},
     {kMuonEDiff, "MuonEDiff"},
     {kPipEDiff, "PipEDiff"},
     {kEDiff, "EDiff"},
@@ -125,83 +127,6 @@ public:
 
   int _nuPDG;
   int _nuPDGunosc;
-
-  double _PMom;
-  double _PipMom;
-  double _PimMom;
-  double _Pi0Mom;
-  double _NMom;
-  double _MuMom;
-
-  double _PTheta;
-  double _PipTheta;
-  double _PimTheta;
-  double _Pi0Theta;
-  double _NTheta;
-  double _MuTheta;
-
-  double _PStartX;
-  double _PStartY;
-  double _PStartZ;
-  double _PEndX;
-  double _PEndY;
-  double _PEndZ;
-
-  double _PipStartX;
-  double _PipStartY;
-  double _PipStartZ;
-  double _PipEndX;
-  double _PipEndY;
-  double _PipEndZ;
-
-  double _PimStartX;
-  double _PimStartY;
-  double _PimStartZ;
-  double _PimEndX;
-  double _PimEndY;
-  double _PimEndZ;
-
-  double _Pi0StartX;
-  double _Pi0StartY;
-  double _Pi0StartZ;
-  double _Pi0EndX;
-  double _Pi0EndY;
-  double _Pi0EndZ;
-
-  double _NStartX;
-  double _NStartY;
-  double _NStartZ;
-  double _NEndX;
-  double _NEndY;
-  double _NEndZ;
-
-  double _MuStartX;
-  double _MuStartY;
-  double _MuStartZ;
-  double _MuEndX;
-  double _MuEndY;
-  double _MuEndZ;
-
-  double _PMomReco;
-  double _PipMomReco;
-  double _PimMomReco;
-  double _Pi0MomReco;
-  double _NMomReco;
-  double _MuMomReco;
-
-  double _PThetaReco;
-  double _PipThetaReco;
-  double _PimThetaReco;
-  double _Pi0ThetaReco;
-  double _NThetaReco;
-  double _MuThetaReco;
-
-  double _eRecoP;
-  double _eRecoPip;
-  double _eRecoPim;
-  double _eRecoPi0;
-  double _eRecoN;
-  double _eRecoMuon;
 
   double _LepNuAngle;
   double _LepE;
@@ -278,7 +203,8 @@ public:
   double mu_res_nd_pos;
   double n_res_nd_pos;
   double em_res_nd_pos;
-  int nparticlesinsample;
+  int *nparticlesinsample;
+  
   bool isNDCovSet = false;
   // The ND detector covariance matrix
   TMatrixD *NDCovMatrix;
@@ -288,9 +214,6 @@ public:
 
   std::vector<const double*> NDDetectorSystPointers;
   int nNDDetectorSystPointers;
-
-  TH2* get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY) override;
-
 
 };
 
