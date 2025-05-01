@@ -28,7 +28,7 @@ General:
     FitTestLikelihood: false
   MCMC:
     NSteps: 2000
-    AutoSave: 5
+    AutoSave: 10000
   Output:
     FileName: "TestEventRates.root"
     OUTPUTNAME: "TestLLH.root"
