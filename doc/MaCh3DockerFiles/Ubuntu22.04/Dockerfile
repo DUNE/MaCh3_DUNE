@@ -34,10 +34,6 @@ RUN --mount=type=ssh git clone https://github.com/DUNE/MaCh3_DUNE.git ${MACH3_DU
 WORKDIR ${MACH3_DUNE_WORK_DIR}
 RUN git checkout ${MACH3_DUNE_VERSION}
 
-# Make a python environment
-FROM python:3
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
 
 RUN mkdir -p ${MACH3_DUNE_INSTALL_DIR}
 WORKDIR ${MACH3_DUNE_INSTALL_DIR}

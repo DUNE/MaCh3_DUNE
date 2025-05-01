@@ -19,11 +19,6 @@ WORKDIR ${MACH3_DUNE_WORK_DIR}
 
 RUN git checkout ${MACH3_DUNE_VERSION}
 
-# Make a python work [hopefully] 
-RUN yum install -y python3
-COPY ./requirements.txt ${MACH3_DUNE_WORK_DIR}/requirements.txt
-RUN pip install --no-cache-dir --upgrade -r  ${MACH3_DUNE_WORK_DIR}/requirements.txt
-COPY . .
 
 RUN mkdir -p ${MACH3_DUNE_BUILD_DIR}
 WORKDIR ${MACH3_DUNE_BUILD_DIR}
