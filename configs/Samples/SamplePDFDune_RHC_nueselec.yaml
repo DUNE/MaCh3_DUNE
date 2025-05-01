@@ -32,6 +32,7 @@ InputFiles:
 
 NuOsc:
   NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
+  #NuOscConfigFile: "configs/NuOsc/NuFASTLinear.yaml"
   EqualBinningPerOscChannel: false
 
 SubSamples:

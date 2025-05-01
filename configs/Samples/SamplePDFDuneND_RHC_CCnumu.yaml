@@ -1,9 +1,10 @@
 SampleName: "ND_RHC_CCnumu"
+
 SampleType: "BeamND"
 
 POT: 3.85e21
 MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes.yaml"
-DetID: "ND"
+DetID: "ND_RHC"
 
 SelectionCuts:
 
@@ -31,7 +32,7 @@ SubSamples:
   - Name: "RHC_numu_x_numu"
     LatexName: "RHC_numu_x_numu"
     mtuplefile: "numu_x_numu_*"
-    splinefile: "numu_x_numu_0"
+    splinefile: "numu_x_numu"
     samplevecno: 0
     nutype: 14
     oscnutype: 14
@@ -45,7 +46,7 @@ SubSamples:
   - Name: "RHC_numubar_x_numubar"
     LatexName: "RHC_numubar_x_numubar"
     mtuplefile: "numubar_x_numubar_*"
-    splinefile: "numubar_x_numubar_0"
+    splinefile: "numubar_x_numubar"
     samplevecno: 2
     nutype: -14
     oscnutype: -14

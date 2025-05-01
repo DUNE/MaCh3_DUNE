@@ -4,7 +4,7 @@ SampleType: "BeamND"
 
 POT: 3.85e21
 MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes.yaml"
-DetID: "ND"
+DetID: "ND_FHC"
 
 SelectionCuts:
 
@@ -32,7 +32,7 @@ SubSamples:
   - Name: "FHC_numu_x_numu"
     LatexName: "FHC_numu_x_numu"
     mtuplefile: "numu_x_numu_*"
-    splinefile: "numu_x_numu_0"
+    splinefile: "numu_x_numu"
     samplevecno: 0
     nutype: 14
     oscnutype: 14

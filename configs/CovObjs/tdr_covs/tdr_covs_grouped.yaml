@@ -1836,7 +1836,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    DetID: ["ND", "FD"]
+    DetID: ["ND_FHC", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
