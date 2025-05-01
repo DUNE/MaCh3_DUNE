@@ -10,8 +10,8 @@ LABEL root_version="v6.26.10"
 LABEL org.opencontainers.image.description="Official MaCh3 container"
 
 # Declare the build argument
-ARG MACH3_VERSION
-ENV MACH3_VERSION=${MACH3_VERSION:-develop}
+ARG MACH3_DUNE_VERSION
+ENV MACH3_DUNE_VERSION=${MACH3_DUNE_VERSION:-develop}
 
 ARG CMAKE_OPTIONS
 ENV CMAKE_OPTIONS=${CMAKE_OPTIONS:-DMaCh3_PYTHON_ENABLED=ON}
@@ -28,7 +28,7 @@ WORKDIR /opt/
 # KS: Let's clone MaCh3
 RUN --mount=type=ssh git clone https://github.com/DUNE/MaCh3_DUNE.git ${MACH3_WORK_DIR}
 WORKDIR ${MACH3_WORK_DIR}
-RUN git checkout ${MACH3_VERSION}
+RUN git checkout ${MACH3_DUNE_VERSION}
 
 RUN mkdir -p ${MACH3_INSTALL_DIR}
 WORKDIR ${MACH3_INSTALL_DIR}

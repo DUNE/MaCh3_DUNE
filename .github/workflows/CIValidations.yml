@@ -52,7 +52,7 @@ jobs:
           --file doc/MaCh3DockerFiles/Alma9/Dockerfile \
           --tag ghcr.io/dune/mach3:alma9test \
           --build-arg MACH3_DUNE_VERSION="${MACH3_DUNE_VERSION}" \
-          --build-arg MACH3_DUNE_BUILD_ARGS=${{matrix.build_arg}}
+          --build-arg CMAKE_OPTIONS=${{matrix.build_arg}}
 
       - name: Link CVMFS repos, validate and run
         uses: addnab/docker-run-action@v3
