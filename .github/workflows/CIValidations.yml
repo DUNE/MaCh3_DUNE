@@ -1,45 +1,18 @@
+---
 name: Event Rates Beam
 
 on:
   pull_request:
     branches: [develop]
   push:
-    branches: ["hwallace/patch/event_rate_bot"]
+   branches: ["hwallace/patch/event_rate_bot"]
 
 permissions:
   contents: read
   packages: write
 
 jobs:
-  build-container:
-    runs-on: ubuntu-latest
-    name: Build Container Image
-    outputs:
-      image_tag: ${{ steps.build.outputs.image_tag }}
-    steps:
-      # Set up CVMFS
-      - name: Set up CVMFS
-        uses: cvmfs-contrib/github-action-cvmfs@v4
-
-      # Checkout the repository code
-      - uses: actions/checkout@v4
-
-      - name: Log in to GitHub Container Registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      - name: Build docker container
-        id: build
-        env:
-          MACH3_DUNE_VERSION: ${{ github.event.pull_request.head.ref || github.ref_name }}
-        run: |
-          docker build . \
-          --file doc/MaCh3DockerFiles/Alma9/Dockerfile \
-          --tag ghcr.io/dune/mach3:alma9test \
-          --build-arg MACH3_DUNE_VERSION="${MACH3_DUNE_VERSION}" \
-          --build-arg MACH3_DUNE_BUILD_ARGS=${{ matrix.build_arg }}
-
-  run-validations:
-    needs: build-container
+  build:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
@@ -65,30 +38,48 @@ jobs:
       - name: Set up CVMFS
         uses: cvmfs-contrib/github-action-cvmfs@v4
 
+      # Checkout the repository code
+      - uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Start docker container with bind mount CVMFS
+        env:
+          MACH3_DUNE_VERSION: ${{ github.event.pull_request.head.ref || github.ref_name }}
+        run: |
+          docker build . \
+          --file doc/MaCh3DockerFiles/Alma9/Dockerfile \
+          --tag ghcr.io/dune/mach3:alma9test \
+          --build-arg MACH3_DUNE_VERSION="${MACH3_DUNE_VERSION}" \
+          --build-arg MACH3_DUNE_BUILD_ARGS=${{matrix.build_arg}}
+
       - name: Link CVMFS repos, validate and run
         uses: addnab/docker-run-action@v3
         with:
           image: ghcr.io/dune/mach3:alma9test
           shell: bash
-          options: -v /cvmfs:/cvmfs:shared:/github/workspace/
-          run: |
-            # Create target directories if they don't exist
-            ln -sf ${{ matrix.mc_files.source }} ${{ matrix.mc_files.target }}
-            ln -sf ${{ matrix.splines.source }} ${{ matrix.splines.target }}
+          options: -v /cvmfs:/cvmfs:shared
+        run: |
+          # Create target directories if they don't exist
+          mkdir -p inputs
+          # Create symlinks using proper JSON handling
+          ln -sf ${{ matrix.mc_files.source }} ${{ matrix.mc_files.target }}
+          ln -sf ${{ matrix.splines.source }} ${{ matrix.splines.target }}
 
-            # Validate the symlinks
-            root -l -q -b 'tests/test_scripts/root_file_corrupt.C("${{matrix.mc_files.target}}")'
-            root -l -q -b 'tests/test_scripts/root_file_corrupt.C("${{matrix.splines.target}}")'
+          # DEBUG AGH
+          which python
+          pip list
 
-            # Run the code
-            source ./install/bin/setup.MaCh3.sh
-            source ./install/bin/setup.MaCh3DUNE.sh
-            ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | tee /github/workspace/${{matrix.test_output}}
+          # Validate the symlinks
+          root -l -q -b 'tests/test_scripts/root_file_corrupt.C("${{matrix.mc_files.target}}")'
+          root -l -q -b 'tests/test_scripts/root_file_corrupt.C("${{matrix.splines.target}}")'
 
-      - name: Check that the files are the exact same
-        uses: LouisBrunner/diff-action@v2.0.0
-        with:
-          old: /github/workspace/{{ matrix.correct_output }}
-          new: /github/workspace/${{ matrix.correct_output }}
-          mode: strict
-          tolerance: same
+          # Run the code
+          source ./install/bin/setup.MaCh3.sh
+          source ./install/bin/setup.NuOscillator.sh
+          source ./install/bin/setup.MaCh3DUNE.sh
+          ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | tee ${{matrix.test_output}}
+
+          # Check do diffs
+          diff -q tests/test_results/${{ matrix.correct_output }} ${{ matrix.test_output }}
