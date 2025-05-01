@@ -77,7 +77,9 @@ void samplePDFDUNEBeamNDGAr::SetupWeightPointers() {
   }
 }
 
-void samplePDFDUNEBeamNDGAr::makePixelGrid(double pixel_spacing_cm){ //make a square pixel grid with spacing defined in yaml file. Spacing must be input in the yaml file in mm, and then is converted to cm later in the code
+void samplePDFDUNEBeamNDdouble z_coord1 = centre_circle_z + std::sqrt(quadratic_ineq_y)-TPC_centre_z;
+      double y_coord = yboundarypositions[i_intersect]-TPC_centre_y;
+      if( (std::sqrt(z_coord1*z_coord1 + y_coord*y_coord) GAr::makePixelGrid(double pixel_spacing_cm){ //make a square pixel grid with spacing defined in yaml file. Spacing must be input in the yaml file in mm, and then is converted to cm later in the code
   int numpixelrows = static_cast<int>(floor(TPCInstrumentedRadius*2/(pixel_spacing_cm))); //find number of pixels along y and z axis.
   double centre_yboundary, centre_zboundary;
   if(numpixelrows % 2 == 0){centre_yboundary=TPC_centre_y; centre_zboundary=TPC_centre_z;}
@@ -102,7 +104,7 @@ double samplePDFDUNEBeamNDGAr::FindNHits(double pixel_spacing_cm, double centre_
 
   for(unsigned int i_intersect = 0; i_intersect<yboundarypositions.size(); i_intersect++){ //check every boundary line to see if it crossed within the TPC instrumented region
     double quadratic_ineq_y= (rad_curvature*100)*(rad_curvature*100)-(yboundarypositions[i_intersect]-centre_circle_y)*(yboundarypositions[i_intersect]-centre_circle_y);
-    if(quadratic_ineq_y > 0){
+    if(quadratic_ineq_y >= 0){
       double z_coord1 = centre_circle_z + std::sqrt(quadratic_ineq_y)-TPC_centre_z;
       double y_coord = yboundarypositions[i_intersect]-TPC_centre_y;
       if( (std::sqrt(z_coord1*z_coord1 + y_coord*y_coord) <= TPCInstrumentedRadius) 
@@ -113,6 +115,9 @@ double samplePDFDUNEBeamNDGAr::FindNHits(double pixel_spacing_cm, double centre_
           num_vertices++;
         }
       }
+
+      if (quadratic_ineq_y == 0) continue; //pixel boundary tangent so one z solution
+
       double z_coord2 = centre_circle_z - std::sqrt(quadratic_ineq_y)-TPC_centre_z;
       if( (std::sqrt(z_coord2*z_coord2 + y_coord*y_coord) <= TPCInstrumentedRadius) 
           && pixelzmin<(centre_circle_z - std::sqrt(quadratic_ineq_y)) 
@@ -123,13 +128,10 @@ double samplePDFDUNEBeamNDGAr::FindNHits(double pixel_spacing_cm, double centre_
         }
       }
     }
-    else if(quadratic_ineq_y == 0){ //when the pixel boundary is a tangent to the circle z = z0
-      num_intersections++;
-    }
   }
   for(unsigned int i_intersect = 0; i_intersect<zboundarypositions.size(); i_intersect++){
     double quadratic_ineq_z = (rad_curvature*100)*(rad_curvature*100)-(zboundarypositions[i_intersect]-centre_circle_z)*(zboundarypositions[i_intersect]-centre_circle_z);
-    if(quadratic_ineq_z > 0){
+    if(quadratic_ineq_z >= 0){
       double y_coord1 = centre_circle_y + std::sqrt(quadratic_ineq_z)-TPC_centre_y;
       double z_coord = zboundarypositions[i_intersect]-TPC_centre_z;
       if( (std::sqrt((y_coord1*y_coord1 + z_coord*z_coord)) <= TPCInstrumentedRadius) 
@@ -137,6 +139,9 @@ double samplePDFDUNEBeamNDGAr::FindNHits(double pixel_spacing_cm, double centre_
           && centre_circle_y + std::sqrt(quadratic_ineq_z)<=pixelymax){ //check that the y coord is also on pixel plane
         num_intersections++;
       }
+
+      if (quadratic_ineq_z == 0) continue; //pixel boundary tangent so one y solution
+
       double y_coord2 = centre_circle_y - std::sqrt(quadratic_ineq_z)-TPC_centre_y; 
       if( (std::sqrt(y_coord2*y_coord2 + z_coord*z_coord) <= TPCInstrumentedRadius) 
           && pixelymin<(centre_circle_y - std::sqrt(quadratic_ineq_z)) 
@@ -144,9 +149,6 @@ double samplePDFDUNEBeamNDGAr::FindNHits(double pixel_spacing_cm, double centre_
         num_intersections++;
       }
       // already checked all vertices for duplicates before so no need to repeat that
-    }
-    else if(quadratic_ineq_z == 0){ //when the pixel boundary is a tangent to the circle y = y0
-      num_intersections++;
     }
   }
   double N_hits = num_intersections - num_vertices + 1; //Add one for the pixel that it starts on
@@ -238,7 +240,7 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
       continue;
     }
     nummatched++;
-    
+
     auto it = std::find(_MCPTrkID->begin(), _MCPTrkID->end(), sr->mc.nu[0].prim[i_truepart].G4ID+1);
     if (i_anapart == it - _MCPTrkID->begin()) *isgoodcafparticle = true;
 
@@ -374,12 +376,12 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
           theta_1 = atan2(y_intersect_1 - centre_circle_y, z_intersect_1 - centre_circle_z);
           theta_2 = atan2(y_intersect_2 - centre_circle_y, z_intersect_2 - centre_circle_z);
           theta_start = atan2(_MCPStartY->at(i_anapart) - centre_circle_y, _MCPStartZ->at(i_anapart) - centre_circle_z);
-          
+
           //Ensure they are in the range [0,2pi)
           if (theta_1 < 0) theta_1 += 2*M_PI;
           if (theta_2 < 0) theta_2 += 2*M_PI;
           if (theta_start < 0) theta_start += 2*M_PI;
-          
+
           //Lorentz force law, if positively charged, counter clockwise, if negative charged, clockwise
           if(!positivecharged){
             theta_diff_1 = (theta_1 < theta_start) ? (theta_start - theta_1) : (2*M_PI - (theta_1 - theta_start));
@@ -389,7 +391,7 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
             theta_diff_1 = (theta_1 > theta_start) ? (theta_1 - theta_start) : (2*M_PI - (theta_start - theta_1));
             theta_diff_2 = (theta_2 > theta_start) ? (theta_2 - theta_start) : (2*M_PI - (theta_start - theta_2));
           }
-          
+
           //JM Why is the second check necessary?
           if(theta_diff_1<theta_diff_2 && (rad_curvature*100*theta_diff_1 > (TPCInstrumentedRadius-start_radius))){
             theta_chosen = theta_diff_1; 
@@ -401,7 +403,7 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
           L_yz = rad_curvature*100*theta_chosen;
           L_yz_chord = std::abs(2*rad_curvature*100*sin(theta_chosen/2));
           nturns = std::abs(length_track_x/100)/pitch;
-          
+
           //If track ends before it would intersect, adjust
           if(std::abs(L_yz*tan_theta) > std::abs(length_track_x)){
             double theta_intersect = fmod(nturns, 1)*2*M_PI; //JM why do we need the fmod? nturns<1 in this case surely?
@@ -442,13 +444,13 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
         double sigma_theta = (cos(theta_xT)*cos(theta_xT) * (pitch/(2*M_PI*rad_curvature)) *
             std::sqrt(sigmax_frac*sigmax_frac + momres_tottransverse*momres_tottransverse));
         double momres_frac = std::sqrt(momres_tottransverse*momres_tottransverse + (sigma_theta*tan_theta)*(sigma_theta*tan_theta));
-        
+
         duneobj->particle_nhits->back() = N_hits;
         duneobj->particle_nturns->back() = nturns;
         duneobj->particle_momresms->back() = momres_ms;
         duneobj->particle_momrestransfrac->back() = momres_tottransverse/momres_frac;
         duneobj->particle_momrestrans->back() = momres_tottransverse;
-        
+
         if(momres_frac > momentum_resolution_threshold){
           isAccepted = false;
         }
@@ -749,9 +751,9 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
     double muonenergy = 0.;
     bool isEventAccepted = true;
     bool isgoodcafevent = true;
-    
+
     int ntrueparticles = sr->mc.nu[0].nprim;
-   
+
     for(int i_truepart =0; i_truepart<ntrueparticles; i_truepart++){
       int partpdg = sr->mc.nu[0].prim[i_truepart].pdg;
       pdgmass = GetMass(partpdg);
@@ -766,12 +768,12 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
           duneobj->rw_lep_pZ[i_event] = static_cast<double>(sr->mc.nu[0].prim[i_truepart].p.pz);
         }
       }
-      
+
       bool isgoodcafparticle = false;
       if (!IsParticleAccepted(duneobj, iSample, i_event, i_truepart, pixel_spacing_cm, &isgoodcafparticle)) {
         isEventAccepted = false;
       }
-      
+
       //Check if particle is stored properly in CAF
       if (isgoodcafparticle == false && isgoodcafevent == true) {
         isgoodcafevent = false;
@@ -785,10 +787,10 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
         //    sr->mc.nu[0].prim[i_truepart].p.px, sr->mc.nu[0].prim[i_truepart].p.py, sr->mc.nu[0].prim[i_truepart].p.pz);
       }
     }
-    
+
     if(isEventAccepted) {duneobj->is_accepted[i_event]=1;}
     else {duneobj->is_accepted[i_event]=0;} 
-    
+
     if (!isgoodcafevent) {
       nbadcafevents++;
       duneobj->is_good_caf_event[i_event]=0;
