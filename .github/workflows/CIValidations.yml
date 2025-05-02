@@ -26,10 +26,10 @@ jobs:
             build_arg: -DCUDAProb3Linear_ENABLED=ON
             # Add a list of directories to link
             splines:
-              source: /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2/DUNE_2021_FD_splines
+              source: /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v1/DUNE_spline_files
               target: inputs/DUNE_spline_files
             mc_files:
-              source: /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2/DUNE_2023_FD_CAFs
+              source: /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v1/DUNE_CAF_files
               target: inputs/DUNE_CAF_files
 
     name: Run Test ${{matrix.name}}
