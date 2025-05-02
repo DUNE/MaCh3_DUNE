@@ -35,4 +35,4 @@ if [ ! -d "$MACH3DIR/inputs/DUNE_ND_spline_files" ]
 then
   mkdir $MACH3DIR/inputs/DUNE_ND_spline_files
 fi
-ln -sf ${FILESDIR}/DUNE_2023_ND_splines/*root inputs/DUNE_ND_spline_files
+ln -sf ${FILESDIR}/DUNE_2025_ND_splines/*root inputs/DUNE_ND_spline_files
