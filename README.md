@@ -53,17 +53,22 @@ Imperial College London lx:
 
 FNAL cluster:
 ```bash
-/dune/data/users/lwarsame
+/exp/dune/data/users/lwarsame
 ```
 
 ComputeCanada Cedar:
 ```bash
-/scratch/liban
+/project/rpp-nilic/MaCh3_inputs
 ```
 
 NERSC Perlmutter:
 ```bash
 /pscratch/sd/l/lwarsame
+```
+
+RAL SCARF:
+```bash
+/work4/ppd/scarf1407
 ```
 
 CVMFS:
