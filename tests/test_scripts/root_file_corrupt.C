@@ -55,7 +55,8 @@ void check_root_files(const char* directory) {
     }
     
     if (fail > 0) {
-        Throw("\033[1;33m Warning, failed check on \033[0m \033[1;31m" << fail << " files\033[0m")
+        std::cerr<<"\033[1;33m Warning, failed check on \033[0m \033[1;31m" << fail << " files\033[0m"<<std::endl;
+        throw std::runtime_error("Files broken, please wait a few hours and re-run")
         // To match Python's behavior of raising an exception
     }
 }
