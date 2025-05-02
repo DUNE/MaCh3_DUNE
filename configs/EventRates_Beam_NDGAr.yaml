@@ -1,5 +1,5 @@
 General:
-  OutputFile: "outputs/Projections_CC_BField0_5_FidRad_160_FidLen_209_InstRad_249_45_InstLen_259_WithECal_Enu_1to5GeV.root"
+  OutputFile: "outputs/Projections_CC_BField0_5_FidRad_160_FidLen_209_InstRad_249_45_InstLen_259_WithECal_Enu_1to5GeV_ds.root"
   #OutputFile: "outputs/FinalComparison_endgap.root"
   DUNESamples: ["configs/Samples/SamplePDFDune_NDGAr_FHC_numuselec.yaml"]	
   #Nu-FIT
@@ -8,7 +8,7 @@ General:
   OscillationParameters: [0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848]
   OscillatorConfigName: "configs/OscillatorObj.yaml"
   Systematics:
-    XsecCovFile: ["configs/CovObjs/xsec_covariance_DUNE_systs_2022a_FD_v3_new.yaml"]
+    XsecCovFile: ["configs/CovObjs/xsec_covariance_DUNE_systs_NDGAr.yaml"]
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.1
     XsecAtGen: false 

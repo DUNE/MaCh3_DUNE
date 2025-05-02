@@ -5,6 +5,9 @@ samplePDFFDBase* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
   samplePDFFDBase *Sample;
 
 #ifdef BUILD_NDGAR
+  (void)osc;
+  (void)NDCov_FHC;
+  (void)NDCov_RHC;
   if (SampleType == "BeamNDGAr") {
     Sample = new samplePDFDUNEBeamNDGAr(SampleConfig, xsec);
   } else {

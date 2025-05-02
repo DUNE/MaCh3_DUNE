@@ -1,19 +1,9 @@
-SampleName: "FHC_numu"
+SampleName: "FHC_numu_NDGAr"
 SampleType: "BeamNDGAr"
 
 POT: 1.0e+21
 MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes.yaml"
 DetID: "NDGAr"
-
-SelectionCuts:
-#  - KinematicStr: "TrueXPos"
-#    Bounds: [ -310.0, 310.0 ]
-#  - KinematicStr: "TrueYPos"
-#    Bounds: [ -550.0, 550.0 ]
-#  - KinematicStr: "TrueZPos"
-#    Bounds: [ 50.0, 1244.0 ]
-#  - KinematicStr: "CVNNumu"
-#    Bounds: [ 0.5, 999 ]
 
 Binning:
   XVarStr : "TrueNeutrinoEnergy" 
@@ -51,8 +41,6 @@ SampleCuts:
 InputFiles:
   mtupleprefix: "inputs/DUNE_NDGAr_CAF_files/NDGAr_FHC_ger_"
   mtuplesuffix: "_numuselec.root"
-#mtupleprefix: "inputs/DUNE_NDGAr_CAF_files/NDGAr_FHC_ger"
-#mtuplesuffix: ".root"
   splineprefix: "inputs/DUNE_NDGAr_spline_files/NDGAr_FHC_ger_"
   splinesuffix: "_numuselec_2dsplinesnewreco.root"
 
@@ -67,69 +55,4 @@ SubSamples:
     splinefile: "numu_x_numu"
     nutype: 14
     oscnutype: 14
-#  - Name: "FHC_nue_x_nue"
-#    LatexName: "FHC_nue_x_nue"
-#    mtuplefile: "nue_x_nue"
-#    splinefile: "nue_x_nue"
-#    nutype: 12
-#    oscnutype: 12
-#  - Name: "FHC_numubar_x_numubar"
-#    LatexName: "FHC_numubar_x_numubar"  
-#    mtuplefile: "numubar_x_numubar"
-#    splinefile: "numubar_x_numubar"
-#    nutype: -14
-#    oscnutype: -14
-#  - Name: "FHC_nuebar_x_nuebar"
-#    LatexName: "FHC_nuebar_x_nuebar"
-#    mtuplefile: "nuebar_x_nuebar"
-#    splinefile: "nuebar_x_nuebar"
-#    nutype: -12
-#    oscnutype: -12
-#  - Name: "FHC_numu_x_nue" 
-#    LatexName: "FHC_numu_x_nue" 
-#    mtuplefile: "numu_x_nue"
-#    splinefile: "numu_x_nue"
-#    nutype: 14
-#    oscnutype: 12
-#  - Name: "FHC_numubar_x_nuebar"
-#    LatexName: "FHC_numubar_x_nuebar"
-#    mtuplefile: "numubar_x_nuebar"
-#    splinefile: "numubar_x_nuebar"
-#    nutype: -14
-#    oscnutype: -12 
-#  - Name: "FHC_nue_x_numu"
-#    LatexName: "FHC_nue_x_numu"
-#    mtuplefile: "nue_x_numu"
-#    splinefile: "nue_x_numu"
-#    nutype: 12
-#    oscnutype: 14
-#  - Name: "FHC_nuebar_x_numubar"
-#    LatexName: "FHC_nuebar_x_numubar"
-#    mtuplefile: "nuebar_x_numubar"
-#    splinefile: "nuebar_x_numubar"
-#    nutype: -12
-#    oscnutype: -14
-#  - Name: "FHC_numu_x_nutau"
-#    LatexName: "FHC_numu_x_nutau"  
-#    mtuplefile: "numu_x_nutau"
-#    splinefile: "numu_x_nutau"
-#    nutype: 14
-#    oscnutype: 16
-#  - Name: "FHC_nue_x_nutau"
-#    LatexName: "FHC_nue_x_nutau"  
-#    mtuplefile: "nue_x_nutau"
-#    splinefile: "nue_x_nutau"
-#    nutype: 12
-#    oscnutype: 16
-#  - Name: "FHC_numubar_x_nutaubar"
-#    LatexName: "FHC_numubar_x_nutaubar"  
-#    mtuplefile: "numubar_x_nutaubar"
-#    splinefile: "numubar_x_nutaubar"
-#    nutype: -14
-#    oscnutype: -16
-#  - Name: "FHC_nuebar_x_nutaubar"
-#    LatexName: "FHC_nuebar_x_nutaubar"  
-#    mtuplefile: "nuebar_x_nutaubar"
-#    splinefile: "nuebar_x_nutaubar"
-#    nutype: -12
-#    oscnutype: -16
+

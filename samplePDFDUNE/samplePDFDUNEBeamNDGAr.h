@@ -34,6 +34,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kIsGoodCAFEvent, kParticle_Event, kParticle_Momentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_IsAccepted, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_NHits, kParticle_NTurns, kParticle_MomResMS, kParticle_MomResTrans};
 
   protected:
+    //Functions required by core
     void Init();
     int setupExperimentMC(int iSample);
     void setupFDMC(int iSample);
@@ -41,26 +42,21 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     void SetupWeightPointers();
     void SetupSplines();
 
-    //DB functions which could be initialised to do something which is non-trivial
-    //double CalcXsecWeightFunc(int iSample, int iEvent) {return 1.;}
-    //void applyShifts(int iSample, int iEvent) {}
-
-    const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent);
     const double* GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent);
     const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
-
     double ReturnKinematicParameter(double KinematicVariable, int iSample, int iEvent);
     double ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
-    double ReturnKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent);
-
     std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameter);
-    std::vector<double> ReturnKinematicParameterBinning(KinematicTypes KinematicParameter);
 
+    //NDGAr-specific functions
+    const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent);
+    double ReturnKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent);
+    std::vector<double> ReturnKinematicParameterBinning(KinematicTypes KinematicParameter);
+    
     void makePixelGrid(double pixel_spacing_cm);
     double FindNHits(double pixel_spacing_cm, double centre_circle_y, double centre_circle_z, double rad_curvature);
-    double CalcBeta(double p_mag, double& bg, double& gamma);
-    double GetMass(int partpdg);
-    bool IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, int i_truepart, double pixel_spacing_cm, bool *isgoodcafparticle);
+    double CalcBeta(double p_mag, double& bg, double& gamma, double pdgmass);
+    bool IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, int i_truepart, double pixel_spacing_cm, bool *isgoodcafparticle, double pdgmass);
 
     bool IsParticleSelected(const int iSample, const int iEvent, const int iParticle);
     std::vector<struct dunemc_base> dunendgarmcSamples;
@@ -74,6 +70,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 
     double pot;
     int *nparticlesinsample;
+    
     // dunendgarmc Variables
     double _ev;
     double _erec;
@@ -112,18 +109,6 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     std::vector<int> *_MCPTrkID=0;
     std::vector<int> *_SimHitTrkID=0;
     std::vector<double> *_SimHitEnergy=0;
-
-    double pdgmass;
-    //particle masses in GeV
-    double m_chargedpi = 0.13957039;
-    double m_pi0 = 0.1349768;
-    double m_e = 0.00051099895;
-    double m_mu = 0.1056583755;
-    double m_p = 0.93827208816;
-    double m_n = 0.9395654205;
-    double m_chargedk = 0.493677;
-    double m_k0 = 0.497648;
-    double m_lambda = 1.115683;
 
     //TPC dimensions
     double TPCFidLength;
