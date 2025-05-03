@@ -27,6 +27,7 @@ void samplePDFDUNEBeamND::Init() {
   pot = SampleManager->raw()["POT"].as<double>();
 
   nparticlesinsample =  new int[nSamples]();
+  
   tot_escale_nd_pos = -999;
   tot_escale_sqrt_nd_pos = -999;
   tot_escale_invsqrt_nd_pos = -999;
@@ -47,6 +48,7 @@ void samplePDFDUNEBeamND::Init() {
   n_res_nd_pos = -999;
   em_res_nd_pos = -999;
   IsELike = SampleManager->raw()["SampleBools"]["IsELike"].as<bool>();
+  
  
   // std::cout << "-------------------------------------------------------------------" <<std::endl;
 }
@@ -305,7 +307,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
     duneobj->nupdgUnosc[iEvent] = sr->mc.nu[0].pdgorig;    
     duneobj->Target[iEvent] = 40;
     duneobj->flux_w[iEvent] = sr->mc.nu[0].genweight;
-    duneobj->nparticlesinsample[iEvent] = 0;
+    // nparticlesinsample[] = 0;
 
     int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
     if (!sr->mc.nu[0].iscc) M3Mode += 14; //Account for no ability to distinguish CC/NC
@@ -334,7 +336,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
     -----------------------------------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------------
     */    
-   
+    
     int nprim = sr->mc.nu[0].nprim;
     for (int i = 0; i < nprim; i++) {
       int pdg = sr->mc.nu[0].prim[i].pdg;

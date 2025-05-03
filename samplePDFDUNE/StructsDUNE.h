@@ -8,8 +8,6 @@ struct dunemc_base {
 
   int *nupdg;
   int *nupdgUnosc;
-
-  int *nparticlesinsample;
   
   double *rw_erec;
   double *rw_erec_shifted;
