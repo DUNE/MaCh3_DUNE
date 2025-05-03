@@ -1,5 +1,5 @@
 General:
-  OutputFile: "outputs/Projections_CC_BField0_5_FidRad_160_FidLen_209_InstRad_249_45_InstLen_259_WithECal_Enu_1to5GeV_ds.root"
+  OutputFile: "outputs/Projections_CC_BField0_5_FidRad_160_FidLen_209_InstRad_249_45_InstLen_259_WithECal_Enu_1to5GeV.root"
   #OutputFile: "outputs/FinalComparison_endgap.root"
   DUNESamples: ["configs/Samples/SamplePDFDune_NDGAr_FHC_numuselec.yaml"]	
   #Nu-FIT
@@ -38,15 +38,15 @@ GeneralKinematicCuts:
 - Name: "Enu"
   VarString: "TrueNeutrinoEnergy"
   Range: [1.,5.]
-- Name: "StoppedInTPC"
-  VarString: "Particle_IsStoppedInTPC"
-  Range: [0.,1.]
-- Name: "StoppedInECal"
-  VarString: "Particle_IsStoppedInECal"
-  Range: [0.,1.]
-- Name: "StoppedInGap"
-  VarString: "Particle_IsStoppedInGap"
-  Range: [0.,1.]
+#- Name: "StoppedInTPC"
+#  VarString: "Particle_IsStoppedInTPC"
+#  Range: [0.,1.]
+#- Name: "StoppedInECal"
+#  VarString: "Particle_IsStoppedInECal"
+#  Range: [0.,1.]
+#- Name: "StoppedInGap"
+#  VarString: "Particle_IsStoppedInGap"
+#  Range: [0.,1.]
 #- Name: "StoppedInEndGap"
 #  VarString: "Particle_IsStoppedInEndGap"
 #  Range: [1.,2.]

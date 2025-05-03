@@ -1,5 +1,4 @@
 #include "samplePDFDUNEBeamNDGAr.h"
-#include "duneanaobj/StandardRecord/StandardRecord.h"
 
 samplePDFDUNEBeamNDGAr::samplePDFDUNEBeamNDGAr(std::string mc_version_, covarianceXsec* XsecCov_) : samplePDFFDBase(mc_version_, XsecCov_) {
   KinematicParameters = &KinematicParametersDUNE;
@@ -760,13 +759,8 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
     duneobj->rw_Q3[i_event] = static_cast<double>(sr->mc.nu[0].modq);
     duneobj->rw_lep_pT[i_event] = std::sqrt((duneobj->rw_lep_pX[i_event])*(duneobj->rw_lep_pX[i_event]) + (duneobj->rw_lep_pY[i_event])*(duneobj->rw_lep_pY[i_event])); 
 
-    _mode = sr->mc.nu[0].mode;
-    _isCC = static_cast<int>(sr->mc.nu[0].iscc);
-
     //int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
     duneobj->mode[i_event] = sr->mc.nu[0].mode;
-    //int mode= TMath::Abs(_mode);       
-    //duneobj->mode[i_event]=static_cast<double>GENIEMode_ToMaCh3Mode(mode, _isCC);
 
     duneobj->flux_w[i_event] = 1.0;
     if(duneobj->rw_isCC[i_event] == 1) numCC++;
@@ -778,6 +772,8 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
   return duneobj->nEvents;
 }
 
+#pragma GCC diagnostic push 
+#pragma GCC diagnostic ignored "-Wswitch-enum"
 const double* samplePDFDUNEBeamNDGAr::GetPointerToKinematicParameter(KinematicTypes KinematicParameter, int iSample, int iEvent) {
   switch(KinematicParameter) {
     case kTrueNeutrinoEnergy:
@@ -836,6 +832,7 @@ const double* samplePDFDUNEBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
       return nullptr;
   }
 }
+#pragma GCC diagnostic pop
 
 const double* samplePDFDUNEBeamNDGAr::GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
@@ -857,6 +854,8 @@ double samplePDFDUNEBeamNDGAr::ReturnKinematicParameter(std::string KinematicPar
   return ReturnKinematicParameter(KinPar,iSample,iEvent);
 }
 
+#pragma GCC diagnostic push 
+#pragma GCC diagnostic ignored "-Wswitch-enum"
 double samplePDFDUNEBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent) {
   //HH: Special cases for dealing with non-doubles
   switch(KinPar) {
@@ -888,6 +887,7 @@ double samplePDFDUNEBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, i
       return *GetPointerToKinematicParameter(KinPar, iSample, iEvent);
   }
 }
+#pragma GCC diagnostic pop
 
 void samplePDFDUNEBeamNDGAr::setupFDMC(int iSample) {
   dunemc_base *duneobj = &(dunendgarmcSamples[iSample]);
@@ -910,6 +910,8 @@ std::vector<double> samplePDFDUNEBeamNDGAr::ReturnKinematicParameterBinning(std:
   return ReturnKinematicParameterBinning(KinPar);
 }
 
+#pragma GCC diagnostic push 
+#pragma GCC diagnostic ignored "-Wswitch-enum"
 std::vector<double> samplePDFDUNEBeamNDGAr::ReturnKinematicParameterBinning(KinematicTypes KinPar) {
   std::vector<double> binningVector;
   switch(KinPar){
@@ -989,6 +991,7 @@ std::vector<double> samplePDFDUNEBeamNDGAr::ReturnKinematicParameterBinning(Kine
   }
   return binningVector;
 }
+#pragma GCC diagnostic pop
 
 TH1* samplePDFDUNEBeamNDGAr::get1DParticleVarHist(std::string ProjectionVar_Str, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* Axis) {
   //DB Grab the associated enum with the argument string

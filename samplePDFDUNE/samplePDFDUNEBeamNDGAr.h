@@ -18,9 +18,12 @@
 #include "covariance/covarianceXsec.h"
 #include "covariance/covarianceOsc.h"
 #include "samplePDF/samplePDFFDBase.h"
-#include "duneanaobj/StandardRecord/StandardRecord.h"
-
 #include "StructsDUNE.h"
+
+#pragma GCC diagnostic push 
+#pragma GCC diagnostic ignored "-Wfloat-conversion"
+#include "duneanaobj/StandardRecord/StandardRecord.h"
+#pragma GCC diagnostic pop
 
 class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
 {
@@ -66,32 +69,12 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     TFile *_sampleFile_geant;
     TTree *_data_geant;
     TString _nutype;
-    int _mode;
+    //int _mode;
 
     double pot;
     int *nparticlesinsample;
-    
-    // dunendgarmc Variables
-    double _ev;
-    double _erec;
-    double _erec_nue;
-    double _elep_reco;
-    double _LepNuAngle;
-    int _reco_numu;
-    int _reco_nue;
     double _BeRPA_cvwgt = 1;
-    int _isCC;
-    int _nuPDGunosc;
-    int _nuPDG;
-    int _run;
-    int _isND;
-    int _isFHC;
-    double _vtx_x;
-    double _vtx_y;
-    double _vtx_z;
-    double _LepTheta;
-    double _Q2;
-
+    
     //Geant vectors
     std::vector<double> *_MCPStartX=0;
     std::vector<double> *_MCPStartY=0;
@@ -155,7 +138,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     double gamma_reco_efficiency;  //efficiency for gamma reco in ECAL
 
     caf::StandardRecord* sr = new caf::StandardRecord();
-
+    
     const std::unordered_map<std::string, int> KinematicParametersDUNE = {
       {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
       {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},

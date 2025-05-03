@@ -198,7 +198,7 @@ cmessage(STATUS "CMAKE CXX Standard: ${CMAKE_CXX_STANDARD}")
 add_library(DUNEMaCh3Warnings INTERFACE)
 
 target_compile_options(DUNEMaCh3Warnings INTERFACE
-#  -Werror                 # Treat Warnings as Errors
+  -Werror                 # Treat Warnings as Errors
   -Wextra                 # Enable extra warning flags
   -Wall                   # Enable all standard warning flags
   -Wshadow                # Warn when a variable declaration shadows one from an outer scope
