@@ -1,4 +1,6 @@
 #include "samplePDFDUNEBeamND.h"
+#include "duneanaobj/StandardRecord/StandardRecord.h"
+#include "TError.h"
 
 //Here nullptr is passed instead of OscCov to prevent oscillation calculations from being performed for the ND Samples
 samplePDFDUNEBeamND::samplePDFDUNEBeamND(std::string mc_version_, covarianceXsec* xsec_cov_,  TMatrixD* nd_cov_, covarianceOsc* osc_cov_=nullptr) : samplePDFFDBase(mc_version_, xsec_cov_, osc_cov_) {
@@ -163,7 +165,7 @@ void samplePDFDUNEBeamND::SetupWeightPointers() {
       MCSamples[i].total_weight_pointers[j].resize(MCSamples[i].ntotal_weight_pointers[j]);
       MCSamples[i].total_weight_pointers[j][0] = &(dunendmcSamples[i].pot_s);
       MCSamples[i].total_weight_pointers[j][1] = &(dunendmcSamples[i].norm_s);
-      MCSamples[i].total_weight_pointers[j][2] = &(dunendmcSamples[i].rw_berpaacvwgt[j]);
+      MCSamples[i].total_weight_pointers[j][2] = MCSamples[i].osc_w_pointer[j];      
       MCSamples[i].total_weight_pointers[j][3] = &(dunendmcSamples[i].flux_w[j]);
       MCSamples[i].total_weight_pointers[j][4] = &(MCSamples[i].xsec_w[j]);
     }
@@ -172,69 +174,25 @@ void samplePDFDUNEBeamND::SetupWeightPointers() {
 
 int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
 
-  dunemc_base *duneobj = &(dunendmcSamples[iSample]);
-  
-  MACH3LOG_INFO("-------------------------------------------------------------------");
-  MACH3LOG_INFO("input file: {}", mc_files.at(iSample));
-  
-  //_sampleFile = TFile::Open(mc_files.at(iSample).c_str(), "READ");
-  //_data = _sampleFile->Get<TTree>("caf");
+  // Set up the branches
 
-  TChain* _data = new TChain("caf");
-  _data->Add(mc_files.at(iSample).c_str());
-
-  if(_data){
-    MACH3LOG_INFO("Found \"caf\" tree in {}", mc_files[iSample]);
-    MACH3LOG_INFO("With number of entries: {}", _data->GetEntries());
-  }
-  else{
-    MACH3LOG_ERROR("Could not find \"caf\" tree in {}", mc_files[iSample]);
+  caf::StandardRecord* sr = new caf::StandardRecord();
+  dunemc_base* duneobj = &dunendmcSamples[iSample];
+  std::string FileName = mc_files[iSample];
+  MACH3LOG_INFO("Reading File: {}",FileName);
+  TFile* File = TFile::Open(FileName.c_str());
+  if (!File || File->IsZombie()) {
+    MACH3LOG_ERROR("Did not find File: {}",FileName);
     throw MaCh3Exception(__FILE__, __LINE__);
   }
-
-  _data->SetBranchStatus("*", 0);
-  _data->SetBranchStatus("Ev", 1);
-  _data->SetBranchAddress("Ev", &_ev);
-  _data->SetBranchStatus("Ev_reco", 1);
-  _data->SetBranchAddress("Ev_reco", &_erec);
-  _data->SetBranchStatus("Elep_reco", 1);
-  _data->SetBranchAddress("Elep_reco", &_erec_lep);
-  _data->SetBranchStatus("mode",1);
-  _data->SetBranchAddress("mode",&_mode);
-  _data->SetBranchStatus("isCC", 1);
-  _data->SetBranchAddress("isCC", &_isCC);
-  _data->SetBranchStatus("reco_q", 1);
-  _data->SetBranchAddress("reco_q", &_reco_q);
-  _data->SetBranchStatus("nuPDGunosc", 1);
-  _data->SetBranchAddress("nuPDGunosc", &_nuPDGunosc);
-  _data->SetBranchStatus("nuPDG", 1);
-  _data->SetBranchAddress("nuPDG", &_nuPDG);
-  _data->SetBranchStatus("BeRPA_A_cvwgt", 1);
-  _data->SetBranchAddress("BeRPA_A_cvwgt", &_BeRPA_cvwgt);
-
-  _data->SetBranchStatus("eRecoP", 1);
-  _data->SetBranchAddress("eRecoP", &_eRecoP);
-  _data->SetBranchStatus("eRecoPip", 1);
-  _data->SetBranchAddress("eRecoPip", &_eRecoPip);
-  _data->SetBranchStatus("eRecoPim", 1);
-  _data->SetBranchAddress("eRecoPim", &_eRecoPim);
-  _data->SetBranchStatus("eRecoPi0", 1);
-  _data->SetBranchAddress("eRecoPi0", &_eRecoPi0);
-  _data->SetBranchStatus("eRecoN", 1);
-  _data->SetBranchAddress("eRecoN", &_eRecoN);
-
-  _data->SetBranchStatus("LepE", 1);
-  _data->SetBranchAddress("LepE", &_LepE);
-  _data->SetBranchStatus("eP", 1);
-  _data->SetBranchAddress("eP", &_eP);
-  _data->SetBranchStatus("ePip", 1);
-  _data->SetBranchAddress("ePip", &_ePip);
-  _data->SetBranchStatus("ePim", 1);
-  _data->SetBranchAddress("ePim", &_ePim);
-  _data->SetBranchStatus("ePi0", 1);
-  _data->SetBranchAddress("ePi0", &_ePi0);
-  _data->SetBranchStatus("eN", 1);
-  _data->SetBranchAddress("eN", &_eN);
+  TTree* Tree = File->Get<TTree>("cafTree");
+  if (!Tree){
+    MACH3LOG_ERROR("Did not find Tree::cafTree in File: {}",FileName);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  
+  Tree->SetBranchStatus("*", 1);
+  Tree->SetBranchAddress("rec", &sr);
 
   if (IsFHC) { 
     duneobj->norm_s = (1e21/1.5e21);
@@ -243,8 +201,9 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   }
   duneobj->pot_s = (pot)/1e21;
 
-  duneobj->nEvents = static_cast<int>(_data->GetEntries());
+  duneobj->nEvents = static_cast<int>(Tree->GetEntries());
 
+  // Usual MaCh3 Variables
   duneobj->rw_yrec = new double[duneobj->nEvents];
   duneobj->rw_erec_lep = new double[duneobj->nEvents];
   duneobj->rw_erec_had = new double[duneobj->nEvents];
@@ -252,36 +211,278 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   duneobj->rw_erec = new double[duneobj->nEvents];
   duneobj->rw_erec_shifted = new double[duneobj->nEvents];
   duneobj->rw_theta = new double[duneobj->nEvents];
+  
   duneobj->flux_w = new double[duneobj->nEvents];
   duneobj->rw_isCC = new int[duneobj->nEvents];
   duneobj->rw_reco_q = new double[duneobj->nEvents];
   duneobj->rw_nuPDGunosc = new int[duneobj->nEvents];
   duneobj->rw_nuPDG = new int[duneobj->nEvents];
-  duneobj->rw_berpaacvwgt = new double[duneobj->nEvents]; 
-
-  duneobj->rw_eRecoP = new double[duneobj->nEvents];
-  duneobj->rw_eRecoPip = new double[duneobj->nEvents];
-  duneobj->rw_eRecoPim = new double[duneobj->nEvents];
-  duneobj->rw_eRecoPi0 = new double[duneobj->nEvents];
-  duneobj->rw_eRecoN = new double[duneobj->nEvents];
-
-  duneobj->rw_LepE = new double[duneobj->nEvents];
-  duneobj->rw_eP = new double[duneobj->nEvents];
-  duneobj->rw_ePip = new double[duneobj->nEvents];
-  duneobj->rw_ePim = new double[duneobj->nEvents];
-  duneobj->rw_ePi0 = new double[duneobj->nEvents];
-  duneobj->rw_eN = new double[duneobj->nEvents];
-
+  // duneobj->rw_berpaacvwgt = new double[duneobj->nEvents];
   duneobj->nupdg = new int[duneobj->nEvents];
   duneobj->nupdgUnosc = new int[duneobj->nEvents];
-  duneobj->mode = new double[duneobj->nEvents];
-  duneobj->Target = new int[duneobj->nEvents];
+  // duneobj->mode = new double[duneobj->nEvents];
+  // duneobj->Target = new int[duneobj->nEvents];
 
-  _data->GetEntry(0);
+  //Reco Particle Energy
+  duneobj->rw_ndLAr_particle_eRecoMuon = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_eRecoMuon->reserve(7 * duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_eRecoP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_eRecoP->reserve(7 * duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_eRecoPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_eRecoPip->reserve(7 * duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_eRecoPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_eRecoPim->reserve(7 * duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_eRecoPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_eRecoPi0->reserve(7 * duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_eRecoN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_eRecoN->reserve(7 * duneobj->nEvents);
+
+  //True Particle Energy
+  duneobj->rw_ndLAr_particle_eMuon = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_eMuon->reserve(7 * duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_eP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_eP->reserve(7 * duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ePip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_ePip->reserve(7 * duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ePim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_ePim->reserve(7 * duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ePi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_ePi0->reserve(7 * duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_eN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_eN->reserve(7 * duneobj->nEvents);
+
+  //Reco Particle Momentum
+  duneobj->rw_ndLAr_particle_MomRecoMu = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_MomRecoMu->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_MomRecoPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_MomRecoPip->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_MomRecoPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_MomRecoPim->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_MomRecoPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_MomRecoPi0->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_MomRecoP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_MomRecoP->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_MomRecoN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_MomRecoN->reserve(7*duneobj->nEvents);
+
+  //True Particle Momentum
+  duneobj->rw_ndLAr_particle_MomMu = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_MomMu->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_MomPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_MomPip->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_MomPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_MomPim->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_MomPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_MomPi0->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_MomP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_MomP->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_MomN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_MomN->reserve(7*duneobj->nEvents);
+
+  //Reco Particle Start Vertex
+  duneobj->rw_ndLAr_particle_StartXvtxRecoMu = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartXvtxRecoMu->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartYvtxRecoMu = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartYvtxRecoMu->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartZvtxRecoMu = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartZvtxRecoMu->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_StartXvtxRecoPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartXvtxRecoPip->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartYvtxRecoPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartYvtxRecoPip->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartZvtxRecoPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartZvtxRecoPip->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_StartXvtxRecoPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartXvtxRecoPim->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartYvtxRecoPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartYvtxRecoPim->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartZvtxRecoPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartZvtxRecoPim->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_StartXvtxRecoPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartXvtxRecoPi0->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartYvtxRecoPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartYvtxRecoPi0->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartZvtxRecoPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartZvtxRecoPi0->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_StartXvtxRecoP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartXvtxRecoP->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartYvtxRecoP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartYvtxRecoP->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartZvtxRecoP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartZvtxRecoP->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_StartXvtxRecoN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartXvtxRecoN->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartYvtxRecoN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartYvtxRecoN->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartZvtxRecoN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartZvtxRecoN->reserve(7*duneobj->nEvents);
+  
+  //True Particle Start vertex
+  duneobj->rw_ndLAr_particle_StartXvtxMu = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartXvtxMu->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartYvtxMu = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartYvtxMu->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartZvtxMu = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartZvtxMu->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_StartXvtxPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartXvtxPip->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartYvtxPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartYvtxPip->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartZvtxPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartZvtxPip->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_StartXvtxPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartXvtxPim->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartYvtxPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartYvtxPim->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartZvtxPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartZvtxPim->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_StartXvtxPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartXvtxPi0->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartYvtxPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartYvtxPi0->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartZvtxPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartZvtxPi0->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_StartXvtxP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartXvtxP->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartYvtxP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartYvtxP->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartZvtxP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartZvtxP->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_StartXvtxN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartXvtxN->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartYvtxN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartYvtxN->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_StartZvtxN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_StartZvtxN->reserve(7*duneobj->nEvents);
+
+  //Reco Particle End Vertex
+  duneobj->rw_ndLAr_particle_EndXvtxRecoMu = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndXvtxRecoMu->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndYvtxRecoMu = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndYvtxRecoMu->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndZvtxRecoMu = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndZvtxRecoMu->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_EndXvtxRecoPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndXvtxRecoPip->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndYvtxRecoPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndYvtxRecoPip->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndZvtxRecoPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndZvtxRecoPip->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_EndXvtxRecoPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndXvtxRecoPim->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndYvtxRecoPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndYvtxRecoPim->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndZvtxRecoPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndZvtxRecoPim->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_EndXvtxRecoPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndXvtxRecoPi0->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndYvtxRecoPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndYvtxRecoPi0->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndZvtxRecoPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndZvtxRecoPi0->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_EndXvtxRecoP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndXvtxRecoP->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndYvtxRecoP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndYvtxRecoP->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndZvtxRecoP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndZvtxRecoP->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_EndXvtxRecoN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndXvtxRecoN->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndYvtxRecoN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndYvtxRecoN->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndZvtxRecoN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndZvtxRecoN->reserve(7*duneobj->nEvents);
+
+  //True Particle End Vertex
+  duneobj->rw_ndLAr_particle_EndXvtxMu = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndXvtxMu->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndYvtxMu = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndYvtxMu->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndZvtxMu = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndZvtxMu->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_EndXvtxPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndXvtxPip->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndYvtxPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndYvtxPip->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndZvtxPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndZvtxPip->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_EndXvtxPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndXvtxPim->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndYvtxPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndYvtxPim->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndZvtxPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndZvtxPim->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_EndXvtxPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndXvtxPi0->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndYvtxPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndYvtxPi0->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndZvtxPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndZvtxPi0->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_EndXvtxP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndXvtxP->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndYvtxP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndYvtxP->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndZvtxP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndZvtxP->reserve(7*duneobj->nEvents);
+
+  duneobj->rw_ndLAr_particle_EndXvtxN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndXvtxN->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndYvtxN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndYvtxN->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_EndZvtxN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_EndZvtxN->reserve(7*duneobj->nEvents);
+
+  // Reco Particle Angle
+  duneobj->rw_ndLAr_particle_ThetaRecoMu = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_ThetaRecoMu->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ThetaRecoPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_ThetaRecoPip->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ThetaRecoPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_ThetaRecoPim->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ThetaRecoPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_ThetaRecoPi0->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ThetaRecoP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_ThetaRecoP->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ThetaRecoN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_ThetaRecoN->reserve(7*duneobj->nEvents);
+
+  // True Particle Angle
+  duneobj->rw_ndLAr_particle_ThetaMu = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_ThetaMu->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ThetaPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_ThetaPip->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ThetaPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_ThetaPim->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ThetaPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_ThetaPi0->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ThetaP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_ThetaP->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ThetaN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_ThetaN->reserve(7*duneobj->nEvents);
+
 
   //FILL DUNE STRUCT
   for (int i = 0; i < duneobj->nEvents; ++i) { // Loop through tree
-    _data->GetEntry(i);
+    Tree->GetEntry(i);
 
     duneobj->nupdg[i] = sample_nupdg[iSample];
     duneobj->nupdgUnosc[i] = sample_nupdgunosc[iSample];
@@ -321,11 +522,105 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
     duneobj->mode[i] = M3Mode;
     
     duneobj->flux_w[i] = 1.0;
+
+
+/*
+    -----------------------------------------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------------------
+    ND-LAr Particle Truth Information
+    -----------------------------------------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------------------
+    */    
+    
+    int nprim = sr->mc.nu[0].nprim;
+    for (int i = 0; i < nprim; i++) {
+      int pdg = sr->mc.nu[0].prim[i].pdg;
+      nparticlesinsample[iSample]++;
+      double energy = static_cast<double>(sr->mc.nu[0].prim[i].p.E);
+      double px = static_cast<double>(sr->mc.nu[0].prim[i].p.px);
+      double py = static_cast<double>(sr->mc.nu[0].prim[i].p.py);
+      double pz = static_cast<double>(sr->mc.nu[0].prim[i].p.pz);
+      double start_pos_x = static_cast<double>(sr->mc.nu[0].prim[i].start_pos.x);
+      double start_pos_y = static_cast<double>(sr->mc.nu[0].prim[i].start_pos.y);
+      double start_pos_z = static_cast<double>(sr->mc.nu[0].prim[i].start_pos.z);
+      double end_pos_x = static_cast<double>(sr->mc.nu[0].prim[i].end_pos.x);
+      double end_pos_y = static_cast<double>(sr->mc.nu[0].prim[i].end_pos.y);
+      double end_pos_z = static_cast<double>(sr->mc.nu[0].prim[i].end_pos.z);
+      double momentum = sqrt(px * px + py * py + pz * pz);
+      double theta = acos(pz / momentum);
+
+      switch (pdg) {
+      case 2212:
+        duneobj->rw_ndLAr_particle_eP->push_back(energy);
+        duneobj->rw_ndLAr_particle_MomRecoP->push_back(momentum);
+        duneobj->rw_ndLAr_particle_ThetaRecoP->push_back(theta);
+        duneobj->rw_ndLAr_particle_StartXvtxRecoP->push_back(start_pos_x);
+        duneobj->rw_ndLAr_particle_StartYvtxRecoP->push_back(start_pos_y);
+        duneobj->rw_ndLAr_particle_StartZvtxRecoP->push_back(start_pos_z);
+        duneobj->rw_ndLAr_particle_EndXvtxRecoP->push_back(end_pos_x);
+        duneobj->rw_ndLAr_particle_EndYvtxRecoP->push_back(end_pos_y);
+        duneobj->rw_ndLAr_particle_EndZvtxRecoP->push_back(end_pos_z);
+        break;
+      case 211:
+        duneobj->rw_ndLAr_particle_ePip->push_back(energy);
+        duneobj->rw_ndLAr_particle_MomRecoPip->push_back(momentum);
+        duneobj->rw_ndLAr_particle_ThetaRecoPip->push_back(theta);
+        duneobj->rw_ndLAr_particle_StartXvtxRecoPip->push_back(start_pos_x);
+        duneobj->rw_ndLAr_particle_StartYvtxRecoPip->push_back(start_pos_y);
+        duneobj->rw_ndLAr_particle_StartZvtxRecoPip->push_back(start_pos_z);
+        duneobj->rw_ndLAr_particle_EndXvtxRecoPip->push_back(end_pos_x);
+        duneobj->rw_ndLAr_particle_EndYvtxRecoPip->push_back(end_pos_y);
+        duneobj->rw_ndLAr_particle_EndZvtxRecoPip->push_back(end_pos_z);
+        break;
+      case -211:
+        duneobj->rw_ndLAr_particle_ePim->push_back(energy);
+        duneobj->rw_ndLAr_particle_MomRecoPim->push_back(momentum);
+        duneobj->rw_ndLAr_particle_ThetaRecoPim->push_back(theta);
+        duneobj->rw_ndLAr_particle_StartXvtxRecoPim->push_back(start_pos_x);
+        duneobj->rw_ndLAr_particle_StartYvtxRecoPim->push_back(start_pos_y);
+        duneobj->rw_ndLAr_particle_StartZvtxRecoPim->push_back(start_pos_z);
+        duneobj->rw_ndLAr_particle_EndXvtxRecoPim->push_back(end_pos_x);
+        duneobj->rw_ndLAr_particle_EndYvtxRecoPim->push_back(end_pos_y);
+        duneobj->rw_ndLAr_particle_EndZvtxRecoPim->push_back(end_pos_z);
+        break;
+      case 111:
+        duneobj->rw_ndLAr_particle_ePi0->push_back(energy);
+        duneobj->rw_ndLAr_particle_MomRecoPi0->push_back(momentum);
+        duneobj->rw_ndLAr_particle_ThetaRecoPi0->push_back(theta);
+        duneobj->rw_ndLAr_particle_StartXvtxRecoPi0->push_back(start_pos_x);
+        duneobj->rw_ndLAr_particle_StartYvtxRecoPi0->push_back(start_pos_y);
+        duneobj->rw_ndLAr_particle_StartZvtxRecoPi0->push_back(start_pos_z);
+        duneobj->rw_ndLAr_particle_EndXvtxRecoPi0->push_back(end_pos_x);
+        duneobj->rw_ndLAr_particle_EndYvtxRecoPi0->push_back(end_pos_y);
+        duneobj->rw_ndLAr_particle_EndZvtxRecoPi0->push_back(end_pos_z);
+        break;
+      case 2112:
+        duneobj->rw_ndLAr_particle_eN->push_back(energy);
+        duneobj->rw_ndLAr_particle_MomRecoN->push_back(momentum);
+        duneobj->rw_ndLAr_particle_ThetaRecoN->push_back(theta);
+        duneobj->rw_ndLAr_particle_StartXvtxRecoN->push_back(start_pos_x);
+        duneobj->rw_ndLAr_particle_StartYvtxRecoN->push_back(start_pos_y);
+        duneobj->rw_ndLAr_particle_StartZvtxRecoN->push_back(start_pos_z);
+        duneobj->rw_ndLAr_particle_EndXvtxRecoN->push_back(end_pos_x);
+        duneobj->rw_ndLAr_particle_EndYvtxRecoN->push_back(end_pos_y);
+        duneobj->rw_ndLAr_particle_EndZvtxRecoN->push_back(end_pos_z);
+        break;
+      case 13:
+        duneobj->rw_ndLAr_particle_eMuon->push_back(energy);
+        duneobj->rw_ndLAr_particle_MomRecoMu->push_back(momentum);
+        duneobj->rw_ndLAr_particle_ThetaRecoMu->push_back(theta);
+        duneobj->rw_ndLAr_particle_StartXvtxRecoMu->push_back(start_pos_x);
+        duneobj->rw_ndLAr_particle_StartYvtxRecoMu->push_back(start_pos_y);
+        duneobj->rw_ndLAr_particle_StartZvtxRecoMu->push_back(start_pos_z);
+        duneobj->rw_ndLAr_particle_EndXvtxRecoMu->push_back(end_pos_x);
+        duneobj->rw_ndLAr_particle_EndYvtxRecoMu->push_back(end_pos_y);
+        duneobj->rw_ndLAr_particle_EndZvtxRecoMu->push_back(end_pos_z);
+        break;
+      }
+
   }
   
   //_sampleFile->Close();
-  _data->Reset();
-  delete _data;
   return duneobj->nEvents;
 }
 

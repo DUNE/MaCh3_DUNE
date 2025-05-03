@@ -3,23 +3,29 @@
 
 struct dunemc_base {
 
+  // General Event Information
   int nEvents; // how many MC events are there
-  int *Target; //Target the interaction was on
+  int *Target; // Target the interaction was on
 
+  // Neutrino Information
   int *nupdg;
   int *nupdgUnosc;
 
+  // Reconstructed Energy Variables
   double *rw_erec;
   double *rw_erec_shifted;
   double *rw_erec_had;
   double *rw_erec_lep;
   double *rw_yrec;
+
+  // Reconstructed Particle Energies
   double *rw_eRecoP;
   double *rw_eRecoPip;
   double *rw_eRecoPim;
   double *rw_eRecoPi0;
   double *rw_eRecoN;
 
+  // True Particle Energies
   double *rw_LepE;
   double *rw_eP;
   double *rw_ePip;
@@ -27,73 +33,93 @@ struct dunemc_base {
   double *rw_ePi0;
   double *rw_eN;
 
+  // Kinematic Variables
   double *rw_etru;
   double *rw_mom;
   double *rw_theta;
   double *rw_Q2;
 
+  // CVN Scores
   double *rw_cvnnumu;
   double *rw_cvnnue;
   double *rw_cvnnumu_shifted;
   double *rw_cvnnue_shifted;
+
+  // Reconstructed Event Information
   int *rw_reco_nue;
   int *rw_reco_numu;
   double *rw_berpaacvwgt;
-  int    *rw_isCC;
-  int    *rw_nuPDGunosc;
-  int    *rw_nuPDG;
-  int    *rw_run;
-  bool    *rw_isFHC;
+  int *rw_isCC;
+  int *rw_nuPDGunosc;
+  int *rw_nuPDG;
+  int *rw_run;
+  bool *rw_isFHC;
+
+  // Vertex Information
   double *rw_vtx_x;
   double *rw_vtx_y;
   double *rw_vtx_z;
   double dummy_y;
   double *rw_reco_q;
+
+  // Muon Information
   double *reco_numu;
   double *rw_Q0;
   double *rw_Q3;
 
+  // Scaling and Normalization
   double pot_s;
   double norm_s;
   double osc_channel;
   double *beam_w;
   double *flux_w;
 
+  // Interaction Mode and Binding
   double *mode;
   int *isbound;
 
+  // True Cosine of Zenith Angle
   double *rw_truecz;
 
+  // Particle Counts
   int *nproton; ///< number of (post-FSI) primary protons
   int *nneutron; ///< number of (post-FSI) primary neutrons
   int *npip; ///< number of (post-FSI) primary pi+
   int *npim; ///< number of (post-FSI) primary pi-
   int *npi0; ///< number of (post-FSI) primary pi0
 
-  int *ntruemuon; //number of true muons
-  int *ntruemuonprim; //number of true primary muons
-  int *nrecomuon; //number of reconstructed muons
-  double *nmuonsratio; //number of reco muons divided by number of true muons
+  // Muon Counts and Ratios
+  int *ntruemuon; // number of true muons
+  int *ntruemuonprim; // number of true primary muons
+  int *nrecomuon; // number of reconstructed muons
+  double *nmuonsratio; // number of reco muons divided by number of true muons
 
-  double *rw_lep_pT;  //transverse lepton momentum
+  // Lepton Momentum
+  double *rw_lep_pT;  // transverse lepton momentum
   double *rw_lep_pX;
   double *rw_lep_pY;
-  double *rw_lep_pZ; //parallel lepton momentum
+  double *rw_lep_pZ; // parallel lepton momentum
+
+  // Reconstructed Vertex Information
   double *rw_reco_vtx_x;
   double *rw_reco_vtx_y;
   double *rw_reco_vtx_z;
   double *rw_reco_rad;
   double *rw_rad;
 
+  // Electron Energy
   double *rw_elep_reco;
   double *rw_elep_true;
 
+  // ********************************
+  // ND GAr Variables
+  // ********************************
   int *nrecoparticles;
   bool *in_fdv;
   bool *is_accepted;
   bool *is_good_caf_event;
 
-  //Particle-level kinematic parameters (JM for NDGAr)
+  // Particle-level Kinematic Parameters (ND GAr)
   std::vector<double> *particle_ecaldepositfraction;
   std::vector<int> *particle_event;
   std::vector<int> *particle_pdg;
@@ -118,6 +144,131 @@ struct dunemc_base {
   std::vector<double> *particle_momresms;
   std::vector<double> *particle_momrestransfrac;
   std::vector<double> *particle_momrestrans;
+
+  // ********************************
+  // ND LAr Variables
+  // ********************************
+  
+  // ND LAr Variables
+  std::vector<double> *rw_ndLAr_particle_eRecoMuon;
+  std::vector<double> *rw_ndLAr_particle_eRecoP;
+  std::vector<double> *rw_ndLAr_particle_eRecoPip;
+  std::vector<double> *rw_ndLAr_particle_eRecoPim;
+  std::vector<double> *rw_ndLAr_particle_eRecoPi0;
+  std::vector<double> *rw_ndLAr_particle_eRecoN;
+  std::vector<double> *rw_ndLAr_particle_eMuon;
+  std::vector<double> *rw_ndLAr_particle_eP;
+  std::vector<double> *rw_ndLAr_particle_ePip;
+  std::vector<double> *rw_ndLAr_particle_ePim;
+  std::vector<double> *rw_ndLAr_particle_ePi0;
+  std::vector<double> *rw_ndLAr_particle_eN;
+  std::vector<double> *rw_ndLAr_particle_MomRecoMu;
+  std::vector<double> *rw_ndLAr_particle_MomRecoPip;
+  std::vector<double> *rw_ndLAr_particle_MomRecoPim;
+  std::vector<double> *rw_ndLAr_particle_MomRecoPi0;
+  std::vector<double> *rw_ndLAr_particle_MomRecoP;
+  std::vector<double> *rw_ndLAr_particle_MomRecoN;
+  std::vector<double> *rw_ndLAr_particle_MomMu;
+  std::vector<double> *rw_ndLAr_particle_MomPip;
+  std::vector<double> *rw_ndLAr_particle_MomPim;
+  std::vector<double> *rw_ndLAr_particle_MomPi0;
+  std::vector<double> *rw_ndLAr_particle_MomP;
+  std::vector<double> *rw_ndLAr_particle_MomN;
+
+  // Reconstructed Vertex Start Positions
+  std::vector<double> *rw_ndLAr_particle_StartXvtxRecoMu;
+  std::vector<double> *rw_ndLAr_particle_StartYvtxRecoMu;
+  std::vector<double> *rw_ndLAr_particle_StartZvtxRecoMu;
+  std::vector<double> *rw_ndLAr_particle_StartXvtxRecoPip;
+  std::vector<double> *rw_ndLAr_particle_StartYvtxRecoPip;
+  std::vector<double> *rw_ndLAr_particle_StartZvtxRecoPip;
+  std::vector<double> *rw_ndLAr_particle_StartXvtxRecoPim;
+  std::vector<double> *rw_ndLAr_particle_StartYvtxRecoPim;
+  std::vector<double> *rw_ndLAr_particle_StartZvtxRecoPim;
+  std::vector<double> *rw_ndLAr_particle_StartXvtxRecoPi0;
+  std::vector<double> *rw_ndLAr_particle_StartYvtxRecoPi0;
+  std::vector<double> *rw_ndLAr_particle_StartZvtxRecoPi0;
+  std::vector<double> *rw_ndLAr_particle_StartXvtxRecoP;
+  std::vector<double> *rw_ndLAr_particle_StartYvtxRecoP;
+  std::vector<double> *rw_ndLAr_particle_StartZvtxRecoP;
+  std::vector<double> *rw_ndLAr_particle_StartXvtxRecoN;
+  std::vector<double> *rw_ndLAr_particle_StartYvtxRecoN;
+  std::vector<double> *rw_ndLAr_particle_StartZvtxRecoN;
+
+  // True Vertex Start Positions
+  std::vector<double> *rw_ndLAr_particle_StartXvtxMu;
+  std::vector<double> *rw_ndLAr_particle_StartYvtxMu;
+  std::vector<double> *rw_ndLAr_particle_StartZvtxMu;
+  std::vector<double> *rw_ndLAr_particle_StartXvtxPip;
+  std::vector<double> *rw_ndLAr_particle_StartYvtxPip;
+  std::vector<double> *rw_ndLAr_particle_StartZvtxPip;
+  std::vector<double> *rw_ndLAr_particle_StartXvtxPim;
+  std::vector<double> *rw_ndLAr_particle_StartYvtxPim;
+  std::vector<double> *rw_ndLAr_particle_StartZvtxPim;
+  std::vector<double> *rw_ndLAr_particle_StartXvtxPi0;
+  std::vector<double> *rw_ndLAr_particle_StartYvtxPi0;
+  std::vector<double> *rw_ndLAr_particle_StartZvtxPi0;
+  std::vector<double> *rw_ndLAr_particle_StartXvtxP;
+  std::vector<double> *rw_ndLAr_particle_StartYvtxP;
+  std::vector<double> *rw_ndLAr_particle_StartZvtxP;
+  std::vector<double> *rw_ndLAr_particle_StartXvtxN;
+  std::vector<double> *rw_ndLAr_particle_StartYvtxN;
+  std::vector<double> *rw_ndLAr_particle_StartZvtxN;
+
+  // Reconstructed Vertex End Positions
+  std::vector<double> *rw_ndLAr_particle_EndXvtxRecoMu;
+  std::vector<double> *rw_ndLAr_particle_EndYvtxRecoMu;
+  std::vector<double> *rw_ndLAr_particle_EndZvtxRecoMu;
+  std::vector<double> *rw_ndLAr_particle_EndXvtxRecoPip;
+  std::vector<double> *rw_ndLAr_particle_EndYvtxRecoPip;
+  std::vector<double> *rw_ndLAr_particle_EndZvtxRecoPip;
+  std::vector<double> *rw_ndLAr_particle_EndXvtxRecoPim;
+  std::vector<double> *rw_ndLAr_particle_EndYvtxRecoPim;
+  std::vector<double> *rw_ndLAr_particle_EndZvtxRecoPim;
+  std::vector<double> *rw_ndLAr_particle_EndXvtxRecoPi0;
+  std::vector<double> *rw_ndLAr_particle_EndYvtxRecoPi0;
+  std::vector<double> *rw_ndLAr_particle_EndZvtxRecoPi0;
+  std::vector<double> *rw_ndLAr_particle_EndXvtxRecoP;
+  std::vector<double> *rw_ndLAr_particle_EndYvtxRecoP;
+  std::vector<double> *rw_ndLAr_particle_EndZvtxRecoP;
+  std::vector<double> *rw_ndLAr_particle_EndXvtxRecoN;
+  std::vector<double> *rw_ndLAr_particle_EndYvtxRecoN;
+  std::vector<double> *rw_ndLAr_particle_EndZvtxRecoN;
+
+  // True Vertex End Positions
+  std::vector<double> *rw_ndLAr_particle_EndXvtxMu;
+  std::vector<double> *rw_ndLAr_particle_EndYvtxMu;
+  std::vector<double> *rw_ndLAr_particle_EndZvtxMu;
+  std::vector<double> *rw_ndLAr_particle_EndXvtxPip;
+  std::vector<double> *rw_ndLAr_particle_EndYvtxPip;
+  std::vector<double> *rw_ndLAr_particle_EndZvtxPip;
+  std::vector<double> *rw_ndLAr_particle_EndXvtxPim;
+  std::vector<double> *rw_ndLAr_particle_EndYvtxPim;
+  std::vector<double> *rw_ndLAr_particle_EndZvtxPim;
+  std::vector<double> *rw_ndLAr_particle_EndXvtxPi0;
+  std::vector<double> *rw_ndLAr_particle_EndYvtxPi0;
+  std::vector<double> *rw_ndLAr_particle_EndZvtxPi0;
+  std::vector<double> *rw_ndLAr_particle_EndXvtxP;
+  std::vector<double> *rw_ndLAr_particle_EndYvtxP;
+  std::vector<double> *rw_ndLAr_particle_EndZvtxP;
+  std::vector<double> *rw_ndLAr_particle_EndXvtxN;
+  std::vector<double> *rw_ndLAr_particle_EndYvtxN;
+  std::vector<double> *rw_ndLAr_particle_EndZvtxN;
+
+  // Reconstructed and True Angles
+  std::vector<double> *rw_ndLAr_particle_ThetaRecoMu;
+  std::vector<double> *rw_ndLAr_particle_ThetaRecoPip;
+  std::vector<double> *rw_ndLAr_particle_ThetaRecoPim;
+  std::vector<double> *rw_ndLAr_particle_ThetaRecoPi0;
+  std::vector<double> *rw_ndLAr_particle_ThetaRecoP;
+  std::vector<double> *rw_ndLAr_particle_ThetaRecoN;
+  std::vector<double> *rw_ndLAr_particle_ThetaMu;
+  std::vector<double> *rw_ndLAr_particle_ThetaPip;
+  std::vector<double> *rw_ndLAr_particle_ThetaPim;
+  std::vector<double> *rw_ndLAr_particle_ThetaPi0;
+  std::vector<double> *rw_ndLAr_particle_ThetaP;
+  std::vector<double> *rw_ndLAr_particle_ThetaN;
+
 };
 
 // ********************************
