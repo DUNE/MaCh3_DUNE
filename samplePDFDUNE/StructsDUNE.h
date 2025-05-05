@@ -39,6 +39,8 @@ struct dunemc_base {
   double *rw_theta;
   double *rw_Q2;
 
+  double *rw_reco_theta;
+
   // CVN Scores
   double *rw_cvnnumu;
   double *rw_cvnnue;
@@ -144,9 +146,10 @@ struct dunemc_base {
   std::vector<double> *particle_momresms;
   std::vector<double> *particle_momrestransfrac;
   std::vector<double> *particle_momrestrans;
+  int *nparticlesinsample;
 
   // ********************************
-  // ND LAr Variables
+  // ND LAr Particle Variables
   // ********************************
   
   // ND LAr Variables
@@ -156,24 +159,35 @@ struct dunemc_base {
   std::vector<double> *rw_ndLAr_particle_eRecoPim;
   std::vector<double> *rw_ndLAr_particle_eRecoPi0;
   std::vector<double> *rw_ndLAr_particle_eRecoN;
+  std::vector<double> *rw_ndLAr_particle_eRecoElectron;
+  std::vector<double> *rw_ndLAr_particle_eRecoGamma;
+
   std::vector<double> *rw_ndLAr_particle_eMuon;
   std::vector<double> *rw_ndLAr_particle_eP;
   std::vector<double> *rw_ndLAr_particle_ePip;
   std::vector<double> *rw_ndLAr_particle_ePim;
   std::vector<double> *rw_ndLAr_particle_ePi0;
   std::vector<double> *rw_ndLAr_particle_eN;
+  std::vector<double> *rw_ndLAr_particle_eElectron;
+  std::vector<double> *rw_ndLAr_particle_eGamma;
+
   std::vector<double> *rw_ndLAr_particle_MomRecoMu;
   std::vector<double> *rw_ndLAr_particle_MomRecoPip;
   std::vector<double> *rw_ndLAr_particle_MomRecoPim;
   std::vector<double> *rw_ndLAr_particle_MomRecoPi0;
   std::vector<double> *rw_ndLAr_particle_MomRecoP;
   std::vector<double> *rw_ndLAr_particle_MomRecoN;
+  std::vector<double> *rw_ndLAr_particle_MomRecoElectron;
+  std::vector<double> *rw_ndLAr_particle_MomRecoGamma;
+
   std::vector<double> *rw_ndLAr_particle_MomMu;
   std::vector<double> *rw_ndLAr_particle_MomPip;
   std::vector<double> *rw_ndLAr_particle_MomPim;
   std::vector<double> *rw_ndLAr_particle_MomPi0;
   std::vector<double> *rw_ndLAr_particle_MomP;
   std::vector<double> *rw_ndLAr_particle_MomN;
+  std::vector<double> *rw_ndLAr_particle_MomElectron;
+  std::vector<double> *rw_ndLAr_particle_MomGamma;
 
   // Reconstructed Vertex Start Positions
   std::vector<double> *rw_ndLAr_particle_StartXvtxRecoMu;
@@ -194,6 +208,12 @@ struct dunemc_base {
   std::vector<double> *rw_ndLAr_particle_StartXvtxRecoN;
   std::vector<double> *rw_ndLAr_particle_StartYvtxRecoN;
   std::vector<double> *rw_ndLAr_particle_StartZvtxRecoN;
+  std::vector<double> *rw_ndLAr_particle_StartXvtxRecoElectron;
+  std::vector<double> *rw_ndLAr_particle_StartYvtxRecoElectron;
+  std::vector<double> *rw_ndLAr_particle_StartZvtxRecoElectron;
+  std::vector<double> *rw_ndLAr_particle_StartXvtxRecoGamma;
+  std::vector<double> *rw_ndLAr_particle_StartYvtxRecoGamma;
+  std::vector<double> *rw_ndLAr_particle_StartZvtxRecoGamma;
 
   // True Vertex Start Positions
   std::vector<double> *rw_ndLAr_particle_StartXvtxMu;
@@ -214,6 +234,12 @@ struct dunemc_base {
   std::vector<double> *rw_ndLAr_particle_StartXvtxN;
   std::vector<double> *rw_ndLAr_particle_StartYvtxN;
   std::vector<double> *rw_ndLAr_particle_StartZvtxN;
+  std::vector<double> *rw_ndLAr_particle_StartXvtxElectron;
+  std::vector<double> *rw_ndLAr_particle_StartYvtxElectron;
+  std::vector<double> *rw_ndLAr_particle_StartZvtxElectron;
+  std::vector<double> *rw_ndLAr_particle_StartXvtxGamma;
+  std::vector<double> *rw_ndLAr_particle_StartYvtxGamma;
+  std::vector<double> *rw_ndLAr_particle_StartZvtxGamma;
 
   // Reconstructed Vertex End Positions
   std::vector<double> *rw_ndLAr_particle_EndXvtxRecoMu;
@@ -234,6 +260,12 @@ struct dunemc_base {
   std::vector<double> *rw_ndLAr_particle_EndXvtxRecoN;
   std::vector<double> *rw_ndLAr_particle_EndYvtxRecoN;
   std::vector<double> *rw_ndLAr_particle_EndZvtxRecoN;
+  std::vector<double> *rw_ndLAr_particle_EndXvtxRecoElectron;
+  std::vector<double> *rw_ndLAr_particle_EndYvtxRecoElectron;
+  std::vector<double> *rw_ndLAr_particle_EndZvtxRecoElectron;
+  std::vector<double> *rw_ndLAr_particle_EndXvtxRecoGamma;
+  std::vector<double> *rw_ndLAr_particle_EndYvtxRecoGamma;
+  std::vector<double> *rw_ndLAr_particle_EndZvtxRecoGamma;
 
   // True Vertex End Positions
   std::vector<double> *rw_ndLAr_particle_EndXvtxMu;
@@ -254,20 +286,52 @@ struct dunemc_base {
   std::vector<double> *rw_ndLAr_particle_EndXvtxN;
   std::vector<double> *rw_ndLAr_particle_EndYvtxN;
   std::vector<double> *rw_ndLAr_particle_EndZvtxN;
+  std::vector<double> *rw_ndLAr_particle_EndXvtxElectron;
+  std::vector<double> *rw_ndLAr_particle_EndYvtxElectron;
+  std::vector<double> *rw_ndLAr_particle_EndZvtxElectron;
+  std::vector<double> *rw_ndLAr_particle_EndXvtxGamma;
+  std::vector<double> *rw_ndLAr_particle_EndYvtxGamma;
+  std::vector<double> *rw_ndLAr_particle_EndZvtxGamma;
 
-  // Reconstructed and True Angles
+  // Reconstructed Particle Angles
   std::vector<double> *rw_ndLAr_particle_ThetaRecoMu;
   std::vector<double> *rw_ndLAr_particle_ThetaRecoPip;
   std::vector<double> *rw_ndLAr_particle_ThetaRecoPim;
   std::vector<double> *rw_ndLAr_particle_ThetaRecoPi0;
   std::vector<double> *rw_ndLAr_particle_ThetaRecoP;
   std::vector<double> *rw_ndLAr_particle_ThetaRecoN;
+  std::vector<double> *rw_ndLAr_particle_ThetaRecoElectron;
+  std::vector<double> *rw_ndLAr_particle_ThetaRecoGamma;
+
+  // True Particle Angles
   std::vector<double> *rw_ndLAr_particle_ThetaMu;
   std::vector<double> *rw_ndLAr_particle_ThetaPip;
   std::vector<double> *rw_ndLAr_particle_ThetaPim;
   std::vector<double> *rw_ndLAr_particle_ThetaPi0;
   std::vector<double> *rw_ndLAr_particle_ThetaP;
   std::vector<double> *rw_ndLAr_particle_ThetaN;
+  std::vector<double> *rw_ndLAr_particle_ThetaElectron;
+  std::vector<double> *rw_ndLAr_particle_ThetaGamma;
+
+  // Reconstructed Track Length
+  std::vector<double> *rw_ndLAr_particle_TrackLengthRecoMu;
+  std::vector<double> *rw_ndLAr_particle_TrackLengthRecoPip;
+  std::vector<double> *rw_ndLAr_particle_TrackLengthRecoPim;
+  std::vector<double> *rw_ndLAr_particle_TrackLengthRecoPi0;
+  std::vector<double> *rw_ndLAr_particle_TrackLengthRecoP;
+  std::vector<double> *rw_ndLAr_particle_TrackLengthRecoN;
+  std::vector<double> *rw_ndLAr_particle_TrackLengthRecoElectron;
+  std::vector<double> *rw_ndLAr_particle_TrackLengthRecoGamma;
+  
+  // True Track Length
+  std::vector<double> *rw_ndLAr_particle_TrackLengthMu;
+  std::vector<double> *rw_ndLAr_particle_TrackLengthPip;
+  std::vector<double> *rw_ndLAr_particle_TrackLengthPim;
+  std::vector<double> *rw_ndLAr_particle_TrackLengthPi0;
+  std::vector<double> *rw_ndLAr_particle_TrackLengthP;
+  std::vector<double> *rw_ndLAr_particle_TrackLengthN;
+  std::vector<double> *rw_ndLAr_particle_TrackLengthElectron;
+  std::vector<double> *rw_ndLAr_particle_TrackLengthGamma;
 
 };
 

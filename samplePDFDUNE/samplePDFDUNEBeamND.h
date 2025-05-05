@@ -97,6 +97,7 @@ public:
   double _LepTheta;
   double _Q2;
   int _reco_q;
+  int *nparticlesinsample;
 
   // configuration 
   bool iselike;
@@ -123,6 +124,13 @@ public:
   double mu_res_nd_pos;
   double n_res_nd_pos;
   double em_res_nd_pos;
+
+  double nd_wall_x_min;
+  double nd_wall_x_max;
+  double nd_wall_y_min;
+  double nd_wall_y_max;
+  double nd_wall_z_min;
+  double nd_wall_z_max;
 
   bool isNDCovSet = false;
   // The ND detector covariance matrix
