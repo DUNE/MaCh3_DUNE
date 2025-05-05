@@ -333,6 +333,16 @@ struct dunemc_base {
   std::vector<double> *rw_ndLAr_particle_TrackLengthElectron;
   std::vector<double> *rw_ndLAr_particle_TrackLengthGamma;
 
+  // True Contained
+  std::vector<int> *rw_ndLAr_particle_ContainedMu;
+  std::vector<int> *rw_ndLAr_particle_ContainedPip;
+  std::vector<int> *rw_ndLAr_particle_ContainedPim;
+  std::vector<int> *rw_ndLAr_particle_ContainedPi0;
+  std::vector<int> *rw_ndLAr_particle_ContainedP;
+  std::vector<int> *rw_ndLAr_particle_ContainedN;
+  std::vector<int> *rw_ndLAr_particle_ContainedElectron;
+  std::vector<int> *rw_ndLAr_particle_ContainedGamma;
+
 };
 
 // ********************************

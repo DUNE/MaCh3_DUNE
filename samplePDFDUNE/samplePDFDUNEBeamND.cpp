@@ -620,6 +620,24 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   duneobj->rw_ndLAr_particle_TrackLengthGamma = new std::vector<double>;
   duneobj->rw_ndLAr_particle_TrackLengthGamma->reserve(7*duneobj->nEvents);
 
+  // Particle Contained
+  duneobj->rw_ndLAr_particle_ContainedMu = new std::vector<int>;
+  duneobj->rw_ndLAr_particle_ContainedMu->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ContainedPip = new std::vector<int>;
+  duneobj->rw_ndLAr_particle_ContainedPip->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ContainedPim = new std::vector<int>;
+  duneobj->rw_ndLAr_particle_ContainedPim->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ContainedPi0 = new std::vector<int>;
+  duneobj->rw_ndLAr_particle_ContainedPi0->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ContainedP = new std::vector<int>;
+  duneobj->rw_ndLAr_particle_ContainedP->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ContainedN = new std::vector<int>;
+  duneobj->rw_ndLAr_particle_ContainedN->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ContainedElectron = new std::vector<int>;
+  duneobj->rw_ndLAr_particle_ContainedElectron->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_ContainedGamma = new std::vector<int>;
+  duneobj->rw_ndLAr_particle_ContainedGamma->reserve(7*duneobj->nEvents);
+
   //Setting up Scalar Values
   duneobj->rw_eP[iSample] = 0.0;
   duneobj->rw_ePip[iSample] = 0.0;
@@ -696,6 +714,30 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
       double theta = acos(pz / momentum);
       double track_length = sqrt((end_pos_x - start_pos_x) * (end_pos_x - start_pos_x) + (end_pos_y - start_pos_y) * (end_pos_y - start_pos_y) + (end_pos_z - start_pos_z) * (end_pos_z - start_pos_z));
       
+      double max_travel_distance = std::numeric_limits<double>::max();
+      double distances[] = {
+        (nd_wall_x_max - start_pos_x) / cos(theta),
+        (nd_wall_y_max - start_pos_y) / sin(theta),
+        (nd_wall_z_max - start_pos_z) / tan(theta)
+      };
+      for (double distance : distances) {
+        if (distance > 0) max_travel_distance = std::min(max_travel_distance, distance);
+      }
+
+      int contained = 0;
+      if (
+        start_pos_x > nd_wall_x_min && start_pos_x < nd_wall_x_max &&
+        start_pos_y > nd_wall_y_min && start_pos_y < nd_wall_y_max &&
+        start_pos_z > nd_wall_z_min && start_pos_z < nd_wall_z_max &&
+        end_pos_x > nd_wall_x_min && end_pos_x < nd_wall_x_max && 
+        end_pos_y > nd_wall_y_min && end_pos_y < nd_wall_y_max && 
+        end_pos_z > nd_wall_z_min && end_pos_z < nd_wall_z_max
+      ) {
+        contained = 1;
+      } else {
+        contained = 0;
+      }
+
       switch (pdg) {
       case 2212:
         duneobj->rw_ndLAr_particle_eP->push_back(energy);
@@ -708,6 +750,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
         duneobj->rw_ndLAr_particle_EndYvtxP->push_back(end_pos_y);
         duneobj->rw_ndLAr_particle_EndZvtxP->push_back(end_pos_z);
         duneobj->rw_ndLAr_particle_TrackLengthP->push_back(track_length);
+        duneobj->rw_ndLAr_particle_ContainedP->push_back(contained);
         duneobj->rw_eP[i] += energy;
         break;
       case 211:
@@ -721,6 +764,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
         duneobj->rw_ndLAr_particle_EndYvtxPip->push_back(end_pos_y);
         duneobj->rw_ndLAr_particle_EndZvtxPip->push_back(end_pos_z);
         duneobj->rw_ndLAr_particle_TrackLengthPip->push_back(track_length);
+        duneobj->rw_ndLAr_particle_ContainedPip->push_back(contained);
         duneobj->rw_ePip[i] += energy;
         break;
       case -211:
@@ -734,6 +778,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
         duneobj->rw_ndLAr_particle_EndYvtxPim->push_back(end_pos_y);
         duneobj->rw_ndLAr_particle_EndZvtxPim->push_back(end_pos_z);
         duneobj->rw_ndLAr_particle_TrackLengthPim->push_back(track_length);
+        duneobj->rw_ndLAr_particle_ContainedPim->push_back(contained);
         duneobj->rw_ePim[i] += energy;
         break;
       case 111:
@@ -747,6 +792,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
         duneobj->rw_ndLAr_particle_EndYvtxPi0->push_back(end_pos_y);
         duneobj->rw_ndLAr_particle_EndZvtxPi0->push_back(end_pos_z);
         duneobj->rw_ndLAr_particle_TrackLengthPi0->push_back(track_length);
+        duneobj->rw_ndLAr_particle_ContainedPi0->push_back(contained);
         duneobj->rw_ePi0[i] += energy;
         break;
       case 2112:
@@ -760,6 +806,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
         duneobj->rw_ndLAr_particle_EndYvtxN->push_back(end_pos_y);
         duneobj->rw_ndLAr_particle_EndZvtxN->push_back(end_pos_z);
         duneobj->rw_ndLAr_particle_TrackLengthN->push_back(track_length);
+        duneobj->rw_ndLAr_particle_ContainedN->push_back(contained);
         duneobj->rw_eN[i] += energy;
         break;
       case 13:
@@ -773,6 +820,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
         duneobj->rw_ndLAr_particle_EndYvtxMu->push_back(end_pos_y);
         duneobj->rw_ndLAr_particle_EndZvtxMu->push_back(end_pos_z);
         duneobj->rw_ndLAr_particle_TrackLengthMu->push_back(track_length);
+        duneobj->rw_ndLAr_particle_ContainedMu->push_back(contained);
         duneobj->rw_LepE[i] += energy;
         break;
       case 11:
@@ -786,6 +834,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
         duneobj->rw_ndLAr_particle_EndYvtxElectron->push_back(end_pos_y);
         duneobj->rw_ndLAr_particle_EndZvtxElectron->push_back(end_pos_z);
         duneobj->rw_ndLAr_particle_TrackLengthElectron->push_back(track_length);
+        duneobj->rw_ndLAr_particle_ContainedElectron->push_back(contained);
         duneobj->rw_LepE[i] += energy;
         break;
       case 22:
@@ -799,6 +848,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
         duneobj->rw_ndLAr_particle_EndYvtxGamma->push_back(end_pos_y);
         duneobj->rw_ndLAr_particle_EndZvtxGamma->push_back(end_pos_z);
         duneobj->rw_ndLAr_particle_TrackLengthGamma->push_back(track_length);
+        duneobj->rw_ndLAr_particle_ContainedGamma->push_back(contained);
         break;
       }
     }
