@@ -221,11 +221,11 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   duneobj->rw_reco_q = new double[duneobj->nEvents];
   duneobj->rw_nuPDGunosc = new int[duneobj->nEvents];
   duneobj->rw_nuPDG = new int[duneobj->nEvents];
-  // duneobj->rw_berpaacvwgt = new double[duneobj->nEvents];
+  duneobj->rw_berpaacvwgt = new double[duneobj->nEvents];
   duneobj->nupdg = new int[duneobj->nEvents];
   duneobj->nupdgUnosc = new int[duneobj->nEvents];
-  // duneobj->mode = new double[duneobj->nEvents];
-  // duneobj->Target = new int[duneobj->nEvents];
+  duneobj->mode = new double[duneobj->nEvents];
+  duneobj->Target = new int[duneobj->nEvents];
   nparticlesinsample =  new int[nSamples]();
 
   //Reco Neutrino Vars
@@ -638,6 +638,24 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   duneobj->rw_ndLAr_particle_ContainedGamma = new std::vector<int>;
   duneobj->rw_ndLAr_particle_ContainedGamma->reserve(7*duneobj->nEvents);
 
+  // Distance to Wall
+  duneobj->rw_ndLAr_particle_DWallMu = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_DWallMu->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_DWallPip = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_DWallPip->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_DWallPim = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_DWallPim->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_DWallPi0 = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_DWallPi0->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_DWallP = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_DWallP->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_DWallN = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_DWallN->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_DWallElectron = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_DWallElectron->reserve(7*duneobj->nEvents);
+  duneobj->rw_ndLAr_particle_DWallGamma = new std::vector<double>;
+  duneobj->rw_ndLAr_particle_DWallGamma->reserve(7*duneobj->nEvents);
+
   //Setting up Scalar Values
   duneobj->rw_eP[iSample] = 0.0;
   duneobj->rw_ePip[iSample] = 0.0;
@@ -661,11 +679,11 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
     duneobj->rw_reco_q[i] = _reco_q;
     duneobj->rw_berpaacvwgt[i] = _BeRPA_cvwgt;
     
-    duneobj->rw_eRecoP[i] = _eRecoP; 
-    duneobj->rw_eRecoPip[i] = _eRecoPip; 
-    duneobj->rw_eRecoPim[i] = _eRecoPim; 
-    duneobj->rw_eRecoPi0[i] = _eRecoPi0; 
-    duneobj->rw_eRecoN[i] = _eRecoN; 
+    // duneobj->rw_eRecoP[i] = _eRecoP; 
+    // duneobj->rw_eRecoPip[i] = _eRecoPip; 
+    // duneobj->rw_eRecoPim[i] = _eRecoPim; 
+    // duneobj->rw_eRecoPi0[i] = _eRecoPi0; 
+    // duneobj->rw_eRecoN[i] = _eRecoN; 
     
     
     duneobj->rw_nuPDGunosc[i] = sr->mc.nu[0].pdgorig;
@@ -691,14 +709,16 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
     */    
     duneobj->rw_etru[i] = static_cast<double>(sr->mc.nu[0].E); // in GeV
     duneobj->rw_isCC[i] = static_cast<int>(sr->mc.nu[0].iscc);
-    duneobj->rw_vtx_x[i] = static_cast<double>(sr->mc.nu[0].vtx.x);
+    duneobj->rw_vtx_x[i] = static_cast<double>(sr->mc.nu[0].vtx.x); // cm
     duneobj->rw_vtx_y[i] = static_cast<double>(sr->mc.nu[0].vtx.y);
     duneobj->rw_vtx_z[i] = static_cast<double>(sr->mc.nu[0].vtx.z);
     // duneobj->rw_theta
 
-    int nprim = sr->mc.nu[0].nprim;
+    long int nprim = sr->mc.nu[0].prim.size();
+    std::cout << "Number of primaries: " << nprim << std::endl;
     for (int j = 0; j < nprim; j++) {
-      int pdg = sr->mc.nu[0].prim[i].pdg;
+      std::cout << "Primary " << j << ": " << sr->mc.nu[0].prim[j].pdg << std::endl;
+      int pdg = sr->mc.nu[0].prim[j].pdg;
       nparticlesinsample[iSample]++;
       double energy = static_cast<double>(sr->mc.nu[0].prim[j].p.E);
       double px = static_cast<double>(sr->mc.nu[0].prim[j].p.px);
@@ -711,33 +731,62 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
       double end_pos_y = static_cast<double>(sr->mc.nu[0].prim[j].end_pos.y);
       double end_pos_z = static_cast<double>(sr->mc.nu[0].prim[j].end_pos.z);
       double momentum = sqrt(px * px + py * py + pz * pz);
-      double theta = acos(pz / momentum);
       double track_length = sqrt((end_pos_x - start_pos_x) * (end_pos_x - start_pos_x) + (end_pos_y - start_pos_y) * (end_pos_y - start_pos_y) + (end_pos_z - start_pos_z) * (end_pos_z - start_pos_z));
-      
+      double theta = acos(pz / momentum);
+      double phi = asin(py / momentum);
+      int contained = 0;
+      double epsilon = 1e-6;
       double max_travel_distance = std::numeric_limits<double>::max();
+      
+      for (auto& val : {&energy, &px, &py, &pz, &start_pos_x, &start_pos_y, &start_pos_z, 
+            &end_pos_x, &end_pos_y, &end_pos_z, &momentum, &track_length, 
+            &theta, &phi, &max_travel_distance}) {
+          if (std::isnan(*val)) *val = M3::_BAD_DOUBLE_;
+      }
+      
       double distances[] = {
-        (nd_wall_x_max - start_pos_x) / cos(theta),
-        (nd_wall_y_max - start_pos_y) / sin(theta),
-        (nd_wall_z_max - start_pos_z) / tan(theta)
+          (std::abs(cos(phi) * sin(theta)) > epsilon) ? (nd_wall_x_max - start_pos_x) / (cos(phi) * sin(theta)) : std::numeric_limits<double>::max(),
+          (std::abs(cos(phi) * sin(theta)) > epsilon) ? (nd_wall_x_min - start_pos_x) / (cos(phi) * sin(theta)) : std::numeric_limits<double>::max(),
+          (std::abs(sin(phi) * sin(theta)) > epsilon) ? (nd_wall_y_max - start_pos_y) / (sin(phi) * sin(theta)) : std::numeric_limits<double>::max(),
+          (std::abs(sin(phi) * sin(theta)) > epsilon) ? (nd_wall_y_min - start_pos_y) / (sin(phi) * sin(theta)) : std::numeric_limits<double>::max(),
+          (std::abs(cos(theta)) > epsilon) ? (nd_wall_z_max - start_pos_z) / cos(theta) : std::numeric_limits<double>::max(),
+          (std::abs(cos(theta)) > epsilon) ? (nd_wall_z_min - start_pos_z) / cos(theta) : std::numeric_limits<double>::max()
       };
+      
+
+      bool valid_distance_found = false;
+      for (double distance : distances) {
+          if (distance > 0 && std::isfinite(distance)) {
+              max_travel_distance = std::min(max_travel_distance, distance); // Remove infinities
+              valid_distance_found = true;
+          }
+      }
+      if (!valid_distance_found) {
+          max_travel_distance = M3::_BAD_DOUBLE_;
+      }
+
       for (double distance : distances) {
         if (distance > 0) max_travel_distance = std::min(max_travel_distance, distance);
       }
 
-      int contained = 0;
-      if (
-        start_pos_x > nd_wall_x_min && start_pos_x < nd_wall_x_max &&
-        start_pos_y > nd_wall_y_min && start_pos_y < nd_wall_y_max &&
-        start_pos_z > nd_wall_z_min && start_pos_z < nd_wall_z_max &&
-        end_pos_x > nd_wall_x_min && end_pos_x < nd_wall_x_max && 
-        end_pos_y > nd_wall_y_min && end_pos_y < nd_wall_y_max && 
-        end_pos_z > nd_wall_z_min && end_pos_z < nd_wall_z_max
-      ) {
-        contained = 1;
+      if (start_pos_x == M3::_BAD_DOUBLE_ || start_pos_y == M3::_BAD_DOUBLE_ || start_pos_z == M3::_BAD_DOUBLE_ || end_pos_x == M3::_BAD_DOUBLE_ || end_pos_y == M3::_BAD_DOUBLE_ || end_pos_z == M3::_BAD_DOUBLE_) 
+      {
+        contained = M3::_BAD_INT_;
+        max_travel_distance = M3::_BAD_DOUBLE_;
       } else {
-        contained = 0;
+        if (
+            start_pos_x > nd_wall_x_min - epsilon && start_pos_x < nd_wall_x_max + epsilon &&
+            start_pos_y > nd_wall_y_min - epsilon && start_pos_y < nd_wall_y_max + epsilon &&
+            start_pos_z > nd_wall_z_min - epsilon && start_pos_z < nd_wall_z_max + epsilon &&
+            end_pos_x > nd_wall_x_min - epsilon && end_pos_x < nd_wall_x_max + epsilon &&
+            end_pos_y > nd_wall_y_min - epsilon && end_pos_y < nd_wall_y_max + epsilon &&
+            end_pos_z > nd_wall_z_min - epsilon && end_pos_z < nd_wall_z_max + epsilon
+        ) {
+            contained = 1;
+        } else {
+            contained = 0;
+        }
       }
-
       switch (pdg) {
       case 2212:
         duneobj->rw_ndLAr_particle_eP->push_back(energy);
@@ -751,6 +800,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
         duneobj->rw_ndLAr_particle_EndZvtxP->push_back(end_pos_z);
         duneobj->rw_ndLAr_particle_TrackLengthP->push_back(track_length);
         duneobj->rw_ndLAr_particle_ContainedP->push_back(contained);
+        duneobj->rw_ndLAr_particle_DWallP->push_back(max_travel_distance);
         duneobj->rw_eP[i] += energy;
         break;
       case 211:
@@ -765,6 +815,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
         duneobj->rw_ndLAr_particle_EndZvtxPip->push_back(end_pos_z);
         duneobj->rw_ndLAr_particle_TrackLengthPip->push_back(track_length);
         duneobj->rw_ndLAr_particle_ContainedPip->push_back(contained);
+        duneobj->rw_ndLAr_particle_DWallPip->push_back(max_travel_distance);
         duneobj->rw_ePip[i] += energy;
         break;
       case -211:
@@ -779,6 +830,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
         duneobj->rw_ndLAr_particle_EndZvtxPim->push_back(end_pos_z);
         duneobj->rw_ndLAr_particle_TrackLengthPim->push_back(track_length);
         duneobj->rw_ndLAr_particle_ContainedPim->push_back(contained);
+        duneobj->rw_ndLAr_particle_DWallPim->push_back(max_travel_distance);
         duneobj->rw_ePim[i] += energy;
         break;
       case 111:
@@ -793,6 +845,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
         duneobj->rw_ndLAr_particle_EndZvtxPi0->push_back(end_pos_z);
         duneobj->rw_ndLAr_particle_TrackLengthPi0->push_back(track_length);
         duneobj->rw_ndLAr_particle_ContainedPi0->push_back(contained);
+        duneobj->rw_ndLAr_particle_DWallPi0->push_back(max_travel_distance);
         duneobj->rw_ePi0[i] += energy;
         break;
       case 2112:
@@ -807,6 +860,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
         duneobj->rw_ndLAr_particle_EndZvtxN->push_back(end_pos_z);
         duneobj->rw_ndLAr_particle_TrackLengthN->push_back(track_length);
         duneobj->rw_ndLAr_particle_ContainedN->push_back(contained);
+        duneobj->rw_ndLAr_particle_DWallN->push_back(max_travel_distance);
         duneobj->rw_eN[i] += energy;
         break;
       case 13:
@@ -821,6 +875,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
         duneobj->rw_ndLAr_particle_EndZvtxMu->push_back(end_pos_z);
         duneobj->rw_ndLAr_particle_TrackLengthMu->push_back(track_length);
         duneobj->rw_ndLAr_particle_ContainedMu->push_back(contained);
+        duneobj->rw_ndLAr_particle_DWallMu->push_back(max_travel_distance);
         duneobj->rw_LepE[i] += energy;
         break;
       case 11:
@@ -835,6 +890,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
         duneobj->rw_ndLAr_particle_EndZvtxElectron->push_back(end_pos_z);
         duneobj->rw_ndLAr_particle_TrackLengthElectron->push_back(track_length);
         duneobj->rw_ndLAr_particle_ContainedElectron->push_back(contained);
+        duneobj->rw_ndLAr_particle_DWallElectron->push_back(max_travel_distance);
         duneobj->rw_LepE[i] += energy;
         break;
       case 22:
@@ -849,6 +905,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
         duneobj->rw_ndLAr_particle_EndZvtxGamma->push_back(end_pos_z);
         duneobj->rw_ndLAr_particle_TrackLengthGamma->push_back(track_length);
         duneobj->rw_ndLAr_particle_ContainedGamma->push_back(contained);
+        duneobj->rw_ndLAr_particle_DWallGamma->push_back(max_travel_distance);
         break;
       }
     }

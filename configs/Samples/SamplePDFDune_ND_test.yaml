@@ -1,0 +1,33 @@
+SampleName: "ND_FHC_numu"
+SampleType: "BeamND"
+POT: 1 #Actual POT /POT_gen *This POT ### Maybe put to 1
+MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes_GENIE.yaml"
+Binning:
+  XVarStr: "TrueNeutrinoEnergy" 
+  XVarBins: [0.,  0.5,  1.,  1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
+DUNESampleBools:
+  isFHC: 1
+  iselike: false
+  isrhc: false
+SampleBools:
+  IsELike: false
+InputFiles:
+  # mtupleprefix: "inputs/DUNE_ND_CAF_files/MicroProdN3p1_NDLAr_2E18_FHC.caf.nu.0000001.CAF" #name of file
+  mtupleprefix: "inputs/DUNE_ND_spline_files/MicroProdN3p1_NDLAr_2E18_FHC.caf.nu.hadded." #name of file
+  # mtupleprefix: "inputs/DUNE_ND_CAF_files/MicroProdN3p1_NDLAr_2E18_FHC.caf.nu." #name of file
+  mtuplesuffix: ".root"
+  splineprefix: ""
+  splinesuffix: ""
+NuOsc:
+  NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
+  EqualBinningPerOscChannel: false
+DetID: "ND" 
+NSubSamples: 1
+SubSamples:
+  - Name: "0000001.CAF"
+    LatexName: "Subsample 1"
+    mtuplefile: "0000001.CAF"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14

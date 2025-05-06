@@ -343,6 +343,16 @@ struct dunemc_base {
   std::vector<int> *rw_ndLAr_particle_ContainedElectron;
   std::vector<int> *rw_ndLAr_particle_ContainedGamma;
 
+  // Max Travel Length
+  std::vector<double> *rw_ndLAr_particle_DWallP;
+  std::vector<double> *rw_ndLAr_particle_DWallPip;
+  std::vector<double> *rw_ndLAr_particle_DWallPim;
+  std::vector<double> *rw_ndLAr_particle_DWallPi0;
+  std::vector<double> *rw_ndLAr_particle_DWallN;
+  std::vector<double> *rw_ndLAr_particle_DWallMu;
+  std::vector<double> *rw_ndLAr_particle_DWallElectron;
+  std::vector<double> *rw_ndLAr_particle_DWallGamma;
+
 };
 
 // ********************************
