@@ -32,6 +32,8 @@ void samplePDFDUNEBeamND::Init() {
   iselike = SampleManager->raw()["SampleBools"]["iselike"].as<bool>();
 
 
+  // Comment out below to remove custom likelihood
+  // /*
   std::string nd_detsys_cov_filename = GetFromManager<std::string>(SampleManager->raw()["NDDetSysCovFile"], "");
   std::string nd_detsys_cov_matrixname = GetFromManager<std::string>(SampleManager->raw()["NDDetSysCovMatrix"], "");
   if (nd_detsys_cov_filename == "") {
@@ -53,6 +55,7 @@ void samplePDFDUNEBeamND::Init() {
     nd_detsys_cov_file->Close();
   }
   MACH3LOG_INFO("Using custom likelihood for ND!");
+  // */
   
   std::cout << "-------------------------------------------------------------------" <<std::endl;
 }
@@ -725,6 +728,9 @@ std::string samplePDFDUNEBeamND::ReturnStringFromKinematicParameter(int Kinemati
   }
 }
 
+// Comment out below to remove custom likelihood
+// /*
+
 // Set the covariance matrix for this class
 void samplePDFDUNEBeamND::setNDCovMatrix() {
   nXBins = static_cast<int>(XBinEdges.size()-1);
@@ -809,3 +815,5 @@ double samplePDFDUNEBeamND::GetLikelihood() {
   }
   return negLogL;
 }
+
+// */

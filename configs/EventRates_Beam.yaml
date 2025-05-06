@@ -1,5 +1,5 @@
 General:
-  OutputFile: "outputs/runs/050_fit.root"
+  OutputFile: "outputs/runs/084_amcmc.root"
   # OutputFile: "outputs/liban_stepsize/sigma_libanND.root"
   # DUNESamples: ["configs/Samples/SamplePDFDuneND_FHC_numuselec_everything.yaml"] 
   # DUNESamples: ["configs/Samples/SamplePDFDuneND_RHC_numuselec_everything.yaml"] 
@@ -24,9 +24,10 @@ General:
     # XsecCovFile: ["configs/CovObjs/one_flux.yaml"]
     # XsecCovFile: ["configs/CovObjs/liban_ND_norm_scale1.yaml"]
     # XsecCovFile: ["configs/CovObjs/liban_covs/Flux_ND_uniform.yaml"]
-    XsecCovFile: ["configs/CovObjs/liban_covs/Flux_ND_uniform.yaml", "configs/CovObjs/liban_covs/Xsec_ND+FD_uniform_hack.yaml"]
+    # XsecCovFile: ["configs/CovObjs/liban_covs/Flux_ND_uniform.yaml", "configs/CovObjs/liban_covs/Xsec_ND+FD_uniform_hack.yaml"]
     # XsecCovFile: ["configs/CovObjs/liban_covs/Xsec_ND+FD_uniform_hack.yaml"]
     # XsecCovFile: ["configs/CovObjs/liban_covs/DetSys_ND_uniform_hack.yaml"]
+    XsecCovFile: ["configs/CovObjs/liban_covs/Flux_ND_uniform.yaml", "configs/CovObjs/liban_covs/Xsec_ND+FD_uniform_hack.yaml", "configs/CovObjs/liban_covs/DetSys_ND_uniform_hack.yaml"]
     # XsecCovFile: ["configs/CovObjs/liban_ND_norm_RHC_20241204.yaml"]
     # XsecCovFile: ["configs/CovObjs/liban_ND.yaml", "configs/CovObjs/xsec_covariance_DUNE_systs_2022a_FD_v3_xsec.yaml"]
     XsecCovName: "xsec_cov"
@@ -39,9 +40,18 @@ General:
     # Slightly less small
     # XsecStepScale: 0.0005
 
+    # Even larger
+    # XsecStepScale: 0.005
+
+    # Even even larger
+    # XsecStepScale: 0.05
+
+    # Even even even larger
+    XsecStepScale: 0.1
+
     # Start with a large step scale for adaptive
     # XsecStepScale: 0.2
-    XsecStepScale: 1
+    # XsecStepScale: 1
     XsecAtGen: false 
     OscCovFile: ["configs/CovObjs/OscCov_PDG2021_v2_unoscillated.yaml"]
     OscCovName: "osc_cov"
@@ -49,7 +59,7 @@ General:
   Fitter:
     FitTestLikelihood: false
   MCMC:
-    NSteps: 1000000
+    NSteps: 5000000
     # NSteps: 30
     AutoSave: 10000
   Output:
@@ -59,10 +69,15 @@ General:
   Seed: 0
   Debug: Yes
 
+  # 1DLLHScan: true
+  # 2DLLHScan: true
+  # LLHScanPoints: 20
+  # LLHScanSigma: 5
+
   # Custom throw matrix
-  ThrowMatrixFile: "outputs/runs/038_fit.root"
+  ThrowMatrixFile: "outputs/runs/081_amcmc.root"
   # Entry in the throw matrix
-  ThrowMatrixName: "AdaptiveFolder/5000000_xsec_cov_throw_matrix"
+  ThrowMatrixName: "AdaptiveFolder/300000_xsec_cov_throw_matrix"
 
 AdaptionOptions:
   Settings:
@@ -81,6 +96,8 @@ AdaptionOptions:
       DoAdaption: true
       # So we can separate out flux and xsec
       MatrixBlocks: [ ]
+      # Detector systematics: all diagonal except for terms that correlate
+      # MatrixBlocks: [[0,2],[2,4],[4,6], [6,7],[7,8],[8,9], [9,10],[10,11],[11,12], [12,13],[13,14],[14,15], [15,17],[17,19],[19,21], [21,22],[22,23],[23,24],[24,26]]
       # External Settings
       UseExternalMatrix: false
       ExternalMatrixFileName: ""
@@ -95,3 +112,152 @@ AdaptionOptions:
       ExternalMatrixFileName: ""
       ExternalMatrixName: ""
       ExternalMeansName: ""
+
+"Projections": [
+  {
+    "Name": "RecoNuEnergy",
+    "VarString": "RecoNeutrinoEnergy",
+    # "VarBins": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4],
+    "VarBins": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0,
+                2.2, 2.4, 2.6, 2.8, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0],
+    # "KinematicCuts": [
+      # {
+      #   "Range": [0.1, 0.8],
+      #   "Name": "TrueNuEnergy",
+      #   "VarString": "TrueNeutrinoEnergy"
+      # },
+      # {
+      #   "Range": [0.4, 1.0],
+      #   "Name": "TrueCosZ",
+      #   "VarString": "TrueCosineZ"
+      # }
+    # ],
+    "CategoryCuts": [
+      {
+      "Name": "IsCC",
+      "VarString": "IsCC",
+      "Breakdown": [[0.0], [1.0]],
+      "Names": ["NC", "CC"]
+      },
+      {
+      "Name": "RecoNumu",
+      "VarString": "RecoNumu",
+      "Breakdown": [[0.0], [1.0]],
+      "Names": ["RecoNumu=0", "RecoNumu=1"]
+      },
+      {
+      "Name": "RecoNue",
+      "VarString": "RecoNue",
+      "Breakdown": [[0.0], [1.0]],
+      "Names": ["RecoNue=0", "RecoNue=1"]
+      },
+      {
+      "Name": "NuPDG",
+      "VarString": "NuPDG",
+      "Breakdown": [[-14.0], [-12.0], [12.0], [14.0]],
+      "Names": ["NumuBar", "NueBar", "Nue", "Numu"],
+      },
+      {
+      "Name": "NotCCNumu",
+      "VarString": "NotCCNumu",
+      "Breakdown": [[0.0],[1.0]],
+      "Names": ["NotCCNumu=0", "NotCCNumu=1"],
+      },
+      {
+      "Name": "CCNumu",
+      "VarString": "CCNumu",
+      "Breakdown": [[0.0],[1.0]],
+      "Names": ["CCNumu=0", "CCNumu=1"],
+      },
+      {
+      "Name": "CCNue",
+      "VarString": "CCNue",
+      "Breakdown": [[0.0],[1.0]],
+      "Names": ["CCNue=0", "CCNue=1"],
+      }
+      # {
+      #   "Name": "OscillationChannel_Single",
+      #   "VarString": "OscChannel",
+      #   "Breakdown": [[0.0], [1.0], [2.0], [3.0], [4.0], [5.0], [6.0], [7.0], [8.0], [9.0], [10.0], [11.0]],
+      #   "Names": ["nue_x_nue", "nue_x_numu", "nue_x_nutau", "numu_x_nue",
+      #             "numu_x_numu", "numu_x_nutau", "nuebar_x_nuebar",
+      #             "nuebar_x_numubar", "nuebar_x_nutaubar", "numubar_x_nuebar",
+      #             "numubar_x_numubar", "numubar_x_nutaubar"],
+      # },
+      # {
+      #   "Name": "OscillationChannel_Group",
+      #   "VarString": "OscChannel",
+      #   "Breakdown": [[0.0, 1.0, 2.0, 3.0, 4.0, 5.0], [6.0, 7.0, 8.0, 9.0, 10.0, 11.0]],
+      #   "Names": ["Nu", "Nubar"],
+      # },
+      # {
+      #   "Name": "Mode_Single",
+      #   "VarString": "Mode",
+      #   "Breakdown": [[0.0], [1.0], [2.0], [3.0], [4.0], [5.0], [6.0], [7.0], [8.0],
+      #                 [9.0], [10.0], [11.0], [12.0], [13.0], [14.0], [15.0], [16.0],
+      #                 [17.0], [18.0], [19.0], [20.0], [21.0], [22.0], [23.0],
+      #                 [24.0], [25.0], [26.0]],
+      # },
+      # {
+      #   "Name": "Mode_Group",
+      #   "VarString": "Mode",
+      #   "Breakdown": [[0.0], [2.0], [3.0], [9.0], [15.0], [16.0], [1.0, 4.0, 5.0, 6.0, 7.0, 8.0, 10.0, 11.0, 12.0, 13.0], [14.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0]],
+      #   "Names": ["CCQE", "CCDIS", "CCRES", "CCMEC", "NCDIS", "NCRES", "CCOth", "NCOth"],
+      # }
+    ],
+  },
+
+  {
+    "Name": "TrueNuEnergy",
+    "VarString": "TrueNeutrinoEnergy",
+    "VarBins": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0,
+                2.2, 2.4, 2.6, 2.8, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0],
+  },
+  {
+    "Name": "NuPDG",
+    "VarString": "NuPDG",
+    "VarBins": [-14.1,-13.9,-12.1,-11.9,11.9,12.1,13.9,14.1],
+  },
+  {
+    "Name": "RecoHadEnergy",
+    "VarString": "RecoHadEnergy",
+    "VarBins": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0,
+                2.2, 2.4, 2.6, 2.8, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0],
+  },
+  {
+    "Name": "RecoLepEnergy",
+    "VarString": "RecoLepEnergy",
+    "VarBins": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0,
+                2.2, 2.4, 2.6, 2.8, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0],
+  },
+  {
+    "Name": "RecoPEnergy",
+    "VarString": "RecoPEnergy",
+    "VarBins": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0,
+                2.2, 2.4, 2.6, 2.8, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0],
+  },
+  {
+    "Name": "RecoPipEnergy",
+    "VarString": "RecoPipEnergy",
+    "VarBins": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0,
+                2.2, 2.4, 2.6, 2.8, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0],
+  },
+  {
+    "Name": "RecoPimEnergy",
+    "VarString": "RecoPimEnergy",
+    "VarBins": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0,
+                2.2, 2.4, 2.6, 2.8, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0],
+  },
+  {
+    "Name": "RecoPi0Energy",
+    "VarString": "RecoPi0Energy",
+    "VarBins": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0,
+                2.2, 2.4, 2.6, 2.8, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0],
+  },
+  {
+    "Name": "RecoNEnergy",
+    "VarString": "RecoNEnergy",
+    "VarBins": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0,
+                2.2, 2.4, 2.6, 2.8, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0],
+  },
+]
