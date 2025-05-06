@@ -32,13 +32,13 @@ General:
 GeneralKinematicCuts:
 - Name: "InFDV"
   VarString: "InFDV"
-  Range: [1.,2.]
+  Range: [1., 2.]
 - Name: "IsCC"
   VarString: "IsCC"
-  Range: [1.,2.]
+  Range: [1., 2.]
 - Name: "Enu"
   VarString: "TrueNeutrinoEnergy"
-  Range: [1.,5.]
+  Range: [1., 5.]
 #- Name: "StoppedInTPC"
 #  VarString: "Particle_IsStoppedInTPC"
 #  Range: [0.,1.]
