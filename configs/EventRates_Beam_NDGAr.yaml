@@ -59,20 +59,20 @@ GeneralKinematicCuts:
   {
     "Name": "TrueNeutrinoEnergy",
     "VarStrings": ["TrueNeutrinoEnergy"],
-    "VarBins": [[0.,  0.5,  1.,  1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]],
+    "VarBins": [[0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]],
   },
   {
     "Name": "TrueQ3_vs_TrueQ0",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[100,0.,3.],[100,0.,3.]],
+    "VarStrings": ["TrueQ3", "TrueQ0"],
+    "VarBins": [[100, 0., 3.], [100, 0., 3.]],
   },
   {
     "Name": "TrueQ3_vs_TrueQ0_Accepted",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[100,0.,3.],[100,0.,3.]],
+    "VarStrings": ["TrueQ3", "TrueQ0"],
+    "VarBins": [[100, 0., 3.], [100, 0., 3.]],
     "KinematicCuts": [
       {
-        "Range": [1.,2.],
+        "Range": [1., 2.],
         "Name": "Accepted",
         "VarString": "Event_IsAccepted"
       }
@@ -80,16 +80,16 @@ GeneralKinematicCuts:
   },
   {
     "Name": "Particle_BAngle_MomResMS",
-    "VarStrings": ["Particle_BAngle","Particle_MomResMS"],
-    "VarBins":[[90,0.,180.],[100,0.,0.2]]
+    "VarStrings": ["Particle_BAngle", "Particle_MomResMS"],
+    "VarBins":[[90, 0., 180.], [100, 0., 0.2]]
   },
   {
     "Name": "Particle_BAngle_MomResMS_Accepted",
-    "VarStrings": ["Particle_BAngle","Particle_MomResMS"],
-    "VarBins":[[90,0.,180.],[100,0.,0.2]],
+    "VarStrings": ["Particle_BAngle", "Particle_MomResMS"],
+    "VarBins":[[90, 0., 180.], [100, 0., 0.2]],
     "KinematicCuts": [
       {
-        "Range": [1.,2.],
+        "Range": [1., 2.],
         "Name": "Accepted",
         "VarString": "Particle_IsAccepted"
       }
@@ -97,16 +97,16 @@ GeneralKinematicCuts:
   },
   {
     "Name": "Particle_BAngle_MomResTrans",
-    "VarStrings": ["Particle_BAngle","Particle_MomResTrans"],
-    "VarBins":[[90,0.,180.],[100,0.,1.]]
+    "VarStrings": ["Particle_BAngle", "Particle_MomResTrans"],
+    "VarBins":[[90, 0., 180.], [100, 0., 1.]]
   },
   {
     "Name": "Particle_BAngle_MomResTrans_Accepted",
-    "VarStrings": ["Particle_BAngle","Particle_MomResTrans"],
-    "VarBins":[[90,0.,180.],[100,0.,1.]],
+    "VarStrings": ["Particle_BAngle", "Particle_MomResTrans"],
+    "VarBins":[[90, 0., 180.], [100, 0., 1.]],
     "KinematicCuts": [
       {
-        "Range": [1.,2.],
+        "Range": [1., 2.],
         "Name": "Accepted",
         "VarString": "Particle_IsAccepted"
       }
@@ -114,16 +114,16 @@ GeneralKinematicCuts:
   },
   {
     "Name": "Particle_BAngle_Momentum",
-    "VarStrings": ["Particle_BAngle","Particle_Momentum"],
-    "VarBins": [[90,0.,180.],[200,0.,6.]],
+    "VarStrings": ["Particle_BAngle", "Particle_Momentum"],
+    "VarBins": [[90, 0., 180.], [200, 0., 6.]],
   },
   {
     "Name": "Particle_BAngle_Momentum_Accepted",
-    "VarStrings": ["Particle_BAngle","Particle_Momentum"],
-    "VarBins": [[90,0.,180.],[200,0.,6.]],
+    "VarStrings": ["Particle_BAngle", "Particle_Momentum"],
+    "VarBins": [[90, 0., 180.], [200, 0., 6.]],
     "KinematicCuts": [
       {
-        "Range": [1.,2.],
+        "Range": [1., 2.],
         "Name": "Accepted",
         "VarString": "Particle_IsAccepted"
       }
@@ -131,11 +131,11 @@ GeneralKinematicCuts:
   },
   {
     "Name": "Particle_BAngle_Momentum_Protons",
-    "VarStrings": ["Particle_BAngle","Particle_Momentum"],
-    "VarBins": [[90,0.,180.],[200,0.,6.]],
+    "VarStrings": ["Particle_BAngle", "Particle_Momentum"],
+    "VarBins": [[90, 0., 180.], [200, 0., 6.]],
     "KinematicCuts": [
       {
-        "Range": [2211.5,2212.5],
+        "Range": [2211.5, 2212.5],
         "Name": "Protons",
         "VarString": "Particle_PDG"
       }
@@ -143,16 +143,16 @@ GeneralKinematicCuts:
   },
   {
     "Name": "Particle_BAngle_Momentum_Protons_Accepted",
-    "VarStrings": ["Particle_BAngle","Particle_Momentum"],
-    "VarBins": [[90,0.,180.],[200,0.,6.]],
+    "VarStrings": ["Particle_BAngle", "Particle_Momentum"],
+    "VarBins": [[90, 0., 180.], [200, 0., 6.]],
     "KinematicCuts": [
       {
-        "Range": [2211.5,2212.5],
+        "Range": [2211.5, 2212.5],
         "Name": "Protons",
         "VarString": "Particle_PDG"
       },
       {
-        "Range": [1.,2.],
+        "Range": [1., 2.],
         "Name": "Accepted",
         "VarString": "Particle_IsAccepted"
       }
@@ -160,11 +160,11 @@ GeneralKinematicCuts:
   },
   {
     "Name": "Particle_BAngle_Momentum_Pi+",
-    "VarStrings": ["Particle_BAngle","Particle_Momentum"],
-    "VarBins": [[90,0.,180.],[200,0.,6.]],
+    "VarStrings": ["Particle_BAngle", "Particle_Momentum"],
+    "VarBins": [[90, 0., 180.], [200, 0., 6.]],
     "KinematicCuts": [
       {
-        "Range": [210.5,211.5],
+        "Range": [210.5, 211.5],
         "Name": "Pi+",
         "VarString": "Particle_PDG"
       }
@@ -172,16 +172,16 @@ GeneralKinematicCuts:
   },
   {
     "Name": "Particle_BAngle_Momentum_Pi+_Accepted",
-    "VarStrings": ["Particle_BAngle","Particle_Momentum"],
-    "VarBins": [[90,0.,180.],[200,0.,6.]],
+    "VarStrings": ["Particle_BAngle", "Particle_Momentum"],
+    "VarBins": [[90, 0., 180.], [200, 0., 6.]],
     "KinematicCuts": [
       {
-        "Range": [210.5,211.5],
+        "Range": [210.5, 211.5],
         "Name": "Pi+",
         "VarString": "Particle_PDG"
       },
       {
-        "Range": [1.,2.],
+        "Range": [1., 2.],
         "Name": "Accepted",
         "VarString": "Particle_IsAccepted"
       }
@@ -189,11 +189,11 @@ GeneralKinematicCuts:
   },
   {
     "Name": "Particle_BAngle_Momentum_Pi-",
-    "VarStrings": ["Particle_BAngle","Particle_Momentum"],
-    "VarBins": [[90,0.,180.],[200,0.,6.]],
+    "VarStrings": ["Particle_BAngle", "Particle_Momentum"],
+    "VarBins": [[90, 0., 180.], [200, 0., 6.]],
     "KinematicCuts": [
       {
-        "Range": [-211.5,-210.5],
+        "Range": [-211.5, -210.5],
         "Name": "Pi-",
         "VarString": "Particle_PDG"
       }
@@ -201,16 +201,16 @@ GeneralKinematicCuts:
   },
   {
     "Name": "Particle_BAngle_Momentum_Pi-_Accepted",
-    "VarStrings": ["Particle_BAngle","Particle_Momentum"],
-    "VarBins": [[90,0.,180.],[200,0.,6.]],
+    "VarStrings": ["Particle_BAngle", "Particle_Momentum"],
+    "VarBins": [[90, 0., 180.], [200, 0., 6.]],
     "KinematicCuts": [
       {
-        "Range": [-211.5,-210.5],
+        "Range": [-211.5, -210.5],
         "Name": "Pi-",
         "VarString": "Particle_PDG"
       },
       {
-        "Range": [1.,2.],
+        "Range": [1., 2.],
         "Name": "Accepted",
         "VarString": "Particle_IsAccepted"
       }
@@ -218,11 +218,11 @@ GeneralKinematicCuts:
   },
   {
     "Name": "Particle_BAngle_Momentum_Mu-",
-    "VarStrings": ["Particle_BAngle","Particle_Momentum"],
-    "VarBins": [[90,0.,180.],[200,0.,6.]],
+    "VarStrings": ["Particle_BAngle", "Particle_Momentum"],
+    "VarBins": [[90, 0., 180.], [200, 0., 6.]],
     "KinematicCuts": [
       {
-        "Range": [12.5,13.5],
+        "Range": [12.5, 13.5],
         "Name": "Mu-",
         "VarString": "Particle_PDG"
       }
@@ -230,16 +230,16 @@ GeneralKinematicCuts:
   },
   {
     "Name": "Particle_BAngle_Momentum_Mu-_Accepted",
-    "VarStrings": ["Particle_BAngle","Particle_Momentum"],
-    "VarBins": [[90,0.,180.],[200,0.,6.]],
+    "VarStrings": ["Particle_BAngle", "Particle_Momentum"],
+    "VarBins": [[90, 0., 180.], [200, 0., 6.]],
     "KinematicCuts": [
       {
-        "Range": [12.5,13.5],
+        "Range": [12.5, 13.5],
         "Name": "Mu-",
         "VarString": "Particle_PDG"
       },
       {
-        "Range": [1.,2.],
+        "Range": [1., 2.],
         "Name": "Accepted",
         "VarString": "Particle_IsAccepted"
       }
@@ -248,15 +248,15 @@ GeneralKinematicCuts:
   {
     "Name": "Particle_PDG",
     "VarStrings": ["Particle_PDG"],
-    "VarBins": [[6444,-3222.5,3222.5]],
+    "VarBins": [[6444, -3222.5, 3222.5]],
   },
   {
     "Name": "Particle_PDG_Accepted",
     "VarStrings": ["Particle_PDG"],
-    "VarBins": [[6444,-3222.5,3222.5]],
+    "VarBins": [[6444, -3222.5, 3222.5]],
     "KinematicCuts": [
       {
-        "Range": [1.,2.],
+        "Range": [1., 2.],
         "Name": "Accepted",
         "VarString": "Particle_IsAccepted"
       }
@@ -265,30 +265,30 @@ GeneralKinematicCuts:
   {
     "Name": "Particle_Momentum",
     "VarStrings": ["Particle_Momentum"],
-    "VarBins": [[100,0.,6]],
+    "VarBins": [[100, 0., 6]],
   },
   {
     "Name": "Particle_Transverse_Momentum",
     "VarStrings": ["Particle_TransverseMomentum"],
-    "VarBins": [[100,0.,6.]],
+    "VarBins": [[100, 0., 6.]],
   },
   {
     "Name": "Particle_N_Hits_in_TPC",
     "VarStrings": ["Particle_NHits"],
-    "VarBins": [[20,0,500]],
+    "VarBins": [[20, 0, 500]],
   },
   {
     "Name": "Particle_N_Helix_Turns",
     "VarStrings": ["Particle_NTurns"],
-    "VarBins": [[100,0.,6.]],
+    "VarBins": [[100, 0., 6.]],
   },
   {
     "Name": "Particle_N_Helix_Turns_p+",
     "VarStrings": ["Particle_NTurns"],
-    "VarBins": [[100,0.,6.]],
+    "VarBins": [[100, 0., 6.]],
     "KinematicCuts": [
       {
-        "Range": [2211.5,2212.5],
+        "Range": [2211.5, 2212.5],
         "Name": "p+",
         "VarString": "Particle_PDG"
       }
@@ -297,10 +297,10 @@ GeneralKinematicCuts:
   {
     "Name": "Particle_N_Helix_Turns_mu-",
     "VarStrings": ["Particle_NTurns"],
-    "VarBins": [[100,0.,6.]],
+    "VarBins": [[100, 0., 6.]],
     "KinematicCuts": [
       {
-        "Range": [12.5,13.5],
+        "Range": [12.5, 13.5],
         "Name": "mu-",
         "VarString": "Particle_PDG"
       }
@@ -309,10 +309,10 @@ GeneralKinematicCuts:
   {
     "Name": "Particle_N_Helix_Turns_pi+",
     "VarStrings": ["Particle_NTurns"],
-    "VarBins": [[100,0.,6.]],
+    "VarBins": [[100, 0., 6.]],
     "KinematicCuts": [
       {
-        "Range": [210.5,211.5],
+        "Range": [210.5, 211.5],
         "Name": "pi+",
         "VarString": "Particle_PDG"
       }
@@ -321,10 +321,10 @@ GeneralKinematicCuts:
   {
     "Name": "Particle_N_Helix_Turns_pi-",
     "VarStrings": ["Particle_NTurns"],
-    "VarBins": [[100,0.,6.]],
+    "VarBins": [[100, 0., 6.]],
     "KinematicCuts": [
       {
-        "Range": [-211.5,-210.5],
+        "Range": [-211.5, -210.5],
         "Name": "pi-",
         "VarString": "Particle_PDG"
       }
@@ -333,15 +333,15 @@ GeneralKinematicCuts:
   {
     "Name": "Interaction Mode",
     "VarStrings": ["Mode"],
-    "VarBins": [[20,-0.5,19.5]],
+    "VarBins": [[20, -0.5, 19.5]],
   },
   {
     "Name": "Interaction Mode (bad caf events)",
     "VarStrings": ["Mode"],
-    "VarBins": [[20,-0.5,19.5]],
+    "VarBins": [[20, -0.5, 19.5]],
     "KinematicCuts": [
       {
-        "Range": [0.,0.5],
+        "Range": [0., 0.5],
         "Name": "Bad CAF Event",
         "VarString": "IsGoodCAFEvent"
       }
