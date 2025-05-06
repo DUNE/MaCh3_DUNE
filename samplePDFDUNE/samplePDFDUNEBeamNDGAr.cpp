@@ -1,5 +1,4 @@
 #include "samplePDFDUNEBeamNDGAr.h"
-#include "duneanaobj/StandardRecord/StandardRecord.h"
 
 samplePDFDUNEBeamNDGAr::samplePDFDUNEBeamNDGAr(std::string mc_version_, covarianceXsec* XsecCov_) : samplePDFFDBase(mc_version_, XsecCov_) {
   KinematicParameters = &KinematicParametersDUNE;
@@ -155,72 +154,14 @@ double samplePDFDUNEBeamNDGAr::FindNHits(double pixel_spacing_cm, double centre_
   return N_hits;
 }
 
-double samplePDFDUNEBeamNDGAr::CalcBeta(double p_mag, double& bg, double& gamma){ //calculate beta (v/c)
+double samplePDFDUNEBeamNDGAr::CalcBeta(double p_mag, double& bg, double& gamma, double pdgmass){ //calculate beta (v/c)
   bg = p_mag/pdgmass; //beta*gamma
   gamma = std::sqrt(1+bg*bg); //gamma
   double beta = bg/gamma; //beta (velocity)
   return beta;
 }
 
-double samplePDFDUNEBeamNDGAr::GetMass(int partpdg){
-  double mass=0;
-  switch(std::abs(partpdg)) {
-    case 13: 
-      mass = m_mu; break;
-    case 211: 
-      mass = m_chargedpi; break;
-    case 111: 
-      mass = m_pi0; break;
-    case 2212: 
-      mass = m_p; break;
-    case 2112: 
-      mass = m_n; break;
-    case 11: 
-      mass = m_e; break;
-    case 321: 
-      mass = m_chargedk; break;
-    case 311:
-      mass = m_k0; break;
-    case 3122:
-      mass = m_lambda; break;
-    case 3222: //sig+
-      mass = 1.118937; break;
-    case 3112: //sig-
-      mass = 1.197449; break;
-    case 3212: //sig0
-      mass = 1.192642; break;
-    case 130: //K_l
-    case 310: //K_s
-      mass = 0.497611; break;
-    case 12: //nue
-    case 14: //numu
-    case 16: //nutau
-    case 22: //gamma
-      mass = 0.; break;
-    case 1000180400: //Ar40 
-      mass = 37.27272; break;
-    case 1000060120: //C12
-      mass = 11.17793; break;
-    case 1000080160: //O16
-      mass = 14.89589; break;
-    case 1000190390: //K39
-      mass = 36.32719; break;
-    case 1000110230: //Na23
-      mass = 21.45502; break;
-    case 1000300640: //Zn64
-      mass = 59.60401; break;
-    case 1000140280: //Si28
-      mass = 26.19938; break;
-    case 1000070140: //N14
-      mass = 13043.78; break;
-    default:
-      MACH3LOG_INFO("Particle mass not assigned: PDG = {}", partpdg);
-      break;
-  }
-  return mass;
-}
-
-bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, int i_truepart, double pixel_spacing_cm, bool *isgoodcafparticle){
+bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, int i_truepart, double pixel_spacing_cm, bool *isgoodcafparticle, double pdgmass){
   static std::random_device rd;
   static std::mt19937 gen(rd());
   static std::uniform_real_distribution<double> dist(0.0, 1.0);
@@ -430,7 +371,7 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
         double p_mag = sr->mc.nu[0].prim[i_truepart].p.Mag();
         double bg = 0; 
         double gamma = 0;
-        double beta = CalcBeta(p_mag, bg, gamma);
+        double beta = CalcBeta(p_mag, bg, gamma, pdgmass);
 
         //JM removed avg_betapT calc (seems to be unused)
 
@@ -756,7 +697,7 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
 
     for(int i_truepart =0; i_truepart<ntrueparticles; i_truepart++){
       int partpdg = sr->mc.nu[0].prim[i_truepart].pdg;
-      pdgmass = GetMass(partpdg);
+      double pdgmass = MaCh3Utils::GetMassFromPDG(partpdg);
       if(std::abs(partpdg) == 13) {
         duneobj->ntruemuon[i_event]++;
         duneobj->ntruemuonprim[i_event]++;
@@ -770,7 +711,7 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
       }
 
       bool isgoodcafparticle = false;
-      if (!IsParticleAccepted(duneobj, iSample, i_event, i_truepart, pixel_spacing_cm, &isgoodcafparticle)) {
+      if (!IsParticleAccepted(duneobj, iSample, i_event, i_truepart, pixel_spacing_cm, &isgoodcafparticle, pdgmass)) {
         isEventAccepted = false;
       }
 
@@ -820,13 +761,8 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
     duneobj->rw_Q3[i_event] = static_cast<double>(sr->mc.nu[0].modq);
     duneobj->rw_lep_pT[i_event] = std::sqrt((duneobj->rw_lep_pX[i_event])*(duneobj->rw_lep_pX[i_event]) + (duneobj->rw_lep_pY[i_event])*(duneobj->rw_lep_pY[i_event])); 
 
-    _mode = sr->mc.nu[0].mode;
-    _isCC = static_cast<int>(sr->mc.nu[0].iscc);
-
-    int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
+    //int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
     duneobj->mode[i_event] = sr->mc.nu[0].mode;
-    //int mode= TMath::Abs(_mode);       
-    //duneobj->mode[i_event]=static_cast<double>GENIEMode_ToMaCh3Mode(mode, _isCC);
 
     duneobj->flux_w[i_event] = 1.0;
     if(duneobj->rw_isCC[i_event] == 1) numCC++;
@@ -838,6 +774,8 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
   return duneobj->nEvents;
 }
 
+#pragma GCC diagnostic push 
+#pragma GCC diagnostic ignored "-Wswitch-enum"
 const double* samplePDFDUNEBeamNDGAr::GetPointerToKinematicParameter(KinematicTypes KinematicParameter, int iSample, int iEvent) {
   switch(KinematicParameter) {
     case kTrueNeutrinoEnergy:
@@ -896,6 +834,7 @@ const double* samplePDFDUNEBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
       return nullptr;
   }
 }
+#pragma GCC diagnostic pop
 
 const double* samplePDFDUNEBeamNDGAr::GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
@@ -917,6 +856,8 @@ double samplePDFDUNEBeamNDGAr::ReturnKinematicParameter(std::string KinematicPar
   return ReturnKinematicParameter(KinPar,iSample,iEvent);
 }
 
+#pragma GCC diagnostic push 
+#pragma GCC diagnostic ignored "-Wswitch-enum"
 double samplePDFDUNEBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent) {
   //HH: Special cases for dealing with non-doubles
   switch(KinPar) {
@@ -948,6 +889,7 @@ double samplePDFDUNEBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, i
       return *GetPointerToKinematicParameter(KinPar, iSample, iEvent);
   }
 }
+#pragma GCC diagnostic pop
 
 void samplePDFDUNEBeamNDGAr::setupFDMC(int iSample) {
   dunemc_base *duneobj = &(dunendgarmcSamples[iSample]);
@@ -970,6 +912,8 @@ std::vector<double> samplePDFDUNEBeamNDGAr::ReturnKinematicParameterBinning(std:
   return ReturnKinematicParameterBinning(KinPar);
 }
 
+#pragma GCC diagnostic push 
+#pragma GCC diagnostic ignored "-Wswitch-enum"
 std::vector<double> samplePDFDUNEBeamNDGAr::ReturnKinematicParameterBinning(KinematicTypes KinPar) {
   std::vector<double> binningVector;
   switch(KinPar){
@@ -1047,9 +991,9 @@ std::vector<double> samplePDFDUNEBeamNDGAr::ReturnKinematicParameterBinning(Kine
       }
       break;
   }
-
   return binningVector;
 }
+#pragma GCC diagnostic pop
 
 TH1* samplePDFDUNEBeamNDGAr::get1DParticleVarHist(std::string ProjectionVar_Str, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* Axis) {
   //DB Grab the associated enum with the argument string

@@ -8,7 +8,7 @@ General:
   OscillationParameters: [0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848]
   OscillatorConfigName: "configs/OscillatorObj.yaml"
   Systematics:
-    XsecCovFile: ["configs/CovObjs/xsec_covariance_DUNE_systs_2022a_FD_v3_new.yaml"]
+    XsecCovFile: ["configs/CovObjs/xsec_covariance_DUNE_systs_NDGAr.yaml"]
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.1
     XsecAtGen: false 
@@ -38,15 +38,15 @@ GeneralKinematicCuts:
 - Name: "Enu"
   VarString: "TrueNeutrinoEnergy"
   Range: [1.,5.]
-- Name: "StoppedInTPC"
-  VarString: "Particle_IsStoppedInTPC"
-  Range: [0.,1.]
-- Name: "StoppedInECal"
-  VarString: "Particle_IsStoppedInECal"
-  Range: [0.,1.]
-- Name: "StoppedInGap"
-  VarString: "Particle_IsStoppedInGap"
-  Range: [0.,1.]
+#- Name: "StoppedInTPC"
+#  VarString: "Particle_IsStoppedInTPC"
+#  Range: [0.,1.]
+#- Name: "StoppedInECal"
+#  VarString: "Particle_IsStoppedInECal"
+#  Range: [0.,1.]
+#- Name: "StoppedInGap"
+#  VarString: "Particle_IsStoppedInGap"
+#  Range: [0.,1.]
 #- Name: "StoppedInEndGap"
 #  VarString: "Particle_IsStoppedInEndGap"
 #  Range: [1.,2.]
