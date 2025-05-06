@@ -39,4 +39,5 @@ if [ ! -d "$MACH3DIR/inputs/DUNE_NDGAr_AnaTrees" ]
 then
   mkdir $MACH3DIR/inputs/DUNE_NDGAr_AnaTrees
 fi
-ln -sf ${FILESDIR1}/NDGAr_1MCAFs/AnaTreesOutputs/*root inputs/DUNE_NDGAr_AnaTrees
+
+ln -sf ${FILESDIR}/DUNE_2025_ND_splines/*root inputs/DUNE_ND_spline_files

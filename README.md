@@ -53,12 +53,12 @@ Imperial College London lx:
 
 FNAL cluster:
 ```bash
-/dune/data/users/lwarsame
+/exp/dune/data/users/lwarsame
 ```
 
 ComputeCanada Cedar:
 ```bash
-/scratch/liban
+/project/rpp-nilic/MaCh3_inputs
 ```
 
 NERSC Perlmutter:
@@ -66,24 +66,29 @@ NERSC Perlmutter:
 /pscratch/sd/l/lwarsame
 ```
 
+RAL SCARF:
+```bash
+/work4/ppd/scarf1407
+```
+
 CVMFS:
 ```bash
-/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2
+/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v3
 ```
 
 Current (Feburary 2024) FD event rates using DUNE FD TDR inputs are below (ND is still under-development). These are made using xsec systematics at their prior central value. Oscillation parameter values used here are:
 
-### Oscillation Parameter Values
+### Oscillation Parameter Values (NuFIT 4.0 NH)
 <div align="center">
 
 |     Parameter     |       Value       |     Unit     |
 |:-----------------:|:-----------------:|:------------:|
-|     sin²θ₁₂       |       0.307       |      -       |
-|     sin²θ₂₃       |       0.52        |      -       |
-|     sin²θ₁₃       |       0.0218      |      -       |
-|     Δm²₃₂         |    7.53 × 10⁻⁵    |     eV²      |
-|     Δm²₁₂         |    2.509 × 10⁻³   |     eV²      |
-|     δCP           |      -1.601       |   radians    |
+|     sin²θ₁₂       |       0.310       |      -       |
+|     sin²θ₂₃       |       0.582       |      -       |
+|     sin²θ₁₃       |       0.0224      |      -       |
+|     Δm²₃₂         |    7.39 × 10⁻⁵    |     eV²      |
+|     Δm²₁₂         |    2.525 × 10⁻³   |     eV²      |
+|     δCP           |      -2.498       |   radians    |
 
 </div>
 
@@ -91,11 +96,11 @@ Current (Feburary 2024) FD event rates using DUNE FD TDR inputs are below (ND is
 
 <div align="center">
 
-|       Type        |     Unoscillated     |     Oscillated     |
+|       Type        |     Unoscillated    |     Oscillated    |
 |:-----------------:|:-------------------:|:-----------------:|
-| FHC ν<sub>μ</sub> |     25941.57467     |     7977.36421    |
-| FHC ν<sub>e</sub> |      390.85150      |     1698.28079    |
-| RHC ν<sub>μ</sub> |     12492.61743     |     4217.78765    |
-| RHC ν<sub>e</sub> |      208.31873      |     447.09673     |
+| FHC ν<sub>μ</sub> |     25941.5747      |     8243.9185     |
+| FHC ν<sub>e</sub> |      391.5995       |     1756.9128     |
+| RHC ν<sub>μ</sub> |     12492.6174      |     4379.4037     |
+| RHC ν<sub>e</sub> |      208.8016       |     491.0061      |
 
 </div>
