@@ -156,23 +156,3 @@ Systematics:
     StepScale:
       MCMC: 1.0
     Type: Osc
-
-  ### - Need For NuFAST Osc Calculator - ###
-
-  #- Systematic:
-  #    Names:
-  #      FancyName: electron_density
-  #      ParameterName: electron_density
-  #
-  #
-  #    DetID: ["FD", "ATM"]
-  #    Error: 0.01
-  #    FlatPrior: true
-  #    ParameterBounds: [0, 999]
-  #    ParameterGroup: Osc
-  #    ParameterValues:
-  #      Generated: 0.5
-  #      PreFitValue: 0.5
-  #    StepScale:
-  #      MCMC: 1.0
-  #    Type: Osc
