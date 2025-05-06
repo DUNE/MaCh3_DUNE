@@ -1,5 +1,5 @@
 if (Build_NDGAr)
-	message("Building NDGAr files only.")
+	message(STATUS "Building BeamNDGAr sample only")
 	set(HEADERS
 		samplePDFDUNEBeamNDGAr.h
   	MaCh3DUNEFactory.h
@@ -9,7 +9,7 @@ if (Build_NDGAr)
     MaCh3DUNEFactory.cpp
 	)
 else()
-	message("Building Atm, BeamFD and BeamND files.")
+	message(STATUS "Building Atm, BeamFD and BeamND samples")
 	set(HEADERS
 		samplePDFDUNEAtm.h
   	samplePDFDUNEBeamFD.h

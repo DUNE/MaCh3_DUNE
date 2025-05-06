@@ -9,6 +9,8 @@
 #include "samplePDFDUNE/MaCh3DUNEFactory.h"
 #include "samplePDFDUNE/StructsDUNE.h"
 
+bool IncludeKinematicCutsInTitle = true;
+
 struct KinematicCut {
   std::string Name;
   std::string VarString;
@@ -33,18 +35,22 @@ struct ProjectionVariable {
 };
 
 std::string ReturnFormattedHistogramNameFromProjection(ProjectionVariable Proj) {
-  std::string ReturnStr;
-
-  for (size_t iKinematicCut=0;iKinematicCut<Proj.KinematicCuts.size();iKinematicCut++) {
-    //if (iKinematicCut > 0) {
-    //	ReturnStr += " && ";
-    //}
-    //ReturnStr += Form("(%4.2f <= %s < %4.2f)",Proj.KinematicCuts[iKinematicCut].Range[0],Proj.KinematicCuts[iKinematicCut].Name.c_str(),Proj.KinematicCuts[iKinematicCut].Range[1]);
+  std::string ReturnStr = Proj.Name;
+  
+  if (IncludeKinematicCutsInTitle) {
+    for (size_t iKinematicCut=0;iKinematicCut<Proj.KinematicCuts.size();iKinematicCut++) {
+      if (iKinematicCut > 0) {
+      	ReturnStr += " && ";
+      } else {
+        ReturnStr += " ";
+      }
+      ReturnStr += Form("(%4.2f <= %s < %4.2f)",Proj.KinematicCuts[iKinematicCut].Range[0],Proj.KinematicCuts[iKinematicCut].Name.c_str(),Proj.KinematicCuts[iKinematicCut].Range[1]);
+    }
   }
   std::string y_axis_title;
   if (Proj.VarStrings.size()==1) {y_axis_title = "Events";}
   else {y_axis_title = Proj.VarStrings[1];}
-  ReturnStr += Proj.Name+";"+Proj.VarStrings[0]+";"+y_axis_title+";";
+  ReturnStr += ";"+Proj.VarStrings[0]+";"+y_axis_title+";";
   return ReturnStr;
 }
 
