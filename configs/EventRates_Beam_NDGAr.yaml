@@ -274,7 +274,7 @@ GeneralKinematicCuts:
   {
     "Name": "Particle_N_Hits_in_TPC",
     "VarStrings": ["Particle_NHits"],
-    "VarBins": [[20,0,500]],
+    "VarBins": [[100,0,5000]],
   },
   {
     "Name": "Particle_N_Helix_Turns",

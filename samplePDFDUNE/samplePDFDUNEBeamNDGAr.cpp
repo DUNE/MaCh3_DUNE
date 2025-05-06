@@ -151,7 +151,11 @@ double samplePDFDUNEBeamNDGAr::FindNHits(double pixel_spacing_cm, double centre_
   double N_hits = num_intersections - num_vertices + 1; //Add one for the pixel that it starts on
   return N_hits;
 }
-
+/*
+double samplePDFDUNEBeamNDGAr::CalcMomResYZ(double pixel_spacing_cm, double centre_circle_y, double centre_circle_z, double rad_curvature) {
+  
+}
+*/
 double samplePDFDUNEBeamNDGAr::CalcBeta(double p_mag, double& bg, double& gamma, double pdgmass){ //calculate beta (v/c)
   bg = p_mag/pdgmass; //beta*gamma
   gamma = std::sqrt(1+bg*bg); //gamma
@@ -320,23 +324,35 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
           if (theta_1 < 0) theta_1 += 2*M_PI;
           if (theta_2 < 0) theta_2 += 2*M_PI;
           if (theta_start < 0) theta_start += 2*M_PI;
-
+          
+          double theta_diffs[2][2] = {}; //[0:negcharge 1:poscharge, 0:theta1 1:theta2]
+          int charge_index;
+          int theta_index;
+          theta_diffs[0][0] = (theta_1 < theta_start) ? (theta_start - theta_1) : (2*M_PI - (theta_1 - theta_start));
+          theta_diffs[0][1] = (theta_2 < theta_start) ? (theta_start - theta_2) : (2*M_PI - (theta_2 - theta_start));
+          theta_diffs[1][0] = (theta_1 > theta_start) ? (theta_1 - theta_start) : (2*M_PI - (theta_start - theta_1));
+          theta_diffs[1][1] = (theta_2 > theta_start) ? (theta_2 - theta_start) : (2*M_PI - (theta_start - theta_2));
+          
           //Lorentz force law, if positively charged, counter clockwise, if negative charged, clockwise
           if(!positivecharged){
             theta_diff_1 = (theta_1 < theta_start) ? (theta_start - theta_1) : (2*M_PI - (theta_1 - theta_start));
             theta_diff_2 = (theta_2 < theta_start) ? (theta_start - theta_2) : (2*M_PI - (theta_2 - theta_start));
+            charge_index = 0; 
           }
           else if(positivecharged){ 
             theta_diff_1 = (theta_1 > theta_start) ? (theta_1 - theta_start) : (2*M_PI - (theta_start - theta_1));
             theta_diff_2 = (theta_2 > theta_start) ? (theta_2 - theta_start) : (2*M_PI - (theta_start - theta_2));
+            charge_index = 1;
           }
 
           //JM Why is the second check necessary?
           if(theta_diff_1<theta_diff_2 && (rad_curvature*100*theta_diff_1 > (TPCInstrumentedRadius-start_radius))){
             theta_chosen = theta_diff_1; 
-          } 
+            theta_index = 0;
+          }
           else {
             theta_chosen = theta_diff_2; 
+            theta_index = 1;
           }
             
           L_yz = rad_curvature*100*theta_chosen;
@@ -353,8 +369,8 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
           else {
             length_track_x = std::abs(L_yz*tan_theta);
           }
-          
-          double theta_overlap = std::abs(theta_1 - theta_2);
+            
+          double theta_overlap = std::abs(theta_diffs[charge_index][theta_index] + theta_diffs[(charge_index+1)%2][(theta_index+1)%2]);
           nhitsfactor = theta_chosen/theta_overlap;
         }
         else { //Radius of curvature small enough to spiral within TPC
