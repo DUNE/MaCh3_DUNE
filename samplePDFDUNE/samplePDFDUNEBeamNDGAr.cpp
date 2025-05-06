@@ -76,9 +76,7 @@ void samplePDFDUNEBeamNDGAr::SetupWeightPointers() {
   }
 }
 
-void samplePDFDUNEBeamNDdouble z_coord1 = centre_circle_z + std::sqrt(quadratic_ineq_y)-TPC_centre_z;
-      double y_coord = yboundarypositions[i_intersect]-TPC_centre_y;
-      if( (std::sqrt(z_coord1*z_coord1 + y_coord*y_coord) GAr::makePixelGrid(double pixel_spacing_cm){ //make a square pixel grid with spacing defined in yaml file. Spacing must be input in the yaml file in mm, and then is converted to cm later in the code
+void samplePDFDUNEBeamNDGAr::makePixelGrid(double pixel_spacing_cm){ //make a square pixel grid with spacing defined in yaml file. Spacing must be input in the yaml file in mm, and then is converted to cm later in the code
   int numpixelrows = static_cast<int>(floor(TPCInstrumentedRadius*2/(pixel_spacing_cm))); //find number of pixels along y and z axis.
   double centre_yboundary, centre_zboundary;
   if(numpixelrows % 2 == 0){centre_yboundary=TPC_centre_y; centre_zboundary=TPC_centre_z;}
@@ -304,7 +302,7 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
         double quadraticformula_a = m_const*m_const + 1;
         double quadraticformula_c = (a_const - TPC_centre_y)*(a_const - TPC_centre_y) + TPC_centre_z*TPC_centre_z - TPCInstrumentedRadius*TPCInstrumentedRadius;
 
-        double z_intersect_1, y_intersect_1, z_intersect_2, y_intersect_2, theta_1, theta_2, theta_start, theta_chosen, theta_diff_1, theta_diff_2;
+        double z_intersect_1, y_intersect_1, z_intersect_2, y_intersect_2, theta_1, theta_2, theta_start, theta_chosen, theta_diff_1, theta_diff_2, nhitsfactor;
         double nturns = 0;
 
         if(quadraticformula_b*quadraticformula_b - 4*quadraticformula_a*quadraticformula_c > 0){
@@ -340,34 +338,39 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
           else {
             theta_chosen = theta_diff_2; 
           }
-
+            
           L_yz = rad_curvature*100*theta_chosen;
           L_yz_chord = std::abs(2*rad_curvature*100*sin(theta_chosen/2));
           nturns = std::abs(length_track_x/100)/pitch;
 
           //If track ends before it would intersect, adjust
           if(std::abs(L_yz*tan_theta) > std::abs(length_track_x)){
-            double theta_intersect = fmod(nturns, 1)*2*M_PI; //JM why do we need the fmod? nturns<1 in this case surely?
+            theta_chosen = fmod(nturns, 1)*2*M_PI; //JM why do we need the fmod? nturns<1 in this case surely?
 
-            L_yz = rad_curvature*100*theta_intersect;
-            L_yz_chord = std::abs(2*rad_curvature*100*sin(theta_intersect/2));
+            L_yz = rad_curvature*100*theta_chosen;
+            L_yz_chord = std::abs(2*rad_curvature*100*sin(theta_chosen/2));
           } 
           else {
             length_track_x = std::abs(L_yz*tan_theta);
           }
+          
+          double theta_overlap = std::abs(theta_1 - theta_2);
+          nhitsfactor = theta_chosen/theta_overlap;
         }
         else { //Radius of curvature small enough to spiral within TPC
           nturns = std::abs(length_track_x/100)/pitch;
           double theta_intersect = nturns*2*M_PI;
           L_yz = theta_intersect*rad_curvature*100;
           L_yz_chord = L_yz;
+
+          nhitsfactor = nturns;
           //if (nturns>=1) {theta_intersect = 2*M_PI;} //JM Why cap at 2pi?
           //else {theta_intersect = nturns*2*M_PI;}
           //L_yz_chord = std::abs(2*rad_curvature*100*sin(theta_intersect/2));
           //L_yz = rad_curvature*100*theta_intersect; //JM this was previously uninitialised in this case
         }
 
-        double N_hits = FindNHits(pixel_spacing_cm, centre_circle_y, centre_circle_z, rad_curvature);
+        double N_hits = nhitsfactor*FindNHits(pixel_spacing_cm, centre_circle_y, centre_circle_z, rad_curvature);
         double p_mag = sr->mc.nu[0].prim[i_truepart].p.Mag();
         double bg = 0; 
         double gamma = 0;
