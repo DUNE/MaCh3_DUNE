@@ -26,7 +26,7 @@ cd build
 Then perform the cmake build command:
 
 ```bash
-cmake .. -DCUDAProb3_ENABLED=[ON,OFF] -DCUDAProb3Linear_ENABLED=[ON,OFF] -DMaCh3_CORE_BRANCH="v1.4.8"
+cmake .. -DCUDAProb3_ENABLED=[ON,OFF] -DCUDAProb3Linear_ENABLED=[ON,OFF] -DMaCh3_CORE_BRANCH="v1.4.8" -DBuild_NDGAr=[OFF|ON] -DDUNE_ANAOBJ_BRANCH="v03_06_00"
 make install
 ```
 

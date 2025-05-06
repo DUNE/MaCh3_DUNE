@@ -8,7 +8,7 @@ struct dunemc_base {
 
   int *nupdg;
   int *nupdgUnosc;
-  
+
   double *rw_erec;
   double *rw_erec_shifted;
   double *rw_erec_had;
@@ -50,10 +50,12 @@ struct dunemc_base {
   double dummy_y;
   double *rw_reco_q;
   double *reco_numu;
+  double *rw_Q0;
+  double *rw_Q3;
 
   double pot_s;
   double norm_s;
-
+  double osc_channel;
   double *beam_w;
   double *flux_w;
 
@@ -74,6 +76,8 @@ struct dunemc_base {
   double *nmuonsratio; //number of reco muons divided by number of true muons
 
   double *rw_lep_pT;  //transverse lepton momentum
+  double *rw_lep_pX;
+  double *rw_lep_pY;
   double *rw_lep_pZ; //parallel lepton momentum
   double *rw_reco_vtx_x;
   double *rw_reco_vtx_y;
@@ -86,6 +90,34 @@ struct dunemc_base {
 
   int *nrecoparticles;
   bool *in_fdv;
+  bool *is_accepted;
+  bool *is_good_caf_event;
+
+  //Particle-level kinematic parameters (JM for NDGAr)
+  std::vector<double> *particle_ecaldepositfraction;
+  std::vector<int> *particle_event;
+  std::vector<int> *particle_pdg;
+  std::vector<double> *particle_energy;
+  std::vector<double> *particle_theta;
+  std::vector<double> *particle_bangle;
+  std::vector<double> *particle_dedx;
+  std::vector<double> *particle_momentum;
+  std::vector<double> *particle_transversemomentum;
+  std::vector<bool> *particle_isaccepted;
+  std::vector<bool> *particle_isstoppedintpc;
+  std::vector<bool> *particle_isstoppedinecal;
+  std::vector<bool> *particle_isstoppedingap;
+  std::vector<bool> *particle_isstoppedinbarrelgap;
+  std::vector<bool> *particle_isstoppedinendgap;
+  std::vector<bool> *particle_isstoppedinbarrel;
+  std::vector<bool> *particle_isstoppedinendcap;
+  std::vector<double> *particle_startx;
+  std::vector<double> *particle_startr2;
+  std::vector<double> *particle_nhits;
+  std::vector<double> *particle_nturns;
+  std::vector<double> *particle_momresms;
+  std::vector<double> *particle_momrestransfrac;
+  std::vector<double> *particle_momrestrans;
 };
 
 // ********************************
@@ -152,7 +184,7 @@ inline void HadEScaleND(const double * par, double * erec, double sumEhad) {
 
   // Protons + Positive Pions + Negative Pions
   (*erec) += (*par) * sumEhad;
-  
+
 }
 
 // Charged Hadron Energy Scale Sqrt
@@ -160,7 +192,7 @@ inline void HadEScaleSqrtND(const double * par, double * erec, double sumEhad, d
 
   // Protons + Positive Pions + Negative Pions
   (*erec) += (*par) * sqrtSumEhad * sumEhad;
-  
+
 }
 
 // Charged Hadron Energy Scale Inv Sqrt
@@ -168,7 +200,7 @@ inline void HadEScaleInvSqrtND(const double * par, double * erec, double sumEhad
 
   // Protons + Positive Pions + Negative Pions
   (*erec) += (*par) * invSqrtSumEhad * sumEhad;
-  
+
 }
 
 
@@ -185,7 +217,7 @@ inline void MuEScaleND(const double * par, double * erec, double erecLep, bool C
   {
     (*erec) += (*par) * erecLep;
   }
-  
+
 }
 
 // Muon Energy Scale Sqrt
@@ -196,7 +228,7 @@ inline void MuEScaleSqrtND(const double * par, double * erec, double erecLep, do
   {
     (*erec) += (*par) * sqrtErecLep * erecLep;
   }
-  
+
 }
 
 // Muon Energy Scale Inverse Sqrt
@@ -207,7 +239,7 @@ inline void MuEScaleInvSqrtND(const double * par, double * erec, double erecLep,
   {
     (*erec) += (*par) * invSqrtErecLep * erecLep;
   }
-  
+
 }
 
 // ---------------------------------------------------------------
@@ -219,21 +251,21 @@ inline void MuEScaleInvSqrtND(const double * par, double * erec, double erecLep,
 inline void NEScaleND(const double * par, double * erec, double eRecoN) {
 
   (*erec) += (*par) * eRecoN;
-  
+
 }
 
 // Neutron Energy Scale Sqrt
 inline void NEScaleSqrtND(const double * par, double * erec, double eRecoN, double sqrteRecoN) {
 
   (*erec) += (*par) * sqrteRecoN * eRecoN;
-  
+
 }
 
 // Neutron Energy Scale Inverse Sqrt
 inline void NEScaleInvSqrtND(const double * par, double * erec, double eRecoN, double invSqrteRecoN) {
 
   (*erec) += (*par) * invSqrteRecoN * eRecoN;
-  
+
 }
 
 // ---------------------------------------------------------------
@@ -251,7 +283,7 @@ inline void EMEScaleND(const double * par, double * erec, double eRecoPi0, doubl
   {
     (*erec) += (*par) * erecLep;
   }
- 
+
 }
 
 // Electromagnetic Shower Energy Scale Sqrt
@@ -264,7 +296,7 @@ inline void EMEScaleSqrtND(const double * par, double * erec, double eRecoPi0, d
   {
     (*erec) += (*par) * sqrtErecLep * erecLep;
   }
- 
+
 }
 
 // Electromagnetic Shower Energy Scale Inverse Sqrt
@@ -277,13 +309,13 @@ inline void EMEScaleInvSqrtND(const double * par, double * erec, double eRecoPi0
   {
     (*erec) += (*par) * invSqrtErecLep * erecLep;
   }
- 
+
 }
 
 // ---------------------------------------------------------------
 // Resolution Uncertainties
 // ---------------------------------------------------------------
- 
+
 // ---------------------------------------------------------------
 // CHARGED HADRONS
 // ---------------------------------------------------------------
@@ -319,7 +351,7 @@ inline void MuResND(const double * par, double * erec, double erecLep, double Le
 inline void NResND(const double * par, double * erec, double eRecoN, double eN) {
 
   (*erec) += (*par) * (eN - eRecoN);
-  
+
 }
 
 // ---------------------------------------------------------------
@@ -335,7 +367,7 @@ inline void EMResND(const double * par, double * erec, double eRecoPi0, double e
   {
     (*erec) += (*par) * (LepE - erecLep);
   }
- 
+
 }
 
 // ********************************
@@ -402,7 +434,7 @@ inline void HadEScaleFD(const double * par, double * erec, double sumEhad) {
 
   // Protons + Positive Pions + Negative Pions
   (*erec) += (*par) * sumEhad;
-  
+
 }
 
 // Charged Hadron Energy Scale Sqrt
@@ -410,7 +442,7 @@ inline void HadEScaleSqrtFD(const double * par, double * erec, double sumEhad, d
 
   // Protons + Positive Pions + Negative Pions
   (*erec) += (*par) * sqrtSumEhad * sumEhad;
-  
+
 }
 
 // Charged Hadron Energy Scale Inv Sqrt
@@ -418,7 +450,7 @@ inline void HadEScaleInvSqrtFD(const double * par, double * erec, double sumEhad
 
   // Protons + Positive Pions + Negative Pions
   (*erec) += (*par) * invSqrtSumEhad * sumEhad;
-  
+
 }
 
 
@@ -435,7 +467,7 @@ inline void MuEScaleFD(const double * par, double * erec, double erecLep, bool C
   {
     (*erec) += (*par) * erecLep;
   }
-  
+
 }
 
 // Muon Energy Scale Sqrt
@@ -446,7 +478,7 @@ inline void MuEScaleSqrtFD(const double * par, double * erec, double erecLep, do
   {
     (*erec) += (*par) * sqrtErecLep * erecLep;
   }
-  
+
 }
 
 // Muon Energy Scale Inverse Sqrt
@@ -457,7 +489,7 @@ inline void MuEScaleInvSqrtFD(const double * par, double * erec, double erecLep,
   {
     (*erec) += (*par) * invSqrtErecLep * erecLep;
   }
-  
+
 }
 
 // ---------------------------------------------------------------
@@ -469,21 +501,21 @@ inline void MuEScaleInvSqrtFD(const double * par, double * erec, double erecLep,
 inline void NEScaleFD(const double * par, double * erec, double eRecoN) {
 
   (*erec) += (*par) * eRecoN;
-  
+
 }
 
 // Neutron Energy Scale Sqrt
 inline void NEScaleSqrtFD(const double * par, double * erec, double eRecoN, double sqrteRecoN) {
 
   (*erec) += (*par) * sqrteRecoN * eRecoN;
-  
+
 }
 
 // Neutron Energy Scale Inverse Sqrt
 inline void NEScaleInvSqrtFD(const double * par, double * erec, double eRecoN, double invSqrteRecoN) {
 
   (*erec) += (*par) * invSqrteRecoN * eRecoN;
-  
+
 }
 
 // ---------------------------------------------------------------
@@ -501,7 +533,7 @@ inline void EMEScaleFD(const double * par, double * erec, double eRecoPi0, doubl
   {
     (*erec) += (*par) * erecLep;
   }
- 
+
 }
 
 // Electromagnetic Shower Energy Scale Sqrt
@@ -514,7 +546,7 @@ inline void EMEScaleSqrtFD(const double * par, double * erec, double eRecoPi0, d
   {
     (*erec) += (*par) * sqrtErecLep * erecLep;
   }
- 
+
 }
 
 // Electromagnetic Shower Energy Scale Inverse Sqrt
@@ -527,13 +559,13 @@ inline void EMEScaleInvSqrtFD(const double * par, double * erec, double eRecoPi0
   {
     (*erec) += (*par) * invSqrtErecLep * erecLep;
   }
- 
+
 }
 
 // ---------------------------------------------------------------
 // Resolution Uncertainties
 // ---------------------------------------------------------------
- 
+
 // ---------------------------------------------------------------
 // CHARGED HADRONS
 // ---------------------------------------------------------------
@@ -569,7 +601,7 @@ inline void MuResFD(const double * par, double * erec, double erecLep, double Le
 inline void NResFD(const double * par, double * erec, double eRecoN, double eN) {
 
   (*erec) += (*par) * (eN - eRecoN);
-  
+
 }
 
 // ---------------------------------------------------------------
@@ -585,7 +617,7 @@ inline void EMResFD(const double * par, double * erec, double eRecoPi0, double e
   {
     (*erec) += (*par) * (LepE - erecLep);
   }
- 
+
 }
 
 // ---------------------------------------------------------------
