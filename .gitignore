@@ -1,0 +1,14 @@
+build/
+*.root
+*.tbz2
+*.tgz
+*.pdf
+*.png
+*~
+logs/
+jupyter_env
+.history
+Doc
+inputs/Atmospherics/CAFs
+nohup.out
+output*.txt

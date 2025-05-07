@@ -1,11 +1,23 @@
-set(splinesDUNE_implementation_files 
-  splinesDUNE.cpp) 
+set(HEADERS splinesDUNE.h
+)
 
-set(splinesDUNE_header_files 
-	splinesDUNE.h)
+add_library(splinesDUNE SHARED
+    splinesDUNE.cpp
+)
 
-add_library(splinesDUNE SHARED ${splinesDUNE_implementation_files})
-target_include_directories(splinesDUNE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
-target_link_libraries(splinesDUNE MaCh3)
+set_target_properties(splinesDUNE PROPERTIES
+    PUBLIC_HEADER "${HEADERS}"
+    EXPORT_NAME splinesDUNE)
 
-install(TARGETS splinesDUNE DESTINATION lib)
+target_link_libraries(splinesDUNE MaCh3::All MaCh3DUNECompilerOptions)
+
+target_include_directories(splinesDUNE PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../>
+  $<INSTALL_INTERFACE:include>)
+
+install(TARGETS splinesDUNE
+        EXPORT mach3dune-targets
+        LIBRARY DESTINATION lib/
+        PUBLIC_HEADER DESTINATION include/splines)
+
+add_library(MACH3DUNE::splinesDUNE ALIAS splinesDUNE)

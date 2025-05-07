@@ -1,0 +1,98 @@
+---
+SampleName: "numuselec"
+SampleType: "Atm"
+# SelectionCuts:
+#   - KinematicStr: "TrueXPos"
+#     Bounds: [ -310.0, 310.0 ]
+#   - KinematicStr: "TrueYPos"
+#     Bounds: [ -550.0, 550.0 ]
+#   - KinematicStr: "TrueZPos"
+#     Bounds: [ 50.0, 1244.0 ]
+Binning:
+  XVarStr: "TrueNeutrinoEnergy"
+  XVarBins: [0., 0.25, 0.5, 0.75, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 4.25, 4.5, 4.75, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 100000.]
+SampleBools:
+  IsELike: no
+InputFiles:
+  mtupleprefix: "inputs/Atmospherics/CAFs/atm_hd"
+  mtuplesuffix: ".root"
+  splineprefix: ""
+  splinesuffix: ""
+DetID: "ATM"
+NuOsc:
+  NuOscConfigFile: "configs/NuOsc/CUDAProb3.yaml"
+  EqualBinningPerOscChannel: true
+NSubSamples: 12
+SubSamples:
+  - name: "nue_x_nue"
+    mtuplefile: "nue_x_nue"
+    splinefile: "nue_x_nue"
+    samplevecno: 0
+    nutype: 12
+    oscnutype: 12
+  - name: "nue_x_numu"
+    mtuplefile: "nue_x_numu"
+    splinefile: "nue_x_numu"
+    samplevecno: 1
+    nutype: 12
+    oscnutype: 14
+  - name: "nue_x_nutau"
+    mtuplefile: "nue_x_nutau"
+    splinefile: "nue_x_nutau"
+    samplevecno: 2
+    nutype: 12
+    oscnutype: 16
+  - name: "numu_x_nue"
+    mtuplefile: "numu_x_nue"
+    splinefile: "numu_x_nue"
+    samplevecno: 3
+    nutype: 14
+    oscnutype: 12
+  - name: "numu_x_numu"
+    mtuplefile: "numu_x_numu"
+    splinefile: "numu_x_numu"
+    samplevecno: 4
+    nutype: 14
+    oscnutype: 14
+  - name: "numu_x_nutau"
+    mtuplefile: "numu_x_nutau"
+    splinefile: "numu_x_nutau"
+    samplevecno: 5
+    nutype: 14
+    oscnutype: 16
+  - name: "nuebar_x_nuebar"
+    mtuplefile: "nuebar_x_nuebar"
+    splinefile: "nuebar_x_nuebar"
+    samplevecno: 6
+    nutype: -12
+    oscnutype: -12
+  - name: "nuebar_x_numubar"
+    mtuplefile: "nuebar_x_numubar"
+    splinefile: "nuebar_x_numubar"
+    samplevecno: 7
+    nutype: -12
+    oscnutype: -14
+  - name: "nuebar_x_nutaubar"
+    mtuplefile: "nuebar_x_nutaubar"
+    splinefile: "nuebar_x_nutaubar"
+    samplevecno: 8
+    nutype: -12
+    oscnutype: -16
+  - name: "numubar_x_nuebar"
+    mtuplefile: "numubar_x_nuebar"
+    splinefile: "numubar_x_nuebar"
+    samplevecno: 9
+    nutype: -14
+    oscnutype: -12
+  - name: "numubar_x_numubar"
+    mtuplefile: "numubar_x_numubar"
+    splinefile: "numubar_x_numubar"
+    samplevecno: 10
+    nutype: -14
+    oscnutype: -14
+  - name: "numubar_x_nutaubar"
+    mtuplefile: "numubar_x_nutaubar"
+    splinefile: "numubar_x_nutaubar"
+    samplevecno: 11
+    nutype: -14
+    oscnutype: -16

@@ -1,0 +1,235 @@
+---
+#########################################
+Title: "DUNE Interaction modes"
+
+GeneratorName: "SIMB"
+
+MaCh3Modes: [
+  "CCQE",
+  "CC1Kaon",
+  "CCDIS",
+  "CCRES",
+  "CCCOH",
+  "CCDiff",
+  "CCNuEl",
+  "CCIMD",
+  "CCAnuGam",
+  "CCMEC",
+  "CCCOHEL",
+  "CCIBD",
+  "CCGlRES",
+  "CCIMDAnn",
+  "NCQE",
+  "NCDIS",
+  "NCRES",
+  "NCCOH",
+  "NCDiff",
+  "NCNuEl",
+  "NCIMD",
+  "NCAnuGam",
+  "NCMEC",
+  "NCCOHEL",
+  "NCIBD",
+  "NCGlRES",
+  "NCIMDAnn"
+  ]
+
+#CC Interaction Modes
+
+CCQE:
+  Name: "CCQE"
+  GeneratorMaping: [0]
+  IsNC: false
+  PlotColor: 1
+  SplineSuffix: "ccqe"
+
+CC1Kaon:
+  Name: "CC1Kaon"
+  GeneratorMaping: [40]
+  IsNC: false
+  PlotColor: 1
+  SplineSuffix: "unknown"
+
+CCDIS:
+  Name: "CCDIS"
+  GeneratorMaping: [2]
+  IsNC: false
+  PlotColor: 2
+  SplineSuffix: "ccdis"
+
+CCRES:
+  Name: "CCRES"
+  GeneratorMaping: [1]
+  IsNC: false
+  PlotColor: 2
+  SplineSuffix: "ccres"
+
+CCCOH:
+  Name: "CCCOH"
+  GeneratorMaping: [3]
+  IsNC: false
+  PlotColor: 2
+  SplineSuffix: "cccoh"
+
+CCDiff:
+  Name: "CCDiff"
+  GeneratorMaping: [11]
+  IsNC: false
+  PlotColor: 2
+  SplineSuffix: "ccdiff"
+
+CCNuEl:
+  Name: "CCNuEl"
+  GeneratorMaping: [5]
+  IsNC: false
+  PlotColor: 2
+  SplineSuffix: "ccnueel"
+
+CCIMD:
+  Name: "CCIMD"
+  GeneratorMaping: [41]
+  IsNC: false
+  PlotColor: 2
+  SplineSuffix: "ccIMD"
+
+CCAnuGam:
+  Name: "CCAnuGam"
+  GeneratorMaping: [9]
+  IsNC: false
+  PlotColor: 2
+  SplineSuffix: "ccamnugamma"
+
+CCMEC:
+  Name: "CCMEC"
+  GeneratorMaping: [10]
+  IsNC: false
+  PlotColor: 2
+  SplineSuffix: "ccmec"
+
+CCCOHEL:
+  Name: "CCCOHEL"
+  GeneratorMaping: [4]
+  IsNC: false
+  PlotColor: 2
+  SplineSuffix: "cccohel"
+
+CCIBD:
+  Name: "CCIBD"
+  GeneratorMaping: [7]
+  IsNC: false
+  PlotColor: 2
+  SplineSuffix: "ccibd"
+
+CCGlRES:
+  Name: "CCGlRES"
+  GeneratorMaping: [8]
+  IsNC: false
+  PlotColor: 2
+  SplineSuffix: "ccglasres"
+
+CCIMDAnn:
+  Name: "CCIMDAnn"
+  GeneratorMaping: [6]
+  IsNC: false
+  PlotColor: 2
+  SplineSuffix: "ccimdannihilation"
+
+#NC Interaction Modes
+
+NCQE:
+  Name: "NCQE"
+  GeneratorMaping: [12]
+  IsNC: true
+  PlotColor: 1
+  SplineSuffix: "ncqe"
+
+#NC1Kaon:
+#  Name: "NC1Kaon"
+#  GeneratorMaping: [42]
+#  IsNC: true
+#  PlotColor: 1
+#  SplineSuffix: "unknown"
+
+NCDIS:
+  Name: "NCDIS"
+  GeneratorMaping: [14]
+  IsNC: true
+  PlotColor: 2
+  SplineSuffix: "ncdis"
+
+NCRES:
+  Name: "NCRES"
+  GeneratorMaping: [13]
+  IsNC: true
+  PlotColor: 2
+  SplineSuffix: "ncres"
+
+NCCOH:
+  Name: "NCCOH"
+  GeneratorMaping: [15]
+  IsNC: true
+  PlotColor: 2
+  SplineSuffix: "nccoh"
+
+NCDiff:
+  Name: "NCDiff"
+  GeneratorMaping: [23]
+  IsNC: true
+  PlotColor: 2
+  SplineSuffix: "ncdiff"
+
+NCNuEl:
+  Name: "NCNuEl"
+  GeneratorMaping: [17]
+  IsNC: true
+  PlotColor: 2
+  SplineSuffix: "ncnueel"
+
+NCIMD:
+  Name: "NCIMD"
+  GeneratorMaping: [43]
+  IsNC: true
+  PlotColor: 2
+  SplineSuffix: "ncIMD"
+
+NCAnuGam:
+  Name: "NCAnuGam"
+  GeneratorMaping: [21]
+  IsNC: true
+  PlotColor: 2
+  SplineSuffix: "ncamnugamma"
+
+NCMEC:
+  Name: "NCMEC"
+  GeneratorMaping: [22]
+  IsNC: true
+  PlotColor: 2
+  SplineSuffix: "ncmec"
+
+NCCOHEL:
+  Name: "NCCOHEL"
+  GeneratorMaping: [16]
+  IsNC: true
+  PlotColor: 2
+  SplineSuffix: "nccohel"
+
+NCIBD:
+  Name: "NCIBD"
+  GeneratorMaping: [19]
+  IsNC: true
+  PlotColor: 2
+  SplineSuffix: "ncibd"
+
+NCGlRES:
+  Name: "NCGlRES"
+  GeneratorMaping: [20]
+  IsNC: true
+  PlotColor: 2
+  SplineSuffix: "ncglasres"
+
+NCIMDAnn:
+  Name: "NCIMDAnn"
+  GeneratorMaping: [18]
+  IsNC: true
+  PlotColor: 2
+  SplineSuffix: "ncimdannihilation"
