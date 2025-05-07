@@ -1,4 +1,26 @@
 var searchData=
 [
-  ['values_0',['Oscillation Parameter Values',['../index.html#autotoc_md5',1,'']]]
+  ['samplepdfduneatm_0',['samplePDFDUNEAtm',['../classsamplePDFDUNEAtm.html',1,'samplePDFDUNEAtm'],['../classsamplePDFDUNEAtm.html#ad1a1aa5326f0bc388f93b3173a01b93f',1,'samplePDFDUNEAtm::samplePDFDUNEAtm()']]],
+  ['samplepdfduneatm_2ecpp_1',['samplePDFDUNEAtm.cpp',['../samplePDFDUNEAtm_8cpp.html',1,'']]],
+  ['samplepdfduneatm_2eh_2',['samplePDFDUNEAtm.h',['../samplePDFDUNEAtm_8h.html',1,'']]],
+  ['samplepdfdunebeamfd_3',['samplePDFDUNEBeamFD',['../classsamplePDFDUNEBeamFD.html',1,'samplePDFDUNEBeamFD'],['../classsamplePDFDUNEBeamFD.html#a4b7c8cd5d3e9cbcc5090d4c1a32a5bd9',1,'samplePDFDUNEBeamFD::samplePDFDUNEBeamFD()']]],
+  ['samplepdfdunebeamfd_2ecpp_4',['samplePDFDUNEBeamFD.cpp',['../samplePDFDUNEBeamFD_8cpp.html',1,'']]],
+  ['samplepdfdunebeamfd_2eh_5',['samplePDFDUNEBeamFD.h',['../samplePDFDUNEBeamFD_8h.html',1,'']]],
+  ['samplepdfdunebeamnd_6',['samplePDFDUNEBeamND',['../classsamplePDFDUNEBeamND.html',1,'samplePDFDUNEBeamND'],['../classsamplePDFDUNEBeamND.html#a4f37bdb1cdf3cd10f8ef83b2fbb70e1a',1,'samplePDFDUNEBeamND::samplePDFDUNEBeamND()']]],
+  ['samplepdfdunebeamnd_2ecpp_7',['samplePDFDUNEBeamND.cpp',['../samplePDFDUNEBeamND_8cpp.html',1,'']]],
+  ['samplepdfdunebeamnd_2eh_8',['samplePDFDUNEBeamND.h',['../samplePDFDUNEBeamND_8h.html',1,'']]],
+  ['samplepdfdunebeamndgar_9',['samplePDFDUNEBeamNDGAr',['../classsamplePDFDUNEBeamNDGAr.html',1,'samplePDFDUNEBeamNDGAr'],['../classsamplePDFDUNEBeamNDGAr.html#ac1b17aadb85fd002b71bc2967b0dd9fc',1,'samplePDFDUNEBeamNDGAr::samplePDFDUNEBeamNDGAr()']]],
+  ['samplepdfdunebeamndgar_2ecpp_10',['samplePDFDUNEBeamNDGAr.cpp',['../samplePDFDUNEBeamNDGAr_8cpp.html',1,'']]],
+  ['samplepdfdunebeamndgar_2eh_11',['samplePDFDUNEBeamNDGAr.h',['../samplePDFDUNEBeamNDGAr_8h.html',1,'']]],
+  ['setndcovmatrix_12',['setNDCovMatrix',['../classsamplePDFDUNEBeamND.html#afb9e1998d78ead91f2815de2cfe514d1',1,'samplePDFDUNEBeamND']]],
+  ['setupexperimentmc_13',['setupExperimentMC',['../classsamplePDFDUNEAtm.html#a8b41bdc5421adeae5d89a15083e14d8f',1,'samplePDFDUNEAtm::setupExperimentMC()'],['../classsamplePDFDUNEBeamFD.html#ab77382698a1cf87201cab60bd83eb167',1,'samplePDFDUNEBeamFD::setupExperimentMC()'],['../classsamplePDFDUNEBeamND.html#a77d4d1d705ed41d08a10dbd215e103c0',1,'samplePDFDUNEBeamND::setupExperimentMC()'],['../classsamplePDFDUNEBeamNDGAr.html#ac8a3a86f7849be23f42200a2e33e369e',1,'samplePDFDUNEBeamNDGAr::setupExperimentMC()']]],
+  ['setupfdmc_14',['setupFDMC',['../classsamplePDFDUNEAtm.html#a60151aa51706717c5c9e98d1b6b53e72',1,'samplePDFDUNEAtm::setupFDMC()'],['../classsamplePDFDUNEBeamFD.html#ad3c3afcfb11bde7aefb76adeebdeaecf',1,'samplePDFDUNEBeamFD::setupFDMC()'],['../classsamplePDFDUNEBeamND.html#aa3e2a61905031dc372c5bcd1fc49e2d5',1,'samplePDFDUNEBeamND::setupFDMC()'],['../classsamplePDFDUNEBeamNDGAr.html#ac3dc8594b61c2d150b0c73750a148558',1,'samplePDFDUNEBeamNDGAr::setupFDMC()']]],
+  ['setupsplines_15',['SetupSplines',['../classsamplePDFDUNEAtm.html#a4c5eaf8dc44b2db73a46bc3afc19a03b',1,'samplePDFDUNEAtm::SetupSplines()'],['../classsamplePDFDUNEBeamFD.html#a181de489fe057226e6dca79ef86778cc',1,'samplePDFDUNEBeamFD::SetupSplines()'],['../classsamplePDFDUNEBeamND.html#a95b03c35c8ee5ac93c504ef0ecd5be4d',1,'samplePDFDUNEBeamND::SetupSplines()'],['../classsamplePDFDUNEBeamNDGAr.html#acc2d982042c03f2aa446e63c0b05f3b7',1,'samplePDFDUNEBeamNDGAr::SetupSplines()']]],
+  ['setupweightpointers_16',['SetupWeightPointers',['../classsamplePDFDUNEAtm.html#a1b6643f49303721a2f890fa070122f88',1,'samplePDFDUNEAtm::SetupWeightPointers()'],['../classsamplePDFDUNEBeamFD.html#ab292de5b83953968a8c85dd0d8c03434',1,'samplePDFDUNEBeamFD::SetupWeightPointers()'],['../classsamplePDFDUNEBeamND.html#a94cb2e73338883a9db8343fe6b8c5bc1',1,'samplePDFDUNEBeamND::SetupWeightPointers()'],['../classsamplePDFDUNEBeamNDGAr.html#a07bdc4e8f0128a3aa5030363d5c106eb',1,'samplePDFDUNEBeamNDGAr::SetupWeightPointers()']]],
+  ['spatial_5fresolution_17',['spatial_resolution',['../classsamplePDFDUNEBeamNDGAr.html#a4bcddba6f990422cb5ae491edf0a020c',1,'samplePDFDUNEBeamNDGAr']]],
+  ['splinesdune_18',['splinesDUNE',['../classsplinesDUNE.html',1,'splinesDUNE'],['../classsplinesDUNE.html#a892ce618d5ad82689f7462dfdb97ebf2',1,'splinesDUNE::splinesDUNE()']]],
+  ['splinesdune_2ecpp_19',['splinesDUNE.cpp',['../splinesDUNE_8cpp.html',1,'']]],
+  ['splinesdune_2eh_20',['splinesDUNE.h',['../splinesDUNE_8h.html',1,'']]],
+  ['sr_21',['sr',['../classsamplePDFDUNEBeamNDGAr.html#a0cc0eaa729f95a7fec37ddbcd02842a7',1,'samplePDFDUNEBeamNDGAr']]],
+  ['structsdune_2eh_22',['StructsDUNE.h',['../StructsDUNE_8h.html',1,'']]]
 ];

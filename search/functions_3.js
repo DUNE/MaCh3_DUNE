@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['fillsamplearray_0',['FillSampleArray',['../classsplinesDUNE.html#afaf6778156a9e0ddd52156cc945fb7b8',1,'splinesDUNE']]]
+  ['findnhits_0',['FindNHits',['../classsamplePDFDUNEBeamNDGAr.html#adc4c11bb6797f7a14d3c21d3de9d305e',1,'samplePDFDUNEBeamNDGAr']]]
 ];

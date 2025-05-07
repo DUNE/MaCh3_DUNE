@@ -97,57 +97,59 @@ $(function(){ initResizable(false); });
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md_README"></a></p>
 <h1><a class="anchor" id="autotoc_md1"></a>
-MaCh3 Build</h1>
+Building MaCh3 DUNE</h1>
 <h2><a class="anchor" id="autotoc_md2"></a>
 Dependencies</h2>
 <ul>
-<li>CMake (version &gt; 3.8).</li>
-<li>MaCh3 Core tag: DUNECore2024 (To be used until the core version currently being developped gets integrated with MaCh3 DUNE)</li>
-<li>ROOT (currently tested on 6.18)</li>
+<li>gcc (tested on 12.2.0)</li>
+<li>CMake (tested on 3.27.7)</li>
+<li>ROOT (tested on 6.28.06)</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md3"></a>
-CMake</h2>
+<p>A setup script which pulls cvmfs dependancies is included here: </p><div class="fragment"><div class="line">source setup_dune_env.sh</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md3"></a>
+Cloning and Building</h2>
 <div class="fragment"><div class="line">mkdir MaCh3_DUNE</div>
-<div class="line">git clone git@github.com:DUNE/MaCh3_DUNE.git</div>
+<div class="line">git clone git@github.com:DUNE/MaCh3_DUNE.git MaCh3_DUNE</div>
 <div class="line">cd MaCh3_DUNE</div>
-</div><!-- fragment --><p>Now setup some dependencies and then actually build MaCh3_DUNE</p>
-<div class="fragment"><div class="line"># For clusters with access to CVMFS</div>
-<div class="line">source setup_dune_env.sh</div>
 <div class="line">mkdir build;</div>
 <div class="line">cd build</div>
-</div><!-- fragment --><p>Optional flags are described briefly below, options are shown grouped by square brackets and delimited by vertical lines. Default is on the left.</p>
-<div class="fragment"><div class="line">cmake .. -DGPU_ENABLED=[OFF|ON] -DUSE_PROB3=[OFF|ON] -DSINGLE_THREAD_ONLY=[OFF|ON] -DDEBUG_ENABLED=[OFF|ON] </div>
-<div class="line">make</div>
-</div><!-- fragment --><p>A few notes: CUDA_SAMPLES not necessary if using CPU_ONLY=ON</p>
-<p>If you want to simultaneously develop both the MaCh3 core code and the MaCh3 DUNE code then you can build against a local version of MaCh3 by adding:</p>
-<div class="fragment"><div class="line">-DCPM_MaCh3_SOURCE=/path/to/MaCh3/folder</div>
-</div><!-- fragment --><p>This will overrule the CPMFindPackage command in the CMakeList.txt and will tell CPM to build that instead.</p>
+</div><!-- fragment --><p>Then perform the cmake build command:</p>
+<div class="fragment"><div class="line">cmake .. -DCUDAProb3_ENABLED=[ON,OFF] -DCUDAProb3Linear_ENABLED=[ON,OFF] -DMaCh3_CORE_BRANCH=&quot;v1.4.8&quot; -DBuild_NDGAr=[OFF|ON] -DDUNE_ANAOBJ_BRANCH=&quot;v03_06_00&quot;</div>
+<div class="line">make install</div>
+</div><!-- fragment --><p>Additional cmake options are available in the MaCh3-Core README</p>
+<ul>
+<li>CUDAProb3 should be used as the default for atmospheric neutrino oscillations</li>
+<li>CUDAProb3Linear should be used as the default for beam oscillations</li>
+</ul>
+<p>Then source the installation of MaCh3: </p><div class="fragment"><div class="line">source build/bin/setup.MaCh3DUNE.sh</div>
+</div><!-- fragment --><p>This sets everything needed, and needs to be re-sourced on each terminal session when using MaCh3 (Along with any dependancies)</p>
 <h1><a class="anchor" id="autotoc_md4"></a>
 Event Rates</h1>
 <p>Once you've got setup you'll then need to setup some symlinks to point to your MC and spline files. You can do this by modifying <code>scripts/link_files.sh</code> script. You'll need to change the FILESDIR variable to point to the relevant folder on your machine. The places these files currently live are listed here:</p>
 <p>Imperial College London lx: </p><div class="fragment"><div class="line">/vols/dune/ljw20/</div>
-</div><!-- fragment --><p>FNAL cluster: </p><div class="fragment"><div class="line">/dune/data/users/lwarsame</div>
-</div><!-- fragment --><p>ComputeCanada Cedar: </p><div class="fragment"><div class="line">/scratch/liban</div>
+</div><!-- fragment --><p>FNAL cluster: </p><div class="fragment"><div class="line">/exp/dune/data/users/lwarsame</div>
+</div><!-- fragment --><p>ComputeCanada Cedar: </p><div class="fragment"><div class="line">/project/rpp-nilic/MaCh3_inputs</div>
 </div><!-- fragment --><p>NERSC Perlmutter: </p><div class="fragment"><div class="line">/pscratch/sd/l/lwarsame</div>
-</div><!-- fragment --><p>CVMFS: </p><div class="fragment"><div class="line">/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2</div>
+</div><!-- fragment --><p>RAL SCARF: </p><div class="fragment"><div class="line">/work4/ppd/scarf1407</div>
+</div><!-- fragment --><p>CVMFS: </p><div class="fragment"><div class="line">/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v3</div>
 </div><!-- fragment --><p>Current (Feburary 2024) FD event rates using DUNE FD TDR inputs are below (ND is still under-development). These are made using xsec systematics at their prior central value. Oscillation parameter values used here are:</p>
 <h2><a class="anchor" id="autotoc_md5"></a>
-Oscillation Parameter Values</h2>
+Oscillation Parameter Values (NuFIT 4.0 NH)</h2>
 <div align="center"></div><div align="center"><table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadCenter">Parameter   </th><th class="markdownTableHeadCenter">Value   </th><th class="markdownTableHeadCenter">Unit    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter">sin²θ₁₂   </td><td class="markdownTableBodyCenter">0.307   </td><td class="markdownTableBodyCenter">-    </td></tr>
+<td class="markdownTableBodyCenter">sin²θ₁₂   </td><td class="markdownTableBodyCenter">0.310   </td><td class="markdownTableBodyCenter">-    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyCenter">sin²θ₂₃   </td><td class="markdownTableBodyCenter">0.52   </td><td class="markdownTableBodyCenter">-    </td></tr>
+<td class="markdownTableBodyCenter">sin²θ₂₃   </td><td class="markdownTableBodyCenter">0.582   </td><td class="markdownTableBodyCenter">-    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter">sin²θ₁₃   </td><td class="markdownTableBodyCenter">0.0218   </td><td class="markdownTableBodyCenter">-    </td></tr>
+<td class="markdownTableBodyCenter">sin²θ₁₃   </td><td class="markdownTableBodyCenter">0.0224   </td><td class="markdownTableBodyCenter">-    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyCenter">Δm²₃₂   </td><td class="markdownTableBodyCenter">7.53 × 10⁻⁵   </td><td class="markdownTableBodyCenter">eV²    </td></tr>
+<td class="markdownTableBodyCenter">Δm²₃₂   </td><td class="markdownTableBodyCenter">7.39 × 10⁻⁵   </td><td class="markdownTableBodyCenter">eV²    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter">Δm²₁₂   </td><td class="markdownTableBodyCenter">2.509 × 10⁻³   </td><td class="markdownTableBodyCenter">eV²    </td></tr>
+<td class="markdownTableBodyCenter">Δm²₁₂   </td><td class="markdownTableBodyCenter">2.525 × 10⁻³   </td><td class="markdownTableBodyCenter">eV²    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyCenter">δCP   </td><td class="markdownTableBodyCenter">-1.601   </td><td class="markdownTableBodyCenter">radians   </td></tr>
+<td class="markdownTableBodyCenter">δCP   </td><td class="markdownTableBodyCenter">-2.498   </td><td class="markdownTableBodyCenter">radians   </td></tr>
 </table>
 </div><div align="center"></div><h2><a class="anchor" id="autotoc_md6"></a>
 Nominal Integrated Event rates</h2>
@@ -155,13 +157,13 @@ Nominal Integrated Event rates</h2>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadCenter">Type   </th><th class="markdownTableHeadCenter">Unoscillated   </th><th class="markdownTableHeadCenter">Oscillated    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter">FHC ν<sub>μ</sub>   </td><td class="markdownTableBodyCenter">25941.57467   </td><td class="markdownTableBodyCenter">7977.36421    </td></tr>
+<td class="markdownTableBodyCenter">FHC ν<sub>μ</sub>   </td><td class="markdownTableBodyCenter">25941.5747   </td><td class="markdownTableBodyCenter">8243.9185    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyCenter">FHC ν<sub>e</sub>   </td><td class="markdownTableBodyCenter">390.85150   </td><td class="markdownTableBodyCenter">1698.28079    </td></tr>
+<td class="markdownTableBodyCenter">FHC ν<sub>e</sub>   </td><td class="markdownTableBodyCenter">391.5995   </td><td class="markdownTableBodyCenter">1756.9128    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter">RHC ν<sub>μ</sub>   </td><td class="markdownTableBodyCenter">12492.61743   </td><td class="markdownTableBodyCenter">4217.78765    </td></tr>
+<td class="markdownTableBodyCenter">RHC ν<sub>μ</sub>   </td><td class="markdownTableBodyCenter">12492.6174   </td><td class="markdownTableBodyCenter">4379.4037    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyCenter">RHC ν<sub>e</sub>   </td><td class="markdownTableBodyCenter">208.31873   </td><td class="markdownTableBodyCenter">447.09673   </td></tr>
+<td class="markdownTableBodyCenter">RHC ν<sub>e</sub>   </td><td class="markdownTableBodyCenter">208.8016   </td><td class="markdownTableBodyCenter">491.0061   </td></tr>
 </table>
 </div><div align="center"></div> </div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"></a>

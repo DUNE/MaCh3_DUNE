@@ -1,4 +1,28 @@
 var searchData=
 [
-  ['oscillation_20parameter_20values_0',['Oscillation Parameter Values',['../index.html#autotoc_md5',1,'']]]
+  ['mach3_20dune_0',['Building MaCh3 DUNE',['../index.html#autotoc_md1',1,'']]],
+  ['mach3_5fdune_1',['MaCh3_DUNE',['../index.html',1,'']]],
+  ['mach3dunefactory_2ecpp_2',['MaCh3DUNEFactory.cpp',['../MaCh3DUNEFactory_8cpp.html',1,'']]],
+  ['mach3dunefactory_2eh_3',['MaCh3DUNEFactory.h',['../MaCh3DUNEFactory_8h.html',1,'']]],
+  ['makemach3duneinstance_4',['MakeMaCh3DuneInstance',['../MaCh3DUNEFactory_8cpp.html#ab8caaa9a7ad17a769476ce3431124c4d',1,'MakeMaCh3DuneInstance(manager *FitManager, std::vector&lt; samplePDFFDBase * &gt; &amp;DUNEPdfs, covarianceXsec *&amp;xsec, covarianceOsc *&amp;osc):&#160;MaCh3DUNEFactory.cpp'],['../MaCh3DUNEFactory_8h.html#adab9463544464b07da21301a8bb09a4a',1,'MakeMaCh3DuneInstance(manager *fitMan, std::vector&lt; samplePDFFDBase * &gt; &amp;sample_vec, covarianceXsec *&amp;xsec, covarianceOsc *&amp;osc):&#160;MaCh3DUNEFactory.cpp']]],
+  ['makepixelgrid_5',['makePixelGrid',['../classsamplePDFDUNEBeamNDGAr.html#ad915040e4f3a2c9f32cdcff0d4e5cada',1,'samplePDFDUNEBeamNDGAr']]],
+  ['mode_6',['mode',['../structdunemc__base.html#a3abdc5e800e6a232cf59ef7162e5b4e7',1,'dunemc_base']]],
+  ['momentum_5fresolution_5fthreshold_7',['momentum_resolution_threshold',['../classsamplePDFDUNEBeamNDGAr.html#a55028a2016a45f70886191579cfd17a6',1,'samplePDFDUNEBeamNDGAr']]],
+  ['mu_5fescale_5ffd_5fpos_8',['mu_escale_fd_pos',['../classsamplePDFDUNEBeamFD.html#a6632ea8e2bfd7f870ba32a352470c66f',1,'samplePDFDUNEBeamFD']]],
+  ['mu_5fescale_5finvsqrt_5ffd_5fpos_9',['mu_escale_invsqrt_fd_pos',['../classsamplePDFDUNEBeamFD.html#aa9fab1ae23954f3bdc10ce5af0cc8962',1,'samplePDFDUNEBeamFD']]],
+  ['mu_5fescale_5finvsqrt_5fnd_5fpos_10',['mu_escale_invsqrt_nd_pos',['../classsamplePDFDUNEBeamND.html#a531bb4065c269067cc6f379c6c8cf492',1,'samplePDFDUNEBeamND']]],
+  ['mu_5fescale_5fnd_5fpos_11',['mu_escale_nd_pos',['../classsamplePDFDUNEBeamND.html#a1bae1554727dfcad6c17dbe0f641cabb',1,'samplePDFDUNEBeamND']]],
+  ['mu_5fescale_5fsqrt_5ffd_5fpos_12',['mu_escale_sqrt_fd_pos',['../classsamplePDFDUNEBeamFD.html#a7f7dfbc0d553fb66926c3958f73503fa',1,'samplePDFDUNEBeamFD']]],
+  ['mu_5fescale_5fsqrt_5fnd_5fpos_13',['mu_escale_sqrt_nd_pos',['../classsamplePDFDUNEBeamND.html#ad8b6f9e0e20bdc70d5980490eb1d0f82',1,'samplePDFDUNEBeamND']]],
+  ['mu_5fres_5ffd_5fpos_14',['mu_res_fd_pos',['../classsamplePDFDUNEBeamFD.html#afa1cec6569c8b470360a30651478ebdc',1,'samplePDFDUNEBeamFD']]],
+  ['mu_5fres_5fnd_5fpos_15',['mu_res_nd_pos',['../classsamplePDFDUNEBeamND.html#a1e30ffb38f859b87fd5a33fb4b6269a7',1,'samplePDFDUNEBeamND']]],
+  ['muescalefd_16',['MuEScaleFD',['../StructsDUNE_8h.html#a0f5c24c5db320e7701bd951a87e2c70e',1,'StructsDUNE.h']]],
+  ['muescaleinvsqrtfd_17',['MuEScaleInvSqrtFD',['../StructsDUNE_8h.html#a6552cbd94a8adf820f046d77fc6b26f8',1,'StructsDUNE.h']]],
+  ['muescaleinvsqrtnd_18',['MuEScaleInvSqrtND',['../StructsDUNE_8h.html#ae48244a94a30bc57df9444cee5c6a7da',1,'StructsDUNE.h']]],
+  ['muescalend_19',['MuEScaleND',['../StructsDUNE_8h.html#ae0c262c9169813867bd96cb58fcaac74',1,'StructsDUNE.h']]],
+  ['muescalesqrtfd_20',['MuEScaleSqrtFD',['../StructsDUNE_8h.html#a6beb33fcf8828a77fdfc480ca93f29a2',1,'StructsDUNE.h']]],
+  ['muescalesqrtnd_21',['MuEScaleSqrtND',['../StructsDUNE_8h.html#a25bfdb5174ff2a0a88dcacb30b3852c4',1,'StructsDUNE.h']]],
+  ['muonscore_5fthreshold_22',['muonscore_threshold',['../classsamplePDFDUNEBeamNDGAr.html#a0f11a8c27e761cdd94b1ca6897842728',1,'samplePDFDUNEBeamNDGAr']]],
+  ['muresfd_23',['MuResFD',['../StructsDUNE_8h.html#a40b0cbdede616dea874b09461ea4ef37',1,'StructsDUNE.h']]],
+  ['muresnd_24',['MuResND',['../StructsDUNE_8h.html#ad7022d9eb7360513c6248e70db3f5f16',1,'StructsDUNE.h']]]
 ];

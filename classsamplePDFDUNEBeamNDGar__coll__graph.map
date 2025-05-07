@@ -1,9 +1,0 @@
-<map id="samplePDFDUNEBeamNDGar" name="samplePDFDUNEBeamNDGar">
-<area shape="rect" id="Node000001" title="Base class for handling beam ND GAR samples." alt="" coords="23,198,223,223"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,102,142,127"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,139,119,196,114,198,84,142"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="166,94,291,135"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="197,147,138,199,134,195,193,143"/>
-<area shape="rect" id="Node000004" href="$structdunemc__base.html" title=" " alt="" coords="177,5,279,31"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="231,46,231,93,226,93,226,46"/>
-</map>

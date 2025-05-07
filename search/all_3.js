@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['calcxsecweightfunc_0',['CalcXsecWeightFunc',['../classsamplePDFDUNEAtm.html#a2237be921778dd322522aa4c778ade24',1,'samplePDFDUNEAtm::CalcXsecWeightFunc()'],['../classsamplePDFDUNEBeamFD.html#a532379bb3308983a28bdb9b011df9f34',1,'samplePDFDUNEBeamFD::CalcXsecWeightFunc()'],['../classsamplePDFDUNEBeamND.html#a916d57cce83b80aefdbf0c4ac2232c00',1,'samplePDFDUNEBeamND::CalcXsecWeightFunc()'],['../classsamplePDFDUNEBeamNDGar.html#aa326d69a4b7f81f530cd466eeddfbb89',1,'samplePDFDUNEBeamNDGar::CalcXsecWeightFunc()']]],
-  ['cmake_1',['CMake',['../index.html#autotoc_md3',1,'']]],
-  ['cvn_5fnue_5ffd_5fpos_2',['cvn_nue_fd_pos',['../classsamplePDFDUNEBeamFD.html#a2f941cffb50e4592bc4889b40796db51',1,'samplePDFDUNEBeamFD']]],
-  ['cvn_5fnumu_5ffd_5fpos_3',['cvn_numu_fd_pos',['../classsamplePDFDUNEBeamFD.html#a23a060f507ee6ad8949fd50262e740b0',1,'samplePDFDUNEBeamFD']]],
-  ['cvnnuefd_4',['CVNNueFD',['../StructsDUNE_8h.html#a8ded258b205e63db1230c5b44d9f14ca',1,'StructsDUNE.h']]],
-  ['cvnnumufd_5',['CVNNumuFD',['../StructsDUNE_8h.html#a75acdacbd4b67905dd89ea2d762e66b9',1,'StructsDUNE.h']]]
+  ['adc_5fsampling_5ffrequency_0',['adc_sampling_frequency',['../classsamplePDFDUNEBeamNDGAr.html#a97faa13eb884ab962b5a0f9a73847775',1,'samplePDFDUNEBeamNDGAr']]],
+  ['and_20building_1',['Cloning and Building',['../index.html#autotoc_md3',1,'']]],
+  ['applyshifts_2',['applyShifts',['../classsamplePDFDUNEAtm.html#a07990eb450006a11af8e7995a032dabb',1,'samplePDFDUNEAtm::applyShifts()'],['../classsamplePDFDUNEBeamFD.html#a2814f6b52fe5f52a843d7af58522ad88',1,'samplePDFDUNEBeamFD::applyShifts()'],['../classsamplePDFDUNEBeamND.html#a78865fddc4368793025fd90e128e7357',1,'samplePDFDUNEBeamND::applyShifts()']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['beam_5fw_0',['beam_w',['../structdunemc__base.html#af787d3a9beb1e81673ae9f725d20efe7',1,'dunemc_base']]]
+  ['adc_5fsampling_5ffrequency_0',['adc_sampling_frequency',['../classsamplePDFDUNEBeamNDGAr.html#a97faa13eb884ab962b5a0f9a73847775',1,'samplePDFDUNEBeamNDGAr']]]
 ];

@@ -1,4 +1,31 @@
 var searchData=
 [
-  ['sr_0',['sr',['../classsamplePDFDUNEBeamNDGar.html#a1b75c1d217d26e437b588e1fc38cae57',1,'samplePDFDUNEBeamNDGar']]]
+  ['n_5fescale_5ffd_5fpos_0',['n_escale_fd_pos',['../classsamplePDFDUNEBeamFD.html#adf190f3ab1ecf69a9c22fe1f1287c0e4',1,'samplePDFDUNEBeamFD']]],
+  ['n_5fescale_5finvsqrt_5ffd_5fpos_1',['n_escale_invsqrt_fd_pos',['../classsamplePDFDUNEBeamFD.html#a39ddb9c28062eabf4c726add9c10d694',1,'samplePDFDUNEBeamFD']]],
+  ['n_5fescale_5finvsqrt_5fnd_5fpos_2',['n_escale_invsqrt_nd_pos',['../classsamplePDFDUNEBeamND.html#aa25c224cf71e8a029a74e66653a0c7bc',1,'samplePDFDUNEBeamND']]],
+  ['n_5fescale_5fnd_5fpos_3',['n_escale_nd_pos',['../classsamplePDFDUNEBeamND.html#a0bac577f201d17988de361afa3ebd04c',1,'samplePDFDUNEBeamND']]],
+  ['n_5fescale_5fsqrt_5ffd_5fpos_4',['n_escale_sqrt_fd_pos',['../classsamplePDFDUNEBeamFD.html#a124002384babb45ff5c0743d4e3cb909',1,'samplePDFDUNEBeamFD']]],
+  ['n_5fescale_5fsqrt_5fnd_5fpos_5',['n_escale_sqrt_nd_pos',['../classsamplePDFDUNEBeamND.html#a138e2d2aa0fdae521da35aec6408f1db',1,'samplePDFDUNEBeamND']]],
+  ['n_5fres_5ffd_5fpos_6',['n_res_fd_pos',['../classsamplePDFDUNEBeamFD.html#a70288a7a9734db9f76dbded99b9ad86e',1,'samplePDFDUNEBeamFD']]],
+  ['n_5fres_5fnd_5fpos_7',['n_res_nd_pos',['../classsamplePDFDUNEBeamND.html#a7a1ece629e8c3915dd03c0bfda55c149',1,'samplePDFDUNEBeamND']]],
+  ['ndcovmatrix_8',['NDCovMatrix',['../classsamplePDFDUNEBeamND.html#aef9680e38972b0a37d50ac4c7e60931a',1,'samplePDFDUNEBeamND']]],
+  ['nddetectorsystpointers_9',['NDDetectorSystPointers',['../classsamplePDFDUNEBeamND.html#a834458e4610e5b5ebbecad31ac1fd4fe',1,'samplePDFDUNEBeamND']]],
+  ['ndinvertcovmatrix_10',['NDInvertCovMatrix',['../classsamplePDFDUNEBeamND.html#acde9a851b93281268a246f3dc0bbe405',1,'samplePDFDUNEBeamND']]],
+  ['nevents_11',['nEvents',['../structdunemc__base.html#a9aeb062e0c1927a91d73e4c55de391ee',1,'dunemc_base']]],
+  ['nfddetectorsystpointers_12',['nFDDetectorSystPointers',['../classsamplePDFDUNEBeamFD.html#abd9cd64bca6660cee746a57dde40d1a2',1,'samplePDFDUNEBeamFD']]],
+  ['nmuonsratio_13',['nmuonsratio',['../structdunemc__base.html#a5c98ff03148f43db79b2bff592d4bfff',1,'dunemc_base']]],
+  ['nnddetectorsystpointers_14',['nNDDetectorSystPointers',['../classsamplePDFDUNEBeamND.html#a63b2cf67b9485b8064f766a1ef843ba5',1,'samplePDFDUNEBeamND']]],
+  ['nneutron_15',['nneutron',['../structdunemc__base.html#ade3f4aa21d7f0c4d82e83a6cb9c986b4',1,'dunemc_base']]],
+  ['norm_5fs_16',['norm_s',['../structdunemc__base.html#ac5220011185873711aa3fcc9d5e11114',1,'dunemc_base']]],
+  ['nparticlesinsample_17',['nparticlesinsample',['../classsamplePDFDUNEBeamNDGAr.html#a9a3848a03a27467bcac5c58e7921af74',1,'samplePDFDUNEBeamNDGAr']]],
+  ['npi0_18',['npi0',['../structdunemc__base.html#ab491c0400061007727cb53c6c2f180f8',1,'dunemc_base']]],
+  ['npim_19',['npim',['../structdunemc__base.html#a8434015ae4b26204934a34ae828f145a',1,'dunemc_base']]],
+  ['npip_20',['npip',['../structdunemc__base.html#a3bde8aca0ddbed144eaea11cfae4286f',1,'dunemc_base']]],
+  ['nproton_21',['nproton',['../structdunemc__base.html#ac5be3fd15b9efcc0277645a95cb56e60',1,'dunemc_base']]],
+  ['nrecomuon_22',['nrecomuon',['../structdunemc__base.html#ac4850cb5de8b9c2e5b0beec989d49ebf',1,'dunemc_base']]],
+  ['nrecoparticles_23',['nrecoparticles',['../structdunemc__base.html#a6354fb96ca4fcec2a9c23c9d1e3bcc4b',1,'dunemc_base']]],
+  ['ntruemuon_24',['ntruemuon',['../structdunemc__base.html#a4e2bb01e0005f6272be5a33527d92ff1',1,'dunemc_base']]],
+  ['ntruemuonprim_25',['ntruemuonprim',['../structdunemc__base.html#a6de1e79c1e31692a5b5000972056bc0a',1,'dunemc_base']]],
+  ['nupdg_26',['nupdg',['../structdunemc__base.html#a8bcdf32f5fb1619bbbeebef135dd607e',1,'dunemc_base']]],
+  ['nupdgunosc_27',['nupdgUnosc',['../structdunemc__base.html#a099cdd286f17009ebdb651b8c048597e',1,'dunemc_base']]]
 ];

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['cvn_5fnue_5ffd_5fpos_0',['cvn_nue_fd_pos',['../classsamplePDFDUNEBeamFD.html#a2f941cffb50e4592bc4889b40796db51',1,'samplePDFDUNEBeamFD']]],
-  ['cvn_5fnumu_5ffd_5fpos_1',['cvn_numu_fd_pos',['../classsamplePDFDUNEBeamFD.html#a23a060f507ee6ad8949fd50262e740b0',1,'samplePDFDUNEBeamFD']]]
+  ['b_5ffield_0',['B_field',['../classsamplePDFDUNEBeamNDGAr.html#a3c71bb53ecc2d20e288916b505e3a113',1,'samplePDFDUNEBeamNDGAr']]],
+  ['beam_5fw_1',['beam_w',['../structdunemc__base.html#af787d3a9beb1e81673ae9f725d20efe7',1,'dunemc_base']]]
 ];

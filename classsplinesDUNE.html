@@ -99,16 +99,13 @@ $(function(){ initResizable(false); });
 </div><!--header-->
 <div class="contents">
 
-<p>Specialisation of FD (binned) spline class.  
- <a href="#details">More...</a></p>
-
 <p><code>#include &lt;<a class="el" href="splinesDUNE_8h_source.html">splines/splinesDUNE.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for splinesDUNE:</div>
 <div class="dyncontent">
 <div class="center"><img src="classsplinesDUNE__inherit__graph.png" border="0" usemap="#asplinesDUNE_inherit__map" alt="Inheritance graph"/></div>
 <map name="asplinesDUNE_inherit__map" id="asplinesDUNE_inherit__map">
-<area shape="rect" title="Specialisation of FD (binned) spline class." alt="" coords="7,79,106,105"/>
+<area shape="rect" title=" " alt="" coords="7,79,106,105"/>
 <area shape="rect" title=" " alt="" coords="5,5,108,31"/>
 <area shape="poly" title=" " alt="" coords="59,46,59,79,54,79,54,46"/>
 </map>
@@ -118,7 +115,7 @@ Collaboration diagram for splinesDUNE:</div>
 <div class="dyncontent">
 <div class="center"><img src="classsplinesDUNE__coll__graph.png" border="0" usemap="#asplinesDUNE_coll__map" alt="Collaboration graph"/></div>
 <map name="asplinesDUNE_coll__map" id="asplinesDUNE_coll__map">
-<area shape="rect" title="Specialisation of FD (binned) spline class." alt="" coords="7,79,106,105"/>
+<area shape="rect" title=" " alt="" coords="7,79,106,105"/>
 <area shape="rect" title=" " alt="" coords="5,5,108,31"/>
 <area shape="poly" title=" " alt="" coords="59,46,59,79,54,79,54,46"/>
 </map>
@@ -126,29 +123,19 @@ Collaboration diagram for splinesDUNE:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3d1ba06e4356e0e36c784a5f181ecb74" id="r_a3d1ba06e4356e0e36c784a5f181ecb74"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3d1ba06e4356e0e36c784a5f181ecb74">splinesDUNE</a> (covarianceXsec *xsec_cov)</td></tr>
-<tr class="memdesc:a3d1ba06e4356e0e36c784a5f181ecb74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <br /></td></tr>
-<tr class="separator:a3d1ba06e4356e0e36c784a5f181ecb74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a892ce618d5ad82689f7462dfdb97ebf2" id="r_a892ce618d5ad82689f7462dfdb97ebf2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a892ce618d5ad82689f7462dfdb97ebf2">splinesDUNE</a> (covarianceXsec *xsec_cov, MaCh3Modes *Modes_)</td></tr>
+<tr class="separator:a892ce618d5ad82689f7462dfdb97ebf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af40bc660bed3724828868b3ad8110cc9" id="r_af40bc660bed3724828868b3ad8110cc9"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af40bc660bed3724828868b3ad8110cc9">~splinesDUNE</a> ()</td></tr>
-<tr class="memdesc:af40bc660bed3724828868b3ad8110cc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <br /></td></tr>
 <tr class="separator:af40bc660bed3724828868b3ad8110cc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afaf6778156a9e0ddd52156cc945fb7b8" id="r_afaf6778156a9e0ddd52156cc945fb7b8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afaf6778156a9e0ddd52156cc945fb7b8">FillSampleArray</a> (std::string SampleName, std::vector&lt; std::string &gt; OscChanFileNames) override</td></tr>
-<tr class="memdesc:afaf6778156a9e0ddd52156cc945fb7b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills indexing for each sample and generates a large spline vector.  <br /></td></tr>
-<tr class="separator:afaf6778156a9e0ddd52156cc945fb7b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a7f595330f15b8ac6fdcd5b3d91e400" id="r_a6a7f595330f15b8ac6fdcd5b3d91e400"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; std::vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a7f595330f15b8ac6fdcd5b3d91e400">StripDuplicatedModes</a> (std::vector&lt; std::vector&lt; int &gt; &gt; InputVector) override</td></tr>
-<tr class="memdesc:a6a7f595330f15b8ac6fdcd5b3d91e400"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find sand strips dubplicate modes to ensure everything corresponds to MaCh3 modes.  <br /></td></tr>
-<tr class="separator:a6a7f595330f15b8ac6fdcd5b3d91e400"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac443fbd10b6f13a774802d7aba9eb4b6" id="r_ac443fbd10b6f13a774802d7aba9eb4b6"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; std::vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac443fbd10b6f13a774802d7aba9eb4b6">GetEventSplines</a> (std::string SampleName, int iOscChan, int EventMode, double Var1Val, double Var2Val, double Var3Val) override</td></tr>
-<tr class="memdesc:ac443fbd10b6f13a774802d7aba9eb4b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter method for each spline.  <br /></td></tr>
-<tr class="separator:ac443fbd10b6f13a774802d7aba9eb4b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a547874e8391a734b78a6748a073e63be" id="r_a547874e8391a734b78a6748a073e63be"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a547874e8391a734b78a6748a073e63be">GetTokensFromSplineName</a> (std::string FullSplineName)</td></tr>
+<tr class="separator:a547874e8391a734b78a6748a073e63be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Specialisation of FD (binned) spline class. </p>
-
-<p class="definition">Definition at line <a class="el" href="splinesDUNE_8h_source.html#l00007">7</a> of file <a class="el" href="splinesDUNE_8h_source.html">splinesDUNE.h</a>.</p>
+<div class="textblock">
+<p class="definition">Definition at line <a class="el" href="splinesDUNE_8h_source.html#l00006">6</a> of file <a class="el" href="splinesDUNE_8h_source.html">splinesDUNE.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a3d1ba06e4356e0e36c784a5f181ecb74" name="a3d1ba06e4356e0e36c784a5f181ecb74"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d1ba06e4356e0e36c784a5f181ecb74">&#9670;&#160;</a></span>splinesDUNE()</h2>
+<a id="a892ce618d5ad82689f7462dfdb97ebf2" name="a892ce618d5ad82689f7462dfdb97ebf2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a892ce618d5ad82689f7462dfdb97ebf2">&#9670;&#160;</a></span>splinesDUNE()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -156,24 +143,19 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">splinesDUNE::splinesDUNE </td>
           <td>(</td>
-          <td class="paramtype">covarianceXsec *</td>          <td class="paramname"><span class="paramname"><em>xsec_cov</em></span></td><td>)</td>
+          <td class="paramtype">covarianceXsec *</td>          <td class="paramname"><span class="paramname"><em>xsec_cov</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">MaCh3Modes *</td>          <td class="paramname"><span class="paramname"><em>Modes_</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Constructor. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">xsec_cov</td><td>cross-section matrix </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="splinesDUNE_8cpp_source.html#l00007">7</a> of file <a class="el" href="splinesDUNE_8cpp_source.html">splinesDUNE.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">    7</span>                                                 : splineFDBase(xsec_cov) {</div>
-<div class="line"><span class="lineno">    8</span>  MACH3LOG_INFO(<span class="stringliteral">&quot;Created splinesDUNE object&quot;</span>);</div>
-<div class="line"><span class="lineno">    9</span>}</div>
+<p class="definition">Definition at line <a class="el" href="splinesDUNE_8cpp_source.html#l00004">4</a> of file <a class="el" href="splinesDUNE_8cpp_source.html">splinesDUNE.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">    4</span>                                                                     : splineFDBase(xsec_cov, Modes_) {</div>
+<div class="line"><span class="lineno">    5</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -200,475 +182,47 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Destructor. </p>
-
-<p class="definition">Definition at line <a class="el" href="splinesDUNE_8cpp_source.html#l00011">11</a> of file <a class="el" href="splinesDUNE_8cpp_source.html">splinesDUNE.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   11</span>                         {</div>
-<div class="line"><span class="lineno">   12</span>  MACH3LOG_INFO(<span class="stringliteral">&quot;Deleting splineSKBase object&quot;</span>);</div>
-<div class="line"><span class="lineno">   13</span>}</div>
+<p class="definition">Definition at line <a class="el" href="splinesDUNE_8cpp_source.html#l00007">7</a> of file <a class="el" href="splinesDUNE_8cpp_source.html">splinesDUNE.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">    7</span>                          {</div>
+<div class="line"><span class="lineno">    8</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="afaf6778156a9e0ddd52156cc945fb7b8" name="afaf6778156a9e0ddd52156cc945fb7b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afaf6778156a9e0ddd52156cc945fb7b8">&#9670;&#160;</a></span>FillSampleArray()</h2>
+<a id="a547874e8391a734b78a6748a073e63be" name="a547874e8391a734b78a6748a073e63be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a547874e8391a734b78a6748a073e63be">&#9670;&#160;</a></span>GetTokensFromSplineName()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void splinesDUNE::FillSampleArray </td>
+          <td class="memname">std::vector&lt; std::string &gt; splinesDUNE::GetTokensFromSplineName </td>
           <td>(</td>
-          <td class="paramtype">std::string</td>          <td class="paramname"><span class="paramname"><em>SampleName</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; std::string &gt;</td>          <td class="paramname"><span class="paramname"><em>OscChanFileNames</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Fills indexing for each sample and generates a large spline vector. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">SampleName</td><td>Name of sample </td></tr>
-    <tr><td class="paramname">OscChanFileNames</td><td>names of oscillation channels in the sample </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="splinesDUNE_8cpp_source.html#l00016">16</a> of file <a class="el" href="splinesDUNE_8cpp_source.html">splinesDUNE.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   21</span>{</div>
-<div class="line"><span class="lineno">   22</span> </div>
-<div class="line"><span class="lineno">   23</span>  <span class="keywordtype">int</span> iSample = getSampleIndex(SampleName);</div>
-<div class="line"><span class="lineno">   24</span> </div>
-<div class="line"><span class="lineno">   25</span>  <span class="keyword">enum</span> ModeState {</div>
-<div class="line"><span class="lineno">   26</span>    kInConfig = 0,</div>
-<div class="line"><span class="lineno">   27</span>    kInConfigAndInFile,</div>
-<div class="line"><span class="lineno">   28</span>    kInFile</div>
-<div class="line"><span class="lineno">   29</span>  };</div>
-<div class="line"><span class="lineno">   30</span> </div>
-<div class="line"><span class="lineno">   31</span>  std::vector&lt;std::map&lt;std::string,ModeState&gt;&gt; ModeStatus;</div>
-<div class="line"><span class="lineno">   32</span> </div>
-<div class="line"><span class="lineno">   33</span>  <span class="comment">//Create map of Mode Status</span></div>
-<div class="line"><span class="lineno">   34</span>  <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> iSyst = 0; iSyst &lt; SplineFileParPrefixNames[iSample].size(); iSyst++) </div>
-<div class="line"><span class="lineno">   35</span>  {</div>
-<div class="line"><span class="lineno">   36</span>    <span class="keyword">auto</span> modes = SplineModeVecs[iSample][iSyst];</div>
-<div class="line"><span class="lineno">   37</span>    ModeStatus.emplace_back();</div>
-<div class="line"><span class="lineno">   38</span> </div>
-<div class="line"><span class="lineno">   39</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> <span class="keyword">const</span> &amp; mode : modes) </div>
-<div class="line"><span class="lineno">   40</span>    {</div>
-<div class="line"><span class="lineno">   41</span>      <span class="comment">//Add Modes from config</span></div>
-<div class="line"><span class="lineno">   42</span>      ModeStatus.back()[<a class="code hl_function" href="StructsDUNE_8h.html#a397a4a529374cae240a28b2a86162593">MaCh3mode_ToDUNEString</a>((<a class="code hl_enumeration" href="StructsDUNE_8h.html#ad6d6cb539decf2212fd3a2186c9daf40">MaCh3_Mode</a>)mode).c_str()] = kInConfig;</div>
-<div class="line"><span class="lineno">   43</span>    }</div>
-<div class="line"><span class="lineno">   44</span>  }</div>
-<div class="line"><span class="lineno">   45</span> </div>
-<div class="line"><span class="lineno">   46</span>  <span class="keywordtype">int</span> nOscChannels = nOscChans[iSample];</div>
-<div class="line"><span class="lineno">   47</span> </div>
-<div class="line"><span class="lineno">   48</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> iOscChan = 0; iOscChan &lt; nOscChannels; iOscChan++)</div>
-<div class="line"><span class="lineno">   49</span>  {</div>
-<div class="line"><span class="lineno">   50</span>    std::cout &lt;&lt; <span class="stringliteral">&quot;Processing:&quot;</span> &lt;&lt; OscChanFileNames[iOscChan] &lt;&lt; std::endl;</div>
-<div class="line"><span class="lineno">   51</span> </div>
-<div class="line"><span class="lineno">   52</span>    TFile *File = <span class="keyword">new</span> TFile(OscChanFileNames[iOscChan].c_str(), <span class="stringliteral">&quot;READ&quot;</span>);</div>
-<div class="line"><span class="lineno">   53</span>    <span class="keywordflow">if</span> (!File || File-&gt;IsZombie())</div>
-<div class="line"><span class="lineno">   54</span>    {</div>
-<div class="line"><span class="lineno">   55</span>      std::cerr &lt;&lt; <span class="stringliteral">&quot;File &quot;</span> &lt;&lt; OscChanFileNames[iOscChan] &lt;&lt; <span class="stringliteral">&quot; not found&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><span class="lineno">   56</span>      <span class="keywordflow">throw</span>;</div>
-<div class="line"><span class="lineno">   57</span>    }</div>
-<div class="line"><span class="lineno">   58</span> </div>
-<div class="line"><span class="lineno">   59</span>    <span class="comment">//This is the MC specific part of the code</span></div>
-<div class="line"><span class="lineno">   60</span>    <span class="comment">//i.e. we always assume that the splines are just store in  single TDirectory and they&#39;re all in there as single objects</span></div>
-<div class="line"><span class="lineno">   61</span>    TIter Next(File-&gt;GetListOfKeys());</div>
-<div class="line"><span class="lineno">   62</span>    TKey *Key;</div>
-<div class="line"><span class="lineno">   63</span> </div>
-<div class="line"><span class="lineno">   64</span>    std::set&lt;std::string&gt; unique_spline_names;</div>
-<div class="line"><span class="lineno">   65</span>    <span class="keywordtype">int</span> nb_splines = 0;</div>
-<div class="line"><span class="lineno">   66</span> </div>
-<div class="line"><span class="lineno">   67</span>    <span class="keywordflow">while</span> ((Key = (TKey *)Next()))</div>
-<div class="line"><span class="lineno">   68</span>    {</div>
-<div class="line"><span class="lineno">   69</span>      TClass *Class = gROOT-&gt;GetClass(Key-&gt;GetClassName());</div>
-<div class="line"><span class="lineno">   70</span> </div>
-<div class="line"><span class="lineno">   71</span>      <span class="comment">//Skip the TGraphs also in the spline files</span></div>
-<div class="line"><span class="lineno">   72</span>      <span class="keywordflow">if</span> (!Class-&gt;InheritsFrom(<span class="stringliteral">&quot;TSpline3&quot;</span>)){<span class="keywordflow">continue</span>;}</div>
-<div class="line"><span class="lineno">   73</span>      <span class="keyword">const</span> <span class="keywordtype">char</span>* keyName = Key-&gt;GetName();</div>
-<div class="line"><span class="lineno">   74</span> </div>
-<div class="line"><span class="lineno">   75</span>      <span class="keywordtype">char</span>* SplineName = <span class="keyword">new</span> <span class="keywordtype">char</span>[strlen(keyName) + 1];</div>
-<div class="line"><span class="lineno">   76</span>      strcpy(SplineName, keyName);</div>
-<div class="line"><span class="lineno">   77</span> </div>
-<div class="line"><span class="lineno">   78</span>      nb_splines += 1;</div>
-<div class="line"><span class="lineno">   79</span>      <span class="keywordflow">if</span>(unique_spline_names.count(std::string(SplineName)) &gt; 0){</div>
-<div class="line"><span class="lineno">   80</span>        <span class="keywordflow">if</span> (std::string(SplineName).find(<span class="stringliteral">&quot;unknown&quot;</span>) == std::string::npos){</div>
-<div class="line"><span class="lineno">   81</span>          <span class="comment">//std::cout &lt;&lt; &quot;Repeated entry for spline named: &quot; &lt;&lt; std::string(SplineName) &lt;&lt; std::endl;</span></div>
-<div class="line"><span class="lineno">   82</span>          <span class="keywordflow">continue</span>;</div>
-<div class="line"><span class="lineno">   83</span>        }</div>
-<div class="line"><span class="lineno">   84</span>      }</div>
-<div class="line"><span class="lineno">   85</span>      unique_spline_names.insert(std::string(SplineName));</div>
-<div class="line"><span class="lineno">   86</span> </div>
-<div class="line"><span class="lineno">   87</span>      <span class="keywordtype">char</span> *Syst;</div>
-<div class="line"><span class="lineno">   88</span>      <span class="keywordtype">char</span> *Mode;</div>
-<div class="line"><span class="lineno">   89</span>      <span class="keywordtype">int</span> Var1Bin;</div>
-<div class="line"><span class="lineno">   90</span>      <span class="keywordtype">int</span> Var2Bin;</div>
-<div class="line"><span class="lineno">   91</span>      <span class="keywordtype">int</span> Var3Bin;</div>
-<div class="line"><span class="lineno">   92</span> </div>
-<div class="line"><span class="lineno">   93</span>      <span class="keywordtype">char</span> *Token = strtok(SplineName, <span class="stringliteral">&quot;_&quot;</span>);</div>
-<div class="line"><span class="lineno">   94</span>      Token = strtok(NULL, <span class="stringliteral">&quot;_&quot;</span>);</div>
-<div class="line"><span class="lineno">   95</span>      Syst = Token;</div>
-<div class="line"><span class="lineno">   96</span> </div>
-<div class="line"><span class="lineno">   97</span>      <span class="keywordtype">int</span> SystNum = -1;</div>
-<div class="line"><span class="lineno">   98</span>      <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> iSyst = 0; iSyst &lt; SplineFileParPrefixNames[iSample].size(); iSyst++) {</div>
-<div class="line"><span class="lineno">   99</span>        <span class="keywordflow">if</span> (strcmp(Syst, SplineFileParPrefixNames[iSample][iSyst].c_str()) == 0) {</div>
-<div class="line"><span class="lineno">  100</span>          SystNum = iSyst;</div>
-<div class="line"><span class="lineno">  101</span>          <span class="keywordflow">break</span>;</div>
-<div class="line"><span class="lineno">  102</span>        }</div>
-<div class="line"><span class="lineno">  103</span>      }</div>
-<div class="line"><span class="lineno">  104</span> </div>
-<div class="line"><span class="lineno">  105</span>      <span class="comment">// If the syst doesn&#39;t match any of the spline names then skip it</span></div>
-<div class="line"><span class="lineno">  106</span>      <span class="keywordflow">if</span> (SystNum == -1){</div>
-<div class="line"><span class="lineno">  107</span>        <span class="keywordflow">continue</span>;</div>
-<div class="line"><span class="lineno">  108</span>      }</div>
-<div class="line"><span class="lineno">  109</span> </div>
-<div class="line"><span class="lineno">  110</span>      <span class="keywordtype">int</span> ModeNum = -1;</div>
-<div class="line"><span class="lineno">  111</span>      Mode = strtok(NULL, <span class="stringliteral">&quot;_&quot;</span>);</div>
-<div class="line"><span class="lineno">  112</span>      <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> iMode = 0; iMode &lt; SplineModeVecs[iSample][SystNum].size(); iMode++) {</div>
-<div class="line"><span class="lineno">  113</span>        <span class="keywordflow">if</span> (strcmp(Mode, <a class="code hl_function" href="StructsDUNE_8h.html#a397a4a529374cae240a28b2a86162593">MaCh3mode_ToDUNEString</a>((<a class="code hl_enumeration" href="StructsDUNE_8h.html#ad6d6cb539decf2212fd3a2186c9daf40">MaCh3_Mode</a>)SplineModeVecs[iSample][SystNum][iMode]).c_str()) == 0) {</div>
-<div class="line"><span class="lineno">  114</span>          ModeNum = iMode;</div>
-<div class="line"><span class="lineno">  115</span>          <span class="keywordflow">break</span>;</div>
-<div class="line"><span class="lineno">  116</span>        }</div>
-<div class="line"><span class="lineno">  117</span>      }</div>
-<div class="line"><span class="lineno">  118</span> </div>
-<div class="line"><span class="lineno">  119</span>      <span class="comment">//Check if mode has been registered already</span></div>
-<div class="line"><span class="lineno">  120</span>      <span class="keywordflow">if</span>(ModeStatus[SystNum].count(Mode))</div>
-<div class="line"><span class="lineno">  121</span>      {</div>
-<div class="line"><span class="lineno">  122</span>        <span class="comment">//Chech if mode has been found in config</span></div>
-<div class="line"><span class="lineno">  123</span>        <span class="keywordflow">if</span>(ModeStatus[SystNum][Mode]!=kInFile) </div>
-<div class="line"><span class="lineno">  124</span>        {</div>
-<div class="line"><span class="lineno">  125</span>          ModeStatus[SystNum][Mode]=kInConfigAndInFile;</div>
-<div class="line"><span class="lineno">  126</span>        }</div>
-<div class="line"><span class="lineno">  127</span>        <span class="keywordflow">else</span> </div>
-<div class="line"><span class="lineno">  128</span>        {</div>
-<div class="line"><span class="lineno">  129</span>          <span class="keywordflow">continue</span>; <span class="comment">//Skip if mode has been found in file but not config</span></div>
-<div class="line"><span class="lineno">  130</span>        }</div>
-<div class="line"><span class="lineno">  131</span>      }</div>
-<div class="line"><span class="lineno">  132</span>      <span class="keywordflow">else</span></div>
-<div class="line"><span class="lineno">  133</span>      {</div>
-<div class="line"><span class="lineno">  134</span>        ModeStatus[SystNum][Mode]=kInFile; <span class="comment">//If mode hasn&#39;t been registered then skip because it&#39;s not in the config </span></div>
-<div class="line"><span class="lineno">  135</span>        <span class="keywordflow">continue</span>;</div>
-<div class="line"><span class="lineno">  136</span>      }</div>
-<div class="line"><span class="lineno">  137</span> </div>
-<div class="line"><span class="lineno">  138</span>      TSpline3 *Obj = (TSpline3 *)Key-&gt;ReadObj();</div>
-<div class="line"><span class="lineno">  139</span>      TSpline3_red *Spline = <span class="keyword">new</span> TSpline3_red(Obj);</div>
-<div class="line"><span class="lineno">  140</span>      <span class="keyword">delete</span> Obj;</div>
-<div class="line"><span class="lineno">  141</span>      </div>
-<div class="line"><span class="lineno">  142</span>      Token = strtok(NULL, <span class="stringliteral">&quot;_&quot;</span>); <span class="comment">// DB Needed to remove sp from spline name</span></div>
-<div class="line"><span class="lineno">  143</span> </div>
-<div class="line"><span class="lineno">  144</span>      Var1Bin = atoi(strtok(NULL, <span class="stringliteral">&quot;_&quot;</span>));</div>
-<div class="line"><span class="lineno">  145</span>      Var2Bin = atoi(strtok(NULL, <span class="stringliteral">&quot;_&quot;</span>));</div>
-<div class="line"><span class="lineno">  146</span> </div>
-<div class="line"><span class="lineno">  147</span>      <span class="keywordtype">char</span> *Var3Bin_Char = strtok(NULL, <span class="stringliteral">&quot;_&quot;</span>);</div>
-<div class="line"><span class="lineno">  148</span>      <span class="keywordflow">if</span> (Var3Bin_Char == NULL)</div>
-<div class="line"><span class="lineno">  149</span>      {</div>
-<div class="line"><span class="lineno">  150</span>        Var3Bin = 0;</div>
-<div class="line"><span class="lineno">  151</span>      }</div>
-<div class="line"><span class="lineno">  152</span>      <span class="keywordflow">else</span></div>
-<div class="line"><span class="lineno">  153</span>      {</div>
-<div class="line"><span class="lineno">  154</span>        Var3Bin = atoi(Var3Bin_Char);</div>
-<div class="line"><span class="lineno">  155</span>      }</div>
-<div class="line"><span class="lineno">  156</span> </div>
-<div class="line"><span class="lineno">  157</span>      <span class="keywordflow">if</span> (isValidSplineIndex(SampleName, iOscChan, SystNum, ModeNum, Var1Bin, Var2Bin, Var3Bin))</div>
-<div class="line"><span class="lineno">  158</span>      {</div>
-<div class="line"><span class="lineno">  159</span>        <span class="comment">// loop over all the spline knots and check their value</span></div>
-<div class="line"><span class="lineno">  160</span>        <span class="comment">// if the value is 1 then set the flat bool to false</span></div>
-<div class="line"><span class="lineno">  161</span>        <span class="keywordtype">int</span> nKnots = Spline-&gt;GetNp();</div>
-<div class="line"><span class="lineno">  162</span>        <span class="keywordtype">bool</span> isFlat = <span class="keyword">true</span>;</div>
-<div class="line"><span class="lineno">  163</span> </div>
-<div class="line"><span class="lineno">  164</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> iKnot = 0; iKnot &lt; nKnots; iKnot++)</div>
-<div class="line"><span class="lineno">  165</span>        {</div>
-<div class="line"><span class="lineno">  166</span>          <span class="keywordtype">double</span> x = -999;</div>
-<div class="line"><span class="lineno">  167</span>          <span class="keywordtype">double</span> y = -999;</div>
-<div class="line"><span class="lineno">  168</span>          Spline-&gt;GetKnot(iKnot, x, y);</div>
-<div class="line"><span class="lineno">  169</span> </div>
-<div class="line"><span class="lineno">  170</span>          <span class="keywordflow">if</span> (x == -999 || y == -999)</div>
-<div class="line"><span class="lineno">  171</span>          {</div>
-<div class="line"><span class="lineno">  172</span>            std::cerr &lt;&lt; <span class="stringliteral">&quot;Something has gone wrong... knot position is at -999&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><span class="lineno">  173</span>            std::cerr &lt;&lt; <span class="stringliteral">&quot;This error brought you by the folks at : &quot;</span>&lt;&lt;__FILE__&lt;&lt;<span class="stringliteral">&quot; : &quot;</span>&lt;&lt;__LINE__&lt;&lt;std::endl;</div>
-<div class="line"><span class="lineno">  174</span>            <span class="keywordflow">throw</span>;</div>
-<div class="line"><span class="lineno">  175</span>          }</div>
-<div class="line"><span class="lineno">  176</span> </div>
-<div class="line"><span class="lineno">  177</span>          <span class="keywordtype">double</span> Eval = Spline-&gt;Eval(x);</div>
-<div class="line"><span class="lineno">  178</span>          <span class="keywordflow">if</span> (Eval &lt; 0.99999 || Eval &gt; 1.00001)</div>
-<div class="line"><span class="lineno">  179</span>          {</div>
-<div class="line"><span class="lineno">  180</span>            isFlat = <span class="keyword">false</span>;</div>
-<div class="line"><span class="lineno">  181</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><span class="lineno">  182</span>          }</div>
-<div class="line"><span class="lineno">  183</span>        }</div>
-<div class="line"><span class="lineno">  184</span> </div>
-<div class="line"><span class="lineno">  185</span>        <span class="comment">//Rather than keeping a mega vector of splines then converting, this should just keep everything nice in memory!</span></div>
-<div class="line"><span class="lineno">  186</span>        indexvec[iSample][iOscChan][SystNum][ModeNum][Var1Bin][Var2Bin][Var3Bin]=MonolithIndex;</div>
-<div class="line"><span class="lineno">  187</span> </div>
-<div class="line"><span class="lineno">  188</span>        coeffindexvec.push_back(CoeffIndex);</div>
-<div class="line"><span class="lineno">  189</span>        <span class="comment">// Should save memory rather saving [x_i_0 ,... x_i_maxknots] for every spline!</span></div>
-<div class="line"><span class="lineno">  190</span>        <span class="keywordflow">if</span> (isFlat)</div>
-<div class="line"><span class="lineno">  191</span>        {</div>
-<div class="line"><span class="lineno">  192</span>          splinevec_Monolith.push_back(NULL);</div>
-<div class="line"><span class="lineno">  193</span>          <span class="keyword">delete</span> Spline;</div>
-<div class="line"><span class="lineno">  194</span>        }</div>
-<div class="line"><span class="lineno">  195</span>        <span class="keywordflow">else</span>{</div>
-<div class="line"><span class="lineno">  196</span>          splinevec_Monolith.push_back(Spline);</div>
-<div class="line"><span class="lineno">  197</span>          <span class="keywordtype">int</span> np=Spline-&gt;GetNp();</div>
-<div class="line"><span class="lineno">  198</span>          uniquecoeffindices.push_back(MonolithIndex); <span class="comment">//So we can get the unique coefficients and skip flat splines later on!</span></div>
-<div class="line"><span class="lineno">  199</span>          CoeffIndex+=np;</div>
-<div class="line"><span class="lineno">  200</span>        }</div>
-<div class="line"><span class="lineno">  201</span>    </div>
-<div class="line"><span class="lineno">  202</span>        MonolithIndex+=1;</div>
-<div class="line"><span class="lineno">  203</span>      }</div>
-<div class="line"><span class="lineno">  204</span>    }<span class="comment">//End of loop over all TKeys in file</span></div>
-<div class="line"><span class="lineno">  205</span>    <span class="comment">//ETA - I have no idea why but this breaks in ROOT 6.24 :/</span></div>
-<div class="line"><span class="lineno">  206</span>    std::cout &lt;&lt; <span class="stringliteral">&quot;Got &quot;</span> &lt;&lt; nb_splines &lt;&lt; <span class="stringliteral">&quot; total splines with &quot;</span> &lt;&lt; unique_spline_names.size() &lt;&lt; <span class="stringliteral">&quot; unique names.&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><span class="lineno">  207</span>    <span class="keyword">delete</span> File;</div>
-<div class="line"><span class="lineno">  208</span>  } <span class="comment">//End of oscillation channel loop</span></div>
-<div class="line"><span class="lineno">  209</span> </div>
-<div class="line"><span class="lineno">  210</span>  <span class="comment">//Find all modes which have been found in the spline file but have not been specified in the config</span></div>
-<div class="line"><span class="lineno">  211</span>  <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> iSyst = 0; iSyst &lt; SplineFileParPrefixNames[iSample].size(); iSyst++) </div>
-<div class="line"><span class="lineno">  212</span>  {</div>
-<div class="line"><span class="lineno">  213</span>    std::vector&lt;std::string&gt; MissedModes;</div>
-<div class="line"><span class="lineno">  214</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> <span class="keyword">const</span> &amp; ModeUsage : ModeStatus[iSyst])</div>
-<div class="line"><span class="lineno">  215</span>    {</div>
-<div class="line"><span class="lineno">  216</span>      <span class="keywordflow">if</span>(ModeUsage.second==kInFile)</div>
-<div class="line"><span class="lineno">  217</span>      {</div>
-<div class="line"><span class="lineno">  218</span>        MissedModes.push_back(ModeUsage.first);</div>
-<div class="line"><span class="lineno">  219</span>      }</div>
-<div class="line"><span class="lineno">  220</span>    }</div>
-<div class="line"><span class="lineno">  221</span> </div>
-<div class="line"><span class="lineno">  222</span>    <span class="keywordflow">if</span>(MissedModes.size()!=0)</div>
-<div class="line"><span class="lineno">  223</span>    {</div>
-<div class="line"><span class="lineno">  224</span>      MACH3LOG_INFO(<span class="stringliteral">&quot;Parameter {} has splines for {} modes which have not been read in!&quot;</span>, SplineFileParPrefixNames[iSample][iSyst].c_str(), MissedModes.size());</div>
-<div class="line"><span class="lineno">  225</span>      std::cout &lt;&lt; <span class="stringliteral">&quot;Modes: &quot;</span>;  </div>
-<div class="line"><span class="lineno">  226</span>      <span class="keywordflow">for</span> (<span class="keyword">auto</span> <span class="keyword">const</span> &amp; Mode : MissedModes)</div>
-<div class="line"><span class="lineno">  227</span>      {</div>
-<div class="line"><span class="lineno">  228</span>        std::cout &lt;&lt; Mode &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;  </div>
-<div class="line"><span class="lineno">  229</span>      }</div>
-<div class="line"><span class="lineno">  230</span>      std::cout &lt;&lt; std::endl;</div>
-<div class="line"><span class="lineno">  231</span>    }</div>
-<div class="line"><span class="lineno">  232</span>  } </div>
-<div class="line"><span class="lineno">  233</span>  </div>
-<div class="line"><span class="lineno">  234</span>  <span class="keywordflow">return</span>;</div>
-<div class="line"><span class="lineno">  235</span>}</div>
-<div class="ttc" id="aStructsDUNE_8h_html_a397a4a529374cae240a28b2a86162593"><div class="ttname"><a href="StructsDUNE_8h.html#a397a4a529374cae240a28b2a86162593">MaCh3mode_ToDUNEString</a></div><div class="ttdeci">std::string MaCh3mode_ToDUNEString(MaCh3_Mode i)</div><div class="ttdef"><b>Definition</b> <a href="StructsDUNE_8h_source.html#l01041">StructsDUNE.h:1041</a></div></div>
-<div class="ttc" id="aStructsDUNE_8h_html_ad6d6cb539decf2212fd3a2186c9daf40"><div class="ttname"><a href="StructsDUNE_8h.html#ad6d6cb539decf2212fd3a2186c9daf40">MaCh3_Mode</a></div><div class="ttdeci">MaCh3_Mode</div><div class="ttdef"><b>Definition</b> <a href="StructsDUNE_8h_source.html#l00617">StructsDUNE.h:617</a></div></div>
-</div><!-- fragment -->
-</div>
-</div>
-<a id="ac443fbd10b6f13a774802d7aba9eb4b6" name="ac443fbd10b6f13a774802d7aba9eb4b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac443fbd10b6f13a774802d7aba9eb4b6">&#9670;&#160;</a></span>GetEventSplines()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; std::vector&lt; int &gt; &gt; splinesDUNE::GetEventSplines </td>
-          <td>(</td>
-          <td class="paramtype">std::string</td>          <td class="paramname"><span class="paramname"><em>SampleName</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>iOscChan</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>EventMode</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>Var1Val</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>Var2Val</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>Var3Val</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Getter method for each spline. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">SampleName</td><td>Name of sample </td></tr>
-    <tr><td class="paramname">iOscChan</td><td>Oscillation channel of sample </td></tr>
-    <tr><td class="paramname">EventMode</td><td>Mode of event </td></tr>
-    <tr><td class="paramname">Var1Val</td><td>Bin 1 value </td></tr>
-    <tr><td class="paramname">Var2Val</td><td>Bin 2 value </td></tr>
-    <tr><td class="paramname">Var3Val</td><td>Bin 3 value </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Value of spline for given bin </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="splinesDUNE_8cpp_source.html#l00238">238</a> of file <a class="el" href="splinesDUNE_8cpp_source.html">splinesDUNE.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  240</span>{</div>
-<div class="line"><span class="lineno">  241</span>  std::vector&lt;std::vector&lt;int&gt;&gt; ReturnVec;</div>
-<div class="line"><span class="lineno">  242</span>  <span class="keywordtype">int</span> SampleIndex = -1;</div>
-<div class="line"><span class="lineno">  243</span>  <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> iSample = 0; iSample &lt; SampleNames.size(); iSample++) {</div>
-<div class="line"><span class="lineno">  244</span>    <span class="keywordflow">if</span> (SampleName == SampleNames[iSample]) {</div>
-<div class="line"><span class="lineno">  245</span>      SampleIndex = iSample;</div>
-<div class="line"><span class="lineno">  246</span>    }</div>
-<div class="line"><span class="lineno">  247</span>  }</div>
-<div class="line"><span class="lineno">  248</span> </div>
-<div class="line"><span class="lineno">  249</span>  <span class="keywordflow">if</span> (SampleIndex == -1)</div>
-<div class="line"><span class="lineno">  250</span>  {</div>
-<div class="line"><span class="lineno">  251</span>    MACH3LOG_ERROR(<span class="stringliteral">&quot;Sample not found: {}&quot;</span>, SampleName);</div>
-<div class="line"><span class="lineno">  252</span>    <span class="keywordflow">throw</span> MaCh3Exception(__FILE__, __LINE__);</div>
-<div class="line"><span class="lineno">  253</span>  }</div>
-<div class="line"><span class="lineno">  254</span> </div>
-<div class="line"><span class="lineno">  255</span>  <span class="keywordtype">int</span> nSplineSysts = (int)indexvec[SampleIndex][iOscChan].size();</div>
-<div class="line"><span class="lineno">  256</span>  <span class="comment">//ETA- this is already a MaCh3 mode</span></div>
-<div class="line"><span class="lineno">  257</span>  <span class="comment">//int Mode = MaCh3Mode_to_SplineMode(MaCh3_Mode(EventMode));</span></div>
-<div class="line"><span class="lineno">  258</span>  <span class="keywordtype">int</span> Mode = <a class="code hl_enumeration" href="StructsDUNE_8h.html#ad6d6cb539decf2212fd3a2186c9daf40">MaCh3_Mode</a>(EventMode);</div>
-<div class="line"><span class="lineno">  259</span> </div>
-<div class="line"><span class="lineno">  260</span>  <span class="keywordtype">int</span> Var1Bin = SplineBinning[SampleIndex][iOscChan][0]-&gt;FindBin(Var1Val)-1;</div>
-<div class="line"><span class="lineno">  261</span>  <span class="keywordflow">if</span> (Var1Bin &lt; 0 || Var1Bin &gt;= SplineBinning[SampleIndex][iOscChan][0]-&gt;GetNbins()){</div>
-<div class="line"><span class="lineno">  262</span>    <span class="comment">//Explicitly push back with an empty vector</span></div>
-<div class="line"><span class="lineno">  263</span>    ReturnVec.push_back(std::vector&lt;int&gt;());</div>
-<div class="line"><span class="lineno">  264</span>    <span class="keywordflow">return</span> ReturnVec;</div>
-<div class="line"><span class="lineno">  265</span>  }</div>
-<div class="line"><span class="lineno">  266</span> </div>
-<div class="line"><span class="lineno">  267</span>  <span class="keywordtype">int</span> Var2Bin = SplineBinning[SampleIndex][iOscChan][1]-&gt;FindBin(Var2Val)-1;</div>
-<div class="line"><span class="lineno">  268</span>  <span class="keywordflow">if</span> (Var2Bin &lt; 0 || Var2Bin &gt;= SplineBinning[SampleIndex][iOscChan][1]-&gt;GetNbins()){</div>
-<div class="line"><span class="lineno">  269</span>    <span class="comment">//Explicitly push back with an empty vector</span></div>
-<div class="line"><span class="lineno">  270</span>    ReturnVec.push_back(std::vector&lt;int&gt;());</div>
-<div class="line"><span class="lineno">  271</span>    <span class="keywordflow">return</span> ReturnVec;</div>
-<div class="line"><span class="lineno">  272</span>  }</div>
-<div class="line"><span class="lineno">  273</span> </div>
-<div class="line"><span class="lineno">  274</span>  <span class="keywordtype">int</span> Var3Bin = SplineBinning[SampleIndex][iOscChan][2]-&gt;FindBin(Var3Val)-1;</div>
-<div class="line"><span class="lineno">  275</span> </div>
-<div class="line"><span class="lineno">  276</span>  <span class="keywordflow">if</span> (Var3Bin &lt; 0 || Var3Bin &gt;= SplineBinning[SampleIndex][iOscChan][2]-&gt;GetNbins()){</div>
-<div class="line"><span class="lineno">  277</span>    <span class="comment">//Explicitly push back with an empty vector</span></div>
-<div class="line"><span class="lineno">  278</span>    ReturnVec.push_back(std::vector&lt;int&gt;());</div>
-<div class="line"><span class="lineno">  279</span>    <span class="keywordflow">return</span> ReturnVec;</div>
-<div class="line"><span class="lineno">  280</span>  }</div>
-<div class="line"><span class="lineno">  281</span> </div>
-<div class="line"><span class="lineno">  282</span>  <span class="keywordflow">for</span>(<span class="keywordtype">int</span> iSyst=0; iSyst&lt;nSplineSysts; iSyst++){</div>
-<div class="line"><span class="lineno">  283</span>    std::vector&lt;int&gt; spline_modes = SplineModeVecs[SampleIndex][iSyst];</div>
-<div class="line"><span class="lineno">  284</span>    <span class="keywordtype">int</span> nSampleModes = (int)spline_modes.size();</div>
-<div class="line"><span class="lineno">  285</span> </div>
-<div class="line"><span class="lineno">  286</span>    <span class="comment">//ETA - look here at the length of spline_modes and what you&#39;re actually comparing against</span></div>
-<div class="line"><span class="lineno">  287</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> iMode = 0; iMode&lt;nSampleModes ; iMode++){</div>
-<div class="line"><span class="lineno">  288</span>      <span class="keywordflow">if</span>(Mode == spline_modes[iMode]){</div>
-<div class="line"><span class="lineno">  289</span>        std::vector&lt;int&gt; event_vec(7);</div>
-<div class="line"><span class="lineno">  290</span>        event_vec[0]=SampleIndex;</div>
-<div class="line"><span class="lineno">  291</span>        event_vec[1]=iOscChan;</div>
-<div class="line"><span class="lineno">  292</span>        event_vec[2]=iSyst;</div>
-<div class="line"><span class="lineno">  293</span>        event_vec[3]=iMode;</div>
-<div class="line"><span class="lineno">  294</span>        event_vec[4]=Var1Bin;</div>
-<div class="line"><span class="lineno">  295</span>        event_vec[5]=Var2Bin;</div>
-<div class="line"><span class="lineno">  296</span>        event_vec[6]=Var3Bin;</div>
-<div class="line"><span class="lineno">  297</span>        <span class="keywordtype">int</span> splineID=indexvec[SampleIndex][iOscChan][iSyst][iMode][Var1Bin][Var2Bin][Var3Bin];</div>
-<div class="line"><span class="lineno">  298</span>        <span class="keywordflow">if</span>(!isflatarray[splineID]){</div>
-<div class="line"><span class="lineno">  299</span>          ReturnVec.push_back(event_vec);</div>
-<div class="line"><span class="lineno">  300</span>        }</div>
-<div class="line"><span class="lineno">  301</span>      }</div>
-<div class="line"><span class="lineno">  302</span>    }</div>
-<div class="line"><span class="lineno">  303</span>  }</div>
-<div class="line"><span class="lineno">  304</span> </div>
-<div class="line"><span class="lineno">  305</span>  <span class="keywordflow">return</span> ReturnVec;</div>
-<div class="line"><span class="lineno">  306</span>}</div>
-</div><!-- fragment -->
-</div>
-</div>
-<a id="a6a7f595330f15b8ac6fdcd5b3d91e400" name="a6a7f595330f15b8ac6fdcd5b3d91e400"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6a7f595330f15b8ac6fdcd5b3d91e400">&#9670;&#160;</a></span>StripDuplicatedModes()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; std::vector&lt; int &gt; &gt; splinesDUNE::StripDuplicatedModes </td>
-          <td>(</td>
-          <td class="paramtype">std::vector&lt; std::vector&lt; int &gt; &gt;</td>          <td class="paramname"><span class="paramname"><em>InputVector</em></span></td><td>)</td>
+          <td class="paramtype">std::string</td>          <td class="paramname"><span class="paramname"><em>FullSplineName</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Find sand strips dubplicate modes to ensure everything corresponds to MaCh3 modes. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">InputVector</td><td>Input vector of smodes </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Processed vector with merged modes </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="splinesDUNE_8cpp_source.html#l00310">310</a> of file <a class="el" href="splinesDUNE_8cpp_source.html">splinesDUNE.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  310</span>                                                                                                     {</div>
-<div class="line"><span class="lineno">  311</span>  </div>
-<div class="line"><span class="lineno">  312</span>  <span class="comment">//ETA - this is of size nPars from the xsec model </span></div>
-<div class="line"><span class="lineno">  313</span>  <span class="keywordtype">int</span> InputVectorSize = InputVector.size();</div>
-<div class="line"><span class="lineno">  314</span>  std::vector&lt; std::vector&lt;int&gt; &gt; ReturnVec(InputVectorSize);</div>
-<div class="line"><span class="lineno">  315</span> </div>
-<div class="line"><span class="lineno">  316</span>  <span class="comment">//ETA - loop over all systematics</span></div>
-<div class="line"><span class="lineno">  317</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> iVec=0;iVec&lt;InputVectorSize;iVec++) {</div>
-<div class="line"><span class="lineno">  318</span>    std::vector&lt;int&gt; TmpVec;</div>
-<div class="line"><span class="lineno">  319</span>    </div>
-<div class="line"><span class="lineno">  320</span>    <span class="comment">//Loop over the modes that we&#39;ve listed in xsec cov</span></div>
-<div class="line"><span class="lineno">  321</span>    <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> iMode = 0 ; iMode &lt; InputVector[iVec].size() ; iMode++){</div>
-<div class="line"><span class="lineno">  322</span>      <span class="comment">//Convert the MaCh3 mode to spline mode (could use MaCh3Mode_SplineMode_Map here)</span></div>
-<div class="line"><span class="lineno">  323</span>      <span class="keywordtype">int</span> iSplineMode = <a class="code hl_function" href="StructsDUNE_8h.html#a46b5fc5d17221c2f314d6642a395fea1">MaCh3Mode_to_SplineMode</a>(InputVector[iVec][iMode]);</div>
-<div class="line"><span class="lineno">  324</span>      <span class="keywordtype">bool</span> IncludeMode = <span class="keyword">true</span>;</div>
-<div class="line"><span class="lineno">  325</span> </div>
-<div class="line"><span class="lineno">  326</span>      <span class="comment">//Now check to see if we&#39;ve already included this unique spline mode</span></div>
-<div class="line"><span class="lineno">  327</span>      <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> entry_i = 0 ; entry_i &lt; TmpVec.size() ; entry_i++){</div>
-<div class="line"><span class="lineno">  328</span>        <span class="comment">//Check to see if we&#39;ve already included this unique SK spline mode</span></div>
-<div class="line"><span class="lineno">  329</span>        <span class="keywordflow">if</span>(iSplineMode == TmpVec[entry_i]){</div>
-<div class="line"><span class="lineno">  330</span>          IncludeMode = <span class="keyword">false</span>;</div>
-<div class="line"><span class="lineno">  331</span>        }</div>
-<div class="line"><span class="lineno">  332</span>      }</div>
-<div class="line"><span class="lineno">  333</span>      </div>
-<div class="line"><span class="lineno">  334</span>      <span class="keywordflow">if</span>(IncludeMode){</div>
-<div class="line"><span class="lineno">  335</span>        <span class="comment">//Push back with the spline mode a systematic applies to</span></div>
-<div class="line"><span class="lineno">  336</span>        TmpVec.push_back(iSplineMode);</div>
-<div class="line"><span class="lineno">  337</span>      }</div>
-<div class="line"><span class="lineno">  338</span>      </div>
-<div class="line"><span class="lineno">  339</span>    }<span class="comment">//end of loop over modes for a syst</span></div>
-<div class="line"><span class="lineno">  340</span>    </div>
-<div class="line"><span class="lineno">  341</span>    ReturnVec[iVec] = TmpVec;</div>
-<div class="line"><span class="lineno">  342</span>  }<span class="comment">//end of loop over systs</span></div>
-<div class="line"><span class="lineno">  343</span>  </div>
-<div class="line"><span class="lineno">  344</span>  <span class="keywordflow">return</span> ReturnVec;</div>
-<div class="line"><span class="lineno">  345</span>}</div>
-<div class="ttc" id="aStructsDUNE_8h_html_a46b5fc5d17221c2f314d6642a395fea1"><div class="ttname"><a href="StructsDUNE_8h.html#a46b5fc5d17221c2f314d6642a395fea1">MaCh3Mode_to_SplineMode</a></div><div class="ttdeci">int MaCh3Mode_to_SplineMode(int iMode)</div><div class="ttdef"><b>Definition</b> <a href="StructsDUNE_8h_source.html#l01202">StructsDUNE.h:1202</a></div></div>
+<p class="definition">Definition at line <a class="el" href="splinesDUNE_8cpp_source.html#l00010">10</a> of file <a class="el" href="splinesDUNE_8cpp_source.html">splinesDUNE.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   10</span>                                                                                  {</div>
+<div class="line"><span class="lineno">   11</span>  std::vector&lt;std::string&gt; ReturnVec(TokenOrdering::kNTokens);</div>
+<div class="line"><span class="lineno">   12</span> </div>
+<div class="line"><span class="lineno">   13</span>  TObjArray *tokens = TString(FullSplineName).Tokenize(<span class="stringliteral">&quot;_&quot;</span>);</div>
+<div class="line"><span class="lineno">   14</span>  </div>
+<div class="line"><span class="lineno">   15</span>  ReturnVec[TokenOrdering::kSystToken] = ((TObjString *)(tokens-&gt;At(1)))-&gt;GetString();</div>
+<div class="line"><span class="lineno">   16</span>  ReturnVec[TokenOrdering::kModeToken] = ((TObjString *)(tokens-&gt;At(2)))-&gt;GetString();</div>
+<div class="line"><span class="lineno">   17</span>  <span class="comment">// Skip 3 because it&#39;s &quot;sp&quot;</span></div>
+<div class="line"><span class="lineno">   18</span>  ReturnVec[TokenOrdering::kVar1BinToken] = ((TObjString *)(tokens-&gt;At(4)))-&gt;GetString();</div>
+<div class="line"><span class="lineno">   19</span>  ReturnVec[TokenOrdering::kVar2BinToken] = ((TObjString *)(tokens-&gt;At(5)))-&gt;GetString();</div>
+<div class="line"><span class="lineno">   20</span>  ReturnVec[TokenOrdering::kVar3BinToken] = <span class="stringliteral">&quot;0&quot;</span>;</div>
+<div class="line"><span class="lineno">   21</span>  </div>
+<div class="line"><span class="lineno">   22</span>  <span class="keywordflow">if</span> (tokens-&gt;GetEntries() == 7) {</div>
+<div class="line"><span class="lineno">   23</span>    ReturnVec[TokenOrdering::kVar3BinToken] = ((TObjString *)(tokens-&gt;At(6)))-&gt;GetString();</div>
+<div class="line"><span class="lineno">   24</span>  }</div>
+<div class="line"><span class="lineno">   25</span> </div>
+<div class="line"><span class="lineno">   26</span>  <span class="keywordflow">return</span> ReturnVec;</div>
+<div class="line"><span class="lineno">   27</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
