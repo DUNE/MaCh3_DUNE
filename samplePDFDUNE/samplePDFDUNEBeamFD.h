@@ -1,20 +1,7 @@
 #ifndef _samplePDFDUNEBeamFD_h_
 #define _samplePDFDUNEBeamFD_h_
 
-#include <iostream>
-#include <TTree.h>
-#include <TH1D.h>
-#include <TH2D.h>
-#include <TMath.h>
-#include <TFile.h>
-#include <TGraph2DErrors.h>
-#include <vector>
-#include <omp.h>
-#include <list>
-
 #include "splines/splinesDUNE.h"
-#include "covariance/covarianceXsec.h"
-#include "covariance/covarianceOsc.h"
 #include "samplePDF/samplePDFFDBase.h"
 
 #include "StructsDUNE.h"
@@ -33,28 +20,10 @@ public:
   /// @brief destructor
   ~samplePDFDUNEBeamFD();
 
+  /// @brief Enum to identify kinematics
   enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC};
 
-  //More robust getters to make plots in different variables, mode, osc channel, systematic weighting and with bin range 
-
-  /// @brief Getter to make plots in different variables, mode, osc channel, systematic weighting and with bin range
-  /// @param Var1 Variable kinematic type
-  /// @param fModeToFill [default: -1] Mode to fill, -1 indicates all mdoes
-  /// @param fSampleToFill [default: -1] Sample to fill, -1 indicates all samples
-  /// @param WeightStyle [default: 0] If weight style==1 use *(MCSamples[i].osc_w_pointer[j]) * dunemcSamples[i].pot_s * dunemcSamples[i].norm_s * dunemcSamples[i].flux_w[j] instead
-  /// @param Axis NOTE: UNUSED
-  /// @return Plot of events binned in kinematic variable
-  TH1D* get1DVarHist(KinematicTypes Var1, int fModeToFill=-1, int fSampleToFill=-1, int WeightStyle=0, TAxis* Axis=0);
-
-  /// @brief Getter to make plots in different variables, mode, osc channel, systematic weighting and with bin range
-  /// @param Var1 Variable kinematic type
-  /// @param Selection Selection to apply to hist
-  /// @param WeightStyle [default: 0] If weight style==1 use *(MCSamples[i].osc_w_pointer[j]) * dunemcSamples[i].pot_s * dunemcSamples[i].norm_s * dunemcSamples[i].flux_w[j] instead
-  /// @param Axis NOTE: UNUSED
-  /// @return Plot of events binned in kinematic variable
-  TH1D* get1DVarHist(KinematicTypes Var1, std::vector< std::vector<double> > Selection, int WeightStyle=0, TAxis* Axis=0);
-    
- protected:
+protected:
   /// @brief Initialises object
   void Init();
 
@@ -69,9 +38,6 @@ public:
 
   /// @brief Sets up pointers weights for each event (oscillation/xsec/etc.)
   void SetupWeightPointers();
-  
-  /// @todo extract this completely to core
-  ///@brief Setup our spline file, this calls InitialseSplineObject() under the hood
   void SetupSplines();
   
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
@@ -103,14 +69,14 @@ public:
   const double* GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent); 
 
   std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameter);
-  inline int ReturnKinematicParameterFromString(std::string KinematicParameterStr);
   inline std::string ReturnStringFromKinematicParameter(int KinematicParameterStr);
   
   //DB functions which could be initialised to do something which is non-trivial
+
   /// @brief NOT IMPLEMENTED: Dunder method to calculate xsec weights
   /// @param iSample sample ID
   /// @param iEvent Event number
-  double CalcXsecWeightFunc(int iSample, int iEvent) {return 1.;}
+  double CalcXsecWeightFunc(int iSample, int iEvent) {(void) iSample; (void)iEvent; return 1.;}
 
   /// @brief Apply kinematic shifts
   /// @param iSample Sample Number
@@ -123,64 +89,8 @@ public:
 
   /// Value of POT used for sample
   double pot;
-
-  /// File containing sample objects
-  TFile *_sampleFile;
-
-  /// TTree containing sample Data
-  TTree *_data;
-
-  TString _nutype;
-
-  int _mode;
-
-  //Reco Variables
-  double _erec;
-  double _erec_nue;
-  double _erec_had;
-  double _erec_had_nue;
-  double _erec_lep;
-  double _erec_lep_nue;
-
-  double _eRecoP;
-  double _eRecoPip;
-  double _eRecoPim;
-  double _eRecoPi0;
-  double _eRecoN;
-
-  double _cvnnumu;
-  double _cvnnue;
-  double _vtx_x;
-  double _vtx_y;
-  double _vtx_z;
-
-  //Truth Variables
-  double _ev;
-  double _LepE;
-  double _eP;
-  double _ePip;
-  double _ePim;
-  double _ePi0;
-  double _eN;
-  double _NuMomX;
-  double _NuMomY;
-  double _NuMomZ;
-  double _LepMomX;
-  double _LepMomY;
-  double _LepMomZ;
-  double _LepNuAngle;
-  double _BeRPA_cvwgt;
-  double _maccres_cvwgt;
-  double _nunpcc1_cvwgt;
-  int _isCC;
-  int _nuPDGunosc;
-  int _nuPDG;
-  int _run;
-  int _isFHC;
-  double _LepTheta;
-  double _Q2;
-
   bool iselike;
+  double isFHC;
 
   //Positions of FD Detector systematics
   double tot_escale_fd_pos;
@@ -210,6 +120,32 @@ public:
 
   /// Number of FD Detector Systematics
   int nFDDetectorSystPointers;
+
+  const std::unordered_map<std::string, int> KinematicParametersDUNE = {
+    {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
+    {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},
+    {"TrueXPos",kTrueXPos},
+    {"TrueYPos",kTrueYPos},
+    {"TrueZPos",kTrueZPos},
+    {"CVNNumu",kCVNNumu},
+    {"CVNNue",kCVNNue},
+    {"Mode",kM3Mode},
+    {"OscillationChannel",kOscChannel},
+    {"IsFHC",kIsFHC}
+  };
+
+  const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
+    {kTrueNeutrinoEnergy,"TrueNeutrinoEnergy"},
+    {kRecoNeutrinoEnergy,"RecoNeutrinoEnergy"},
+    {kTrueXPos,"TrueXPos"},
+    {kTrueYPos,"TrueYPos"},
+    {kTrueZPos,"TrueZPos"},
+    {kCVNNumu,"CVNNumu"},
+    {kCVNNue,"CVNNue"},
+    {kM3Mode,"Mode"},
+    {kOscChannel,"OscillationChannel"},
+    {kIsFHC,"IsFHC"}
+  };
 };
 
 #endif

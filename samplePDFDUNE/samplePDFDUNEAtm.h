@@ -2,8 +2,6 @@
 #define _samplePDFDUNEAtm_h_
 
 #include "splines/splinesDUNE.h"
-#include "covariance/covarianceXsec.h"
-#include "covariance/covarianceOsc.h"
 #include "samplePDF/samplePDFFDBase.h"
 
 #include "StructsDUNE.h"
@@ -46,12 +44,12 @@ protected:
   /// @brief NOT IMPLEMENTED: Dunder method to calculate xsec weights
   /// @param iSample sample ID
   /// @param iEvent Event number
-  double CalcXsecWeightFunc(int iSample, int iEvent) {return 1.;}
+  double CalcXsecWeightFunc(int iSample, int iEvent) {(void)iSample; (void) iEvent; return 1.;}
   
   /// @brief NOT IMPLEMENTED: Apply kinematic shifts
   /// @param iSample Sample Number
   /// @param iEvent Event number
-  void applyShifts(int iSample, int iEvent) {}
+  void applyShifts(int iSample, int iEvent) {(void)iSample; (void)iEvent;}
   
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinPar Kinematic parameter enum val
@@ -97,17 +95,25 @@ protected:
   /// @param KinPar Parameter ID
   /// @return Vector containing parameter bins
   std::vector<double> ReturnKinematicParameterBinning(KinematicTypes KinPar);
+  
+  const std::unordered_map<std::string, int> KinematicParametersDUNE = {
+    {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
+    {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},
+    {"TrueCosineZ",kTrueCosZ},
+    {"RecoCosineZ",kRecoCosZ},
+    {"OscillationChannel",kOscChannel},
+    {"Mode",kMode}
+  };
 
-  /// @brief Get kinematic parameter ID from string name
-  /// @param KinematicStr 
-  /// @return Parameter ID
-  inline int ReturnKinematicParameterFromString(std::string KinematicStr);
-
-  /// @brief Get kinematic parameter name from ID
-  /// @param KinematicVariable  Parameter ID
-  /// @return Parameter Name
-  inline std::string ReturnStringFromKinematicParameter(int KinematicVariable);
-
+  const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
+    {kTrueNeutrinoEnergy,"TrueNeutrinoEnergy"},
+    {kRecoNeutrinoEnergy,"RecoNeutrinoEnergy"},
+    {kTrueCosZ,"TrueCosineZ"},    
+    {kRecoCosZ,"RecoCosineZ"},
+    {kOscChannel,"OscillationChannel"},
+    {kMode,"Mode"}
+  };
+  
   /// Array filled with MC samples for each oscillation channel
   std::vector<struct dunemc_base> dunemcSamples;
 

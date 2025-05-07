@@ -9,7 +9,7 @@ def get_from_full_yaml(input_file, out_name,
                        param_groups=None,
                        ):
     if det_id is None:
-        det_id = [1]
+        det_id = [["ND"]]
     if syst_type is None:
         syst_type = ['Norm']
     if horn_current is None:
@@ -24,28 +24,28 @@ def get_from_full_yaml(input_file, out_name,
     new_yaml = {'Systematics': []}
     b_systamatics = []
 
+    print("Looping over systematics")
     for s in f['Systematics']:
-        accept = True
-        if s['Systematic']['DetID'] not in det_id:
-            accept = False
+        if set(s['Systematic']['DetID']) not in det_id:
+            continue
         if s['Systematic']['Type'] not in syst_type:
-            accept = False
+            continue
         if s['Systematic']['ParameterGroup'] not in param_groups:
-            accept = False
+            continue
         try:
             fhc_lower_bound = s['Systematic']['KinematicCuts'][1]['IsFHC'][0]
         except KeyError:
             fhc_lower_bound = 0
         if fhc_lower_bound >= 0:
             if 'fhc' not in horn_current:
-                accept = False
+                continue
         if fhc_lower_bound <= 0:
             if 'rhc' not in horn_current:
-                accept = False
-        if accept:
-            new_yaml['Systematics'].append(s)
-            if 'b_' in s['Systematic']['Names']['ParameterName']:
-                b_systamatics.append(s['Systematic']['Names']['ParameterName'])
+                continue
+        new_yaml['Systematics'].append(s)
+        if 'b_' in s['Systematic']['Names']['ParameterName']:
+            b_systamatics.append(s['Systematic']['Names']['ParameterName'])
+    print("Filling new yaml")
     for i,s in enumerate(new_yaml['Systematics']):
         if s['Systematic']['Names']['ParameterName'] in b_systamatics:
             corr = s['Systematic']['Correlations']
@@ -68,13 +68,14 @@ if __name__ == '__main__':
     input_file = args.input
     output_folder = args.output_folder
     
-    det_ids = [1,24,25]
+    det_ids = [set(['ND']), set(['FD']), set(['ND','FD'])]
+    det_ids_names = ['ND', 'FD', 'ND+FD']
     syst_types = ['Norm','Spline','Functional']
     param_groups = ['Flux','Xsec','DetSys']
     horn_currents = ['fhc','rhc']
 
-    for det_id in det_ids:
-        det_id_name = 'ND' if det_id == 1 else ('FD' if det_id == 24 else 'ND+FD')
+    for i,det_id in enumerate(det_ids):
+        det_id_name = det_ids_names[i]
         for param_group in param_groups:
             get_from_full_yaml(input_file, f"{output_folder}/{param_group}_{det_id_name}.yaml",
                                 det_id=[det_id],
@@ -88,13 +89,14 @@ if __name__ == '__main__':
                                 param_groups=[param_group],
                                 uniform_stepscale=True)
 
+    # Combine ND and FD for flux
     get_from_full_yaml(input_file, f'{output_folder}/Flux_ND+FD.yaml',
-                          det_id=[1,24],
+                          det_id=[set(['ND']),set(['FD'])],
                           syst_type=syst_types,
                           horn_current=['fhc','rhc'],
                           param_groups=['Flux'])
     get_from_full_yaml(input_file, f'{output_folder}/Flux_ND+FD_uniform.yaml',
-                       det_id=[1,24],
+                       det_id=[set(['ND']),set(['FD'])],
                           syst_type=syst_types,
                             horn_current=['fhc','rhc'],
                             param_groups=['Flux'],

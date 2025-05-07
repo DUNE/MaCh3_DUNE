@@ -1,13 +1,13 @@
 ---
 Systematics:
 - Systematic:
-    DetID: ["ATM"]
+    DetID: ["NDGAr"]
     Error: 0.123224219401
     FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
-      - 0.0
-      - 0.5
+      - -2.0
+      - -1.0
     Names:
       FancyName: b_104
       ParameterName: b_104

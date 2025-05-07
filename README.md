@@ -1,47 +1,46 @@
 # MaCh3_DUNE
 
-## MaCh3 Build
+## Building MaCh3 DUNE
 
 ### Dependencies
 
-- CMake (version > 3.8).
-- MaCh3 Core tag: DUNECore2024 (To be used until the core version currently being developped gets integrated with MaCh3 DUNE)
-- ROOT (currently tested on 6.18)
+- gcc (tested on 12.2.0)
+- CMake (tested on 3.27.7)
+- ROOT (tested on 6.28.06)
 
-### CMake
+A setup script which pulls cvmfs dependancies is included here:
+```bash
+source setup_dune_env.sh
+```
+
+### Cloning and Building
 
 ```bash
 mkdir MaCh3_DUNE
-git clone git@github.com:DUNE/MaCh3_DUNE.git
+git clone git@github.com:DUNE/MaCh3_DUNE.git MaCh3_DUNE
 cd MaCh3_DUNE
-```
-
-Now setup some dependencies and then actually build MaCh3_DUNE
-
-```bash
-# For clusters with access to CVMFS
-source setup_dune_env.sh
 mkdir build;
 cd build
 ```
 
-Optional flags are described briefly below, options are shown grouped by square brackets and delimited by vertical lines. Default is on the left.
+Then perform the cmake build command:
 
 ```bash
-cmake .. -DGPU_ENABLED=[OFF|ON] -DUSE_PROB3=[OFF|ON] -DSINGLE_THREAD_ONLY=[OFF|ON] -DDEBUG_ENABLED=[OFF|ON] 
-make
+cmake .. -DCUDAProb3_ENABLED=[ON,OFF] -DCUDAProb3Linear_ENABLED=[ON,OFF] -DMaCh3_CORE_BRANCH="v1.4.8" -DBuild_NDGAr=[OFF|ON] -DDUNE_ANAOBJ_BRANCH="v03_06_00"
+make install
 ```
 
-A few notes:
-CUDA_SAMPLES not necessary if using CPU_ONLY=ON
+Additional cmake options are available in the MaCh3-Core README
 
-If you want to simultaneously develop both the MaCh3 core code and the MaCh3 DUNE code then you can build against a local version of MaCh3 by adding:
+- CUDAProb3 should be used as the default for atmospheric neutrino oscillations
+- CUDAProb3Linear should be used as the default for beam oscillations
 
+Then source the installation of MaCh3:
 ```bash
--DCPM_MaCh3_SOURCE=/path/to/MaCh3/folder
+source build/bin/setup.MaCh3DUNE.sh
 ```
 
-This will overrule the CPMFindPackage command in the CMakeList.txt and will tell CPM to build that instead.
+This sets everything needed, and needs to be re-sourced on each terminal session when using MaCh3 (Along with any dependancies)
 
 ## Event Rates
 
@@ -54,12 +53,12 @@ Imperial College London lx:
 
 FNAL cluster:
 ```bash
-/dune/data/users/lwarsame
+/exp/dune/data/users/lwarsame
 ```
 
 ComputeCanada Cedar:
 ```bash
-/scratch/liban
+/project/rpp-nilic/MaCh3_inputs
 ```
 
 NERSC Perlmutter:
@@ -67,24 +66,29 @@ NERSC Perlmutter:
 /pscratch/sd/l/lwarsame
 ```
 
+RAL SCARF:
+```bash
+/work4/ppd/scarf1407
+```
+
 CVMFS:
 ```bash
-/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2
+/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v3
 ```
 
 Current (Feburary 2024) FD event rates using DUNE FD TDR inputs are below (ND is still under-development). These are made using xsec systematics at their prior central value. Oscillation parameter values used here are:
 
-### Oscillation Parameter Values
+### Oscillation Parameter Values (NuFIT 4.0 NH)
 <div align="center">
 
 |     Parameter     |       Value       |     Unit     |
 |:-----------------:|:-----------------:|:------------:|
-|     sin²θ₁₂       |       0.307       |      -       |
-|     sin²θ₂₃       |       0.52        |      -       |
-|     sin²θ₁₃       |       0.0218      |      -       |
-|     Δm²₃₂         |    7.53 × 10⁻⁵    |     eV²      |
-|     Δm²₁₂         |    2.509 × 10⁻³   |     eV²      |
-|     δCP           |      -1.601       |   radians    |
+|     sin²θ₁₂       |       0.310       |      -       |
+|     sin²θ₂₃       |       0.582       |      -       |
+|     sin²θ₁₃       |       0.0224      |      -       |
+|     Δm²₃₂         |    7.39 × 10⁻⁵    |     eV²      |
+|     Δm²₁₂         |    2.525 × 10⁻³   |     eV²      |
+|     δCP           |      -2.498       |   radians    |
 
 </div>
 
@@ -92,11 +96,11 @@ Current (Feburary 2024) FD event rates using DUNE FD TDR inputs are below (ND is
 
 <div align="center">
 
-|       Type        |     Unoscillated     |     Oscillated     |
+|       Type        |     Unoscillated    |     Oscillated    |
 |:-----------------:|:-------------------:|:-----------------:|
-| FHC ν<sub>μ</sub> |     25941.57467     |     7977.36421    |
-| FHC ν<sub>e</sub> |      390.85150      |     1698.28079    |
-| RHC ν<sub>μ</sub> |     12492.61743     |     4217.78765    |
-| RHC ν<sub>e</sub> |      208.31873      |     447.09673     |
+| FHC ν<sub>μ</sub> |     25941.5747      |     8243.9185     |
+| FHC ν<sub>e</sub> |      391.5995       |     1756.9128     |
+| RHC ν<sub>μ</sub> |     12492.6174      |     4379.4037     |
+| RHC ν<sub>e</sub> |      208.8016       |     491.0061      |
 
 </div>

@@ -1,17 +1,31 @@
-set(HEADERS
-  samplePDFDUNEAtm.h
-  samplePDFDUNEBeamFD.h
-  samplePDFDUNEBeamND.h
-  #samplePDFDUNEBeamNDGar.h
-  MaCh3DUNEFactory.h 
-)
+if (Build_NDGAr)
+	message(STATUS "Building BeamNDGAr sample only")
+	set(HEADERS
+		samplePDFDUNEBeamNDGAr.h
+  	MaCh3DUNEFactory.h
+	)
+	set(SOURCE_FILES
+		samplePDFDUNEBeamNDGAr.cpp
+    MaCh3DUNEFactory.cpp
+	)
+else()
+	message(STATUS "Building Atm, BeamFD and BeamND samples")
+	set(HEADERS
+		samplePDFDUNEAtm.h
+  	samplePDFDUNEBeamFD.h
+   	samplePDFDUNEBeamND.h
+		MaCh3DUNEFactory.h
+	)
+	set(SOURCE_FILES
+		samplePDFDUNEAtm.cpp
+    samplePDFDUNEBeamFD.cpp
+    samplePDFDUNEBeamND.cpp
+    MaCh3DUNEFactory.cpp
+	)
+endif()
 
 add_library(SamplePDFDUNE SHARED
-  samplePDFDUNEAtm.cpp
-  samplePDFDUNEBeamFD.cpp
-  samplePDFDUNEBeamND.cpp
-  #samplePDFDUNEBeamNDGar.cpp
-  MaCh3DUNEFactory.cpp
+	${SOURCE_FILES}
 )
 
 set_target_properties(SamplePDFDUNE PROPERTIES

@@ -1,7 +1,11 @@
 ---
 SampleName: "RHC_numu"
 SampleType: "BeamFD"
+
 POT: 1.3628319e+23
+MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes.yaml"
+DetID: "FD"
+
 SelectionCuts:
   - KinematicStr: "TrueXPos"
     Bounds: [-310.0, 310.0]
@@ -11,92 +15,95 @@ SelectionCuts:
     Bounds: [50.0, 1244.0]
   - KinematicStr: "CVNNumu"
     Bounds: [0.5, 999]
+
 Binning:
   XVarStr: "RecoNeutrinoEnergy"
   XVarBins: [0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
+
 DUNESampleBools:
   iselike: no
-  isfhc: 0
+  isFHC: 0
+
 InputFiles:
   mtupleprefix: "inputs/DUNE_CAF_files/FD_RHC_ger_"
   mtuplesuffix: "_numuselec.root"
   splineprefix: "inputs/DUNE_spline_files/FD_RHC_ger_"
   splinesuffix: "_numuselec_splines.root"
-DetID: 24
+
 NuOsc:
   NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
   EqualBinningPerOscChannel: false
-NSubSamples: 12
+
 SubSamples:
-  - name: "RHC_numu_x_numu"
+  - Name: "RHC_numu_x_numu"
+    LatexName: "RHC_numu_x_numu"
     mtuplefile: "numu_x_numu"
     splinefile: "numu_x_numu"
-    samplevecno: 0
     nutype: 14
     oscnutype: 14
-  - name: "RHC_nue_x_nue"
+  - Name: "RHC_nue_x_nue"
+    LatexName: "RHC_nue_x_nue"
     mtuplefile: "nue_x_nue"
     splinefile: "nue_x_nue"
-    samplevecno: 1
     nutype: 12
     oscnutype: 12
-  - name: "RHC_numubar_x_numubar"
+  - Name: "RHC_numubar_x_numubar"
+    LatexName: "RHC_numubar_x_numubar"
     mtuplefile: "numubar_x_numubar"
     splinefile: "numubar_x_numubar"
-    samplevecno: 2
     nutype: -14
     oscnutype: -14
-  - name: "RHC_nuebar_x_nuebar"
+  - Name: "RHC_nuebar_x_nuebar"
+    LatexName: "RHC_nuebar_x_nuebar"
     mtuplefile: "nuebar_x_nuebar"
     splinefile: "nuebar_x_nuebar"
-    samplevecno: 3
     nutype: -12
     oscnutype: -12
-  - name: "RHC_numu_x_nue"
+  - Name: "RHC_numu_x_nue"
+    LatexName: "RHC_numu_x_nue"
     mtuplefile: "numu_x_nue"
     splinefile: "numu_x_nue"
-    samplevecno: 4
     nutype: 14
     oscnutype: 12
-  - name: "RHC_numubar_x_nuebar"
+  - Name: "RHC_numubar_x_nuebar"
+    LatexName: "RHC_numubar_x_nuebar"
     mtuplefile: "numubar_x_nuebar"
     splinefile: "numubar_x_nuebar"
-    samplevecno: 5
     nutype: -14
     oscnutype: -12
-  - name: "RHC_nue_x_numu"
+  - Name: "RHC_nue_x_numu"
+    LatexName: "RHC_nue_x_numu"
     mtuplefile: "nue_x_numu"
     splinefile: "nue_x_numu"
-    samplevecno: 6
     nutype: 12
     oscnutype: 14
-  - name: "RHC_nuebar_x_numubar"
+  - Name: "RHC_nuebar_x_numubar"
+    LatexName: "RHC_nuebar_x_numubar"
     mtuplefile: "nuebar_x_numubar"
     splinefile: "nuebar_x_numubar"
-    samplevecno: 7
     nutype: -12
     oscnutype: -14
-  - name: "RHC_numu_x_nutau"
+  - Name: "RHC_numu_x_nutau"
+    LatexName: "RHC_numu_x_nutau"
     mtuplefile: "numu_x_nutau"
     splinefile: "numu_x_nutau"
-    samplevecno: 8
     nutype: 14
     oscnutype: 16
-  - name: "RHC_nue_x_nutau"
+  - Name: "RHC_nue_x_nutau"
+    LatexName: "RHC_nue_x_nutau"
     mtuplefile: "nue_x_nutau"
     splinefile: "nue_x_nutau"
-    samplevecno: 9
     nutype: 12
     oscnutype: 16
-  - name: "RHC_numubar_x_nutaubar"
+  - Name: "RHC_numubar_x_nutaubar"
+    LatexName: "RHC_numubar_x_nutaubar"
     mtuplefile: "numubar_x_nutaubar"
     splinefile: "numubar_x_nutaubar"
-    samplevecno: 10
     nutype: -14
     oscnutype: -16
-  - name: "RHC_nuebar_x_nutaubar"
+  - Name: "RHC_nuebar_x_nutaubar"
+    LatexName: "RHC_nuebar_x_nutaubar"
     mtuplefile: "nuebar_x_nutaubar"
     splinefile: "nuebar_x_nutaubar"
-    samplevecno: 11
     nutype: -12
     oscnutype: -16
