@@ -64,7 +64,7 @@ int main(int argc, char * argv[]) {
       DUNEHists.push_back(Sample->get2DHist());
 
     std::string EventRateString = fmt::format("{:.2f}", Sample->get1DHist()->Integral());
-    MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetName(), EventRateString);
+    MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetSampleName(), EventRateString);
 
     Sample->PrintIntegral();
   }
@@ -84,20 +84,20 @@ int main(int argc, char * argv[]) {
     MACH3LOG_INFO("======================");
     int nOscChannels = Sample->getNMCSamples();
     for (int iOscChan=0;iOscChan<nOscChannels;iOscChan++) {
-      std::vector< std::vector<double> > SelectionVec;
+      std::vector< KinematicCut > SelectionVec;
 
-      std::vector<double> SelecChannel(3);
-      SelecChannel[0] = Sample->ReturnKinematicParameterFromString("OscillationChannel");
-      SelecChannel[1] = iOscChan;
-      SelecChannel[2] = iOscChan+1;
+      KinematicCut SelecChannel;
+      SelecChannel.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString("OscillationChannel");
+      SelecChannel.LowerBound = iOscChan;
+      SelecChannel.UpperBound = iOscChan+1;
       SelectionVec.push_back(SelecChannel);
       
       TH1* Hist = Sample->get1DVarHist(Sample->GetXBinVarName(),SelectionVec);
-      MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetName(),Sample->getFlavourName(iOscChan),Hist->Integral());
+      MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetSampleName(),Sample->getFlavourName(iOscChan),Hist->Integral());
     }
 
     TH1* Hist = Sample->get1DVarHist(Sample->GetXBinVarName());
-    MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetName(),Hist->Integral());
+    MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetSampleName(),Hist->Integral());
   }
 
   //###############################################################################################################################
@@ -113,20 +113,20 @@ int main(int argc, char * argv[]) {
     MaCh3Modes* Modes = Sample->GetMaCh3Modes();
     int nModeChannels = Modes->GetNModes();
     for (int iModeChan=0;iModeChan<nModeChannels;iModeChan++) {
-      std::vector< std::vector<double> > SelectionVec;
+      std::vector< KinematicCut > SelectionVec;
 
-      std::vector<double> SelecChannel(3);
-      SelecChannel[0] = Sample->ReturnKinematicParameterFromString("Mode");
-      SelecChannel[1] = iModeChan;
-      SelecChannel[2] = iModeChan+1;
+      KinematicCut SelecChannel;
+      SelecChannel.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString("Mode");
+      SelecChannel.LowerBound = iModeChan;
+      SelecChannel.UpperBound = iModeChan+1;
       SelectionVec.push_back(SelecChannel);
 
       TH1* Hist = Sample->get1DVarHist(Sample->GetXBinVarName(),SelectionVec);
-      MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetName(),Modes->GetMaCh3ModeName(iModeChan),Hist->Integral());
+      MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetSampleName(),Modes->GetMaCh3ModeName(iModeChan),Hist->Integral());
     }
 
     TH1* Hist = Sample->get1DVarHist(Sample->GetXBinVarName());
-    MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetName(),Hist->Integral());
+    MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetSampleName(),Hist->Integral());
   }
 
   //###############################################################################################################################

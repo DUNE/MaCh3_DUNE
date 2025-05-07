@@ -51,7 +51,7 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("=======================================================");
   for(samplePDFFDBase* Sample: DUNEPdfs){
     Sample->reweight();
-    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetName(), Sample->get1DHist()->Integral());
+    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetSampleName(), Sample->get1DHist()->Integral());
   }
   
   //###############################################################################################################################
@@ -105,7 +105,7 @@ int main(int argc, char * argv[]) {
             CovObj->setParProp(iPar,VarVal);
 
 	          for (size_t iSample=0;iSample<DUNEPdfs.size();iSample++) {
-	            std::string SampleName = DUNEPdfs[iSample]->GetName();
+	            std::string SampleName = DUNEPdfs[iSample]->GetSampleName();
 	  
 	            File->cd(ParName.c_str());
 	            if (iSigVar == 0) {
