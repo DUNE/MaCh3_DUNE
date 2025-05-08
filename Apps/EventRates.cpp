@@ -64,7 +64,7 @@ int main(int argc, char * argv[]) {
       DUNEHists.push_back(Sample->get2DHist());
 
     std::string EventRateString = fmt::format("{:.2f}", Sample->get1DHist()->Integral());
-    MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetSampleName(), EventRateString);
+    MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetTitle(), EventRateString);
 
     Sample->PrintIntegral();
   }
@@ -93,11 +93,11 @@ int main(int argc, char * argv[]) {
       SelectionVec.push_back(SelecChannel);
       
       TH1* Hist = Sample->get1DVarHist(Sample->GetXBinVarName(),SelectionVec);
-      MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetSampleName(),Sample->getFlavourName(iOscChan),Hist->Integral());
+      MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetTitle(),Sample->getFlavourName(iOscChan),Hist->Integral());
     }
 
     TH1* Hist = Sample->get1DVarHist(Sample->GetXBinVarName());
-    MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetSampleName(),Hist->Integral());
+    MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetTitle(),Hist->Integral());
   }
 
   //###############################################################################################################################
@@ -122,11 +122,11 @@ int main(int argc, char * argv[]) {
       SelectionVec.push_back(SelecChannel);
 
       TH1* Hist = Sample->get1DVarHist(Sample->GetXBinVarName(),SelectionVec);
-      MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetSampleName(),Modes->GetMaCh3ModeName(iModeChan),Hist->Integral());
+      MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetTitle(),Modes->GetMaCh3ModeName(iModeChan),Hist->Integral());
     }
 
     TH1* Hist = Sample->get1DVarHist(Sample->GetXBinVarName());
-    MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetSampleName(),Hist->Integral());
+    MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetTitle(),Hist->Integral());
   }
 
   //###############################################################################################################################

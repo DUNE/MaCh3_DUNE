@@ -138,7 +138,7 @@ int main(int argc, char *argv[]) {
     DUNEHists.push_back(Sample->get1DHist());
 
     std::string EventRateString = fmt::format("{:.2f}", Sample->get1DHist()->Integral());
-    MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetSampleName(), EventRateString);
+    MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetTitle(), EventRateString);
   }
 
   // ###############################################################################################################################
@@ -327,7 +327,7 @@ int main(int argc, char *argv[]) {
 #else
         Hist = (TH1*)Sample->get1DVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
 #endif
-        outputname = Sample->GetSampleName()+"_"+Projections[iProj].Name;
+        outputname = Sample->GetTitle()+"_"+Projections[iProj].Name;
         Hist->Scale(1.0,"Width");
       } 
       else {
@@ -341,10 +341,10 @@ int main(int argc, char *argv[]) {
 #else
         Hist = (TH1*)Sample->get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
 #endif
-        outputname = Sample->GetSampleName()+"_"+Projections[iProj].Name;
+        outputname = Sample->GetTitle()+"_"+Projections[iProj].Name;
       }
       Hist->SetTitle(ReturnFormattedHistogramNameFromProjection(Projections[iProj]).c_str());
-      MACH3LOG_INFO("\tSample: {:<20} - Integral: {:<10}",Sample->GetSampleName(),Hist->Integral());
+      MACH3LOG_INFO("\tSample: {:<20} - Integral: {:<10}",Sample->GetTitle(),Hist->Integral());
       //PrintTH1Histogram(Hist,outputname+".png");
       //WriteTH1Histogram(Hist, outputname, dir);
       WriteTH1Histogram(Hist, outputname);
@@ -394,10 +394,10 @@ int main(int argc, char *argv[]) {
         leg->Draw();
         std::string histstackname;
         if (histdim==1) {
-          histstackname = Sample->GetSampleName()+"_"+ProjectionVar_Str[0]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack";
+          histstackname = Sample->GetTitle()+"_"+ProjectionVar_Str[0]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack";
         }
         else {
-          histstackname = Sample->GetSampleName()+"_"+ProjectionVar_Str[0]+"_"+ProjectionVar_Str[1]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack";
+          histstackname = Sample->GetTitle()+"_"+ProjectionVar_Str[0]+"_"+ProjectionVar_Str[1]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack";
         }
         //PrintTHStackHistogram(Stack,histstackname+".png");
         Canv.Write((histstackname+"_Canvas").c_str());

@@ -58,7 +58,7 @@ int main(int argc, char * argv[]) {
         Sample->reweight();
         
         std::string EventRateString = fmt::format("{:.2f}", Sample->get1DHist()->Integral());
-        writeToBoth(outFile, "Event rate for " + Sample->GetSampleName() + ": " + EventRateString);
+        writeToBoth(outFile, "Event rate for " + Sample->GetTitle() + ": " + EventRateString);
     }
 
     writeToBoth(outFile, "======");
@@ -77,11 +77,11 @@ int main(int argc, char * argv[]) {
             SelectionVec.push_back(SelecChannel);
             
             TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy",SelectionVec);
-            writeToBoth(outFile, Sample->GetSampleName() + " " + Sample->getFlavourName(iOscChan) + ": " + std::to_string(Hist->Integral()));
+            writeToBoth(outFile, Sample->GetTitle() + " " + Sample->getFlavourName(iOscChan) + ": " + std::to_string(Hist->Integral()));
         }
 
         TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy");
-        writeToBoth(outFile, Sample->GetSampleName() + " " + std::to_string(Hist->Integral()));
+        writeToBoth(outFile, Sample->GetTitle() + " " + std::to_string(Hist->Integral()));
     }
 
     //###############################################################################################################################
@@ -102,11 +102,11 @@ int main(int argc, char * argv[]) {
 	SelectionVec.push_back(SelecChannel);
 	
 	TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy",SelectionVec);
-	writeToBoth(outFile, Sample->GetSampleName() + " " + Sample->GetMaCh3Modes()->GetMaCh3ModeName(iModeChan) + ": " + std::to_string(Hist->Integral()));
+	writeToBoth(outFile, Sample->GetTitle() + " " + Sample->GetMaCh3Modes()->GetMaCh3ModeName(iModeChan) + ": " + std::to_string(Hist->Integral()));
       }
       
       TH1* Hist = Sample->get1DVarHist("TrueNeutrinoEnergy");
-      writeToBoth(outFile, Sample->GetSampleName() + ": " + std::to_string(Hist->Integral()));
+      writeToBoth(outFile, Sample->GetTitle() + ": " + std::to_string(Hist->Integral()));
     }
 
     // Do you want to gener
