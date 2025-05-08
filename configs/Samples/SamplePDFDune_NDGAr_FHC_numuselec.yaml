@@ -4,7 +4,7 @@ SampleType: "BeamNDGAr"
 
 POT: 1.0e+21
 MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes.yaml"
-SampleName: "NDGAr"
+SampleName: "ND_GAr"
 
 Binning:
   XVarStr: "TrueNeutrinoEnergy"

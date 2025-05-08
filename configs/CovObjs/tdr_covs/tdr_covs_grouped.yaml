@@ -1,7 +1,7 @@
 ---
 Systematics:
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -18,7 +18,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.01
     FlatPrior: false
     Names:
@@ -35,7 +35,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -52,7 +52,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.05
     FlatPrior: false
     Names:
@@ -69,7 +69,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.05
     FlatPrior: false
     Names:
@@ -86,7 +86,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.05
     FlatPrior: false
     Names:
@@ -103,7 +103,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -120,7 +120,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.005
     FlatPrior: false
     Names:
@@ -137,7 +137,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -154,7 +154,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.2
     FlatPrior: false
     Names:
@@ -171,7 +171,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.3
     FlatPrior: false
     Names:
@@ -188,7 +188,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.3
     FlatPrior: false
     Names:
@@ -205,7 +205,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.025
     FlatPrior: false
     Names:
@@ -222,7 +222,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.025
     FlatPrior: false
     Names:
@@ -239,7 +239,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.025
     FlatPrior: false
     Names:
@@ -256,7 +256,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -273,7 +273,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -290,7 +290,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.1
     FlatPrior: false
     Names:
@@ -307,7 +307,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -324,7 +324,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -341,7 +341,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.01
     FlatPrior: false
     Names:
@@ -358,7 +358,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -375,7 +375,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.05
     FlatPrior: false
     Names:
@@ -392,7 +392,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.05
     FlatPrior: false
     Names:
@@ -409,7 +409,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.05
     FlatPrior: false
     Names:
@@ -426,7 +426,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -443,7 +443,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.005
     FlatPrior: false
     Names:
@@ -460,7 +460,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -477,7 +477,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.2
     FlatPrior: false
     Names:
@@ -494,7 +494,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.3
     FlatPrior: false
     Names:
@@ -511,7 +511,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.3
     FlatPrior: false
     Names:
@@ -528,7 +528,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.025
     FlatPrior: false
     Names:
@@ -545,7 +545,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.025
     FlatPrior: false
     Names:
@@ -562,7 +562,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.025
     FlatPrior: false
     Names:
@@ -579,7 +579,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -596,7 +596,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -613,7 +613,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.1
     FlatPrior: false
     Names:
@@ -630,7 +630,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -647,7 +647,7 @@ Systematics:
     Type: Functional
     ParameterGroup: DetSys
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -668,7 +668,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -689,7 +689,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 0.09
     FlatPrior: false
     Names:
@@ -710,7 +710,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -731,7 +731,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -752,7 +752,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -773,7 +773,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -795,7 +795,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -817,7 +817,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -839,7 +839,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -861,7 +861,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -883,7 +883,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -907,7 +907,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -931,7 +931,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -955,7 +955,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -979,7 +979,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1003,7 +1003,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1029,7 +1029,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1055,7 +1055,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1081,7 +1081,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1107,7 +1107,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1133,7 +1133,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1155,7 +1155,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1177,7 +1177,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1199,7 +1199,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1221,7 +1221,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1243,7 +1243,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1265,7 +1265,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1286,7 +1286,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1307,7 +1307,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1328,7 +1328,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1349,7 +1349,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 0.2
     FlatPrior: false
     Names:
@@ -1370,7 +1370,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1391,7 +1391,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1412,7 +1412,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1433,7 +1433,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1454,7 +1454,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1475,7 +1475,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1496,7 +1496,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1517,7 +1517,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1538,7 +1538,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1559,7 +1559,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1580,7 +1580,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1601,7 +1601,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1622,7 +1622,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1643,7 +1643,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1664,7 +1664,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1685,7 +1685,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1706,7 +1706,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1727,7 +1727,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1748,7 +1748,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1769,7 +1769,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1790,7 +1790,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1811,7 +1811,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND", "FD"]
+    SampleNames: ["ND_*", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1836,7 +1836,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleName: ["ND_FHC", "FD"]
+    SampleNames: ["ND_LAr_FHC", "FD"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -2070,7 +2070,7 @@ Systematics:
     - b_205: 0.166011654169
     - b_206: 0.115684201527
     - b_207: 0.0449225119598
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.125273361158
     FlatPrior: false
     KinematicCuts:
@@ -2305,7 +2305,7 @@ Systematics:
     - b_205: 0.248286850945
     - b_206: 0.19225454413
     - b_207: 0.0990062973645
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0926120290447
     FlatPrior: false
     KinematicCuts:
@@ -2540,7 +2540,7 @@ Systematics:
     - b_205: 0.29858051813
     - b_206: 0.245458020019
     - b_207: 0.143216275964
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0804767043985
     FlatPrior: false
     KinematicCuts:
@@ -2775,7 +2775,7 @@ Systematics:
     - b_205: 0.331360132044
     - b_206: 0.296697870877
     - b_207: 0.174004493979
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0774468678958
     FlatPrior: false
     KinematicCuts:
@@ -3010,7 +3010,7 @@ Systematics:
     - b_205: 0.376678253247
     - b_206: 0.337275370348
     - b_207: 0.230033918132
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0801585961159
     FlatPrior: false
     KinematicCuts:
@@ -3245,7 +3245,7 @@ Systematics:
     - b_205: 0.352461400126
     - b_206: 0.316388741228
     - b_207: 0.191639697344
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0767549557896
     FlatPrior: false
     KinematicCuts:
@@ -3480,7 +3480,7 @@ Systematics:
     - b_205: 0.317144524995
     - b_206: 0.284644104959
     - b_207: 0.178059095913
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0738976671906
     FlatPrior: false
     KinematicCuts:
@@ -3715,7 +3715,7 @@ Systematics:
     - b_205: 0.267218051734
     - b_206: 0.233673341851
     - b_207: 0.161303647687
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0753765092052
     FlatPrior: false
     KinematicCuts:
@@ -3950,7 +3950,7 @@ Systematics:
     - b_205: 0.253193033837
     - b_206: 0.238751454388
     - b_207: 0.14226823113
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0754754390019
     FlatPrior: false
     KinematicCuts:
@@ -4185,7 +4185,7 @@ Systematics:
     - b_205: 0.268432808795
     - b_206: 0.22096660997
     - b_207: 0.174125657578
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0789796908757
     FlatPrior: false
     KinematicCuts:
@@ -4420,7 +4420,7 @@ Systematics:
     - b_205: 0.230284142215
     - b_206: 0.221199026401
     - b_207: 0.0770398277935
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0898401873206
     FlatPrior: false
     KinematicCuts:
@@ -4655,7 +4655,7 @@ Systematics:
     - b_205: 0.347822225068
     - b_206: 0.328022927754
     - b_207: 0.186682257984
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0883663024722
     FlatPrior: false
     KinematicCuts:
@@ -4890,7 +4890,7 @@ Systematics:
     - b_205: 0.462914123377
     - b_206: 0.464077701822
     - b_207: 0.342133017736
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0863581148799
     FlatPrior: false
     KinematicCuts:
@@ -5125,7 +5125,7 @@ Systematics:
     - b_205: 0.464029022318
     - b_206: 0.47375439819
     - b_207: 0.344228424365
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0957909278003
     FlatPrior: false
     KinematicCuts:
@@ -5360,7 +5360,7 @@ Systematics:
     - b_205: 0.437806732016
     - b_206: 0.458427815764
     - b_207: 0.306560345799
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0853907781146
     FlatPrior: false
     KinematicCuts:
@@ -5595,7 +5595,7 @@ Systematics:
     - b_205: 0.313071358395
     - b_206: 0.390403864245
     - b_207: 0.346165041054
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.118445839742
     FlatPrior: false
     KinematicCuts:
@@ -5830,7 +5830,7 @@ Systematics:
     - b_205: 0.341231234424
     - b_206: 0.44412800564
     - b_207: 0.350042001097
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.175350220656
     FlatPrior: false
     KinematicCuts:
@@ -6065,7 +6065,7 @@ Systematics:
     - b_205: 0.386012387997
     - b_206: 0.470196287161
     - b_207: 0.441661594356
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.185646424801
     FlatPrior: false
     KinematicCuts:
@@ -6300,7 +6300,7 @@ Systematics:
     - b_205: 0.330817488378
     - b_206: 0.299023396874
     - b_207: 0.419980656764
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.347006205066
     FlatPrior: false
     KinematicCuts:
@@ -6535,7 +6535,7 @@ Systematics:
     - b_205: 0.288264945803
     - b_206: 0.234815818668
     - b_207: 0.130552069614
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.153199620714
     FlatPrior: false
     KinematicCuts:
@@ -6770,7 +6770,7 @@ Systematics:
     - b_205: 0.419204376184
     - b_206: 0.376277445534
     - b_207: 0.205819528517
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.104531334342
     FlatPrior: false
     KinematicCuts:
@@ -7005,7 +7005,7 @@ Systematics:
     - b_205: 0.487174148705
     - b_206: 0.43202200719
     - b_207: 0.262931426454
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.103605563829
     FlatPrior: false
     KinematicCuts:
@@ -7240,7 +7240,7 @@ Systematics:
     - b_205: 0.490037401964
     - b_206: 0.43303235867
     - b_207: 0.257923971717
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.102497513369
     FlatPrior: false
     KinematicCuts:
@@ -7475,7 +7475,7 @@ Systematics:
     - b_205: 0.520861171114
     - b_206: 0.460939427496
     - b_207: 0.289431977815
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.102943383631
     FlatPrior: false
     KinematicCuts:
@@ -7710,7 +7710,7 @@ Systematics:
     - b_205: 0.540542884239
     - b_206: 0.484098800243
     - b_207: 0.305904944909
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.101857930208
     FlatPrior: false
     KinematicCuts:
@@ -7945,7 +7945,7 @@ Systematics:
     - b_205: 0.545120486413
     - b_206: 0.489857831564
     - b_207: 0.298173192695
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0985017454341
     FlatPrior: false
     KinematicCuts:
@@ -8180,7 +8180,7 @@ Systematics:
     - b_205: 0.570916132903
     - b_206: 0.517054788977
     - b_207: 0.33455255784
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.10266107887
     FlatPrior: false
     KinematicCuts:
@@ -8415,7 +8415,7 @@ Systematics:
     - b_205: 0.556085860967
     - b_206: 0.50534703478
     - b_207: 0.304812854395
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0950780750528
     FlatPrior: false
     KinematicCuts:
@@ -8650,7 +8650,7 @@ Systematics:
     - b_205: 0.626043586212
     - b_206: 0.573473927647
     - b_207: 0.385582703413
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0992667829062
     FlatPrior: false
     KinematicCuts:
@@ -8885,7 +8885,7 @@ Systematics:
     - b_205: 0.666184985553
     - b_206: 0.613513976869
     - b_207: 0.433048361984
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.106433821513
     FlatPrior: false
     KinematicCuts:
@@ -9120,7 +9120,7 @@ Systematics:
     - b_205: 0.696469197001
     - b_206: 0.636078938239
     - b_207: 0.415175490577
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.102909691851
     FlatPrior: false
     KinematicCuts:
@@ -9355,7 +9355,7 @@ Systematics:
     - b_205: 0.644833342582
     - b_206: 0.601411908005
     - b_207: 0.351739606073
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0994042176524
     FlatPrior: false
     KinematicCuts:
@@ -9590,7 +9590,7 @@ Systematics:
     - b_205: 0.687851685501
     - b_206: 0.639016660482
     - b_207: 0.406008694546
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.107849552145
     FlatPrior: false
     KinematicCuts:
@@ -9825,7 +9825,7 @@ Systematics:
     - b_205: 0.724650208532
     - b_206: 0.675585140353
     - b_207: 0.465086852791
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.132078471898
     FlatPrior: false
     KinematicCuts:
@@ -10060,7 +10060,7 @@ Systematics:
     - b_205: 0.799004101138
     - b_206: 0.796480817036
     - b_207: 0.369313102192
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.15924116036
     FlatPrior: false
     KinematicCuts:
@@ -10295,7 +10295,7 @@ Systematics:
     - b_205: 0.680205228885
     - b_206: 0.798072266585
     - b_207: 0.373601981566
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.22479737126
     FlatPrior: false
     KinematicCuts:
@@ -10530,7 +10530,7 @@ Systematics:
     - b_205: 0.573794417489
     - b_206: 0.63220524523
     - b_207: 0.566109698762
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.215033791076
     FlatPrior: false
     KinematicCuts:
@@ -10765,7 +10765,7 @@ Systematics:
     - b_205: 0.0282740226785
     - b_206: 0.00738810476078
     - b_207: 0.0521763086252
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.594284639504
     FlatPrior: false
     KinematicCuts:
@@ -11000,7 +11000,7 @@ Systematics:
     - b_205: 0.347022308309
     - b_206: 0.22470049857
     - b_207: 0.310018359601
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0883315241115
     FlatPrior: false
     KinematicCuts:
@@ -11235,7 +11235,7 @@ Systematics:
     - b_205: 0.369359565083
     - b_206: 0.384898239991
     - b_207: 0.13528912539
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0709513400342
     FlatPrior: false
     KinematicCuts:
@@ -11470,7 +11470,7 @@ Systematics:
     - b_205: 0.501358685387
     - b_206: 0.482027187381
     - b_207: 0.291107518808
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0795096818781
     FlatPrior: false
     KinematicCuts:
@@ -11705,7 +11705,7 @@ Systematics:
     - b_205: 0.548469738095
     - b_206: 0.623945335925
     - b_207: 0.389222115419
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0913606273956
     FlatPrior: false
     KinematicCuts:
@@ -11940,7 +11940,7 @@ Systematics:
     - b_205: 0.495401138672
     - b_206: 0.612756630902
     - b_207: 0.307989316946
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.1145125855
     FlatPrior: false
     KinematicCuts:
@@ -12175,7 +12175,7 @@ Systematics:
     - b_205: 0.36936377217
     - b_206: 0.57996704016
     - b_207: 0.235446164783
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.148054923254
     FlatPrior: false
     KinematicCuts:
@@ -12410,7 +12410,7 @@ Systematics:
     - b_205: 0.460537550012
     - b_206: 0.395971902959
     - b_207: 0.68218981284
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.255360042724
     FlatPrior: false
     KinematicCuts:
@@ -12645,7 +12645,7 @@ Systematics:
     - b_205: 0.409886420242
     - b_206: 0.338247872661
     - b_207: 0.156359207516
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.108389443607
     FlatPrior: false
     KinematicCuts:
@@ -12880,7 +12880,7 @@ Systematics:
     - b_205: 0.805160146751
     - b_206: 0.703739938224
     - b_207: 0.384683938856
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0983768747454
     FlatPrior: false
     KinematicCuts:
@@ -13115,7 +13115,7 @@ Systematics:
     - b_205: 0.889877050852
     - b_206: 0.810283864379
     - b_207: 0.436240749758
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.114267462176
     FlatPrior: false
     KinematicCuts:
@@ -13350,7 +13350,7 @@ Systematics:
     - b_205: 0.916960453929
     - b_206: 0.860348003881
     - b_207: 0.474031464578
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.137986953478
     FlatPrior: false
     KinematicCuts:
@@ -13585,7 +13585,7 @@ Systematics:
     - b_205: 0.909226576952
     - b_206: 0.89344055461
     - b_207: 0.454590570421
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.152545464064
     FlatPrior: false
     KinematicCuts:
@@ -13820,7 +13820,7 @@ Systematics:
     - b_205: 0.85985268179
     - b_206: 0.940012776976
     - b_207: 0.571689692175
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.160069302489
     FlatPrior: false
     KinematicCuts:
@@ -14055,7 +14055,7 @@ Systematics:
     - b_205: 0.302076799044
     - b_206: 0.378141404814
     - b_207: 0.511000908031
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.209431444838
     FlatPrior: false
     KinematicCuts:
@@ -14290,7 +14290,7 @@ Systematics:
     - b_205: 0.285441944944
     - b_206: 0.240933528623
     - b_207: 0.157531932604
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.1612193214
     FlatPrior: false
     KinematicCuts:
@@ -14525,7 +14525,7 @@ Systematics:
     - b_205: 0.405234842091
     - b_206: 0.37100206501
     - b_207: 0.235615331781
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.107714786765
     FlatPrior: false
     KinematicCuts:
@@ -14760,7 +14760,7 @@ Systematics:
     - b_205: 0.481633559876
     - b_206: 0.434964581078
     - b_207: 0.291193616635
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0958234513258
     FlatPrior: false
     KinematicCuts:
@@ -14995,7 +14995,7 @@ Systematics:
     - b_205: 0.508238269852
     - b_206: 0.460426102541
     - b_207: 0.325561494248
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0999305646731
     FlatPrior: false
     KinematicCuts:
@@ -15230,7 +15230,7 @@ Systematics:
     - b_205: 0.497548844903
     - b_206: 0.45475471116
     - b_207: 0.313483280811
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.102185750196
     FlatPrior: false
     KinematicCuts:
@@ -15465,7 +15465,7 @@ Systematics:
     - b_205: 0.482538369208
     - b_206: 0.446903273204
     - b_207: 0.304569488534
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.10312950082
     FlatPrior: false
     KinematicCuts:
@@ -15700,7 +15700,7 @@ Systematics:
     - b_205: 0.482166536367
     - b_206: 0.449197805475
     - b_207: 0.30371041203
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.106154976254
     FlatPrior: false
     KinematicCuts:
@@ -15935,7 +15935,7 @@ Systematics:
     - b_205: 0.502667079743
     - b_206: 0.471181745737
     - b_207: 0.329226074073
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.108834546614
     FlatPrior: false
     KinematicCuts:
@@ -16170,7 +16170,7 @@ Systematics:
     - b_205: 0.518339390647
     - b_206: 0.490748872919
     - b_207: 0.359194371238
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.111352585732
     FlatPrior: false
     KinematicCuts:
@@ -16405,7 +16405,7 @@ Systematics:
     - b_205: 0.456175055914
     - b_206: 0.44419265679
     - b_207: 0.300817212429
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.110317302578
     FlatPrior: false
     KinematicCuts:
@@ -16640,7 +16640,7 @@ Systematics:
     - b_205: 0.493206988302
     - b_206: 0.478141932073
     - b_207: 0.341842331407
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.10791622741
     FlatPrior: false
     KinematicCuts:
@@ -16875,7 +16875,7 @@ Systematics:
     - b_205: 0.496142379864
     - b_206: 0.495770937428
     - b_207: 0.334811201143
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.105977079735
     FlatPrior: false
     KinematicCuts:
@@ -17110,7 +17110,7 @@ Systematics:
     - b_205: 0.515102863941
     - b_206: 0.509040951455
     - b_207: 0.423980682622
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.126040076925
     FlatPrior: false
     KinematicCuts:
@@ -17345,7 +17345,7 @@ Systematics:
     - b_205: 0.517526707838
     - b_206: 0.511244939537
     - b_207: 0.398802507481
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.123444801438
     FlatPrior: false
     KinematicCuts:
@@ -17580,7 +17580,7 @@ Systematics:
     - b_205: 0.460466309132
     - b_206: 0.486539957444
     - b_207: 0.387469724101
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.116662604907
     FlatPrior: false
     KinematicCuts:
@@ -17815,7 +17815,7 @@ Systematics:
     - b_205: 0.340819128337
     - b_206: 0.434851360049
     - b_207: 0.326503005129
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.146041746228
     FlatPrior: false
     KinematicCuts:
@@ -18050,7 +18050,7 @@ Systematics:
     - b_205: 0.356046421291
     - b_206: 0.475438914781
     - b_207: 0.355298883291
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.18290662659
     FlatPrior: false
     KinematicCuts:
@@ -18285,7 +18285,7 @@ Systematics:
     - b_205: 0.37085580204
     - b_206: 0.453408368138
     - b_207: 0.440367615446
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.194623999144
     FlatPrior: false
     KinematicCuts:
@@ -18520,7 +18520,7 @@ Systematics:
     - b_205: 0.361245320545
     - b_206: 0.388297476226
     - b_207: 0.393465035792
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.365017881095
     FlatPrior: false
     KinematicCuts:
@@ -18755,7 +18755,7 @@ Systematics:
     - b_205: 0.171471459599
     - b_206: 0.110840899172
     - b_207: 0.0281528904738
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.120635257733
     FlatPrior: false
     KinematicCuts:
@@ -18990,7 +18990,7 @@ Systematics:
     - b_205: 0.282035540666
     - b_206: 0.216625351796
     - b_207: 0.0675981968748
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0888025452482
     FlatPrior: false
     KinematicCuts:
@@ -19225,7 +19225,7 @@ Systematics:
     - b_205: 0.335310776209
     - b_206: 0.273766360431
     - b_207: 0.100044974794
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0777255922407
     FlatPrior: false
     KinematicCuts:
@@ -19460,7 +19460,7 @@ Systematics:
     - b_205: 0.392929139021
     - b_206: 0.327145577738
     - b_207: 0.168405416518
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0740336925141
     FlatPrior: false
     KinematicCuts:
@@ -19695,7 +19695,7 @@ Systematics:
     - b_205: 0.42717244514
     - b_206: 0.36425903509
     - b_207: 0.189223759379
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.075020282706
     FlatPrior: false
     KinematicCuts:
@@ -19930,7 +19930,7 @@ Systematics:
     - b_205: 0.426560064884
     - b_206: 0.350457114578
     - b_207: 0.195303648115
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0698300677849
     FlatPrior: false
     KinematicCuts:
@@ -20165,7 +20165,7 @@ Systematics:
     - b_205: 0.368356129015
     - b_206: 0.306720141047
     - b_207: 0.133035859669
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0650617530281
     FlatPrior: false
     KinematicCuts:
@@ -20400,7 +20400,7 @@ Systematics:
     - b_205: 0.310533467933
     - b_206: 0.268525437576
     - b_207: 0.0938605915898
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0652173360008
     FlatPrior: false
     KinematicCuts:
@@ -20635,7 +20635,7 @@ Systematics:
     - b_205: 0.269276904294
     - b_206: 0.231275333311
     - b_207: 0.0667061826798
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.067013857191
     FlatPrior: false
     KinematicCuts:
@@ -20870,7 +20870,7 @@ Systematics:
     - b_205: 0.364887188977
     - b_206: 0.258448066099
     - b_207: 0.255132247744
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.072106899348
     FlatPrior: false
     KinematicCuts:
@@ -21105,7 +21105,7 @@ Systematics:
     - b_205: 0.385085142745
     - b_206: 0.301334697815
     - b_207: 0.2500607466
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0822802356682
     FlatPrior: false
     KinematicCuts:
@@ -21340,7 +21340,7 @@ Systematics:
     - b_205: 0.423796969844
     - b_206: 0.438129458403
     - b_207: 0.12443065684
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0779165821275
     FlatPrior: false
     KinematicCuts:
@@ -21575,7 +21575,7 @@ Systematics:
     - b_205: 0.636464153491
     - b_206: 0.554922700772
     - b_207: 0.464288511686
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0801278105923
     FlatPrior: false
     KinematicCuts:
@@ -21810,7 +21810,7 @@ Systematics:
     - b_205: 0.562512312029
     - b_206: 0.55560468966
     - b_207: 0.254711590945
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0983192374144
     FlatPrior: false
     KinematicCuts:
@@ -22045,7 +22045,7 @@ Systematics:
     - b_205: 0.720263455844
     - b_206: 0.611024508432
     - b_207: 0.425736273494
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0900200657746
     FlatPrior: false
     KinematicCuts:
@@ -22280,7 +22280,7 @@ Systematics:
     - b_205: 0.790646231398
     - b_206: 0.685278159906
     - b_207: 0.356432470732
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.134035329171
     FlatPrior: false
     KinematicCuts:
@@ -22515,7 +22515,7 @@ Systematics:
     - b_205: 0.713026200734
     - b_206: 0.81096294728
     - b_207: 0.298011910279
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.210272444664
     FlatPrior: false
     KinematicCuts:
@@ -22750,7 +22750,7 @@ Systematics:
     - b_205: 0.595657966901
     - b_206: 0.701397747296
     - b_207: 0.533867191389
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.213486017244
     FlatPrior: false
     KinematicCuts:
@@ -22985,7 +22985,7 @@ Systematics:
     - b_205: -0.0623748870152
     - b_206: 0.125978803348
     - b_207: -0.236615415421
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.649167360483
     FlatPrior: false
     KinematicCuts:
@@ -23220,7 +23220,7 @@ Systematics:
     - b_205: 0.452966922101
     - b_206: 0.392281859563
     - b_207: 0.274222385932
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.108367353345
     FlatPrior: false
     KinematicCuts:
@@ -23455,7 +23455,7 @@ Systematics:
     - b_205: 0.694731857588
     - b_206: 0.6540776442
     - b_207: 0.429601245028
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0930550373398
     FlatPrior: false
     KinematicCuts:
@@ -23690,7 +23690,7 @@ Systematics:
     - b_205: 0.747881628821
     - b_206: 0.732484987009
     - b_207: 0.499015318065
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.114330236084
     FlatPrior: false
     KinematicCuts:
@@ -23925,7 +23925,7 @@ Systematics:
     - b_205: 0.741262694049
     - b_206: 0.744328262657
     - b_207: 0.484179067863
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.128955833776
     FlatPrior: false
     KinematicCuts:
@@ -24160,7 +24160,7 @@ Systematics:
     - b_205: 0.735837558123
     - b_206: 0.764532421673
     - b_207: 0.485464506562
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.15951467851
     FlatPrior: false
     KinematicCuts:
@@ -24395,7 +24395,7 @@ Systematics:
     - b_205: 0.615833305725
     - b_206: 0.71845981944
     - b_207: 0.516066431803
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.161724572019
     FlatPrior: false
     KinematicCuts:
@@ -24630,7 +24630,7 @@ Systematics:
     - b_205: 0.46743920645
     - b_206: 0.514542281845
     - b_207: 0.586543404673
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.236872655124
     FlatPrior: false
     KinematicCuts:
@@ -24865,7 +24865,7 @@ Systematics:
     - b_205: 0.205689360277
     - b_206: 0.20885088257
     - b_207: -0.0727023611988
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.087955395682
     FlatPrior: false
     KinematicCuts:
@@ -25100,7 +25100,7 @@ Systematics:
     - b_205: 0.557881134714
     - b_206: 0.531549202024
     - b_207: 0.227519200536
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0691974666559
     FlatPrior: false
     KinematicCuts:
@@ -25335,7 +25335,7 @@ Systematics:
     - b_205: 0.718470517619
     - b_206: 0.675047861322
     - b_207: 0.40321432518
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.0844609146932
     FlatPrior: false
     KinematicCuts:
@@ -25570,7 +25570,7 @@ Systematics:
     - b_205: 0.839022994586
     - b_206: 0.648374208689
     - b_207: 0.703793057135
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.128874841305
     FlatPrior: false
     KinematicCuts:
@@ -25805,7 +25805,7 @@ Systematics:
     - b_205: 0.84942833458
     - b_206: 0.897830834612
     - b_207: 0.309580616162
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.132257068909
     FlatPrior: false
     KinematicCuts:
@@ -26040,7 +26040,7 @@ Systematics:
     - b_205: 0.911941316239
     - b_206: 0.986622112881
     - b_207: 0.603075465221
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.148582318316
     FlatPrior: false
     KinematicCuts:
@@ -26275,7 +26275,7 @@ Systematics:
     - b_205: 0.500522782145
     - b_206: 0.523485017964
     - b_207: 0.909211431241
-    SampleName: ["ND"]
+    SampleNames: ["ND_*"]
     Error: 0.193734459966
     FlatPrior: false
     KinematicCuts:
@@ -26510,7 +26510,7 @@ Systematics:
     - b_205: 0.153228986145
     - b_206: 0.100861196493
     - b_207: 0.0369056155729
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.123224219401
     FlatPrior: false
     KinematicCuts:
@@ -26745,7 +26745,7 @@ Systematics:
     - b_205: 0.246940514513
     - b_206: 0.18873023131
     - b_207: 0.101861002507
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0919918430785
     FlatPrior: false
     KinematicCuts:
@@ -26980,7 +26980,7 @@ Systematics:
     - b_205: 0.297985593057
     - b_206: 0.245171026384
     - b_207: 0.142513129152
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0802415242014
     FlatPrior: false
     KinematicCuts:
@@ -27215,7 +27215,7 @@ Systematics:
     - b_205: 0.319257673074
     - b_206: 0.287768499717
     - b_207: 0.161527748856
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0772539480878
     FlatPrior: false
     KinematicCuts:
@@ -27450,7 +27450,7 @@ Systematics:
     - b_205: 0.368748345125
     - b_206: 0.328643059401
     - b_207: 0.229154189729
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0784638953031
     FlatPrior: false
     KinematicCuts:
@@ -27685,7 +27685,7 @@ Systematics:
     - b_205: 0.380807396059
     - b_206: 0.337333012884
     - b_207: 0.226587891052
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0785373241597
     FlatPrior: false
     KinematicCuts:
@@ -27920,7 +27920,7 @@ Systematics:
     - b_205: 0.353746405303
     - b_206: 0.318702873475
     - b_207: 0.19657495057
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0753665087782
     FlatPrior: false
     KinematicCuts:
@@ -28155,7 +28155,7 @@ Systematics:
     - b_205: 0.289569535465
     - b_206: 0.261981617746
     - b_207: 0.159590623701
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0760384558939
     FlatPrior: false
     KinematicCuts:
@@ -28390,7 +28390,7 @@ Systematics:
     - b_205: 0.269069674535
     - b_206: 0.236766475728
     - b_207: 0.163362936981
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0756908107654
     FlatPrior: false
     KinematicCuts:
@@ -28625,7 +28625,7 @@ Systematics:
     - b_205: 0.29523861378
     - b_206: 0.24342761527
     - b_207: 0.223832962585
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0776430657652
     FlatPrior: false
     KinematicCuts:
@@ -28860,7 +28860,7 @@ Systematics:
     - b_205: 0.214132917456
     - b_206: 0.234766322209
     - b_207: 0.0341102799423
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0862654553181
     FlatPrior: false
     KinematicCuts:
@@ -29095,7 +29095,7 @@ Systematics:
     - b_205: 0.398251500161
     - b_206: 0.344539521074
     - b_207: 0.277797500426
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.08898115163
     FlatPrior: false
     KinematicCuts:
@@ -29330,7 +29330,7 @@ Systematics:
     - b_205: 0.448362288613
     - b_206: 0.430079036034
     - b_207: 0.320150080173
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0840024699312
     FlatPrior: false
     KinematicCuts:
@@ -29565,7 +29565,7 @@ Systematics:
     - b_205: 0.472826056852
     - b_206: 0.461468190764
     - b_207: 0.370494453133
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0950422221091
     FlatPrior: false
     KinematicCuts:
@@ -29800,7 +29800,7 @@ Systematics:
     - b_205: 0.444170156763
     - b_206: 0.464143782376
     - b_207: 0.321393866094
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0880469563124
     FlatPrior: false
     KinematicCuts:
@@ -30035,7 +30035,7 @@ Systematics:
     - b_205: 0.34778374881
     - b_206: 0.403646491237
     - b_207: 0.37577720874
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.111680294472
     FlatPrior: false
     KinematicCuts:
@@ -30270,7 +30270,7 @@ Systematics:
     - b_205: 0.321717130443
     - b_206: 0.423294735133
     - b_207: 0.315790074612
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.166335506531
     FlatPrior: false
     KinematicCuts:
@@ -30505,7 +30505,7 @@ Systematics:
     - b_205: 0.36214649987
     - b_206: 0.468778583992
     - b_207: 0.402942526115
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.175355411847
     FlatPrior: false
     KinematicCuts:
@@ -30740,7 +30740,7 @@ Systematics:
     - b_205: 0.382451540591
     - b_206: 0.340072184381
     - b_207: 0.483214160886
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.322609599348
     FlatPrior: false
     KinematicCuts:
@@ -30975,7 +30975,7 @@ Systematics:
     - b_205: 0.263784731185
     - b_206: 0.211104998507
     - b_207: 0.112010645004
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.148567101318
     FlatPrior: false
     KinematicCuts:
@@ -31210,7 +31210,7 @@ Systematics:
     - b_205: 0.409207213423
     - b_206: 0.36274229702
     - b_207: 0.193155196705
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.102081519068
     FlatPrior: false
     KinematicCuts:
@@ -31445,7 +31445,7 @@ Systematics:
     - b_205: 0.453102920482
     - b_206: 0.397761609891
     - b_207: 0.22543470634
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.101315339656
     FlatPrior: false
     KinematicCuts:
@@ -31680,7 +31680,7 @@ Systematics:
     - b_205: 0.478591642094
     - b_206: 0.4186937932
     - b_207: 0.24587774759
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.103906099616
     FlatPrior: false
     KinematicCuts:
@@ -31915,7 +31915,7 @@ Systematics:
     - b_205: 0.509238736716
     - b_206: 0.448055164688
     - b_207: 0.278853957194
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.105285456989
     FlatPrior: false
     KinematicCuts:
@@ -32150,7 +32150,7 @@ Systematics:
     - b_205: 0.53036606875
     - b_206: 0.472331753847
     - b_207: 0.291586036972
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.10071126015
     FlatPrior: false
     KinematicCuts:
@@ -32385,7 +32385,7 @@ Systematics:
     - b_205: 0.543230219153
     - b_206: 0.487093674332
     - b_207: 0.308569612832
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.10107213865
     FlatPrior: false
     KinematicCuts:
@@ -32620,7 +32620,7 @@ Systematics:
     - b_205: 0.564029009758
     - b_206: 0.508537540767
     - b_207: 0.333587195365
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.102252045769
     FlatPrior: false
     KinematicCuts:
@@ -32855,7 +32855,7 @@ Systematics:
     - b_205: 0.561184297577
     - b_206: 0.511583128693
     - b_207: 0.325188050036
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.098317152216
     FlatPrior: false
     KinematicCuts:
@@ -33090,7 +33090,7 @@ Systematics:
     - b_205: 0.552892785091
     - b_206: 0.51432177713
     - b_207: 0.321569189213
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0977261159832
     FlatPrior: false
     KinematicCuts:
@@ -33325,7 +33325,7 @@ Systematics:
     - b_205: 0.624032596649
     - b_206: 0.570997882664
     - b_207: 0.396895410204
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.105837848757
     FlatPrior: false
     KinematicCuts:
@@ -33560,7 +33560,7 @@ Systematics:
     - b_205: 0.639249504254
     - b_206: 0.590230883229
     - b_207: 0.436108802073
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.114467628591
     FlatPrior: false
     KinematicCuts:
@@ -33795,7 +33795,7 @@ Systematics:
     - b_205: 0.627821046931
     - b_206: 0.585415906199
     - b_207: 0.346533873462
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0998471512565
     FlatPrior: false
     KinematicCuts:
@@ -34030,7 +34030,7 @@ Systematics:
     - b_205: 0.687213839874
     - b_206: 0.639582144822
     - b_207: 0.401329491179
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.106740781753
     FlatPrior: false
     KinematicCuts:
@@ -34265,7 +34265,7 @@ Systematics:
     - b_205: 0.749718539157
     - b_206: 0.696800685818
     - b_207: 0.46396613517
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.120723958605
     FlatPrior: false
     KinematicCuts:
@@ -34500,7 +34500,7 @@ Systematics:
     - b_205: 0.782528630841
     - b_206: 0.753129206372
     - b_207: 0.398204561306
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.161174300575
     FlatPrior: false
     KinematicCuts:
@@ -34735,7 +34735,7 @@ Systematics:
     - b_205: 0.63480297178
     - b_206: 0.758461452345
     - b_207: 0.290018866365
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.226198470406
     FlatPrior: false
     KinematicCuts:
@@ -34970,7 +34970,7 @@ Systematics:
     - b_205: 0.588974208108
     - b_206: 0.658788860538
     - b_207: 0.559754892488
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.218724600379
     FlatPrior: false
     KinematicCuts:
@@ -35205,7 +35205,7 @@ Systematics:
     - b_205: -0.05022657434
     - b_206: -0.0533911982232
     - b_207: -0.0606375860771
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.876585568248
     FlatPrior: false
     KinematicCuts:
@@ -35440,7 +35440,7 @@ Systematics:
     - b_205: 0.308751896182
     - b_206: 0.207929798036
     - b_207: 0.225011125822
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.084932612534
     FlatPrior: false
     KinematicCuts:
@@ -35675,7 +35675,7 @@ Systematics:
     - b_205: 0.46628743144
     - b_206: 0.436324716463
     - b_207: 0.300272404425
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0679864204842
     FlatPrior: false
     KinematicCuts:
@@ -35910,7 +35910,7 @@ Systematics:
     - b_205: 0.46603827479
     - b_206: 0.472631206071
     - b_207: 0.223835281939
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.075441973537
     FlatPrior: false
     KinematicCuts:
@@ -36145,7 +36145,7 @@ Systematics:
     - b_205: 0.624140230499
     - b_206: 0.624535945624
     - b_207: 0.518809576743
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0853839574578
     FlatPrior: false
     KinematicCuts:
@@ -36380,7 +36380,7 @@ Systematics:
     - b_205: 0.52717063117
     - b_206: 0.617153877328
     - b_207: 0.366472943572
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.108801713212
     FlatPrior: false
     KinematicCuts:
@@ -36615,7 +36615,7 @@ Systematics:
     - b_205: 0.41007744215
     - b_206: 0.603708150503
     - b_207: 0.282195954608
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.139492097845
     FlatPrior: false
     KinematicCuts:
@@ -36850,7 +36850,7 @@ Systematics:
     - b_205: 0.464796041228
     - b_206: 0.409126408357
     - b_207: 0.725711929107
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.226805353458
     FlatPrior: false
     KinematicCuts:
@@ -37085,7 +37085,7 @@ Systematics:
     - b_205: 0.430058947796
     - b_206: 0.351793151423
     - b_207: 0.175986698795
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.10146513306
     FlatPrior: false
     KinematicCuts:
@@ -37320,7 +37320,7 @@ Systematics:
     - b_205: 0.777328198338
     - b_206: 0.676953061585
     - b_207: 0.353788221318
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0930336214323
     FlatPrior: false
     KinematicCuts:
@@ -37555,7 +37555,7 @@ Systematics:
     - b_205: 0.907758637178
     - b_206: 0.822935972154
     - b_207: 0.481370954686
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.112741652929
     FlatPrior: false
     KinematicCuts:
@@ -37790,7 +37790,7 @@ Systematics:
     - b_205: 0.920128961156
     - b_206: 0.856109899734
     - b_207: 0.464752892536
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.128663792758
     FlatPrior: false
     KinematicCuts:
@@ -38025,7 +38025,7 @@ Systematics:
     - b_205: 0.914723300905
     - b_206: 0.892771145215
     - b_207: 0.446399615188
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.145672602693
     FlatPrior: false
     KinematicCuts:
@@ -38260,7 +38260,7 @@ Systematics:
     - b_205: 0.871106563401
     - b_206: 0.953300076793
     - b_207: 0.567304554813
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.155969277676
     FlatPrior: false
     KinematicCuts:
@@ -38495,7 +38495,7 @@ Systematics:
     - b_205: 0.213097252994
     - b_206: 0.294761464053
     - b_207: 0.380551515944
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.229443910222
     FlatPrior: false
     KinematicCuts:
@@ -38730,7 +38730,7 @@ Systematics:
     - b_205: 0.265302233658
     - b_206: 0.221344536585
     - b_207: 0.142297988419
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.156114583904
     FlatPrior: false
     KinematicCuts:
@@ -38965,7 +38965,7 @@ Systematics:
     - b_205: 0.398654822367
     - b_206: 0.361718837876
     - b_207: 0.226897373853
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.102593642381
     FlatPrior: false
     KinematicCuts:
@@ -39200,7 +39200,7 @@ Systematics:
     - b_205: 0.466947991803
     - b_206: 0.420286316422
     - b_207: 0.277465320329
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0923182099511
     FlatPrior: false
     KinematicCuts:
@@ -39435,7 +39435,7 @@ Systematics:
     - b_205: 0.500589983654
     - b_206: 0.451663191572
     - b_207: 0.317724521895
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0967089335474
     FlatPrior: false
     KinematicCuts:
@@ -39670,7 +39670,7 @@ Systematics:
     - b_205: 0.495344327295
     - b_206: 0.449760258923
     - b_207: 0.313787404106
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.101134743759
     FlatPrior: false
     KinematicCuts:
@@ -39905,7 +39905,7 @@ Systematics:
     - b_205: 0.474231000602
     - b_206: 0.435486534883
     - b_207: 0.299656877014
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.104246041387
     FlatPrior: false
     KinematicCuts:
@@ -40140,7 +40140,7 @@ Systematics:
     - b_205: 0.467172290748
     - b_206: 0.436531768166
     - b_207: 0.298955816106
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.105620505343
     FlatPrior: false
     KinematicCuts:
@@ -40375,7 +40375,7 @@ Systematics:
     - b_205: 0.488172538502
     - b_206: 0.460551803569
     - b_207: 0.341154029096
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.113292572118
     FlatPrior: false
     KinematicCuts:
@@ -40610,7 +40610,7 @@ Systematics:
     - b_205: 0.478535958621
     - b_206: 0.454537317619
     - b_207: 0.321718219748
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.111672329236
     FlatPrior: false
     KinematicCuts:
@@ -40845,7 +40845,7 @@ Systematics:
     - b_205: 0.501336112647
     - b_206: 0.480058904332
     - b_207: 0.363003479441
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.117202581003
     FlatPrior: false
     KinematicCuts:
@@ -41080,7 +41080,7 @@ Systematics:
     - b_205: 0.461607926254
     - b_206: 0.450680565988
     - b_207: 0.327883797551
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.112319933805
     FlatPrior: false
     KinematicCuts:
@@ -41315,7 +41315,7 @@ Systematics:
     - b_205: 0.461325156779
     - b_206: 0.455418473921
     - b_207: 0.314826739268
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.108966363232
     FlatPrior: false
     KinematicCuts:
@@ -41550,7 +41550,7 @@ Systematics:
     - b_205: 0.498661760699
     - b_206: 0.495289236647
     - b_207: 0.398372086946
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.118607377738
     FlatPrior: false
     KinematicCuts:
@@ -41785,7 +41785,7 @@ Systematics:
     - b_205: 0.510066865438
     - b_206: 0.508148471465
     - b_207: 0.407361977519
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.121507250422
     FlatPrior: false
     KinematicCuts:
@@ -42020,7 +42020,7 @@ Systematics:
     - b_205: 0.470675285398
     - b_206: 0.494915905965
     - b_207: 0.399634233414
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.113958744146
     FlatPrior: false
     KinematicCuts:
@@ -42255,7 +42255,7 @@ Systematics:
     - b_205: 0.296674209864
     - b_206: 0.384699776411
     - b_207: 0.276191875994
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.142894497859
     FlatPrior: false
     KinematicCuts:
@@ -42490,7 +42490,7 @@ Systematics:
     - b_205: 0.35622306197
     - b_206: 0.47059009086
     - b_207: 0.3370775892
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.194107360503
     FlatPrior: false
     KinematicCuts:
@@ -42725,7 +42725,7 @@ Systematics:
     - b_205: 0.373890854032
     - b_206: 0.463987092065
     - b_207: 0.443153597659
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.181542659311
     FlatPrior: false
     KinematicCuts:
@@ -42960,7 +42960,7 @@ Systematics:
     - b_205: 0.325572062285
     - b_206: 0.364009948246
     - b_207: 0.350610830129
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.31924067114
     FlatPrior: false
     KinematicCuts:
@@ -43195,7 +43195,7 @@ Systematics:
     - b_205: 0.157874103946
     - b_206: 0.0961342581362
     - b_207: 0.018227576458
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.119323524094
     FlatPrior: false
     KinematicCuts:
@@ -43430,7 +43430,7 @@ Systematics:
     - b_205: 0.276291292377
     - b_206: 0.210758684357
     - b_207: 0.0626476025638
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0881785384035
     FlatPrior: false
     KinematicCuts:
@@ -43665,7 +43665,7 @@ Systematics:
     - b_205: 0.334431085786
     - b_206: 0.269919474419
     - b_207: 0.104879795802
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0775096471758
     FlatPrior: false
     KinematicCuts:
@@ -43900,7 +43900,7 @@ Systematics:
     - b_205: 0.383943878825
     - b_206: 0.32031536191
     - b_207: 0.160063439337
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0739511879664
     FlatPrior: false
     KinematicCuts:
@@ -44135,7 +44135,7 @@ Systematics:
     - b_205: 0.410352194055
     - b_206: 0.3529326723
     - b_207: 0.164994251974
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0739234595837
     FlatPrior: false
     KinematicCuts:
@@ -44370,7 +44370,7 @@ Systematics:
     - b_205: 0.434756056713
     - b_206: 0.372496072083
     - b_207: 0.190592970687
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0716676699533
     FlatPrior: false
     KinematicCuts:
@@ -44605,7 +44605,7 @@ Systematics:
     - b_205: 0.426568883814
     - b_206: 0.340388644488
     - b_207: 0.206700754747
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0665602134795
     FlatPrior: false
     KinematicCuts:
@@ -44840,7 +44840,7 @@ Systematics:
     - b_205: 0.33496337588
     - b_206: 0.301038085806
     - b_207: 0.0955979922923
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0660309536093
     FlatPrior: false
     KinematicCuts:
@@ -45075,7 +45075,7 @@ Systematics:
     - b_205: 0.320516623902
     - b_206: 0.254795499185
     - b_207: 0.127318126483
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0665488842619
     FlatPrior: false
     KinematicCuts:
@@ -45310,7 +45310,7 @@ Systematics:
     - b_205: 0.339817395592
     - b_206: 0.27745431512
     - b_207: 0.157861346866
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.068320900554
     FlatPrior: false
     KinematicCuts:
@@ -45545,7 +45545,7 @@ Systematics:
     - b_205: 0.378988889201
     - b_206: 0.300184413378
     - b_207: 0.221132636595
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0759986457421
     FlatPrior: false
     KinematicCuts:
@@ -45780,7 +45780,7 @@ Systematics:
     - b_205: 0.373469203714
     - b_206: 0.387128375589
     - b_207: 0.0830538025261
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0803969281245
     FlatPrior: false
     KinematicCuts:
@@ -46015,7 +46015,7 @@ Systematics:
     - b_205: 0.632899639143
     - b_206: 0.563948471847
     - b_207: 0.451650235412
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0794696719707
     FlatPrior: false
     KinematicCuts:
@@ -46250,7 +46250,7 @@ Systematics:
     - b_205: 0.647418474658
     - b_206: 0.560262524723
     - b_207: 0.472036633431
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0931328939462
     FlatPrior: false
     KinematicCuts:
@@ -46485,7 +46485,7 @@ Systematics:
     - b_205: 0.662286272551
     - b_206: 0.607711675723
     - b_207: 0.321236342559
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0904542234871
     FlatPrior: false
     KinematicCuts:
@@ -46720,7 +46720,7 @@ Systematics:
     - b_205: 0.784778359067
     - b_206: 0.673805843476
     - b_207: 0.369600210219
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.125686510068
     FlatPrior: false
     KinematicCuts:
@@ -46955,7 +46955,7 @@ Systematics:
     - b_205: 0.713981566932
     - b_206: 0.786916498196
     - b_207: 0.268833202943
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.1976242631
     FlatPrior: false
     KinematicCuts:
@@ -47190,7 +47190,7 @@ Systematics:
     - b_205: 0.618998278153
     - b_206: 0.724860537107
     - b_207: 0.531020713366
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.21069746735
     FlatPrior: false
     KinematicCuts:
@@ -47425,7 +47425,7 @@ Systematics:
     - b_205: -0.0845363932683
     - b_206: 0.109939463102
     - b_207: -0.293259786856
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.839550788657
     FlatPrior: false
     KinematicCuts:
@@ -47660,7 +47660,7 @@ Systematics:
     - b_205: 0.432406897529
     - b_206: 0.368884214132
     - b_207: 0.251346435483
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.103263736633
     FlatPrior: false
     KinematicCuts:
@@ -47895,7 +47895,7 @@ Systematics:
     - b_205: 0.69517679334
     - b_206: 0.654256786835
     - b_207: 0.442204042392
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0890224428233
     FlatPrior: false
     KinematicCuts:
@@ -48130,7 +48130,7 @@ Systematics:
     - b_205: 0.743688313878
     - b_206: 0.724730460041
     - b_207: 0.495764460289
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.108163370625
     FlatPrior: false
     KinematicCuts:
@@ -48365,7 +48365,7 @@ Systematics:
     - b_205: 0.737709602079
     - b_206: 0.743467176374
     - b_207: 0.488602223497
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.124204493911
     FlatPrior: false
     KinematicCuts:
@@ -48600,7 +48600,7 @@ Systematics:
     - b_205: 0.735815058025
     - b_206: 0.758063143601
     - b_207: 0.496048218331
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.146830957451
     FlatPrior: false
     KinematicCuts:
@@ -48835,7 +48835,7 @@ Systematics:
     - b_205: 0.626378353961
     - b_206: 0.730268017687
     - b_207: 0.520861289149
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.158357027131
     FlatPrior: false
     KinematicCuts:
@@ -49070,7 +49070,7 @@ Systematics:
     - b_205: 0.447021347801
     - b_206: 0.521757138558
     - b_207: 0.597633494099
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.191606685339
     FlatPrior: false
     KinematicCuts:
@@ -49305,7 +49305,7 @@ Systematics:
     - b_205: 0.245912398726
     - b_206: 0.231842784634
     - b_207: -0.0219715771122
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0850143376668
     FlatPrior: false
     KinematicCuts:
@@ -49540,7 +49540,7 @@ Systematics:
     - b_205: 0.522992662717
     - b_206: 0.507358392441
     - b_207: 0.15009140906
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0678272409999
     FlatPrior: false
     KinematicCuts:
@@ -49775,7 +49775,7 @@ Systematics:
     - b_205: 0.813164625355
     - b_206: 0.704159530649
     - b_207: 0.512039910482
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.0789826067963
     FlatPrior: false
     KinematicCuts:
@@ -50010,7 +50010,7 @@ Systematics:
     - b_205: 0.837807411558
     - b_206: 0.66715159168
     - b_207: 0.642927784699
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.11790005798
     FlatPrior: false
     KinematicCuts:
@@ -50245,7 +50245,7 @@ Systematics:
     - b_205: 1.0
     - b_206: 0.89515733437
     - b_207: 0.564646586763
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.120569006222
     FlatPrior: false
     KinematicCuts:
@@ -50480,7 +50480,7 @@ Systematics:
     - b_205: 0.89515733437
     - b_206: 1.0
     - b_207: 0.53422543473
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.143373459782
     FlatPrior: false
     KinematicCuts:
@@ -50715,7 +50715,7 @@ Systematics:
     - b_205: 0.564646586763
     - b_206: 0.53422543473
     - b_207: 1.0
-    SampleName: ["FD"]
+    SampleNames: ["FD"]
     Error: 0.196693899466
     FlatPrior: false
     KinematicCuts:

@@ -4,7 +4,7 @@ SampleType: "BeamND"
 
 POT: 3.85e21
 MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes.yaml"
-SampleName: "ND_RHC"
+SampleName: "ND_LAr_RHC"
 
 Binning:
   XVarStr: "RecoNeutrinoEnergy"

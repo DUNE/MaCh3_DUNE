@@ -1,7 +1,7 @@
 ---
 Systematics:
 - Systematic:
-    SampleName: ["ATM"]
+    SampleNames: ["ATM"]
     Error: 0.123224219401
     FlatPrior: false
     KinematicCuts:
