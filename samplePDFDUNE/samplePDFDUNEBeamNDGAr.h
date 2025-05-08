@@ -57,7 +57,8 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     std::vector<double> ReturnKinematicParameterBinning(KinematicTypes KinematicParameter);
     
     void makePixelGrid(double pixel_spacing_cm);
-    double FindNHits(double pixel_spacing_cm, double centre_circle_y, double centre_circle_z, double rad_curvature);
+    double FindNHits(bool positivecharged, double pixel_spacing_cm, double centre_circle_y, double centre_circle_z, double rad_curvature, double theta_start, double theta_end);
+    bool isCoordOnTrack(bool positivecharged, double ycoord, double zcoord, double centre_circle_y, double centre_circle_z, double theta_start, double theta_end);
     double CalcBeta(double p_mag, double& bg, double& gamma, double pdgmass);
     bool IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, int i_truepart, double pixel_spacing_cm, bool *isgoodcafparticle, double pdgmass);
 

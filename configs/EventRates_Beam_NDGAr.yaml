@@ -277,6 +277,30 @@ GeneralKinematicCuts:
     "VarBins": [[100,0,5000]],
   },
   {
+    "Name": "Particle_N_Hits_in_TPC_escapedTPC",
+    "VarStrings": ["Particle_NHits"],
+    "VarBins": [[100,0,5000]],
+    "KinematicCuts": [
+      {
+        "Range": [0.,0.5],
+        "Name": "Escaped TPC",
+        "VarString": "Particle_IsStoppedInTPC"
+      }
+    ]
+  },
+  {
+    "Name": "Particle_N_Hits_in_TPC_stoppedinTPC",
+    "VarStrings": ["Particle_NHits"],
+    "VarBins": [[100,0,5000]],
+    "KinematicCuts": [
+      {
+        "Range": [1.,2],
+        "Name": "Stopped in TPC",
+        "VarString": "Particle_IsStoppedInTPC"
+      }
+    ]
+  },
+  {
     "Name": "Particle_N_Helix_Turns",
     "VarStrings": ["Particle_NTurns"],
     "VarBins": [[100,0.,6.]],

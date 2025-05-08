@@ -1,0 +1,147 @@
+General:
+  OutputFile: "outputs/nhits_bugfix.root"
+  #OutputFile: "outputs/FinalComparison_endgap.root"
+  DUNESamples: ["configs/Samples/SamplePDFDune_NDGAr_FHC_numuselec.yaml"]	
+  #Nu-FIT
+  #OscillationParameters: [0.310, 0.582, 0.224, 7.39E-5, 2.5254E-3, -2.498]
+  # T2K-like best-fit
+  OscillationParameters: [0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848]
+  OscillatorConfigName: "configs/OscillatorObj.yaml"
+  Systematics:
+    XsecCovFile: ["configs/CovObjs/xsec_covariance_DUNE_systs_NDGAr.yaml"]
+    XsecCovName: "xsec_cov"
+    XsecStepScale: 0.1
+    XsecAtGen: false 
+    OscCovFile: ["configs/CovObjs/OscCov_PDG2021_v2.yaml"]
+    OscCovName: "osc_cov"
+    OscFix: ["baseline"]
+
+  Fitter:
+    FitTestLikelihood: false
+  MCMC:
+    NSteps: 2000
+    AutoSave: 10000
+  Output:
+    FileName: "TestEventRates.root"
+    OUTPUTNAME: "TestLLH.root"
+  ProcessMCMC: No
+  Seed: 0
+  Debug: No
+
+GeneralKinematicCuts:
+- Name: "InFDV"
+  VarString: "InFDV"
+  Range: [1.,2.]
+- Name: "IsCC"
+  VarString: "IsCC"
+  Range: [1.,2.]
+- Name: "Enu"
+  VarString: "TrueNeutrinoEnergy"
+  Range: [1.,5.]
+
+"Projections": [
+  {
+    "Name": "Particle_Momentum",
+    "VarStrings": ["Particle_Momentum"],
+    "VarBins": [[100,0.,6]],
+  },
+  {
+    "Name": "Particle_Momentum_escapedTPC",
+    "VarStrings": ["Particle_Momentum"],
+    "VarBins": [[100,0.,6]],
+    "KinematicCuts": [
+      {
+        "Range": [0.,0.5],
+        "Name": "Escaped TPC",
+        "VarString": "Particle_IsStoppedInTPC"
+      }
+    ]
+  },
+  {
+    "Name": "Particle_Momentum_stoppedinTPC",
+    "VarStrings": ["Particle_Momentum"],
+    "VarBins": [[100,0.,6]],
+    "KinematicCuts": [
+      {
+        "Range": [1.,2],
+        "Name": "Stopped in TPC",
+        "VarString": "Particle_IsStoppedInTPC"
+      }
+    ]
+  },
+  {
+    "Name": "Particle_MomResMS",
+    "VarStrings": ["Particle_MomResMS"],
+    "VarBins":[[100,0.,0.2]]
+  },
+  {
+    "Name": "Particle_MomResMS_escapedTPC",
+    "VarStrings": ["Particle_MomResMS"],
+    "VarBins":[[100,0.,0.2]],
+    "KinematicCuts": [
+      {
+        "Range": [0.,0.5],
+        "Name": "Escaped TPC",
+        "VarString": "Particle_IsStoppedInTPC"
+      }
+    ]
+  },
+  {
+    "Name": "Particle_MomResMS_stoppedinTPC",
+    "VarStrings": ["Particle_MomResMS"],
+    "VarBins":[[100,0.,0.2]],
+    "KinematicCuts": [
+      {
+        "Range": [1.,2],
+        "Name": "Stopped in TPC",
+        "VarString": "Particle_IsStoppedInTPC"
+      }
+    ]
+  },
+  {
+    "Name": "Particle_Momentum_MomResMS",
+    "VarStrings": ["Particle_Momentum", "Particle_MomResMS"],
+    "VarBins": [[100,0.,6], [100,0.,0.2]]
+  },
+  {
+    "Name": "Particle_Momentum_MomResMS_stoppedinTPC",
+    "VarStrings": ["Particle_Momentum", "Particle_MomResMS"],
+    "VarBins": [[100,0.,6], [100,0.,0.2]],
+    "KinematicCuts": [
+      {
+        "Range": [1.,2],
+        "Name": "Stopped in TPC",
+        "VarString": "Particle_IsStoppedInTPC"
+      }
+    ]
+  },
+  {
+    "Name": "Particle_N_Hits_in_TPC",
+    "VarStrings": ["Particle_NHits"],
+    "VarBins": [[100,0,5000]],
+  },
+  {
+    "Name": "Particle_N_Hits_in_TPC_escapedTPC",
+    "VarStrings": ["Particle_NHits"],
+    "VarBins": [[100,0,5000]],
+    "KinematicCuts": [
+      {
+        "Range": [0.,0.5],
+        "Name": "Escaped TPC",
+        "VarString": "Particle_IsStoppedInTPC"
+      }
+    ]
+  },
+  {
+    "Name": "Particle_N_Hits_in_TPC_stoppedinTPC",
+    "VarStrings": ["Particle_NHits"],
+    "VarBins": [[100,0,5000]],
+    "KinematicCuts": [
+      {
+        "Range": [1.,2],
+        "Name": "Stopped in TPC",
+        "VarString": "Particle_IsStoppedInTPC"
+      }
+    ]
+  }
+]
