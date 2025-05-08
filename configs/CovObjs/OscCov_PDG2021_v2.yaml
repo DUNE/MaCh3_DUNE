@@ -11,7 +11,7 @@ Systematics:
       ParameterName: sin2th_12
 
 
-    DetID: ["FD", "ATM"]
+    SampleName: ["FD", "ATM"]
     Error: 0.0129961532770277840
     FlatPrior: false
     ParameterBounds: [0, 1]
@@ -30,7 +30,7 @@ Systematics:
       ParameterName: sin2th_23
 
 
-    DetID: ["FD", "ATM"]
+    SampleName: ["FD", "ATM"]
     Error: 0.021
     FlatPrior: true
     ParameterBounds: [0, 1]
@@ -49,7 +49,7 @@ Systematics:
       ParameterName: sin2th_13
 
 
-    DetID: ["FD", "ATM"]
+    SampleName: ["FD", "ATM"]
     Error: 0.0007
     FlatPrior: true
     ParameterBounds: [0, 1]
@@ -68,7 +68,7 @@ Systematics:
       ParameterName: delm2_12
 
 
-    DetID: ["FD", "ATM"]
+    SampleName: ["FD", "ATM"]
     Error: 0.0000018
     FlatPrior: false
     ParameterBounds: [-999, 999]
@@ -87,7 +87,7 @@ Systematics:
       ParameterName: delm2_23
 
 
-    DetID: ["FD", "ATM"]
+    SampleName: ["FD", "ATM"]
     Error: 0.000034
     FlatPrior: true
     ParameterBounds: [-999, 999]
@@ -106,7 +106,7 @@ Systematics:
       ParameterName: delta_cp
 
 
-    DetID: ["FD", "ATM"]
+    SampleName: ["FD", "ATM"]
     Error: 6.28331122896200340
     FlatPrior: true
     # It has special treatment as it is continuous param
@@ -126,7 +126,7 @@ Systematics:
       ParameterName: baseline
 
 
-    DetID: ["FD", "ATM"]
+    SampleName: ["FD", "ATM"]
     Error: 0.01
     FlatPrior: true
     ParameterBounds: [0, 9999]
@@ -145,7 +145,7 @@ Systematics:
       ParameterName: density
 
 
-    DetID: ["FD", "ATM"]
+    SampleName: ["FD", "ATM"]
     Error: 0.01
     FlatPrior: true
     ParameterBounds: [0, 999]

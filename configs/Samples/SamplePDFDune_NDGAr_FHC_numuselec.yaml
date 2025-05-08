@@ -1,10 +1,10 @@
 ---
-SampleName: "FHC_numu_NDGAr"
+SampleTitle: "FHC_numu_NDGAr"
 SampleType: "BeamNDGAr"
 
 POT: 1.0e+21
 MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes.yaml"
-DetID: "NDGAr"
+SampleName: "NDGAr"
 
 Binning:
   XVarStr: "TrueNeutrinoEnergy"

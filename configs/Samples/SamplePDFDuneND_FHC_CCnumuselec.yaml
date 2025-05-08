@@ -1,10 +1,10 @@
 ---
-SampleName: "ND_FHC_CCnumu"
+SampleTitle: "ND_FHC_CCnumu"
 SampleType: "BeamND"
 
 POT: 3.85e21
 MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes.yaml"
-DetID: "ND_FHC"
+SampleName: "ND_FHC"
 
 Binning:
   XVarStr: "RecoNeutrinoEnergy"

@@ -106,7 +106,7 @@ Systematics:
     - b_101: 0.158975977449
     - b_102: 0.0969922910475
     - b_103: 0.0618066120354
-    DetID:
+    SampleName:
     - ND
     Error: 0.125273361158
     FlatPrior: false
@@ -238,7 +238,7 @@ Systematics:
     - b_101: 0.22676582018
     - b_102: 0.167896326866
     - b_103: 0.134121039458
-    DetID:
+    SampleName:
     - ND
     Error: 0.0926120290447
     FlatPrior: false
@@ -370,7 +370,7 @@ Systematics:
     - b_101: 0.274506962552
     - b_102: 0.221593169102
     - b_103: 0.188190328704
-    DetID:
+    SampleName:
     - ND
     Error: 0.0804767043985
     FlatPrior: false
@@ -502,7 +502,7 @@ Systematics:
     - b_101: 0.330594175733
     - b_102: 0.270362422323
     - b_103: 0.229881927462
-    DetID:
+    SampleName:
     - ND
     Error: 0.0774468678958
     FlatPrior: false
@@ -634,7 +634,7 @@ Systematics:
     - b_101: 0.362603593365
     - b_102: 0.317088929839
     - b_103: 0.279494684559
-    DetID:
+    SampleName:
     - ND
     Error: 0.0801585961159
     FlatPrior: false
@@ -766,7 +766,7 @@ Systematics:
     - b_101: 0.348451297859
     - b_102: 0.29424906485
     - b_103: 0.253459351812
-    DetID:
+    SampleName:
     - ND
     Error: 0.0767549557896
     FlatPrior: false
@@ -898,7 +898,7 @@ Systematics:
     - b_101: 0.316877434557
     - b_102: 0.26601949564
     - b_103: 0.23195477851
-    DetID:
+    SampleName:
     - ND
     Error: 0.0738976671906
     FlatPrior: false
@@ -1030,7 +1030,7 @@ Systematics:
     - b_101: 0.255459217724
     - b_102: 0.220117054102
     - b_103: 0.212271314944
-    DetID:
+    SampleName:
     - ND
     Error: 0.0753765092052
     FlatPrior: false
@@ -1162,7 +1162,7 @@ Systematics:
     - b_101: 0.275383173459
     - b_102: 0.22127649475
     - b_103: 0.193392217502
-    DetID:
+    SampleName:
     - ND
     Error: 0.0754754390019
     FlatPrior: false
@@ -1294,7 +1294,7 @@ Systematics:
     - b_101: 0.225382694194
     - b_102: 0.220812485543
     - b_103: 0.188757648054
-    DetID:
+    SampleName:
     - ND
     Error: 0.0789796908757
     FlatPrior: false
@@ -1426,7 +1426,7 @@ Systematics:
     - b_101: 0.291114169545
     - b_102: 0.202093965584
     - b_103: 0.122505376494
-    DetID:
+    SampleName:
     - ND
     Error: 0.0898401873206
     FlatPrior: false
@@ -1558,7 +1558,7 @@ Systematics:
     - b_101: 0.33986266224
     - b_102: 0.320430465278
     - b_103: 0.210486778304
-    DetID:
+    SampleName:
     - ND
     Error: 0.0883663024722
     FlatPrior: false
@@ -1690,7 +1690,7 @@ Systematics:
     - b_101: 0.495509029167
     - b_102: 0.451127260252
     - b_103: 0.368838850071
-    DetID:
+    SampleName:
     - ND
     Error: 0.0863581148799
     FlatPrior: false
@@ -1822,7 +1822,7 @@ Systematics:
     - b_101: 0.502923768909
     - b_102: 0.46774467455
     - b_103: 0.348053418365
-    DetID:
+    SampleName:
     - ND
     Error: 0.0957909278003
     FlatPrior: false
@@ -1954,7 +1954,7 @@ Systematics:
     - b_101: 0.460559617318
     - b_102: 0.454560991176
     - b_103: 0.325874112921
-    DetID:
+    SampleName:
     - ND
     Error: 0.0853907781146
     FlatPrior: false
@@ -2086,7 +2086,7 @@ Systematics:
     - b_101: 0.296065656858
     - b_102: 0.395106187921
     - b_103: 0.359455927102
-    DetID:
+    SampleName:
     - ND
     Error: 0.118445839742
     FlatPrior: false
@@ -2218,7 +2218,7 @@ Systematics:
     - b_101: 0.300480294253
     - b_102: 0.453648038998
     - b_103: 0.332178578997
-    DetID:
+    SampleName:
     - ND
     Error: 0.175350220656
     FlatPrior: false
@@ -2350,7 +2350,7 @@ Systematics:
     - b_101: 0.357322354688
     - b_102: 0.500016599708
     - b_103: 0.408629592999
-    DetID:
+    SampleName:
     - ND
     Error: 0.185646424801
     FlatPrior: false
@@ -2482,7 +2482,7 @@ Systematics:
     - b_101: 0.160975240512
     - b_102: 0.320597857696
     - b_103: 0.432126448045
-    DetID:
+    SampleName:
     - ND
     Error: 0.347006205066
     FlatPrior: false
@@ -2614,7 +2614,7 @@ Systematics:
     - b_101: 0.27472268187
     - b_102: 0.221064116711
     - b_103: 0.136697946852
-    DetID:
+    SampleName:
     - ND
     Error: 0.153199620714
     FlatPrior: false
@@ -2746,7 +2746,7 @@ Systematics:
     - b_101: 0.398612053649
     - b_102: 0.353373161336
     - b_103: 0.233763858507
-    DetID:
+    SampleName:
     - ND
     Error: 0.104531334342
     FlatPrior: false
@@ -2878,7 +2878,7 @@ Systematics:
     - b_101: 0.45206554396
     - b_102: 0.421390245994
     - b_103: 0.244587693493
-    DetID:
+    SampleName:
     - ND
     Error: 0.103605563829
     FlatPrior: false
@@ -3010,7 +3010,7 @@ Systematics:
     - b_101: 0.455389564386
     - b_102: 0.420994141969
     - b_103: 0.246337113404
-    DetID:
+    SampleName:
     - ND
     Error: 0.102497513369
     FlatPrior: false
@@ -3142,7 +3142,7 @@ Systematics:
     - b_101: 0.481049952475
     - b_102: 0.455892381025
     - b_103: 0.254886140948
-    DetID:
+    SampleName:
     - ND
     Error: 0.102943383631
     FlatPrior: false
@@ -3274,7 +3274,7 @@ Systematics:
     - b_101: 0.501010603752
     - b_102: 0.479578344622
     - b_103: 0.273571666585
-    DetID:
+    SampleName:
     - ND
     Error: 0.101857930208
     FlatPrior: false
@@ -3406,7 +3406,7 @@ Systematics:
     - b_101: 0.513692615181
     - b_102: 0.477525220255
     - b_103: 0.297911317392
-    DetID:
+    SampleName:
     - ND
     Error: 0.0985017454341
     FlatPrior: false
@@ -3538,7 +3538,7 @@ Systematics:
     - b_101: 0.535857526805
     - b_102: 0.511257154881
     - b_103: 0.31369092331
-    DetID:
+    SampleName:
     - ND
     Error: 0.10266107887
     FlatPrior: false
@@ -3670,7 +3670,7 @@ Systematics:
     - b_101: 0.531065760496
     - b_102: 0.487527762739
     - b_103: 0.32961104757
-    DetID:
+    SampleName:
     - ND
     Error: 0.0950780750528
     FlatPrior: false
@@ -3802,7 +3802,7 @@ Systematics:
     - b_101: 0.584838908248
     - b_102: 0.573869879558
     - b_103: 0.348678180485
-    DetID:
+    SampleName:
     - ND
     Error: 0.0992667829062
     FlatPrior: false
@@ -3934,7 +3934,7 @@ Systematics:
     - b_101: 0.617652157927
     - b_102: 0.622494098521
     - b_103: 0.366478345077
-    DetID:
+    SampleName:
     - ND
     Error: 0.106433821513
     FlatPrior: false
@@ -4066,7 +4066,7 @@ Systematics:
     - b_101: 0.653828146864
     - b_102: 0.636009194403
     - b_103: 0.389072454775
-    DetID:
+    SampleName:
     - ND
     Error: 0.102909691851
     FlatPrior: false
@@ -4198,7 +4198,7 @@ Systematics:
     - b_101: 0.624104352397
     - b_102: 0.580755735869
     - b_103: 0.407827006698
-    DetID:
+    SampleName:
     - ND
     Error: 0.0994042176524
     FlatPrior: false
@@ -4330,7 +4330,7 @@ Systematics:
     - b_101: 0.652398631696
     - b_102: 0.63244626116
     - b_103: 0.403782286904
-    DetID:
+    SampleName:
     - ND
     Error: 0.107849552145
     FlatPrior: false
@@ -4462,7 +4462,7 @@ Systematics:
     - b_101: 0.662701460317
     - b_102: 0.693547823884
     - b_103: 0.35363007631
-    DetID:
+    SampleName:
     - ND
     Error: 0.132078471898
     FlatPrior: false
@@ -4594,7 +4594,7 @@ Systematics:
     - b_101: 0.743559001284
     - b_102: 0.783589901849
     - b_103: 0.323735783731
-    DetID:
+    SampleName:
     - ND
     Error: 0.15924116036
     FlatPrior: false
@@ -4726,7 +4726,7 @@ Systematics:
     - b_101: 0.648470702085
     - b_102: 0.801295835813
     - b_103: 0.340697397826
-    DetID:
+    SampleName:
     - ND
     Error: 0.22479737126
     FlatPrior: false
@@ -4858,7 +4858,7 @@ Systematics:
     - b_101: 0.541076579987
     - b_102: 0.661276135889
     - b_103: 0.500667287105
-    DetID:
+    SampleName:
     - ND
     Error: 0.215033791076
     FlatPrior: false
@@ -4990,7 +4990,7 @@ Systematics:
     - b_101: 0.0792079843378
     - b_102: -0.0387299243394
     - b_103: 0.272624916455
-    DetID:
+    SampleName:
     - ND
     Error: 0.594284639504
     FlatPrior: false
@@ -5122,7 +5122,7 @@ Systematics:
     - b_101: 0.196248386547
     - b_102: 0.236644011383
     - b_103: 0.282022732303
-    DetID:
+    SampleName:
     - ND
     Error: 0.0883315241115
     FlatPrior: false
@@ -5254,7 +5254,7 @@ Systematics:
     - b_101: 0.452741007155
     - b_102: 0.333903757304
     - b_103: 0.283769363012
-    DetID:
+    SampleName:
     - ND
     Error: 0.0709513400342
     FlatPrior: false
@@ -5386,7 +5386,7 @@ Systematics:
     - b_101: 0.48048980545
     - b_102: 0.500488031334
     - b_103: 0.236686283581
-    DetID:
+    SampleName:
     - ND
     Error: 0.0795096818781
     FlatPrior: false
@@ -5518,7 +5518,7 @@ Systematics:
     - b_101: 0.616050270049
     - b_102: 0.600965524595
     - b_103: 0.468663727747
-    DetID:
+    SampleName:
     - ND
     Error: 0.0913606273956
     FlatPrior: false
@@ -5650,7 +5650,7 @@ Systematics:
     - b_101: 0.607878779232
     - b_102: 0.58033980334
     - b_103: 0.410736036325
-    DetID:
+    SampleName:
     - ND
     Error: 0.1145125855
     FlatPrior: false
@@ -5782,7 +5782,7 @@ Systematics:
     - b_101: 0.551406293628
     - b_102: 0.536222152532
     - b_103: 0.367699920366
-    DetID:
+    SampleName:
     - ND
     Error: 0.148054923254
     FlatPrior: false
@@ -5914,7 +5914,7 @@ Systematics:
     - b_101: 0.22340705218
     - b_102: 0.483675029553
     - b_103: 0.507580224669
-    DetID:
+    SampleName:
     - ND
     Error: 0.255360042724
     FlatPrior: false
@@ -6046,7 +6046,7 @@ Systematics:
     - b_101: 0.407745738647
     - b_102: 0.310551241144
     - b_103: 0.237086693593
-    DetID:
+    SampleName:
     - ND
     Error: 0.108389443607
     FlatPrior: false
@@ -6178,7 +6178,7 @@ Systematics:
     - b_101: 0.77414626362
     - b_102: 0.693768128059
     - b_103: 0.424149670115
-    DetID:
+    SampleName:
     - ND
     Error: 0.0983768747454
     FlatPrior: false
@@ -6310,7 +6310,7 @@ Systematics:
     - b_101: 0.852880774134
     - b_102: 0.806696612298
     - b_103: 0.450092087134
-    DetID:
+    SampleName:
     - ND
     Error: 0.114267462176
     FlatPrior: false
@@ -6442,7 +6442,7 @@ Systematics:
     - b_101: 0.871839233536
     - b_102: 0.868921982083
     - b_103: 0.434614989257
-    DetID:
+    SampleName:
     - ND
     Error: 0.137986953478
     FlatPrior: false
@@ -6574,7 +6574,7 @@ Systematics:
     - b_101: 0.869967912637
     - b_102: 0.899243159733
     - b_103: 0.427764967441
-    DetID:
+    SampleName:
     - ND
     Error: 0.152545464064
     FlatPrior: false
@@ -6706,7 +6706,7 @@ Systematics:
     - b_101: 0.825147311086
     - b_102: 0.959223139055
     - b_103: 0.53011059342
-    DetID:
+    SampleName:
     - ND
     Error: 0.160069302489
     FlatPrior: false
@@ -6838,7 +6838,7 @@ Systematics:
     - b_101: 0.333027578157
     - b_102: 0.358157379615
     - b_103: 0.715472418088
-    DetID:
+    SampleName:
     - ND
     Error: 0.209431444838
     FlatPrior: false
@@ -6970,7 +6970,7 @@ Systematics:
     - b_101: 0.272266572001
     - b_102: 0.228417869085
     - b_103: 0.163660791188
-    DetID:
+    SampleName:
     - ND
     Error: 0.1612193214
     FlatPrior: false
@@ -7102,7 +7102,7 @@ Systematics:
     - b_101: 0.390178996643
     - b_102: 0.348956476184
     - b_103: 0.272680497368
-    DetID:
+    SampleName:
     - ND
     Error: 0.107714786765
     FlatPrior: false
@@ -7234,7 +7234,7 @@ Systematics:
     - b_101: 0.459737081409
     - b_102: 0.419990622163
     - b_103: 0.309276596264
-    DetID:
+    SampleName:
     - ND
     Error: 0.0958234513258
     FlatPrior: false
@@ -7366,7 +7366,7 @@ Systematics:
     - b_101: 0.481292070682
     - b_102: 0.455079836714
     - b_103: 0.315048266522
-    DetID:
+    SampleName:
     - ND
     Error: 0.0999305646731
     FlatPrior: false
@@ -7498,7 +7498,7 @@ Systematics:
     - b_101: 0.474703121074
     - b_102: 0.448323882167
     - b_103: 0.310337872251
-    DetID:
+    SampleName:
     - ND
     Error: 0.102185750196
     FlatPrior: false
@@ -7630,7 +7630,7 @@ Systematics:
     - b_101: 0.465131768732
     - b_102: 0.438392468502
     - b_103: 0.315598983953
-    DetID:
+    SampleName:
     - ND
     Error: 0.10312950082
     FlatPrior: false
@@ -7762,7 +7762,7 @@ Systematics:
     - b_101: 0.467041042369
     - b_102: 0.438993277398
     - b_103: 0.325423229872
-    DetID:
+    SampleName:
     - ND
     Error: 0.106154976254
     FlatPrior: false
@@ -7894,7 +7894,7 @@ Systematics:
     - b_101: 0.483131477668
     - b_102: 0.467092798715
     - b_103: 0.329186721409
-    DetID:
+    SampleName:
     - ND
     Error: 0.108834546614
     FlatPrior: false
@@ -8026,7 +8026,7 @@ Systematics:
     - b_101: 0.493234041493
     - b_102: 0.493968025724
     - b_103: 0.333854482327
-    DetID:
+    SampleName:
     - ND
     Error: 0.111352585732
     FlatPrior: false
@@ -8158,7 +8158,7 @@ Systematics:
     - b_101: 0.452456652982
     - b_102: 0.429947148987
     - b_103: 0.352503175231
-    DetID:
+    SampleName:
     - ND
     Error: 0.110317302578
     FlatPrior: false
@@ -8290,7 +8290,7 @@ Systematics:
     - b_101: 0.483882623482
     - b_102: 0.469825826955
     - b_103: 0.373607188019
-    DetID:
+    SampleName:
     - ND
     Error: 0.10791622741
     FlatPrior: false
@@ -8422,7 +8422,7 @@ Systematics:
     - b_101: 0.492186996463
     - b_102: 0.481499920991
     - b_103: 0.388875029774
-    DetID:
+    SampleName:
     - ND
     Error: 0.105977079735
     FlatPrior: false
@@ -8554,7 +8554,7 @@ Systematics:
     - b_101: 0.481553998692
     - b_102: 0.530190578353
     - b_103: 0.343683402312
-    DetID:
+    SampleName:
     - ND
     Error: 0.126040076925
     FlatPrior: false
@@ -8686,7 +8686,7 @@ Systematics:
     - b_101: 0.495424504888
     - b_102: 0.518848942128
     - b_103: 0.371819910645
-    DetID:
+    SampleName:
     - ND
     Error: 0.123444801438
     FlatPrior: false
@@ -8818,7 +8818,7 @@ Systematics:
     - b_101: 0.446314010621
     - b_102: 0.490374377798
     - b_103: 0.38421086203
-    DetID:
+    SampleName:
     - ND
     Error: 0.116662604907
     FlatPrior: false
@@ -8950,7 +8950,7 @@ Systematics:
     - b_101: 0.344221595755
     - b_102: 0.427893227098
     - b_103: 0.376720122717
-    DetID:
+    SampleName:
     - ND
     Error: 0.146041746228
     FlatPrior: false
@@ -9082,7 +9082,7 @@ Systematics:
     - b_101: 0.350658440511
     - b_102: 0.485641951828
     - b_103: 0.356454618274
-    DetID:
+    SampleName:
     - ND
     Error: 0.18290662659
     FlatPrior: false
@@ -9214,7 +9214,7 @@ Systematics:
     - b_101: 0.359160594322
     - b_102: 0.472909505232
     - b_103: 0.457949846002
-    DetID:
+    SampleName:
     - ND
     Error: 0.194623999144
     FlatPrior: false
@@ -9346,7 +9346,7 @@ Systematics:
     - b_101: 0.331145899359
     - b_102: 0.414180542855
     - b_103: 0.310960292567
-    DetID:
+    SampleName:
     - ND
     Error: 0.365017881095
     FlatPrior: false
@@ -9478,7 +9478,7 @@ Systematics:
     - b_101: 0.163446720662
     - b_102: 0.0925403663335
     - b_103: 0.0398621619917
-    DetID:
+    SampleName:
     - ND
     Error: 0.120635257733
     FlatPrior: false
@@ -9610,7 +9610,7 @@ Systematics:
     - b_101: 0.272890032894
     - b_102: 0.188702366542
     - b_103: 0.101169114201
-    DetID:
+    SampleName:
     - ND
     Error: 0.0888025452482
     FlatPrior: false
@@ -9742,7 +9742,7 @@ Systematics:
     - b_101: 0.324814586228
     - b_102: 0.242164741604
     - b_103: 0.15463054836
-    DetID:
+    SampleName:
     - ND
     Error: 0.0777255922407
     FlatPrior: false
@@ -9874,7 +9874,7 @@ Systematics:
     - b_101: 0.366754636435
     - b_102: 0.302399713573
     - b_103: 0.211774691695
-    DetID:
+    SampleName:
     - ND
     Error: 0.0740336925141
     FlatPrior: false
@@ -10006,7 +10006,7 @@ Systematics:
     - b_101: 0.404480592759
     - b_102: 0.340425738568
     - b_103: 0.231947417681
-    DetID:
+    SampleName:
     - ND
     Error: 0.075020282706
     FlatPrior: false
@@ -10138,7 +10138,7 @@ Systematics:
     - b_101: 0.384920852471
     - b_102: 0.337384838587
     - b_103: 0.208707117901
-    DetID:
+    SampleName:
     - ND
     Error: 0.0698300677849
     FlatPrior: false
@@ -10270,7 +10270,7 @@ Systematics:
     - b_101: 0.355558760719
     - b_102: 0.286736796288
     - b_103: 0.16939172747
-    DetID:
+    SampleName:
     - ND
     Error: 0.0650617530281
     FlatPrior: false
@@ -10402,7 +10402,7 @@ Systematics:
     - b_101: 0.330328509784
     - b_102: 0.243296173396
     - b_103: 0.149022112814
-    DetID:
+    SampleName:
     - ND
     Error: 0.0652173360008
     FlatPrior: false
@@ -10534,7 +10534,7 @@ Systematics:
     - b_101: 0.280440338114
     - b_102: 0.202235055329
     - b_103: 0.155061172704
-    DetID:
+    SampleName:
     - ND
     Error: 0.067013857191
     FlatPrior: false
@@ -10666,7 +10666,7 @@ Systematics:
     - b_101: 0.256077423441
     - b_102: 0.267613838475
     - b_103: 0.254793225707
-    DetID:
+    SampleName:
     - ND
     Error: 0.072106899348
     FlatPrior: false
@@ -10798,7 +10798,7 @@ Systematics:
     - b_101: 0.322719883834
     - b_102: 0.308647924878
     - b_103: 0.232180288945
-    DetID:
+    SampleName:
     - ND
     Error: 0.0822802356682
     FlatPrior: false
@@ -10930,7 +10930,7 @@ Systematics:
     - b_101: 0.554452521724
     - b_102: 0.390124331424
     - b_103: 0.21898400794
-    DetID:
+    SampleName:
     - ND
     Error: 0.0779165821275
     FlatPrior: false
@@ -11062,7 +11062,7 @@ Systematics:
     - b_101: 0.554389047439
     - b_102: 0.570213921665
     - b_103: 0.402337526617
-    DetID:
+    SampleName:
     - ND
     Error: 0.0801278105923
     FlatPrior: false
@@ -11194,7 +11194,7 @@ Systematics:
     - b_101: 0.615948667636
     - b_102: 0.539714559117
     - b_103: 0.245293836174
-    DetID:
+    SampleName:
     - ND
     Error: 0.0983192374144
     FlatPrior: false
@@ -11326,7 +11326,7 @@ Systematics:
     - b_101: 0.612253778328
     - b_102: 0.624000997561
     - b_103: 0.381244535102
-    DetID:
+    SampleName:
     - ND
     Error: 0.0900200657746
     FlatPrior: false
@@ -11458,7 +11458,7 @@ Systematics:
     - b_101: 0.649584045661
     - b_102: 0.686560246577
     - b_103: 0.296758993499
-    DetID:
+    SampleName:
     - ND
     Error: 0.134035329171
     FlatPrior: false
@@ -11590,7 +11590,7 @@ Systematics:
     - b_101: 0.668218894695
     - b_102: 0.778507674285
     - b_103: 0.321548871569
-    DetID:
+    SampleName:
     - ND
     Error: 0.210272444664
     FlatPrior: false
@@ -11722,7 +11722,7 @@ Systematics:
     - b_101: 0.586217750045
     - b_102: 0.706916563909
     - b_103: 0.512554381767
-    DetID:
+    SampleName:
     - ND
     Error: 0.213486017244
     FlatPrior: false
@@ -11854,7 +11854,7 @@ Systematics:
     - b_101: 0.34505272565
     - b_102: 0.0274936793211
     - b_103: -0.0197371854722
-    DetID:
+    SampleName:
     - ND
     Error: 0.649167360483
     FlatPrior: false
@@ -11986,7 +11986,7 @@ Systematics:
     - b_101: 0.432673600526
     - b_102: 0.389637038094
     - b_103: 0.265085766253
-    DetID:
+    SampleName:
     - ND
     Error: 0.108367353345
     FlatPrior: false
@@ -12118,7 +12118,7 @@ Systematics:
     - b_101: 0.677407717359
     - b_102: 0.651256684062
     - b_103: 0.472062659663
-    DetID:
+    SampleName:
     - ND
     Error: 0.0930550373398
     FlatPrior: false
@@ -12250,7 +12250,7 @@ Systematics:
     - b_101: 0.713390373765
     - b_102: 0.751233735638
     - b_103: 0.458909340311
-    DetID:
+    SampleName:
     - ND
     Error: 0.114330236084
     FlatPrior: false
@@ -12382,7 +12382,7 @@ Systematics:
     - b_101: 0.716149140704
     - b_102: 0.754953022162
     - b_103: 0.477884356753
-    DetID:
+    SampleName:
     - ND
     Error: 0.128955833776
     FlatPrior: false
@@ -12514,7 +12514,7 @@ Systematics:
     - b_101: 0.706656995928
     - b_102: 0.782300571527
     - b_103: 0.443281649709
-    DetID:
+    SampleName:
     - ND
     Error: 0.15951467851
     FlatPrior: false
@@ -12646,7 +12646,7 @@ Systematics:
     - b_101: 0.600009833107
     - b_102: 0.736360180674
     - b_103: 0.514578081104
-    DetID:
+    SampleName:
     - ND
     Error: 0.161724572019
     FlatPrior: false
@@ -12778,7 +12778,7 @@ Systematics:
     - b_101: 0.426058158701
     - b_102: 0.564164893083
     - b_103: 0.481184629771
-    DetID:
+    SampleName:
     - ND
     Error: 0.236872655124
     FlatPrior: false
@@ -12910,7 +12910,7 @@ Systematics:
     - b_101: 0.312585219936
     - b_102: 0.139027763885
     - b_103: 0.0893970655224
-    DetID:
+    SampleName:
     - ND
     Error: 0.087955395682
     FlatPrior: false
@@ -13042,7 +13042,7 @@ Systematics:
     - b_101: 0.632273991339
     - b_102: 0.502622068317
     - b_103: 0.245205629564
-    DetID:
+    SampleName:
     - ND
     Error: 0.0691974666559
     FlatPrior: false
@@ -13174,7 +13174,7 @@ Systematics:
     - b_101: 0.704309487363
     - b_102: 0.634500611695
     - b_103: 0.517608250779
-    DetID:
+    SampleName:
     - ND
     Error: 0.0844609146932
     FlatPrior: false
@@ -13306,7 +13306,7 @@ Systematics:
     - b_101: 0.536640910561
     - b_102: 0.721138500469
     - b_103: 0.510790347731
-    DetID:
+    SampleName:
     - ND
     Error: 0.128874841305
     FlatPrior: false
@@ -13438,7 +13438,7 @@ Systematics:
     - b_101: 1.0
     - b_102: 0.853117160768
     - b_103: 0.353865016034
-    DetID:
+    SampleName:
     - ND
     Error: 0.132257068909
     FlatPrior: false
@@ -13570,7 +13570,7 @@ Systematics:
     - b_101: 0.853117160768
     - b_102: 1.0
     - b_103: 0.543077962922
-    DetID:
+    SampleName:
     - ND
     Error: 0.148582318316
     FlatPrior: false
@@ -13702,7 +13702,7 @@ Systematics:
     - b_101: 0.353865016034
     - b_102: 0.543077962922
     - b_103: 1.0
-    DetID:
+    SampleName:
     - ND
     Error: 0.193734459966
     FlatPrior: false
