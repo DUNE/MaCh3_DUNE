@@ -167,13 +167,13 @@ void samplePDFDUNEBeamFD::Init() {
 void samplePDFDUNEBeamFD::SetupSplines() {
 
   ///@todo move all of the spline setup into core
-  if(XsecCov->GetNumParamsFromDetID(SampleDetID, kSpline) > 0){
-    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", XsecCov->GetNumParamsFromDetID(SampleDetID, kSpline));
+  if(XsecCov->GetNumParamsFromSampleName(SampleName, kSpline) > 0){
+    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", XsecCov->GetNumParamsFromSampleName(SampleName, kSpline));
     SplineHandler = std::unique_ptr<splineFDBase>(new splinesDUNE(XsecCov,Modes));
     InitialiseSplineObject();
   }
   else{
-    MACH3LOG_INFO("Found {} splines for this sample so I will not load or evaluate splines", XsecCov->GetNumParamsFromDetID(SampleDetID, kSpline));
+    MACH3LOG_INFO("Found {} splines for this sample so I will not load or evaluate splines", XsecCov->GetNumParamsFromSampleName(SampleName, kSpline));
     SplineHandler = nullptr;
   }
   
@@ -423,7 +423,7 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   return duneobj->nEvents;
 }
 
-double samplePDFDUNEBeamFD::ReturnKinematicParameter(double KinematicVariable, int iSample, int iEvent) {
+double samplePDFDUNEBeamFD::ReturnKinematicParameter(int KinematicVariable, int iSample, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
   double KinematicValue = -999;
   
