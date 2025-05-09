@@ -1,16 +1,20 @@
-#include <TROOT.h>
-
 #include "samplePDFDUNEBeamND.h"
-#include "StructsDUNE.h"
-#include "TString.h"
-#include <assert.h>
-#include <manager/MaCh3Logger.h>
-#include <stdexcept>
-#include <string>
-#include "TMath.h"
-#include "manager/manager.h"
+#include <cstddef>
 
-samplePDFDUNEBeamND::samplePDFDUNEBeamND(std::string mc_version_, covarianceXsec* xsec_cov_, covarianceOsc* osc_cov_) : samplePDFFDBase(mc_version_, xsec_cov_, osc_cov_) {  
+//Here nullptr is passed instead of OscCov to prevent oscillation calculations from being performed for the ND Samples
+samplePDFDUNEBeamND::samplePDFDUNEBeamND(std::string mc_version_, covarianceXsec* xsec_cov_,  TMatrixD* nd_cov_, covarianceOsc* osc_cov_=nullptr) : samplePDFFDBase(mc_version_, xsec_cov_, osc_cov_) {
+  OscCov = nullptr;
+  
+  if(!nd_cov_){
+    MACH3LOG_ERROR("You've passed me a nullptr to a ND covarince matrix... ");
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  
+  NDCovMatrix = nd_cov_;
+
+  KinematicParameters = &KinematicParametersDUNE;
+  ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
+  
   Initialise();
 }
 
@@ -19,17 +23,10 @@ samplePDFDUNEBeamND::~samplePDFDUNEBeamND() {
 
 void samplePDFDUNEBeamND::Init() {
   dunendmcSamples.resize(nSamples,dunemc_base());
-
-  if (CheckNodeExists(SampleManager->raw(), "POT")) {
-    pot = SampleManager->raw()["POT"].as<double>();
-  } else{
-    MACH3LOG_ERROR("POT not defined in {}, please add this!", SampleManager->GetFileName());
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
   
-  IsRHC = SampleManager->raw()["SampleBools"]["isrhc"].as<bool>();
-  SampleDetID = SampleManager->raw()["DetID"].as<int>();
-  iselike = SampleManager->raw()["SampleBools"]["iselike"].as<bool>();
+  IsFHC = SampleManager->raw()["DUNESampleBools"]["isFHC"].as<double>();
+  iselike = SampleManager->raw()["DUNESampleBools"]["iselike"].as<bool>();
+  pot = SampleManager->raw()["POT"].as<double>();
 
 
   // Comment out below to remove custom likelihood
@@ -64,7 +61,7 @@ void samplePDFDUNEBeamND::SetupSplines() {
   ///@todo move all of the spline setup into core
   if(XsecCov->GetNumParamsFromDetID(SampleDetID, kSpline) > 0){
     MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", XsecCov->GetNumParamsFromDetID(SampleDetID, kSpline));
-    SplineHandler = std::unique_ptr<splineFDBase>(new splinesDUNE(XsecCov));
+    SplineHandler = std::unique_ptr<splineFDBase>(new splinesDUNE(XsecCov,Modes));
     InitialiseSplineObject();
   }
   else{
@@ -204,6 +201,7 @@ void samplePDFDUNEBeamND::EMResCCNue(const double * par, std::size_t iSample, st
 }
 
 void samplePDFDUNEBeamND::DebugShift(const double * par, std::size_t iSample, std::size_t iEvent) {
+  (void)par; // Suppress unused variable warning
   if (dunendmcSamples[iSample].rw_erec[iEvent] < 2) {
     dunendmcSamples[iSample].rw_erec_shifted[iEvent] = 4.0;
   }
@@ -218,7 +216,7 @@ void samplePDFDUNEBeamND::RegisterFunctionalParameters() {
   // A lambda function has to be used so we can refer to a non-static member function
   RegisterIndividualFuncPar("DebugNothing", 
                             kDebugNothing, 
-                            [this](const double * par, std::size_t iSample, std::size_t iEvent) {});
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) {(void)par; (void)iSample; (void)iEvent;});
 
   RegisterIndividualFuncPar("DebugShift",
                             kDebugShift, 
@@ -338,16 +336,15 @@ void samplePDFDUNEBeamND::resetShifts(int iSample, int iEvent) {
 // =================================
 
 void samplePDFDUNEBeamND::SetupWeightPointers() {
-  for (int i = 0; i < (int)dunendmcSamples.size(); ++i) {
+  for (size_t i = 0; i < dunendmcSamples.size(); ++i) {
     for (int j = 0; j < dunendmcSamples[i].nEvents; ++j) {
-      MCSamples[i].ntotal_weight_pointers[j] = 6;
+      MCSamples[i].ntotal_weight_pointers[j] = 5;
       MCSamples[i].total_weight_pointers[j].resize(MCSamples[i].ntotal_weight_pointers[j]);
       MCSamples[i].total_weight_pointers[j][0] = &(dunendmcSamples[i].pot_s);
       MCSamples[i].total_weight_pointers[j][1] = &(dunendmcSamples[i].norm_s);
-      MCSamples[i].total_weight_pointers[j][2] = MCSamples[i].osc_w_pointer[j];
-      MCSamples[i].total_weight_pointers[j][3] = &(dunendmcSamples[i].rw_berpaacvwgt[j]);
-      MCSamples[i].total_weight_pointers[j][4] = &(dunendmcSamples[i].flux_w[j]);
-      MCSamples[i].total_weight_pointers[j][5] = &(MCSamples[i].xsec_w[j]);
+      MCSamples[i].total_weight_pointers[j][2] = &(dunendmcSamples[i].rw_berpaacvwgt[j]);
+      MCSamples[i].total_weight_pointers[j][3] = &(dunendmcSamples[i].flux_w[j]);
+      MCSamples[i].total_weight_pointers[j][4] = &(MCSamples[i].xsec_w[j]);
     }
   }
 }
@@ -355,15 +352,10 @@ void samplePDFDUNEBeamND::SetupWeightPointers() {
 int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
 
   dunemc_base *duneobj = &(dunendmcSamples[iSample]);
-  int nupdgUnosc = sample_nupdgunosc[iSample];
-  int nupdg = sample_nupdg[iSample];
   
   MACH3LOG_INFO("-------------------------------------------------------------------");
   MACH3LOG_INFO("input file: {}", mc_files.at(iSample));
   
-  _sampleFile = TFile::Open(mc_files.at(iSample).c_str(), "READ");
-  _data = (TTree*)_sampleFile->Get("caf");
-
   TChain* _data = new TChain("caf");
   _data->Add(mc_files.at(iSample).c_str());
 
@@ -427,10 +419,15 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   _data->SetBranchStatus("reco_numu", 1);
   _data->SetBranchAddress("reco_numu", &_reco_numu);
 
-  if (!IsRHC) { 
-    duneobj->norm_s = (1e21/1.5e21);
-  } else {
+  _data->SetBranchStatus("reco_nue", 1);
+  _data->SetBranchAddress("reco_nue", &_reco_nue);
+  _data->SetBranchStatus("reco_numu", 1);
+  _data->SetBranchAddress("reco_numu", &_reco_numu);
+
+  if (IsFHC) { 
     duneobj->norm_s = (1e21/1.905e21);
+  } else {
+    duneobj->norm_s = (1e21/1.5e21);
   }
   duneobj->pot_s = (pot)/1e21;
   
@@ -438,7 +435,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   std::cout << "pot_s: " << duneobj->pot_s << std::endl;
   std::cout << "norm_s: " << duneobj->norm_s << std::endl;
 
-  duneobj->nEvents = _data->GetEntries();
+  duneobj->nEvents = static_cast<int>(_data->GetEntries());
 
   // HH: Downsampling by choosing the first X% of the events
   // HH TODO: Instead of choosing the first X% of the events, we should randomly sample X% of the events 
@@ -510,32 +507,32 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
     duneobj->nupdg[i] = sample_nupdg[iSample];
     duneobj->nupdgUnosc[i] = sample_nupdgunosc[iSample];
     
-    duneobj->rw_erec[i] = (double)_erec;
-    duneobj->rw_erec_shifted[i] = (double)_erec;
-    duneobj->rw_erec_lep[i] = (double)_erec_lep;
-    duneobj->rw_erec_had[i] = (double)(_erec - _erec_lep);
-    duneobj->rw_yrec[i] = (double)((_erec - _erec_lep)/_erec);
-    duneobj->rw_etru[i] = (double)_ev; // in GeV
-    duneobj->rw_theta[i] = (double)_LepNuAngle;
+    duneobj->rw_erec[i] = _erec;
+    duneobj->rw_erec_shifted[i] = _erec;
+    duneobj->rw_erec_lep[i] = _erec_lep;
+    duneobj->rw_erec_had[i] = (_erec - _erec_lep);
+    duneobj->rw_yrec[i] = ((_erec - _erec_lep)/_erec);
+    duneobj->rw_etru[i] = _ev; // in GeV
+    duneobj->rw_theta[i] = _LepNuAngle;
     duneobj->rw_isCC[i] = _isCC;
     duneobj->rw_isFHC[i] = (double)_isFHC;
     duneobj->rw_reco_q[i] = _reco_q;
     duneobj->rw_nuPDGunosc[i] = _nuPDGunosc;
     duneobj->rw_nuPDG[i] = _nuPDG;
-    duneobj->rw_berpaacvwgt[i] = (double)_BeRPA_cvwgt;
+    duneobj->rw_berpaacvwgt[i] = _BeRPA_cvwgt;
     
-    duneobj->rw_eRecoP[i] = (double)_eRecoP; 
-    duneobj->rw_eRecoPip[i] = (double)_eRecoPip; 
-    duneobj->rw_eRecoPim[i] = (double)_eRecoPim; 
-    duneobj->rw_eRecoPi0[i] = (double)_eRecoPi0; 
-    duneobj->rw_eRecoN[i] = (double)_eRecoN; 
+    duneobj->rw_eRecoP[i] = _eRecoP; 
+    duneobj->rw_eRecoPip[i] = _eRecoPip; 
+    duneobj->rw_eRecoPim[i] = _eRecoPim; 
+    duneobj->rw_eRecoPi0[i] = _eRecoPi0; 
+    duneobj->rw_eRecoN[i] = _eRecoN; 
     
-    duneobj->rw_LepE[i] = (double)_LepE; 
-    duneobj->rw_eP[i] = (double)_eP; 
-    duneobj->rw_ePip[i] = (double)_ePip; 
-    duneobj->rw_ePim[i] = (double)_ePim; 
-    duneobj->rw_ePi0[i] = (double)_ePi0; 
-    duneobj->rw_eN[i] = (double)_eN; 
+    duneobj->rw_LepE[i] = _LepE; 
+    duneobj->rw_eP[i] = _eP; 
+    duneobj->rw_ePip[i] = _ePip; 
+    duneobj->rw_ePim[i] = _ePim; 
+    duneobj->rw_ePi0[i] = _ePi0; 
+    duneobj->rw_eN[i] = _eN; 
 
     duneobj->rw_reco_numu[i] = static_cast<int>(_reco_numu);
     duneobj->rw_reco_nue[i] = static_cast<int>(_reco_nue);
@@ -550,14 +547,18 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
 
     //Assume everything is on Argon for now....
     duneobj->Target[i] = 40;
-    
-    int mode= TMath::Abs(_mode);       
-    duneobj->mode[i]=(double)GENIEMode_ToMaCh3Mode(mode, _isCC);
+
+    int M3Mode = Modes->GetModeFromGenerator(std::abs(_mode));
+    if (!_isCC) M3Mode += 14; //Account for no ability to distinguish CC/NC
+    if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
+    duneobj->mode[i] = M3Mode;
     
     duneobj->flux_w[i] = 1.0;
   }
   
-  _sampleFile->Close();
+  //_sampleFile->Close();
+  _data->Reset();
+  delete _data;
   return duneobj->nEvents;
 }
 
@@ -567,20 +568,22 @@ const double* samplePDFDUNEBeamND::GetPointerToKinematicParameter(KinematicTypes
   
   switch(KinPar){
   case kTrueNeutrinoEnergy:
-    KinematicValue = &dunendmcSamples[iSample].rw_etru[iEvent]; 
-    break;
-  case kRecoQ:
-    KinematicValue = &dunendmcSamples[iSample].rw_reco_q[iEvent];
+    KinematicValue = &(dunendmcSamples[iSample].rw_etru[iEvent]);
     break;
   case kRecoNeutrinoEnergy:
-    // HH: Changed this to match BeamFD
-    KinematicValue = &dunendmcSamples[iSample].rw_erec_shifted[iEvent];
+    KinematicValue = &(dunendmcSamples[iSample].rw_erec_shifted[iEvent]);
+    break;
+  case kyRec:
+    KinematicValue = &(dunendmcSamples[iSample].rw_yrec[iEvent]);
+    break;
+  case kOscChannel:
+    KinematicValue = &(MCSamples[iSample].ChannelIndex);
+    break;
+  case kMode:
+    KinematicValue = &(dunendmcSamples[iSample].mode[iEvent]);
     break;
   case kIsFHC:
-    KinematicValue = &dunendmcSamples[iSample].rw_isFHC[iEvent];
-    break;
-  case kRecoY:
-    KinematicValue = &dunendmcSamples[iSample].rw_yrec[iEvent];
+    KinematicValue = &(IsFHC);
     break;
   case kRecoHadEnergy:
     KinematicValue = &dunendmcSamples[iSample].rw_erec_had[iEvent];
@@ -613,7 +616,7 @@ const double* samplePDFDUNEBeamND::GetPointerToKinematicParameter(KinematicTypes
 }
 
 const double* samplePDFDUNEBeamND::GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent) {
-  KinematicTypes KinPar = (KinematicTypes) std::round(KinematicVariable);
+  KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
   return GetPointerToKinematicParameter(KinPar,iSample,iEvent);
 }
 
@@ -663,7 +666,6 @@ void samplePDFDUNEBeamND::setupFDMC(int iSample) {
   dunemc_base *duneobj = &(dunendmcSamples[iSample]);
   FarDetectorCoreInfo *fdobj = &(MCSamples[iSample]);
 
-  fdobj->SampleDetID = SampleDetID;
   for(int iEvent = 0 ;iEvent < fdobj->nEvents ; ++iEvent){
     fdobj->rw_etru[iEvent] = &(duneobj->rw_etru[iEvent]);
     fdobj->mode[iEvent] = &(duneobj->mode[iEvent]);
@@ -674,59 +676,70 @@ void samplePDFDUNEBeamND::setupFDMC(int iSample) {
   }
 }
 
-std::vector<double> samplePDFDUNEBeamND::ReturnKinematicParameterBinning(std::string KinematicParameterStr) 
-{
-  std::vector<double> binningVector;
-  return binningVector;
-}
+std::vector<double> samplePDFDUNEBeamND::ReturnKinematicParameterBinning(std::string KinematicParameterStr) {
+  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameterStr));
+  std::vector<double> ReturnVec;
 
-int samplePDFDUNEBeamND::ReturnKinematicParameterFromString(std::string KinematicParameterStr) {
-  if(KinematicParameterStr == "TrueNeutrinoEnergy") return kTrueNeutrinoEnergy;
-  if(KinematicParameterStr == "RecoQ") return kRecoQ;
-  if(KinematicParameterStr == "RecoNeutrinoEnergy") return kRecoNeutrinoEnergy;
-  if(KinematicParameterStr == "IsFHC") return kIsFHC;
-  if(KinematicParameterStr == "RecoY") return kRecoY;
-  if(KinematicParameterStr == "IsCC") return kIsCC;
-  if(KinematicParameterStr == "RecoNumu") return kRecoNumu;
-  if(KinematicParameterStr == "RecoNue") return kRecoNue;
-  if(KinematicParameterStr == "NuPDG") return kNuPDG;
-  if(KinematicParameterStr == "NotCCNumu") return kNotCCNumu;
-  if(KinematicParameterStr == "CCNumu") return kCCNumu;
-  if(KinematicParameterStr == "CCNue") return kCCNue;
-  if(KinematicParameterStr == "RecoHadEnergy") return kRecoHadEnergy;
-  if(KinematicParameterStr == "RecoLepEnergy") return kRecoLepEnergy;
-  if(KinematicParameterStr == "RecoPEnergy") return kRecoPEnergy;
-  if(KinematicParameterStr == "RecoPipEnergy") return kRecoPipEnergy;
-  if(KinematicParameterStr == "RecoPimEnergy") return kRecoPimEnergy;
-  if(KinematicParameterStr == "RecoPi0Energy") return kRecoPi0Energy;
-  if(KinematicParameterStr == "RecoNEnergy") return kRecoNEnergy;
-  return -1;
-}
+  switch (KinPar) {
 
-std::string samplePDFDUNEBeamND::ReturnStringFromKinematicParameter(int KinematicParameter) {
-  switch(KinematicParameter){
-    case kTrueNeutrinoEnergy: return "TrueNeutrinoEnergy";
-    case kRecoQ: return "RecoQ";
-    case kRecoNeutrinoEnergy: return "RecoNeutrinoEnergy";
-    case kIsFHC: return "IsFHC";
-    case kRecoY: return "RecoY";
-    case kIsCC: return "IsCC";
-    case kRecoNumu: return "RecoNumu";
-    case kRecoNue: return "RecoNue";
-    case kNuPDG: return "NuPDG";
-    case kNotCCNumu: return "NotCCnumu";
-    case kCCNumu: return "CCNumu";
-    case kCCNue: return "CCNue";
-    case kRecoHadEnergy: return "RecoHadEnergy";
-    case kRecoLepEnergy: return "RecoLepEnergy";
-    case kRecoPEnergy: return "RecoPEnergy";
-    case kRecoPipEnergy: return "RecoPipEnergy";
-    case kRecoPimEnergy: return "RecoPimEnergy";
-    case kRecoPi0Energy: return "RecoPi0Energy";
-    case kRecoNEnergy: return "RecoNEnergy";
-    default: return "";
+  case kIsFHC:
+    ReturnVec.resize(3);
+    ReturnVec[0] = -0.5;
+    ReturnVec[1] = 0.5;
+    ReturnVec[2] = 1.5;
+    break;
+    
+  case kTrueNeutrinoEnergy:
+    for (int i=0;i<20;i++) {
+      ReturnVec.emplace_back(i);
+    }
+    ReturnVec.emplace_back(100.);
+    ReturnVec.emplace_back(1000.);
+    break;
+
+  case kRecoNeutrinoEnergy:
+    ReturnVec.resize(XBinEdges.size());
+    for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
+    break;
+
+  case kyRec:
+    ReturnVec.resize(YBinEdges.size());
+    for (unsigned int bin_i=0;bin_i<YBinEdges.size();bin_i++) {ReturnVec[bin_i] = YBinEdges[bin_i];}
+    break;
+
+  case kOscChannel:
+    ReturnVec.resize(GetNsamples());
+    for (int bin_i=0;bin_i<GetNsamples();bin_i++) {ReturnVec[bin_i] = bin_i;}
+    break;
+
+  case kMode:
+    ReturnVec.resize(Modes->GetNModes());
+    for (int bin_i=0;bin_i<Modes->GetNModes();bin_i++) {ReturnVec[bin_i] = bin_i;}
+    break;
+
+  case kIsCC:
+  case kRecoNumu:
+  case kRecoNue:
+  case kCCNumu:
+  case kCCNue:
+  case kNotCCNumu:
+  case kRecoQ:
+  case kRecoHadEnergy:
+  case kRecoLepEnergy:
+  case kRecoPEnergy:
+  case kRecoPipEnergy:
+  case kRecoPimEnergy:
+  case kRecoPi0Energy:
+  case kRecoNEnergy: 
+  case kNuPDG:
+  default:
+    MACH3LOG_ERROR("Unknown KinPar: {}",static_cast<int>(KinPar));
+    throw MaCh3Exception(__FILE__, __LINE__);
   }
+
+  return ReturnVec;
 }
+
 
 // Comment out below to remove custom likelihood
 // /*
@@ -752,9 +765,9 @@ void samplePDFDUNEBeamND::setNDCovMatrix() {
   }
 
   // 2D -> 1D Array
-  for (size_t xBin = 0; xBin < nXBins; xBin++) 
+  for (size_t xBin = 0; xBin < static_cast<size_t>(nXBins); xBin++) 
   {
-    for (size_t yBin = 0; yBin < nYBins; yBin++) 
+    for (size_t yBin = 0; yBin < static_cast<size_t>(nYBins); yBin++) 
     {
       double CV = samplePDFFD_data[yBin][xBin];
       FlatCV.push_back(CV);

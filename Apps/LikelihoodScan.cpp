@@ -43,9 +43,9 @@ int main(int argc, char * argv[]) {
 
   //###############################################################################################################################
   //Perform reweight, print total integral, and set data
-  // std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
-  // for (int i = 0; i < oscpars.size(); i++)
-  //   osc->setPar(i, oscpars.at(i));
+  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
+  for (int i = 0; i < oscpars.size(); i++)
+    osc->setPar(i, oscpars.at(i));
 
   std::vector<TH1*> DUNEHists;
   for(auto Sample : DUNEPdfs){

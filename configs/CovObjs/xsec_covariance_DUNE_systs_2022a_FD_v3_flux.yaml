@@ -1,3 +1,4 @@
+---
 Systematics:
 - Systematic:
     Correlations:
@@ -105,7 +106,7 @@ Systematics:
     - b_205: 0.153228986145
     - b_206: 0.100861196493
     - b_207: 0.0369056155729
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.123224219401
     FlatPrior: false
     KinematicCuts:
@@ -231,7 +232,7 @@ Systematics:
     - b_205: 0.246940514513
     - b_206: 0.18873023131
     - b_207: 0.101861002507
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0919918430785
     FlatPrior: false
     KinematicCuts:
@@ -357,7 +358,7 @@ Systematics:
     - b_205: 0.297985593057
     - b_206: 0.245171026384
     - b_207: 0.142513129152
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0802415242014
     FlatPrior: false
     KinematicCuts:
@@ -483,7 +484,7 @@ Systematics:
     - b_205: 0.319257673074
     - b_206: 0.287768499717
     - b_207: 0.161527748856
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0772539480878
     FlatPrior: false
     KinematicCuts:
@@ -609,7 +610,7 @@ Systematics:
     - b_205: 0.368748345125
     - b_206: 0.328643059401
     - b_207: 0.229154189729
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0784638953031
     FlatPrior: false
     KinematicCuts:
@@ -735,7 +736,7 @@ Systematics:
     - b_205: 0.380807396059
     - b_206: 0.337333012884
     - b_207: 0.226587891052
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0785373241597
     FlatPrior: false
     KinematicCuts:
@@ -861,7 +862,7 @@ Systematics:
     - b_205: 0.353746405303
     - b_206: 0.318702873475
     - b_207: 0.19657495057
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0753665087782
     FlatPrior: false
     KinematicCuts:
@@ -987,7 +988,7 @@ Systematics:
     - b_205: 0.289569535465
     - b_206: 0.261981617746
     - b_207: 0.159590623701
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0760384558939
     FlatPrior: false
     KinematicCuts:
@@ -1113,7 +1114,7 @@ Systematics:
     - b_205: 0.269069674535
     - b_206: 0.236766475728
     - b_207: 0.163362936981
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0756908107654
     FlatPrior: false
     KinematicCuts:
@@ -1239,7 +1240,7 @@ Systematics:
     - b_205: 0.29523861378
     - b_206: 0.24342761527
     - b_207: 0.223832962585
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0776430657652
     FlatPrior: false
     KinematicCuts:
@@ -1365,7 +1366,7 @@ Systematics:
     - b_205: 0.214132917456
     - b_206: 0.234766322209
     - b_207: 0.0341102799423
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0862654553181
     FlatPrior: false
     KinematicCuts:
@@ -1491,7 +1492,7 @@ Systematics:
     - b_205: 0.398251500161
     - b_206: 0.344539521074
     - b_207: 0.277797500426
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.08898115163
     FlatPrior: false
     KinematicCuts:
@@ -1617,7 +1618,7 @@ Systematics:
     - b_205: 0.448362288613
     - b_206: 0.430079036034
     - b_207: 0.320150080173
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0840024699312
     FlatPrior: false
     KinematicCuts:
@@ -1743,7 +1744,7 @@ Systematics:
     - b_205: 0.472826056852
     - b_206: 0.461468190764
     - b_207: 0.370494453133
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0950422221091
     FlatPrior: false
     KinematicCuts:
@@ -1869,7 +1870,7 @@ Systematics:
     - b_205: 0.444170156763
     - b_206: 0.464143782376
     - b_207: 0.321393866094
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0880469563124
     FlatPrior: false
     KinematicCuts:
@@ -1995,7 +1996,7 @@ Systematics:
     - b_205: 0.34778374881
     - b_206: 0.403646491237
     - b_207: 0.37577720874
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.111680294472
     FlatPrior: false
     KinematicCuts:
@@ -2121,7 +2122,7 @@ Systematics:
     - b_205: 0.321717130443
     - b_206: 0.423294735133
     - b_207: 0.315790074612
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.166335506531
     FlatPrior: false
     KinematicCuts:
@@ -2247,7 +2248,7 @@ Systematics:
     - b_205: 0.36214649987
     - b_206: 0.468778583992
     - b_207: 0.402942526115
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.175355411847
     FlatPrior: false
     KinematicCuts:
@@ -2373,7 +2374,7 @@ Systematics:
     - b_205: 0.382451540591
     - b_206: 0.340072184381
     - b_207: 0.483214160886
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.322609599348
     FlatPrior: false
     KinematicCuts:
@@ -2499,7 +2500,7 @@ Systematics:
     - b_205: 0.263784731185
     - b_206: 0.211104998507
     - b_207: 0.112010645004
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.148567101318
     FlatPrior: false
     KinematicCuts:
@@ -2625,7 +2626,7 @@ Systematics:
     - b_205: 0.409207213423
     - b_206: 0.36274229702
     - b_207: 0.193155196705
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.102081519068
     FlatPrior: false
     KinematicCuts:
@@ -2751,7 +2752,7 @@ Systematics:
     - b_205: 0.453102920482
     - b_206: 0.397761609891
     - b_207: 0.22543470634
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.101315339656
     FlatPrior: false
     KinematicCuts:
@@ -2877,7 +2878,7 @@ Systematics:
     - b_205: 0.478591642094
     - b_206: 0.4186937932
     - b_207: 0.24587774759
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.103906099616
     FlatPrior: false
     KinematicCuts:
@@ -3003,7 +3004,7 @@ Systematics:
     - b_205: 0.509238736716
     - b_206: 0.448055164688
     - b_207: 0.278853957194
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.105285456989
     FlatPrior: false
     KinematicCuts:
@@ -3129,7 +3130,7 @@ Systematics:
     - b_205: 0.53036606875
     - b_206: 0.472331753847
     - b_207: 0.291586036972
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.10071126015
     FlatPrior: false
     KinematicCuts:
@@ -3255,7 +3256,7 @@ Systematics:
     - b_205: 0.543230219153
     - b_206: 0.487093674332
     - b_207: 0.308569612832
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.10107213865
     FlatPrior: false
     KinematicCuts:
@@ -3381,7 +3382,7 @@ Systematics:
     - b_205: 0.564029009758
     - b_206: 0.508537540767
     - b_207: 0.333587195365
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.102252045769
     FlatPrior: false
     KinematicCuts:
@@ -3507,7 +3508,7 @@ Systematics:
     - b_205: 0.561184297577
     - b_206: 0.511583128693
     - b_207: 0.325188050036
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.098317152216
     FlatPrior: false
     KinematicCuts:
@@ -3633,7 +3634,7 @@ Systematics:
     - b_205: 0.552892785091
     - b_206: 0.51432177713
     - b_207: 0.321569189213
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0977261159832
     FlatPrior: false
     KinematicCuts:
@@ -3759,7 +3760,7 @@ Systematics:
     - b_205: 0.624032596649
     - b_206: 0.570997882664
     - b_207: 0.396895410204
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.105837848757
     FlatPrior: false
     KinematicCuts:
@@ -3885,7 +3886,7 @@ Systematics:
     - b_205: 0.639249504254
     - b_206: 0.590230883229
     - b_207: 0.436108802073
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.114467628591
     FlatPrior: false
     KinematicCuts:
@@ -4011,7 +4012,7 @@ Systematics:
     - b_205: 0.627821046931
     - b_206: 0.585415906199
     - b_207: 0.346533873462
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0998471512565
     FlatPrior: false
     KinematicCuts:
@@ -4137,7 +4138,7 @@ Systematics:
     - b_205: 0.687213839874
     - b_206: 0.639582144822
     - b_207: 0.401329491179
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.106740781753
     FlatPrior: false
     KinematicCuts:
@@ -4263,7 +4264,7 @@ Systematics:
     - b_205: 0.749718539157
     - b_206: 0.696800685818
     - b_207: 0.46396613517
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.120723958605
     FlatPrior: false
     KinematicCuts:
@@ -4389,7 +4390,7 @@ Systematics:
     - b_205: 0.782528630841
     - b_206: 0.753129206372
     - b_207: 0.398204561306
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.161174300575
     FlatPrior: false
     KinematicCuts:
@@ -4515,7 +4516,7 @@ Systematics:
     - b_205: 0.63480297178
     - b_206: 0.758461452345
     - b_207: 0.290018866365
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.226198470406
     FlatPrior: false
     KinematicCuts:
@@ -4641,7 +4642,7 @@ Systematics:
     - b_205: 0.588974208108
     - b_206: 0.658788860538
     - b_207: 0.559754892488
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.218724600379
     FlatPrior: false
     KinematicCuts:
@@ -4767,7 +4768,7 @@ Systematics:
     - b_205: -0.05022657434
     - b_206: -0.0533911982232
     - b_207: -0.0606375860771
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.876585568248
     FlatPrior: false
     KinematicCuts:
@@ -4893,7 +4894,7 @@ Systematics:
     - b_205: 0.308751896182
     - b_206: 0.207929798036
     - b_207: 0.225011125822
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.084932612534
     FlatPrior: false
     KinematicCuts:
@@ -5019,7 +5020,7 @@ Systematics:
     - b_205: 0.46628743144
     - b_206: 0.436324716463
     - b_207: 0.300272404425
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0679864204842
     FlatPrior: false
     KinematicCuts:
@@ -5145,7 +5146,7 @@ Systematics:
     - b_205: 0.46603827479
     - b_206: 0.472631206071
     - b_207: 0.223835281939
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.075441973537
     FlatPrior: false
     KinematicCuts:
@@ -5271,7 +5272,7 @@ Systematics:
     - b_205: 0.624140230499
     - b_206: 0.624535945624
     - b_207: 0.518809576743
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0853839574578
     FlatPrior: false
     KinematicCuts:
@@ -5397,7 +5398,7 @@ Systematics:
     - b_205: 0.52717063117
     - b_206: 0.617153877328
     - b_207: 0.366472943572
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.108801713212
     FlatPrior: false
     KinematicCuts:
@@ -5523,7 +5524,7 @@ Systematics:
     - b_205: 0.41007744215
     - b_206: 0.603708150503
     - b_207: 0.282195954608
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.139492097845
     FlatPrior: false
     KinematicCuts:
@@ -5649,7 +5650,7 @@ Systematics:
     - b_205: 0.464796041228
     - b_206: 0.409126408357
     - b_207: 0.725711929107
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.226805353458
     FlatPrior: false
     KinematicCuts:
@@ -5775,7 +5776,7 @@ Systematics:
     - b_205: 0.430058947796
     - b_206: 0.351793151423
     - b_207: 0.175986698795
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.10146513306
     FlatPrior: false
     KinematicCuts:
@@ -5901,7 +5902,7 @@ Systematics:
     - b_205: 0.777328198338
     - b_206: 0.676953061585
     - b_207: 0.353788221318
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0930336214323
     FlatPrior: false
     KinematicCuts:
@@ -6027,7 +6028,7 @@ Systematics:
     - b_205: 0.907758637178
     - b_206: 0.822935972154
     - b_207: 0.481370954686
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.112741652929
     FlatPrior: false
     KinematicCuts:
@@ -6153,7 +6154,7 @@ Systematics:
     - b_205: 0.920128961156
     - b_206: 0.856109899734
     - b_207: 0.464752892536
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.128663792758
     FlatPrior: false
     KinematicCuts:
@@ -6279,7 +6280,7 @@ Systematics:
     - b_205: 0.914723300905
     - b_206: 0.892771145215
     - b_207: 0.446399615188
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.145672602693
     FlatPrior: false
     KinematicCuts:
@@ -6405,7 +6406,7 @@ Systematics:
     - b_205: 0.871106563401
     - b_206: 0.953300076793
     - b_207: 0.567304554813
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.155969277676
     FlatPrior: false
     KinematicCuts:
@@ -6531,7 +6532,7 @@ Systematics:
     - b_205: 0.213097252994
     - b_206: 0.294761464053
     - b_207: 0.380551515944
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.229443910222
     FlatPrior: false
     KinematicCuts:
@@ -6657,7 +6658,7 @@ Systematics:
     - b_205: 0.265302233658
     - b_206: 0.221344536585
     - b_207: 0.142297988419
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.156114583904
     FlatPrior: false
     KinematicCuts:
@@ -6783,7 +6784,7 @@ Systematics:
     - b_205: 0.398654822367
     - b_206: 0.361718837876
     - b_207: 0.226897373853
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.102593642381
     FlatPrior: false
     KinematicCuts:
@@ -6909,7 +6910,7 @@ Systematics:
     - b_205: 0.466947991803
     - b_206: 0.420286316422
     - b_207: 0.277465320329
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0923182099511
     FlatPrior: false
     KinematicCuts:
@@ -7035,7 +7036,7 @@ Systematics:
     - b_205: 0.500589983654
     - b_206: 0.451663191572
     - b_207: 0.317724521895
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0967089335474
     FlatPrior: false
     KinematicCuts:
@@ -7161,7 +7162,7 @@ Systematics:
     - b_205: 0.495344327295
     - b_206: 0.449760258923
     - b_207: 0.313787404106
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.101134743759
     FlatPrior: false
     KinematicCuts:
@@ -7287,7 +7288,7 @@ Systematics:
     - b_205: 0.474231000602
     - b_206: 0.435486534883
     - b_207: 0.299656877014
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.104246041387
     FlatPrior: false
     KinematicCuts:
@@ -7413,7 +7414,7 @@ Systematics:
     - b_205: 0.467172290748
     - b_206: 0.436531768166
     - b_207: 0.298955816106
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.105620505343
     FlatPrior: false
     KinematicCuts:
@@ -7539,7 +7540,7 @@ Systematics:
     - b_205: 0.488172538502
     - b_206: 0.460551803569
     - b_207: 0.341154029096
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.113292572118
     FlatPrior: false
     KinematicCuts:
@@ -7665,7 +7666,7 @@ Systematics:
     - b_205: 0.478535958621
     - b_206: 0.454537317619
     - b_207: 0.321718219748
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.111672329236
     FlatPrior: false
     KinematicCuts:
@@ -7791,7 +7792,7 @@ Systematics:
     - b_205: 0.501336112647
     - b_206: 0.480058904332
     - b_207: 0.363003479441
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.117202581003
     FlatPrior: false
     KinematicCuts:
@@ -7917,7 +7918,7 @@ Systematics:
     - b_205: 0.461607926254
     - b_206: 0.450680565988
     - b_207: 0.327883797551
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.112319933805
     FlatPrior: false
     KinematicCuts:
@@ -8043,7 +8044,7 @@ Systematics:
     - b_205: 0.461325156779
     - b_206: 0.455418473921
     - b_207: 0.314826739268
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.108966363232
     FlatPrior: false
     KinematicCuts:
@@ -8169,7 +8170,7 @@ Systematics:
     - b_205: 0.498661760699
     - b_206: 0.495289236647
     - b_207: 0.398372086946
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.118607377738
     FlatPrior: false
     KinematicCuts:
@@ -8295,7 +8296,7 @@ Systematics:
     - b_205: 0.510066865438
     - b_206: 0.508148471465
     - b_207: 0.407361977519
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.121507250422
     FlatPrior: false
     KinematicCuts:
@@ -8421,7 +8422,7 @@ Systematics:
     - b_205: 0.470675285398
     - b_206: 0.494915905965
     - b_207: 0.399634233414
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.113958744146
     FlatPrior: false
     KinematicCuts:
@@ -8547,7 +8548,7 @@ Systematics:
     - b_205: 0.296674209864
     - b_206: 0.384699776411
     - b_207: 0.276191875994
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.142894497859
     FlatPrior: false
     KinematicCuts:
@@ -8673,7 +8674,7 @@ Systematics:
     - b_205: 0.35622306197
     - b_206: 0.47059009086
     - b_207: 0.3370775892
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.194107360503
     FlatPrior: false
     KinematicCuts:
@@ -8799,7 +8800,7 @@ Systematics:
     - b_205: 0.373890854032
     - b_206: 0.463987092065
     - b_207: 0.443153597659
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.181542659311
     FlatPrior: false
     KinematicCuts:
@@ -8925,7 +8926,7 @@ Systematics:
     - b_205: 0.325572062285
     - b_206: 0.364009948246
     - b_207: 0.350610830129
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.31924067114
     FlatPrior: false
     KinematicCuts:
@@ -9051,7 +9052,7 @@ Systematics:
     - b_205: 0.157874103946
     - b_206: 0.0961342581362
     - b_207: 0.018227576458
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.119323524094
     FlatPrior: false
     KinematicCuts:
@@ -9177,7 +9178,7 @@ Systematics:
     - b_205: 0.276291292377
     - b_206: 0.210758684357
     - b_207: 0.0626476025638
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0881785384035
     FlatPrior: false
     KinematicCuts:
@@ -9303,7 +9304,7 @@ Systematics:
     - b_205: 0.334431085786
     - b_206: 0.269919474419
     - b_207: 0.104879795802
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0775096471758
     FlatPrior: false
     KinematicCuts:
@@ -9429,7 +9430,7 @@ Systematics:
     - b_205: 0.383943878825
     - b_206: 0.32031536191
     - b_207: 0.160063439337
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0739511879664
     FlatPrior: false
     KinematicCuts:
@@ -9555,7 +9556,7 @@ Systematics:
     - b_205: 0.410352194055
     - b_206: 0.3529326723
     - b_207: 0.164994251974
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0739234595837
     FlatPrior: false
     KinematicCuts:
@@ -9681,7 +9682,7 @@ Systematics:
     - b_205: 0.434756056713
     - b_206: 0.372496072083
     - b_207: 0.190592970687
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0716676699533
     FlatPrior: false
     KinematicCuts:
@@ -9807,7 +9808,7 @@ Systematics:
     - b_205: 0.426568883814
     - b_206: 0.340388644488
     - b_207: 0.206700754747
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0665602134795
     FlatPrior: false
     KinematicCuts:
@@ -9933,7 +9934,7 @@ Systematics:
     - b_205: 0.33496337588
     - b_206: 0.301038085806
     - b_207: 0.0955979922923
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0660309536093
     FlatPrior: false
     KinematicCuts:
@@ -10059,7 +10060,7 @@ Systematics:
     - b_205: 0.320516623902
     - b_206: 0.254795499185
     - b_207: 0.127318126483
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0665488842619
     FlatPrior: false
     KinematicCuts:
@@ -10185,7 +10186,7 @@ Systematics:
     - b_205: 0.339817395592
     - b_206: 0.27745431512
     - b_207: 0.157861346866
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.068320900554
     FlatPrior: false
     KinematicCuts:
@@ -10311,7 +10312,7 @@ Systematics:
     - b_205: 0.378988889201
     - b_206: 0.300184413378
     - b_207: 0.221132636595
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0759986457421
     FlatPrior: false
     KinematicCuts:
@@ -10437,7 +10438,7 @@ Systematics:
     - b_205: 0.373469203714
     - b_206: 0.387128375589
     - b_207: 0.0830538025261
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0803969281245
     FlatPrior: false
     KinematicCuts:
@@ -10563,7 +10564,7 @@ Systematics:
     - b_205: 0.632899639143
     - b_206: 0.563948471847
     - b_207: 0.451650235412
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0794696719707
     FlatPrior: false
     KinematicCuts:
@@ -10689,7 +10690,7 @@ Systematics:
     - b_205: 0.647418474658
     - b_206: 0.560262524723
     - b_207: 0.472036633431
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0931328939462
     FlatPrior: false
     KinematicCuts:
@@ -10815,7 +10816,7 @@ Systematics:
     - b_205: 0.662286272551
     - b_206: 0.607711675723
     - b_207: 0.321236342559
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0904542234871
     FlatPrior: false
     KinematicCuts:
@@ -10941,7 +10942,7 @@ Systematics:
     - b_205: 0.784778359067
     - b_206: 0.673805843476
     - b_207: 0.369600210219
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.125686510068
     FlatPrior: false
     KinematicCuts:
@@ -11067,7 +11068,7 @@ Systematics:
     - b_205: 0.713981566932
     - b_206: 0.786916498196
     - b_207: 0.268833202943
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.1976242631
     FlatPrior: false
     KinematicCuts:
@@ -11193,7 +11194,7 @@ Systematics:
     - b_205: 0.618998278153
     - b_206: 0.724860537107
     - b_207: 0.531020713366
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.21069746735
     FlatPrior: false
     KinematicCuts:
@@ -11319,7 +11320,7 @@ Systematics:
     - b_205: -0.0845363932683
     - b_206: 0.109939463102
     - b_207: -0.293259786856
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.839550788657
     FlatPrior: false
     KinematicCuts:
@@ -11445,7 +11446,7 @@ Systematics:
     - b_205: 0.432406897529
     - b_206: 0.368884214132
     - b_207: 0.251346435483
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.103263736633
     FlatPrior: false
     KinematicCuts:
@@ -11571,7 +11572,7 @@ Systematics:
     - b_205: 0.69517679334
     - b_206: 0.654256786835
     - b_207: 0.442204042392
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0890224428233
     FlatPrior: false
     KinematicCuts:
@@ -11697,7 +11698,7 @@ Systematics:
     - b_205: 0.743688313878
     - b_206: 0.724730460041
     - b_207: 0.495764460289
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.108163370625
     FlatPrior: false
     KinematicCuts:
@@ -11823,7 +11824,7 @@ Systematics:
     - b_205: 0.737709602079
     - b_206: 0.743467176374
     - b_207: 0.488602223497
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.124204493911
     FlatPrior: false
     KinematicCuts:
@@ -11949,7 +11950,7 @@ Systematics:
     - b_205: 0.735815058025
     - b_206: 0.758063143601
     - b_207: 0.496048218331
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.146830957451
     FlatPrior: false
     KinematicCuts:
@@ -12075,7 +12076,7 @@ Systematics:
     - b_205: 0.626378353961
     - b_206: 0.730268017687
     - b_207: 0.520861289149
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.158357027131
     FlatPrior: false
     KinematicCuts:
@@ -12201,7 +12202,7 @@ Systematics:
     - b_205: 0.447021347801
     - b_206: 0.521757138558
     - b_207: 0.597633494099
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.191606685339
     FlatPrior: false
     KinematicCuts:
@@ -12327,7 +12328,7 @@ Systematics:
     - b_205: 0.245912398726
     - b_206: 0.231842784634
     - b_207: -0.0219715771122
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0850143376668
     FlatPrior: false
     KinematicCuts:
@@ -12453,7 +12454,7 @@ Systematics:
     - b_205: 0.522992662717
     - b_206: 0.507358392441
     - b_207: 0.15009140906
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0678272409999
     FlatPrior: false
     KinematicCuts:
@@ -12579,7 +12580,7 @@ Systematics:
     - b_205: 0.813164625355
     - b_206: 0.704159530649
     - b_207: 0.512039910482
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.0789826067963
     FlatPrior: false
     KinematicCuts:
@@ -12705,7 +12706,7 @@ Systematics:
     - b_205: 0.837807411558
     - b_206: 0.66715159168
     - b_207: 0.642927784699
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.11790005798
     FlatPrior: false
     KinematicCuts:
@@ -12831,7 +12832,7 @@ Systematics:
     - b_205: 1.0
     - b_206: 0.89515733437
     - b_207: 0.564646586763
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.120569006222
     FlatPrior: false
     KinematicCuts:
@@ -12957,7 +12958,7 @@ Systematics:
     - b_205: 0.89515733437
     - b_206: 1.0
     - b_207: 0.53422543473
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.143373459782
     FlatPrior: false
     KinematicCuts:
@@ -13083,7 +13084,7 @@ Systematics:
     - b_205: 0.564646586763
     - b_206: 0.53422543473
     - b_207: 1.0
-    DetID: 24
+    DetID: ["FD"]
     Error: 0.196693899466
     FlatPrior: false
     KinematicCuts:

@@ -39,11 +39,8 @@ int main(int argc, char * argv[]) {
   std::vector<samplePDFFDBase*> DUNEPdfs;
   MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec, osc);
 
-  // Some place to store the histograms
-  // HH: Add a check for 1D or 2D data
-  std::vector<TH1D *> PredictionHistograms1D;
-  std::vector<TH2D *> PredictionHistograms2D;
-  // std::vector<TH1D*> PredictionHistograms;
+  //Some place to store the histograms
+  std::vector<TH1*> PredictionHistograms;
   std::vector<std::string> sample_names;
 
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
@@ -57,32 +54,27 @@ int main(int argc, char * argv[]) {
     
     if (useosc) {osc->setParameters();}
     DUNEPdfs[sample_i] -> reweight();
-    // HH: Add a check for 1D or 2D data
-    if (DUNEPdfs[sample_i]->GetNDim() == 1) {
-      TH1D *SampleHistogram = (TH1D*)DUNEPdfs[sample_i] -> get1DHist() -> Clone(NameTString+"_unosc");
-      PredictionHistograms1D.push_back(SampleHistogram);
-      DUNEPdfs[sample_i]->addData(PredictionHistograms1D[sample_i]);
+    if (DUNEPdfs[sample_i]->GetNDim() == 1){
+      PredictionHistograms.push_back(static_cast<TH1*>(DUNEPdfs[sample_i] -> get1DHist() -> Clone(NameTString+"_unosc")));
+      DUNEPdfs[sample_i]->addData(static_cast<TH1D*>(PredictionHistograms[sample_i]));
+    }
+      
+    else if (DUNEPdfs[sample_i]->GetNDim() == 2){
+      PredictionHistograms.push_back(static_cast<TH1*>(DUNEPdfs[sample_i] -> get2DHist() -> Clone(NameTString+"_unosc")));
+      DUNEPdfs[sample_i]->addData(static_cast<TH2D*>(PredictionHistograms[sample_i]));
     }
     else {
-      TH2D *SampleHistogram = (TH2D*)DUNEPdfs[sample_i] -> get2DHist() -> Clone(NameTString+"_unosc");
-      PredictionHistograms2D.push_back(SampleHistogram);
-      DUNEPdfs[sample_i]->addData(PredictionHistograms2D[sample_i]);
+      MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting"); 
+      throw MaCh3Exception(__FILE__ , __LINE__ );
     }
-
     
-    std::cout << "Added data to " << name << "with llh " << DUNEPdfs[sample_i]->GetLikelihood() << std::endl;
+    
   }
   
   //Now print out some event rates, we'll make a nice latex table at some point 
   for (unsigned iPDF = 0; iPDF < DUNEPdfs.size() ; ++iPDF) {
     MACH3LOG_INFO("Integrals of nominal hists: ");
-    if (DUNEPdfs[iPDF]->GetNDim() == 1) {
-      MACH3LOG_INFO("{} : {}", sample_names[iPDF].c_str(),
-                    PredictionHistograms1D[iPDF]->Integral());
-    } else {
-      MACH3LOG_INFO("{} : {}", sample_names[iPDF].c_str(),
-                    PredictionHistograms2D[iPDF]->Integral());
-    }
+    MACH3LOG_INFO("{} : {}", sample_names[iPDF].c_str(), PredictionHistograms[iPDF]->Integral());
     MACH3LOG_INFO("--------------");
   }
   
@@ -92,6 +84,24 @@ int main(int argc, char * argv[]) {
   std::unique_ptr<mcmc> MaCh3Fitter = std::make_unique<mcmc>(FitManager);
 
   bool StartFromPreviousChain = GetFromManager(FitManager->raw()["General"]["StartFromPos"], false);
+
+  //Start chain from random position unless continuing a chain
+  if(!StartFromPreviousChain){
+    xsec->throwParameters();
+    osc->throwParameters();
+  }
+  
+
+  //Add systematic objects
+  MaCh3Fitter->addSystObj(osc);
+  if (GetFromManager(FitManager->raw()["General"]["StatOnly"], false)){
+    MACH3LOG_INFO("Running a stat-only fit so no systematics will be applied");
+  }
+  else {
+    MaCh3Fitter->addSystObj(xsec);
+  }
+
+
   if (StartFromPreviousChain) {
     std::string PreviousChainPath = FitManager->raw()["General"]["PosFileName"].as<std::string>();
     MACH3LOG_INFO("MCMC getting starting position from: {}",PreviousChainPath);
@@ -144,9 +154,14 @@ int main(int argc, char * argv[]) {
     MACH3LOG_ERROR("Fit.cpp is still doing AMCMC!");
     throw MaCh3Exception(__FILE__ , __LINE__ );
   }
+
   
   //Run fit
   MaCh3Fitter->runMCMC();
+
+  //Writing the memory usage at the end to eventually spot some nasty leak
+  MACH3LOG_WARN("\033[0;31mCurrent Total RAM usage is {:.2f} GB\033[0m", MaCh3Utils::getValue("VmRSS") / 1048576.0);
+  MACH3LOG_WARN("\033[0;31mOut of Total available RAM {:.2f} GB\033[0m", MaCh3Utils::getValue("MemTotal") / 1048576.0);
 
   return 0;
 }

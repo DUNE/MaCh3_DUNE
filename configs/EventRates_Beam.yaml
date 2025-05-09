@@ -1,3 +1,4 @@
+---
 General:
   OutputFile: "outputs/runs/084_amcmc.root"
   # OutputFile: "outputs/liban_stepsize/sigma_libanND.root"
@@ -18,6 +19,7 @@ General:
   # OscillationParameters: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
   OscillatorConfigName: "configs/OscillatorObj.yaml"
+
   Systematics:
     # XsecCovFile: ["configs/CovObjs/xsec_covariance_DUNE_systs_2022a_FD_v3_flux.yaml"]
     # XsecCovFile: ["configs/CovObjs/liban.yaml"]
@@ -55,6 +57,7 @@ General:
     XsecAtGen: false 
     OscCovFile: ["configs/CovObjs/OscCov_PDG2021_v2_unoscillated.yaml"]
     OscCovName: "osc_cov"
+    OscFix: ["baseline", "density"]
 
   Fitter:
     FitTestLikelihood: false

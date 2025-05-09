@@ -1,3 +1,4 @@
+---
 SampleName: "numuselec"
 SampleType: "Atm"
 # SelectionCuts:
@@ -9,7 +10,7 @@ SampleType: "Atm"
 #     Bounds: [ 50.0, 1244.0 ]
 Binning:
   XVarStr: "TrueNeutrinoEnergy"
-  XVarBins: [0., 0.25, 0.5, 0.75, 1.,  1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 4.25, 4.5, 4.75, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 100000.]
+  XVarBins: [0., 0.25, 0.5, 0.75, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 4.25, 4.5, 4.75, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 100000.]
 SampleBools:
   IsELike: no
 InputFiles:
@@ -17,9 +18,10 @@ InputFiles:
   mtuplesuffix: "_ncselec.root"
   splineprefix: ""
   splinesuffix: ""
-DetID: 24
+DetID: "ATM"
 NuOsc:
   NuOscConfigFile: "configs/NuOsc/CUDAProb3.yaml"
+  EqualBinningPerOscChannel: true
 NSubSamples: 12
 SubSamples:
   - name: "nue_x_nue"

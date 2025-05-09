@@ -94,7 +94,11 @@ int main(int argc, char * argv[]) {
 	  File->cd((ParName+"/"+SampleName).c_str());
 	  
 	  DUNEPdfs[iSample]->reweight();
-	  TH1* Hist = DUNEPdfs[iSample]->get1DHist();
+	  TH1* Hist;
+    if (DUNEPdfs[iSample]->GetNDim() == 1)
+      Hist = DUNEPdfs[iSample]->get1DHist();
+    else if (DUNEPdfs[iSample]->GetNDim() == 2)
+      Hist = DUNEPdfs[iSample]->get2DHist();
 	  MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}",SampleName,Hist->Integral());
 	  
 	  Hist->Write(Form("Variation_%i",(int)iSigVar));

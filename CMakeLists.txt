@@ -40,11 +40,11 @@ file(
 include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 
 CPMFindPackage(
-      NAME CMakeModules
-      GIT_TAG stable
-      GITHUB_REPOSITORY NuHepMC/CMakeModules
-      DOWNLOAD_ONLY
-  )
+  NAME CMakeModules
+  GIT_TAG stable
+  GITHUB_REPOSITORY NuHepMC/CMakeModules
+  DOWNLOAD_ONLY
+)
 include(${CMakeModules_SOURCE_DIR}/NuHepMCModules.cmake)
 
 #=================== ROOT
@@ -59,18 +59,33 @@ if(DEFINED ROOT_CXX_STANDARD AND ROOT_CXX_STANDARD GREATER CMAKE_CXX_STANDARD)
 endif()
 
 #=================== DUNEAnaObj
+option(Build_NDGAr "Whether to build ndgar samplepdf class or all others" OFF)
+
+if(NOT DEFINED DUNE_ANAOBJ_BRANCH)
+  if (Build_NDGAr)
+    set(DUNE_ANAOBJ_BRANCH tag/legacy_ndgar_cafs_2024)
+  else()
+    set(DUNE_ANAOBJ_BRANCH v03_06_00)
+  endif()
+
+  set(DUNE_ANAOBJ_BRANCH ${DUNE_ANAOBJ_BRANCH} CACHE STRING "Specify which duneanaobj branch to use")
+endif()
+
+if (Build_NDGAr)
+  add_compile_definitions(BUILD_NDGAR)
+endif()
 
 option(MaCh3_DUNE_USE_SRProxy "Whether to build proxy classes for Standard Record objects" OFF)
 
 if(MaCh3_DUNE_USE_SRProxy)
   find_package(duneanaobj)
-
+	
   if(NOT duneanaobj_FOUND)
-    CPMFindPackage(
-      NAME duneanaobj
-      GIT_TAG feature/Clingification_rebase2024
-      GITHUB_REPOSITORY luketpickering/duneanaobj
-      VERSION 4.0.0
+		CPMFindPackage(
+    	NAME duneanaobj
+    	GIT_TAG feature/Clingification_rebase2024
+    	GITHUB_REPOSITORY luketpickering/duneanaobj
+    	VERSION 4.0.0
     )
   endif()
 
@@ -78,17 +93,16 @@ if(MaCh3_DUNE_USE_SRProxy)
     cmessage(FATAL_ERROR "MaCh3 DUNE Expected dependency target: duneanaobj::all")
   endif()
 else()
-  CPMAddPackage(
-    NAME duneanaobj
-    GIT_TAG v03_06_00
-    GITHUB_REPOSITORY "DUNE/duneanaobj"
-    DOWNLOAD_ONLY YES
+	CPMAddPackage(
+ 	  NAME duneanaobj
+	  GIT_TAG ${DUNE_ANAOBJ_BRANCH}
+	  GITHUB_REPOSITORY DUNE/duneanaobj 
+	  DOWNLOAD_ONLY YES
   )
-
-  include_directories(${duneanaobj_SOURCE_DIR})
+	include_directories(${duneanaobj_SOURCE_DIR})
 
   ROOT_GENERATE_DICTIONARY(StandardRecordDict ${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/StandardRecord.h
-    LINKDEF ${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/classes_def.xml)
+  LINKDEF ${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/classes_def.xml)
 
   file(GLOB SR_IMPL_FILES "${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/*.cxx")
   LIST(APPEND SR_IMPL_FILES ${CMAKE_CURRENT_BINARY_DIR}/StandardRecordDict.cxx)
@@ -110,8 +124,8 @@ else()
 
   install(FILES ${SR_HEADER_FILES} DESTINATION include/duneanaobj/StandardRecord)
   install(FILES 
-      ${CMAKE_CURRENT_BINARY_DIR}/libStandardRecordDict_rdict.pcm 
-      ${CMAKE_CURRENT_BINARY_DIR}/libStandardRecordDict.rootmap 
+    ${CMAKE_CURRENT_BINARY_DIR}/libStandardRecordDict_rdict.pcm 
+    ${CMAKE_CURRENT_BINARY_DIR}/libStandardRecordDict.rootmap 
     DESTINATION lib)
 
   add_library(duneanaobj::all ALIAS duneanaobj_StandardRecord)
@@ -121,7 +135,9 @@ endif()
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
-find_package(MaCh3 1.3.5 EXACT QUIET)
+find_package(MaCh3 1.4.8 EXACT QUIET)
+set(MaCh3_CORE_BRANCH v1.4.8 CACHE STRING "Specify the MaCh3 core branch to use")
+message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 
 if(NOT MaCh3_FOUND)
   cmessage(STATUS "Didn't find MaCh3, attempting to use built in MaCh3")
@@ -143,16 +159,17 @@ if(NOT MaCh3_FOUND)
       "USE_CPU ${USE_CPU}"
       "MaCh3_DEBUG_ENABLED ${DEBUG_ENABLED}"
       "MaCh3_MULTITHREAD_ENABLED ${MULTITHREAD_ENABLED}"
+      "MaCh3_CORE_BRANCH ${MaCh3_CORE_BRANCH}"
   )
 
   # Add LOG_LEVEL if defined
   if (LOG_LEVEL)
-      list(APPEND MaCh3_OPTIONS "LOG_LEVEL ${LOG_LEVEL}")
+    list(APPEND MaCh3_OPTIONS "LOG_LEVEL ${LOG_LEVEL}")
   endif()
   
   CPMAddPackage(
       NAME MaCh3
-      GIT_TAG "v1.3.5"
+      GIT_TAG ${MaCh3_CORE_BRANCH}
       GITHUB_REPOSITORY mach3-software/MaCh3
   )
 else()
@@ -181,6 +198,7 @@ cmessage(STATUS "CMAKE CXX Standard: ${CMAKE_CXX_STANDARD}")
 add_library(DUNEMaCh3Warnings INTERFACE)
 
 target_compile_options(DUNEMaCh3Warnings INTERFACE
+  -Werror                 # Treat Warnings as Errors
   -Wextra                 # Enable extra warning flags
   -Wall                   # Enable all standard warning flags
   -Wshadow                # Warn when a variable declaration shadows one from an outer scope
@@ -218,9 +236,9 @@ endif()
 
 if(MaCh3DUNE_DependancyGraph)
   add_custom_target(graphviz ALL
-                    COMMAND ${CMAKE_COMMAND} "--graphviz=foo.dot" .
-                    COMMAND dot -Tpng foo.dot -o foo.png
-                    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+    COMMAND ${CMAKE_COMMAND} "--graphviz=foo.dot" .
+    COMMAND dot -Tpng foo.dot -o foo.png
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
   )
 endif()
 
@@ -230,17 +248,24 @@ set_target_properties(MaCh3DUNECompilerOptions PROPERTIES EXPORT_NAME CompilerOp
 
 target_include_directories(MaCh3DUNECompilerOptions
   INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/Apps>
     $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
     $<INSTALL_INTERFACE:include>)
 
 install(TARGETS MaCh3DUNECompilerOptions
-    EXPORT mach3dune-targets
-    LIBRARY DESTINATION lib/)
+  EXPORT mach3dune-targets
+  LIBRARY DESTINATION lib/)
 
 add_subdirectory(splines)
 add_subdirectory(samplePDFDUNE)
-add_subdirectory(src)
+add_subdirectory(Apps)
+
+
+# Do we want to build our integration tests?
+if(DEFINED MACH3_BUILD_TESTS AND MACH3_BUILD_TESTS)
+  add_subdirectory(tests)
+endif()
+
 
 add_library(MaCh3DUNEAll INTERFACE)
 set_target_properties(MaCh3DUNEAll PROPERTIES EXPORT_NAME All)
@@ -248,8 +273,8 @@ target_link_libraries(MaCh3DUNEAll INTERFACE SamplePDFDUNE splinesDUNE MaCh3DUNE
 add_library(MaCh3DUNE::All ALIAS MaCh3DUNEAll)
 
 install(TARGETS MaCh3DUNEAll
-    EXPORT mach3dune-targets
-    LIBRARY DESTINATION lib/)
+  EXPORT mach3dune-targets
+  LIBRARY DESTINATION lib/)
 
 configure_file(cmake/Templates/setup.MaCh3DUNE.sh.in
   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/setup.MaCh3DUNE.sh" @ONLY)
@@ -264,9 +289,9 @@ install(DIRECTORY configs DESTINATION ${CMAKE_BINARY_DIR})
 install(DIRECTORY utils DESTINATION ${CMAKE_BINARY_DIR})
 
 install(EXPORT mach3dune-targets
-        FILE MaCh3DUNETargets.cmake
-        NAMESPACE MaCh3DUNE::
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/
+  FILE MaCh3DUNETargets.cmake
+  NAMESPACE MaCh3DUNE::
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/
 )
 
 include(CMakePackageConfigHelpers)
@@ -283,8 +308,8 @@ write_basic_package_version_file(${CMAKE_BINARY_DIR}/MaCh3DUNEConfigVersion.cmak
   COMPATIBILITY AnyNewerVersion)
 
 install(FILES
-    ${CMAKE_BINARY_DIR}/MaCh3DUNEConfig.cmake
-    ${CMAKE_BINARY_DIR}/MaCh3DUNEConfigVersion.cmake
+  ${CMAKE_BINARY_DIR}/MaCh3DUNEConfig.cmake
+  ${CMAKE_BINARY_DIR}/MaCh3DUNEConfigVersion.cmake
   DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/MaCh3DUNE)
 
 include(mach3dune-config)

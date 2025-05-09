@@ -1,0 +1,56 @@
+Be aware of the current fragility incorporated into the MaCh3Modes object in Core::<=v1.4.6 (And until this file gets removed)
+
+The MaCh3Modes object currently can not differentiate a MaCh3Mode based on an isCC check (It currently assumes a unique generator mode per MaCh3Mode).
+Consequently for GENIE modes (where CC and NC are not differentiated) we have to do this differentiation ourselves.
+
+The MaCh3Modes yaml currently looks like:
+
+```
+MaCh3Modes: [
+  "CCQE",
+  "CC1Kaon",
+  "CCDIS",
+  "CCRES",
+  "CCCOH",
+  "CCDiff",
+  "CCNuEl",
+  "CCIMD",
+  "CCAnuGam",
+  "CCMEC",
+  "CCCOHEL",
+  "CCIBD",
+  "CCGlRES",
+  "CCIMDAnn",
+  "NCQE",
+#  "NC1Kaon",
+  "NCDIS",
+  "NCRES",
+  "NCCOH",
+  "NCDiff",
+  "NCNuEl",
+  "NCIMD",
+  "NCAnuGam",
+  "NCMEC",
+  "NCCOHEL",
+  "NCIBD",
+  "NCGlRES",
+  "NCIMDAnn"
+  ]
+```
+So we have individual CC and NC MaCh3 modes, just no way to access the NC modes within the MaCh3Modes object right now.
+
+Notice the lack of NC1Kaon - this was not in the original mode breakdown used in previous version of MaCh3 DUNE: https://github.com/DUNE/MaCh3_DUNE/blob/53b4f5c7cb4a45ed0a249076ef60824d65c997ff/samplePDFDUNE/StructsDUNE.h#L650-L653
+
+Consequently, we include the differentiation by adding 14 to the returned MaCh3Mode (i.e. the number of CC modes) and subtract 1 to account for the missing NC1Kaon mode if the M3Mode is above 15:
+
+```
+int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
+if (!sr->mc.nu[0].iscc) M3Mode += 14; //Account for no ability to distinguish CC/NC                                                                                                                               
+if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon                                                                                                                                                       
+duneobj->mode[iEvent] = M3Mode;
+```
+
+Other notes to get this to work:
+The generator mode mapping in the MaCh3Modes.yaml has to be "fugded" to avoid CC and NC key conflicts. Consequently all MaCh3 NC modes has an offset of 12 to avoid key conflicts. This is an offset of 12 because kWeakMix (https://github.com/DUNE/MaCh3_DUNE/blob/53b4f5c7cb4a45ed0a249076ef60824d65c997ff/samplePDFDUNE/StructsDUNE.h#L716C3-L716C11) and kEM (https://github.com/DUNE/MaCh3_DUNE/blob/53b4f5c7cb4a45ed0a249076ef60824d65c997ff/samplePDFDUNE/StructsDUNE.h#L714C3-L714C6) are never used anywhere, and kUnknown should not be defined. CC1Kaon does not have a well-defined SIMB mode so it has a generator mode of 40.
+
+Once the MaCh3Modes object is altered so it can distinguish based on isCC, the CC and NC generator modes within the MaCh3Modes.yaml should be identical. I'm still uncertainty why CC1Kaon doesn't have a SIMB-mode, something seems really messed up, but I think that's a different problem.
