@@ -1,0 +1,324 @@
+Systematics:
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.02
+    FlatPrior: false
+    Names:
+      FancyName: TotalEScaleFD
+      ParameterName: TotalEScaleFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 8.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.01
+    FlatPrior: false
+    Names:
+      FancyName: TotalEScaleSqrtFD
+      ParameterName: TotalEScaleSqrtFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 16.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.02
+    FlatPrior: false
+    Names:
+      FancyName: TotalEScaleInvSqrtFD
+      ParameterName: TotalEScaleInvSqrtFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 18.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.05
+    FlatPrior: false
+    Names:
+      FancyName: HadEScaleFD
+      ParameterName: HadEScaleFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 18.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.05
+    FlatPrior: false
+    Names:
+      FancyName: HadEScaleSqrtFD
+      ParameterName: HadEScaleSqrtFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 20.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.05
+    FlatPrior: false
+    Names:
+      FancyName: HadEScaleInvSqrtFD
+      ParameterName: HadEScaleInvSqrtFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 7.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.02
+    FlatPrior: false
+    Names:
+      FancyName: MuEScaleFD
+      ParameterName: MuEScaleFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 15.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.005
+    FlatPrior: false
+    Names:
+      FancyName: MuEScaleSqrtFD
+      ParameterName: MuEScaleSqrtFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 20.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.02
+    FlatPrior: false
+    Names:
+      FancyName: MuEScaleInvSqrtFD
+      ParameterName: MuEScaleInvSqrtFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 20.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.2
+    FlatPrior: false
+    Names:
+      FancyName: NEScaleFD
+      ParameterName: NEScaleFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 6.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.3
+    FlatPrior: false
+    Names:
+      FancyName: NEScaleSqrtFD
+      ParameterName: NEScaleSqrtFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 12.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.3
+    FlatPrior: false
+    Names:
+      FancyName: NEScaleInvSqrtFD
+      ParameterName: NEScaleInvSqrtFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 10.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.025
+    FlatPrior: false
+    Names:
+      FancyName: EMEScaleFD
+      ParameterName: EMEScaleFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 30.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.025
+    FlatPrior: false
+    Names:
+      FancyName: EMEScaleSqrtFD
+      ParameterName: EMEScaleSqrtFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 20.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.025
+    FlatPrior: false
+    Names:
+      FancyName: EMEScaleInvSqrtFD
+      ParameterName: EMEScaleInvSqrtFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 20.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.02
+    FlatPrior: false
+    Names:
+      FancyName: HadResFD
+      ParameterName: HadResFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 20.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.02
+    FlatPrior: false
+    Names:
+      FancyName: MuResFD
+      ParameterName: MuResFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 9.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.1
+    FlatPrior: false
+    Names:
+      FancyName: NResFD
+      ParameterName: NResFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 17.0
+    Type: Functional
+- Systematic:
+    SampleNames: ["FD"]
+    Error: 0.02
+    FlatPrior: false
+    Names:
+      FancyName: EMResFD
+      ParameterName: EMResFD
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterGroup: DetSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 22.0
+    Type: Functional
