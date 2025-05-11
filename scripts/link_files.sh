@@ -40,4 +40,16 @@ then
   mkdir $MACH3DIR/inputs/DUNE_NDGAr_AnaTrees
 fi
 
+if [ ! -d "$MACH3DIR/inputs/DUNE_ND_spline_files" ]
+then
+  mkdir $MACH3DIR/inputs/DUNE_ND_spline_files
+fi
+
 ln -sf ${FILESDIR}/DUNE_2025_ND_splines/*root inputs/DUNE_ND_spline_files
+
+if [ ! -d "$MACH3DIR/inputs/DUNE_ND_CAF_files" ]
+then
+  mkdir $MACH3DIR/inputs/DUNE_ND_CAF_files
+fi
+
+ln -sf ${FILESDIR}/DUNE_2023_ND_CAFs_FV_CCINC_Q/*root inputs/DUNE_ND_CAF_files
