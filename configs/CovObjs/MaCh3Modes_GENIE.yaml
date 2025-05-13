@@ -2,7 +2,7 @@
 
 Title: "DUNE Interaction modes"
 
-GeneratorName: "SIMB"
+GeneratorName: "GENIE"
 
 MaCh3Modes: [
   "CCQE",

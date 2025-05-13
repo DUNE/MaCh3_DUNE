@@ -14,7 +14,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 0
       SplineName: maqe
     StepScale:
@@ -35,7 +35,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 0
       SplineName: pauli
     StepScale:
@@ -56,7 +56,7 @@ Systematics:
       Generated: -0.36
       PreFitValue: -0.36
     SplineInformation:
-      FDMode:
+      Mode:
       - 3
       SplineName: mares
     StepScale:
@@ -77,7 +77,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 3
       SplineName: mvres
     StepScale:
@@ -98,7 +98,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 16
       SplineName: mancres
     StepScale:
@@ -119,7 +119,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 16
       SplineName: mvncres
     StepScale:
@@ -140,7 +140,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 3
       - 16
       SplineName: thetadelta
@@ -162,7 +162,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       - 15
       SplineName: ahtby
@@ -184,7 +184,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       - 15
       SplineName: bhtby
@@ -206,7 +206,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       - 15
       SplineName: cv1uby
@@ -228,7 +228,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       - 15
       SplineName: cv2uby
@@ -250,7 +250,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       - 3
       - 15
@@ -274,7 +274,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       - 3
       - 15
@@ -298,7 +298,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       - 3
       - 15
@@ -322,7 +322,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       - 3
       - 15
@@ -346,7 +346,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       - 3
       - 15
@@ -370,7 +370,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 0
       - 2
       - 3
@@ -396,7 +396,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 0
       - 2
       - 3
@@ -422,7 +422,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 0
       - 2
       - 3
@@ -448,7 +448,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 0
       - 2
       - 3
@@ -474,7 +474,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 0
       - 2
       - 3
@@ -500,7 +500,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 9
       - 22
       SplineName: e2anu
@@ -522,7 +522,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 9
       - 22
       SplineName: e2bnu
@@ -544,7 +544,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 9
       - 22
       SplineName: e2anubar
@@ -566,7 +566,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 9
       - 22
       SplineName: e2bnubar
@@ -588,7 +588,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 9
       - 22
       SplineName: c12nu
@@ -610,7 +610,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 9
       - 22
       SplineName: c12nubar
@@ -632,7 +632,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       SplineName: nuncc2
     StepScale:
@@ -653,7 +653,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       SplineName: nuncc3
     StepScale:
@@ -674,7 +674,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       SplineName: nupcc2
     StepScale:
@@ -695,7 +695,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       SplineName: nupcc3
     StepScale:
@@ -716,7 +716,7 @@ Systematics:
       Generated: -1.14
       PreFitValue: -1.14
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       SplineName: nunpcc1
     StepScale:
@@ -737,7 +737,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 15
       SplineName: nunnc1
     StepScale:
@@ -758,7 +758,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 15
       SplineName: nunnc2
     StepScale:
@@ -779,7 +779,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 15
       SplineName: nunnc3
     StepScale:
@@ -800,7 +800,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 15
       SplineName: nupnc1
     StepScale:
@@ -821,7 +821,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 15
       SplineName: nupnc2
     StepScale:
@@ -842,7 +842,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 15
       SplineName: nupnc3
     StepScale:
@@ -863,7 +863,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       SplineName: nubarncc1
     StepScale:
@@ -884,7 +884,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       SplineName: nubarncc2
     StepScale:
@@ -905,7 +905,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       SplineName: nubarncc3
     StepScale:
@@ -926,7 +926,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       SplineName: nubarpcc1
     StepScale:
@@ -947,7 +947,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       SplineName: nubarpcc2
     StepScale:
@@ -968,7 +968,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 2
       SplineName: nubarpcc3
     StepScale:
@@ -989,7 +989,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 15
       SplineName: nubarnnc1
     StepScale:
@@ -1010,7 +1010,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 15
       SplineName: nubarnnc2
     StepScale:
@@ -1031,7 +1031,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 15
       SplineName: nubarnnc3
     StepScale:
@@ -1052,7 +1052,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 15
       SplineName: nubarpnc1
     StepScale:
@@ -1073,7 +1073,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 15
       SplineName: nubarpnc2
     StepScale:
@@ -1094,7 +1094,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 15
       SplineName: nubarpnc3
     StepScale:
@@ -1115,7 +1115,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 0
       SplineName: berpaa
     StepScale:
@@ -1136,7 +1136,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 0
       SplineName: berpab
     StepScale:
@@ -1157,7 +1157,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 0
       SplineName: berpad
     StepScale:
@@ -1178,7 +1178,7 @@ Systematics:
       Generated: 1.0
       PreFitValue: 1.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 0
       - 2
       - 3
@@ -1203,7 +1203,7 @@ Systematics:
       Generated: 1.0
       PreFitValue: 1.0
     SplineInformation:
-      FDMode:
+      Mode:
       - 0
       - 2
       - 3
