@@ -1,6 +1,7 @@
+---
 Systematics:
 - Systematic:
-    DetID: ["NDGAr"]
+    SampleNames: ["ND_GAr"]
     Error: 0.123224219401
     FlatPrior: false
     KinematicCuts:

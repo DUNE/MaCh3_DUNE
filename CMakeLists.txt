@@ -135,8 +135,8 @@ endif()
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
-find_package(MaCh3 1.4.8 EXACT QUIET)
-set(MaCh3_CORE_BRANCH v1.4.8 CACHE STRING "Specify the MaCh3 core branch to use")
+find_package(MaCh3 1.5.0 EXACT QUIET)
+set(MaCh3_CORE_BRANCH v1.5.0 CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 
 if(NOT MaCh3_FOUND)
@@ -215,7 +215,7 @@ target_compile_options(DUNEMaCh3Warnings INTERFACE
   -Wconversion            # Warn on type conversions that may lose data
   -Wformat-security       # Warn on functions that are potentially insecure for formatting
   -Walloca                # Warn if `alloca` is used, as it can lead to stack overflows
-  #-Wswitch-enum           # Warn if a `switch` statement on an enum does not cover all values
+  -Wswitch-enum           # Warn if a `switch` statement on an enum does not cover all values
   #-Wfloat-equal          # Warn if floating-point values are compared directly
   #-Wpadded               # Warn when padding is added to a structure or class for alignment
 )

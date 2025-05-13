@@ -6,7 +6,6 @@ foreach(app
 	Projections
 	SigmaVariation
 	LikelihoodScan
-  RunAdaptiveMCMC
 	Variations
       )
       

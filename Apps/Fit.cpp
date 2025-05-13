@@ -37,7 +37,7 @@ int main(int argc, char * argv[]) {
   //Create samplePDFSKBase Objs
 
   std::vector<samplePDFFDBase*> DUNEPdfs;
-  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec, osc);
+  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec, osc); 
 
   //Some place to store the histograms
   std::vector<TH1*> PredictionHistograms;
@@ -48,7 +48,7 @@ int main(int argc, char * argv[]) {
 
   for (unsigned sample_i = 0 ; sample_i < DUNEPdfs.size() ; ++sample_i) {
     
-    std::string name = DUNEPdfs[sample_i]->GetName();
+    std::string name = DUNEPdfs[sample_i]->GetTitle();
     sample_names.push_back(name);
     TString NameTString = TString(name.c_str());
     
@@ -74,7 +74,7 @@ int main(int argc, char * argv[]) {
   //Now print out some event rates, we'll make a nice latex table at some point 
   for (unsigned iPDF = 0; iPDF < DUNEPdfs.size() ; ++iPDF) {
     MACH3LOG_INFO("Integrals of nominal hists: ");
-    MACH3LOG_INFO("{} : {}", sample_names[iPDF].c_str(), PredictionHistograms[iPDF]->Integral());
+    MACH3LOG_INFO("{} : {}",sample_names[iPDF].c_str(),PredictionHistograms[iPDF]->Integral());
     MACH3LOG_INFO("--------------");
   }
   
@@ -83,35 +83,6 @@ int main(int argc, char * argv[]) {
 
   std::unique_ptr<mcmc> MaCh3Fitter = std::make_unique<mcmc>(FitManager);
 
-  bool StartFromPreviousChain = GetFromManager(FitManager->raw()["General"]["StartFromPos"], false);
-
-  //Start chain from random position unless continuing a chain
-  if(!StartFromPreviousChain){
-    xsec->throwParameters();
-    osc->throwParameters();
-  }
-  
-
-  //Add systematic objects
-  MaCh3Fitter->addSystObj(osc);
-  if (GetFromManager(FitManager->raw()["General"]["StatOnly"], false)){
-    MACH3LOG_INFO("Running a stat-only fit so no systematics will be applied");
-  }
-  else {
-    MaCh3Fitter->addSystObj(xsec);
-  }
-
-
-  if (StartFromPreviousChain) {
-    std::string PreviousChainPath = FitManager->raw()["General"]["PosFileName"].as<std::string>();
-    MACH3LOG_INFO("MCMC getting starting position from: {}",PreviousChainPath);
-    MaCh3Fitter->StartFromPreviousFit(PreviousChainPath);
-  }
-  
-  //Add samples
-  for(auto Sample : DUNEPdfs){
-    MaCh3Fitter->addSamplePDF(Sample);
-  }
   std::string throwmatrixfilename = GetFromManager<std::string>(FitManager->raw()["General"]["ThrowMatrixFile"], "");
   std::string throwmatrixname = GetFromManager<std::string>(FitManager->raw()["General"]["ThrowMatrixName"], "");
   if (throwmatrixfilename == "") {
@@ -134,14 +105,18 @@ int main(int argc, char * argv[]) {
     }
     std::cout << std::endl;
   }
-  //Start chain from random position
-  xsec->throwParameters();
-  if (useosc) {
-    osc->throwParameters();
-    MaCh3Fitter->addSystObj(osc);
+
+  bool StartFromPreviousChain = GetFromManager(FitManager->raw()["General"]["StartFromPos"], false);
+
+  //Start chain from random position unless continuing a chain
+  if(!StartFromPreviousChain){
+    xsec->throwParameters();
+    if (useosc) osc->throwParameters();
   }
+  
 
   //Add systematic objects
+  if (useosc) MaCh3Fitter->addSystObj(osc);
   if (GetFromManager(FitManager->raw()["General"]["StatOnly"], false)){
     MACH3LOG_INFO("Running a stat-only fit so no systematics will be applied");
   }
@@ -149,10 +124,16 @@ int main(int argc, char * argv[]) {
     MaCh3Fitter->addSystObj(xsec);
   }
 
-  // HH debug: if xsec is still doing AMCMC, throw an error.
-  if (xsec->getUseAdaptive()) {
-    MACH3LOG_ERROR("Fit.cpp is still doing AMCMC!");
-    throw MaCh3Exception(__FILE__ , __LINE__ );
+
+  if (StartFromPreviousChain) {
+    std::string PreviousChainPath = FitManager->raw()["General"]["PosFileName"].as<std::string>();
+    MACH3LOG_INFO("MCMC getting starting position from: {}",PreviousChainPath);
+    MaCh3Fitter->StartFromPreviousFit(PreviousChainPath);
+  }
+  
+  //Add samples
+  for(auto Sample : DUNEPdfs){
+    MaCh3Fitter->addSamplePDF(Sample);
   }
 
   

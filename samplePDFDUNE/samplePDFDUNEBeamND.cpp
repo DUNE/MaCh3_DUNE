@@ -1,5 +1,4 @@
 #include "samplePDFDUNEBeamND.h"
-#include <cstddef>
 
 //Here nullptr is passed instead of OscCov to prevent oscillation calculations from being performed for the ND Samples
 samplePDFDUNEBeamND::samplePDFDUNEBeamND(std::string mc_version_, covarianceXsec* xsec_cov_,  TMatrixD* nd_cov_, covarianceOsc* osc_cov_=nullptr) : samplePDFFDBase(mc_version_, xsec_cov_, osc_cov_) {
@@ -28,44 +27,18 @@ void samplePDFDUNEBeamND::Init() {
   iselike = SampleManager->raw()["DUNESampleBools"]["iselike"].as<bool>();
   pot = SampleManager->raw()["POT"].as<double>();
 
-
-  // Comment out below to remove custom likelihood
-  // /*
-  std::string nd_detsys_cov_filename = GetFromManager<std::string>(SampleManager->raw()["NDDetSysCovFile"], "");
-  std::string nd_detsys_cov_matrixname = GetFromManager<std::string>(SampleManager->raw()["NDDetSysCovMatrix"], "");
-  if (nd_detsys_cov_filename == "") {
-    MACH3LOG_ERROR("No NDDetSysCovFile found in {}", SampleManager->GetFileName());
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-  else {
-    TFile *nd_detsys_cov_file = new TFile(nd_detsys_cov_filename.c_str(), "READ");
-    if (nd_detsys_cov_file->IsZombie()) {
-      MACH3LOG_ERROR("Could not open NDDetSysCovFile {}, please check the file name", nd_detsys_cov_filename);
-      throw MaCh3Exception(__FILE__, __LINE__);
-    }
-    MACH3LOG_INFO("Loading NDDetSysCovMatrix from {}", nd_detsys_cov_filename);
-    NDCovMatrix = nd_detsys_cov_file->Get<TMatrixD>(nd_detsys_cov_matrixname.c_str());
-    if (NDCovMatrix == nullptr) {
-      MACH3LOG_ERROR("Could not find {}, please check the matrix name", nd_detsys_cov_matrixname);
-      throw MaCh3Exception(__FILE__, __LINE__);
-    }
-    nd_detsys_cov_file->Close();
-  }
-  MACH3LOG_INFO("Using custom likelihood for ND!");
-  // */
-  
   std::cout << "-------------------------------------------------------------------" <<std::endl;
 }
 
 void samplePDFDUNEBeamND::SetupSplines() {
   ///@todo move all of the spline setup into core
-  if(XsecCov->GetNumParamsFromDetID(SampleDetID, kSpline) > 0){
-    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", XsecCov->GetNumParamsFromDetID(SampleDetID, kSpline));
+  if(XsecCov->GetNumParamsFromSampleName(SampleName, kSpline) > 0){
+    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", XsecCov->GetNumParamsFromSampleName(SampleName, kSpline));
     SplineHandler = std::unique_ptr<splineFDBase>(new splinesDUNE(XsecCov,Modes));
     InitialiseSplineObject();
   }
   else{
-    MACH3LOG_INFO("Found {} splines for this sample so I will not load or evaluate splines", XsecCov->GetNumParamsFromDetID(SampleDetID, kSpline));
+    MACH3LOG_INFO("Found {} splines for this sample so I will not load or evaluate splines", XsecCov->GetNumParamsFromSampleName(SampleName, kSpline));
     SplineHandler = nullptr;
   }
 
@@ -452,8 +425,6 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
     MACH3LOG_INFO("Downsample not defined in {}, continuing without downsampling!", SampleManager->GetFileName());
   }
 
-
-
   duneobj->rw_yrec = new double[duneobj->nEvents];
   duneobj->rw_erec_lep = new double[duneobj->nEvents];
   duneobj->rw_erec_had = new double[duneobj->nEvents];
@@ -625,9 +596,9 @@ const double* samplePDFDUNEBeamND::GetPointerToKinematicParameter(std::string Ki
   return GetPointerToKinematicParameter(KinPar,iSample,iEvent);
 }
 
-double samplePDFDUNEBeamND::ReturnKinematicParameter(double KinematicVariable, int iSample, int iEvent) {
-  KinematicTypes KinPar = (KinematicTypes) std::round(KinematicVariable);
-  return ReturnKinematicParameter(KinPar,iSample,iEvent);
+double samplePDFDUNEBeamND::ReturnKinematicParameter(int KinematicVariable, int iSample, int iEvent) {
+  KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
+  return *GetPointerToKinematicParameter(KinPar, iSample, iEvent);
 }
 
 double samplePDFDUNEBeamND::ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent) {

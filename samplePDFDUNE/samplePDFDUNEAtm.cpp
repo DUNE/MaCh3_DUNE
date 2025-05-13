@@ -186,8 +186,9 @@ const double* samplePDFDUNEAtm::GetPointerToKinematicParameter(std::string Kinem
   return GetPointerToKinematicParameter(KinPar,iSample,iEvent);
 }
 
-double samplePDFDUNEAtm::ReturnKinematicParameter(double KinematicVariable, int iSample, int iEvent) {
-  return *GetPointerToKinematicParameter(KinematicVariable, iSample, iEvent);
+double samplePDFDUNEAtm::ReturnKinematicParameter(int KinematicVariable, int iSample, int iEvent) {
+  KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
+  return *GetPointerToKinematicParameter(KinPar, iSample, iEvent);
 }
 
 double samplePDFDUNEAtm::ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent) {

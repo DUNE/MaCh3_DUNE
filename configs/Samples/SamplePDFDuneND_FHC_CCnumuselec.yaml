@@ -1,15 +1,16 @@
 ---
-SampleName: "ND_FHC_CCnumu"
+SampleTitle: "ND_FHC_CCnumu"
 SampleType: "BeamND"
 
 POT: 3.85e21
-MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes.yaml"
-DetID: "ND_FHC"
+MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes_GENIE.yaml"
+SampleName: "ND_LAr_FHC"
+# Downsample: 0.01
 
 Binning:
-  XVarStr : "RecoNeutrinoEnergy" 
-  XVarBins: [0.,  0.5,  1.,  1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
-  YVarStr : "yRec" 
+  XVarStr: "RecoNeutrinoEnergy"
+  XVarBins: [0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
+  YVarStr: "yRec"
   YVarBins: [0., 0.1, 0.2, 0.3, 0.4, 0.6, 1.1]
 
 DUNESampleBools:

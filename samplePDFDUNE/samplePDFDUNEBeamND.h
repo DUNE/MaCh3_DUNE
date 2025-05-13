@@ -87,7 +87,7 @@ public:
   const double* GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent);
   const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
 
-  double ReturnKinematicParameter(double KinematicVariable, int iSample, int iEvent);
+  double ReturnKinematicParameter(int KinematicVariable, int iSample, int iEvent);
   double ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
   double ReturnKinematicParameter(KinematicTypes Kinpar, int iSample, int iEvent);
 
@@ -170,28 +170,6 @@ public:
   bool isND;
   double IsFHC;
 
-  // //Positions of ND Detector systematics
-  // double tot_escale_nd_pos;
-  // double tot_escale_sqrt_nd_pos;
-  // double tot_escale_invsqrt_nd_pos;
-  // double had_escale_nd_pos;
-  // double had_escale_sqrt_nd_pos;
-  // double had_escale_invsqrt_nd_pos;
-  // double mu_escale_nd_pos;
-  // double mu_escale_sqrt_nd_pos;
-  // double mu_escale_invsqrt_nd_pos;
-  // double n_escale_nd_pos;
-  // double n_escale_sqrt_nd_pos;
-  // double n_escale_invsqrt_nd_pos;
-  // double em_escale_nd_pos;
-  // double em_escale_sqrt_nd_pos;
-  // double em_escale_invsqrt_nd_pos;
-  // double had_res_nd_pos;
-  // double mu_res_nd_pos;
-  // double n_res_nd_pos;
-  // double em_res_nd_pos;
-
-  // int nNDDetectorSystPointers = 0;
 };
 
 #endif

@@ -43,11 +43,11 @@ protected:
   void RegisterFunctionalParameters(){};
   
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinematicVariable Kinematic parameter ID as double (gets cast -> int)
+  /// @param KinematicVariable Kinematic parameter ID as int
   /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Value of kinematic parameter corresponding for a given event 
-  double ReturnKinematicParameter (double KinematicVariable, int iSample, int iEvent);
+  double ReturnKinematicParameter (int KinematicVariable, int iSample, int iEvent);
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicParameter Kinematic parameter name as string (gets cast -> int)

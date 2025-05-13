@@ -1,5 +1,5 @@
 ---
-SampleName: "numuselec"
+SampleTitle: "numuselec"
 SampleType: "Atm"
 # SelectionCuts:
 #   - KinematicStr: "TrueXPos"
@@ -18,7 +18,7 @@ InputFiles:
   mtuplesuffix: ".root"
   splineprefix: ""
   splinesuffix: ""
-DetID: "ATM"
+SampleName: "ATM"
 NuOsc:
   NuOscConfigFile: "configs/NuOsc/CUDAProb3.yaml"
   EqualBinningPerOscChannel: true

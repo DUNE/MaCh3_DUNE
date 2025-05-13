@@ -85,9 +85,9 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<samplePDFFDBase*> &D
   MACH3LOG_INFO("cov xsec setup");
   MACH3LOG_INFO("------------------------------");
 
-  std::vector<std::string> OscMatrixFile = FitManager->raw()["General"]["Systematics"]["OscCovFile"].as<std::vector<std::string>>();
-  std::string  OscMatrixName = FitManager->raw()["General"]["Systematics"]["OscCovName"].as<std::string>(); 
-  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
+  std::vector<std::string> OscMatrixFile = GetFromManager<std::vector<std::string>>(FitManager->raw()["General"]["Systematics"]["OscCovFile"], {""});
+  std::string  OscMatrixName = GetFromManager<std::string>(FitManager->raw()["General"]["Systematics"]["OscCovName"], "");
+  std::vector<double> oscpars = GetFromManager<std::vector<double>>(FitManager->raw()["General"]["OscillationParameters"], {});
 
   std::string OscPars = "";
   bool useosc = oscpars.size() > 0;
@@ -116,7 +116,10 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<samplePDFFDBase*> &D
 
   MACH3LOG_INFO("Osc cov setup");
   MACH3LOG_INFO("------------------------------");
-
+  }  
+  else {
+    MACH3LOG_WARN("No OscillationParameters found, skipping oscillation parameters.");
+  }
   // ==========================================================
   //read flat prior, fixed paramas from the config file
   std::vector<std::string> XsecFixParams = GetFromManager<std::vector<std::string>>(FitManager->raw()["General"]["Systematics"]["XsecFix"], {});
@@ -175,6 +178,12 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<samplePDFFDBase*> &D
     DUNEPdfs.back()->setWeightSwitchOffVector(FitManager->getWeightSwitchOffVector());
     DUNEPdfs.back()->setXsecWeightSwitchOffVector(FitManager->getXsecWeightSwitchOffVector());
 #endif
+  }
+
+  // Adaptive MCMC stuff
+
+  if (FitManager->raw()["AdaptionOptions"]){ 
+    xsec->initialiseAdaption(FitManager->raw());
   }
 
   return;

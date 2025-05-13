@@ -1,37 +1,37 @@
 ---
 General:
-  OutputFile: "outputs/runs/084_amcmc.root"
-  # OutputFile: "outputs/liban_stepsize/sigma_libanND.root"
-  # DUNESamples: ["configs/Samples/SamplePDFDuneND_FHC_numuselec_everything.yaml"] 
-  # DUNESamples: ["configs/Samples/SamplePDFDuneND_RHC_numuselec_everything.yaml"] 
-  # DUNESamples: ["configs/Samples/SamplePDFDuneND_RHC_numuselec_everything_downsample.yaml"] 
-  # DUNESamples: ["configs/Samples/SamplePDFDuneND_RHC_numuselec_onesample.yaml"] 
-  # DUNESamples: ["configs/Samples/SamplePDFDuneND_FHC_numuselec_everything.yaml", "configs/Samples/SamplePDFDuneND_RHC_numuselec_everything.yaml"]
-  DUNESamples: ["configs/Samples/SamplePDFDuneND_FHC_numuselec_everything_downsample.yaml", "configs/Samples/SamplePDFDuneND_RHC_numuselec_everything_downsample.yaml"] 
-  # DUNESamples: ["configs/Samples/SamplePDFDuneND_RHC_numuselec_everything_downsample.yaml"] 
-  # DUNESamples: ["configs/Samples/SamplePDFDuneND_FHC_numuselec.yaml"]
-  # DUNESamples: ["configs/Samples/SamplePDFDuneND_FHC_numuselec_numuonly.yaml"]
-  ## Nu-FIT
-  # OscillationParameters: [0.310, 0.582, 0.224, 7.39E-5, 2.5254E-3, -2.498]
-  ## T2K-like best-fit
-  # OscillationParameters: [0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848]
-  ## Comment out OscillationParameters to remove oscillation
-  # OscillationParameters: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  # OutputFile: "outputs/runs/085_eventrates.root"
+  # OutputFile: "outputs/runs/086_llh.root"
+  # OutputFile: "outputs/runs/087_sigmavar.root"
+  # OutputFile: "outputs/runs/088_llh.root"
+  OutputFile: "outputs/runs/089_amcmc.root"
+  DUNESamples: 
+    # - "configs/Samples/SamplePDFDune_FHC_numuselec.yaml"
+    # - "configs/Samples/SamplePDFDune_FHC_nueselec.yaml"
+    # - "configs/Samples/SamplePDFDune_RHC_numuselec.yaml"
+    # - "configs/Samples/SamplePDFDune_RHC_nueselec.yaml"
+    - "configs/Samples/SamplePDFDuneND_FHC_CCnumuselec.yaml"
+    - "configs/Samples/SamplePDFDuneND_RHC_CCnumuselec.yaml"
+
+  # Nu-FIT
+  # OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 1284.9, 2.848] #CUDAProb3
+  #OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 1284.9, 2.848,  0.5] #NuFAST
+
+  # T2K-like best-fit
+  #OscillationParameters: [0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848] #CUDAProb3
+  #OscillationParameters: [0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848, 0.5] #NuFAST
 
   OscillatorConfigName: "configs/OscillatorObj.yaml"
 
   Systematics:
     # XsecCovFile: ["configs/CovObjs/xsec_covariance_DUNE_systs_2022a_FD_v3_flux.yaml"]
-    # XsecCovFile: ["configs/CovObjs/liban.yaml"]
-    # XsecCovFile: ["configs/CovObjs/one_flux.yaml"]
-    # XsecCovFile: ["configs/CovObjs/liban_ND_norm_scale1.yaml"]
-    # XsecCovFile: ["configs/CovObjs/liban_covs/Flux_ND_uniform.yaml"]
-    # XsecCovFile: ["configs/CovObjs/liban_covs/Flux_ND_uniform.yaml", "configs/CovObjs/liban_covs/Xsec_ND+FD_uniform_hack.yaml"]
-    # XsecCovFile: ["configs/CovObjs/liban_covs/Xsec_ND+FD_uniform_hack.yaml"]
-    # XsecCovFile: ["configs/CovObjs/liban_covs/DetSys_ND_uniform_hack.yaml"]
-    XsecCovFile: ["configs/CovObjs/liban_covs/Flux_ND_uniform.yaml", "configs/CovObjs/liban_covs/Xsec_ND+FD_uniform_hack.yaml", "configs/CovObjs/liban_covs/DetSys_ND_uniform_hack.yaml"]
-    # XsecCovFile: ["configs/CovObjs/liban_ND_norm_RHC_20241204.yaml"]
-    # XsecCovFile: ["configs/CovObjs/liban_ND.yaml", "configs/CovObjs/xsec_covariance_DUNE_systs_2022a_FD_v3_xsec.yaml"]
+    XsecCovFile: 
+      # - "configs/CovObjs/tdr_covs/Flux_ND.yaml"
+      - "configs/CovObjs/tdr_covs/Flux_ND_uniform.yaml"
+      # - "configs/CovObjs/tdr_covs/Xsec_ND+FD.yaml"
+      - "configs/CovObjs/tdr_covs/Xsec_ND+FD_uniform.yaml"
+      # - "configs/CovObjs/tdr_covs/DetSys_ND_uniform_hack.yaml"
+      # - '/vols/dune/hh2823/mach3_random/MaCh3_DUNE/configs/CovObjs/tdr_covs/tdr_covs_grouped.yaml'
     XsecCovName: "xsec_cov"
     # Liban's step size
     # XsecStepScale: 0.05
@@ -55,6 +55,7 @@ General:
     # XsecStepScale: 0.2
     # XsecStepScale: 1
     XsecAtGen: false 
+    NDCovFile: "configs/CovObjs/tdr_covs/det_sys_cov.root"
     OscCovFile: ["configs/CovObjs/OscCov_PDG2021_v2_unoscillated.yaml"]
     OscCovName: "osc_cov"
     OscFix: ["baseline", "density"]
@@ -63,7 +64,6 @@ General:
     FitTestLikelihood: false
   MCMC:
     NSteps: 5000000
-    # NSteps: 30
     AutoSave: 10000
   Output:
     FileName: "TestEventRates.root"
@@ -72,26 +72,37 @@ General:
   Seed: 0
   Debug: Yes
 
-  # 1DLLHScan: true
-  # 2DLLHScan: true
-  # LLHScanPoints: 20
-  # LLHScanSigma: 5
-
   # Custom throw matrix
-  ThrowMatrixFile: "outputs/runs/081_amcmc.root"
+  # ThrowMatrixFile: "outputs/runs/081_amcmc.root"
   # Entry in the throw matrix
-  ThrowMatrixName: "AdaptiveFolder/300000_xsec_cov_throw_matrix"
+  # ThrowMatrixName: "AdaptiveFolder/300000_xsec_cov_throw_matrix"
+
+# LLH Scan settings  
+LLHScan:
+  # don't make LLH for certain systematic groups
+  #LLHScanSkipVector: []
+  # Save individual sample contributions to the LLH
+  LLHScanBySample: false
+  # Number of points we run LLH scans for each systematic
+  LLHScanPoints: 20
+  # Number of points for 2D scan in each direction
+  #2DLLHScanPoints: 20
+  # Add physical ranges for special params whose priors/errors may not be well well-defined
+  ScanRanges:
+    #delta_cp: [-3.14,3.14]
 
 AdaptionOptions:
   Settings:
     # When do we start throwing from our adaptive matrix?
-    AdaptionStartThrow : 100000
+    StartThrow: 100000
     # When do we start putting steps into our adaptive covariance?
-    AdaptionStartUpdate : 0
+    StartUpdate: 0
     # When do we end updating our covariance?
-    AdaptionEndUpdate : 5000000
+    EndUpdate: 5000000
     # How often do we change our matrix throws?
-    AdaptionUpdateStep : 100000
+    UpdateStep: 100000
+    SaveNIterations: 1
+    OutputFileName: "outputs/runs/089_amcmc_mat.root"
   Covariance:
     # So now we list individual matrices, let's just do xsec
     xsec_cov:
@@ -264,3 +275,8 @@ AdaptionOptions:
                 2.2, 2.4, 2.6, 2.8, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0],
   },
 ]
+
+# Tests
+Tests:
+  SkipChecks: False
+  TestResultsFile: tests/test_results/EventRatesV2TDR.txt
