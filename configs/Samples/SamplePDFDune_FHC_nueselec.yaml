@@ -4,7 +4,7 @@ SampleType: "BeamFD"
 
 POT: 1.3628319e+23
 MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes.yaml"
-SampleName: "FD"
+SampleName: "FD_FHC_nue"
 
 SelectionCuts:
   - KinematicStr: "TrueXPos"
