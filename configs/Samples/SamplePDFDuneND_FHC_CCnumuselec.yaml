@@ -3,7 +3,7 @@ SampleTitle: "ND_FHC_CCnumu"
 SampleType: "BeamND"
 
 POT: 3.85e21
-MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes.yaml"
+MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes_GENIE.yaml"
 SampleName: "ND_LAr_FHC"
 
 Binning:

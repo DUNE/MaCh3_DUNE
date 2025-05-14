@@ -1,0 +1,1215 @@
+Systematics:
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: MAQE
+      ParameterName: MAQE
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 0
+      SplineName: maqe
+    StepScale:
+      MCMC: 0.002
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: CCQEPauliSupViaKF
+      ParameterName: CCQEPauliSupViaKF
+    ParameterBounds:
+    - 0.0
+    - 1.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 0
+      SplineName: pauli
+    StepScale:
+      MCMC: 0.02
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 0.09
+    FlatPrior: false
+    Names:
+      FancyName: MaCCRES
+      ParameterName: MaCCRES
+    ParameterBounds:
+    - -0.72
+    - 0.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: -0.36
+      PreFitValue: -0.36
+    SplineInformation:
+      Mode:
+      - 3
+      SplineName: mares
+    StepScale:
+      MCMC: 0.2
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: MvCCRES
+      ParameterName: MvCCRES
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 3
+      SplineName: mvres
+    StepScale:
+      MCMC: 0.003
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: MaNCRES
+      ParameterName: MaNCRES
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 16
+      SplineName: mancres
+    StepScale:
+      MCMC: 0.2
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: MvNCRES
+      ParameterName: MvNCRES
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 16
+      SplineName: mvncres
+    StepScale:
+      MCMC: 6.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: ThetaDelta2NPi
+      ParameterName: ThetaDelta2NPi
+    ParameterBounds:
+    - 0.0
+    - 1.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 3
+      - 16
+      SplineName: thetadelta
+    StepScale:
+      MCMC: 0.1
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: AhtBY
+      ParameterName: AhtBY
+    ParameterBounds:
+    - -3.0
+    - 3.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      - 15
+      SplineName: ahtby
+    StepScale:
+      MCMC: 2.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: BhtBY
+      ParameterName: BhtBY
+    ParameterBounds:
+    - -3.0
+    - 3.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      - 15
+      SplineName: bhtby
+    StepScale:
+      MCMC: 1.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: CV1uBY
+      ParameterName: CV1uBY
+    ParameterBounds:
+    - -3.0
+    - 3.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      - 15
+      SplineName: cv1uby
+    StepScale:
+      MCMC: 1.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: CV2uBY
+      ParameterName: CV2uBY
+    ParameterBounds:
+    - -3.0
+    - 3.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      - 15
+      SplineName: cv2uby
+    StepScale:
+      MCMC: 2.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: FrCEx_pi
+      ParameterName: FrCEx_pi
+    ParameterBounds:
+    - -3.0
+    - 3.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      - 3
+      - 15
+      - 16
+      SplineName: frcexpi
+    StepScale:
+      MCMC: 3.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: FrElas_pi
+      ParameterName: FrElas_pi
+    ParameterBounds:
+    - -3.0
+    - 3.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      - 3
+      - 15
+      - 16
+      SplineName: frelaspi
+    StepScale:
+      MCMC: 5.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: FrInel_pi
+      ParameterName: FrInel_pi
+    ParameterBounds:
+    - -3.0
+    - 3.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      - 3
+      - 15
+      - 16
+      SplineName: frinelpi
+    StepScale:
+      MCMC: 2.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: FrAbs_pi
+      ParameterName: FrAbs_pi
+    ParameterBounds:
+    - -3.0
+    - 3.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      - 3
+      - 15
+      - 16
+      SplineName: frabspi
+    StepScale:
+      MCMC: 2.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: FrPiProd_pi
+      ParameterName: FrPiProd_pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      - 3
+      - 15
+      - 16
+      SplineName: frpiprodpi
+    StepScale:
+      MCMC: 7.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: FrCEx_N
+      ParameterName: FrCEx_N
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 0
+      - 2
+      - 3
+      - 14
+      - 15
+      - 16
+      SplineName: frcexn
+    StepScale:
+      MCMC: 2.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: FrElas_N
+      ParameterName: FrElas_N
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 0
+      - 2
+      - 3
+      - 14
+      - 15
+      - 16
+      SplineName: frelasn
+    StepScale:
+      MCMC: 4.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: FrInel_N
+      ParameterName: FrInel_N
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 0
+      - 2
+      - 3
+      - 14
+      - 15
+      - 16
+      SplineName: frineln
+    StepScale:
+      MCMC: 3.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: FrAbs_N
+      ParameterName: FrAbs_N
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 0
+      - 2
+      - 3
+      - 14
+      - 15
+      - 16
+      SplineName: frabsn
+    StepScale:
+      MCMC: 4.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: FrPiProd_N
+      ParameterName: FrPiProd_N
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 0
+      - 2
+      - 3
+      - 14
+      - 15
+      - 16
+      SplineName: frpiprodn
+    StepScale:
+      MCMC: 7.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: E2p2h_A_nu
+      ParameterName: E2p2h_A_nu
+    ParameterBounds:
+    - -1.0
+    - 1.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 9
+      - 22
+      SplineName: e2anu
+    StepScale:
+      MCMC: 0.03
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: E2p2h_B_nu
+      ParameterName: E2p2h_B_nu
+    ParameterBounds:
+    - -1.0
+    - 1.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 9
+      - 22
+      SplineName: e2bnu
+    StepScale:
+      MCMC: 0.07
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: E2p2h_A_nubar
+      ParameterName: E2p2h_A_nubar
+    ParameterBounds:
+    - -1.0
+    - 1.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 9
+      - 22
+      SplineName: e2anubar
+    StepScale:
+      MCMC: 0.02
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: E2p2h_B_nubar
+      ParameterName: E2p2h_B_nubar
+    ParameterBounds:
+    - -1.0
+    - 1.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 9
+      - 22
+      SplineName: e2bnubar
+    StepScale:
+      MCMC: 0.03
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: C12ToAr40_2p2hScaling_nu
+      ParameterName: C12ToAr40_2p2hScaling_nu
+    ParameterBounds:
+    - 0.0
+    - 1.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 9
+      - 22
+      SplineName: c12nu
+    StepScale:
+      MCMC: 0.3
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: C12ToAr40_2p2hScaling_nubar
+      ParameterName: C12ToAr40_2p2hScaling_nubar
+    ParameterBounds:
+    - 0.0
+    - 1.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 9
+      - 22
+      SplineName: c12nubar
+    StepScale:
+      MCMC: 0.1
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nu_n_CC_2pi
+      ParameterName: NR_nu_n_CC_2pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      SplineName: nuncc2
+    StepScale:
+      MCMC: 0.03
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nu_n_CC_3pi
+      ParameterName: NR_nu_n_CC_3pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      SplineName: nuncc3
+    StepScale:
+      MCMC: 0.06
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nu_p_CC_2pi
+      ParameterName: NR_nu_p_CC_2pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      SplineName: nupcc2
+    StepScale:
+      MCMC: 0.04
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nu_p_CC_3pi
+      ParameterName: NR_nu_p_CC_3pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      SplineName: nupcc3
+    StepScale:
+      MCMC: 0.05
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 0.2
+    FlatPrior: false
+    Names:
+      FancyName: NR_nu_np_CC_1pi
+      ParameterName: NR_nu_np_CC_1pi
+    ParameterBounds:
+    - -1.22
+    - -1.06
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: -1.14
+      PreFitValue: -1.14
+    SplineInformation:
+      Mode:
+      - 2
+      SplineName: nunpcc1
+    StepScale:
+      MCMC: 0.001
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nu_n_NC_1pi
+      ParameterName: NR_nu_n_NC_1pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 15
+      SplineName: nunnc1
+    StepScale:
+      MCMC: 10.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nu_n_NC_2pi
+      ParameterName: NR_nu_n_NC_2pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 15
+      SplineName: nunnc2
+    StepScale:
+      MCMC: 10.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nu_n_NC_3pi
+      ParameterName: NR_nu_n_NC_3pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 15
+      SplineName: nunnc3
+    StepScale:
+      MCMC: 30.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nu_p_NC_1pi
+      ParameterName: NR_nu_p_NC_1pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 15
+      SplineName: nupnc1
+    StepScale:
+      MCMC: 10.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nu_p_NC_2pi
+      ParameterName: NR_nu_p_NC_2pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 15
+      SplineName: nupnc2
+    StepScale:
+      MCMC: 10.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nu_p_NC_3pi
+      ParameterName: NR_nu_p_NC_3pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 15
+      SplineName: nupnc3
+    StepScale:
+      MCMC: 2.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nubar_n_CC_1pi
+      ParameterName: NR_nubar_n_CC_1pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      SplineName: nubarncc1
+    StepScale:
+      MCMC: 4.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nubar_n_CC_2pi
+      ParameterName: NR_nubar_n_CC_2pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      SplineName: nubarncc2
+    StepScale:
+      MCMC: 0.3
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nubar_n_CC_3pi
+      ParameterName: NR_nubar_n_CC_3pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      SplineName: nubarncc3
+    StepScale:
+      MCMC: 1.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nubar_p_CC_1pi
+      ParameterName: NR_nubar_p_CC_1pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      SplineName: nubarpcc1
+    StepScale:
+      MCMC: 0.1
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nubar_p_CC_2pi
+      ParameterName: NR_nubar_p_CC_2pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      SplineName: nubarpcc2
+    StepScale:
+      MCMC: 1.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nubar_p_CC_3pi
+      ParameterName: NR_nubar_p_CC_3pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 2
+      SplineName: nubarpcc3
+    StepScale:
+      MCMC: 2.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nubar_n_NC_1pi
+      ParameterName: NR_nubar_n_NC_1pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 15
+      SplineName: nubarnnc1
+    StepScale:
+      MCMC: 10.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nubar_n_NC_2pi
+      ParameterName: NR_nubar_n_NC_2pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 15
+      SplineName: nubarnnc2
+    StepScale:
+      MCMC: 2.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nubar_n_NC_3pi
+      ParameterName: NR_nubar_n_NC_3pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 15
+      SplineName: nubarnnc3
+    StepScale:
+      MCMC: 4.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nubar_p_NC_1pi
+      ParameterName: NR_nubar_p_NC_1pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 15
+      SplineName: nubarpnc1
+    StepScale:
+      MCMC: 10.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nubar_p_NC_2pi
+      ParameterName: NR_nubar_p_NC_2pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 15
+      SplineName: nubarpnc2
+    StepScale:
+      MCMC: 10.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: NR_nubar_p_NC_3pi
+      ParameterName: NR_nubar_p_NC_3pi
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 15
+      SplineName: nubarpnc3
+    StepScale:
+      MCMC: 5.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: BeRPA_A
+      ParameterName: BeRPA_A
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 0
+      SplineName: berpaa
+    StepScale:
+      MCMC: 0.01
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: BeRPA_B
+      ParameterName: BeRPA_B
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 0
+      SplineName: berpab
+    StepScale:
+      MCMC: 0.01
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: BeRPA_D
+      ParameterName: BeRPA_D
+    ParameterBounds:
+    - -4.0
+    - 4.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 0
+      SplineName: berpad
+    StepScale:
+      MCMC: 0.04
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_*", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: nuenuebar_xsec_ratio
+      ParameterName: nuenuebar_xsec_ratio
+    ParameterBounds:
+    - 0.0
+    - 1.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    SplineInformation:
+      Mode:
+      - 0
+      - 2
+      - 3
+      - 4
+      - 9
+      SplineName: nuexsec
+    StepScale:
+      MCMC: 5.0
+    Type: Spline
+- Systematic:
+    SampleNames: ["ND_LAr_FHC", "FD"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: nuemumu_xsec_ratio
+      ParameterName: nuemumu_xsec_ratio
+    ParameterBounds:
+    - 0.0
+    - 1.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    SplineInformation:
+      Mode:
+      - 0
+      - 2
+      - 3
+      - 4
+      - 9
+      SplineName: nuemuxsec
+    StepScale:
+      MCMC: 5.0
+    Type: Spline
