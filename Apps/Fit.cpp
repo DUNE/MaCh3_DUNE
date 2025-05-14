@@ -42,13 +42,13 @@ int main(int argc, char * argv[]) {
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
 
+  osc->setParameters(FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>());
   for (unsigned sample_i = 0 ; sample_i < DUNEPdfs.size() ; ++sample_i) {
     
     std::string name = DUNEPdfs[sample_i]->GetName();
     sample_names.push_back(name);
     TString NameTString = TString(name.c_str());
     
-    osc->setParameters();
     DUNEPdfs[sample_i] -> reweight();
     if (DUNEPdfs[sample_i]->GetNDim() == 1){
       PredictionHistograms.push_back(static_cast<TH1*>(DUNEPdfs[sample_i] -> get1DHist() -> Clone(NameTString+"_unosc")));
@@ -83,7 +83,9 @@ int main(int argc, char * argv[]) {
 
   //Start chain from random position unless continuing a chain
   if(!StartFromPreviousChain){
-    xsec->throwParameters();
+    if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false))
+      xsec->throwParameters();
+    osc->setParameters();
     osc->throwParameters();
   }
   
