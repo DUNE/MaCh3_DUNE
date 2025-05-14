@@ -1,3 +1,4 @@
+---
 Systematics:
 
 ##### Global energy scale uncertainties #####
@@ -25,7 +26,7 @@ Systematics:
 
 - Systematic:
   # Extra part, in accordance with CAFana, to account for
-  # additional shifts based on Elep for events that are 
+  # additional shifts based on Elep for events that are
   # (not true CCNumu) and (reconstructed as Nue)
   # https://github.com/DUNE/lblpwgtools/blob/3d475f50a998fbfa6266df9a0c4eb3056c0cdfe5/CAFAna/Systs/EnergySysts.h#L39
     Correlations:
@@ -597,4 +598,3 @@ Systematics:
     StepScale:
       MCMC: 0.1
     Type: Norm
-

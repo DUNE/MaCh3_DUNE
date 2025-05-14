@@ -1,7 +1,7 @@
 ---
 General:
   OutputFile: "DuneEventRates.root"
-  DUNESamples: 
+  DUNESamples:
    - "configs/Samples/SamplePDFDune_FHC_numuselec.yaml"
    - "configs/Samples/SamplePDFDune_FHC_nueselec.yaml"
    - "configs/Samples/SamplePDFDune_RHC_numuselec.yaml"
@@ -19,7 +19,7 @@ General:
   OscillatorConfigName: "configs/OscillatorObj.yaml"
 
   Systematics:
-    XsecCovFile: 
+    XsecCovFile:
       - "configs/CovObjs/tdr_covs/Xsec_ND+FD.yaml"
       - "configs/CovObjs/tdr_covs/Flux_ND+FD.yaml"
       - "configs/CovObjs/tdr_covs/DetSysts_FD.yaml"
@@ -43,7 +43,7 @@ General:
   Seed: 0
   Debug: No
 
-# LLH Scan settings  
+# LLH Scan settings
 LLHScan:
   # don't make LLH for certain systematic groups
   #LLHScanSkipVector: []
