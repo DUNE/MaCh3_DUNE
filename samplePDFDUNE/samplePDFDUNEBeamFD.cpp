@@ -775,12 +775,11 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(double Kinemat
 
 double samplePDFDUNEBeamFD::ReturnKinematicParameter(int KinematicVariable, int iSample, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
-  return ReturnKinematicParameter(KinPar, iSample, iEvent);
+  return *GetPointerToKinematicParameter(KinPar, iSample, iEvent);
 }
 
 double samplePDFDUNEBeamFD::ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent) {
- KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter)); 
- return ReturnKinematicParameter(KinPar, iSample, iEvent);
+ return *GetPointerToKinematicParameter(KinematicParameter, iSample, iEvent);
 }
 
 
