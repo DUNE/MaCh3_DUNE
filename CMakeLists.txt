@@ -79,7 +79,7 @@ option(MaCh3_DUNE_USE_SRProxy "Whether to build proxy classes for Standard Recor
 
 if(MaCh3_DUNE_USE_SRProxy)
   find_package(duneanaobj)
-	
+
   if(NOT duneanaobj_FOUND)
     CPMFindPackage(
       NAME duneanaobj
@@ -88,7 +88,7 @@ if(MaCh3_DUNE_USE_SRProxy)
       VERSION 4.0.0
     )
   endif()
-  
+
   if(NOT TARGET duneanaobj::all)
     cmessage(FATAL_ERROR "MaCh3 DUNE Expected dependency target: duneanaobj::all")
   endif()
@@ -96,40 +96,40 @@ else()
   CPMAddPackage(
     NAME duneanaobj
     GIT_TAG ${DUNE_ANAOBJ_BRANCH}
-    GITHUB_REPOSITORY DUNE/duneanaobj 
+    GITHUB_REPOSITORY DUNE/duneanaobj
     DOWNLOAD_ONLY YES
   )
   include_directories(${duneanaobj_SOURCE_DIR})
-  
+
   ROOT_GENERATE_DICTIONARY(StandardRecordDict ${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/StandardRecord.h
     LINKDEF ${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/classes_def.xml)
-  
+
   file(GLOB SR_IMPL_FILES "${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/*.cxx")
   LIST(APPEND SR_IMPL_FILES ${CMAKE_CURRENT_BINARY_DIR}/StandardRecordDict.cxx)
-  
+
   add_library(duneanaobj_StandardRecord SHARED ${SR_IMPL_FILES})
   target_link_libraries(duneanaobj_StandardRecord PUBLIC ROOT::MathCore)
-  
-  target_include_directories(duneanaobj_StandardRecord PUBLIC 
-    $<BUILD_INTERFACE:${duneanaobj_SOURCE_DIR}> 
+
+  target_include_directories(duneanaobj_StandardRecord PUBLIC
+    $<BUILD_INTERFACE:${duneanaobj_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include>)
-  target_include_directories(duneanaobj_StandardRecord PRIVATE 
+  target_include_directories(duneanaobj_StandardRecord PRIVATE
     $<BUILD_INTERFACE:${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord> #root puts this in the dictionary
   )
-  
+
   set_target_properties(duneanaobj_StandardRecord PROPERTIES EXPORT_NAME all)
   install(TARGETS duneanaobj_StandardRecord EXPORT mach3dune-targets DESTINATION lib)
-  
+
   file(GLOB SR_HEADER_FILES "${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/*.h")
-  
+
   install(FILES ${SR_HEADER_FILES} DESTINATION include/duneanaobj/StandardRecord)
-  install(FILES 
-    ${CMAKE_CURRENT_BINARY_DIR}/libStandardRecordDict_rdict.pcm 
-    ${CMAKE_CURRENT_BINARY_DIR}/libStandardRecordDict.rootmap 
+  install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/libStandardRecordDict_rdict.pcm
+    ${CMAKE_CURRENT_BINARY_DIR}/libStandardRecordDict.rootmap
     DESTINATION lib)
-  
+
   add_library(duneanaobj::all ALIAS duneanaobj_StandardRecord)
-  
+
 endif()
 
 ##################################  MaCh3  ######################################
@@ -142,19 +142,19 @@ option(MaCh3DUNE_Atmos "Whether working with atmospherics or beam oscillations" 
 
 if(NOT MaCh3_FOUND)
   cmessage(STATUS "Didn't find MaCh3, attempting to use built in MaCh3")
-  
+
   if(NOT DEFINED MaCh3_GPU_ENABLED)
     set(MaCh3_GPU_ENABLED ON)
   endif()
-  
+
   if(NOT DEFINED MaCh3_DEBUG_ENABLED)
     set(MaCh3_DEBUG_ENABLED FALSE)
   endif()
-  
+
   if(NOT DEFINED MaCh3_MULTITHREAD_ENABLED)
     set(MaCh3_MULTITHREAD_ENABLED TRUE)
   endif()
-  
+
   # Options list construction
   set(MaCh3_OPTIONS
     "MaCh3_GPU_ENABLED ${MaCh3_GPU_ENABLED}"
@@ -175,7 +175,7 @@ if(NOT MaCh3_FOUND)
   else()
     list(APPEND MaCh3_OPTIONS "CUDAProb3Linear_ENABLED TRUE")
   endif()
-  
+
   CPMAddPackage(
     NAME MaCh3
     GIT_TAG ${MaCh3_CORE_BRANCH}
@@ -187,7 +187,7 @@ else()
   ##KS: This ensure that all executables that are in core will be moved
   FILE(GLOB MaCh3Exe $ENV{MaCh3_ROOT}/Diagnostics/*)
   FILE(COPY ${MaCh3Exe} DESTINATION ${CMAKE_BINARY_DIR}/Diagnostics/)
-  
+
   FILE(GLOB MaCh3Exe $ENV{MaCh3_ROOT}/plotting/*)
   FILE(COPY ${MaCh3Exe} DESTINATION ${CMAKE_BINARY_DIR}/plotting/)
 endif()
