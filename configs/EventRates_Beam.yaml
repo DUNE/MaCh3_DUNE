@@ -19,7 +19,10 @@ General:
   OscillatorConfigName: "configs/OscillatorObj.yaml"
 
   Systematics:
-    XsecCovFile: ["configs/CovObjs/tdr_covs/tdr_covs_grouped.yaml"]
+    XsecCovFile: 
+      - "configs/CovObjs/tdr_covs/Xsec_ND+FD.yaml"
+      - "configs/CovObjs/tdr_covs/Flux_ND+FD.yaml"
+      - "configs/CovObjs/tdr_covs/DetSysts_FD.yaml"
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.05
     XsecAtGen: false
