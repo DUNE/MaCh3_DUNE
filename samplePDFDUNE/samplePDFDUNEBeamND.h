@@ -35,7 +35,6 @@ public:
   
   //DB functions which could be initialised to do something which is non-trivial
   double CalcXsecWeightFunc(int iSample, int iEvent) {return 1.; (void)iSample; (void)iEvent;}
-  void applyShifts(int iSample, int iEvent);
 
   void setNDCovMatrix();
   double GetLikelihood() override;
@@ -104,27 +103,6 @@ public:
   bool iselike;
   bool isND;
   double IsFHC;
-
-  //Positions of ND Detector systematics
-  double tot_escale_nd_pos;
-  double tot_escale_sqrt_nd_pos;
-  double tot_escale_invsqrt_nd_pos;
-  double had_escale_nd_pos;
-  double had_escale_sqrt_nd_pos;
-  double had_escale_invsqrt_nd_pos;
-  double mu_escale_nd_pos;
-  double mu_escale_sqrt_nd_pos;
-  double mu_escale_invsqrt_nd_pos;
-  double n_escale_nd_pos;
-  double n_escale_sqrt_nd_pos;
-  double n_escale_invsqrt_nd_pos;
-  double em_escale_nd_pos;
-  double em_escale_sqrt_nd_pos;
-  double em_escale_invsqrt_nd_pos;
-  double had_res_nd_pos;
-  double mu_res_nd_pos;
-  double n_res_nd_pos;
-  double em_res_nd_pos;
 
   bool isNDCovSet = false;
   // The ND detector covariance matrix

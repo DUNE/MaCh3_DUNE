@@ -149,11 +149,6 @@ protected:
   /// @param iEvent Event number
   double CalcXsecWeightFunc(int iSample, int iEvent) {(void) iSample; (void)iEvent; return 1.;}
 
-  /// @brief Apply kinematic shifts
-  /// @param iSample Sample Number
-  /// @param iEvent Event number
-  void applyShifts(int iSample, int iEvent);
-
   // dunemc
   /// DUNE MC sampels
   std::vector<struct dunemc_base> dunemcSamples;
@@ -162,35 +157,6 @@ protected:
   double pot;
   bool iselike;
   double isFHC;
-
-  //Positions of FD Detector systematics
-  double tot_escale_fd_pos;
-  double tot_escale_sqrt_fd_pos;
-  double tot_escale_invsqrt_fd_pos;
-  double had_escale_fd_pos;
-  double had_escale_sqrt_fd_pos;
-  double had_escale_invsqrt_fd_pos;
-  double mu_escale_fd_pos;
-  double mu_escale_sqrt_fd_pos;
-  double mu_escale_invsqrt_fd_pos;
-  double n_escale_fd_pos;
-  double n_escale_sqrt_fd_pos;
-  double n_escale_invsqrt_fd_pos;
-  double em_escale_fd_pos;
-  double em_escale_sqrt_fd_pos;
-  double em_escale_invsqrt_fd_pos;
-  double had_res_fd_pos;
-  double mu_res_fd_pos;
-  double n_res_fd_pos;
-  double em_res_fd_pos;
-  double cvn_numu_fd_pos;
-  double cvn_nue_fd_pos;
-
-  /// FD Detector Systematics
-  std::vector<const double*> FDDetectorSystPointers;
-
-  /// Number of FD Detector Systematics
-  int nFDDetectorSystPointers;
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
@@ -203,8 +169,8 @@ protected:
     {"Mode",kM3Mode},
     {"OscillationChannel",kOscChannel},
     {"IsFHC",kIsFHC},
-	{"IsTrueCCnue", kTrueCCnue},
-	{"IsTrueCCnumu", kTrueCCnumu}
+    {"IsTrueCCnue", kTrueCCnue},
+    {"IsTrueCCnumu", kTrueCCnumu}
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -218,8 +184,8 @@ protected:
     {kM3Mode,"Mode"},
     {kOscChannel,"OscillationChannel"},
     {kIsFHC,"IsFHC"},
-	{kTrueCCnue,"IsTrueCCnue"},
-	{kTrueCCnumu,"IsTrueCCnumu"}
+    {kTrueCCnue,"IsTrueCCnue"},
+    {kTrueCCnumu,"IsTrueCCnumu"}
   };
 };
 
