@@ -142,8 +142,8 @@ message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 if(NOT MaCh3_FOUND)
   cmessage(STATUS "Didn't find MaCh3, attempting to use built in MaCh3")
 
-  if(NOT DEFINED USE_CPU)
-    set(USE_CPU FALSE)
+  if(NOT DEFINED GPU_ENABLED)
+    set(GPU_ENABLED ON)
   endif()
 
   if(NOT DEFINED DEBUG_ENABLED)
@@ -156,7 +156,7 @@ if(NOT MaCh3_FOUND)
 
   # Options list construction
   set(MaCh3_OPTIONS
-      "USE_CPU ${USE_CPU}"
+      "MaCh3_GPU_ENABLED ${GPU_ENABLED}"
       "MaCh3_DEBUG_ENABLED ${DEBUG_ENABLED}"
       "MaCh3_MULTITHREAD_ENABLED ${MULTITHREAD_ENABLED}"
       "MaCh3_CORE_BRANCH ${MaCh3_CORE_BRANCH}"
@@ -171,6 +171,8 @@ if(NOT MaCh3_FOUND)
       NAME MaCh3
       GIT_TAG ${MaCh3_CORE_BRANCH}
       GITHUB_REPOSITORY mach3-software/MaCh3
+      OPTIONS
+      	${MaCh3_OPTIONS}
   )
 else()
   ##KS: This ensure that all executables that are in core will be moved
