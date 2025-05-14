@@ -61,7 +61,7 @@ void samplePDFDUNEBeamFD::Init() {
   std::unordered_map<std::string, const double*> FDDetectorSystPointersMap;
   FDDetectorSystPointers = std::vector<const double*>(nFDDetectorSystPointers);
 
-  for(auto FuncPar_i  = 0 ; FuncPar_i < funcParsIndex.size() ; ++FuncPar_i){
+  for(auto FuncPar_i  = 0 ; FuncPar_i < funcParsIndex.size() ; ++FuncPar_i){bz
     FDDetectorSystPointersMap.insert(std::pair<std::string, const double*>(funcParsNames.at(FuncPar_i), XsecCov->retPointer(funcParsIndex.at(FuncPar_i))));
   }
 
@@ -179,6 +179,275 @@ void samplePDFDUNEBeamFD::SetupSplines() {
   
   return;
 }
+
+
+// === HH: Functional parameters ===
+void samplePDFDUNEBeamFD::TotalEScale(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // Total energy scale uncertainties for anything but CC Numu, see:
+  // https://github.com/DUNE/lblpwgtools/blob/3d475f50a998fbfa6266df9a0c4eb3056c0cdfe5/CAFAna/Systs/EnergySysts.h#L39
+
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_had[iEvent];
+}
+
+void samplePDFDUNEBeamFD::TotalEScaleNotCCNumu(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // A special case for Not (CC Numu), where we also scale Erec by lepton energy
+  // Since we reconstruct muon energy in a different way, see:
+  // https://github.com/DUNE/lblpwgtools/blob/3d475f50a998fbfa6266df9a0c4eb3056c0cdfe5/CAFAna/Systs/EnergySysts.h#L39
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_lep[iEvent];
+}
+
+void samplePDFDUNEBeamFD::TotalEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_had[iEvent] * dunemcSamples[iSample].rw_erec_had_sqrt[iEvent];
+}
+
+void samplePDFDUNEBeamFD::TotalEScaleSqrtNotCCNumu(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // See comments in TotalEScaleNotCCNumu
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_lep[iEvent] * dunemcSamples[iSample].rw_erec_lep_sqrt[iEvent];
+}
+
+void samplePDFDUNEBeamFD::TotalEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // Erec/sqrt(Erec) = sqrt(Erec)
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_had_sqrt[iEvent];
+}
+
+void samplePDFDUNEBeamFD::TotalEScaleInvSqrtNotCCNumu(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // See comments in TotalEScaleNotCCNumu
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_lep_sqrt[iEvent];
+}
+
+void samplePDFDUNEBeamFD::HadEScale(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_sum_ehad[iEvent];
+}
+
+void samplePDFDUNEBeamFD::HadEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_sum_ehad[iEvent] * dunemcSamples[iSample].rw_sum_ehad_sqrt[iEvent];
+}
+
+void samplePDFDUNEBeamFD::HadEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_sum_ehad_sqrt[iEvent];
+}
+
+void samplePDFDUNEBeamFD::MuEScale(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // HH TODO: Functionally this is the same as TotalEScaleNotCCNumu, not sure if this function is even needed
+  TotalEScaleNotCCNumu(par, iSample, iEvent);
+}
+
+void samplePDFDUNEBeamFD::MuEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // See comments in MuEScale
+  TotalEScaleSqrtNotCCNumu(par, iSample, iEvent);
+}
+
+void samplePDFDUNEBeamFD::MuEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // See comments in MuEScale
+  TotalEScaleInvSqrtNotCCNumu(par, iSample, iEvent);
+}
+
+void samplePDFDUNEBeamFD::NEScale(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_eRecoN[iEvent];
+}
+
+void samplePDFDUNEBeamFD::NEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_eRecoN[iEvent] * dunemcSamples[iSample].rw_eRecoN_sqrt[iEvent];
+}
+
+void samplePDFDUNEBeamFD::NEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_eRecoN_sqrt[iEvent];
+}
+
+void samplePDFDUNEBeamFD::EMEScale(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_eRecoPi0[iEvent];
+}
+
+void samplePDFDUNEBeamFD::EMEScaleCCNue(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // Again this is the same as TotalEScaleNotCCNumu, not sure if this function is needed
+  TotalEScaleNotCCNumu(par, iSample, iEvent);
+}
+
+void samplePDFDUNEBeamFD::EMEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_eRecoPi0[iEvent] * dunemcSamples[iSample].rw_eRecoPi0_sqrt[iEvent];
+}
+
+void samplePDFDUNEBeamFD::EMEScaleSqrtCCNue(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // See comments in EMEScaleCCNue
+  TotalEScaleSqrtNotCCNumu(par, iSample, iEvent);
+}
+
+void samplePDFDUNEBeamFD::EMEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_eRecoPi0_sqrt[iEvent];
+}
+
+void samplePDFDUNEBeamFD::EMEScaleInvSqrtCCNue(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // See comments in EMEScaleCCNue
+  TotalEScaleInvSqrtNotCCNumu(par, iSample, iEvent);
+}
+
+void samplePDFDUNEBeamFD::HadRes(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // True sum - reco sum
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * (dunemcSamples[iSample].rw_eP[iEvent]
+    + dunemcSamples[iSample].rw_ePip[iEvent]
+    + dunemcSamples[iSample].rw_ePim[iEvent]
+    - dunemcSamples[iSample].rw_sum_ehad[iEvent]);
+}
+
+void samplePDFDUNEBeamFD::MuRes(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // True muon energy - reco muon energy
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * (dunemcSamples[iSample].rw_LepE[iEvent] - dunemcSamples[iSample].rw_erec_lep[iEvent]);
+}
+
+void samplePDFDUNEBeamFD::NRes(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // True neutron energy - reco neutron energy
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * (dunemcSamples[iSample].rw_eN[iEvent] - dunemcSamples[iSample].rw_eRecoN[iEvent]);
+}
+
+void samplePDFDUNEBeamFD::EMRes(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // True pi0 energy - reco pi0 energy
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * (dunemcSamples[iSample].rw_ePi0[iEvent] - dunemcSamples[iSample].rw_eRecoPi0[iEvent]);
+}
+
+void samplePDFDUNEBeamFD::EMResCCNue(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // This is the same as MuRes, again not sure if this function is needed
+  MuRes(par, iSample, iEvent);
+}
+
+void samplePDFDUNEBeamFD::RecoCVNNumu(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // CVN numu uncertainty
+  dunemcSamples[iSample].rw_cvnnumu_shifted[iEvent] += (*par);
+}
+
+void samplePDFDUNEBeamFD::RecoCVNNue(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // CVN nue uncertainty
+  dunemcSamples[iSample].rw_cvnnue_shifted[iEvent] += (*par);
+}
+
+void samplePDFDUNEBeamFD::RegisterFunctionalParameters() {
+  MACH3LOG_INFO("Registering functional parameters");
+  // This function manually populates the map of functional parameters
+  // Maps the name of the functional parameter to the pointer of the function
+
+  // This is the part where we manually enter things
+  // A lambda function has to be used so we can refer to a non-static member function
+  RegisterIndividualFuncPar("TotalEScaleFD",
+                            kTotalEScale,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScale(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("TotalEScaleNotCCNumuFD",
+                            kTotalEScaleNotCCNumu,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleNotCCNumu(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("TotalEScaleSqrtFD",
+                            kTotalEScaleSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("TotalEScaleSqrtNotCCNumuFD",
+                            kTotalEScaleSqrtNotCCNumu,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleSqrtNotCCNumu(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("TotalEScaleInvSqrtFD",
+                            kTotalEScaleInvSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleInvSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("TotalEScaleInvSqrtNotCCNumuFD",
+                            kTotalEScaleInvSqrtNotCCNumu,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleInvSqrtNotCCNumu(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("HadEScaleFD",
+                            kHadEScale,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->HadEScale(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("HadEScaleSqrtFD",
+                            kHadEScaleSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->HadEScaleSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("HadEScaleInvSqrtFD",
+                            kHadEScaleInvSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->HadEScaleInvSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("MuEScaleFD",
+                            kMuEScale,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->MuEScale(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("MuEScaleSqrtFD",
+                            kMuEScaleSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->MuEScaleSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("MuEScaleInvSqrtFD",
+                            kMuEScaleInvSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->MuEScaleInvSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("NEScaleFD",
+                            kNEScale,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->NEScale(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("NEScaleSqrtFD",
+                            kNEScaleSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->NEScaleSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("NEScaleInvSqrtFD",
+                            kNEScaleInvSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->NEScaleInvSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("EMEScaleFD",
+                            kEMEScale,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->EMEScale(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("EMEScaleCCNueFD",
+                            kEMEScaleCCNue,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->EMEScaleCCNue(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("EMEScaleSqrtFD",
+                            kEMEScaleSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->EMEScaleSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("EMEScaleSqrtCCNueFD",
+                            kEMEScaleSqrtCCNue,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->EMEScaleSqrtCCNue(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("EMEScaleInvSqrtFD",
+                            kEMEScaleInvSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->EMEScaleInvSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("EMEScaleInvSqrtCCNueFD",
+                            kEMEScaleInvSqrtCCNue,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->EMEScaleInvSqrtCCNue(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("HadResFD",
+                            kHadRes,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->HadRes(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("MuResFD",
+                            kMuRes,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->MuRes(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("NResFD",
+                            kNRes,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->NRes(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("EMResFD",
+                            kEMRes,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->EMRes(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("EMResCCNueFD",
+                            kEMResCCNue,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->EMResCCNue(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("RecoCVNNumuFD",
+                            kRecoCVNNumu,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->RecoCVNNumu(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("RecoCVNNueFD",
+                            kRecoCVNNue,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->RecoCVNNue(par, iSample, iEvent); });
+
+  MACH3LOG_INFO("Finished registering functional parameters");
+}
+
+// HH: Reset the shifted values to the original values
+void samplePDFDUNEBeamFD::resetShifts(int iSample, int iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] = dunemcSamples[iSample].rw_erec[iEvent];
+  dunemcSamples[iSample].rw_cvnnumu_shifted[iEvent] = dunemcSamples[iSample].rw_cvnnumu[iEvent];
+  dunemcSamples[iSample].rw_cvnnue_shifted[iEvent] = dunemcSamples[iSample].rw_cvnnue[iEvent];
+}
+// =================================
 
 void samplePDFDUNEBeamFD::SetupWeightPointers() {
   for (size_t i = 0; i < dunemcSamples.size(); ++i) {
@@ -346,6 +615,18 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   duneobj->rw_ePi0 = new double[duneobj->nEvents];
   duneobj->rw_eN = new double[duneobj->nEvents];
 
+  duneobj->rw_erec_had_sqrt = new double[duneobj->nEvents];
+  duneobj->rw_erec_lep_sqrt = new double[duneobj->nEvents];
+  duneobj->rw_eRecoN_sqrt = new double[duneobj->nEvents];
+  duneobj->rw_eRecoPi0_sqrt = new double[duneobj->nEvents];
+
+  duneobj->rw_sum_ehad = new double[duneobj->nEvents];
+  duneobj->rw_sum_ehad_sqrt = new double[duneobj->nEvents];
+
+  duneobj->rw_trueccnue = new double[duneobj->nEvents];
+  duneobj->rw_trueccnumu = new double[duneobj->nEvents];
+
+
   duneobj->rw_theta = new double[duneobj->nEvents];
   duneobj->flux_w = new double[duneobj->nEvents];
   duneobj->rw_isCC = new int[duneobj->nEvents];
@@ -397,8 +678,16 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
     duneobj->rw_ePip[i] = (_ePip); 
     duneobj->rw_ePim[i] = (_ePim); 
     duneobj->rw_ePi0[i] = (_ePi0); 
-    duneobj->rw_eN[i] = (_eN); 
-    
+    duneobj->rw_eN[i] = (_eN);
+
+	duneobj->rw_erec_had_sqrt[i] = sqrt(duneobj->rw_erec_had[i]);
+    duneobj->rw_erec_lep_sqrt[i] = sqrt(duneobj->rw_erec_lep[i]);
+    duneobj->rw_eRecoN_sqrt[i] = sqrt(duneobj->rw_eRecoN[i]);
+    duneobj->rw_eRecoPi0_sqrt[i] = sqrt(duneobj->rw_eRecoPi0[i]);
+
+    duneobj->rw_sum_ehad[i] = duneobj->rw_eRecoP[i] + duneobj->rw_eRecoPip[i] + duneobj->rw_eRecoPim[i];
+    duneobj->rw_sum_ehad_sqrt[i] = sqrt(duneobj->rw_sum_ehad[i]);
+
     duneobj->rw_etru[i] = (_ev);
     duneobj->rw_isCC[i] = _isCC;
     duneobj->rw_nuPDGunosc[i] = _nuPDGunosc;
@@ -407,6 +696,9 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
     duneobj->rw_vtx_x[i] = (_vtx_x);
     duneobj->rw_vtx_y[i] = (_vtx_y);
     duneobj->rw_vtx_z[i] = (_vtx_z);
+
+    duneobj->rw_trueccnumu[i] = static_cast<double>(duneobj->rw_isCC[i]==1 && abs(duneobj->rw_nuPDG[i])==14);
+    duneobj->rw_trueccnue[i] = static_cast<double>(duneobj->rw_isCC[i]==1 && abs(duneobj->rw_nuPDG[i])==12);
     
     //Assume everything is on Argon40 for now....
     duneobj->Target[i] = kTarget_Ar;
@@ -423,139 +715,7 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   return duneobj->nEvents;
 }
 
-double samplePDFDUNEBeamFD::ReturnKinematicParameter(int KinematicVariable, int iSample, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
-  double KinematicValue = -999;
-  
-  switch(KinPar){
-  case kTrueNeutrinoEnergy:
-    KinematicValue = dunemcSamples[iSample].rw_etru[iEvent]; 
-    break;
-  case kRecoNeutrinoEnergy:
-    KinematicValue = dunemcSamples[iSample].rw_erec_shifted[iEvent];
-    break;
-  case kTrueXPos:
-    KinematicValue = dunemcSamples[iSample].rw_vtx_x[iEvent];
-    break;
-  case kTrueYPos:
-    KinematicValue = dunemcSamples[iSample].rw_vtx_y[iEvent];
-    break;
-  case kTrueZPos:
-    KinematicValue = dunemcSamples[iSample].rw_vtx_z[iEvent];
-    break;
-  case kCVNNumu:
-    KinematicValue = dunemcSamples[iSample].rw_cvnnumu_shifted[iEvent];
-    break;
-  case kCVNNue:
-    KinematicValue = dunemcSamples[iSample].rw_cvnnue_shifted[iEvent];
-    break;
-  case kM3Mode:
-    KinematicValue = dunemcSamples[iSample].mode[iEvent];
-    break;
-  case kOscChannel:
-    KinematicValue = MCSamples[iSample].ChannelIndex;
-    break;
-  case kIsFHC:
-    KinematicValue = isFHC;
-    break;
-  default:
-    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", static_cast<int>(KinPar));
-    MACH3LOG_ERROR("Was given a Kinematic Variable of {}", KinematicVariable);
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-  
-  return KinematicValue;
-}
-
-double samplePDFDUNEBeamFD::ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent) {
- KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter)); 
- double KinematicValue = -999;
- 
- switch(KinPar){
- case kTrueNeutrinoEnergy:
-   KinematicValue = dunemcSamples[iSample].rw_etru[iEvent]; 
-   break;
- case kRecoNeutrinoEnergy:
-   KinematicValue = dunemcSamples[iSample].rw_erec_shifted[iEvent];
-   break;
- case kTrueXPos:
-   KinematicValue = dunemcSamples[iSample].rw_vtx_x[iEvent];
-   break;
- case kTrueYPos:
-   KinematicValue = dunemcSamples[iSample].rw_vtx_y[iEvent];
-   break;
- case kTrueZPos:
-   KinematicValue = dunemcSamples[iSample].rw_vtx_z[iEvent];
-   break;
- case kCVNNumu:
-   KinematicValue = dunemcSamples[iSample].rw_cvnnumu_shifted[iEvent];
-   break;
- case kCVNNue:
-   KinematicValue = dunemcSamples[iSample].rw_cvnnue_shifted[iEvent];
-   break;
- case kM3Mode:
-    KinematicValue = dunemcSamples[iSample].mode[iEvent];
-    break;
- case kOscChannel:
-    KinematicValue = MCSamples[iSample].ChannelIndex;
-    break;
- case kIsFHC:
-    KinematicValue = isFHC;
-    break;
- default:
-   MACH3LOG_ERROR("Did not recognise Kinematic Parameter type {}", KinematicParameter);
-   throw MaCh3Exception(__FILE__, __LINE__);
- }
- 
- return KinematicValue;
-}
-
-
-const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(std::string KinematicParameter, int iSample, int iEvent) {
- KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter)); 
- double* KinematicValue = nullptr;
- 
- switch(KinPar){
- case kTrueNeutrinoEnergy:
-   KinematicValue = &dunemcSamples[iSample].rw_etru[iEvent]; 
-   break;
- case kRecoNeutrinoEnergy:
-   KinematicValue = &dunemcSamples[iSample].rw_erec_shifted[iEvent];
-   break;
- case kTrueXPos:
-   KinematicValue = &dunemcSamples[iSample].rw_vtx_x[iEvent];
-   break;
- case kTrueYPos:
-   KinematicValue = &dunemcSamples[iSample].rw_vtx_y[iEvent];
-   break;
- case kTrueZPos:
-   KinematicValue = &dunemcSamples[iSample].rw_vtx_z[iEvent];
-   break;
- case kCVNNumu:
-   KinematicValue = &dunemcSamples[iSample].rw_cvnnumu_shifted[iEvent];
-   break;
- case kCVNNue:
-   KinematicValue = &dunemcSamples[iSample].rw_cvnnue_shifted[iEvent];
-   break;
- case kM3Mode:
-   KinematicValue = &(dunemcSamples[iSample].mode[iEvent]);
-   break;
- case kOscChannel:
-   KinematicValue = &(MCSamples[iSample].ChannelIndex);
-   break;
- case kIsFHC:
-   KinematicValue = &(isFHC);
-   break;
- default:
-   MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", KinematicParameter);
-   throw MaCh3Exception(__FILE__, __LINE__);
- }
- 
- return KinematicValue;
-}
-
-const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
+const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent) {
   double* KinematicValue = nullptr;
 
   switch(KinPar){
@@ -589,13 +749,41 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(double Kinemat
   case kIsFHC:
     KinematicValue = &(isFHC);
     break;
+  case kTrueCCnue: 
+	KinematicValue = &(dunemcSamples[iSample].rw_trueccnue[iEvent]);
+ 	break;
+  case kTrueCCnumu: 
+	KinematicValue = &(dunemcSamples[iSample].rw_trueccnumu[iEvent]);
+ 	break;
   default:
-    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", KinematicVariable);
+    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
     throw MaCh3Exception(__FILE__, __LINE__);
   }
   
   return KinematicValue;
 }
+
+const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(std::string KinematicParameter, int iSample, int iEvent) {
+  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter)); 
+  return GetPointerToKinematicParameter(KinPar, iSample, iEvent);
+}
+
+const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent) {
+  KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
+  return GetPointerToKinematicParameter(KinPar, iSample, iEvent);
+}
+
+double samplePDFDUNEBeamFD::ReturnKinematicParameter(int KinematicVariable, int iSample, int iEvent) {
+  KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
+  return ReturnKinematicParameter(KinPar, iSample, iEvent);
+}
+
+double samplePDFDUNEBeamFD::ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent) {
+ KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter)); 
+ return ReturnKinematicParameter(KinPar, iSample, iEvent);
+}
+
+
 
 void samplePDFDUNEBeamFD::setupFDMC(int iSample) {
   dunemc_base *duneobj = &(dunemcSamples[iSample]);
@@ -726,6 +914,8 @@ std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::st
   case kTrueXPos:
   case kTrueYPos:
   case kTrueZPos:
+  case kTrueCCnue:
+  case kTrueCCnumu:
   case kCVNNue:
   case kCVNNumu:
     ReturnVec.resize(2);
