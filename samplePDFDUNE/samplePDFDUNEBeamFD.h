@@ -53,8 +53,8 @@ protected:
     kHadRes, kMuRes, kNRes, kEMRes, kEMResCCNue,
 	kRecoCVNNumu, kRecoCVNNue
   };
-  void RegisterFunctionalParameters();
-  void resetShifts(int iSample, int iEvent);
+  void RegisterFunctionalParameters() override;
+  void resetShifts(int iSample, int iEvent) override;
 
   // Global energy scale systematics
   void TotalEScale(const double * par, std::size_t iSample, std::size_t iEvent);

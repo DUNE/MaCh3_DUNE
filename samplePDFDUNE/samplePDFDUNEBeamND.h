@@ -22,7 +22,7 @@ public:
   void SetupWeightPointers();
   void SetupSplines();
 
-  void RegisterFunctionalParameters(){};
+  void RegisterFunctionalParameters(){} override;
   
   const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent);
   const double* GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent);

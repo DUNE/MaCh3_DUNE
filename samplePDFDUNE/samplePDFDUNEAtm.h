@@ -39,7 +39,7 @@ protected:
   /// @brief Sets up splines 
   void SetupSplines();
 
-  void RegisterFunctionalParameters() {};
+  void RegisterFunctionalParameters() {} override;
   
   //DB functions which could be initialised to do something which is non-trivial
   
