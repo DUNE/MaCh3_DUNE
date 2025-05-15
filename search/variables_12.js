@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['x0_0',['X0',['../classsamplePDFDUNEBeamNDGAr.html#a20fd34033143a21b9eaaff8d62a3f64b',1,'samplePDFDUNEBeamNDGAr']]]
+  ['zboundarypositions_0',['zboundarypositions',['../classsamplePDFDUNEBeamNDGAr.html#acace75b21045acd7b0bb89d03e3aec1f',1,'samplePDFDUNEBeamNDGAr']]]
 ];

@@ -1,19 +1,7 @@
 var searchData=
 [
-  ['had_5fescale_5ffd_5fpos_0',['had_escale_fd_pos',['../classsamplePDFDUNEBeamFD.html#adec91f9726c0c0a27adf9b236791047a',1,'samplePDFDUNEBeamFD']]],
-  ['had_5fescale_5finvsqrt_5ffd_5fpos_1',['had_escale_invsqrt_fd_pos',['../classsamplePDFDUNEBeamFD.html#a546c846c9308befc062214fbffe6a0c6',1,'samplePDFDUNEBeamFD']]],
-  ['had_5fescale_5finvsqrt_5fnd_5fpos_2',['had_escale_invsqrt_nd_pos',['../classsamplePDFDUNEBeamND.html#a8baaa62ab38acd35a78ab199ea28fc19',1,'samplePDFDUNEBeamND']]],
-  ['had_5fescale_5fnd_5fpos_3',['had_escale_nd_pos',['../classsamplePDFDUNEBeamND.html#a1acf587460a4b1e8837f650996d4cefb',1,'samplePDFDUNEBeamND']]],
-  ['had_5fescale_5fsqrt_5ffd_5fpos_4',['had_escale_sqrt_fd_pos',['../classsamplePDFDUNEBeamFD.html#acbbef3a049887de0fc3edccf8b4985be',1,'samplePDFDUNEBeamFD']]],
-  ['had_5fescale_5fsqrt_5fnd_5fpos_5',['had_escale_sqrt_nd_pos',['../classsamplePDFDUNEBeamND.html#a2e7e39bc6b8811c6f9ebf40708a462dc',1,'samplePDFDUNEBeamND']]],
-  ['had_5fres_5ffd_5fpos_6',['had_res_fd_pos',['../classsamplePDFDUNEBeamFD.html#a03eda78ddf06ff5a2ab0307e7bfb31e5',1,'samplePDFDUNEBeamFD']]],
-  ['had_5fres_5fnd_5fpos_7',['had_res_nd_pos',['../classsamplePDFDUNEBeamND.html#aab62943e45bb361a634d96d289c95fb2',1,'samplePDFDUNEBeamND']]],
-  ['hadescalefd_8',['HadEScaleFD',['../StructsDUNE_8h.html#a8c4ae6c5414ad435d98b38f755252054',1,'StructsDUNE.h']]],
-  ['hadescaleinvsqrtfd_9',['HadEScaleInvSqrtFD',['../StructsDUNE_8h.html#acd13d60aa25c74177ac1e42209f7bec8',1,'StructsDUNE.h']]],
-  ['hadescaleinvsqrtnd_10',['HadEScaleInvSqrtND',['../StructsDUNE_8h.html#ac479ed9b95fb4d08361342fc95c12c9c',1,'StructsDUNE.h']]],
-  ['hadescalend_11',['HadEScaleND',['../StructsDUNE_8h.html#a6df41e7ab3ea7597672dfd171bde9b25',1,'StructsDUNE.h']]],
-  ['hadescalesqrtfd_12',['HadEScaleSqrtFD',['../StructsDUNE_8h.html#a4adcda47486b5b3ddb8e8e8132a86b18',1,'StructsDUNE.h']]],
-  ['hadescalesqrtnd_13',['HadEScaleSqrtND',['../StructsDUNE_8h.html#ab86ffccc0176e7e16427e39178074c70',1,'StructsDUNE.h']]],
-  ['hadresfd_14',['HadResFD',['../StructsDUNE_8h.html#a88b263d1ae68e62bb188e386f535c32c',1,'StructsDUNE.h']]],
-  ['hadresnd_15',['HadResND',['../StructsDUNE_8h.html#a89fd196a5b3a314bdcd48626da453a35',1,'StructsDUNE.h']]]
+  ['hadescale_0',['HadEScale',['../classsamplePDFDUNEBeamFD.html#a6389acf6499e37ffe55df8091d5c148a',1,'samplePDFDUNEBeamFD']]],
+  ['hadescaleinvsqrt_1',['HadEScaleInvSqrt',['../classsamplePDFDUNEBeamFD.html#a2d7c19617e64187fb3a87c139f8fa4f8',1,'samplePDFDUNEBeamFD']]],
+  ['hadescalesqrt_2',['HadEScaleSqrt',['../classsamplePDFDUNEBeamFD.html#a88955a72d02e109899ebe7e8f62c6456',1,'samplePDFDUNEBeamFD']]],
+  ['hadres_3',['HadRes',['../classsamplePDFDUNEBeamFD.html#aae614d49850c7086e053df33f7eeefa3',1,'samplePDFDUNEBeamFD']]]
 ];

@@ -1,26 +1,24 @@
 <map id="samplePDFDUNEBeamFD" name="samplePDFDUNEBeamFD">
-<area shape="rect" id="Node000001" title="Base class for handling FD Beam samples." alt="" coords="973,291,1151,317"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="569,168,705,194"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="721,183,832,197,892,211,950,229,1005,258,1046,288,1043,293,1002,263,948,234,891,216,831,202,720,188"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="574,218,700,259"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="715,246,950,281,988,288,987,293,949,286,715,252"/>
-<area shape="rect" id="Node000004" href="$structdunemc__base.html" title=" " alt="" coords="363,222,465,247"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="480,233,574,235,574,240,480,238"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="5,155,147,181"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="162,167,249,175,339,195,368,206,393,219,390,224,366,211,338,200,248,181,162,172"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="17,216,135,242"/>
-<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="151,228,362,231,362,236,151,233"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="12,367,140,393"/>
-<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="155,389,199,390,247,387,294,376,337,356,364,332,384,302,407,247,411,249,389,305,368,336,340,361,296,381,247,392,199,395,155,394"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="575,283,699,324"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="715,301,973,301,973,306,715,306"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="570,349,704,389"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="719,356,949,321,989,315,990,320,950,327,720,361"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="375,422,452,447"/>
-<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="467,416,569,386,570,391,469,421"/>
-<area shape="rect" id="Node000012" title=" " alt="" coords="570,414,704,455"/>
-<area shape="poly" id="edge12_Node000012_Node000010" title=" " alt="" coords="468,432,569,432,569,437,468,437"/>
-<area shape="rect" id="Node000011" title=" " alt="" coords="14,417,138,457"/>
-<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="153,434,375,432,375,437,153,439"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="719,425,830,408,890,393,948,374,1002,345,1043,315,1046,319,1004,350,950,379,892,398,831,413,720,431"/>
+<area shape="rect" id="Node000001" title="Base class for handling FD Beam samples." alt="" coords="973,284,1151,310"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="569,199,705,225"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="721,215,830,228,950,252,994,266,1032,281,1031,286,992,271,949,257,830,234,720,220"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="574,249,700,289"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="715,271,973,289,973,294,715,277"/>
+<area shape="rect" id="Node000004" href="$structdunemc__base.html" title=" " alt="" coords="363,228,465,254"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="481,247,574,259,574,264,480,252"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,156,147,182"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="163,167,249,175,295,184,340,196,370,210,396,226,393,230,368,214,338,201,294,189,248,181,162,172"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="17,218,135,243"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="151,230,362,237,362,242,151,235"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="12,368,140,394"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="155,391,200,393,247,391,294,381,337,361,364,338,384,308,407,253,411,255,389,311,368,341,340,366,296,386,248,396,200,399,155,397"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="570,314,704,355"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="719,326,949,307,973,304,973,310,950,312,720,331"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="375,387,452,413"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="467,382,569,351,570,357,469,387"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="570,379,704,420"/>
+<area shape="poly" id="edge11_Node000011_Node000009" title=" " alt="" coords="468,397,569,397,569,402,468,402"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="14,418,138,459"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="153,428,338,408,374,403,375,408,339,413,154,434"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="719,389,829,373,949,345,995,328,1035,308,1037,313,997,332,950,351,830,379,720,395"/>
 </map>

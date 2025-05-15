@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['totalescalefd_0',['TotalEScaleFD',['../StructsDUNE_8h.html#a0bc8608bf208b9c907c264f1efc21e7a',1,'StructsDUNE.h']]],
-  ['totalescaleinvsqrtfd_1',['TotalEScaleInvSqrtFD',['../StructsDUNE_8h.html#a0bb3289e34787c29d5490bda768468b8',1,'StructsDUNE.h']]],
-  ['totalescaleinvsqrtnd_2',['TotalEScaleInvSqrtND',['../StructsDUNE_8h.html#a0f6e4dc69f6c55af92598a3220fd6539',1,'StructsDUNE.h']]],
-  ['totalescalend_3',['TotalEScaleND',['../StructsDUNE_8h.html#a5e8542c0490429d4cdadb4109a48f15a',1,'StructsDUNE.h']]],
-  ['totalescalesqrtfd_4',['TotalEScaleSqrtFD',['../StructsDUNE_8h.html#ace513a34b5a4d1decd9e63272d8a6888',1,'StructsDUNE.h']]],
-  ['totalescalesqrtnd_5',['TotalEScaleSqrtND',['../StructsDUNE_8h.html#a8aafb76aff65490309a4083ad1400d50',1,'StructsDUNE.h']]]
+  ['totalescale_0',['TotalEScale',['../classsamplePDFDUNEBeamFD.html#a07700d9968373da36eea7ae09889c1db',1,'samplePDFDUNEBeamFD']]],
+  ['totalescaleinvsqrt_1',['TotalEScaleInvSqrt',['../classsamplePDFDUNEBeamFD.html#af45c4fcee83846582b9d7f6f6f7592e7',1,'samplePDFDUNEBeamFD']]],
+  ['totalescaleinvsqrtnotccnumu_2',['TotalEScaleInvSqrtNotCCNumu',['../classsamplePDFDUNEBeamFD.html#a40c774de52e14405c13828a574a780e5',1,'samplePDFDUNEBeamFD']]],
+  ['totalescalenotccnumu_3',['TotalEScaleNotCCNumu',['../classsamplePDFDUNEBeamFD.html#a8845c283fd04c1d13ca6c1ed5b8946e0',1,'samplePDFDUNEBeamFD']]],
+  ['totalescalesqrt_4',['TotalEScaleSqrt',['../classsamplePDFDUNEBeamFD.html#a2d5f44467fedf88fa95ba8bbeebe194d',1,'samplePDFDUNEBeamFD']]],
+  ['totalescalesqrtnotccnumu_5',['TotalEScaleSqrtNotCCNumu',['../classsamplePDFDUNEBeamFD.html#aadc1bb55fffab587185accc7cba4a4a6',1,'samplePDFDUNEBeamFD']]]
 ];

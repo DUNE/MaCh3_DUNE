@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['emescalefd_0',['EMEScaleFD',['../StructsDUNE_8h.html#a8ab18175ccb5573fa0d892f7df7cab37',1,'StructsDUNE.h']]],
-  ['emescaleinvsqrtfd_1',['EMEScaleInvSqrtFD',['../StructsDUNE_8h.html#a8b823f3c4bfa98ec13b6cb004cfa6c21',1,'StructsDUNE.h']]],
-  ['emescaleinvsqrtnd_2',['EMEScaleInvSqrtND',['../StructsDUNE_8h.html#aaea40604b684d8b565930cc05d149e73',1,'StructsDUNE.h']]],
-  ['emescalend_3',['EMEScaleND',['../StructsDUNE_8h.html#a53d183b9557ea6b26a9f393113379d3c',1,'StructsDUNE.h']]],
-  ['emescalesqrtfd_4',['EMEScaleSqrtFD',['../StructsDUNE_8h.html#a36a5712697af0b6e6d64d3df244c7275',1,'StructsDUNE.h']]],
-  ['emescalesqrtnd_5',['EMEScaleSqrtND',['../StructsDUNE_8h.html#a1923d8548f4a36340e977ef93e04234a',1,'StructsDUNE.h']]],
-  ['emresfd_6',['EMResFD',['../StructsDUNE_8h.html#ac64ee2d7a2bab1588dc921d8ca600729',1,'StructsDUNE.h']]],
-  ['emresnd_7',['EMResND',['../StructsDUNE_8h.html#a2a3e34a4c0d4dc4ac9113ed9cb881490',1,'StructsDUNE.h']]]
+  ['emescale_0',['EMEScale',['../classsamplePDFDUNEBeamFD.html#a469a59bf7151a9f7496fd013097567ad',1,'samplePDFDUNEBeamFD']]],
+  ['emescaleccnue_1',['EMEScaleCCNue',['../classsamplePDFDUNEBeamFD.html#a7eceb554949bdc388e648786b34d295c',1,'samplePDFDUNEBeamFD']]],
+  ['emescaleinvsqrt_2',['EMEScaleInvSqrt',['../classsamplePDFDUNEBeamFD.html#a3fe93335a5b33eb10e8017bd7c4781fb',1,'samplePDFDUNEBeamFD']]],
+  ['emescaleinvsqrtccnue_3',['EMEScaleInvSqrtCCNue',['../classsamplePDFDUNEBeamFD.html#ae21d64b96cbcbde0a86a7dd0598bcd6c',1,'samplePDFDUNEBeamFD']]],
+  ['emescalesqrt_4',['EMEScaleSqrt',['../classsamplePDFDUNEBeamFD.html#a55586aa060627856786cdf6714324648',1,'samplePDFDUNEBeamFD']]],
+  ['emescalesqrtccnue_5',['EMEScaleSqrtCCNue',['../classsamplePDFDUNEBeamFD.html#a42b19a747fa4f340de70ea7b04f19f09',1,'samplePDFDUNEBeamFD']]],
+  ['emres_6',['EMRes',['../classsamplePDFDUNEBeamFD.html#a309a9407158a1b8c2189dd819776e634',1,'samplePDFDUNEBeamFD']]],
+  ['emresccnue_7',['EMResCCNue',['../classsamplePDFDUNEBeamFD.html#ae1d9626abd597d17d9e590440a0600cf',1,'samplePDFDUNEBeamFD']]]
 ];
