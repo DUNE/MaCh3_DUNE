@@ -45,7 +45,7 @@ int main(int argc, char * argv[]) {
   osc->setParameters(FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>());
   for (unsigned sample_i = 0 ; sample_i < DUNEPdfs.size() ; ++sample_i) {
     
-    std::string name = DUNEPdfs[sample_i]->GetName();
+    std::string name = DUNEPdfs[sample_i]->GetTitle();
     sample_names.push_back(name);
     TString NameTString = TString(name.c_str());
     

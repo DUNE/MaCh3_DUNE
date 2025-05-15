@@ -55,7 +55,7 @@ int main(int argc, char * argv[]) {
     else if (Sample->GetNDim() == 2)
       DUNEHists.push_back(Sample->get2DHist());
 
-    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetName(), Sample->get1DHist()->Integral());
+    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetTitle(), Sample->get1DHist()->Integral());
     if (Sample->GetNDim() == 1)
       Sample->addData((TH1D*)DUNEHists.back());
     else if (Sample->GetNDim() == 2)

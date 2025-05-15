@@ -1,10 +1,10 @@
 ---
-SampleName: "RHC_numu"
+SampleTitle: "RHC_numu"
 SampleType: "BeamFD"
 
 POT: 1.3628319e+23
 MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes.yaml"
-DetID: "FD"
+SampleName: "FD_RHC_numu"
 
 SelectionCuts:
   - KinematicStr: "TrueXPos"

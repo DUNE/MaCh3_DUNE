@@ -11,7 +11,7 @@
 
 bool IncludeKinematicCutsInTitle = true;
 
-struct KinematicCut {
+struct ProjectionKinematicCut {
   std::string Name;
   std::string VarString;
   std::vector<double> Range;
@@ -30,7 +30,7 @@ struct ProjectionVariable {
   std::vector<std::string> VarStrings;
   std::vector<std::vector<double>> BinEdges;
 
-  std::vector<KinematicCut> KinematicCuts;
+  std::vector<ProjectionKinematicCut> KinematicCuts;
   std::vector<CategoryCut> CategoryCuts;
 };
 
@@ -138,7 +138,7 @@ int main(int argc, char *argv[]) {
     DUNEHists.push_back(Sample->get1DHist());
 
     std::string EventRateString = fmt::format("{:.2f}", Sample->get1DHist()->Integral());
-    MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetName(), EventRateString);
+    MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetTitle(), EventRateString);
   }
 
   // ###############################################################################################################################
@@ -158,7 +158,7 @@ int main(int argc, char *argv[]) {
     //JM have included this option (as [nbins, lbin, hbin])
     std::vector<std::vector<double>> VarBinnings = ProjectionConfig["VarBins"].as<std::vector<std::vector<double>>>();
 
-    std::vector<KinematicCut> KinematicCuts;
+    std::vector<ProjectionKinematicCut> KinematicCuts;
     std::vector<CategoryCut> CategoryCuts;
 
     if ((VarStrings.size()!=1 && VarStrings.size()!=2) || VarStrings.size() != VarBinnings.size()) {
@@ -190,7 +190,7 @@ int main(int argc, char *argv[]) {
       std::string KinematicCutVarString = KinematicCutConfig["VarString"].as<std::string>();
       std::vector<double> KinematicCutRange = KinematicCutConfig["Range"].as< std::vector<double> >();
 
-      KinematicCut Cut = KinematicCut{KinematicCutName,KinematicCutVarString,KinematicCutRange};
+      ProjectionKinematicCut Cut = ProjectionKinematicCut{KinematicCutName,KinematicCutVarString,KinematicCutRange};
       KinematicCuts.emplace_back(Cut);
     }
     for (auto &KinematicCutConfig: ProjectionConfig["KinematicCuts"]) {
@@ -198,7 +198,7 @@ int main(int argc, char *argv[]) {
       std::string KinematicCutVarString = KinematicCutConfig["VarString"].as<std::string>();
       std::vector<double> KinematicCutRange = KinematicCutConfig["Range"].as< std::vector<double> >();
 
-      KinematicCut Cut = KinematicCut{KinematicCutName,KinematicCutVarString,KinematicCutRange};
+      ProjectionKinematicCut Cut = ProjectionKinematicCut{KinematicCutName,KinematicCutVarString,KinematicCutRange};
       KinematicCuts.emplace_back(Cut);
     }
 
@@ -305,12 +305,12 @@ int main(int argc, char *argv[]) {
 
       //File->mkdir(Sample->GetName().c_str());
       //TDirectory *dir = File->GetDirectory(Sample->GetName().c_str());
-      std::vector< std::vector<double> > SelectionVector;
+      std::vector< KinematicCut > SelectionVector;
       for (size_t iCut=0;iCut<Projections[iProj].KinematicCuts.size();iCut++) {
-        std::vector<double> Selection(3);
-        Selection[0] = Sample->ReturnKinematicParameterFromString(Projections[iProj].KinematicCuts[iCut].VarString);
-        Selection[1] = Projections[iProj].KinematicCuts[iCut].Range[0];
-        Selection[2] = Projections[iProj].KinematicCuts[iCut].Range[1];
+        KinematicCut Selection;
+        Selection.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString(Projections[iProj].KinematicCuts[iCut].VarString);
+        Selection.LowerBound = Projections[iProj].KinematicCuts[iCut].Range[0];
+        Selection.UpperBound = Projections[iProj].KinematicCuts[iCut].Range[1];
 
         SelectionVector.emplace_back(Selection);
       }
@@ -327,7 +327,7 @@ int main(int argc, char *argv[]) {
 #else
         Hist = (TH1*)Sample->get1DVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
 #endif
-        outputname = Sample->GetName()+"_"+Projections[iProj].Name;
+        outputname = Sample->GetTitle()+"_"+Projections[iProj].Name;
         Hist->Scale(1.0,"Width");
       } 
       else {
@@ -341,10 +341,10 @@ int main(int argc, char *argv[]) {
 #else
         Hist = (TH1*)Sample->get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
 #endif
-        outputname = Sample->GetName()+"_"+Projections[iProj].Name;
+        outputname = Sample->GetTitle()+"_"+Projections[iProj].Name;
       }
       Hist->SetTitle(ReturnFormattedHistogramNameFromProjection(Projections[iProj]).c_str());
-      MACH3LOG_INFO("\tSample: {:<20} - Integral: {:<10}",Sample->GetName(),Hist->Integral());
+      MACH3LOG_INFO("\tSample: {:<20} - Integral: {:<10}",Sample->GetTitle(),Hist->Integral());
       //PrintTH1Histogram(Hist,outputname+".png");
       //WriteTH1Histogram(Hist, outputname, dir);
       WriteTH1Histogram(Hist, outputname);
@@ -361,12 +361,12 @@ int main(int argc, char *argv[]) {
           TH1 *BreakdownHist = nullptr;
 
           for (size_t iGroup=0;iGroup<Projections[iProj].CategoryCuts[iCat].Breakdown[iBreak].size();iGroup++) {
-            std::vector< std::vector<double> > SelectionVector_IncCategory = std::vector< std::vector<double> >(SelectionVector);
+            std::vector< KinematicCut > SelectionVector_IncCategory = std::vector< KinematicCut >(SelectionVector);
 
-            std::vector<double> Selection(3);
-            Selection[0] = Sample->ReturnKinematicParameterFromString(Projections[iProj].CategoryCuts[iCat].VarString);
-            Selection[1] = Projections[iProj].CategoryCuts[iCat].Breakdown[iBreak][iGroup];
-            Selection[2] = Projections[iProj].CategoryCuts[iCat].Breakdown[iBreak][iGroup]+1;
+            KinematicCut Selection;
+            Selection.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString(Projections[iProj].CategoryCuts[iCat].VarString);
+            Selection.LowerBound = Projections[iProj].CategoryCuts[iCat].Breakdown[iBreak][iGroup];
+            Selection.UpperBound = Projections[iProj].CategoryCuts[iCat].Breakdown[iBreak][iGroup]+1;
             SelectionVector_IncCategory.emplace_back(Selection);
 
             if (histdim==1) {
@@ -394,10 +394,10 @@ int main(int argc, char *argv[]) {
         leg->Draw();
         std::string histstackname;
         if (histdim==1) {
-          histstackname = Sample->GetName()+"_"+ProjectionVar_Str[0]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack";
+          histstackname = Sample->GetTitle()+"_"+ProjectionVar_Str[0]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack";
         }
         else {
-          histstackname = Sample->GetName()+"_"+ProjectionVar_Str[0]+"_"+ProjectionVar_Str[1]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack";
+          histstackname = Sample->GetTitle()+"_"+ProjectionVar_Str[0]+"_"+ProjectionVar_Str[1]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack";
         }
         //PrintTHStackHistogram(Stack,histstackname+".png");
         Canv.Write((histstackname+"_Canvas").c_str());
