@@ -1,6 +1,8 @@
 #include "SampleHandlerBeamNDGAr.h"
 
-SampleHandlerBeamNDGAr::SampleHandlerBeamNDGAr(std::string mc_version_, covarianceXsec* XsecCov_) : SampleHandlerFD(mc_version_, XsecCov_) {
+#include <random>
+
+SampleHandlerBeamNDGAr::SampleHandlerBeamNDGAr(std::string mc_version_, ParameterHandlerGeneric* ParHandler_) : SampleHandlerFD(mc_version_, ParHandler_) {
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
 
@@ -44,13 +46,13 @@ void SampleHandlerBeamNDGAr::Init() {
 
 void SampleHandlerBeamNDGAr::SetupSplines() {
   ///@todo move all of the spline setup into core
-  if(XsecCov->GetNumParamsFromDetID(SampleDetID, kSpline) > 0){
-    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", XsecCov->GetNumParamsFromDetID(SampleDetID, kSpline));
-    SplineHandler = std::unique_ptr<BinnedSplineHandler>(new BinnedSplineHandlerDUNE(XsecCov,Modes));
+  if(ParHandler->GetNumParamsFromSampleName(SampleName, kSpline) > 0){
+    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", ParHandler->GetNumParamsFromSampleName(SampleName, kSpline));
+    SplineHandler = std::unique_ptr<BinnedSplineHandler>(new BinnedSplineHandlerDUNE(ParHandler,Modes));
     InitialiseSplineObject();
   }
   else{
-    MACH3LOG_INFO("Found {} splines for this sample so I will not load or evaluate splines", XsecCov->GetNumParamsFromDetID(SampleDetID, kSpline));
+    MACH3LOG_INFO("Found {} splines for this sample so I will not load or evaluate splines", ParHandler->GetNumParamsFromSampleName(SampleName, kSpline));
     SplineHandler = nullptr;
   }
 
@@ -421,14 +423,16 @@ bool SampleHandlerBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
     if (isAccepted == false) {duneobj->particle_isaccepted->back() = false;}
     break;
   }
+
   if(nummatched != 1){
     MACH3LOG_INFO("Found {} matching particles in anatree", nummatched);
     MACH3LOG_INFO("PDG: {}, momentum: ({},{},{})",pdgcaf,sr->mc.nu[0].prim[i_truepart].p.px,sr->mc.nu[0].prim[i_truepart].p.py,sr->mc.nu[0].prim[i_truepart].p.pz);
   }
+  
   return isAccepted;
 }
 
-int SampleHandlerBeamNDGAr::setupExperimentMC(int iSample) {
+int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
 
   dunemc_base *duneobj = &(dunendgarmcSamples[iSample]);
   //int nutype = sample_nutype[iSample];
@@ -824,7 +828,7 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
     case kParticle_MomResTrans:
       return &dunendgarmcSamples[iSample].particle_momrestrans->at(iEvent);
     default:
-      MACH3LOG_ERROR("Did not recognise Kinematic Parameter {}", KinematicParameter);
+      MACH3LOG_ERROR("Did not recognise Kinematic Parameter {}", static_cast<int>(KinematicParameter));
       throw MaCh3Exception(__FILE__, __LINE__);
       return nullptr;
   }
@@ -841,7 +845,7 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(std::string
   return GetPointerToKinematicParameter(KinPar,iSample,iEvent);
 }
 
-double SampleHandlerBeamNDGAr::ReturnKinematicParameter(double KinematicVariable, int iSample, int iEvent) {
+double SampleHandlerBeamNDGAr::ReturnKinematicParameter(int KinematicVariable, int iSample, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
   return ReturnKinematicParameter(KinPar,iSample,iEvent);
 }
@@ -886,7 +890,7 @@ double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, i
 }
 #pragma GCC diagnostic pop
 
-void SampleHandlerBeamNDGAr::setupFDMC(int iSample) {
+void SampleHandlerBeamNDGAr::SetupFDMC(int iSample) {
   dunemc_base *duneobj = &(dunendgarmcSamples[iSample]);
   FarDetectorCoreInfo *fdobj = &(MCSamples[iSample]);
 
@@ -990,14 +994,14 @@ std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicParameterBinning(Kine
 }
 #pragma GCC diagnostic pop
 
-TH1* SampleHandlerBeamNDGAr::get1DParticleVarHist(std::string ProjectionVar_Str, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* Axis) {
+TH1* SampleHandlerBeamNDGAr::Get1DParticleVarHist(std::string ProjectionVar_Str, std::vector< KinematicCut > SelectionVec, int WeightStyle, TAxis* Axis) {
   //DB Grab the associated enum with the argument string
   int ProjectionVar_Int = ReturnKinematicParameterFromString(ProjectionVar_Str);
 
   //DB Need to overwrite the Selection member variable so that IsEventSelected function operates correctly.
   //   Consequently, store the selection cuts already saved in the sample, overwrite the Selection variable, then reset
-  std::vector< std::vector<double> > tmp_Selection = Selection;
-  std::vector< std::vector<double> > SelectionVecToApply;
+  std::vector< KinematicCut > tmp_Selection = Selection;
+  std::vector< KinematicCut > SelectionVecToApply;
 
   //DB Add all the predefined selections to the selection vector which will be applied
   for (size_t iSelec=0;iSelec<Selection.size();iSelec++) {
@@ -1007,14 +1011,6 @@ TH1* SampleHandlerBeamNDGAr::get1DParticleVarHist(std::string ProjectionVar_Str,
   //DB Add all requested cuts from the argument to the selection vector which will be applied
   for (size_t iSelec=0;iSelec<SelectionVec.size();iSelec++) {
     SelectionVecToApply.emplace_back(SelectionVec[iSelec]);
-  }
-
-  //DB Check the formatting of all requested cuts, should be [cutPar,lBound,uBound]
-  for (size_t iSelec=0;iSelec<SelectionVecToApply.size();iSelec++) {
-    if (SelectionVecToApply[iSelec].size()!=3) {
-      MACH3LOG_ERROR("Selection Vector[{}] is not formed correctly. Expect size == 3, given: {}",iSelec,SelectionVecToApply[iSelec].size());
-      throw MaCh3Exception(__FILE__, __LINE__);
-    }
   }
 
   //DB Set the member variable to be the cuts to apply
@@ -1030,7 +1026,7 @@ TH1* SampleHandlerBeamNDGAr::get1DParticleVarHist(std::string ProjectionVar_Str,
   }
 
   //Loop over all particles
-  for (int iSample=0;iSample<getNMCSamples();iSample++) {
+  for (int iSample=0;iSample<GetNMCSamples();iSample++) {
     for (int iParticle=0;iParticle<nparticlesinsample[iSample];iParticle++) {
       int event = static_cast<int>(std::round(ReturnKinematicParameter("Particle_Event", iSample, iParticle)));
       if (IsParticleSelected(iSample,event,iParticle)) {
@@ -1050,15 +1046,15 @@ TH1* SampleHandlerBeamNDGAr::get1DParticleVarHist(std::string ProjectionVar_Str,
   return _h1DVar;
 }
 
-TH2* SampleHandlerBeamNDGAr::get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY) {
+TH2* SampleHandlerBeamNDGAr::Get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< KinematicCut > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY) {
   //DB Grab the associated enum with the argument string
   int ProjectionVar_IntX = ReturnKinematicParameterFromString(ProjectionVar_StrX);
   int ProjectionVar_IntY = ReturnKinematicParameterFromString(ProjectionVar_StrY);
 
   //DB Need to overwrite the Selection member variable so that IsEventSelected function operates correctly.
   //   Consequently, store the selection cuts already saved in the sample, overwrite the Selection variable, then reset
-  std::vector< std::vector<double> > tmp_Selection = Selection;
-  std::vector< std::vector<double> > SelectionVecToApply;
+  std::vector< KinematicCut > tmp_Selection = Selection;
+  std::vector< KinematicCut > SelectionVecToApply;
 
   //DB Add all the predefined selections to the selection vector which will be applied
   for (size_t iSelec=0;iSelec<Selection.size();iSelec++) {
@@ -1068,14 +1064,6 @@ TH2* SampleHandlerBeamNDGAr::get2DParticleVarHist(std::string ProjectionVar_StrX
   //DB Add all requested cuts from the argument to the selection vector which will be applied
   for (size_t iSelec=0;iSelec<SelectionVec.size();iSelec++) {
     SelectionVecToApply.emplace_back(SelectionVec[iSelec]);
-  }
-
-  //DB Check the formatting of all requested cuts, should be [cutPar,lBound,uBound]
-  for (size_t iSelec=0;iSelec<SelectionVecToApply.size();iSelec++) {
-    if (SelectionVecToApply[iSelec].size()!=3) {
-      MACH3LOG_ERROR("Selection Vector[{}] is not formed correctly. Expect size == 3, given: {}",iSelec,SelectionVecToApply[iSelec].size());
-      throw MaCh3Exception(__FILE__, __LINE__);
-    }
   }
 
   //DB Set the member variable to be the cuts to apply
@@ -1092,7 +1080,7 @@ TH2* SampleHandlerBeamNDGAr::get2DParticleVarHist(std::string ProjectionVar_StrX
   }
 
   //JM Loop over all particles
-  for (int iSample=0;iSample<getNMCSamples();iSample++) {
+  for (int iSample=0;iSample<GetNMCSamples();iSample++) {
     for (int iParticle=0;iParticle<nparticlesinsample[iSample];iParticle++) {
       int event = static_cast<int>(std::round(ReturnKinematicParameter("Particle_Event", iSample, iParticle)));
       if (IsParticleSelected(iSample,event,iParticle)) {
@@ -1116,14 +1104,14 @@ TH2* SampleHandlerBeamNDGAr::get2DParticleVarHist(std::string ProjectionVar_StrX
 bool SampleHandlerBeamNDGAr::IsParticleSelected(const int iSample, const int iEvent, const int iParticle) {
   double Val;
   for (unsigned int iSelection=0;iSelection < Selection.size() ;iSelection++) {
-    std::string SelecVarStr = ReturnStringFromKinematicParameter(static_cast<int>(std::round(Selection[iSelection][0])));
+    std::string SelecVarStr = ReturnStringFromKinematicParameter(Selection[iSelection].ParamToCutOnIt);
     int SelectionVarElement;
 
     if (SelecVarStr.find("Particle_") != std::string::npos) {SelectionVarElement = iParticle;}
     else {SelectionVarElement = iEvent;}
 
-    Val = ReturnKinematicParameter(Selection[iSelection][0], iSample, SelectionVarElement);
-    if ((Val<Selection[iSelection][1])||(Val>=Selection[iSelection][2])) {
+    Val = ReturnKinematicParameter(Selection[iSelection].ParamToCutOnIt, iSample, SelectionVarElement);
+    if ((Val<Selection[iSelection].LowerBound)||(Val>=Selection[iSelection].UpperBound)) {
       return false;
     }
   }

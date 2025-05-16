@@ -9,6 +9,10 @@
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/StructsDUNE.h"
 
+#ifdef BUILD_NDGAR
+#include "Samples/SampleHandlerBeamNDGAr.h"
+#endif
+
 bool IncludeKinematicCutsInTitle = true;
 
 struct ProjectionKinematicCut {
@@ -319,7 +323,7 @@ int main(int argc, char *argv[]) {
       if (histdim==1) {
 #ifdef BUILD_NDGAR
         if (ProjectionVar_Str[0].find("Particle_") != std::string::npos) {
-          Hist = (TH1*)dynamic_cast<samplePDFDUNEBeamNDGAr*>(Sample)->Get1DParticleVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
+          Hist = (TH1*)dynamic_cast<SampleHandlerBeamNDGAr*>(Sample)->Get1DParticleVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
         }
         else {
           Hist = (TH1*)Sample->Get1DVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
@@ -333,7 +337,7 @@ int main(int argc, char *argv[]) {
       else {
 #ifdef BUILD_NDGAR
         if (ProjectionVar_Str[0].find("Particle_") != std::string::npos) {
-          Hist = (TH1*)dynamic_cast<samplePDFDUNEBeamNDGAr*>(Sample)->Get2DParticleVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
+          Hist = (TH1*)dynamic_cast<SampleHandlerBeamNDGAr*>(Sample)->Get2DParticleVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
         }
         else {
           Hist = (TH1*)Sample->Get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);

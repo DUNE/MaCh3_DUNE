@@ -1,24 +1,9 @@
 #ifndef _SampleHandlerBeamNDGAr_h_
 #define _SampleHandlerBeamNDGAr_h_
 
-#include <iostream>
-#include <TTree.h>
-#include <TH1D.h>
-#include <TH2D.h>
-#include <TMath.h>
-#include <TFile.h>
-#include <TGraph2DErrors.h>
-#include <vector>
-#include <omp.h>
-#include <list>
-#include <random>
-#include <limits>
-
-#include "splines/splinesDUNE.h"
-#include "covariance/covarianceXsec.h"
-#include "covariance/covarianceOsc.h"
-#include "SampleHandler/SampleHandlerFD.h"
-#include "StructsDUNE.h"
+#include "Splines/BinnedSplineHandlerDUNE.h"
+#include "Samples/SampleHandlerFD.h"
+#include "Samples/StructsDUNE.h"
 
 #pragma GCC diagnostic push 
 #pragma GCC diagnostic ignored "-Wfloat-conversion"
@@ -28,26 +13,28 @@
 class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
 {
   public:
-    SampleHandlerBeamNDGAr(std::string mc_version, covarianceXsec* xsec_cov);
+    SampleHandlerBeamNDGAr(std::string mc_version, ParameterHandlerGeneric* xsec_cov);
     ~SampleHandlerBeamNDGAr();
 
-    TH1* get1DParticleVarHist(std::string ProjectionVar_StrX, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX);
-    TH2* get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY);
+    TH1* Get1DParticleVarHist(std::string ProjectionVar_StrX, std::vector< KinematicCut > SelectionVec, int WeightStyle, TAxis* AxisX);
+    TH2* Get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< KinematicCut > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY);
     
     enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kIsGoodCAFEvent, kParticle_Event, kParticle_Momentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_IsAccepted, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_NHits, kParticle_NTurns, kParticle_MomResMS, kParticle_MomResTrans};
 
   protected:
     //Functions required by core
     void Init();
-    int setupExperimentMC(int iSample);
-    void setupFDMC(int iSample);
+    int SetupExperimentMC(int iSample);
+    void SetupFDMC(int iSample);
 
     void SetupWeightPointers();
     void SetupSplines();
 
+    void RegisterFunctionalParameters() override {};
+
     const double* GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent);
     const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
-    double ReturnKinematicParameter(double KinematicVariable, int iSample, int iEvent);
+    double ReturnKinematicParameter(int KinematicVariable, int iSample, int iEvent);
     double ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
     std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameter);
 
