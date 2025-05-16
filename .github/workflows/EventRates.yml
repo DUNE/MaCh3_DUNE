@@ -24,12 +24,12 @@ jobs:
         include:
           - name: Beam Event Rate Validation
             test_exe: tests/TestEventRates
-            test_config: configs/EventRates_Beam.yaml
+            test_config: Configs/EventRates_Beam.yaml
             repo_linking_command: |
               ln -s \
-              /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2/DUNE_2021_FD_splines inputs/DUNE_spline_files
+              /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/Inputs/TDR/v2/DUNE_2021_FD_splines Inputs/DUNE_spline_files
               ln -s \
-              /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2/DUNE_2023_FD_CAFs inputs/DUNE_CAF_files
+              /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/Inputs/TDR/v2/DUNE_2023_FD_CAFs Inputs/DUNE_CAF_files
 
     name: Run Test ${{matrix.name}}
     steps:
