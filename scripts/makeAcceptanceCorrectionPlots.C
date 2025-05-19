@@ -34,6 +34,14 @@ void movePalette(TH1* hist) {
   }
 }
 
+void changeAxisTitle(TAxis* axis) {
+  std::string title = axis->GetTitle();
+  if (title ==  "TrueQ0") axis->SetTitle("Q0 (GeV)");
+  else if (title == "TrueQ3") axis->SetTitle("Q3 (GeV/c)");
+  else if (title == "Particle_BAngle") axis->SetTitle("Angle to B-Field (  #circ )");
+  else if (title == "Particle_Momentum") axis->SetTitle("Momentum (GeV)");
+}
+
 void makeAcceptanceCorrectionPlots(const char* inputfilename, const char* outputfilename = "/vols/dune/jmm224/newMaCh3/MaCh3_DUNE/outputs/AcceptancePlots.pdf") {
 
   TFile* inputfile = TFile::Open(inputfilename, "READ");
@@ -48,7 +56,7 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename, const char* output
   gStyle->SetPadRightMargin(0.15);
   gStyle->SetPadLeftMargin(0.15);
   gStyle->SetNumberContours(128);
-  TCanvas* canvas = new TCanvas("canvas", "Acceptance Correction Plots", 800, 800);
+  TCanvas* canvas = new TCanvas("canvas", "Acceptance Correction Plots", 900, 800);
   canvas->Print(Form("%s[", outputfilename));
 
   TIter next(inputfile->GetListOfKeys());
@@ -65,6 +73,8 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename, const char* output
     std::string histname = key->GetName();
 
     TH1* rawHist = (TH1*)obj;
+    changeAxisTitle(rawHist->GetXaxis());
+    changeAxisTitle(rawHist->GetYaxis());
     rawHist->Draw("COLZ");
     movePalette(rawHist);
     canvas->Print(outputfilename);
@@ -92,16 +102,12 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename, const char* output
         std::string rawtitle = totalHist->GetTitle();
         acceptanceHist->SetTitle((rawtitle+"_Acceptance").c_str());
 
-        acceptanceHist->SetMarkerSize(0.3);
+        acceptanceHist->SetMarkerSize(0.35);
         acceptanceHist->Draw("COLZ TEXT0");
+        //acceptanceHist->Draw("COLZ");
         movePalette(rawHist);
         canvas->Print(outputfilename);
         std::cout << "Drawn acceptance histogram: " << acceptanceHist->GetName() << std::endl;
-        /*delete acceptanceHist;
-          if (acceptedRebinned != acceptedHist) delete acceptedRebinned;
-          if (totalRebinned != totalHist) delete totalRebinned;
-          delete acceptedHist;
-          delete totalHist;*/
       }
     }
   }

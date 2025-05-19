@@ -34,7 +34,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     TH1* get1DParticleVarHist(std::string ProjectionVar_StrX, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX);
     TH2* get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY);
     
-    enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kIsGoodCAFEvent, kParticle_Event, kParticle_Momentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_IsAccepted, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_NHits, kParticle_NTurns, kParticle_MomResMS, kParticle_MomResTrans};
+    enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kIsGoodCAFEvent, kParticle_Event, kParticle_Momentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_IsAccepted, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_NTurns, kParticle_NHits, kParticle_MomResMS, kParticle_MomResYZ};
 
   protected:
     //Functions required by core
@@ -56,11 +56,10 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     double ReturnKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent);
     std::vector<double> ReturnKinematicParameterBinning(KinematicTypes KinematicParameter);
     
-    void makePixelGrid(double pixel_spacing_cm);
-    double FindNHits(bool positivecharged, double pixel_spacing_cm, double centre_circle_y, double centre_circle_z, double rad_curvature, double theta_start, double theta_end);
-    bool isCoordOnTrack(bool positivecharged, double ycoord, double zcoord, double centre_circle_y, double centre_circle_z, double theta_start, double theta_end);
+    double FindNHits(double pixel_spacing_cm, double centre_circle_y, double centre_circle_z, double rad_curvature, double theta_start, double theta_spanned, bool positivecharged);
+    bool isCoordOnTrack(bool positivecharged, double ycoord, double zcoord, double centre_circle_y, double centre_circle_z, double theta_start, double theta_spanned);
     double CalcBeta(double p_mag, double& bg, double& gamma, double pdgmass);
-    bool IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, int i_truepart, double pixel_spacing_cm, bool *isgoodcafparticle, double pdgmass);
+    bool IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, int i_truepart, double pixel_spacing_cm, double pdgmass);
 
     bool IsParticleSelected(const int iSample, const int iEvent, const int iParticle);
     std::vector<struct dunemc_base> dunendgarmcSamples;
@@ -75,7 +74,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     double pot;
     int *nparticlesinsample;
     double _BeRPA_cvwgt = 1;
-    
+
     //Geant vectors
     std::vector<double> *_MCPStartX=0;
     std::vector<double> *_MCPStartY=0;
@@ -106,6 +105,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     double TPC_centre_x =0.;
     double TPC_centre_y = -150.;
     double TPC_centre_z = 1486.;
+    double BeamDirection[3] = {0.,-0.101,0.995};
 
     double X0 = 1193; //in cm From Federico's Kalman Filter Paper
 
@@ -139,7 +139,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     double gamma_reco_efficiency;  //efficiency for gamma reco in ECAL
 
     caf::StandardRecord* sr = new caf::StandardRecord();
-    
+
     const std::unordered_map<std::string, int> KinematicParametersDUNE = {
       {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
       {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},
@@ -157,6 +157,10 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
       {"RecoRad",kRecoRad},
       {"LepPT",kLepPT},
       {"LepPZ",kLepPZ},
+      {"LepTheta",kLepTheta},
+      {"LepPhi",kLepPhi},
+      {"LepP",kLepP},
+      {"LepBAngle",kLepBAngle},
       {"TrueQ0",kTrueQ0},
       {"TrueQ3",kTrueQ3},
       {"Event_IsAccepted",kEvent_IsAccepted},
@@ -174,10 +178,10 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
       {"Particle_IsStoppedInGap",kParticle_IsStoppedInGap},
       {"Particle_IsStoppedInEndGap",kParticle_IsStoppedInEndGap},
       {"Particle_IsStoppedInBarrelGap",kParticle_IsStoppedInBarrelGap},
-      {"Particle_NHits",kParticle_NHits},
       {"Particle_NTurns",kParticle_NTurns},
+      {"Particle_NHits",kParticle_NHits},
       {"Particle_MomResMS",kParticle_MomResMS},
-      {"Particle_MomResTrans",kParticle_MomResTrans},
+      {"Particle_MomResYZ",kParticle_MomResYZ},
     };
 
     const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -197,6 +201,10 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
       {kRecoRad,"RecoRad"},
       {kLepPT,"LepPT"},
       {kLepPZ,"LepPZ"},
+      {kLepTheta,"LepTheta"},
+      {kLepPhi,"LepPhi"},
+      {kLepBAngle,"LepBAngle"},
+      {kLepP,"LepP"},
       {kTrueQ0,"TrueQ0"},
       {kTrueQ3,"TrueQ3"},
       {kEvent_IsAccepted,"Event_IsAccepted"},
@@ -214,10 +222,10 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
       {kParticle_IsStoppedInGap,"Particle_IsStoppedInGap"},
       {kParticle_IsStoppedInEndGap,"Particle_IsStoppedInEndGap"},
       {kParticle_IsStoppedInBarrelGap,"Particle_IsStoppedInBarrelGap"},
-      {kParticle_NHits,"Particle_NHits"},
       {kParticle_NTurns,"Particle_NTurns"},
+      {kParticle_NHits,"Particle_NHits"},
       {kParticle_MomResMS,"Particle_MomResMS"},
-      {kParticle_MomResTrans,"Particle_MomResTrans"},
+      {kParticle_MomResYZ,"Particle_MomResYZ"},
     };
 };
 

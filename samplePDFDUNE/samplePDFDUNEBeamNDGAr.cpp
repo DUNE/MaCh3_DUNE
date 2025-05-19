@@ -63,7 +63,7 @@ void samplePDFDUNEBeamNDGAr::SetupSplines() {
 void samplePDFDUNEBeamNDGAr::SetupWeightPointers() {
   for (int i = 0; i < static_cast<int>(dunendgarmcSamples.size()); ++i) {
     for (int j = 0; j < dunendgarmcSamples[i].nEvents; ++j) {
-      MCSamples[i].ntotal_weight_pointers[j] = 6;
+      MCSamples[i].ntotal_weight_pointers[j] = 7;
       //MCSamples[i].total_weight_pointers[j] = new const double*[MCSamples[i].ntotal_weight_pointers[j]];
       MCSamples[i].total_weight_pointers[j].resize(MCSamples[i].ntotal_weight_pointers[j]);
       MCSamples[i].total_weight_pointers[j][0] = &(dunendgarmcSamples[i].pot_s);
@@ -72,167 +72,75 @@ void samplePDFDUNEBeamNDGAr::SetupWeightPointers() {
       MCSamples[i].total_weight_pointers[j][3] = &(dunendgarmcSamples[i].rw_berpaacvwgt[j]);
       MCSamples[i].total_weight_pointers[j][4] = &(dunendgarmcSamples[i].flux_w[j]);
       MCSamples[i].total_weight_pointers[j][5] = &(MCSamples[i].xsec_w[j]);
+      MCSamples[i].total_weight_pointers[j][6] = &(dunendgarmcSamples[i].geometric_correction[j]);
     }
   }
 }
 
-void samplePDFDUNEBeamNDGAr::makePixelGrid(double pixel_spacing_cm){ //make a square pixel grid with spacing defined in yaml file. Spacing must be input in the yaml file in mm, and then is converted to cm later in the code
-  int numpixelrows = static_cast<int>(floor(TPCInstrumentedRadius*2/(pixel_spacing_cm))); //find number of pixels along y and z axis.
-  double centre_yboundary, centre_zboundary;
-  if(numpixelrows % 2 == 0){centre_yboundary=TPC_centre_y; centre_zboundary=TPC_centre_z;}
-  else{centre_yboundary=TPC_centre_y-(pixel_spacing_cm/2); centre_zboundary=TPC_centre_z-(pixel_spacing_cm/2);}
-  pixelymin = centre_yboundary - floor(numpixelrows/2)*pixel_spacing_cm;
-  pixelymax = centre_yboundary + floor(numpixelrows/2)*pixel_spacing_cm;
-  pixelzmin = centre_zboundary - floor(numpixelrows/2)*pixel_spacing_cm;
-  pixelzmax = centre_zboundary + floor(numpixelrows/2)*pixel_spacing_cm;
-
-  for(int i_pixel = 0; i_pixel<numpixelrows; i_pixel++){
-    yboundarypositions.push_back(pixelymin+i_pixel*pixel_spacing_cm);
-    zboundarypositions.push_back(pixelzmin+i_pixel*pixel_spacing_cm);
-  }
-}
-
-double samplePDFDUNEBeamNDGAr::FindNHits(bool positivecharged, double pixel_spacing_cm, double centre_circle_y, double centre_circle_z, double rad_curvature, double theta_start, double theta_end){
-  //use the pixel grid method to find number of pixels hit in a track.
-  int num_vertices =0; // number of vertices hit. Counting to avoid duplicating
-  int num_intersections =0;
-
-  //equation for circle = (y-y0)^2 + (z-z0)^2 = r^2
-
-  for(unsigned int i_intersect = 0; i_intersect<yboundarypositions.size(); i_intersect++){ //check every boundary line to see if it crossed within the TPC instrumented region
-    double quadratic_ineq_y= (rad_curvature*100)*(rad_curvature*100)-(yboundarypositions[i_intersect]-centre_circle_y)*(yboundarypositions[i_intersect]-centre_circle_y);
-    if (quadratic_ineq_y < 0) continue; //circle does not intersect this boundary
-    
-    double z_coord1 = centre_circle_z + std::sqrt(quadratic_ineq_y);
-    double y_coord = yboundarypositions[i_intersect];
-    if(isCoordOnTrack(positivecharged, y_coord, z_coord1, centre_circle_y, centre_circle_z, theta_start, theta_end)){ // check point is in tpc volume and on arc of track
-      num_intersections++;
-      if(fmod((z_coord1 - pixelzmin), pixel_spacing_cm) == 0){ // this is the case when a vertex is crossed so to avoid double counting pixels
-        num_vertices++;
-      }
-    }
-
-    if (quadratic_ineq_y == 0) continue; //pixel boundary tangent so one z solution
-
-    double z_coord2 = centre_circle_z - std::sqrt(quadratic_ineq_y);
-    if(isCoordOnTrack(positivecharged, y_coord, z_coord2, centre_circle_y, centre_circle_z, theta_start, theta_end)){ // check point is in tpc volume and on arc of track
-      num_intersections++;
-      if(fmod((z_coord2 - pixelzmin), pixel_spacing_cm) == 0){ // this is the case when a vertex is crossed so to avoid double counting pixels
-        num_vertices++;
-      }
-    }
-  }
-  for(unsigned int i_intersect = 0; i_intersect<zboundarypositions.size(); i_intersect++){
-    double quadratic_ineq_z = (rad_curvature*100)*(rad_curvature*100)-(zboundarypositions[i_intersect]-centre_circle_z)*(zboundarypositions[i_intersect]-centre_circle_z);
-    if(quadratic_ineq_z < 0) continue;
-    
-    double y_coord1 = centre_circle_y + std::sqrt(quadratic_ineq_z);
-    double z_coord = zboundarypositions[i_intersect];
-    if(isCoordOnTrack(positivecharged, y_coord1, z_coord, centre_circle_y, centre_circle_z, theta_start, theta_end)){
-      num_intersections++;
-    }
-
-    if (quadratic_ineq_z == 0) continue; //pixel boundary tangent so one y solution
-
-    double y_coord2 = centre_circle_y - std::sqrt(quadratic_ineq_z)-TPC_centre_y;
-    if(isCoordOnTrack(positivecharged, y_coord2, z_coord, centre_circle_y, centre_circle_z, theta_start, theta_end)){ 
-      num_intersections++;
-    }
-    // already checked all vertices for duplicates before so no need to repeat that
-  }
-  double N_hits = num_intersections - num_vertices + 1; //Add one for the pixel that it starts on
-  return N_hits;
-}
-
-bool samplePDFDUNEBeamNDGAr::isCoordOnTrack(bool positivecharged, double ycoord, double zcoord, double centre_circle_y, double centre_circle_z, double theta_start, double theta_end) {
+bool samplePDFDUNEBeamNDGAr::isCoordOnTrack(bool positivecharged, double ycoord, double zcoord, double centre_circle_y, double centre_circle_z, double theta_start, double theta_spanned) {
   double theta_coord = atan2(ycoord - centre_circle_y, zcoord - centre_circle_z);
-  if (theta_coord<0) theta_coord += 2*M_PI;
-
   bool iscoordinTPC = (ycoord - TPC_centre_y)*(ycoord - TPC_centre_y)+(zcoord - TPC_centre_z)*(zcoord - TPC_centre_z) < TPCInstrumentedRadius*TPCInstrumentedRadius;
-  
-  bool fullrotation = false;
-  if (theta_end > 2*M_PI) {
-    if (theta_end < 2*M_PI + theta_start) theta_end -= 2*M_PI;
-    else fullrotation = true;
-  }
-
   bool iscoordinarc;
-  if (!positivecharged) {
-    if (theta_start < theta_end) iscoordinarc = theta_coord < theta_start || theta_coord > theta_end;
-    else iscoordinarc = theta_coord > theta_end && theta_coord < theta_start;
+
+  if (positivecharged) {
+    double theta_end = theta_start + theta_spanned;
+    if (theta_coord < theta_start) theta_coord += 2*M_PI;
+    iscoordinarc = theta_coord > theta_start && theta_coord < theta_end;
   }
   else {
-    if (theta_start < theta_end) iscoordinarc = theta_coord > theta_start && theta_coord < theta_end;
-    else iscoordinarc = theta_coord > theta_start || theta_coord < theta_end;
+    double theta_end = theta_start - theta_spanned;
+    if (theta_coord > theta_start) theta_start -= 2*M_PI;
+    iscoordinarc = theta_coord < theta_start && theta_coord > theta_end;
   }
 
-  return iscoordinTPC && (iscoordinarc || fullrotation);
+  return iscoordinTPC && iscoordinarc;
 }
-/*
-double samplePDFDUNEBeamNDGAr::CalcMomResYZ(double pixel_spacing_cm, double centre_circle_y, double centre_circle_z, double rad_curvature, double theta_start, double theta_end, bool positivecharged) {
 
-  //summations for resolution calculation
-  double sumy=0, sumz=0, sumr2=0, sumyz=0, sumyr2=0, sumzr2=0;
-  int nhits = 0;
+double samplePDFDUNEBeamNDGAr::FindNHits(double pixel_spacing_cm, double centre_circle_y, double centre_circle_z, double rad_curvature, double theta_start, double theta_spanned, bool positivecharged) {
 
-  //define yz pixel grid which covers entire tpc cross section
-  int numpixelrows = static_cast<int>(floor(TPCInstrumentedRadius*2/(pixel_spacing_cm)))+1;
-  if (numpixelrows%2 == 0) numpixelrows += 1;
-  int pixelmin = -(numpixelrows-1)/2;
-  int pixelmax = (numpixelrows+1)/2;
+  int num_intersections = 0;
+  int num_vertices = 0;
 
-  //Loop through all pixels in grid
-  for (int ypixel=pixelmin; ypixel<=pixelmax; ypixel++) {
-    for (int zpixel=pixelmin; zpixel<=pixelmax; zpixel++) {
-      double pixel_centre_y = TPC_centre_y + ypixel*pixel_spacing_cm;
-      double pixel_centre_z = TPC_centre_z + zpixel*pixel_spacing_cm;
+  //Define yz pixel grid which covers entire tpc cross section
+  int numpixelboundaries = static_cast<int>(floor(TPCInstrumentedRadius*2/(pixel_spacing_cm)))+1;
+  if (numpixelboundaries%2 == 0) numpixelboundaries += 1;
+  int pixelmin = -(numpixelboundaries-1)/2;
+  int pixelmax = (numpixelboundaries-1)/2;
 
-      //Check if track passes through pixel: nearest corner is contained in the circle the furthest corner is not
-      double near_corner_y, near_corner_z;
-      double far_corner_y, far_corner_z;
-      if (centre_circle_y > pixel_centre_y) near_corner_y = pixel_centre_y + 0.5*pixel_spacing_cm;
-      else near_corner_y = pixel_centre_y - 0.5*pixel_spacing_cm;
-      if (centre_circle_z > pixel_centre_z) near_corner_z = pixel_centre_z + 0.5*pixel_spacing_cm;
-      else near_corner_z = pixel_centre_z - 0.5*pixel_spacing_cm;
+  //Loop through all pixel boundaries
+  for (int pixel=pixelmin; pixel<=pixelmax; pixel++) {
+    
+    //Check if corresponding y boundary is crossed
+    double ycoord = TPC_centre_y + pixel*pixel_spacing_cm;
+    double quadratic_ineq_y = rad_curvature*rad_curvature-(ycoord-centre_circle_y)*(ycoord-centre_circle_y);
+    
+    if (quadratic_ineq_y >=0) {
+      double zcoord1 = centre_circle_z + std::sqrt(quadratic_ineq_y);
+      if (isCoordOnTrack(positivecharged, ycoord, zcoord1, centre_circle_y, centre_circle_z, theta_start, theta_spanned)) num_intersections++;
+      if (fmod(std::abs(zcoord1 - TPC_centre_z),pixel_spacing_cm)==0) num_vertices++;
       
-      double near_corner_r2 = ((near_corner_y - centre_circle_y)*(near_corner_y - centre_circle_y) 
-          + (near_corner_z - centre_circle_z)*(near_corner_z - centre_circle_z));
-      double far_corner_r2 = ((far_corner_y - centre_circle_y)*(far_corner_y - centre_circle_y) 
-          + (far_corner_z - centre_circle_z)*(far_corner_z - centre_circle_z));
+      double zcoord2 = centre_circle_z - std::sqrt(quadratic_ineq_y);
+      if (isCoordOnTrack(positivecharged, ycoord, zcoord2, centre_circle_y, centre_circle_z, theta_start, theta_spanned)) num_intersections++;
+      if (fmod(std::abs(zcoord2 - TPC_centre_z),pixel_spacing_cm)==0) num_vertices++;
+    }
 
-      if (near_corner_r2 < rad_curvature*rad_curvature && far_corner_r2 > rad_curvature*rad_curvature) {
-        if (isCoordOnTrack(positivecharged, pixel_centre_y, pixel_centre_z, centre_circle_y, centre_circle_z, theta_start, theta_end)) {
-          double r2 = pixel_centre_y*pixel_centre_y + pixel_centre_z*pixel_centre_z;
-          sumy += pixel_centre_y;
-          sumz += pixel_centre_z;
-          sumr2 += r2;
-          sumyy += pixel_centre_y*pixel_centre_y;
-          sumzz += pixel_centre_z*pixel_centre_z;
-          sumr2r2 += r2*r2;
-          sumyz += pixel_centre_y*pixel_centre_z;
-          sumyr2 += pixel_centre_y*r2;
-          sumzr2 += pixel_centre_z*r2;
-          nhits++;
-        }
-      }
+    //Check if corresponding z boundary is crossed
+    double zcoord = TPC_centre_z + pixel*pixel_spacing_cm;
+    double quadratic_ineq_z = rad_curvature*rad_curvature-(zcoord-centre_circle_z)*(zcoord-centre_circle_z);
+
+    if (quadratic_ineq_z >=0) {
+      double ycoord1 = centre_circle_y + std::sqrt(quadratic_ineq_z);
+      if (isCoordOnTrack(positivecharged, ycoord1, zcoord, centre_circle_y, centre_circle_z, theta_start, theta_spanned)) num_intersections++;
+      if (fmod(std::abs(ycoord1 - TPC_centre_y),pixel_spacing_cm)==0) num_vertices++;
+
+      double ycoord2 = centre_circle_y - std::sqrt(quadratic_ineq_z);
+      if (isCoordOnTrack(positivecharged, ycoord2, zcoord, centre_circle_y, centre_circle_z, theta_start, theta_spanned)) num_intersections++;
+      if (fmod(std::abs(ycoord2 - TPC_centre_y),pixel_spacing_cm)==0) num_vertices++;
     }
   }
-  //Calculation of momres follows V. Karimaki CMS note 
-  //'Explicit Covariance Matrix for Particle Measurement Precision'
-  double sigyy = sumyy/nhits - sumy*sumy/(nhits*nhits);
-  double sigzz = sumzz/nhits - sumz*sumz/(nhits*nhits);
-  double sigr2r2 = sumr2r2/nhits - sumr2*sumr2/(nhits*nhits);
-  double sigyz = sumyz/nhits - sumy*sumz/(nhits*nhits);
-  double sigyr2 = sumyr2/nhits - sumy*sumr2/(nhits*nhits);
-  double sigzr2 = sumzr2/nhits - sumz*sumr2/(nhits*nhits;
-
-  double phi = 0.5*atan(2*(sigr2r2*sigyz - sigyr2*sigzr2)/(sigr2r2*(sigyy-sigzz) - sigyr2*sigyr2 + sigzr2*sigzr2));
-  double rho = 2*(sin(phi)*sigyr2 - cos(phi)*sigzr2)/sigr2r2;
-  double rad_curv_est = 1/rho;
-  double momres_yz = 0.3*B_field*(std::abs(rad_curv_est) - rad_curvature);
-  return momres_yz;
+  return num_intersections - num_vertices;
 }
-*/
+
 double samplePDFDUNEBeamNDGAr::CalcBeta(double p_mag, double& bg, double& gamma, double pdgmass){ //calculate beta (v/c)
   bg = p_mag/pdgmass; //beta*gamma
   gamma = std::sqrt(1+bg*bg); //gamma
@@ -240,7 +148,7 @@ double samplePDFDUNEBeamNDGAr::CalcBeta(double p_mag, double& bg, double& gamma,
   return beta;
 }
 
-bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, int i_truepart, double pixel_spacing_cm, bool *isgoodcafparticle, double pdgmass){
+bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, int i_truepart, double pixel_spacing_cm, double pdgmass){
   static std::random_device rd;
   static std::mt19937 gen(rd());
   static std::uniform_real_distribution<double> dist(0.0, 1.0);
@@ -261,8 +169,6 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
     }
     nummatched++;
 
-    auto it = std::find(_MCPTrkID->begin(), _MCPTrkID->end(), sr->mc.nu[0].prim[i_truepart].G4ID+1);
-    if (i_anapart == it - _MCPTrkID->begin()) *isgoodcafparticle = true;
 
     //Ignore neutrons and neutrinos (they will be accepted by default for now but will not appear on particle-level plots)
     if(std::abs(pdgcaf) == 2112 || std::abs(pdgcaf) == 14 || std::abs(pdgcaf) == 12 
@@ -307,11 +213,10 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
     duneobj->particle_isstoppedinendcap->push_back(stops_in_ecal && end_radius<ECALInnerRadius);
     duneobj->particle_isstoppedintpc->push_back(stops_in_tpc);
     duneobj->particle_momresms->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
-    duneobj->particle_momrestransfrac->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
-    duneobj->particle_momrestrans->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
+    duneobj->particle_momresyz->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
     duneobj->particle_ecaldepositfraction->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
-    duneobj->particle_nhits->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
     duneobj->particle_nturns->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
+    duneobj->particle_nhits->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
     nparticlesinsample[i_sample]++;
 
     //If particle is not stopped in the tpc or ecal 
@@ -320,42 +225,37 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
       //JM why not more (eg. sig +/-)
       if(std::abs(pdgcaf) == 2212 || std::abs(pdgcaf) == 211 || std::abs(pdgcaf) == 13 || std::abs(pdgcaf) == 11 || std::abs(pdgcaf) == 321) {
 
-        double length_track_x;
-        if(std::abs(end_length)>TPCInstrumentedLength){
-          if((end_length)>=0){length_track_x = TPCInstrumentedLength - (_MCPStartX->at(i_anapart)-TPC_centre_x);} //in cm
-          else{length_track_x = -TPCInstrumentedLength - (_MCPStartX->at(i_anapart)-TPC_centre_x);} //in cm
-        }
-        else{length_track_x = _MCPEndX->at(i_anapart) - _MCPStartX->at(i_anapart);} //in cm
-
-        double rad_curvature = transverse_mom/(0.3*B_field); //p = 0.3*B*r where p in GeV/c, B in T, r in m
+        double rad_curvature = 100*transverse_mom/(0.3*B_field); //p = 0.3*B*r where p in GeV/c, B in T, r in m (*100 to convert to cm)
         double theta_xT = atan(_MCPStartPX->at(i_anapart)/transverse_mom); //helix pitch angle
-        double pitch = std::abs(2*M_PI*rad_curvature*tan(theta_xT)); //distance between two turns of a helix in m
+        double pitch = std::abs(2*M_PI*rad_curvature*tan(theta_xT)); //distance between two turns of a helix in cm
         double tan_theta = tan(theta_xT);
 
         //Find centre of circular path
         bool positivecharged = 0;
         double centre_circle_y;
         double centre_circle_z;
-        double L_yz, L_yz_chord; //length of curved track in y-z plane
-        if(pdgcaf == 2212 || pdgcaf == 211 || pdgcaf == -13 || pdgcaf == -11 || pdgcaf == 321){positivecharged = 1;}
-        if(positivecharged){
-          centre_circle_y = _MCPStartY->at(i_anapart) + (rad_curvature*100*_MCPStartPZ->at(i_anapart)/transverse_mom); //Note plus sign here as cross product gives F in direction of ( pz j - py k) F= q v x B
-          centre_circle_z = _MCPStartZ->at(i_anapart) - (rad_curvature*100*_MCPStartPY->at(i_anapart)/transverse_mom);
+        double L_yz; //length of curved track in y-z plane
+        
+        if(pdgcaf == 2212 || pdgcaf == 211 || pdgcaf == -13 || pdgcaf == -11 || pdgcaf == 321) positivecharged = 1;
+
+        if (positivecharged) {
+          centre_circle_y = _MCPStartY->at(i_anapart) + (rad_curvature*_MCPStartPZ->at(i_anapart)/transverse_mom); //Note plus sign here as cross product gives F in direction of ( pz j - py k) F= q v x B
+          centre_circle_z = _MCPStartZ->at(i_anapart) - (rad_curvature*_MCPStartPY->at(i_anapart)/transverse_mom);
         }
-        else if(!positivecharged){
-          centre_circle_y = _MCPStartY->at(i_anapart) - (rad_curvature*100*_MCPStartPZ->at(i_anapart)/transverse_mom); //Note minus sign here as cross product gives F in direction of ( -pz j + py k)
-          centre_circle_z = _MCPStartZ->at(i_anapart) + (rad_curvature*100*_MCPStartPY->at(i_anapart)/transverse_mom);
+        else {
+          centre_circle_y = _MCPStartY->at(i_anapart) - (rad_curvature*_MCPStartPZ->at(i_anapart)/transverse_mom); //Note minus sign here as cross product gives F in direction of ( -pz j + py k)
+          centre_circle_z = _MCPStartZ->at(i_anapart) + (rad_curvature*_MCPStartPY->at(i_anapart)/transverse_mom);
         }
+
         //Find Position where track leaves TPC. Intersection of two circles.
-        //JM do you consider the case where the particle leaves out the end cap?
         double m_const = (TPC_centre_z - centre_circle_z)/(TPC_centre_y-centre_circle_y); //gradient of line between two intersection points
-        double a_const = (TPCInstrumentedRadius*TPCInstrumentedRadius-(rad_curvature*100)*(rad_curvature*100) - (TPC_centre_y*TPC_centre_y - centre_circle_y*centre_circle_y)-(TPC_centre_z*TPC_centre_z - centre_circle_z*centre_circle_z))/(2*(centre_circle_y-TPC_centre_y));
+        double a_const = (TPCInstrumentedRadius*TPCInstrumentedRadius-rad_curvature*rad_curvature - (TPC_centre_y*TPC_centre_y - centre_circle_y*centre_circle_y)-(TPC_centre_z*TPC_centre_z - centre_circle_z*centre_circle_z))/(2*(centre_circle_y-TPC_centre_y));
         double quadraticformula_b = -(2*m_const*(a_const - TPC_centre_y) + 2*TPC_centre_z);
         double quadraticformula_a = m_const*m_const + 1;
         double quadraticformula_c = (a_const - TPC_centre_y)*(a_const - TPC_centre_y) + TPC_centre_z*TPC_centre_z - TPCInstrumentedRadius*TPCInstrumentedRadius;
 
-        double z_intersect_1, y_intersect_1, z_intersect_2, y_intersect_2, theta_1, theta_2, theta_chosen, theta_diff_1, theta_diff_2, theta_end;
-        double nturns = 0;
+        double z_intersect_1, y_intersect_1, z_intersect_2, y_intersect_2; 
+        double theta_1, theta_2, theta_spanned, theta_diff_1, theta_diff_2;
 
         double theta_start = atan2(_MCPStartY->at(i_anapart) - centre_circle_y, _MCPStartZ->at(i_anapart) - centre_circle_z);
 
@@ -369,53 +269,45 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
           theta_1 = atan2(y_intersect_1 - centre_circle_y, z_intersect_1 - centre_circle_z);
           theta_2 = atan2(y_intersect_2 - centre_circle_y, z_intersect_2 - centre_circle_z);
 
-          //Ensure they are in the range [0,2pi)
-          if (theta_1 < 0) theta_1 += 2*M_PI;
-          if (theta_2 < 0) theta_2 += 2*M_PI;
-          if (theta_start < 0) theta_start += 2*M_PI;
-
-          //Lorentz force law, if positively charged, counter clockwise, if negative charged, clockwise (looking down the B-field)
-          if(!positivecharged){
-            theta_diff_1 = (theta_1 < theta_start) ? (theta_start - theta_1) : (2*M_PI - (theta_1 - theta_start));
-            theta_diff_2 = (theta_2 < theta_start) ? (theta_start - theta_2) : (2*M_PI - (theta_2 - theta_start));
-          }
-          else if(positivecharged){ 
-            theta_diff_1 = (theta_1 > theta_start) ? (theta_1 - theta_start) : (2*M_PI - (theta_start - theta_1));
-            theta_diff_2 = (theta_2 > theta_start) ? (theta_2 - theta_start) : (2*M_PI - (theta_start - theta_2));
-          }
-
-          //JM Why is the second check necessary?
-          if(theta_diff_1<theta_diff_2 && (rad_curvature*100*theta_diff_1 > (TPCInstrumentedRadius-start_radius))){
-            theta_chosen = theta_diff_1;
-            theta_end = theta_1;
+          //Lorentz force law, if positively charged theta is increasing and vice versa
+          if(positivecharged){ 
+            theta_diff_1 = (theta_1 > theta_start) ? (theta_1 - theta_start) : (2*M_PI + theta_1 - theta_start);
+            theta_diff_2 = (theta_2 > theta_start) ? (theta_2 - theta_start) : (2*M_PI + theta_2 - theta_start);
           }
           else {
-            theta_chosen = theta_diff_2;
-            theta_end = theta_2;
+            theta_diff_1 = (theta_1 < theta_start) ? (theta_start - theta_1) : (2*M_PI + theta_start - theta_1);
+            theta_diff_2 = (theta_2 < theta_start) ? (theta_start - theta_2) : (2*M_PI + theta_start - theta_2);
           }
 
-          L_yz = rad_curvature*100*theta_chosen;
-          L_yz_chord = std::abs(2*rad_curvature*100*sin(theta_chosen/2));
-          nturns = std::abs(length_track_x/100)/pitch;
-
-          //If track ends before it would intersect, adjust
-          if(std::abs(L_yz*tan_theta) > std::abs(length_track_x)){
-            theta_chosen = fmod(nturns, 1)*2*M_PI; //JM why do we need the fmod? nturns<1 in this case surely?
-            L_yz = rad_curvature*100*theta_chosen;
-            L_yz_chord = std::abs(2*rad_curvature*100*sin(theta_chosen/2));
-          } 
+          if(theta_diff_1 < theta_diff_2){
+            theta_spanned = theta_diff_1;
+          }
           else {
-            length_track_x = std::abs(L_yz*tan_theta);
+            theta_spanned = theta_diff_2;
+          }
+
+          double x_end = (_MCPStartPX->at(i_anapart) > 0) ? (_MCPStartX->at(i_anapart) + theta_spanned*pitch/(2*M_PI)) : (_MCPStartX->at(i_anapart) - theta_spanned*pitch/(2*M_PI));
+
+          //Check if escapes through end caps
+          if (x_end > TPC_centre_x + TPCInstrumentedLength) {
+            theta_spanned = (TPC_centre_x + TPCInstrumentedLength - _MCPStartX->at(i_anapart))*2*M_PI/pitch;
+          }
+          else if (x_end < TPC_centre_x - TPCInstrumentedLength) { 
+            theta_spanned = (_MCPStartX->at(i_anapart) - (TPC_centre_x - TPCInstrumentedLength))*2*M_PI/pitch;
           }
         }
-        else { //Radius of curvature small enough to spiral within TPC
-          nturns = std::abs(length_track_x/100)/pitch;
-          double theta_intersect = nturns*2*M_PI;
-          L_yz = theta_intersect*rad_curvature*100;
-          theta_end = theta_start + theta_intersect;
-          L_yz_chord = L_yz;
+        else { //Radius of curvature small enough to spiral within TPC (must leave through end caps)
+          if (_MCPStartPX->at(i_anapart) > 0) {
+            theta_spanned = (TPC_centre_x + TPCInstrumentedLength - _MCPStartX->at(i_anapart))*2*M_PI/pitch;
+          }
+          else { 
+            theta_spanned = (_MCPStartX->at(i_anapart) - (TPC_centre_x - TPCInstrumentedLength))*2*M_PI/pitch;
+          }
         }
-        double N_hits = FindNHits(positivecharged, pixel_spacing_cm, centre_circle_y, centre_circle_z, rad_curvature, theta_start, theta_end);
+        double nturns = theta_spanned/(2*M_PI);
+        L_yz = rad_curvature*theta_spanned;
+        
+        double length_track_x = (theta_spanned/(2*M_PI))*pitch;
         double p_mag = sr->mc.nu[0].prim[i_truepart].p.Mag();
         double bg = 0; 
         double gamma = 0;
@@ -423,22 +315,24 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
 
         //JM removed avg_betapT calc (seems to be unused)
 
+        double nhits = FindNHits(pixel_spacing_cm, centre_circle_y, centre_circle_z, rad_curvature, theta_start, theta_spanned, positivecharged);
+        if (nturns > 1) nhits *= nturns;
+
         double sigmax = (drift_velocity/100)*(1/(adc_sampling_frequency));
         double sigmax_frac = sigmax/(std::abs(length_track_x)/100);
-        double sigmayz = (spatial_resolution/(1000)); //needs to be in m              
-        double momres_yz = transverse_mom*(std::sqrt(720/(N_hits+4)) * (sigmayz*transverse_mom/(0.3*B_field*(L_yz_chord/100)*(L_yz_chord/100))) 
-            * std::sqrt(1-(1/21)*(L_yz_chord/(rad_curvature*100))*(L_yz_chord/(rad_curvature*100))));
+        double sigmayz = (spatial_resolution/(1000)); //needs to be in m
+        double momres_yz = transverse_mom*(std::sqrt(720/(nhits+4)) * (sigmayz*transverse_mom/(0.3*B_field*(L_yz/100)*(L_yz/100)))
+            * std::sqrt(1-(1/21)*(L_yz/rad_curvature)*(L_yz/rad_curvature)));
         double momres_ms = transverse_mom*(0.016/(0.3*B_field*(L_yz/100)*cos(theta_xT)*beta))*std::sqrt(L_yz/X0);
         double momres_tottransverse = std::sqrt(momres_yz*momres_yz + momres_ms*momres_ms)/transverse_mom;
         double sigma_theta = (cos(theta_xT)*cos(theta_xT) * (pitch/(2*M_PI*rad_curvature)) *
             std::sqrt(sigmax_frac*sigmax_frac + momres_tottransverse*momres_tottransverse));
         double momres_frac = std::sqrt(momres_tottransverse*momres_tottransverse + (sigma_theta*tan_theta)*(sigma_theta*tan_theta));
 
-        duneobj->particle_nhits->back() = N_hits;
         duneobj->particle_nturns->back() = nturns;
+        duneobj->particle_nhits->back() = nhits;
         duneobj->particle_momresms->back() = momres_ms;
-        duneobj->particle_momrestransfrac->back() = momres_tottransverse/momres_frac;
-        duneobj->particle_momrestrans->back() = momres_tottransverse;
+        duneobj->particle_momresyz->back() = momres_yz;
 
         if(momres_frac > momentum_resolution_threshold){
           isAccepted = false;
@@ -558,6 +452,7 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
   }
   duneobj->norm_s = 1.;
   double downsampling = 1; //default 1, set to eg. 0.01 for quick testing
+  bool do_geometric_correction = true;
   duneobj->pot_s = pot/(downsampling*1e21);
   duneobj->nEvents = static_cast<int>(std::round(downsampling*static_cast<double>(_data->GetEntries())));
 
@@ -571,6 +466,7 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
   duneobj->rw_nuPDGunosc = new int[duneobj->nEvents];
   duneobj->rw_nuPDG = new int[duneobj->nEvents];
   duneobj->rw_berpaacvwgt = new double[duneobj->nEvents]; 
+  duneobj->geometric_correction = new double[duneobj->nEvents];
 
   duneobj->rw_Q0 = new double[duneobj->nEvents];
   duneobj->rw_Q3 = new double[duneobj->nEvents];
@@ -600,6 +496,11 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
   duneobj->rw_lep_pX = new double[duneobj->nEvents];
   duneobj->rw_lep_pY = new double[duneobj->nEvents];
   duneobj->rw_lep_pZ = new double[duneobj->nEvents];
+  duneobj->rw_lep_p = new double[duneobj->nEvents];
+
+  duneobj->rw_lep_theta = new double[duneobj->nEvents]; //angle to z (beam)
+  duneobj->rw_lep_phi = new double[duneobj->nEvents]; //angle in xy plane to x (B-field)
+  duneobj->rw_lep_bangle = new double[duneobj->nEvents];
 
   duneobj->rw_reco_vtx_x = new double[duneobj->nEvents];
   duneobj->rw_reco_vtx_y = new double[duneobj->nEvents];
@@ -609,7 +510,6 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
   duneobj->Target = new int[duneobj->nEvents];
 
   duneobj->is_accepted = new bool[duneobj->nEvents];
-  duneobj->is_good_caf_event = new bool[duneobj->nEvents];
 
   //Particle-level kinematic variables
   duneobj->particle_event = new std::vector<int>; duneobj->particle_event->reserve(7*duneobj->nEvents);
@@ -629,11 +529,10 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
   duneobj->particle_isstoppedinendcap = new std::vector<bool>; duneobj->particle_isstoppedinendcap->reserve(7*duneobj->nEvents); 
   duneobj->particle_startx = new std::vector<double>; duneobj->particle_startx->reserve(7*duneobj->nEvents); 
   duneobj->particle_startr2 = new std::vector<double>; duneobj->particle_startr2->reserve(7*duneobj->nEvents); 
-  duneobj->particle_nhits = new std::vector<double>; duneobj->particle_nhits->reserve(7*duneobj->nEvents); 
   duneobj->particle_nturns = new std::vector<double>; duneobj->particle_nturns->reserve(7*duneobj->nEvents); 
+  duneobj->particle_nhits = new std::vector<double>; duneobj->particle_nhits->reserve(7*duneobj->nEvents); 
   duneobj->particle_momresms = new std::vector<double>; duneobj->particle_momresms->reserve(7*duneobj->nEvents); 
-  duneobj->particle_momrestransfrac = new std::vector<double>; duneobj->particle_momrestransfrac->reserve(7*duneobj->nEvents); 
-  duneobj->particle_momrestrans= new std::vector<double>; duneobj->particle_momrestrans->reserve(7*duneobj->nEvents);
+  duneobj->particle_momresyz= new std::vector<double>; duneobj->particle_momresyz->reserve(7*duneobj->nEvents);
 
   int numCC = 0;
   int num_no_ixns = 0;
@@ -643,17 +542,14 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
   int num_notin_fdv = 0;
   int num_nanenergy = 0;
   int num_nanparticles = 0;
-  int ngoodcafevents = 0;
-  int nbadcafevents = 0;
 
   double pixel_spacing_cm = pixel_spacing/10; //convert to cm
-  makePixelGrid(pixel_spacing_cm); //make square pixel grid and fill vectors with y and z pixel boundaries	
 
   for (int i_event = 1; i_event < (duneobj->nEvents); ++i_event) { 
     _data->GetEntry(i_event);
 
-    if ((i_event % (duneobj->nEvents/100))==0) {
-      MACH3LOG_INFO("\tProcessing event: {}/{}",i_event,duneobj->nEvents);
+    if (i_event % (duneobj->nEvents/100) == 0) {
+      MACH3LOG_INFO("\tNow processing event: {}/{}",i_event,duneobj->nEvents);
     }
     double radius = std::sqrt((sr->mc.nu[0].vtx.y-TPC_centre_y)*(sr->mc.nu[0].vtx.y-TPC_centre_y) + (sr->mc.nu[0].vtx.z-TPC_centre_z)*(sr->mc.nu[0].vtx.z-TPC_centre_z)); //find radius of interaction vertex
     if(std::abs(sr->mc.nu[0].vtx.x)<=TPCFidLength &&  radius<=TPCFidRadius){
@@ -739,7 +635,6 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
 
     double muonenergy = 0.;
     bool isEventAccepted = true;
-    bool isgoodcafevent = true;
 
     int ntrueparticles = sr->mc.nu[0].nprim;
 
@@ -758,35 +653,33 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
         }
       }
 
-      bool isgoodcafparticle = false;
-      if (!IsParticleAccepted(duneobj, iSample, i_event, i_truepart, pixel_spacing_cm, &isgoodcafparticle, pdgmass)) {
+      if (!IsParticleAccepted(duneobj, iSample, i_event, i_truepart, pixel_spacing_cm, pdgmass)) {
         isEventAccepted = false;
-      }
-
-      //Check if particle is stored properly in CAF
-      if (isgoodcafparticle == false && isgoodcafevent == true) {
-        isgoodcafevent = false;
-        //MACH3LOG_INFO("Bad CAF event. Bad CAF particle has pdg = {}, start pos = ({},{},{}), start mom = ({},{},{})",
-        //    partpdg, sr->mc.nu[0].prim[i_truepart].start_pos.x, sr->mc.nu[0].prim[i_truepart].start_pos.y, sr->mc.nu[0].prim[i_truepart].start_pos.z,
-        //    sr->mc.nu[0].prim[i_truepart].p.px, sr->mc.nu[0].prim[i_truepart].p.py, sr->mc.nu[0].prim[i_truepart].p.pz);
-      }
-      else if (isgoodcafparticle == true && isgoodcafevent == true && i_truepart == ntrueparticles-1) {
-        //MACH3LOG_INFO("Good CAF event. Good CAF particle has pdg = {}, start pos = ({},{},{}), start mom = ({},{},{})",
-        //    partpdg, sr->mc.nu[0].prim[i_truepart].start_pos.x, sr->mc.nu[0].prim[i_truepart].start_pos.y, sr->mc.nu[0].prim[i_truepart].start_pos.z,
-        //    sr->mc.nu[0].prim[i_truepart].p.px, sr->mc.nu[0].prim[i_truepart].p.py, sr->mc.nu[0].prim[i_truepart].p.pz);
       }
     }
 
     if(isEventAccepted) {duneobj->is_accepted[i_event]=1;}
     else {duneobj->is_accepted[i_event]=0;} 
 
-    if (!isgoodcafevent) {
-      nbadcafevents++;
-      duneobj->is_good_caf_event[i_event]=0;
-    }
-    else {
-      ngoodcafevents++;
-      duneobj->is_good_caf_event[i_event]=1;
+    double lep_momentum = std::sqrt(duneobj->rw_lep_pX[i_event]*duneobj->rw_lep_pX[i_event] + duneobj->rw_lep_pY[i_event]*duneobj->rw_lep_pY[i_event] + duneobj->rw_lep_pZ[i_event]*duneobj->rw_lep_pZ[i_event]);
+    double lep_pBeam = duneobj->rw_lep_pY[i_event]*BeamDirection[1] + duneobj->rw_lep_pZ[i_event]*BeamDirection[2];
+    double lep_pB = duneobj->rw_lep_pX[i_event];
+    double lep_pPerp = duneobj->rw_lep_pY[i_event]*BeamDirection[2] - duneobj->rw_lep_pZ[i_event]*BeamDirection[1];
+
+    double lep_beamangle = acos(lep_pBeam/lep_momentum)*180/M_PI; //Angle to beam (beam direction: [0.0,-0.101,0.995])
+    double lep_bangle = acos(lep_pB/lep_momentum)*180/M_PI; //Angle to B-field (b-field along x)
+    double lep_perpangle = acos(lep_pPerp/lep_momentum)*180/M_PI; //Angle to axis perpendicular to beam and B
+    double lep_phi = atan2(lep_pPerp, lep_pB)*180/M_PI;
+
+    duneobj->rw_lep_theta[i_event] = lep_beamangle;
+    duneobj->rw_lep_phi[i_event] = lep_phi;
+    duneobj->rw_lep_bangle[i_event] = lep_bangle;
+    duneobj->rw_lep_p[i_event] = lep_momentum;
+
+    duneobj->geometric_correction[i_event] = 1.;
+    if (do_geometric_correction) {
+      if ((lep_bangle < 45 || lep_bangle > 135) && lep_momentum > 0.3) duneobj->geometric_correction[i_event] = 0.;
+      else if ((lep_perpangle < 45 || lep_perpangle > 135) && lep_momentum > 0.3) duneobj->geometric_correction[i_event] = 2.;
     }
 
     int ntruesecparticles = sr->mc.nu[0].nsec;
@@ -816,7 +709,6 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
     if(duneobj->rw_isCC[i_event] == 1) numCC++;
   }
   MACH3LOG_INFO("nEvents = {}, numCC = {}, numFDV = {}", duneobj->nEvents, numCC, num_in_fdv);
-  MACH3LOG_INFO("ngoodcafevents = {}, nbadcafevents = {}", ngoodcafevents, nbadcafevents);
   _sampleFile->Close();
   _sampleFile_geant->Close();
   return duneobj->nEvents;
@@ -858,6 +750,14 @@ const double* samplePDFDUNEBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
       return &dunendgarmcSamples[iSample].rw_lep_pT[iEvent];
     case kLepPZ:
       return &dunendgarmcSamples[iSample].rw_lep_pZ[iEvent];
+    case kLepTheta:
+      return &dunendgarmcSamples[iSample].rw_lep_theta[iEvent];
+    case kLepPhi:
+      return &dunendgarmcSamples[iSample].rw_lep_phi[iEvent];
+    case kLepBAngle:
+      return &dunendgarmcSamples[iSample].rw_lep_bangle[iEvent];
+    case kLepP:
+      return &dunendgarmcSamples[iSample].rw_lep_p[iEvent];
     case kTrueQ0:
       return &dunendgarmcSamples[iSample].rw_Q0[iEvent];
     case kTrueQ3:
@@ -868,14 +768,14 @@ const double* samplePDFDUNEBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
       return &dunendgarmcSamples[iSample].particle_transversemomentum->at(iEvent);
     case kParticle_BAngle:
       return &dunendgarmcSamples[iSample].particle_bangle->at(iEvent);
-    case kParticle_NHits:
-      return &dunendgarmcSamples[iSample].particle_nhits->at(iEvent);
     case kParticle_NTurns:
       return &dunendgarmcSamples[iSample].particle_nturns->at(iEvent);
+    case kParticle_NHits:
+      return &dunendgarmcSamples[iSample].particle_nhits->at(iEvent);
     case kParticle_MomResMS:
       return &dunendgarmcSamples[iSample].particle_momresms->at(iEvent);
-    case kParticle_MomResTrans:
-      return &dunendgarmcSamples[iSample].particle_momrestrans->at(iEvent);
+    case kParticle_MomResYZ:
+      return &dunendgarmcSamples[iSample].particle_momresyz->at(iEvent);
     default:
       MACH3LOG_ERROR("Did not recognise Kinematic Parameter {}", KinematicParameter);
       throw MaCh3Exception(__FILE__, __LINE__);
@@ -911,8 +811,6 @@ double samplePDFDUNEBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, i
   switch(KinPar) {
     case kEvent_IsAccepted:
       return static_cast<double>(dunendgarmcSamples[iSample].is_accepted[iEvent]);
-    case kIsGoodCAFEvent:
-      return static_cast<double>(dunendgarmcSamples[iSample].is_good_caf_event[iEvent]);
     case kIsCC:
       return static_cast<double>(dunendgarmcSamples[iSample].rw_isCC[iEvent]);
     case kInFDV:

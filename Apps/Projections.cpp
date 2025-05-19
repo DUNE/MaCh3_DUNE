@@ -9,7 +9,7 @@
 #include "samplePDFDUNE/MaCh3DUNEFactory.h"
 #include "samplePDFDUNE/StructsDUNE.h"
 
-bool IncludeKinematicCutsInTitle = true;
+bool IncludeKinematicCutsInTitle = false;
 
 struct KinematicCut {
   std::string Name;
