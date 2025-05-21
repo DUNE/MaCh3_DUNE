@@ -27,11 +27,11 @@ protected:
   /// @brief Function to setup MC from file
   /// @param iSample sample ID
   /// @return Total number of events
-  int SetupExperimentMC(int iSample);
+  int SetupExperimentMC();
 
   /// @brief Tells FD base which variables to point to/be set to
   /// @param iSample Sample ID
-  void SetupFDMC(int iSample);
+  void SetupFDMC();
 
   /// @brief Sets up pointers weights for each event (oscillation/xsec/etc.)
   void SetupWeightPointers();
@@ -46,47 +46,47 @@ protected:
   /// @brief NOT IMPLEMENTED: Dunder method to calculate xsec weights
   /// @param iSample sample ID
   /// @param iEvent Event number
-  double CalcXsecWeightFunc(int iSample, int iEvent) {(void)iSample; (void) iEvent; return 1.;}
+  double CalcXsecWeightFunc(int iEvent) {(void) iEvent; return 1.;}
   
   /// @brief NOT IMPLEMENTED: Apply kinematic shifts
   /// @param iSample Sample Number
   /// @param iEvent Event number
-  void applyShifts(int iSample, int iEvent) {(void)iSample; (void)iEvent;}
+  void applyShifts(int iEvent) {(void)iEvent;}
   
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinPar Kinematic parameter enum val
   /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Pointer to KinPar for a given event
-  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent);
+  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent);
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter as double (gets cast -> int)
   /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Pointer to KinPar for a given event
-  const double* GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent);
+  const double* GetPointerToKinematicParameter(double KinematicVariable, int iEvent);
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicParameter Kinematic parameter name as string (gets cast -> int)
   /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Pointer to KinPar for a given event
-  const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
+  const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent);
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter ID as double (gets cast -> int)
   /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Value of kinematic parameter corresponding for a given event
-  double ReturnKinematicParameter(int KinematicVariable, int iSample, int iEvent);
+  double ReturnKinematicParameter(int KinematicVariable, int iEvent);
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicParameter Kinematic parameter name as string (gets cast -> int)
   /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Value of kinematic parameter corresponding for a given event
-  double ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
+  double ReturnKinematicParameter(std::string KinematicParameter, int iEvent);
 
   /// @brief Gets binning for a given parameter
   /// @param KinematicParameterStr Parameter name
@@ -117,7 +117,7 @@ protected:
   };
   
   /// Array filled with MC samples for each oscillation channel
-  std::vector<struct dunemc_base> dunemcSamples;
+  std::vector<dunemc_base> dunemcSamples;
 
   /// Is the sample e-like
   bool IsELike;

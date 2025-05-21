@@ -3,14 +3,17 @@
 #ifdef BUILD_NDGAR
 #include "Samples/SampleHandlerBeamNDGAr.h"
 #else
-#include "Samples/SampleHandlerBeamFD.h"
-#include "Samples/SampleHandlerBeamND.h"
+//#include "Samples/SampleHandlerBeamFD.h"
+//#include "Samples/SampleHandlerBeamND.h"
 #include "Samples/SampleHandlerAtm.h"
 #endif
 
 SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, ParameterHandlerGeneric* &xsec, ParameterHandlerOsc* &osc, TMatrixD* NDCov_FHC, TMatrixD* NDCov_RHC) {
   SampleHandlerFD *Sample;
 
+  (void)NDCov_FHC;
+  (void)NDCov_RHC;
+  
 #ifdef BUILD_NDGAR
   (void)osc;
   (void)NDCov_FHC;
@@ -22,6 +25,7 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
     throw MaCh3Exception(__FILE__, __LINE__);
   }
 #else
+  /*
   if (SampleType == "BeamFD") {
     Sample = new SampleHandlerBeamFD(SampleConfig, xsec, osc);
   } else if (SampleType == "BeamND") {
@@ -38,7 +42,8 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
     else {NDCov = NDCov_RHC;}
     
     Sample = new SampleHandlerBeamND(SampleConfig, xsec, NDCov, osc);
-  } else if (SampleType == "Atm") {
+    } else*/
+  if (SampleType == "Atm") {
     Sample = new SampleHandlerAtm(SampleConfig, xsec, osc);
   } else {
     MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
@@ -82,9 +87,10 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<SampleHandlerFD*> &D
 
   //Setup the cross-section parameters
   //This should get the prior values.
-  std::vector<double> XsecParVals = xsec->GetNominalArray();
+  //std::vector<double> XsecParVals = xsec->GetNominalArray();
 
-  xsec->SetParameters(XsecParVals);  
+  //xsec->SetParameters(XsecParVals);
+  xsec->SetParameters();
   xsec->SetStepScale(FitManager->raw()["General"]["Systematics"]["XsecStepScale"].as<double>());
 
   MACH3LOG_INFO("cov xsec setup");
