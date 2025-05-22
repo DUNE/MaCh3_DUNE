@@ -1,0 +1,25 @@
+Systematics:
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 0.1
+      - .20000000000000000000
+    - q3:
+      - .40000000000000000000
+      - .50000000000000000000
+    Names:
+      FancyName: q0q3_2
+      ParameterName: q0q3_2
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec

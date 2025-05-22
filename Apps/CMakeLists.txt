@@ -7,6 +7,9 @@ foreach(app
 	SigmaVariation
 	LikelihoodScan
 	Variations
+	EventRates_New
+	Fit_Abi
+	Fit_fixingparameters
       )
       
     add_executable(${app} ${app}.cpp)

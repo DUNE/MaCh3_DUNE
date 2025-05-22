@@ -1,0 +1,50 @@
+General:
+  OutputFile: "Chain_testing/nonadaptive.root"
+  DUNESamples:
+    - "configs/Samples/OA_samples_subsamples/0m_CC_q0q3.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/0m_all_computecanada.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/0m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/1.75m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/2m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/4m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/5.75m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/8m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/9.75m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/12m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/13.75m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/16m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/17.75m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/20m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/21.75m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/24m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/25.75m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/26.25m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/28m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/28.25m_all.yaml"
+   #- "configs/Samples/OA_Samples_subsamples/28.5m_all.yaml"
+
+  OscillationParameters: [0.0, 0.0, 0.0, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848, 0.5] #[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848]#[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848] #[0.0, 0.0, 0.0, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848] #[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848]
+  OscillatorConfigName: "configs/OscillatorObj.yaml"
+
+  Systematics:
+    XsecCovFile: ["configs/CovObjs/q0q3_triangle_1275params.yaml"] #["configs/CovObjs/xsec_energy_abi_moreparameters.yaml"]  #["configs/CovObjs/xsec_abi_manyparameters_nd.yaml"] #["configs/CovObjs/xsec_energy_abi_moreparameters.yaml"]  #["configs/CovObjs/xsec_abi_manyparameters_nd.yaml"]
+    XsecCovName: "xsec_cov"
+    XsecStepScale: 0.002
+    XsecAtGen: false 
+    OscCovFile: ["configs/CovObjs/OscCov_PDG2021_v2.yaml"]
+    OscCovName: "osc_cov"
+
+  Fitter:
+    FitTestLikelihood: false
+  MCMC:
+    NSteps: 50000
+    AutoSave: 1000
+  Output:
+    FileName: "TestEventRates_fit_10000.root"
+    OUTPUTNAME: "TestLLH__fit_10000.root"
+
+  ProcessMCMC: No
+  Seed: 0
+  Debug: No
+LLHScans:
+  ParPoints: 1000
