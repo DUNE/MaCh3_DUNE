@@ -4,7 +4,7 @@ General:
   # OutputFile: "outputs/runs/086_llh.root"
   # OutputFile: "outputs/runs/087_sigmavar.root"
   # OutputFile: "outputs/runs/088_llh.root"
-  OutputFile: "outputs/runs/089_amcmc.root"
+  OutputFile: "outputs/runs/097_fit.root"
   DUNESamples: 
     # - "configs/Samples/SamplePDFDune_FHC_numuselec.yaml"
     # - "configs/Samples/SamplePDFDune_FHC_nueselec.yaml"
@@ -49,11 +49,13 @@ General:
     # XsecStepScale: 0.05
 
     # Even even even larger
-    XsecStepScale: 0.1
+    # XsecStepScale: 0.1
 
     # Start with a large step scale for adaptive
     # XsecStepScale: 0.2
-    # XsecStepScale: 1
+
+    # Set global step scale to be 1 when using an external adapted proposal matrix
+    XsecStepScale: 1
     XsecAtGen: false 
     NDCovFile: "configs/CovObjs/tdr_covs/det_sys_cov.root"
     OscCovFile: ["configs/CovObjs/OscCov_PDG2021_v2_unoscillated.yaml"]
@@ -73,9 +75,10 @@ General:
   Debug: Yes
 
   # Custom throw matrix
-  # ThrowMatrixFile: "outputs/runs/081_amcmc.root"
+  ThrowMatrixFile: "outputs/runs/094_amcmc_mat.root"
   # Entry in the throw matrix
-  # ThrowMatrixName: "AdaptiveFolder/300000_xsec_cov_throw_matrix"
+  ThrowMatrixName: "xsec_cov_posfit_matrix"
+  # ThrowMatrixName: "4600000_xsec_cov_throw_matrix"
 
 # LLH Scan settings  
 LLHScan:
@@ -84,7 +87,7 @@ LLHScan:
   # Save individual sample contributions to the LLH
   LLHScanBySample: false
   # Number of points we run LLH scans for each systematic
-  LLHScanPoints: 20
+  LLHScanPoints: 100
   # Number of points for 2D scan in each direction
   #2DLLHScanPoints: 20
   # Add physical ranges for special params whose priors/errors may not be well well-defined
@@ -102,12 +105,12 @@ AdaptionOptions:
     # How often do we change our matrix throws?
     UpdateStep: 100000
     SaveNIterations: 1
-    OutputFileName: "outputs/runs/089_amcmc_mat.root"
+    OutputFileName: "outputs/runs/094_amcmc_mat.root"
   Covariance:
     # So now we list individual matrices, let's just do xsec
     xsec_cov:
       # Do we want to adapt this matrix?
-      DoAdaption: true
+      DoAdaption: false
       # So we can separate out flux and xsec
       MatrixBlocks: [ ]
       # Detector systematics: all diagonal except for terms that correlate
