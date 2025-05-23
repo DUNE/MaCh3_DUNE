@@ -1,7 +1,7 @@
 ---
 Systematics:
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -21,7 +21,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -42,7 +42,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -63,7 +63,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 0.09
     FlatPrior: false
     Names:
@@ -84,7 +84,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -105,7 +105,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -126,7 +126,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -147,7 +147,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -169,7 +169,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -191,7 +191,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -213,7 +213,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -235,7 +235,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -257,7 +257,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -281,7 +281,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -305,7 +305,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -329,7 +329,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -353,7 +353,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -377,7 +377,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -403,7 +403,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -429,7 +429,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -455,7 +455,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -481,7 +481,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -507,7 +507,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -529,7 +529,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -551,7 +551,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -573,7 +573,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -595,7 +595,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -617,7 +617,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -639,7 +639,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -660,7 +660,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -681,7 +681,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -702,7 +702,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -723,7 +723,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -744,7 +744,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -765,7 +765,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -786,7 +786,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -807,7 +807,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -828,7 +828,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -849,7 +849,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -870,7 +870,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -891,7 +891,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -912,7 +912,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -933,7 +933,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -954,7 +954,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -975,7 +975,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -996,7 +996,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1017,7 +1017,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1038,7 +1038,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1059,7 +1059,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1080,7 +1080,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1101,7 +1101,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1122,7 +1122,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1143,7 +1143,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1164,7 +1164,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1185,7 +1185,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1205,7 +1205,7 @@ Systematics:
     Type: Spline
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND_*", "FD", "ATM"]
+    SampleNames: ["ND_*", "FD_*", "ATM"]
     Error: 1.0
     FlatPrior: false
     Names:

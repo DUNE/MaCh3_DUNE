@@ -46,6 +46,7 @@ int main(int argc, char * argv[]) {
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
 
+  osc->setParameters(FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>());
   for (unsigned sample_i = 0 ; sample_i < DUNEPdfs.size() ; ++sample_i) {
     
     std::string name = DUNEPdfs[sample_i]->GetTitle();
@@ -110,7 +111,9 @@ int main(int argc, char * argv[]) {
 
   //Start chain from random position unless continuing a chain
   if(!StartFromPreviousChain){
-    xsec->throwParameters();
+    if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false))
+      xsec->throwParameters();
+    osc->setParameters();
     if (useosc) osc->throwParameters();
   }
   

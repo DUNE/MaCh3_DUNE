@@ -15,7 +15,7 @@ def get_from_full_yaml(input_file, out_name,
     if horn_current is None:
         horn_current = ['fhc','rhc']
     if param_groups is None:
-        param_groups = ['Flux','Xsec','DetSys']
+        param_groups = ['Flux','Xsec','DetSysts']
     with open(input_file, 'r') as stream:
         try:
             f = yaml.safe_load(stream)
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     det_ids = [set(['ND']), set(['FD']), set(['ND','FD'])]
     det_ids_names = ['ND', 'FD', 'ND+FD']
     syst_types = ['Norm','Spline','Functional']
-    param_groups = ['Flux','Xsec','DetSys']
+    param_groups = ['Flux','Xsec','DetSysts']
     horn_currents = ['fhc','rhc']
 
     for i,det_id in enumerate(det_ids):

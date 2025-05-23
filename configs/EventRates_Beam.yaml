@@ -80,7 +80,7 @@ General:
   ThrowMatrixName: "xsec_cov_posfit_matrix"
   # ThrowMatrixName: "4600000_xsec_cov_throw_matrix"
 
-# LLH Scan settings  
+# LLH Scan settings
 LLHScan:
   # don't make LLH for certain systematic groups
   #LLHScanSkipVector: []
