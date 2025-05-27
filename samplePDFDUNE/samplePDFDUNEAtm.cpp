@@ -99,7 +99,7 @@ int samplePDFDUNEAtm::setupExperimentMC(int iSample) {
     duneobj->rw_etru[iEvent] = static_cast<double>(sr->mc.nu[0].E);
 
     TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.X(),sr->mc.nu[0].momentum.Y(),sr->mc.nu[0].momentum.Z())).Unit();
-    duneobj->rw_truecz[iEvent] = TrueNuMomentumVector.Y();
+    duneobj->rw_truecz[iEvent] = -TrueNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
 
     duneobj->flux_w[iEvent] = sr->mc.nu[0].genweight;
 
@@ -111,7 +111,7 @@ int samplePDFDUNEAtm::setupExperimentMC(int iSample) {
       duneobj->rw_erec[iEvent] = sr->common.ixn.pandora[0].Enu.lep_calo;
       RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.X(),sr->common.ixn.pandora[0].dir.lngtrk.Y(),sr->common.ixn.pandora[0].dir.lngtrk.Z())).Unit();      
     }
-    duneobj->rw_theta[iEvent] = RecoNuMomentumVector.Y();
+    duneobj->rw_theta[iEvent] = -RecoNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
     
   }
 
