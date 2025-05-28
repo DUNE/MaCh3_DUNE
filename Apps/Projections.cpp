@@ -9,7 +9,7 @@
 #include "samplePDFDUNE/MaCh3DUNEFactory.h"
 #include "samplePDFDUNE/StructsDUNE.h"
 
-bool IncludeKinematicCutsInTitle = false;
+bool IncludeKinematicCutsInTitle = true;
 
 struct KinematicCut {
   std::string Name;
@@ -117,7 +117,7 @@ int main(int argc, char *argv[]) {
   }
   auto fitMan = std::unique_ptr<manager>(new manager(argv[1]));
 
-  int WeightStyle = 1;
+  int WeightStyle = 0;
   gStyle->SetPalette(1);
   // ###############################################################################################################################
   // Create samplePDFFD objects

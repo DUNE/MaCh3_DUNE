@@ -73,6 +73,12 @@ void samplePDFDUNEBeamNDGAr::SetupWeightPointers() {
       MCSamples[i].total_weight_pointers[j][4] = &(dunendgarmcSamples[i].flux_w[j]);
       MCSamples[i].total_weight_pointers[j][5] = &(MCSamples[i].xsec_w[j]);
       MCSamples[i].total_weight_pointers[j][6] = &(dunendgarmcSamples[i].geometric_correction[j]);
+      
+      double totalweight=1.;
+      for (int weighting=0; weighting<MCSamples[i].ntotal_weight_pointers[j]; weighting++) {
+        totalweight *= *(MCSamples[i].total_weight_pointers[j][weighting]);
+      }
+      if (totalweight != 1) MACH3LOG_INFO("Non-unitary weighting! Event {}, Weighting {}", j, totalweight);
     }
   }
 }
@@ -204,6 +210,8 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
     duneobj->particle_bangle->push_back(acos(_MCPStartPX->at(i_anapart)/mom_tot)*180/M_PI);//Angle to B-field
     duneobj->particle_startx->push_back(_MCPStartX->at(i_anapart)-TPC_centre_x);
     duneobj->particle_startr2->push_back(start_radius*start_radius);
+    duneobj->particle_endr->push_back(end_radius);
+    duneobj->particle_endx->push_back(end_length);
     duneobj->particle_isaccepted->push_back(true); //default (updates later)
     duneobj->particle_isstoppedingap->push_back(!stops_in_tpc && stops_before_ecal);
     duneobj->particle_isstoppedinbarrelgap->push_back(!stops_in_tpc && stops_before_ecal && std::abs(end_length)<=TPCInstrumentedLength); 
@@ -214,9 +222,11 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
     duneobj->particle_isstoppedintpc->push_back(stops_in_tpc);
     duneobj->particle_momresms->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
     duneobj->particle_momresyz->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
+    duneobj->particle_momresx->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
     duneobj->particle_ecaldepositfraction->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
     duneobj->particle_nturns->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
     duneobj->particle_nhits->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
+    duneobj->particle_tracklengthyz->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
     nparticlesinsample[i_sample]++;
 
     //If particle is not stopped in the tpc or ecal 
@@ -331,8 +341,10 @@ bool samplePDFDUNEBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
 
         duneobj->particle_nturns->back() = nturns;
         duneobj->particle_nhits->back() = nhits;
-        duneobj->particle_momresms->back() = momres_ms;
-        duneobj->particle_momresyz->back() = momres_yz;
+        duneobj->particle_tracklengthyz->back() = L_yz;
+        duneobj->particle_momresms->back() = momres_ms/transverse_mom;
+        duneobj->particle_momresyz->back() = momres_yz/transverse_mom;
+        duneobj->particle_momresx->back() = std::abs(sigma_theta*tan_theta);
 
         if(momres_frac > momentum_resolution_threshold){
           isAccepted = false;
@@ -452,7 +464,7 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
   }
   duneobj->norm_s = 1.;
   double downsampling = 1; //default 1, set to eg. 0.01 for quick testing
-  bool do_geometric_correction = true;
+  bool do_geometric_correction = false;
   duneobj->pot_s = pot/(downsampling*1e21);
   duneobj->nEvents = static_cast<int>(std::round(downsampling*static_cast<double>(_data->GetEntries())));
 
@@ -529,10 +541,14 @@ int samplePDFDUNEBeamNDGAr::setupExperimentMC(int iSample) {
   duneobj->particle_isstoppedinendcap = new std::vector<bool>; duneobj->particle_isstoppedinendcap->reserve(7*duneobj->nEvents); 
   duneobj->particle_startx = new std::vector<double>; duneobj->particle_startx->reserve(7*duneobj->nEvents); 
   duneobj->particle_startr2 = new std::vector<double>; duneobj->particle_startr2->reserve(7*duneobj->nEvents); 
+  duneobj->particle_endr = new std::vector<double>; duneobj->particle_endr->reserve(7*duneobj->nEvents); 
+  duneobj->particle_endx = new std::vector<double>; duneobj->particle_endx->reserve(7*duneobj->nEvents); 
   duneobj->particle_nturns = new std::vector<double>; duneobj->particle_nturns->reserve(7*duneobj->nEvents); 
   duneobj->particle_nhits = new std::vector<double>; duneobj->particle_nhits->reserve(7*duneobj->nEvents); 
+  duneobj->particle_tracklengthyz = new std::vector<double>; duneobj->particle_tracklengthyz->reserve(7*duneobj->nEvents); 
   duneobj->particle_momresms = new std::vector<double>; duneobj->particle_momresms->reserve(7*duneobj->nEvents); 
   duneobj->particle_momresyz= new std::vector<double>; duneobj->particle_momresyz->reserve(7*duneobj->nEvents);
+  duneobj->particle_momresx = new std::vector<double>; duneobj->particle_momresx->reserve(7*duneobj->nEvents); 
 
   int numCC = 0;
   int num_no_ixns = 0;
@@ -772,10 +788,22 @@ const double* samplePDFDUNEBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
       return &dunendgarmcSamples[iSample].particle_nturns->at(iEvent);
     case kParticle_NHits:
       return &dunendgarmcSamples[iSample].particle_nhits->at(iEvent);
+    case kParticle_TrackLengthYZ:
+      return &dunendgarmcSamples[iSample].particle_tracklengthyz->at(iEvent);
     case kParticle_MomResMS:
       return &dunendgarmcSamples[iSample].particle_momresms->at(iEvent);
     case kParticle_MomResYZ:
       return &dunendgarmcSamples[iSample].particle_momresyz->at(iEvent);
+    case kParticle_MomResX:
+      return &dunendgarmcSamples[iSample].particle_momresx->at(iEvent);
+    case kParticle_StartR2:
+      return &dunendgarmcSamples[iSample].particle_startr2->at(iEvent);
+    case kParticle_EndR:
+      return &dunendgarmcSamples[iSample].particle_endr->at(iEvent);
+    case kParticle_EndX:
+      return &dunendgarmcSamples[iSample].particle_endx->at(iEvent);
+    case kParticle_StartX:
+      return &dunendgarmcSamples[iSample].particle_startx->at(iEvent);
     default:
       MACH3LOG_ERROR("Did not recognise Kinematic Parameter {}", KinematicParameter);
       throw MaCh3Exception(__FILE__, __LINE__);

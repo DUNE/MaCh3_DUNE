@@ -34,7 +34,7 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
     TH1* get1DParticleVarHist(std::string ProjectionVar_StrX, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX);
     TH2* get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY);
     
-    enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kIsGoodCAFEvent, kParticle_Event, kParticle_Momentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_IsAccepted, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_NTurns, kParticle_NHits, kParticle_MomResMS, kParticle_MomResYZ};
+    enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kIsGoodCAFEvent, kParticle_Event, kParticle_Momentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_IsAccepted, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_NTurns, kParticle_NHits, kParticle_TrackLengthYZ, kParticle_MomResMS, kParticle_MomResYZ, kParticle_MomResX, kParticle_StartR2, kParticle_EndR, kParticle_EndX, kParticle_StartX};
 
   protected:
     //Functions required by core
@@ -180,8 +180,14 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
       {"Particle_IsStoppedInBarrelGap",kParticle_IsStoppedInBarrelGap},
       {"Particle_NTurns",kParticle_NTurns},
       {"Particle_NHits",kParticle_NHits},
+      {"Particle_TrackLengthYZ",kParticle_TrackLengthYZ},
       {"Particle_MomResMS",kParticle_MomResMS},
       {"Particle_MomResYZ",kParticle_MomResYZ},
+      {"Particle_MomResX",kParticle_MomResX},
+      {"Particle_StartR2",kParticle_StartR2},
+      {"Particle_EndR",kParticle_EndR},
+      {"Particle_EndX",kParticle_EndX},
+      {"Particle_StartX",kParticle_StartX},
     };
 
     const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -224,8 +230,14 @@ class samplePDFDUNEBeamNDGAr : virtual public samplePDFFDBase
       {kParticle_IsStoppedInBarrelGap,"Particle_IsStoppedInBarrelGap"},
       {kParticle_NTurns,"Particle_NTurns"},
       {kParticle_NHits,"Particle_NHits"},
+      {kParticle_TrackLengthYZ,"Particle_TrackLengthYZ"},
       {kParticle_MomResMS,"Particle_MomResMS"},
       {kParticle_MomResYZ,"Particle_MomResYZ"},
+      {kParticle_MomResX,"Particle_MomResX"},
+      {kParticle_StartR2,"Particle_StartR2"},
+      {kParticle_EndR,"Particle_EndR"},
+      {kParticle_EndX,"Particle_EndX"},
+      {kParticle_StartX,"Particle_StartX"},
     };
 };
 

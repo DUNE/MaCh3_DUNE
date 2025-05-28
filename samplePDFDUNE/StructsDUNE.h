@@ -117,10 +117,14 @@ struct dunemc_base {
   std::vector<bool> *particle_isstoppedinendcap;
   std::vector<double> *particle_startx;
   std::vector<double> *particle_startr2;
+  std::vector<double> *particle_endr;
+  std::vector<double> *particle_endx;
   std::vector<double> *particle_nturns;
   std::vector<double> *particle_nhits;
+  std::vector<double> *particle_tracklengthyz;
   std::vector<double> *particle_momresms;
   std::vector<double> *particle_momresyz;
+  std::vector<double> *particle_momresx;
 };
 
 // ********************************
