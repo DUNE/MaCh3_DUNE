@@ -805,7 +805,7 @@ const double* samplePDFDUNEBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
     case kParticle_StartX:
       return &dunendgarmcSamples[iSample].particle_startx->at(iEvent);
     default:
-      MACH3LOG_ERROR("Did not recognise Kinematic Parameter {}", KinematicParameter);
+      MACH3LOG_ERROR("Did not recognise Kinematic Parameter {}", static_cast<int>(KinematicParameter));
       throw MaCh3Exception(__FILE__, __LINE__);
       return nullptr;
   }
