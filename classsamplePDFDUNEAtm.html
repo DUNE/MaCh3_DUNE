@@ -979,7 +979,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="lineno">   99</span>    duneobj-&gt;<a class="code hl_variable" href="structdunemc__base.html#a89ac686c7596ebb77a6555257748ee53">rw_etru</a>[iEvent] = <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(sr-&gt;mc.nu[0].E);</div>
 <div class="line"><span class="lineno">  100</span> </div>
 <div class="line"><span class="lineno">  101</span>    TVector3 TrueNuMomentumVector = (TVector3(sr-&gt;mc.nu[0].momentum.X(),sr-&gt;mc.nu[0].momentum.Y(),sr-&gt;mc.nu[0].momentum.Z())).Unit();</div>
-<div class="line"><span class="lineno">  102</span>    duneobj-&gt;<a class="code hl_variable" href="structdunemc__base.html#aadc0610daf8fe8cb58bd1a8accaf2d53">rw_truecz</a>[iEvent] = TrueNuMomentumVector.Y();</div>
+<div class="line"><span class="lineno">  102</span>    duneobj-&gt;<a class="code hl_variable" href="structdunemc__base.html#aadc0610daf8fe8cb58bd1a8accaf2d53">rw_truecz</a>[iEvent] = -TrueNuMomentumVector.Y(); <span class="comment">// +Y in CAF files translates to +Z in typical CosZ</span></div>
 <div class="line"><span class="lineno">  103</span> </div>
 <div class="line"><span class="lineno">  104</span>    duneobj-&gt;<a class="code hl_variable" href="structdunemc__base.html#a7f862d7cde60d9f7288a66845d76dfff">flux_w</a>[iEvent] = sr-&gt;mc.nu[0].genweight;</div>
 <div class="line"><span class="lineno">  105</span> </div>
@@ -991,7 +991,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  111</span>      duneobj-&gt;<a class="code hl_variable" href="structdunemc__base.html#a635d83dfd665a3ddbc810ca3e4d69214">rw_erec</a>[iEvent] = sr-&gt;common.ixn.pandora[0].Enu.lep_calo;</div>
 <div class="line"><span class="lineno">  112</span>      RecoNuMomentumVector = (TVector3(sr-&gt;common.ixn.pandora[0].dir.lngtrk.X(),sr-&gt;common.ixn.pandora[0].dir.lngtrk.Y(),sr-&gt;common.ixn.pandora[0].dir.lngtrk.Z())).Unit();      </div>
 <div class="line"><span class="lineno">  113</span>    }</div>
-<div class="line"><span class="lineno">  114</span>    duneobj-&gt;<a class="code hl_variable" href="structdunemc__base.html#aa2519373a98e6a194fdf7092c2f350cf">rw_theta</a>[iEvent] = RecoNuMomentumVector.Y();</div>
+<div class="line"><span class="lineno">  114</span>    duneobj-&gt;<a class="code hl_variable" href="structdunemc__base.html#aa2519373a98e6a194fdf7092c2f350cf">rw_theta</a>[iEvent] = -RecoNuMomentumVector.Y(); <span class="comment">// +Y in CAF files translates to +Z in typical CosZ</span></div>
 <div class="line"><span class="lineno">  115</span>    </div>
 <div class="line"><span class="lineno">  116</span>  }</div>
 <div class="line"><span class="lineno">  117</span> </div>
