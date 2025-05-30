@@ -21,7 +21,7 @@ public:
   ~samplePDFDUNEBeamFD();
 
   /// @brief Enum to identify kinematics
-  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC};
+  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC, kq0, kq3, k_pT, k_pz, k_global_bin_number, kp_lep, ktheta_lep, kELepRec, kEHadRec, kERec_minus_Etrue,kERecQE};
 
 protected:
   /// @brief Initialises object
@@ -41,6 +41,7 @@ protected:
   void SetupSplines();
 
   void RegisterFunctionalParameters(){};
+  double CalculatePOT();
   
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter ID as int
@@ -133,7 +134,12 @@ protected:
     {"CVNNue",kCVNNue},
     {"Mode",kM3Mode},
     {"OscillationChannel",kOscChannel},
-    {"IsFHC",kIsFHC}
+    {"IsFHC",kIsFHC},
+    {"q0",kq0},
+    {"q3",kq3},
+    {"pT",k_pT},
+    {"pz",k_pz},
+    {"global_bin_number",k_global_bin_number}
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -146,7 +152,18 @@ protected:
     {kCVNNue,"CVNNue"},
     {kM3Mode,"Mode"},
     {kOscChannel,"OscillationChannel"},
-    {kIsFHC,"IsFHC"}
+    {kIsFHC,"IsFHC"},
+    {kq0, "q0"},
+    {kq3, "q3"},
+    {k_pT, "pT"},
+    {k_pz, "pz"},
+    {k_global_bin_number, "global_bin_number"},
+    {kp_lep, "p_lep"},
+    {ktheta_lep, "theta_lep"},
+    {kELepRec, "ELepRec"},
+    {kEHadRec,"EHadRec"},
+    {kERec_minus_Etrue, "ERec_minus_Etrue"},
+    {kERecQE, "ERecQE"}
   };
 };
 

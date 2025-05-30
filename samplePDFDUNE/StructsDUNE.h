@@ -59,10 +59,18 @@ struct dunemc_base {
   double *beam_w;
   double *flux_w;
 
+  double *true_q0;
+  double *true_q3;
+  double *rw_pz;
+  double *rw_pt;
+
   double *mode;
   int *isbound;
 
   double *rw_truecz;
+
+  double *global_bin_number;
+  double *ERec_QE;
 
   int *nproton; ///< number of (post-FSI) primary protons
   int *nneutron; ///< number of (post-FSI) primary neutrons
@@ -92,6 +100,10 @@ struct dunemc_base {
   bool *in_fdv;
   bool *is_accepted;
   bool *is_good_caf_event;
+
+  double *theta_lep;
+  double *p_lep;
+  double *enurec_minus_enutrue;
 
   //Particle-level kinematic parameters (JM for NDGAr)
   std::vector<double> *particle_ecaldepositfraction;
