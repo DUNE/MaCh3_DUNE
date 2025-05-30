@@ -6,8 +6,12 @@
 #include <THStack.h>
 #include <TLegend.h>
 
-#include "samplePDFDUNE/MaCh3DUNEFactory.h"
-#include "samplePDFDUNE/StructsDUNE.h"
+#include "Samples/MaCh3DUNEFactory.h"
+#include "Samples/StructsDUNE.h"
+
+#ifdef BUILD_NDGAR
+#include "Samples/SampleHandlerBeamNDGAr.h"
+#endif
 
 bool IncludeKinematicCutsInTitle = true;
 
@@ -122,10 +126,10 @@ int main(int argc, char *argv[]) {
   // ###############################################################################################################################
   // Create samplePDFFD objects
 
-  covarianceXsec *xsec = nullptr;
-  covarianceOsc *osc = nullptr;
+  ParameterHandlerGeneric *xsec = nullptr;
+  ParameterHandlerOsc *osc = nullptr;
 
-  std::vector<samplePDFFDBase *> DUNEPdfs;
+  std::vector<SampleHandlerFD*> DUNEPdfs;
   MakeMaCh3DuneInstance(fitMan.get(), DUNEPdfs, xsec, osc);
 
   // ###############################################################################################################################
@@ -134,10 +138,10 @@ int main(int argc, char *argv[]) {
   MACH3LOG_INFO("=================================================");
   std::vector<TH1D*> DUNEHists;
   for (auto Sample : DUNEPdfs) {
-    Sample->reweight();
-    DUNEHists.push_back(Sample->get1DHist());
+    Sample->Reweight();
+    DUNEHists.push_back(Sample->Get1DHist());
 
-    std::string EventRateString = fmt::format("{:.2f}", Sample->get1DHist()->Integral());
+    std::string EventRateString = fmt::format("{:.2f}", Sample->Get1DHist()->Integral());
     MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetTitle(), EventRateString);
   }
 
@@ -319,13 +323,13 @@ int main(int argc, char *argv[]) {
       if (histdim==1) {
 #ifdef BUILD_NDGAR
         if (ProjectionVar_Str[0].find("Particle_") != std::string::npos) {
-          Hist = (TH1*)dynamic_cast<samplePDFDUNEBeamNDGAr*>(Sample)->get1DParticleVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
+          Hist = (TH1*)dynamic_cast<SampleHandlerBeamNDGAr*>(Sample)->Get1DParticleVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
         }
         else {
-          Hist = (TH1*)Sample->get1DVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
+          Hist = (TH1*)Sample->Get1DVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
         }
 #else
-        Hist = (TH1*)Sample->get1DVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
+        Hist = (TH1*)Sample->Get1DVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
 #endif
         outputname = Sample->GetTitle()+"_"+Projections[iProj].Name;
         Hist->Scale(1.0,"Width");
@@ -333,13 +337,13 @@ int main(int argc, char *argv[]) {
       else {
 #ifdef BUILD_NDGAR
         if (ProjectionVar_Str[0].find("Particle_") != std::string::npos) {
-          Hist = (TH1*)dynamic_cast<samplePDFDUNEBeamNDGAr*>(Sample)->get2DParticleVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
+          Hist = (TH1*)dynamic_cast<SampleHandlerBeamNDGAr*>(Sample)->Get2DParticleVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
         }
         else {
-          Hist = (TH1*)Sample->get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
+          Hist = (TH1*)Sample->Get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
         }
 #else
-        Hist = (TH1*)Sample->get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
+        Hist = (TH1*)Sample->Get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
 #endif
         outputname = Sample->GetTitle()+"_"+Projections[iProj].Name;
       }
@@ -370,10 +374,10 @@ int main(int argc, char *argv[]) {
             SelectionVector_IncCategory.emplace_back(Selection);
 
             if (histdim==1) {
-              Hist = Sample->get1DVarHist(ProjectionVar_Str[0],SelectionVector_IncCategory,WeightStyle,&AxisX);
+              Hist = Sample->Get1DVarHist(ProjectionVar_Str[0],SelectionVector_IncCategory,WeightStyle,&AxisX);
               Hist->Scale(1.0,"Width");
             }	else {
-              Hist = (TH1*)Sample->get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector_IncCategory,WeightStyle,&AxisX,&AxisY);
+              Hist = (TH1*)Sample->Get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector_IncCategory,WeightStyle,&AxisX,&AxisY);
             }
             Hist->SetFillColor(Projections[iProj].CategoryCuts[iCat].Colours[iBreak]);
 

@@ -13,9 +13,9 @@
 #include <TColor.h>
 #include <TMath.h>
 
-#include "mcmc/mcmc.h"
-#include "samplePDFDUNE/MaCh3DUNEFactory.h"
-#include "samplePDFDUNE/StructsDUNE.h"
+#include "Fitters/mcmc.h"
+#include "Samples/MaCh3DUNEFactory.h"
+#include "Samples/StructsDUNE.h"
 
 //CS YAML "Variations" node expects to be given each parameter to vary with :
 // - "Name": name of the parameter as written in the CovObjs YAML file 
@@ -37,10 +37,10 @@ int main(int argc, char * argv[]) {
   //###############################################################################################################################
   //Create samplePDFFD objects
   
-  covarianceXsec* xsec = nullptr;
-  covarianceOsc* osc = nullptr;
+  ParameterHandlerGeneric* xsec = nullptr;
+  ParameterHandlerOsc* osc = nullptr;
 
-  std::vector<samplePDFFDBase*> DUNEPdfs;
+  std::vector<SampleHandlerFD*> DUNEPdfs;
   MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec, osc);
 
   std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
@@ -49,9 +49,9 @@ int main(int argc, char * argv[]) {
   //Perform reweight and print total integral
 
   MACH3LOG_INFO("=======================================================");
-  for(samplePDFFDBase* Sample: DUNEPdfs){
-    Sample->reweight();
-    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetTitle(), Sample->get1DHist()->Integral());
+  for(SampleHandlerFD* Sample: DUNEPdfs){
+    Sample->Reweight();
+    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetTitle(), Sample->Get1DHist()->Integral());
   }
   
   //###############################################################################################################################
@@ -59,7 +59,7 @@ int main(int argc, char * argv[]) {
   //   Thats not the case in the FD code, which has one selection per samplePDF object
   //   Consequently have to write out own code
   
-  std::vector<covarianceBase*> CovObjs;
+  std::vector<ParameterHandlerBase*> CovObjs;
   CovObjs.emplace_back(xsec);
   CovObjs.emplace_back(osc);
 
@@ -69,10 +69,10 @@ int main(int argc, char * argv[]) {
   TFile* File = TFile::Open(OutputFileName.c_str(),"RECREATE");
 
   
-  for (covarianceBase* CovObj: CovObjs) {
-    MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",CovObj->getName());
+  for (ParameterHandlerBase* CovObj: CovObjs) {
+    MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",CovObj->GetName());
     
-    int nPars = CovObj->getNpars();
+    int nPars = CovObj->GetNumParams();
 
     for (int iPar=0;iPar<nPars;iPar++) {
       std::string ParName = CovObj->GetParName(iPar);
@@ -86,10 +86,10 @@ int main(int argc, char * argv[]) {
           MACH3LOG_INFO("\tParameter : {:<30}",ParName);
 
           if(!param["OscParDefault"]){ //if specific default values not specified for the parameter then use global default ones
-            CovObj->setParameters(oscpars);
+            CovObj->SetParameters(oscpars);
           }
           else {
-            CovObj->setParameters((param["OscParDefault"].as<std::vector<double>>()));
+            CovObj->SetParameters((param["OscParDefault"].as<std::vector<double>>()));
           }
 
           std::vector<double> valVariations = (param["VarValues"].as<std::vector<double>>());
@@ -99,31 +99,32 @@ int main(int argc, char * argv[]) {
           File->cd(ParName.c_str());
       
           for (size_t iSigVar=0;iSigVar<valVariations.size();iSigVar++) {
-	          double VarVal = valVariations[iSigVar];
-	
-	          MACH3LOG_INFO("\t\tParameter Value : {:<10.7f}",VarVal);
-            CovObj->setParProp(iPar,VarVal);
-
-	          for (size_t iSample=0;iSample<DUNEPdfs.size();iSample++) {
-	            std::string SampleName = DUNEPdfs[iSample]->GetTitle();
-	  
-	            File->cd(ParName.c_str());
-	            if (iSigVar == 0) {
-	              File->mkdir((ParName+"/"+SampleName).c_str());
-	            }
-	            File->cd((ParName+"/"+SampleName).c_str());
-	  
-	            DUNEPdfs[iSample]->reweight();
+	    double VarVal = valVariations[iSigVar];
+	    
+	    MACH3LOG_INFO("\t\tParameter Value : {:<10.7f}",VarVal);
+            CovObj->SetParProp(iPar,VarVal);
+	    
+	    for (size_t iSample=0;iSample<DUNEPdfs.size();iSample++) {
+	      std::string SampleName = DUNEPdfs[iSample]->GetTitle();
+	      
+	      File->cd(ParName.c_str());
+	      if (iSigVar == 0) {
+		File->mkdir((ParName+"/"+SampleName).c_str());
+	      }
+	      File->cd((ParName+"/"+SampleName).c_str());
+	      
+	      DUNEPdfs[iSample]->Reweight();
               TH1* Hist;
-              if(DUNEPdfs[iSample]->GetNDim() == 1)
-	              Hist = DUNEPdfs[iSample]->get1DHist();
-              else if(DUNEPdfs[iSample]->GetNDim() == 2)
-                Hist = DUNEPdfs[iSample]->get2DHist();
-
-	            MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}",SampleName,Hist->Integral());
-	  
-	            Hist->Write(Form("Variation_%.2e",VarVal));
-	          }
+              if(DUNEPdfs[iSample]->GetNDim() == 1) {
+		Hist = DUNEPdfs[iSample]->Get1DHist();
+	      } else if(DUNEPdfs[iSample]->GetNDim() == 2) {
+                Hist = DUNEPdfs[iSample]->Get2DHist();
+	      }
+	      
+	      MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}",SampleName,Hist->Integral());
+	      
+	      Hist->Write(Form("Variation_%.2e",VarVal));
+	    }
           }
 
         }
