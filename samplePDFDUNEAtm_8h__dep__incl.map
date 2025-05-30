@@ -1,9 +1,0 @@
-<map id="samplePDFDUNE/samplePDFDUNEAtm.h" name="samplePDFDUNE/samplePDFDUNEAtm.h">
-<area shape="rect" id="Node000001" title=" " alt="" coords="156,5,426,31"/>
-<area shape="rect" id="Node000002" href="$MaCh3DUNEFactory_8h.html" title=" " alt="" coords="12,79,274,105"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="253,41,169,81,167,76,251,36"/>
-<area shape="rect" id="Node000004" href="$samplePDFDUNEAtm_8cpp.html" title=" " alt="" coords="297,79,581,105"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="331,36,415,76,413,81,329,41"/>
-<area shape="rect" id="Node000003" href="$MaCh3DUNEFactory_8cpp.html" title=" " alt="" coords="5,153,281,178"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="146,120,146,152,140,152,140,120"/>
-</map>

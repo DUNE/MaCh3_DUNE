@@ -1,9 +1,0 @@
-<map id="dunemc_base" name="dunemc_base">
-<area shape="rect" id="Node000001" title=" " alt="" coords="214,244,316,270"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,147,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,46,69,84,70,131,80,178,90,199,104,218,121,229,148,237,214,248,213,253,147,242,119,233,100,222,85,202,75,179,65,131,64,84,68,46"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="207,5,324,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="268,47,268,244,263,244,263,47"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="348,5,476,31"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="414,47,411,85,402,131,384,179,357,222,339,236,318,246,316,242,336,232,353,218,380,177,396,130,405,84,409,46"/>
-</map>
