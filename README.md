@@ -58,7 +58,7 @@ FNAL cluster:
 
 ComputeCanada Cedar:
 ```bash
-/project/rpp-nilic/MaCh3_inputs
+/project/rpp-nilic/MaCh3_Inputs
 ```
 
 NERSC Perlmutter:
@@ -73,10 +73,10 @@ RAL SCARF:
 
 CVMFS:
 ```bash
-/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v3
+/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/Inputs/TDR/v3
 ```
 
-Current (Feburary 2024) FD event rates using DUNE FD TDR inputs are below (ND is still under-development). These are made using xsec systematics at their prior central value. Oscillation parameter values used here are:
+Current (Feburary 2024) FD event rates using DUNE FD TDR Inputs are below (ND is still under-development). These are made using xsec systematics at their prior central value. Oscillation parameter values used here are:
 
 ### Oscillation Parameter Values (NuFIT 4.0 NH)
 <div align="center">

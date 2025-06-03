@@ -1,0 +1,23 @@
+---
+Systematics:
+- Systematic:
+    SampleNames: ["ND_GAr"]
+    Error: 0.123224219401
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - -2.0
+      - -1.0
+    Names:
+      FancyName: b_104
+      ParameterName: b_104
+    ParameterBounds:
+    - 0.0
+    - 9999.0
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 0.3
+    Type: Norm
