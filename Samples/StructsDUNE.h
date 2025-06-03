@@ -39,6 +39,7 @@ struct dunemc_base {
   int *rw_reco_nue;
   int *rw_reco_numu;
   double *rw_berpaacvwgt;
+  double *geometric_correction;
   int    *rw_isCC;
   int    *rw_nuPDGunosc;
   int    *rw_nuPDG;
@@ -79,6 +80,10 @@ struct dunemc_base {
   double *rw_lep_pX;
   double *rw_lep_pY;
   double *rw_lep_pZ; //parallel lepton momentum
+  double *rw_lep_p;
+  double *rw_lep_phi;
+  double *rw_lep_theta;
+  double *rw_lep_bangle;
   double *rw_reco_vtx_x;
   double *rw_reco_vtx_y;
   double *rw_reco_vtx_z;
@@ -100,7 +105,6 @@ struct dunemc_base {
   int *nrecoparticles;
   bool *in_fdv;
   bool *is_accepted;
-  bool *is_good_caf_event;
 
   //Particle-level kinematic parameters (JM for NDGAr)
   std::vector<double> *particle_ecaldepositfraction;
@@ -122,11 +126,14 @@ struct dunemc_base {
   std::vector<bool> *particle_isstoppedinendcap;
   std::vector<double> *particle_startx;
   std::vector<double> *particle_startr2;
-  std::vector<double> *particle_nhits;
+  std::vector<double> *particle_endr;
+  std::vector<double> *particle_endx;
   std::vector<double> *particle_nturns;
+  std::vector<double> *particle_nhits;
+  std::vector<double> *particle_tracklengthyz;
   std::vector<double> *particle_momresms;
-  std::vector<double> *particle_momrestransfrac;
-  std::vector<double> *particle_momrestrans;
+  std::vector<double> *particle_momresyz;
+  std::vector<double> *particle_momresx;
 };
 
 #endif
