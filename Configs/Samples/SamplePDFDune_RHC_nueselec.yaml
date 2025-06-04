@@ -1,0 +1,109 @@
+---
+SampleTitle: "RHC_nue"
+SampleType: "BeamFD"
+
+POT: 1.3628319e+23
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
+SampleName: "FD_RHC_nue"
+
+SelectionCuts:
+  - KinematicStr: "TrueXPos"
+    Bounds: [-310.0, 310.0]
+  - KinematicStr: "TrueYPos"
+    Bounds: [-550.0, 550.0]
+  - KinematicStr: "TrueZPos"
+    Bounds: [50.0, 1244.0]
+  - KinematicStr: "CVNNue"
+    Bounds: [0.85, 999]
+
+Binning:
+  XVarStr: "RecoNeutrinoEnergy"
+  XVarBins: [0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
+
+DUNESampleBools:
+  iselike: yes
+  isFHC: 0
+
+InputFiles:
+  mtupleprefix: "Inputs/DUNE_CAF_files/FD_RHC_ger_"
+  mtuplesuffix: "_nueselec.root"
+  splineprefix: "Inputs/DUNE_spline_files/FD_RHC_ger_"
+  splinesuffix: "_nueselec_splines.root"
+
+NuOsc:
+  NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
+  EqualBinningPerOscChannel: false
+
+SubSamples:
+  - Name: "RHC_numu_x_numu"
+    LatexName: "RHC_numu_x_numu"
+    mtuplefile: "numu_x_numu"
+    splinefile: "numu_x_numu"
+    nutype: 14
+    oscnutype: 14
+  - Name: "RHC_nue_x_nue"
+    LatexName: "RHC_nue_x_nue"
+    mtuplefile: "nue_x_nue"
+    splinefile: "nue_x_nue"
+    nutype: 12
+    oscnutype: 12
+  - Name: "RHC_numubar_x_numubar"
+    LatexName: "RHC_numubar_x_numubar"
+    mtuplefile: "numubar_x_numubar"
+    splinefile: "numubar_x_numubar"
+    nutype: -14
+    oscnutype: -14
+  - Name: "RHC_nuebar_x_nuebar"
+    LatexName: "RHC_nuebar_x_nuebar"
+    mtuplefile: "nuebar_x_nuebar"
+    splinefile: "nuebar_x_nuebar"
+    nutype: -12
+    oscnutype: -12
+  - Name: "RHC_numu_x_nue"
+    LatexName: "RHC_numu_x_nue"
+    mtuplefile: "numu_x_nue"
+    splinefile: "numu_x_nue"
+    nutype: 14
+    oscnutype: 12
+  - Name: "RHC_numubar_x_nuebar"
+    LatexName: "RHC_numubar_x_nuebar"
+    mtuplefile: "numubar_x_nuebar"
+    splinefile: "numubar_x_nuebar"
+    nutype: -14
+    oscnutype: -12
+  - Name: "RHC_nue_x_numu"
+    LatexName: "RHC_nue_x_numu"
+    mtuplefile: "nue_x_numu"
+    splinefile: "nue_x_numu"
+    nutype: 12
+    oscnutype: 14
+  - Name: "RHC_nuebar_x_numubar"
+    LatexName: "RHC_nuebar_x_numubar"
+    mtuplefile: "nuebar_x_numubar"
+    splinefile: "nuebar_x_numubar"
+    nutype: -12
+    oscnutype: -14
+  - Name: "RHC_numu_x_nutau"
+    LatexName: "RHC_numu_x_nutau"
+    mtuplefile: "numu_x_nutau"
+    splinefile: "numu_x_nutau"
+    nutype: 14
+    oscnutype: 16
+  - Name: "RHC_nue_x_nutau"
+    LatexName: "RHC_nue_x_nutau"
+    mtuplefile: "nue_x_nutau"
+    splinefile: "nue_x_nutau"
+    nutype: 12
+    oscnutype: 16
+  - Name: "RHC_numubar_x_nutaubar"
+    LatexName: "RHC_numubar_x_nutaubar"
+    mtuplefile: "numubar_x_nutaubar"
+    splinefile: "numubar_x_nutaubar"
+    nutype: -14
+    oscnutype: -16
+  - Name: "RHC_nuebar_x_nutaubar"
+    LatexName: "RHC_nuebar_x_nutaubar"
+    mtuplefile: "nuebar_x_nutaubar"
+    splinefile: "nuebar_x_nutaubar"
+    nutype: -12
+    oscnutype: -16

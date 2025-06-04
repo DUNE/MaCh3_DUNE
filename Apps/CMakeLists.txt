@@ -10,7 +10,7 @@ foreach(app
       )
       
     add_executable(${app} ${app}.cpp)
-    target_link_libraries(${app} MaCh3DUNE::All Minuit)
+    target_link_libraries(${app} SamplesDUNE MaCh3DUNE::All Minuit)
 
     add_dependencies(MaCh3DUNEApps ${app})
 

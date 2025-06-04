@@ -12,8 +12,8 @@
 #include <TColor.h>
 #include <TMath.h>
 
-#include "mcmc/mcmc.h"
-#include "samplePDFDUNE/MaCh3DUNEFactory.h"
+#include "Fitters//mcmc.h"
+#include "Samples/MaCh3DUNEFactory.h"
 
 int main(int argc, char * argv[]) {
 
@@ -26,13 +26,13 @@ int main(int argc, char * argv[]) {
   manager *FitManager = new manager(argv[1]);
   auto OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
 
-  covarianceXsec* xsec = nullptr;
-  covarianceOsc* osc = nullptr;
+  ParameterHandlerGeneric* xsec = nullptr;
+  ParameterHandlerOsc* osc = nullptr;
 
   //####################################################################################
   //Create samplePDFSKBase Objs
 
-  std::vector<samplePDFFDBase*> DUNEPdfs;
+  std::vector<SampleHandlerFD*> DUNEPdfs;
   MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec, osc); 
 
   //Some place to store the histograms
@@ -42,22 +42,22 @@ int main(int argc, char * argv[]) {
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
 
-  osc->setParameters(FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>());
+  osc->SetParameters(FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>());
   for (unsigned sample_i = 0 ; sample_i < DUNEPdfs.size() ; ++sample_i) {
     
     std::string name = DUNEPdfs[sample_i]->GetTitle();
     sample_names.push_back(name);
     TString NameTString = TString(name.c_str());
     
-    DUNEPdfs[sample_i] -> reweight();
+    DUNEPdfs[sample_i] -> Reweight();
     if (DUNEPdfs[sample_i]->GetNDim() == 1){
-      PredictionHistograms.push_back(static_cast<TH1*>(DUNEPdfs[sample_i] -> get1DHist() -> Clone(NameTString+"_unosc")));
-      DUNEPdfs[sample_i]->addData(static_cast<TH1D*>(PredictionHistograms[sample_i]));
+      PredictionHistograms.push_back(static_cast<TH1*>(DUNEPdfs[sample_i] -> Get1DHist() -> Clone(NameTString+"_unosc")));
+      DUNEPdfs[sample_i]->AddData(static_cast<TH1D*>(PredictionHistograms[sample_i]));
     }
       
     else if (DUNEPdfs[sample_i]->GetNDim() == 2){
-      PredictionHistograms.push_back(static_cast<TH1*>(DUNEPdfs[sample_i] -> get2DHist() -> Clone(NameTString+"_unosc")));
-      DUNEPdfs[sample_i]->addData(static_cast<TH2D*>(PredictionHistograms[sample_i]));
+      PredictionHistograms.push_back(static_cast<TH1*>(DUNEPdfs[sample_i] -> Get2DHist() -> Clone(NameTString+"_unosc")));
+      DUNEPdfs[sample_i]->AddData(static_cast<TH2D*>(PredictionHistograms[sample_i]));
     }
     else {
       MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting"); 
@@ -106,20 +106,21 @@ int main(int argc, char * argv[]) {
 
   //Start chain from random position unless continuing a chain
   if(!StartFromPreviousChain){
-    if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false))
-      xsec->throwParameters();
-    osc->setParameters();
-    osc->throwParameters();
+    if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false)) {
+      xsec->ThrowParameters();
+    }
+    osc->SetParameters();
+    osc->ThrowParameters();
   }
   
 
   //Add systematic objects
-  MaCh3Fitter->addSystObj(osc);
+  MaCh3Fitter->AddSystObj(osc);
   if (GetFromManager(FitManager->raw()["General"]["StatOnly"], false)){
     MACH3LOG_INFO("Running a stat-only fit so no systematics will be applied");
   }
   else {
-    MaCh3Fitter->addSystObj(xsec);
+    MaCh3Fitter->AddSystObj(xsec);
   }
 
 
@@ -131,12 +132,12 @@ int main(int argc, char * argv[]) {
   
   //Add samples
   for(auto Sample : DUNEPdfs){
-    MaCh3Fitter->addSamplePDF(Sample);
+    MaCh3Fitter->AddSampleHandler(Sample);
   }
 
   
   //Run fit
-  MaCh3Fitter->runMCMC();
+  MaCh3Fitter->RunMCMC();
 
   //Writing the memory usage at the end to eventually spot some nasty leak
   MACH3LOG_WARN("\033[0;31mCurrent Total RAM usage is {:.2f} GB\033[0m", MaCh3Utils::getValue("VmRSS") / 1048576.0);
