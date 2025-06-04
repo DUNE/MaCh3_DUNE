@@ -71,7 +71,7 @@ int main(int argc, char * argv[]) {
     MaCh3Fitter->addSamplePDF(Sample);
   }
 
-  // MaCh3Fitter->addSystObj(osc);
+  MaCh3Fitter->addSystObj(osc);
   MaCh3Fitter->addSystObj(xsec);
   
   if (do_1d_llhscan)

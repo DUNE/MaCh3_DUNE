@@ -77,8 +77,6 @@ int samplePDFDUNEAtm::setupExperimentMC(int iSample) {
   duneobj->flux_w = new double[duneobj->nEvents];
   duneobj->rw_erec = new double[duneobj->nEvents];
   duneobj->rw_theta = new double[duneobj->nEvents];
-  duneobj->rw_nuPDG = new int[duneobj->nEvents];
-  duneobj->rw_nuPDGunosc = new int[duneobj->nEvents];
  
   for (int iEvent=0;iEvent<duneobj->nEvents;iEvent++) {
     Tree->GetEntry(iEvent);    
@@ -114,9 +112,6 @@ int samplePDFDUNEAtm::setupExperimentMC(int iSample) {
       RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.X(),sr->common.ixn.pandora[0].dir.lngtrk.Y(),sr->common.ixn.pandora[0].dir.lngtrk.Z())).Unit();      
     }
     duneobj->rw_theta[iEvent] = RecoNuMomentumVector.Y();
-    // HH: Added these to match core v1.2.0 so that mach3_dune can compile 
-    duneobj->rw_nuPDG[iEvent] = sr->mc.nu[0].pdg;
-    duneobj->rw_nuPDGunosc[iEvent] = sr->mc.nu[0].pdgorig;
   }
 
   delete Tree;
