@@ -29,10 +29,6 @@ int main(int argc, char * argv[]) {
   covarianceXsec* xsec = nullptr;
   covarianceOsc* osc = nullptr;
 
-  // HH: Add a check to skip osc cov if OscCovFile is not specified, similar to MaCh3Factory.cpp
-  std::vector<double> oscpars = GetFromManager<std::vector<double>>(FitManager->raw()["General"]["OscillationParameters"], {});
-  bool useosc = oscpars.size() > 0;
-
   //####################################################################################
   //Create samplePDFSKBase Objs
 
@@ -53,7 +49,6 @@ int main(int argc, char * argv[]) {
     sample_names.push_back(name);
     TString NameTString = TString(name.c_str());
     
-    if (useosc) {osc->setParameters();}
     DUNEPdfs[sample_i] -> reweight();
     if (DUNEPdfs[sample_i]->GetNDim() == 1){
       PredictionHistograms.push_back(static_cast<TH1*>(DUNEPdfs[sample_i] -> get1DHist() -> Clone(NameTString+"_unosc")));
@@ -114,12 +109,12 @@ int main(int argc, char * argv[]) {
     if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false))
       xsec->throwParameters();
     osc->setParameters();
-    if (useosc) osc->throwParameters();
+    osc->throwParameters();
   }
   
 
   //Add systematic objects
-  if (useosc) MaCh3Fitter->addSystObj(osc);
+  MaCh3Fitter->addSystObj(osc);
   if (GetFromManager(FitManager->raw()["General"]["StatOnly"], false)){
     MACH3LOG_INFO("Running a stat-only fit so no systematics will be applied");
   }

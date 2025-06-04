@@ -90,8 +90,6 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<samplePDFFDBase*> &D
   std::vector<double> oscpars = GetFromManager<std::vector<double>>(FitManager->raw()["General"]["OscillationParameters"], {});
 
   std::string OscPars = "";
-  bool useosc = oscpars.size() > 0;
-  if (useosc){
 
   for (unsigned int i=0;i<oscpars.size();i++) {
     OscPars+=std::to_string(oscpars[i]);
@@ -116,10 +114,7 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<samplePDFFDBase*> &D
 
   MACH3LOG_INFO("Osc cov setup");
   MACH3LOG_INFO("------------------------------");
-  }  
-  else {
-    MACH3LOG_WARN("No OscillationParameters found, skipping oscillation parameters.");
-  }
+
   // ==========================================================
   //read flat prior, fixed paramas from the config file
   std::vector<std::string> XsecFixParams = GetFromManager<std::vector<std::string>>(FitManager->raw()["General"]["Systematics"]["XsecFix"], {});
