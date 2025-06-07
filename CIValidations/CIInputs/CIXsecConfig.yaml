@@ -1,12 +1,455 @@
 ---
+# Dummy Xsec config containing a normalisation systematic for each mode
 Systematics:
 - Systematic:
     Names:
-      FancyName: Norm_Param_0
+      FancyName: CCQE_norm_param
     Error: 0.11
     FlatPrior: false
     IsFixed: false
     Mode: [ 0 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: CC1Kaon_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 1 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: CCDIS_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 2 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: CCRES_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 3 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: CCCOH_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 4 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: CCDiff_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 5 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: CCNuEl_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 6 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: CCIMD_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 7 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: CCAnuGam_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 8 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: CCMEC_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 9 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: CCCOHEL_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 10 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: CCIBD_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 11 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: CCGlRES_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 12 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: CCIMDAnn_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 13 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: NCQE_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 14 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: NCDIS_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 15 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: NCRES_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 16 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: NCCOH_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 17 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: NCDiff_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 18 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: NCNuEl_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 19 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: NCIMD_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 20 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: NCAnuGam_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 21 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: NCMEC_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 22 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: NCCOHEL_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 23 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: NCIBD_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 24 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: NCGlRES_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 25 ]
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    Type: Norm
+
+- Systematic:
+    Names:
+      FancyName: NCIMDAnn_norm_param
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    Mode: [ 26 ]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:

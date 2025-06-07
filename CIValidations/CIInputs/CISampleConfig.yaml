@@ -2,7 +2,7 @@
 SampleName: "dummy"
 SampleType: "BeamFD"
 
-POT: 3.85e21
+POT: 3.85e24
 MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes.yaml"
 DetID: "FD"
 
