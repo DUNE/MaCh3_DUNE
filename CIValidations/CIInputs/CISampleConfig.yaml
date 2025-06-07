@@ -1,0 +1,33 @@
+---
+SampleName: "dummy"
+SampleType: "BeamFD"
+
+POT: 3.85e21
+MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes.yaml"
+DetID: "FD"
+
+Binning:
+  XVarStr: "RecoNeutrinoEnergy"
+  XVarBins: [0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
+
+DUNESampleBools:
+  isFHC: 1
+  iselike: no
+
+InputFiles:
+  mtupleprefix: "CIValidations/CIInputs/"
+  mtuplesuffix: ".root"
+  splineprefix: "inputs/DUNE_ND_spline_files/ND_FHC_ger_"
+  splinesuffix: "_splines.root"
+
+NuOsc:
+  NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
+  EqualBinningPerOscChannel: false
+
+SubSamples:
+  - Name: "dummy"
+    LatexName: "dummy"
+    mtuplefile: "ci_caf_file"
+    splinefile: "ci_caf_file"
+    nutype: 14
+    oscnutype: 14
