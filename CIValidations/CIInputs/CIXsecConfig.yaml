@@ -7,7 +7,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 0 ]
+    Mode: [0]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -24,7 +24,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 1 ]
+    Mode: [1]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -41,7 +41,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 2 ]
+    Mode: [2]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -58,7 +58,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 3 ]
+    Mode: [3]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -75,7 +75,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 4 ]
+    Mode: [4]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -92,7 +92,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 5 ]
+    Mode: [5]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -109,7 +109,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 6 ]
+    Mode: [6]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -126,7 +126,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 7 ]
+    Mode: [7]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -143,7 +143,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 8 ]
+    Mode: [8]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -160,7 +160,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 9 ]
+    Mode: [9]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -177,7 +177,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 10 ]
+    Mode: [10]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -194,7 +194,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 11 ]
+    Mode: [11]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -211,7 +211,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 12 ]
+    Mode: [12]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -228,7 +228,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 13 ]
+    Mode: [13]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -245,7 +245,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 14 ]
+    Mode: [14]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -262,7 +262,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 15 ]
+    Mode: [15]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -279,7 +279,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 16 ]
+    Mode: [16]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -296,7 +296,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 17 ]
+    Mode: [17]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -313,7 +313,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 18 ]
+    Mode: [18]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -330,7 +330,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 19 ]
+    Mode: [19]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -347,7 +347,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 20 ]
+    Mode: [20]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -364,7 +364,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 21 ]
+    Mode: [21]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -381,7 +381,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 22 ]
+    Mode: [22]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -398,7 +398,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 23 ]
+    Mode: [23]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -415,7 +415,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 24 ]
+    Mode: [24]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -432,7 +432,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 25 ]
+    Mode: [25]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
@@ -449,7 +449,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     IsFixed: false
-    Mode: [ 26 ]
+    Mode: [26]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     ParameterValues:
