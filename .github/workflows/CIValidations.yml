@@ -10,6 +10,8 @@ name: Event Rates Beam
 on:
   pull_request:
     branches: [develop]
+  push:
+   branches: ["hwallace/patch/event_rate_ci"]
 
 permissions:
   contents: read
@@ -23,23 +25,16 @@ jobs:
       matrix:
         include:
           - name: Beam Event Rate Validation
-            test_exe: tests/TestEventRates
-            test_config: configs/EventRates_Beam.yaml
-            repo_linking_command: |
-              ln -s \
-              /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2/DUNE_2021_FD_splines inputs/DUNE_spline_files
-              ln -s \
-              /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2/DUNE_2023_FD_CAFs inputs/DUNE_CAF_files
+            test_exe: bin/EventRates
+            test_config: CIValidations/CIInputs/CIFitConfig.yaml
+            old_output: CIValidations/CIOutputs/BeamEventRates.txt
+            new_output: CIValidations/CIOutputs/BeamEventRates_New.txt
+
 
     name: Run Test ${{matrix.name}}
     steps:
-      # Set up CVMFS
-      - name: Set up CVMFS
-        uses: cvmfs-contrib/github-action-cvmfs@v5
-
       # Checkout the repository code
       - uses: actions/checkout@v4
-
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
@@ -49,7 +44,7 @@ jobs:
         run: |
           docker build . \
           --file doc/MaCh3DockerFiles/Alma9/Dockerfile \
-          --tag ghcr.io/dune/mach3:alma9test \
+          --tag ghcr.io/dune/mach3:alma9_ci \
           --build-arg MACH3_DUNE_VERSION="${MACH3_DUNE_VERSION}" \
           --build-arg MACH3_DUNE_BUILD_ARGS="-DCUDAProb3Linear_ENABLED=ON -DMACH3_BUILD_TESTS=ON"
 
@@ -57,13 +52,18 @@ jobs:
       - name: Run Event Rates
         uses: addnab/docker-run-action@v3
         with:
-          image: ghcr.io/dune/mach3:alma9test
+          image: ghcr.io/dune/mach3:alma9_ci
           shell: bash
-          options: -v /cvmfs:/cvmfs:shared
           run: |
-            ${{matrix.repo_linking_command}}
-            ls
             source ./install/bin/setup.MaCh3.sh
             source ./install/bin/setup.NuOscillator.sh
             source ./install/bin/setup.MaCh3DUNE.sh
-            ./install/${{matrix.test_exe}} ${{matrix.test_config}}
+            ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 |  grep -v '\[Monitor.cpp\]' | grep -v '\[manager.cpp\]' | tee ${{matrix.new_output}}
+
+      - name: Check Outputs
+        uses: LouisBrunner/diff-action@v2.0.0
+        with:
+          old: ${{matrix.test_output}}
+          new: test_output
+          mode: strict
+          tolerance: same
