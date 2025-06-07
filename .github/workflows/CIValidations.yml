@@ -60,4 +60,9 @@ jobs:
             source ./build/bin/setup.MaCh3.sh
             source ./build/bin/setup.MaCh3DUNE.sh
             ./build/bin/${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 |  grep -v '\[Monitor.cpp\]' | grep -v '\[manager.cpp\]' | tee ${{matrix.new_output}}
-            diff ${{matrix.old_output}} ${{matrix.new_output}} || exit 1
+            diff ${{matrix.old_output}} ${{matrix.new_output}} | tee diff_output.txt
+            if [ $? -gt 0 ]; then
+              echo "Differences found:"
+              cat diff_output.txt
+              exit 1
+            fi
