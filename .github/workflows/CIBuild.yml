@@ -24,10 +24,6 @@ jobs:
           - os: Ubuntu22.04
             file: Docs/MaCh3DockerFiles/Ubuntu22.04/Dockerfile
             tag: ubuntulatest
-          - os: Rocky9
-            file: doc/MaCh3DockerFiles/Rocky0/Dockerfile
-            tag: rocky9latest
-
 
     name: Build CI ${{ matrix.os }}
 
