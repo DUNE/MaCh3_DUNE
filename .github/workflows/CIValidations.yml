@@ -10,8 +10,6 @@ name: Event Rates Beam
 on:
   pull_request:
     branches: [develop]
-  push:
-   branches: ["hwallace/patch/event_rate_ci"]
 
 permissions:
   contents: read
@@ -65,4 +63,6 @@ jobs:
               echo "Differences found:"
               cat diff_output.txt
               exit 1
+            else
+              echo "Workflow run successfully, no differences found!"
             fi
