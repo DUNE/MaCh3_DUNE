@@ -27,9 +27,9 @@ jobs:
           - name: Beam Event Rate Validation
             test_exe: bin/EventRates
             build_arg: -DCUDAProb3Linear_ENABLED=ON
-            test_config: ../CIValidations/CIInputs/CIFitConfig.yaml
-            old_output: ../CIValidations/CIOutputs/BeamEventRates.txt
-            new_output: ../CIValidations/CIOutputs/BeamEventRates_New.txt
+            test_config: CIValidations/CIInputs/CIFitConfig.yaml
+            old_output: CIValidations/CIOutputs/BeamEventRates.txt
+            new_output: CIValidations/CIOutputs/BeamEventRates_New.txt
 
 
     name: Run Test ${{matrix.name}}
@@ -56,14 +56,15 @@ jobs:
           image: ghcr.io/dune/mach3:alma9_ci
           shell: bash
           run: |
-            source ./install/bin/setup.MaCh3.sh
-            source ./install/bin/setup.MaCh3DUNE.sh
+            cd ..
+            source ./build/bin/setup.MaCh3.sh
+            source ./build/bin/setup.MaCh3DUNE.sh
             ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 |  grep -v '\[Monitor.cpp\]' | grep -v '\[manager.cpp\]' | tee ${{matrix.new_output}}
 
       - name: Check Outputs
         uses: LouisBrunner/diff-action@v2.0.0
         with:
-          old: ${{matrix.test_output}}
-          new: test_output
+          old: ${{matrix.old_output}}
+          new: ${{matrix.new_output}}
           mode: strict
           tolerance: same
