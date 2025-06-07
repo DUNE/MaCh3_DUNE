@@ -238,18 +238,139 @@
 [samplePDFFDBase.cpp][info]     - NCIMDAnn: 1
 [samplePDFDUNEBeamFD.cpp][info] -------------------------------------------------------------------
 [samplePDFFDBase.cpp][info] =============================================
-[samplePDFFDBase.cpp][info] Initialising sample: 0/1
+[samplePDFFDBase.cpp][info] Initialising sample: 0/12
 [samplePDFDUNEBeamFD.cpp][info] -------------------------------------------------------------------
 [samplePDFDUNEBeamFD.cpp][info] input file: CIValidations/CIInputs/ci_caf_file.root
 [samplePDFDUNEBeamFD.cpp][info] Found "caf" tree in CIValidations/CIInputs/ci_caf_file.root
 [samplePDFDUNEBeamFD.cpp][info] With number of entries: 18970
 [samplePDFFDBase.cpp][info] Number of events processed: 18970
 [samplePDFFDBase.cpp][info] Initialising FDMC object..
-[samplePDFFDBase.cpp][info] Initialised sample: 0/1
+[samplePDFFDBase.cpp][info] Initialised sample: 0/12
 [samplePDFFDBase.cpp][info] =============================================
-[samplePDFFDBase.cpp][info] Total number of events is: 18970
+[samplePDFFDBase.cpp][info] Initialising sample: 1/12
+[samplePDFDUNEBeamFD.cpp][info] -------------------------------------------------------------------
+[samplePDFDUNEBeamFD.cpp][info] input file: CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] Found "caf" tree in CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] With number of entries: 18970
+[samplePDFFDBase.cpp][info] Number of events processed: 18970
+[samplePDFFDBase.cpp][info] Initialising FDMC object..
+[samplePDFFDBase.cpp][info] Initialised sample: 1/12
+[samplePDFFDBase.cpp][info] =============================================
+[samplePDFFDBase.cpp][info] Initialising sample: 2/12
+[samplePDFDUNEBeamFD.cpp][info] -------------------------------------------------------------------
+[samplePDFDUNEBeamFD.cpp][info] input file: CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] Found "caf" tree in CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] With number of entries: 18970
+[samplePDFFDBase.cpp][info] Number of events processed: 18970
+[samplePDFFDBase.cpp][info] Initialising FDMC object..
+[samplePDFFDBase.cpp][info] Initialised sample: 2/12
+[samplePDFFDBase.cpp][info] =============================================
+[samplePDFFDBase.cpp][info] Initialising sample: 3/12
+[samplePDFDUNEBeamFD.cpp][info] -------------------------------------------------------------------
+[samplePDFDUNEBeamFD.cpp][info] input file: CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] Found "caf" tree in CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] With number of entries: 18970
+[samplePDFFDBase.cpp][info] Number of events processed: 18970
+[samplePDFFDBase.cpp][info] Initialising FDMC object..
+[samplePDFFDBase.cpp][info] Initialised sample: 3/12
+[samplePDFFDBase.cpp][info] =============================================
+[samplePDFFDBase.cpp][info] Initialising sample: 4/12
+[samplePDFDUNEBeamFD.cpp][info] -------------------------------------------------------------------
+[samplePDFDUNEBeamFD.cpp][info] input file: CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] Found "caf" tree in CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] With number of entries: 18970
+[samplePDFFDBase.cpp][info] Number of events processed: 18970
+[samplePDFFDBase.cpp][info] Initialising FDMC object..
+[samplePDFFDBase.cpp][info] Initialised sample: 4/12
+[samplePDFFDBase.cpp][info] =============================================
+[samplePDFFDBase.cpp][info] Initialising sample: 5/12
+[samplePDFDUNEBeamFD.cpp][info] -------------------------------------------------------------------
+[samplePDFDUNEBeamFD.cpp][info] input file: CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] Found "caf" tree in CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] With number of entries: 18970
+[samplePDFFDBase.cpp][info] Number of events processed: 18970
+[samplePDFFDBase.cpp][info] Initialising FDMC object..
+[samplePDFFDBase.cpp][info] Initialised sample: 5/12
+[samplePDFFDBase.cpp][info] =============================================
+[samplePDFFDBase.cpp][info] Initialising sample: 6/12
+[samplePDFDUNEBeamFD.cpp][info] -------------------------------------------------------------------
+[samplePDFDUNEBeamFD.cpp][info] input file: CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] Found "caf" tree in CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] With number of entries: 18970
+[samplePDFFDBase.cpp][info] Number of events processed: 18970
+[samplePDFFDBase.cpp][info] Initialising FDMC object..
+[samplePDFFDBase.cpp][info] Initialised sample: 6/12
+[samplePDFFDBase.cpp][info] =============================================
+[samplePDFFDBase.cpp][info] Initialising sample: 7/12
+[samplePDFDUNEBeamFD.cpp][info] -------------------------------------------------------------------
+[samplePDFDUNEBeamFD.cpp][info] input file: CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] Found "caf" tree in CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] With number of entries: 18970
+[samplePDFFDBase.cpp][info] Number of events processed: 18970
+[samplePDFFDBase.cpp][info] Initialising FDMC object..
+[samplePDFFDBase.cpp][info] Initialised sample: 7/12
+[samplePDFFDBase.cpp][info] =============================================
+[samplePDFFDBase.cpp][info] Initialising sample: 8/12
+[samplePDFDUNEBeamFD.cpp][info] -------------------------------------------------------------------
+[samplePDFDUNEBeamFD.cpp][info] input file: CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] Found "caf" tree in CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] With number of entries: 18970
+[samplePDFFDBase.cpp][info] Number of events processed: 18970
+[samplePDFFDBase.cpp][info] Initialising FDMC object..
+[samplePDFFDBase.cpp][info] Initialised sample: 8/12
+[samplePDFFDBase.cpp][info] =============================================
+[samplePDFFDBase.cpp][info] Initialising sample: 9/12
+[samplePDFDUNEBeamFD.cpp][info] -------------------------------------------------------------------
+[samplePDFDUNEBeamFD.cpp][info] input file: CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] Found "caf" tree in CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] With number of entries: 18970
+[samplePDFFDBase.cpp][info] Number of events processed: 18970
+[samplePDFFDBase.cpp][info] Initialising FDMC object..
+[samplePDFFDBase.cpp][info] Initialised sample: 9/12
+[samplePDFFDBase.cpp][info] =============================================
+[samplePDFFDBase.cpp][info] Initialising sample: 10/12
+[samplePDFDUNEBeamFD.cpp][info] -------------------------------------------------------------------
+[samplePDFDUNEBeamFD.cpp][info] input file: CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] Found "caf" tree in CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] With number of entries: 18970
+[samplePDFFDBase.cpp][info] Number of events processed: 18970
+[samplePDFFDBase.cpp][info] Initialising FDMC object..
+[samplePDFFDBase.cpp][info] Initialised sample: 10/12
+[samplePDFFDBase.cpp][info] =============================================
+[samplePDFFDBase.cpp][info] Initialising sample: 11/12
+[samplePDFDUNEBeamFD.cpp][info] -------------------------------------------------------------------
+[samplePDFDUNEBeamFD.cpp][info] input file: CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] Found "caf" tree in CIValidations/CIInputs/ci_caf_file.root
+[samplePDFDUNEBeamFD.cpp][info] With number of entries: 18970
+[samplePDFFDBase.cpp][info] Number of events processed: 18970
+[samplePDFFDBase.cpp][info] Initialising FDMC object..
+[samplePDFFDBase.cpp][info] Initialised sample: 11/12
+[samplePDFFDBase.cpp][info] =============================================
+[samplePDFFDBase.cpp][info] Total number of events is: 227640
 [samplePDFFDBase.cpp][info] Setting up NuOscillator..
-[samplePDFFDBase.cpp][info] Setting up NuOscillator::Oscillator object in OscillationChannel: 0/1
+[samplePDFFDBase.cpp][info] Setting up NuOscillator::Oscillator object in OscillationChannel: 0/12
+[samplePDFFDBase.cpp][info] [NuOscillator] OscillatorFactory creating OscillatorBase object from config: configs/NuOsc/CUDAProb3Linear.yaml
+[samplePDFFDBase.cpp][info] Setting up NuOscillator::Oscillator object in OscillationChannel: 1/12
+[samplePDFFDBase.cpp][info] [NuOscillator] OscillatorFactory creating OscillatorBase object from config: configs/NuOsc/CUDAProb3Linear.yaml
+[samplePDFFDBase.cpp][info] Setting up NuOscillator::Oscillator object in OscillationChannel: 2/12
+[samplePDFFDBase.cpp][info] [NuOscillator] OscillatorFactory creating OscillatorBase object from config: configs/NuOsc/CUDAProb3Linear.yaml
+[samplePDFFDBase.cpp][info] Setting up NuOscillator::Oscillator object in OscillationChannel: 3/12
+[samplePDFFDBase.cpp][info] [NuOscillator] OscillatorFactory creating OscillatorBase object from config: configs/NuOsc/CUDAProb3Linear.yaml
+[samplePDFFDBase.cpp][info] Setting up NuOscillator::Oscillator object in OscillationChannel: 4/12
+[samplePDFFDBase.cpp][info] [NuOscillator] OscillatorFactory creating OscillatorBase object from config: configs/NuOsc/CUDAProb3Linear.yaml
+[samplePDFFDBase.cpp][info] Setting up NuOscillator::Oscillator object in OscillationChannel: 5/12
+[samplePDFFDBase.cpp][info] [NuOscillator] OscillatorFactory creating OscillatorBase object from config: configs/NuOsc/CUDAProb3Linear.yaml
+[samplePDFFDBase.cpp][info] Setting up NuOscillator::Oscillator object in OscillationChannel: 6/12
+[samplePDFFDBase.cpp][info] [NuOscillator] OscillatorFactory creating OscillatorBase object from config: configs/NuOsc/CUDAProb3Linear.yaml
+[samplePDFFDBase.cpp][info] Setting up NuOscillator::Oscillator object in OscillationChannel: 7/12
+[samplePDFFDBase.cpp][info] [NuOscillator] OscillatorFactory creating OscillatorBase object from config: configs/NuOsc/CUDAProb3Linear.yaml
+[samplePDFFDBase.cpp][info] Setting up NuOscillator::Oscillator object in OscillationChannel: 8/12
+[samplePDFFDBase.cpp][info] [NuOscillator] OscillatorFactory creating OscillatorBase object from config: configs/NuOsc/CUDAProb3Linear.yaml
+[samplePDFFDBase.cpp][info] Setting up NuOscillator::Oscillator object in OscillationChannel: 9/12
+[samplePDFFDBase.cpp][info] [NuOscillator] OscillatorFactory creating OscillatorBase object from config: configs/NuOsc/CUDAProb3Linear.yaml
+[samplePDFFDBase.cpp][info] Setting up NuOscillator::Oscillator object in OscillationChannel: 10/12
+[samplePDFFDBase.cpp][info] [NuOscillator] OscillatorFactory creating OscillatorBase object from config: configs/NuOsc/CUDAProb3Linear.yaml
+[samplePDFFDBase.cpp][info] Setting up NuOscillator::Oscillator object in OscillationChannel: 11/12
 [samplePDFFDBase.cpp][info] [NuOscillator] OscillatorFactory creating OscillatorBase object from config: configs/NuOsc/CUDAProb3Linear.yaml
 [samplePDFFDBase.cpp][info] Setting up Sample Binning..
 [samplePDFFDBase.cpp][info] Setting up Sample Binning
@@ -265,41 +386,41 @@
 [samplePDFFDBase.cpp][info] Setting up Weight Pointers..
 [samplePDFFDBase.cpp][info] Setting up Kinematic Map..
 [samplePDFFDBase.cpp][info] =======================================================
-[EventRates.cpp][info] Event rate for dummy : 7167.39
+[EventRates.cpp][info] Event rate for dummy : 42056.15
 [samplePDFFDBase.cpp][info] -------------------------------------------------
 [samplePDFFDBase.cpp][info] Integral breakdown for sample: dummy
 [samplePDFFDBase.cpp][info] 
-[samplePDFFDBase.cpp][info] | Mode     | dummy             | Total      |
-[samplePDFFDBase.cpp][info] ---------------------------------------------
-[samplePDFFDBase.cpp][info] | CCQE     | 756.1011          | 756.1011   |
-[samplePDFFDBase.cpp][info] | CC1Kaon  | 0.0000            | 0.0000     |
-[samplePDFFDBase.cpp][info] | CCDIS    | 2197.5268         | 2197.5268  |
-[samplePDFFDBase.cpp][info] | CCRES    | 1213.1692         | 1213.1692  |
-[samplePDFFDBase.cpp][info] | CCCOH    | 22.6666           | 22.6666    |
-[samplePDFFDBase.cpp][info] | CCDiff   | 0.0000            | 0.0000     |
-[samplePDFFDBase.cpp][info] | CCNuEl   | 1.2312            | 1.2312     |
-[samplePDFFDBase.cpp][info] | CCIMD    | 0.0000            | 0.0000     |
-[samplePDFFDBase.cpp][info] | CCAnuGam | 0.0000            | 0.0000     |
-[samplePDFFDBase.cpp][info] | CCMEC    | 181.3615          | 181.3615   |
-[samplePDFFDBase.cpp][info] | CCCOHEL  | 0.0000            | 0.0000     |
-[samplePDFFDBase.cpp][info] | CCIBD    | 0.0000            | 0.0000     |
-[samplePDFFDBase.cpp][info] | CCGlRES  | 0.0000            | 0.0000     |
-[samplePDFFDBase.cpp][info] | CCIMDAnn | 0.0000            | 0.0000     |
-[samplePDFFDBase.cpp][info] | NCQE     | 18.5613           | 18.5613    |
-[samplePDFFDBase.cpp][info] | NCDIS    | 2259.2859         | 2259.2859  |
-[samplePDFFDBase.cpp][info] | NCRES    | 451.4117          | 451.4117   |
-[samplePDFFDBase.cpp][info] | NCCOH    | 35.6378           | 35.6378    |
-[samplePDFFDBase.cpp][info] | NCDiff   | 0.0000            | 0.0000     |
-[samplePDFFDBase.cpp][info] | NCNuEl   | 30.4406           | 30.4406    |
-[samplePDFFDBase.cpp][info] | NCIMD    | 0.0000            | 0.0000     |
-[samplePDFFDBase.cpp][info] | NCAnuGam | 0.0000            | 0.0000     |
-[samplePDFFDBase.cpp][info] | NCMEC    | 0.0000            | 0.0000     |
-[samplePDFFDBase.cpp][info] | NCCOHEL  | 0.0000            | 0.0000     |
-[samplePDFFDBase.cpp][info] | NCIBD    | 0.0000            | 0.0000     |
-[samplePDFFDBase.cpp][info] | NCGlRES  | 0.0000            | 0.0000     |
-[samplePDFFDBase.cpp][info] | NCIMDAnn | 0.0000            | 0.0000     |
-[samplePDFFDBase.cpp][info] | Total    | 7167.3938         | 7167.3938  |
-[samplePDFFDBase.cpp][info] ---------------------------------------------
+[samplePDFFDBase.cpp][info] | Mode     | FHC_numu_x_numu   | FHC_nue_x_nue     | FHC_numubar_x_numubar | FHC_nuebar_x_nuebar | FHC_numu_x_nue    | FHC_numubar_x_nuebar | FHC_nue_x_numu    | FHC_nuebar_x_numubar | FHC_numu_x_nutau  | FHC_nue_x_nutau   | FHC_numubar_x_nutaubar | FHC_nuebar_x_nutaubar | Total      |
+[samplePDFFDBase.cpp][info] -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[samplePDFFDBase.cpp][info] | CCQE     | 756.1011          | 1381.0035         | 761.0095          | 1422.0468         | 56.9289           | 21.2959           | 45.4481           | 29.3248           | 657.1810          | 43.7593           | 687.9056          | 18.8394           | 5880.8440  |
+[samplePDFFDBase.cpp][info] | CC1Kaon  | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[samplePDFFDBase.cpp][info] | CCDIS    | 2197.5268         | 3350.8763         | 2202.5894         | 3416.3942         | 92.3141           | 41.0602           | 77.0404           | 51.8134           | 1213.0545         | 74.9788           | 1259.2459         | 34.6878           | 14011.5818 |
+[samplePDFFDBase.cpp][info] | CCRES    | 1213.1692         | 2181.3440         | 1220.0865         | 2248.5757         | 87.0214           | 32.6598           | 71.0034           | 43.2352           | 1018.4915         | 66.3348           | 1065.9359         | 26.8713           | 9274.7287  |
+[samplePDFFDBase.cpp][info] | CCCOH    | 22.6666           | 50.3475           | 22.8547           | 52.1268           | 2.4204            | 0.9293            | 1.9549            | 1.2652            | 29.1121           | 1.8967            | 30.4151           | 0.8072            | 216.7964   |
+[samplePDFFDBase.cpp][info] | CCDiff   | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[samplePDFFDBase.cpp][info] | CCNuEl   | 1.2312            | 2.1053            | 1.2357            | 2.1668            | 0.0765            | 0.0289            | 0.0623            | 0.0383            | 0.9197            | 0.0598            | 0.9627            | 0.0222            | 8.9094     |
+[samplePDFFDBase.cpp][info] | CCIMD    | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[samplePDFFDBase.cpp][info] | CCAnuGam | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[samplePDFFDBase.cpp][info] | CCMEC    | 181.3615          | 346.0850          | 182.8742          | 358.3635          | 15.8667           | 5.4740            | 12.7112           | 7.5207            | 173.2560          | 11.6881           | 182.1360          | 4.6001            | 1481.9371  |
+[samplePDFFDBase.cpp][info] | CCCOHEL  | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[samplePDFFDBase.cpp][info] | CCIBD    | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[samplePDFFDBase.cpp][info] | CCGlRES  | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[samplePDFFDBase.cpp][info] | CCIMDAnn | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[samplePDFFDBase.cpp][info] | NCQE     | 18.5613           | 18.5613           | 18.5613           | 18.5613           | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 74.2453    |
+[samplePDFFDBase.cpp][info] | NCDIS    | 2259.2859         | 2259.2859         | 2259.2859         | 2259.2859         | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 9037.1436  |
+[samplePDFFDBase.cpp][info] | NCRES    | 451.4117          | 451.4117          | 451.4117          | 451.4117          | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 1805.6468  |
+[samplePDFFDBase.cpp][info] | NCCOH    | 35.6378           | 35.6378           | 35.6378           | 35.6378           | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 142.5511   |
+[samplePDFFDBase.cpp][info] | NCDiff   | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[samplePDFFDBase.cpp][info] | NCNuEl   | 30.4406           | 30.4406           | 30.4406           | 30.4406           | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 121.7624   |
+[samplePDFFDBase.cpp][info] | NCIMD    | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[samplePDFFDBase.cpp][info] | NCAnuGam | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[samplePDFFDBase.cpp][info] | NCMEC    | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[samplePDFFDBase.cpp][info] | NCCOHEL  | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[samplePDFFDBase.cpp][info] | NCIBD    | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[samplePDFFDBase.cpp][info] | NCGlRES  | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[samplePDFFDBase.cpp][info] | NCIMDAnn | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[samplePDFFDBase.cpp][info] | Total    | 7167.3938         | 10107.0989        | 7185.9873         | 10295.0111        | 254.6280          | 101.4481          | 208.2203          | 133.1976          | 3092.0148         | 198.7175          | 3226.6012         | 85.8280           | 42056.1465 |
+[samplePDFFDBase.cpp][info] -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 [samplePDFFDBase.cpp][info] 
 Info in <TCanvas::Print>: pdf file CIFit.pdf has been created
 Info in <TCanvas::Print>: Current canvas added to pdf file CIFit.pdf
@@ -308,32 +429,43 @@ Info in <TCanvas::Print>: pdf file CIFit.pdf has been closed
 [EventRates.cpp][info] ========================================================================
 [EventRates.cpp][info] Oscillation Mode Breakdown:
 [EventRates.cpp][info] ======================
-[EventRates.cpp][info] dummy                : dummy                : 7167.39             
-[EventRates.cpp][info] dummy                : 7167.39             
+[EventRates.cpp][info] dummy                : FHC_numu_x_numu      : 7167.39             
+[EventRates.cpp][info] dummy                : FHC_nue_x_nue        : 10107.10            
+[EventRates.cpp][info] dummy                : FHC_numubar_x_numubar : 7185.99             
+[EventRates.cpp][info] dummy                : FHC_nuebar_x_nuebar  : 10295.01            
+[EventRates.cpp][info] dummy                : FHC_numu_x_nue       : 254.63              
+[EventRates.cpp][info] dummy                : FHC_numubar_x_nuebar : 101.45              
+[EventRates.cpp][info] dummy                : FHC_nue_x_numu       : 208.22              
+[EventRates.cpp][info] dummy                : FHC_nuebar_x_numubar : 133.20              
+[EventRates.cpp][info] dummy                : FHC_numu_x_nutau     : 3092.01             
+[EventRates.cpp][info] dummy                : FHC_nue_x_nutau      : 198.72              
+[EventRates.cpp][info] dummy                : FHC_numubar_x_nutaubar : 3226.60             
+[EventRates.cpp][info] dummy                : FHC_nuebar_x_nutaubar : 85.83               
+[EventRates.cpp][info] dummy                : 42056.15            
 [EventRates.cpp][info] ========================================================================
 [EventRates.cpp][info] ========================================================================
 [EventRates.cpp][info] Interaction Mode Breakdown:
 [EventRates.cpp][info] ======================
-[EventRates.cpp][info] dummy                : CCQE                 : 756.10              
+[EventRates.cpp][info] dummy                : CCQE                 : 5880.84             
 [EventRates.cpp][info] dummy                : CC1Kaon              : 0.00                
-[EventRates.cpp][info] dummy                : CCDIS                : 2197.53             
-[EventRates.cpp][info] dummy                : CCRES                : 1213.17             
-[EventRates.cpp][info] dummy                : CCCOH                : 22.67               
+[EventRates.cpp][info] dummy                : CCDIS                : 14011.58            
+[EventRates.cpp][info] dummy                : CCRES                : 9274.73             
+[EventRates.cpp][info] dummy                : CCCOH                : 216.80              
 [EventRates.cpp][info] dummy                : CCDiff               : 0.00                
-[EventRates.cpp][info] dummy                : CCNuEl               : 1.23                
+[EventRates.cpp][info] dummy                : CCNuEl               : 8.91                
 [EventRates.cpp][info] dummy                : CCIMD                : 0.00                
 [EventRates.cpp][info] dummy                : CCAnuGam             : 0.00                
-[EventRates.cpp][info] dummy                : CCMEC                : 181.36              
+[EventRates.cpp][info] dummy                : CCMEC                : 1481.94             
 [EventRates.cpp][info] dummy                : CCCOHEL              : 0.00                
 [EventRates.cpp][info] dummy                : CCIBD                : 0.00                
 [EventRates.cpp][info] dummy                : CCGlRES              : 0.00                
 [EventRates.cpp][info] dummy                : CCIMDAnn             : 0.00                
-[EventRates.cpp][info] dummy                : NCQE                 : 18.56               
-[EventRates.cpp][info] dummy                : NCDIS                : 2259.29             
-[EventRates.cpp][info] dummy                : NCRES                : 451.41              
-[EventRates.cpp][info] dummy                : NCCOH                : 35.64               
+[EventRates.cpp][info] dummy                : NCQE                 : 74.25               
+[EventRates.cpp][info] dummy                : NCDIS                : 9037.14             
+[EventRates.cpp][info] dummy                : NCRES                : 1805.65             
+[EventRates.cpp][info] dummy                : NCCOH                : 142.55              
 [EventRates.cpp][info] dummy                : NCDiff               : 0.00                
-[EventRates.cpp][info] dummy                : NCNuEl               : 30.44               
+[EventRates.cpp][info] dummy                : NCNuEl               : 121.76              
 [EventRates.cpp][info] dummy                : NCIMD                : 0.00                
 [EventRates.cpp][info] dummy                : NCAnuGam             : 0.00                
 [EventRates.cpp][info] dummy                : NCMEC                : 0.00                
@@ -341,4 +473,4 @@ Info in <TCanvas::Print>: pdf file CIFit.pdf has been closed
 [EventRates.cpp][info] dummy                : NCIBD                : 0.00                
 [EventRates.cpp][info] dummy                : NCGlRES              : 0.00                
 [EventRates.cpp][info] dummy                : NCIMDAnn             : 0.00                
-[EventRates.cpp][info] dummy                : 7167.39             
+[EventRates.cpp][info] dummy                : 42056.15            
