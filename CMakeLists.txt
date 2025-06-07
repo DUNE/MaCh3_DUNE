@@ -59,7 +59,7 @@ if(DEFINED ROOT_CXX_STANDARD AND ROOT_CXX_STANDARD GREATER CMAKE_CXX_STANDARD)
 endif()
 
 #=================== DUNEAnaObj
-option(Build_NDGAr "Whether to build ndgar samplepdf class or all others" OFF)
+option(Build_NDGAr "Whether to build ndgar SampleHandler class or all others" OFF)
 
 if(NOT DEFINED DUNE_ANAOBJ_BRANCH)
   if (Build_NDGAr)
@@ -135,15 +135,15 @@ endif()
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
-find_package(MaCh3 1.4.8 EXACT QUIET)
-set(MaCh3_CORE_BRANCH v1.4.8_patches CACHE STRING "Specify the MaCh3 core branch to use")
+find_package(MaCh3 2.0.0 EXACT QUIET)
+set(MaCh3_CORE_BRANCH v2.0.0 CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 
 if(NOT MaCh3_FOUND)
   cmessage(STATUS "Didn't find MaCh3, attempting to use built in MaCh3")
 
-  if(NOT DEFINED USE_CPU)
-    set(USE_CPU FALSE)
+  if(NOT DEFINED GPU_ENABLED)
+    set(GPU_ENABLED ON)
   endif()
 
   if(NOT DEFINED DEBUG_ENABLED)
@@ -156,7 +156,7 @@ if(NOT MaCh3_FOUND)
 
   # Options list construction
   set(MaCh3_OPTIONS
-      "USE_CPU ${USE_CPU}"
+      "MaCh3_GPU_ENABLED ${GPU_ENABLED}"
       "MaCh3_DEBUG_ENABLED ${DEBUG_ENABLED}"
       "MaCh3_MULTITHREAD_ENABLED ${MULTITHREAD_ENABLED}"
       "MaCh3_CORE_BRANCH ${MaCh3_CORE_BRANCH}"
@@ -171,6 +171,8 @@ if(NOT MaCh3_FOUND)
       NAME MaCh3
       GIT_TAG ${MaCh3_CORE_BRANCH}
       GITHUB_REPOSITORY mach3-software/MaCh3
+      OPTIONS
+      	${MaCh3_OPTIONS}
   )
 else()
   ##KS: This ensure that all executables that are in core will be moved
@@ -256,13 +258,13 @@ install(TARGETS MaCh3DUNECompilerOptions
   EXPORT mach3dune-targets
   LIBRARY DESTINATION lib/)
 
-add_subdirectory(splines)
-add_subdirectory(samplePDFDUNE)
+add_subdirectory(Splines)
+add_subdirectory(Samples)
 add_subdirectory(Apps)
 
 add_library(MaCh3DUNEAll INTERFACE)
 set_target_properties(MaCh3DUNEAll PROPERTIES EXPORT_NAME All)
-target_link_libraries(MaCh3DUNEAll INTERFACE SamplePDFDUNE splinesDUNE MaCh3DUNECompilerOptions)
+target_link_libraries(MaCh3DUNEAll INTERFACE SamplesDUNE SplinesDUNE MaCh3DUNECompilerOptions)
 add_library(MaCh3DUNE::All ALIAS MaCh3DUNEAll)
 
 install(TARGETS MaCh3DUNEAll
@@ -277,9 +279,9 @@ install(FILES
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/output)
 
 ############################  Install  ####################################
-install(DIRECTORY inputs DESTINATION ${CMAKE_BINARY_DIR})
-install(DIRECTORY configs DESTINATION ${CMAKE_BINARY_DIR})
-install(DIRECTORY utils DESTINATION ${CMAKE_BINARY_DIR})
+install(DIRECTORY Inputs DESTINATION ${CMAKE_BINARY_DIR})
+install(DIRECTORY Configs DESTINATION ${CMAKE_BINARY_DIR})
+install(DIRECTORY Utils DESTINATION ${CMAKE_BINARY_DIR})
 
 install(EXPORT mach3dune-targets
   FILE MaCh3DUNETargets.cmake

@@ -1,0 +1,99 @@
+---
+SampleTitle: "nueselec"
+SampleType: "Atm"
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
+SampleName: "ATM"
+
+Binning:
+  XVarStr: "RecoCosineZ"
+  XVarBins: [-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1]
+  YVarStr: "RecoNeutrinoEnergy"
+  YVarBins: [0, 0.11, 0.17, 0.26, 0.4, 0.63, 1.03, 1.71, 2.94, 5.48, 1e8]
+
+SampleBools:
+  IsELike: yes
+
+InputFiles:
+  mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"
+  mtuplesuffix: "_nueselec.root"
+  splineprefix: ""
+  splinesuffix: ""
+
+NuOsc:
+  NuOscConfigFile: "Configs/NuOsc/CUDAProb3.yaml"
+  EqualBinningPerOscChannel: true
+
+SubSamples:
+  - Name: "nue_x_nue"
+    LatexName: "nue_x_nue"
+    mtuplefile: "nue_x_nue"
+    splinefile: "nue_x_nue"
+    nutype: 12
+    oscnutype: 12
+  - Name: "nue_x_numu"
+    LatexName: "nue_x_numu"
+    mtuplefile: "nue_x_numu"
+    splinefile: "nue_x_numu"
+    nutype: 12
+    oscnutype: 14
+  - Name: "nue_x_nutau"
+    LatexName: "nue_x_nutau"
+    mtuplefile: "nue_x_nutau"
+    splinefile: "nue_x_nutau"
+    nutype: 12
+    oscnutype: 16
+  - Name: "numu_x_nue"
+    LatexName: "numu_x_nue"
+    mtuplefile: "numu_x_nue"
+    splinefile: "numu_x_nue"
+    nutype: 14
+    oscnutype: 12
+  - Name: "numu_x_numu"
+    LatexName: "numu_x_numu"
+    mtuplefile: "numu_x_numu"
+    splinefile: "numu_x_numu"
+    nutype: 14
+    oscnutype: 14
+  - Name: "numu_x_nutau"
+    LatexName: "numu_x_nutau"
+    mtuplefile: "numu_x_nutau"
+    splinefile: "numu_x_nutau"
+    nutype: 14
+    oscnutype: 16
+  - Name: "nuebar_x_nuebar"
+    LatexName: "nuebar_x_nuebar"
+    mtuplefile: "nuebar_x_nuebar"
+    splinefile: "nuebar_x_nuebar"
+    nutype: -12
+    oscnutype: -12
+  - Name: "nuebar_x_numubar"
+    LatexName: "nuebar_x_numubar"
+    mtuplefile: "nuebar_x_numubar"
+    splinefile: "nuebar_x_numubar"
+    nutype: -12
+    oscnutype: -14
+  - Name: "nuebar_x_nutaubar"
+    LatexName: "nuebar_x_nutaubar"
+    mtuplefile: "nuebar_x_nutaubar"
+    splinefile: "nuebar_x_nutaubar"
+    nutype: -12
+    oscnutype: -16
+  - Name: "numubar_x_nuebar"
+    LatexName: "numubar_x_nuebar"
+    mtuplefile: "numubar_x_nuebar"
+    splinefile: "numubar_x_nuebar"
+    nutype: -14
+    oscnutype: -12
+  - Name: "numubar_x_numubar"
+    LatexName: "numubar_x_numubar"
+    mtuplefile: "numubar_x_numubar"
+    splinefile: "numubar_x_numubar"
+    nutype: -14
+    oscnutype: -14
+  - Name: "numubar_x_nutaubar"
+    LatexName: "numubar_x_nutaubar"
+    mtuplefile: "numubar_x_nutaubar"
+    splinefile: "numubar_x_nutaubar"
+    samplevecno: 11
+    nutype: -14
+    oscnutype: -16
