@@ -25,7 +25,7 @@ jobs:
       matrix:
         include:
           - name: Beam Event Rate Validation
-            test_exe: bin/EventRates
+            test_exe: EventRates
             build_arg: -DCUDAProb3Linear_ENABLED=ON
             test_config: CIValidations/CIInputs/CIFitConfig.yaml
             old_output: CIValidations/CIOutputs/BeamEventRates.txt
@@ -59,7 +59,7 @@ jobs:
             cd ..
             source ./build/bin/setup.MaCh3.sh
             source ./build/bin/setup.MaCh3DUNE.sh
-            ./${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 |  grep -v '\[Monitor.cpp\]' | grep -v '\[manager.cpp\]' | tee ${{matrix.new_output}}
+            ./build/bin/${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 |  grep -v '\[Monitor.cpp\]' | grep -v '\[manager.cpp\]' | tee ${{matrix.new_output}}
 
       - name: Check Outputs
         uses: LouisBrunner/diff-action@v2.0.0
