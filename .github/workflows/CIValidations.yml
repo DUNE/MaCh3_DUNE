@@ -45,7 +45,7 @@ jobs:
         run: |
           docker build . \
           --file doc/MaCh3DockerFiles/Alma9/Dockerfile \
-          --tag ghcr.io/dune/mach3:alma9test \
+          --tag ghcr.io/dune/mach3:alma9_ci \
           --build-arg MACH3_DUNE_VERSION="${MACH3_DUNE_VERSION}" \
           --build-arg CMAKE_OPTIONS=${{matrix.build_arg}}
 
