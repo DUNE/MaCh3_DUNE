@@ -19,7 +19,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         include:
           - name: Beam Event Rate Validation
@@ -54,6 +54,7 @@ jobs:
           image: ghcr.io/dune/mach3:alma9_ci
           shell: bash
           run: |
+            sudo yum install diff
             cd ..
             source ./build/bin/setup.MaCh3.sh
             source ./build/bin/setup.MaCh3DUNE.sh
@@ -65,4 +66,4 @@ jobs:
               exit 1
             else
               echo "Workflow run successfully, no differences found!"
-            fi
+            fi~
