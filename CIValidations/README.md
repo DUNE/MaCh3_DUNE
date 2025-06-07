@@ -46,3 +46,7 @@ In order to generate the old output simply use the technique above of
 ```bash
 ./application list/of/inputs 2>&1 |  grep -v '\[Monitor.cpp\]' | grep -v '\[manager.cpp\]' | tee output_name.txt
 ```
+
+## Scripts
+The scripts directory contains useful scripts for modifying/creating CI inputs. Currently there are
+1. `Rad`
