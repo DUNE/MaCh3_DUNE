@@ -54,7 +54,7 @@ jobs:
           image: ghcr.io/dune/mach3:alma9_ci
           shell: bash
           run: |
-            dnf install diffutils
+            dnf install -y diffutils
             cd ..
             source ./build/bin/setup.MaCh3.sh
             source ./build/bin/setup.MaCh3DUNE.sh
