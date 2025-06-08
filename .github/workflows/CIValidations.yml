@@ -54,11 +54,11 @@ jobs:
           image: ghcr.io/dune/mach3:alma9_ci
           shell: bash
           run: |
-            sudo yum install diff
+            dnf install diff
             cd ..
             source ./build/bin/setup.MaCh3.sh
             source ./build/bin/setup.MaCh3DUNE.sh
-            ./build/bin/${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 |  grep -v '\[Monitor.cpp\]' | grep -v '\[manager.cpp\]' | tee ${{matrix.new_output}}
+            ./build/bin/${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | grep '^\['"${{matrix.test_exe}}"'\.cpp\]' | tee ${{matrix.new_output}}
             diff ${{matrix.old_output}} ${{matrix.new_output}} | tee diff_output.txt
             if [ $? -gt 0 ]; then
               echo "Differences found:"
@@ -66,4 +66,4 @@ jobs:
               exit 1
             else
               echo "Workflow run successfully, no differences found!"
-            fi~
+            fi
