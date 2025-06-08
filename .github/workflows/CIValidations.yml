@@ -9,7 +9,7 @@ name: Event Rates Beam
 
 on:
   pull_request:
-    branches: [develop]
+    branches: [develop, main]
 
 permissions:
   contents: read
