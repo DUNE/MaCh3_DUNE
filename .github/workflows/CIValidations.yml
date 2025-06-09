@@ -60,12 +60,11 @@ jobs:
             source ./build/bin/setup.MaCh3DUNE.sh
             echo Running ./build/bin/${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | grep '^\['"${{matrix.test_exe}}"'\.cpp\]' | tee ${{matrix.new_output}}
             ./build/bin/${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | grep '^\['"${{matrix.test_exe}}"'\.cpp\]' | tee ${{matrix.new_output}}
+            diff ${{matrix.old_output}} ${{matrix.new_output}} > diff_output.txt
             DIFF_EXIT=$?
-            cat diff_output.txt  # Display the differences
+            cat diff_output.txt
             if [ $DIFF_EXIT -gt 0 ]; then
-            if [ $? -gt 0 ]; then
               echo "Differences found:"
-              cat diff_output.txt
               exit 1
             else
               echo "Workflow run successfully, no differences found!"
