@@ -18,8 +18,8 @@ InputFiles:
   mtupleprefix: "CIValidations/CIInputs/"
   mtuplesuffix: ".root"
   # Splines not used rn
-  splineprefix: ""
-  splinesuffix: ""
+  splineprefix: "NO_SPLINE"
+  splinesuffix: "NO_SPLINE"
 
 NuOsc:
   NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
