@@ -1,5 +1,7 @@
 ---
-SampleName: "dummy"
+SampleTitle: "dummy"
+SampleName: "FD_Beam"
+
 SampleType: "BeamFD"
 
 POT: 3.85e24
