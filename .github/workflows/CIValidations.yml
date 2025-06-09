@@ -59,7 +59,7 @@ jobs:
             source ./build/bin/setup.MaCh3.sh
             source ./build/bin/setup.MaCh3DUNE.sh
             echo Running ./build/bin/${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | grep '^\['"${{matrix.test_exe}}"'\.cpp\]' | tee ${{matrix.new_output}}
-            ./build/bin/${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | grep '^\['"${{matrix.test_exe}}"'\.cpp\]' | tee ${{matrix.new_output}}
+            ./build/bin/${{matrix.test_exe}} ${{matrix.test_config}} | grep '^\['"${{matrix.test_exe}}"'\.cpp\]' | tee ${{matrix.new_output}}
             diff ${{matrix.old_output}} ${{matrix.new_output}} > diff_output.txt
             DIFF_EXIT=$?
             cat diff_output.txt
