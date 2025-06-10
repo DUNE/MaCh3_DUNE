@@ -365,7 +365,7 @@ std::vector<double> SampleHandlerBeamND::ReturnKinematicParameterBinning(std::st
 // /*
 
 // Set the covariance matrix for this class
-void samplePDFDUNEBeamND::setNDCovMatrix() {
+void SampleHandlerBeamND::setNDCovMatrix() {
   nXBins = static_cast<int>(XBinEdges.size()-1);
   nYBins = static_cast<int>(YBinEdges.size()-1);
   covSize = nXBins*nYBins;
@@ -379,8 +379,8 @@ void samplePDFDUNEBeamND::setNDCovMatrix() {
   std::vector<double> FlatCV;
   int iter = 0;
 
-  if (samplePDFFD_data == nullptr) {
-    MACH3LOG_ERROR("SamplePDFFD_data is not set!");
+  if (SampleHandlerFD_data == nullptr) {
+    MACH3LOG_ERROR("SampleHandlerFD_data is not set!");
     throw MaCh3Exception(__FILE__, __LINE__);
   }
 
@@ -389,7 +389,7 @@ void samplePDFDUNEBeamND::setNDCovMatrix() {
   {
     for (size_t yBin = 0; yBin < static_cast<size_t>(nYBins); yBin++) 
     {
-      double CV = samplePDFFD_data[yBin][xBin];
+      double CV = SampleHandlerFD_data[yBin][xBin];
       FlatCV.push_back(CV);
 
       if(CV>0) (*NDCovMatrix)(iter,iter) += 1/CV;
@@ -416,7 +416,7 @@ void samplePDFDUNEBeamND::setNDCovMatrix() {
   FlatDataMCDiff.resize(covSize, 0.);
 }
 
-double samplePDFDUNEBeamND::GetLikelihood() {
+double SampleHandlerBeamND::GetLikelihood() {
 
   if (!isNDCovSet) {
     setNDCovMatrix();
@@ -429,8 +429,8 @@ double samplePDFDUNEBeamND::GetLikelihood() {
   //2D -> 1D 
   for (int xBin = 0; xBin < nXBins; xBin++) {
     for (int yBin = 0; yBin < nYBins; yBin++) {
-      double MCPred = samplePDFFD_array[yBin][xBin];
-      double DataVal = samplePDFFD_data[yBin][xBin];
+      double MCPred = SampleHandlerFD_array[yBin][xBin];
+      double DataVal = SampleHandlerFD_data[yBin][xBin];
       FlatDataMCDiff[xBin*nYBins+yBin] = DataVal - MCPred;
     }
   }

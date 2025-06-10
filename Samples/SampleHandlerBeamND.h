@@ -5,7 +5,6 @@
 #include "Samples/SampleHandlerFD.h"
 
 #include "StructsDUNE.h"
-#include "samplePDF/Structs.h"
 
 class SampleHandlerBeamND : virtual public SampleHandlerFD
 {

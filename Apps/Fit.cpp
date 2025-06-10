@@ -92,7 +92,7 @@ int main(int argc, char * argv[]) {
     }
     MACH3LOG_INFO("Found throw matrix file {}.", throwmatrixfilename);
     TMatrixDSym *throwmatrix = throwmatrixfile->Get<TMatrixDSym>(throwmatrixname.c_str());
-    xsec->setThrowMatrix(throwmatrix);
+    xsec->SetThrowMatrix(throwmatrix);
     MACH3LOG_INFO("Set throw matrix from file {} with name {}",
                   throwmatrixfilename, throwmatrixname);
     // Print the throw matrix diagonals

@@ -183,7 +183,7 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<SampleHandlerFD*> &D
   // Adaptive MCMC stuff
 
   if (FitManager->raw()["AdaptionOptions"]){ 
-    xsec->initialiseAdaption(FitManager->raw());
+    xsec->InitialiseAdaption(FitManager->raw());
   }
 
   return;
