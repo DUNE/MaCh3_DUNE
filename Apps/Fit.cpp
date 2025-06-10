@@ -92,6 +92,19 @@ int main(int argc, char * argv[]) {
     }
     MACH3LOG_INFO("Found throw matrix file {}.", throwmatrixfilename);
     TMatrixDSym *throwmatrix = throwmatrixfile->Get<TMatrixDSym>(throwmatrixname.c_str());
+    if (!throwmatrix) {
+      MACH3LOG_ERROR("Couldn't find throw matrix {} in file {}", throwmatrixname, throwmatrixfilename);
+      throw MaCh3Exception(__FILE__ , __LINE__ );
+    }
+    // Reset individual step scales to 1.0
+    xsec->ResetIndivStepScale();
+    // Keep global step scale flexible, but it should be 1
+    double globalStepScale = FitManager->raw()["General"]["Systematics"]["XsecStepScale"].as<double>();
+    if (globalStepScale != 1.0) {
+      MACH3LOG_WARN("Global step scale is not 1.0, it is set to {}. This may cause issues when using adapted throw matrix.", globalStepScale);
+    }
+    xsec->SetStepScale(globalStepScale);
+    MACH3LOG_WARN("I have set all the individual step scales to 1.0 since we are using an external throw matrix");
     xsec->SetThrowMatrix(throwmatrix);
     MACH3LOG_INFO("Set throw matrix from file {} with name {}",
                   throwmatrixfilename, throwmatrixname);
