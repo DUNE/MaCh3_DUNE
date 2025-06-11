@@ -3,7 +3,7 @@ General:
   OutputFile: "CIFit.root"
   DUNESamples: ["CIValidations/CIInputs/CISampleConfig.yaml"]
   # Nu-FIT
-  OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 1284.9, 2.848] 
+  OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 1284.9, 2.848]
   OscillatorConfigName: "Configs/OscillatorObj.yaml"
 
   Systematics:
