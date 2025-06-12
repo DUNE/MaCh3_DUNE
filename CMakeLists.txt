@@ -262,13 +262,6 @@ add_subdirectory(Splines)
 add_subdirectory(Samples)
 add_subdirectory(Apps)
 
-
-# Do we want to build our integration tests?
-if(DEFINED MACH3_BUILD_TESTS AND MACH3_BUILD_TESTS)
-  add_subdirectory(tests)
-endif()
-
-
 add_library(MaCh3DUNEAll INTERFACE)
 set_target_properties(MaCh3DUNEAll PROPERTIES EXPORT_NAME All)
 target_link_libraries(MaCh3DUNEAll INTERFACE SamplesDUNE SplinesDUNE MaCh3DUNECompilerOptions)

@@ -1,0 +1,50 @@
+[EventRates.cpp][info] Event rate for dummy : 42056.15
+[EventRates.cpp][info] ========================================================================
+[EventRates.cpp][info] ========================================================================
+[EventRates.cpp][info] Oscillation Mode Breakdown:
+[EventRates.cpp][info] ======================
+[EventRates.cpp][info] dummy                : FHC_numu_x_numu      : 7167.39             
+[EventRates.cpp][info] dummy                : FHC_nue_x_nue        : 10107.10            
+[EventRates.cpp][info] dummy                : FHC_numubar_x_numubar : 7185.99             
+[EventRates.cpp][info] dummy                : FHC_nuebar_x_nuebar  : 10295.01            
+[EventRates.cpp][info] dummy                : FHC_numu_x_nue       : 254.63              
+[EventRates.cpp][info] dummy                : FHC_numubar_x_nuebar : 101.45              
+[EventRates.cpp][info] dummy                : FHC_nue_x_numu       : 208.22              
+[EventRates.cpp][info] dummy                : FHC_nuebar_x_numubar : 133.20              
+[EventRates.cpp][info] dummy                : FHC_numu_x_nutau     : 3092.01             
+[EventRates.cpp][info] dummy                : FHC_nue_x_nutau      : 198.72              
+[EventRates.cpp][info] dummy                : FHC_numubar_x_nutaubar : 3226.60             
+[EventRates.cpp][info] dummy                : FHC_nuebar_x_nutaubar : 85.83               
+[EventRates.cpp][info] dummy                : 42056.15            
+[EventRates.cpp][info] ========================================================================
+[EventRates.cpp][info] ========================================================================
+[EventRates.cpp][info] Interaction Mode Breakdown:
+[EventRates.cpp][info] ======================
+[EventRates.cpp][info] dummy                : CCQE                 : 5880.84             
+[EventRates.cpp][info] dummy                : CC1Kaon              : 0.00                
+[EventRates.cpp][info] dummy                : CCDIS                : 14011.58            
+[EventRates.cpp][info] dummy                : CCRES                : 9274.73             
+[EventRates.cpp][info] dummy                : CCCOH                : 216.80              
+[EventRates.cpp][info] dummy                : CCDiff               : 0.00                
+[EventRates.cpp][info] dummy                : CCNuEl               : 8.91                
+[EventRates.cpp][info] dummy                : CCIMD                : 0.00                
+[EventRates.cpp][info] dummy                : CCAnuGam             : 0.00                
+[EventRates.cpp][info] dummy                : CCMEC                : 1481.94             
+[EventRates.cpp][info] dummy                : CCCOHEL              : 0.00                
+[EventRates.cpp][info] dummy                : CCIBD                : 0.00                
+[EventRates.cpp][info] dummy                : CCGlRES              : 0.00                
+[EventRates.cpp][info] dummy                : CCIMDAnn             : 0.00                
+[EventRates.cpp][info] dummy                : NCQE                 : 74.25               
+[EventRates.cpp][info] dummy                : NCDIS                : 9037.14             
+[EventRates.cpp][info] dummy                : NCRES                : 1805.65             
+[EventRates.cpp][info] dummy                : NCCOH                : 142.55              
+[EventRates.cpp][info] dummy                : NCDiff               : 0.00                
+[EventRates.cpp][info] dummy                : NCNuEl               : 121.76              
+[EventRates.cpp][info] dummy                : NCIMD                : 0.00                
+[EventRates.cpp][info] dummy                : NCAnuGam             : 0.00                
+[EventRates.cpp][info] dummy                : NCMEC                : 0.00                
+[EventRates.cpp][info] dummy                : NCCOHEL              : 0.00                
+[EventRates.cpp][info] dummy                : NCIBD                : 0.00                
+[EventRates.cpp][info] dummy                : NCGlRES              : 0.00                
+[EventRates.cpp][info] dummy                : NCIMDAnn             : 0.00                
+[EventRates.cpp][info] dummy                : 42056.15            
