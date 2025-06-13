@@ -3,6 +3,46 @@
 Systematics:
 - Systematic:
     Names:
+      FancyName: CC_spline_param
+      ParameterName: ccdummy
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 1.
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    SplineInformation:
+      Mode: [0]
+      SplineName: ccdummy
+    Type: Spline
+
+- Systematic:
+    Names:
+      FancyName: NC_spline_param
+      ParameterName: ncdummy
+    Error: 0.11
+    FlatPrior: false
+    IsFixed: false
+    ParameterBounds: [0, 999.]
+    ParameterGroup: Xsec
+    ParameterValues:
+      Generated: 0.5
+      PreFitValue: 1.
+    DetID: ["ND", "FD", "ATM"]
+    StepScale:
+      MCMC: 0.2
+    SplineInformation:
+      Mode: [14]
+      SplineName: ncdummy
+    Type: Spline
+
+- Systematic:
+    Names:
       FancyName: CCQE_norm_param
     Error: 0.11
     FlatPrior: false

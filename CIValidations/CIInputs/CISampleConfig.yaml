@@ -20,8 +20,8 @@ InputFiles:
   mtupleprefix: "CIValidations/CIInputs/"
   mtuplesuffix: ".root"
   # Splines not used rn
-  splineprefix: "NO_SPLINE"
-  splinesuffix: "NO_SPLINE"
+  splineprefix: "CIValidations/CIInputs/"
+  splinesuffix: ".root"
 
 NuOsc:
   NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
@@ -30,73 +30,73 @@ NuOsc:
 SubSamples:
   - Name: "FHC_numu_x_numu"
     LatexName: "FHC_numu_x_numu"
-    mtuplefile: "ci_caf_file"
-    splinefile: "ci_caf_file"
+    mtuplefile: "CICafFile"
+    splinefile: "CISplineFile"
     nutype: 14
     oscnutype: 14
   - Name: "FHC_nue_x_nue"
     LatexName: "FHC_nue_x_nue"
-    mtuplefile: "ci_caf_file"
-    splinefile: "ci_caf_file"
+    mtuplefile: "CICafFile"
+    splinefile: "CISplineFile"
     nutype: 12
     oscnutype: 12
   - Name: "FHC_numubar_x_numubar"
     LatexName: "FHC_numubar_x_numubar"
-    mtuplefile: "ci_caf_file"
-    splinefile: "ci_caf_file"
+    mtuplefile: "CICafFile"
+    splinefile: "CISplineFile"
     nutype: -14
     oscnutype: -14
   - Name: "FHC_nuebar_x_nuebar"
     LatexName: "FHC_nuebar_x_nuebar"
-    mtuplefile: "ci_caf_file"
-    splinefile: "ci_caf_file"
+    mtuplefile: "CICafFile"
+    splinefile: "CISplineFile"
     nutype: -12
     oscnutype: -12
   - Name: "FHC_numu_x_nue"
     LatexName: "FHC_numu_x_nue"
-    mtuplefile: "ci_caf_file"
-    splinefile: "ci_caf_file"
+    mtuplefile: "CICafFile"
+    splinefile: "CISplineFile"
     nutype: 14
     oscnutype: 12
   - Name: "FHC_numubar_x_nuebar"
     LatexName: "FHC_numubar_x_nuebar"
-    mtuplefile: "ci_caf_file"
-    splinefile: "ci_caf_file"
+    mtuplefile: "CICafFile"
+    splinefile: "CISplineFile"
     nutype: -14
     oscnutype: -12
   - Name: "FHC_nue_x_numu"
     LatexName: "FHC_nue_x_numu"
-    mtuplefile: "ci_caf_file"
-    splinefile: "ci_caf_file"
+    mtuplefile: "CICafFile"
+    splinefile: "CISplineFile"
     nutype: 12
     oscnutype: 14
   - Name: "FHC_nuebar_x_numubar"
     LatexName: "FHC_nuebar_x_numubar"
-    mtuplefile: "ci_caf_file"
-    splinefile: "ci_caf_file"
+    mtuplefile: "CICafFile"
+    splinefile: "CISplineFile"
     nutype: -12
     oscnutype: -14
   - Name: "FHC_numu_x_nutau"
     LatexName: "FHC_numu_x_nutau"
-    mtuplefile: "ci_caf_file"
-    splinefile: "ci_caf_file"
+    mtuplefile: "CICafFile"
+    splinefile: "CISplineFile"
     nutype: 14
     oscnutype: 16
   - Name: "FHC_nue_x_nutau"
     LatexName: "FHC_nue_x_nutau"
-    mtuplefile: "ci_caf_file"
-    splinefile: "ci_caf_file"
+    mtuplefile: "CICafFile"
+    splinefile: "CISplineFile"
     nutype: 12
     oscnutype: 16
   - Name: "FHC_numubar_x_nutaubar"
     LatexName: "FHC_numubar_x_nutaubar"
-    mtuplefile: "ci_caf_file"
-    splinefile: "ci_caf_file"
+    mtuplefile: "CICafFile"
+    splinefile: "CISplineFile"
     nutype: -14
     oscnutype: -16
   - Name: "FHC_nuebar_x_nutaubar"
     LatexName: "FHC_nuebar_x_nutaubar"
-    mtuplefile: "ci_caf_file"
-    splinefile: "ci_caf_file"
+    mtuplefile: "CICafFile"
+    splinefile: "CISplineFile"
     nutype: -12
     oscnutype: -16
