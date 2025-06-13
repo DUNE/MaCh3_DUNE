@@ -553,12 +553,20 @@ int SampleHandlerBeamFD::SetupExperimentMC(int iSample) {
     duneobj->rw_ePi0[i] = (_ePi0); 
     duneobj->rw_eN[i] = (_eN);
 
-	duneobj->rw_erec_had_sqrt[i] = sqrt(duneobj->rw_erec_had[i]);
+
+    // HH: Add checks to make sure the energies are not negative
+    if (duneobj->rw_erec_had[i] < 0) duneobj->rw_erec_had[i] = 0;
+    if (duneobj->rw_erec_lep[i] < 0) duneobj->rw_erec_lep[i] = 0;
+    if (duneobj->rw_eRecoN[i] < 0) duneobj->rw_eRecoN[i] = 0;
+    if (duneobj->rw_eRecoPi0[i] < 0) duneobj->rw_eRecoPi0[i] = 0;
+    
+    duneobj->rw_erec_had_sqrt[i] = sqrt(duneobj->rw_erec_had[i]);
     duneobj->rw_erec_lep_sqrt[i] = sqrt(duneobj->rw_erec_lep[i]);
     duneobj->rw_eRecoN_sqrt[i] = sqrt(duneobj->rw_eRecoN[i]);
     duneobj->rw_eRecoPi0_sqrt[i] = sqrt(duneobj->rw_eRecoPi0[i]);
 
     duneobj->rw_sum_ehad[i] = duneobj->rw_eRecoP[i] + duneobj->rw_eRecoPip[i] + duneobj->rw_eRecoPim[i];
+    if (duneobj->rw_sum_ehad[i] < 0) duneobj->rw_sum_ehad[i] = 0; 
     duneobj->rw_sum_ehad_sqrt[i] = sqrt(duneobj->rw_sum_ehad[i]);
 
     duneobj->rw_etru[i] = (_ev);
