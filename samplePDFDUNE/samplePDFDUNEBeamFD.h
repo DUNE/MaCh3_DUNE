@@ -3,6 +3,15 @@
 
 #include "splines/splinesDUNE.h"
 #include "samplePDF/samplePDFFDBase.h"
+#include <vector>
+#include <string>
+
+struct xsec_BinDef {
+  int index;
+  double q0_min, q0_max;
+  double q3_min, q3_max;
+};
+
 
 #include "StructsDUNE.h"
 /// @brief Base class for handling FD Beam samples
@@ -21,7 +30,18 @@ public:
   ~samplePDFDUNEBeamFD();
 
   /// @brief Enum to identify kinematics
-  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC, kq0, kq3, k_pT, k_pz, k_global_bin_number, kp_lep, ktheta_lep, kELepRec, kEHadRec, kERec_minus_Etrue,kERecQE};
+  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC, kq0, kq3, k_pT, k_pz, k_global_bin_number, kp_lep, ktheta_lep, kELepRec, kEHadRec, kERec_minus_Etrue, kERecQE, kERecProxy_minus_Enu, kyRec, keHad_av, kisCC};
+  
+  std::vector<xsec_BinDef> fxsec_BinDefs;
+  std::vector<double> fQ0Edges, fQ3Edges;
+  TH2D* fQ0Q3Hist = nullptr;
+  void ExtractQ0Q3BinningFromYAML(const std::string& yamlFile);
+  void SetupQ0Q3Hist(); // optional helper to build fQ0Q3Hist
+  TH2D* GetQ0Q3Hist() const { return fQ0Q3Hist; }
+  TH2D* h_q0q3_filling = nullptr; 
+
+  // samplePDFDUNEBeamFD.h
+  TH2D* GetQ0Q3FillingHist() const;  // just the declaration
 
 protected:
   /// @brief Initialises object
@@ -139,7 +159,17 @@ protected:
     {"q3",kq3},
     {"pT",k_pT},
     {"pz",k_pz},
-    {"global_bin_number",k_global_bin_number}
+    {"global_bin_number",k_global_bin_number},
+    {"p_lep",kp_lep},
+    {"theta_lep",ktheta_lep},
+    {"ELepRec",kELepRec},
+    {"EHadRec",kEHadRec},
+    {"ERec_minus_Etrue",kERec_minus_Etrue},
+    {"ERecQE",kERecQE},
+    {"ERecProxy_minus_Enu",kERecProxy_minus_Enu},
+    {"yRec",kyRec},
+    {"eHad_av",keHad_av},
+    {"isCC", kisCC}
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -163,7 +193,11 @@ protected:
     {kELepRec, "ELepRec"},
     {kEHadRec,"EHadRec"},
     {kERec_minus_Etrue, "ERec_minus_Etrue"},
-    {kERecQE, "ERecQE"}
+    {kERecQE, "ERecQE"},
+    {kERecProxy_minus_Enu, "ERecProxy_minus_Enu"},
+    {kyRec, "yRec"},
+    {keHad_av, "eHad_av"},
+    {kisCC, "isCC"}
   };
 };
 

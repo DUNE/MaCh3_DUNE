@@ -69,7 +69,7 @@ int samplePDFDUNEAtm::setupExperimentMC(int iSample) {
   duneobj->nupdgUnosc = new int[duneobj->nEvents];
 
   duneobj->mode = new double[duneobj->nEvents];
-  duneobj->rw_isCC = new int[duneobj->nEvents];
+  duneobj->rw_isCC = new double[duneobj->nEvents];
   duneobj->Target = new int[duneobj->nEvents];
   
   duneobj->rw_etru = new double[duneobj->nEvents];

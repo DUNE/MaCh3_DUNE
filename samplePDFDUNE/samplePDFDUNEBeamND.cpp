@@ -195,7 +195,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   _data->SetBranchStatus("Ev_reco", 1);
   _data->SetBranchAddress("Ev_reco", &_erec);
   _data->SetBranchStatus("Elep_reco", 1);
-  _data->SetBranchAddress("Elep_reco", &_erec_lep);
+  _data->SetBranchAddress("Elep_reco", &_elep_reco);
   _data->SetBranchStatus("mode",1);
   _data->SetBranchAddress("mode",&_mode);
   _data->SetBranchStatus("isCC", 1);
@@ -250,7 +250,7 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
   duneobj->rw_erec_shifted = new double[duneobj->nEvents];
   duneobj->rw_theta = new double[duneobj->nEvents];
   duneobj->flux_w = new double[duneobj->nEvents];
-  duneobj->rw_isCC = new int[duneobj->nEvents];
+  duneobj->rw_isCC = new double[duneobj->nEvents];
   duneobj->rw_reco_q = new double[duneobj->nEvents];
   duneobj->rw_nuPDGunosc = new int[duneobj->nEvents];
   duneobj->rw_nuPDG = new int[duneobj->nEvents];
@@ -285,9 +285,9 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
     
     duneobj->rw_erec[i] = _erec;
     duneobj->rw_erec_shifted[i] = _erec;
-    duneobj->rw_erec_lep[i] = _erec_lep;
-    duneobj->rw_erec_had[i] = (_erec - _erec_lep);
-    duneobj->rw_yrec[i] = ((_erec - _erec_lep)/_erec);
+    duneobj->rw_erec_lep[i] =_elep_reco;
+    duneobj->rw_erec_had[i] = (_erec -_elep_reco);
+    duneobj->rw_yrec[i] = ((_erec -_elep_reco)/_erec);
     duneobj->rw_etru[i] = _ev; // in GeV
     duneobj->rw_theta[i] = _LepNuAngle;
     duneobj->rw_isCC[i] = _isCC;
@@ -335,7 +335,7 @@ const double* samplePDFDUNEBeamND::GetPointerToKinematicParameter(KinematicTypes
     KinematicValue = &(dunendmcSamples[iSample].rw_etru[iEvent]);
     break;
   case kRecoNeutrinoEnergy:
-    KinematicValue = &(dunendmcSamples[iSample].rw_erec_shifted[iEvent]);
+    KinematicValue = &(dunendmcSamples[iSample].rw_erec[iEvent]);
     break;
   case kyRec:
     KinematicValue = &(dunendmcSamples[iSample].rw_yrec[iEvent]);
