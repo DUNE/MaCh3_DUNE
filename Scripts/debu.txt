@@ -1,0 +1,13 @@
+
+Processing PlotErrorBands.C("/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/Chain_testing/newconfig_eventrate2.root", "ND_FHC_CCnumuELepRec", 1000)...
+[DEBUG] Loaded ND_FHC_CCnumuELepRec0 with integral: 587896
+[DEBUG] Loaded ND_FHC_CCnumuELepRec1 with integral: 587896
+[DEBUG] Loaded ND_FHC_CCnumuELepRec2 with integral: 587896
+[INFO] Successfully loaded 1000 toy histograms.
+Bin 1 values:
+  Toy 0: 587896
+  Toy 1: 587896
+  Toy 2: 587896
+  Toy 3: 587896
+  Toy 4: 587896
+Info in <TCanvas::SaveAs>: ROOT file error_bands.root has been created

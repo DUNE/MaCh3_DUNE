@@ -79,6 +79,7 @@ public:
   double _eRecoPim;
   double _eRecoPi0;
   double _eRecoN;
+  double _elep_reco;
 
   double _LepNuAngle;
   double _LepE;

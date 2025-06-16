@@ -8,7 +8,7 @@ void PlotAutoCorrelations(std::string FileName) {
   TFile* File = new TFile(FileName.c_str(),"READ");
 
   gStyle->SetOptStat(0);
-  TDirectory* AutoCorrDir2 = (TDirectory*)File->Get("Trace");
+  TDirectory* AutoCorrDir2 = (TDirectory*)File->Get("posteriors");
   TIter next2(AutoCorrDir2->GetListOfKeys());
   std::vector<TString> Titles;
   TString HistName2;
