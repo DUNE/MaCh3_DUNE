@@ -1,17 +1,20 @@
----
-
 Systematics:
 
-# V2 initial commit
-# WARNING !!!
-# osc covariance require particular order of osc parameters, do not change order of dials here
+
+
+
+#V2 initial commit
+#WARNING !!!
+#osc covariance require particular order of osc parameters, do not change order of dials here
 - Systematic:
     Names:
       FancyName: sin2th_12
       ParameterName: sin2th_12
 
 
-    SampleNames: ["FD_*", "ATM"]
+
+
+    DetID: 984
     Error: 0.0129961532770277840
     FlatPrior: false
     ParameterBounds: [0, 1]
@@ -24,13 +27,17 @@ Systematics:
     Type: Osc
 
 
+
+
 - Systematic:
     Names:
       FancyName: sin2th_23
       ParameterName: sin2th_23
 
 
-    SampleNames: ["FD_*", "ATM"]
+
+
+    DetID: 984
     Error: 0.021
     FlatPrior: true
     ParameterBounds: [0, 1]
@@ -43,13 +50,17 @@ Systematics:
     Type: Osc
 
 
+
+
 - Systematic:
     Names:
       FancyName: sin2th_13
       ParameterName: sin2th_13
 
 
-    SampleNames: ["FD_*", "ATM"]
+
+
+    DetID: 984
     Error: 0.0007
     FlatPrior: true
     ParameterBounds: [0, 1]
@@ -62,13 +73,17 @@ Systematics:
     Type: Osc
 
 
+
+
 - Systematic:
     Names:
       FancyName: delm2_12
       ParameterName: delm2_12
 
 
-    SampleNames: ["FD_*", "ATM"]
+
+
+    DetID: 984
     Error: 0.0000018
     FlatPrior: false
     ParameterBounds: [-999, 999]
@@ -81,13 +96,17 @@ Systematics:
     Type: Osc
 
 
+
+
 - Systematic:
     Names:
       FancyName: delm2_23
       ParameterName: delm2_23
 
 
-    SampleNames: ["FD_*", "ATM"]
+
+
+    DetID: 984
     Error: 0.000034
     FlatPrior: true
     ParameterBounds: [-999, 999]
@@ -100,13 +119,17 @@ Systematics:
     Type: Osc
 
 
+
+
 - Systematic:
     Names:
       FancyName: delta_cp
       ParameterName: delta_cp
 
 
-    SampleNames: ["FD_*", "ATM"]
+
+
+    DetID: 984
     Error: 6.28331122896200340
     FlatPrior: true
     # It has special treatment as it is continuous param
@@ -120,16 +143,20 @@ Systematics:
     Type: Osc
 
 
+
+
 - Systematic:
     Names:
       FancyName: baseline
       ParameterName: baseline
 
 
-    SampleNames: ["FD_*", "ATM"]
+
+
+    DetID: 984
     Error: 0.01
     FlatPrior: true
-    ParameterBounds: [0, 9999]
+    ParameterBounds: [0, 999]
     ParameterGroup: Osc
     ParameterValues:
       Generated: 1284.9
@@ -139,13 +166,17 @@ Systematics:
     Type: Osc
 
 
+
+
 - Systematic:
     Names:
       FancyName: density
       ParameterName: density
 
 
-    SampleNames: ["FD_*", "ATM"]
+
+
+    DetID: 984
     Error: 0.01
     FlatPrior: true
     ParameterBounds: [0, 999]
@@ -153,6 +184,90 @@ Systematics:
     ParameterValues:
       Generated: 2.6
       PreFitValue: 2.6
+    StepScale:
+      MCMC: 1.0
+    Type: Osc
+
+
+- Systematic:
+    Names:
+      FancyName: elec_density
+      ParameterName: elec_density
+
+
+
+
+    DetID: 984
+    Error: 0.01
+    FlatPrior: true
+    ParameterBounds: [0, 999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 0.5
+      PreFitValue: 0.5
+    StepScale:
+      MCMC: 1.0
+    Type: Osc
+
+
+- Systematic:
+    Names:
+      FancyName: decoherence_strength
+      ParameterName: decoherence_strength
+
+
+
+
+    DetID: 984
+    Error: 0.01
+    FlatPrior: true
+    ParameterBounds: [0, 999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 9.48e-18 # 9.48e-18
+      PreFitValue: 9.48e-18
+    StepScale:
+      MCMC: 1.0
+    Type: Osc
+
+
+- Systematic:
+    Names:
+      FancyName: energy_scale
+      ParameterName: energy_scale
+
+
+
+
+    DetID: 984
+    Error: 0.01
+    FlatPrior: true
+    ParameterBounds: [0, 999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 2.0
+      PreFitValue: 2.0
+    StepScale:
+      MCMC: 1.0
+    Type: Osc
+
+
+- Systematic:
+    Names:
+      FancyName: reference_energy
+      ParameterName: reference_energy
+
+
+
+
+    DetID: 984
+    Error: 0.01
+    FlatPrior: true
+    ParameterBounds: [0, 999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
     StepScale:
       MCMC: 1.0
     Type: Osc

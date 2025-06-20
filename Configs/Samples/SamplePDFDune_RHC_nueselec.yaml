@@ -31,7 +31,7 @@ InputFiles:
   splinesuffix: "_nueselec_splines.root"
 
 NuOsc:
-  NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
+  NuOscConfigFile: "Configs/NuOsc/Binned_NuSQUIDSLinear.yaml"
   EqualBinningPerOscChannel: false
 
 SubSamples:
