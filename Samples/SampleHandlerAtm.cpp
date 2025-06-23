@@ -53,6 +53,9 @@ int SampleHandlerAtm::SetupExperimentMC() {
   for (int iEvent=0;iEvent<nEntries;iEvent++) {
     Chain->GetEntry(iEvent);    
 
+    std::cout << "Chain->GetCurrentFile():" << Chain->GetCurrentFile() << std::endl;
+    std::cout << "Chain->GetCurrentFile()->GetName():" << Chain->GetCurrentFile()->GetName() << std::endl;
+    
     if ((iEvent % (nEntries/10))==0) {
       MACH3LOG_INFO("\tProcessing event: {}/{}",iEvent,nEntries);
     }

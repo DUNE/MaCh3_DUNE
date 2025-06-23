@@ -39,6 +39,9 @@ protected:
   /// @brief Sets up splines 
   void SetupSplines();
 
+  /// @brief Cleanup memory
+  void CleanMemoryBeforeFit() override {};
+
   void RegisterFunctionalParameters() override {};
   
   //DB functions which could be initialised to do something which is non-trivial

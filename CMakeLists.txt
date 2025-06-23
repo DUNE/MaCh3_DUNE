@@ -135,8 +135,8 @@ endif()
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
-find_package(MaCh3 2.0.0 EXACT QUIET)
-set(MaCh3_CORE_BRANCH feature/kskwarczynski/EventClass CACHE STRING "Specify the MaCh3 core branch to use")
+find_package(MaCh3 2.1.0 EXACT QUIET)
+set(MaCh3_CORE_BRANCH develop CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 
 if(NOT MaCh3_FOUND)
