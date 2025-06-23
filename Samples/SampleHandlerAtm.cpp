@@ -19,7 +19,8 @@ SampleHandlerAtm::~SampleHandlerAtm() {
 void SampleHandlerAtm::Init() {
   dunemcSamples.resize(nSamples,dunemc_base());
   
-  IsELike = SampleManager->raw()["SampleBools"]["IsELike"].as<bool>();
+  IsELike = Get<bool>(SampleManager->raw()["SampleOptions"]["IsELike"],__FILE__,__LINE__);
+  ExposureScaling = Get<double>(SampleManager->raw()["SampleOptions"]["ExposureScaling"],__FILE__,__LINE__);
 }
 
 void SampleHandlerAtm::SetupSplines() {
@@ -29,11 +30,12 @@ void SampleHandlerAtm::SetupSplines() {
 void SampleHandlerAtm::SetupWeightPointers() {
   for (size_t i = 0; i < dunemcSamples.size(); ++i) {
     for (int j = 0; j < dunemcSamples[i].nEvents; ++j) {
-      MCSamples[i].ntotal_weight_pointers[j] = 3;
+      MCSamples[i].ntotal_weight_pointers[j] = 4;
       MCSamples[i].total_weight_pointers[j].resize(MCSamples[i].ntotal_weight_pointers[j]);
       MCSamples[i].total_weight_pointers[j][0] = &(dunemcSamples[i].flux_w[j]);
       MCSamples[i].total_weight_pointers[j][1] = MCSamples[i].osc_w_pointer[j];
       MCSamples[i].total_weight_pointers[j][2] = &(MCSamples[i].xsec_w[j]);
+      MCSamples[i].total_weight_pointers[j][3] = &(ExposureScaling);
     }
   }
 }
