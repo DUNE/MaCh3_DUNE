@@ -51,19 +51,41 @@ int SampleHandlerAtm::SetupExperimentMC() {
   dunemcSamples.resize(nEntries);
  
   for (int iEvent=0;iEvent<nEntries;iEvent++) {
-    Chain->GetEntry(iEvent);    
+    Chain->GetEntry(iEvent);
 
-    //std::cout << "Chain->GetCurrentFile():" << Chain->GetCurrentFile() << std::endl;
-    //std::cout << "Chain->GetCurrentFile()->GetName():" << Chain->GetCurrentFile()->GetName() << std::endl;
-
-    std::string CurrFileName = Chain->GetCurrentFile()->GetName();
-    
     if ((iEvent % (nEntries/10))==0) {
       MACH3LOG_INFO("\tProcessing event: {}/{}",iEvent,nEntries);
     }
-
-    dunemcSamples[iEvent].nupdgUnosc = FileToInitPDGMap[CurrFileName];
-    dunemcSamples[iEvent].nupdg = FileToFinalPDGMap[CurrFileName];
+    
+    if(sr->common.ixn.pandora.size() != 1) {
+      MACH3LOG_WARN("Skipping event {}/{} -> Number of neutrino slices found in event: {}",iEvent,nEntries,sr->common.ixn.pandora.size());
+      continue;
+    }
+    
+    TVector3 RecoNuMomentumVector;
+    double RecoENu;
+    if (IsELike) {
+      RecoENu = sr->common.ixn.pandora[0].Enu.e_calo;
+      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.heshw.X(),sr->common.ixn.pandora[0].dir.heshw.Y(),sr->common.ixn.pandora[0].dir.heshw.Z())).Unit();
+    } else {
+      RecoENu = sr->common.ixn.pandora[0].Enu.lep_calo;
+      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.X(),sr->common.ixn.pandora[0].dir.lngtrk.Y(),sr->common.ixn.pandora[0].dir.lngtrk.Z())).Unit();      
+    }
+    double RecoCZ = -RecoNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
+    if (std::isnan(RecoCZ)) {
+      MACH3LOG_WARN("Skipping event {}/{} -> Reconstructed Cosine Z is NAN",iEvent,nEntries);
+      continue;
+    }
+    if (std::isnan(RecoENu)) {
+      MACH3LOG_WARN("Skipping event {}/{} -> Reconstructed Neutrino Energy is NAN",iEvent,nEntries);
+      continue;
+    }
+    dunemcSamples[iEvent].rw_erec = RecoENu;
+    dunemcSamples[iEvent].rw_theta = RecoCZ;
+    
+    std::string CurrFileName = Chain->GetCurrentFile()->GetName();
+    dunemcSamples[iEvent].nupdgUnosc = GetInitPDGFromFileName(CurrFileName);
+    dunemcSamples[iEvent].nupdg = GetFinalPDGFromFileName(CurrFileName);
 
     int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
     if (!sr->mc.nu[0].iscc) M3Mode += 14; //Account for no ability to distinguish CC/NC
@@ -79,17 +101,6 @@ int SampleHandlerAtm::SetupExperimentMC() {
     dunemcSamples[iEvent].rw_truecz = -TrueNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
 
     dunemcSamples[iEvent].flux_w = sr->mc.nu[0].genweight;
-
-    TVector3 RecoNuMomentumVector;
-    if (IsELike) {
-      dunemcSamples[iEvent].rw_erec = sr->common.ixn.pandora[0].Enu.e_calo;
-      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.heshw.X(),sr->common.ixn.pandora[0].dir.heshw.Y(),sr->common.ixn.pandora[0].dir.heshw.Z())).Unit();
-    } else {
-      dunemcSamples[iEvent].rw_erec = sr->common.ixn.pandora[0].Enu.lep_calo;
-      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.X(),sr->common.ixn.pandora[0].dir.lngtrk.Y(),sr->common.ixn.pandora[0].dir.lngtrk.Z())).Unit();      
-    }
-
-    dunemcSamples[iEvent].rw_theta = -RecoNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
   }
 
   delete Chain;

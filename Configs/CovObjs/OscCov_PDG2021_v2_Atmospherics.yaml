@@ -31,6 +31,10 @@ Systematics:
 
     SampleNames: ["FD_*", "ATM"]
     Error: 0.021
+    # flip octant around point of maximal disappearance (0.5112)
+    # this ensures we move to a parameter value which has the same oscillation probability
+    SpecialProposal:
+      FlipParameter: 0.5112
     FlatPrior: true
     ParameterBounds: [0, 1]
     ParameterGroup: Osc
@@ -89,6 +93,8 @@ Systematics:
 
     SampleNames: ["FD_*", "ATM"]
     Error: 0.000034
+    SpecialProposal:
+      FlipParameter: 0.
     FlatPrior: true
     ParameterBounds: [-999, 999]
     ParameterGroup: Osc
@@ -108,6 +114,8 @@ Systematics:
 
     SampleNames: ["FD_*", "ATM"]
     Error: 6.28331122896200340
+    SpecialProposal:
+      CircularBounds: [-3.141592, 3.141592]
     FlatPrior: true
     # It has special treatment as it is continuous param
     ParameterBounds: [-999, 999]

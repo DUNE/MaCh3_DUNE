@@ -26,7 +26,7 @@ General:
     FitTestLikelihood: false
 
   MCMC:
-    NSteps: 10
+    NSteps: 1000000
     AutoSave: 10000
 
   Output:
