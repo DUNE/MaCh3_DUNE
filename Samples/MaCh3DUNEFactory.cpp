@@ -8,14 +8,13 @@
 #include "Samples/SampleHandlerAtm.h"
 #endif
 
-SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, ParameterHandlerGeneric* &xsec, ParameterHandlerOsc* &osc, TMatrixD* NDCov_FHC, TMatrixD* NDCov_RHC) {
+SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, ParameterHandlerGeneric* &xsec, TMatrixD* NDCov_FHC, TMatrixD* NDCov_RHC) {
   SampleHandlerFD *Sample;
 
   (void)NDCov_FHC;
   (void)NDCov_RHC;
   
 #ifdef BUILD_NDGAR
-  (void)osc;
   (void)NDCov_FHC;
   (void)NDCov_RHC;
   if (SampleType == "BeamNDGAr") {
@@ -27,7 +26,7 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
 #else
   /*
   if (SampleType == "BeamFD") {
-    Sample = new SampleHandlerBeamFD(SampleConfig, xsec, osc);
+    Sample = new SampleHandlerBeamFD(SampleConfig, xsec);
   } else if (SampleType == "BeamND") {
     
     if (NDCov_FHC == nullptr || NDCov_RHC == nullptr) {
@@ -41,10 +40,10 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
     if(isFHC) {NDCov = NDCov_FHC;}
     else {NDCov = NDCov_RHC;}
     
-    Sample = new SampleHandlerBeamND(SampleConfig, xsec, NDCov, osc);
+    Sample = new SampleHandlerBeamND(SampleConfig, xsec, NDCov);
     } else*/
   if (SampleType == "Atm") {
-    Sample = new SampleHandlerAtm(SampleConfig, xsec, osc);
+    Sample = new SampleHandlerAtm(SampleConfig, xsec);
   } else {
     MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
     throw MaCh3Exception(__FILE__, __LINE__);
@@ -54,7 +53,7 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
   return Sample;
 }
 
-void MakeMaCh3DuneInstance(manager *FitManager, std::vector<SampleHandlerFD*> &DUNEPdfs, ParameterHandlerGeneric *&xsec, ParameterHandlerOsc *&osc){
+void MakeMaCh3DuneInstance(manager *FitManager, std::vector<SampleHandlerFD*> &DUNEPdfs, ParameterHandlerGeneric *&xsec){
 
   // there's a check inside the manager class that does this; left here for demonstrative purposes
   if (FitManager == nullptr) {
@@ -68,6 +67,8 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<SampleHandlerFD*> &D
     throw MaCh3Exception(__FILE__, __LINE__);
   }
 
+  // ==========================================================
+  
   // Get inputted systematic parameters covariance matrices
   std::vector<std::string> xsecCovMatrixFile;
   if (CheckNodeExists(FitManager->raw(), "General", "Systematics", "XsecCovFile") ){
@@ -85,48 +86,9 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<SampleHandlerFD*> &D
     MACH3LOG_INFO("covariance Xsec has already been created so I am not re-initialising the object"); 
   }
 
-  //Setup the cross-section parameters
-  //This should get the prior values.
-  //std::vector<double> XsecParVals = xsec->GetNominalArray();
-
-  //xsec->SetParameters(XsecParVals);
-  xsec->SetParameters();
-  xsec->SetStepScale(FitManager->raw()["General"]["Systematics"]["XsecStepScale"].as<double>());
-
   MACH3LOG_INFO("cov xsec setup");
   MACH3LOG_INFO("------------------------------");
 
-  std::vector<std::string> OscMatrixFile = FitManager->raw()["General"]["Systematics"]["OscCovFile"].as<std::vector<std::string>>();
-  std::string  OscMatrixName = FitManager->raw()["General"]["Systematics"]["OscCovName"].as<std::string>(); 
-  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
-
-  std::string OscPars = "";
-
-  for (unsigned int i=0;i<oscpars.size();i++) {
-    OscPars+=std::to_string(oscpars[i]);
-    OscPars+=", ";
-  }
-  MACH3LOG_INFO("Oscillation Parameters being used: {} ", OscPars);
-
-  osc = new ParameterHandlerOsc(OscMatrixFile,OscMatrixName.c_str());
-  osc->SetName("osc_cov");
-  osc->SetParameters(oscpars);
-
-  std::vector<std::string> OscFixParams = GetFromManager<std::vector<std::string>>(FitManager->raw()["General"]["Systematics"]["OscFix"], {});
-  if (OscFixParams.size() == 1 && OscFixParams.at(0) == "All") {
-    for (int j = 0; j < osc->GetNumParams(); j++) {
-      osc->ToggleFixParameter(j);
-    }
-  } else {
-    for (unsigned int j = 0; j < OscFixParams.size(); j++) {
-      osc->ToggleFixParameter(OscFixParams.at(j));
-    }
-  }
-
-  MACH3LOG_INFO("Osc cov setup");
-  MACH3LOG_INFO("------------------------------");
-
-  // ==========================================================
   //read flat prior, fixed paramas from the config file
   std::vector<std::string> XsecFixParams = GetFromManager<std::vector<std::string>>(FitManager->raw()["General"]["Systematics"]["XsecFix"], {});
 
@@ -142,10 +104,14 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<SampleHandlerFD*> &D
   }
   MACH3LOG_INFO("xsec parameters loop done");
 
-  // Fill the parameter values with their nominal values
-  // should _ALWAYS_ be done before overriding with fix or flat
   xsec->SetParameters();
+  xsec->SetStepScale(FitManager->raw()["General"]["Systematics"]["XsecStepScale"].as<double>());
 
+  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
+  xsec->SetGroupOnlyParameters("Osc", oscpars);
+  
+  // ==========================================================
+  
   TMatrixD* NDCov_FHC = nullptr;
   TMatrixD* NDCov_RHC = nullptr;
 
@@ -177,7 +143,7 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<SampleHandlerFD*> &D
     manager* tempSampleManager = new manager(DUNESampleConfigs[Sample_i].c_str());
     std::string SampleType = tempSampleManager->raw()["SampleType"].as<std::string>();
 
-    DUNEPdfs.push_back(GetMaCh3DuneInstance(SampleType, DUNESampleConfigs[Sample_i], xsec, osc, NDCov_FHC, NDCov_RHC));
+    DUNEPdfs.push_back(GetMaCh3DuneInstance(SampleType, DUNESampleConfigs[Sample_i], xsec, NDCov_FHC, NDCov_RHC));
 
     // Pure for debugging, lets us set which weights we don't want via the manager
 #if DEBUG_DUNE_WEIGHTS==1

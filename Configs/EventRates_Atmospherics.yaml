@@ -17,12 +17,10 @@ General:
   # OscillationParameters: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.5]
 
   Systematics:
-    XsecCovFile: ["Configs/CovObjs/xsec_covariance_DUNE_systs_2022a_FD_v3.yaml"]
+    XsecCovFile: ["Configs/CovObjs/xsec_covariance_DUNE_systs_2022a_FD_v3.yaml", "Configs/CovObjs/OscCov_PDG2021_v2_Atmospherics.yaml"]
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.1
     XsecAtGen: false
-    OscCovFile: ["Configs/CovObjs/OscCov_PDG2021_v2_Atmospherics.yaml"]
-    OscCovName: "osc_cov"
 
   Fitter:
     FitTestLikelihood: false

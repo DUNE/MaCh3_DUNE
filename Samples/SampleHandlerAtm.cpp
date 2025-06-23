@@ -6,7 +6,7 @@
 #include "duneanaobj/StandardRecord/StandardRecord.h"
 #pragma GCC diagnostic pop
 
-SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGeneric* xsec_cov_, ParameterHandlerOsc* osc_cov_) : SampleHandlerFD(mc_version_, xsec_cov_, osc_cov_) {
+SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGeneric* xsec_cov_) : SampleHandlerFD(mc_version_, xsec_cov_) {
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
   
@@ -53,17 +53,17 @@ int SampleHandlerAtm::SetupExperimentMC() {
   for (int iEvent=0;iEvent<nEntries;iEvent++) {
     Chain->GetEntry(iEvent);    
 
-    std::cout << "Chain->GetCurrentFile():" << Chain->GetCurrentFile() << std::endl;
-    std::cout << "Chain->GetCurrentFile()->GetName():" << Chain->GetCurrentFile()->GetName() << std::endl;
+    //std::cout << "Chain->GetCurrentFile():" << Chain->GetCurrentFile() << std::endl;
+    //std::cout << "Chain->GetCurrentFile()->GetName():" << Chain->GetCurrentFile()->GetName() << std::endl;
+
+    std::string CurrFileName = Chain->GetCurrentFile()->GetName();
     
     if ((iEvent % (nEntries/10))==0) {
       MACH3LOG_INFO("\tProcessing event: {}/{}",iEvent,nEntries);
     }
 
-    dunemcSamples[iEvent].nupdg = sr->mc.nu[0].pdg;
-
-    //dunemcSamples->nupdgUnosc[iEvent] = sr->mc.nu[0].pdgorig;
-    dunemcSamples[iEvent].nupdgUnosc = 14 * ((dunemcSamples[iEvent].nupdg > 0) - (dunemcSamples[iEvent].nupdg < 0));
+    dunemcSamples[iEvent].nupdgUnosc = FileToInitPDGMap[CurrFileName];
+    dunemcSamples[iEvent].nupdg = FileToFinalPDGMap[CurrFileName];
 
     int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
     if (!sr->mc.nu[0].iscc) M3Mode += 14; //Account for no ability to distinguish CC/NC
@@ -76,7 +76,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
     dunemcSamples[iEvent].rw_etru = static_cast<double>(sr->mc.nu[0].E);
 
     TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.X(),sr->mc.nu[0].momentum.Y(),sr->mc.nu[0].momentum.Z())).Unit();
-    duneobj->rw_truecz[iEvent] = -TrueNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
+    dunemcSamples[iEvent].rw_truecz = -TrueNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
 
     dunemcSamples[iEvent].flux_w = sr->mc.nu[0].genweight;
 
@@ -89,7 +89,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
       RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.X(),sr->common.ixn.pandora[0].dir.lngtrk.Y(),sr->common.ixn.pandora[0].dir.lngtrk.Z())).Unit();      
     }
 
-    duneobj->rw_theta[iEvent] = -RecoNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
+    dunemcSamples[iEvent].rw_theta = -RecoNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
   }
 
   delete Chain;
@@ -167,43 +167,7 @@ std::vector<double> SampleHandlerAtm::ReturnKinematicParameterBinning(std::strin
 }
 
 std::vector<double> SampleHandlerAtm::ReturnKinematicParameterBinning(KinematicTypes KinPar)  {
+  (void)KinPar;
   std::vector<double> ReturnVec;
-  
-  switch (KinPar) {
-
-  case kTrueNeutrinoEnergy:
-    for (int i=0;i<20;i++) {
-      ReturnVec.emplace_back(i);
-    }
-    ReturnVec.emplace_back(100.);
-    ReturnVec.emplace_back(1000.);
-    break;
-
-  case kTrueCosZ:
-  case kRecoCosZ:
-    ReturnVec.resize(XBinEdges.size());
-    for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
-    break;
-
-  case kRecoNeutrinoEnergy:
-    ReturnVec.resize(YBinEdges.size());
-    for (unsigned int bin_i=0;bin_i<YBinEdges.size();bin_i++) {ReturnVec[bin_i] = YBinEdges[bin_i];}
-    break;
-
-  case kOscChannel:
-    ReturnVec.resize(GetNsamples());
-    for (int bin_i=0;bin_i<GetNsamples();bin_i++) {ReturnVec[bin_i] = bin_i;}
-    break;
-
-  case kMode:
-    ReturnVec.resize(Modes->GetNModes());
-    for (int bin_i=0;bin_i<Modes->GetNModes();bin_i++) {ReturnVec[bin_i] = bin_i;}
-    break;
-    
-  default:
-    MACH3LOG_ERROR("Unknown KinPar: {}",static_cast<int>(KinPar));
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-
   return ReturnVec;
 }

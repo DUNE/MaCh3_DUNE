@@ -2,11 +2,11 @@ add_custom_target(MaCh3DUNEApps)
 
 foreach(app
 	EventRates
-	Fit
-	Projections
-	SigmaVariation
-	LikelihoodScan
-	Variations
+#	Fit
+#	Projections
+#	SigmaVariation
+#	LikelihoodScan
+#	Variations
       )
       
     add_executable(${app} ${app}.cpp)
