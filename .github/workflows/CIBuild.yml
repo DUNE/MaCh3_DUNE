@@ -1,7 +1,6 @@
 ---
 # Check if MaCh3 compiles correctly
-
-name: Build CI
+name: Build CD
 
 # The events that trigger the workflow
 on:

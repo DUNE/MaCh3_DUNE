@@ -76,7 +76,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
     dunemcSamples[iEvent].rw_etru = static_cast<double>(sr->mc.nu[0].E);
 
     TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.X(),sr->mc.nu[0].momentum.Y(),sr->mc.nu[0].momentum.Z())).Unit();
-    dunemcSamples[iEvent].rw_truecz = TrueNuMomentumVector.Y();
+    duneobj->rw_truecz[iEvent] = -TrueNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
 
     dunemcSamples[iEvent].flux_w = sr->mc.nu[0].genweight;
 
@@ -88,8 +88,8 @@ int SampleHandlerAtm::SetupExperimentMC() {
       dunemcSamples[iEvent].rw_erec = sr->common.ixn.pandora[0].Enu.lep_calo;
       RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.X(),sr->common.ixn.pandora[0].dir.lngtrk.Y(),sr->common.ixn.pandora[0].dir.lngtrk.Z())).Unit();      
     }
-    dunemcSamples[iEvent].rw_theta = RecoNuMomentumVector.Y();
-    
+
+    duneobj->rw_theta[iEvent] = -RecoNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
   }
 
   delete Chain;
