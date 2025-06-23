@@ -17,7 +17,10 @@ SampleHandlerAtm::~SampleHandlerAtm() {
 }
 
 void SampleHandlerAtm::Init() {
-  IsELike = SampleManager->raw()["SampleBools"]["IsELike"].as<bool>();
+  dunemcSamples.resize(nSamples,dunemc_base());
+  
+  IsELike = Get<bool>(SampleManager->raw()["SampleOptions"]["IsELike"],__FILE__,__LINE__);
+  ExposureScaling = Get<double>(SampleManager->raw()["SampleOptions"]["ExposureScaling"],__FILE__,__LINE__);
 }
 
 void SampleHandlerAtm::SetupSplines() {
@@ -29,6 +32,7 @@ void SampleHandlerAtm::SetupWeightPointers() {
     MCSamples[i].total_weight_pointers.push_back(&(dunemcSamples[i].flux_w));
     MCSamples[i].total_weight_pointers.push_back(MCSamples[i].osc_w_pointer);
     MCSamples[i].total_weight_pointers.push_back(&(MCSamples[i].xsec_w));
+    MCSamples[i].total_weight_pointers.push_back(&(ExposureScaling));
   }
   
 }

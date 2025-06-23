@@ -127,21 +127,17 @@ int main(int argc, char *argv[]) {
   // Create samplePDFFD objects
 
   ParameterHandlerGeneric *xsec = nullptr;
-  ParameterHandlerOsc *osc = nullptr;
 
   std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(fitMan.get(), DUNEPdfs, xsec, osc);
+  MakeMaCh3DuneInstance(fitMan.get(), DUNEPdfs, xsec);
 
   // ###############################################################################################################################
   // Perform reweight and print total integral for sanity check
 
   MACH3LOG_INFO("=================================================");
-  std::vector<TH1D*> DUNEHists;
   for (auto Sample : DUNEPdfs) {
     Sample->Reweight();
-    DUNEHists.push_back(Sample->Get1DHist());
-
-    std::string EventRateString = fmt::format("{:.2f}", Sample->Get1DHist()->Integral());
+    std::string EventRateString = fmt::format("{:.2f}", Sample->GetMCHist(Sample->GetNDim())->Integral());
     MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetTitle(), EventRateString);
   }
 
