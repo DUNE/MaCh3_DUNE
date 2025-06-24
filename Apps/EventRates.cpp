@@ -78,7 +78,7 @@ int main(int argc, char * argv[]) {
   
   for(auto Sample : DUNEPdfs) {
     MACH3LOG_INFO("======================");
-    int nOscChannels = Sample->GetNMCSamples();
+    int nOscChannels = Sample->GetNOscChannels();
     for (int iOscChan=0;iOscChan<nOscChannels;iOscChan++) {
       std::vector< KinematicCut > SelectionVec;
 

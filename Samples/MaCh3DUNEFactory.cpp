@@ -8,7 +8,7 @@
 #include "Samples/SampleHandlerAtm.h"
 #endif
 
-SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, ParameterHandlerGeneric* &xsec, TMatrixD* NDCov_FHC, TMatrixD* NDCov_RHC) {
+SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, ParameterHandlerGeneric* &xsec, const std::shared_ptr<OscillationHandler>&  Oscillator_, TMatrixD* NDCov_FHC, TMatrixD* NDCov_RHC) {
   SampleHandlerFD *Sample;
 
   (void)NDCov_FHC;
@@ -43,7 +43,7 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
     Sample = new SampleHandlerBeamND(SampleConfig, xsec, NDCov);
     } else*/
   if (SampleType == "Atm") {
-    Sample = new SampleHandlerAtm(SampleConfig, xsec);
+    Sample = new SampleHandlerAtm(SampleConfig, xsec, Oscillator_);
   } else {
     MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
     throw MaCh3Exception(__FILE__, __LINE__);
@@ -111,6 +111,12 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<SampleHandlerFD*> &D
   xsec->SetGroupOnlyParameters("Osc", oscpars);
   
   // ==========================================================
+
+  std::string OscillatorConfig = Get<std::string>(FitManager->raw()["General"]["SharedNuOscillatorObject"]["ATM"], __FILE__, __LINE__);
+  std::vector<const double*> OscParams = xsec->GetOscParsFromSampleName("ATM");
+  std::shared_ptr<OscillationHandler> AtmOscHandler = std::make_shared<OscillationHandler>(OscillatorConfig,true,OscParams,12);
+
+  // ==========================================================
   
   TMatrixD* NDCov_FHC = nullptr;
   TMatrixD* NDCov_RHC = nullptr;
@@ -143,7 +149,7 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<SampleHandlerFD*> &D
     manager* tempSampleManager = new manager(DUNESampleConfigs[Sample_i].c_str());
     std::string SampleType = tempSampleManager->raw()["SampleType"].as<std::string>();
 
-    DUNEPdfs.push_back(GetMaCh3DuneInstance(SampleType, DUNESampleConfigs[Sample_i], xsec, NDCov_FHC, NDCov_RHC));
+    DUNEPdfs.push_back(GetMaCh3DuneInstance(SampleType, DUNESampleConfigs[Sample_i], xsec, AtmOscHandler, NDCov_FHC, NDCov_RHC));
 
     // Pure for debugging, lets us set which weights we don't want via the manager
 #if DEBUG_DUNE_WEIGHTS==1

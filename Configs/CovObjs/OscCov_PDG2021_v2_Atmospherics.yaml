@@ -145,3 +145,278 @@ Systematics:
     StepScale:
       MCMC: 5.0
     Type: Oscillation
+
+############# Earth Model Systematics #############
+# These are ripped from: /exp/dune/app/users/ismerio/M3_250317/MaCh3_DUNE/configs/CovObjs/OscCov_PDG2021_v2_Atmospherics_EarthSys_v2.yaml
+# Need to confirm with Marcelo that these are the correct ones to use
+
+- Systematic:
+    Names:
+      FancyName: r_1
+      ParameterName: r_1
+    DetID: ["FD","ATM"]
+    Error: 61.075
+    FlatPrior: false
+    ParameterBounds: [0, 9999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 1221.50
+      PreFitValue: 1221.50
+    StepScale:
+      MCMC: 1.0
+    Type: Oscillation
+    Correlations:
+    - r_1: 1.00000
+    - r_2: 0.00103
+    - r_3: 0.00024
+    - r_4: -0.00180
+    - w_1: -0.00075
+    - w_2: -0.00953
+    - w_3: -0.00032
+    - w_4: 0.00162
+
+
+- Systematic:
+    Names:
+      FancyName: r_2
+      ParameterName: r_2
+    DetID: ["FD","ATM"]
+    Error: 112.925
+    FlatPrior: false
+    ParameterBounds: [0, 9999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 3480.00
+      PreFitValue: 3480.00
+    StepScale:
+      MCMC: 1.0
+    Type: Oscillation
+    Correlations:
+    - r_1: 0.00103
+    - r_2: 1.00000
+    - r_3: 0.00174
+    - r_4: -0.01246
+    - w_1: -0.01702
+    - w_2: -0.50650
+    - w_3: -0.20535
+    - w_4: 0.06791
+
+
+- Systematic:
+    Names:
+      FancyName: r_3
+      ParameterName: r_3
+    DetID: ["FD","ATM"]
+    Error: 111.050
+    FlatPrior: false
+    ParameterBounds: [0, 9999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 5701.00
+      PreFitValue: 5701.00
+    StepScale:
+      MCMC: 1.0
+    Type: Oscillation
+    Correlations:
+    - r_1: 0.00024
+    - r_2: 0.00174
+    - r_3: 1.00000
+    - r_4: 0.00012
+    - w_1: 0.00376
+    - w_2: 0.07809
+    - w_3: -0.12786
+    - w_4: -0.08755
+
+
+- Systematic:
+    Names:
+      FancyName: r_4
+      ParameterName: r_4
+    DetID: ["FD","ATM"]
+    Error: 3.000
+    FlatPrior: false
+    ParameterBounds: [0, 9999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 6371.00
+      PreFitValue: 6371.00
+    StepScale:
+      MCMC: 1.0
+    Type: Oscillation
+    Correlations:
+    - r_1: -0.00180
+    - r_2: -0.01246
+    - r_3: 0.00012
+    - r_4: 1.00000
+    - w_1: -0.00194
+    - w_2: -0.07305
+    - w_3: -0.04818
+    - w_4: -0.00052
+
+
+- Systematic:
+    Names:
+      FancyName: w_1
+      ParameterName: w_1
+    DetID: ["FD","ATM"]
+    Error: 0.100
+    FlatPrior: false
+    ParameterBounds: [0, 999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 1.00
+      PreFitValue: 1.00
+    StepScale:
+      MCMC: 1.0
+    Type: Oscillation
+    Correlations:
+    - r_1: -0.00075
+    - r_2: -0.01702
+    - r_3: 0.00376
+    - r_4: -0.00194
+    - w_1: 1.00000
+    - w_2: -0.12050
+    - w_3: -0.00661
+    - w_4: 0.03424
+
+
+- Systematic:
+    Names:
+      FancyName: w_2
+      ParameterName: w_2
+    DetID: ["FD","ATM"]
+    Error: 0.100
+    FlatPrior: false
+    ParameterBounds: [0, 999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 1.00
+      PreFitValue: 1.00
+    StepScale:
+      MCMC: 1.0
+    Type: Oscillation
+    Correlations:
+    - r_1: -0.00953
+    - r_2: -0.50650
+    - r_3: 0.07809
+    - r_4: -0.07305
+    - w_1: -0.12050
+    - w_2: 1.00000
+    - w_3: -0.70637
+    - w_4: 0.75434
+
+
+- Systematic:
+    Names:
+      FancyName: w_3
+      ParameterName: w_3
+    DetID: ["FD","ATM"]
+    Error: 0.100
+    FlatPrior: false
+    ParameterBounds: [0, 999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 1.00
+      PreFitValue: 1.00
+    StepScale:
+      MCMC: 1.0
+    Type: Oscillation
+    Correlations:
+    - r_1: -0.00032
+    - r_2: -0.20535
+    - r_3: -0.12786
+    - r_4: -0.04818
+    - w_1: -0.00661
+    - w_2: -0.70637
+    - w_3: 1.00000
+    - w_4: -0.93205
+
+
+- Systematic:
+    Names:
+      FancyName: w_4
+      ParameterName: w_4
+    DetID: ["FD","ATM"]
+    Error: 0.100
+    FlatPrior: false
+    ParameterBounds: [0, 999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 1.00
+      PreFitValue: 1.00
+    StepScale:
+      MCMC: 1.0
+    Type: Oscillation
+    Correlations:
+    - r_1: 0.00162
+    - r_2: 0.06791
+    - r_3: -0.08755
+    - r_4: -0.00052
+    - w_1: 0.03424
+    - w_2: 0.75434
+    - w_3: -0.93205
+    - w_4: 1.00000
+
+- Systematic:
+    Names:
+      FancyName: elecdensity_1
+      ParameterName: elecdensity_1
+    DetID: ["ATM"]
+    Error: 0.028
+    FlatPrior: false
+    ParameterBounds: [0, 999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 0.468
+      PreFitValue: 0.468
+    StepScale:
+      MCMC: 1.0
+    Type: Oscillation
+
+- Systematic:
+    Names:
+      FancyName: elecdensity_2
+      ParameterName: elecdensity_2
+    DetID: ["ATM"]
+    Error: 0.028
+    FlatPrior: false
+    ParameterBounds: [0, 999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 0.468
+      PreFitValue: 0.468
+    StepScale:
+      MCMC: 1.0
+    Type: Oscillation
+
+- Systematic:
+    Names:
+      FancyName: elecdensity_3
+      ParameterName: elecdensity_3
+    DetID: ["ATM"]
+    Error: 0.028
+    FlatPrior: true
+    ParameterBounds: [0, 999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 0.496
+      PreFitValue: 0.496
+    StepScale:
+      MCMC: 1.0
+    Type: Oscillation
+
+- Systematic:
+    Names:
+      FancyName: elecdensity_4
+      ParameterName: elecdensity_4
+    DetID: ["ATM"]
+    Error: 0.028
+    FlatPrior: true
+    ParameterBounds: [0, 999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 0.496
+      PreFitValue: 0.496
+    StepScale:
+      MCMC: 1.0
+    Type: Oscillation

@@ -6,7 +6,7 @@
 #include "duneanaobj/StandardRecord/StandardRecord.h"
 #pragma GCC diagnostic pop
 
-SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGeneric* xsec_cov_) : SampleHandlerFD(mc_version_, xsec_cov_) {
+SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGeneric* xsec_cov_, const std::shared_ptr<OscillationHandler>&  Oscillator_) : SampleHandlerFD(mc_version_, xsec_cov_, Oscillator_) {
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
   
@@ -90,7 +90,8 @@ int SampleHandlerAtm::SetupExperimentMC() {
     std::string CurrFileName = Chain->GetCurrentFile()->GetName();
     dunemcSamples[iEvent].nupdgUnosc = GetInitPDGFromFileName(CurrFileName);
     dunemcSamples[iEvent].nupdg = GetFinalPDGFromFileName(CurrFileName);
-
+    dunemcSamples[iEvent].OscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, dunemcSamples[iEvent].nupdgUnosc, dunemcSamples[iEvent].nupdg));
+    
     int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
     if (!sr->mc.nu[0].iscc) M3Mode += 14; //Account for no ability to distinguish CC/NC
     if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
@@ -143,8 +144,7 @@ const double* SampleHandlerAtm::GetPointerToKinematicParameter(KinematicTypes Ki
     KinematicValue = &(dunemcSamples[iEvent].rw_theta);
     break;
   case kOscChannel:
-    //KinematicValue = &(MCSamples.ChannelIndex);
-    KinematicValue = &(dunemcSamples[iEvent].rw_theta);
+    KinematicValue = &(dunemcSamples[iEvent].OscChannelIndex);
     break;
   case kMode:
     KinematicValue = &(dunemcSamples[iEvent].mode);

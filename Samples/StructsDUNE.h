@@ -14,7 +14,8 @@ struct dunemc_base {
   
   int nupdg;
   int nupdgUnosc;
-
+  double OscChannelIndex;
+  
   double rw_erec;
   /*
   double rw_erec_shifted;

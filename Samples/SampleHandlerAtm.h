@@ -13,7 +13,7 @@ public:
   /// @param mc_version Configuration file
   /// @param xsec_cov cross-section covariance matrix
   /// @param osc_cov oscillation covariance matrix
-  SampleHandlerAtm(std::string mc_version, ParameterHandlerGeneric* xsec_cov);
+  SampleHandlerAtm(std::string mc_version, ParameterHandlerGeneric* xsec_cov, const std::shared_ptr<OscillationHandler>&  Oscillator_);
   /// @brief destructor
   ~SampleHandlerAtm();
 
