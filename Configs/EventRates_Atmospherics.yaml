@@ -4,7 +4,7 @@ General:
 
   DUNESamples:
     - "Configs/Samples/AtmSample_numuselec.yaml"
-#    - "Configs/Samples/AtmSample_nueselec.yaml"    
+    - "Configs/Samples/AtmSample_nueselec.yaml"    
 
   # Nu-FIT
   # OscillationParameters: [0.310, 0.582, 0.224, 7.39E-5, 2.5254E-3, -2.498, 25]
@@ -33,7 +33,7 @@ General:
     FitTestLikelihood: false
 
   MCMC:
-    NSteps: 100
+    NSteps: 60000
     AutoSave: 10000
 
   Output:
