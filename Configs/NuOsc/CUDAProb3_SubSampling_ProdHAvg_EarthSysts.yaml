@@ -3,6 +3,7 @@ General:
   Verbosity: "NONE"
   CosineZIgnored: false
   CalculationType: "SubSampling"
+#  CalculationType: "Binned"
 
 SubSampling:
   FileName: "./Inputs/Atmospherics/ExampleSubSamplingBinning.root"
@@ -10,10 +11,18 @@ SubSampling:
   CoarseCosineZAxisHistName: "CoarseCosZ"
   FineEnergyAxisHistName: "FineEnergy"
   FineCosineZAxisHistName: "FineCosZ"
+
+Binned:
+  FileName: "./Inputs/Atmospherics/ExampleSubSamplingBinning.root"
+  EnergyAxisHistName: "FineEnergy"
+  CosineZAxisHistName: "FineCosZ"
+#  FileName: "./Inputs/Atmospherics/ExampleAtmosphericBinning.root"
+#  EnergyAxisHistName: "EnergyAxisBinning"
+#  CosineZAxisHistName: "CosineZAxisBinning"  
   
 OscProbCalcerSetup:
   ImplementationName: "CUDAProb3"
-  EarthModelFileName: "./Inputs/Atmospherics/PREM_4layer.dat"
+  EarthModelFileName: "./Inputs/Atmospherics/PREM_4layer_quad.dat"
 
   UseEarthModelSystematics: true
   Layers: 4
