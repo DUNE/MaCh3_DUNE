@@ -5,6 +5,7 @@
 #include "TCanvas.h"
 #include "TStyle.h"
 #include "TLegend.h"
+#include "DUNEStyle.h"
 
 #include <iostream>
 
@@ -25,21 +26,15 @@ TH1* rebinHist(TH1* hist) {
   return hist;
 }
 
-void movePalette(TH1* hist) {
-  gPad->Update(); // palette doesn't exist until after first draw
-  TPaletteAxis* palette = (TPaletteAxis*)hist->GetListOfFunctions()->FindObject("palette");
-  if (palette) {
-    palette->SetX1NDC(0.87);  // Left edge
-    palette->SetX2NDC(0.9);  // Right edge
-  }
-}
-
 void changeAxisTitle(TAxis* axis) {
   std::string title = axis->GetTitle();
-  if (title ==  "TrueQ0") axis->SetTitle("Q0 (GeV)");
-  else if (title == "TrueQ3") axis->SetTitle("Q3 (GeV/c)");
-  else if (title == "Particle_BAngle") axis->SetTitle("Angle to B-Field (  #circ )");
-  else if (title == "Particle_Momentum") axis->SetTitle("Momentum (GeV)");
+  if (title ==  "TrueQ0") axis->SetTitle("q_{0} [GeV]");
+  else if (title == "TrueQ3") {
+    axis->SetTitle("q_{3} [GeV/c]");
+    axis->SetNdivisions(4,8,0); 
+  }
+  else if (title == "Particle_BAngle") axis->SetTitle("Angle to B-Field [  #circ ]");
+  else if (title == "Particle_Momentum") axis->SetTitle("Momentum [GeV/c]");
   else if (title == "Particle_MomResMS") axis->SetTitle("Momentum Resolution (Multiple Scattering)");
   else if (title == "Particle_MomResYZ") axis->SetTitle("Momentum Resolution (Gluckstern)");
   else if (title == "Particle_TrackLengthYZ") axis->SetTitle("Track Length in YZ Plane (cm)");
@@ -55,13 +50,8 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename, const char* output
     return;
   }
 
-  gStyle->SetPalette(kBlueRedYellow);
   gStyle->SetOptStat(0);
-  gStyle->SetPaintTextFormat("1.2f");
-  gStyle->SetPadRightMargin(0.15);
-  gStyle->SetPadLeftMargin(0.15);
-  gStyle->SetNumberContours(128);
-  TCanvas* canvas = new TCanvas("canvas", "Acceptance Correction Plots", 900, 800);
+  TCanvas* canvas = new TCanvas("canvas", "Acceptance Correction Plots", 800, 600);
   canvas->Print(Form("%s[", outputfilename));
 
   TIter next(inputfile->GetListOfKeys());
@@ -80,8 +70,9 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename, const char* output
     std::string histname = key->GetName();
     changeAxisTitle(rawHist->GetXaxis());
     changeAxisTitle(rawHist->GetYaxis());
-    rawHist->Draw("COLZ");
-    movePalette(rawHist);
+    if (obj->InheritsFrom(TH1D::Class())) rawHist->Draw("HIST");
+    else rawHist->Draw("COLZ");
+    rawHist->GetXaxis()->SetTitleOffset(1.3);
     canvas->Print(outputfilename);
     std::cout << "Drawn histogram: " << key->GetName() << std::endl;
 
@@ -106,11 +97,10 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename, const char* output
         }
         std::string rawtitle = totalHist->GetTitle();
         acceptanceHist->SetTitle(("Acceptance_"+rawtitle).c_str());
-
         acceptanceHist->SetMarkerSize(0.4);
         //acceptanceHist->Draw("COLZ TEXT0");
         acceptanceHist->Draw("COLZ");
-        movePalette(rawHist);
+        acceptanceHist->GetXaxis()->SetTitleOffset(1.3);
         canvas->Print(outputfilename);
         std::cout << "\nDrawn acceptance histogram: " << acceptanceHist->GetName() << std::endl;
       }

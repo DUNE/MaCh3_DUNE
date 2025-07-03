@@ -219,19 +219,19 @@ bool SampleHandlerBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
     duneobj->particle_isstoppedinbarrel->push_back(stops_in_ecal && end_radius>=ECALInnerRadius);
     duneobj->particle_isstoppedinendcap->push_back(stops_in_ecal && end_radius<ECALInnerRadius);
     duneobj->particle_isstoppedintpc->push_back(stops_in_tpc);
-    duneobj->particle_momresms->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
-    duneobj->particle_momresyz->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
-    duneobj->particle_momresx->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
-    duneobj->particle_ecaldepositfraction->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
-    duneobj->particle_nturns->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
-    duneobj->particle_nhits->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
-    duneobj->particle_tracklengthyz->push_back(std::numeric_limits<double>::quiet_NaN()); //default (updates later)
+    duneobj->particle_isescaped->push_back(stops_beyond_ecal);
+    duneobj->particle_momresms->push_back(M3::_BAD_DOUBLE_); //default (updates later)
+    duneobj->particle_momresyz->push_back(M3::_BAD_DOUBLE_); //default (updates later)
+    duneobj->particle_momresx->push_back(M3::_BAD_DOUBLE_); //default (updates later)
+    duneobj->particle_ecaldepositfraction->push_back(M3::_BAD_DOUBLE_); //default (updates later)
+    duneobj->particle_nturns->push_back(M3::_BAD_DOUBLE_); //default (updates later)
+    duneobj->particle_nhits->push_back(M3::_BAD_DOUBLE_); //default (updates later)
+    duneobj->particle_tracklengthyz->push_back(M3::_BAD_DOUBLE_); //default (updates later)
     nparticlesinsample[i_sample]++;
 
     //If particle is not stopped in the tpc or ecal 
     if(!stops_in_tpc && !stops_in_ecal){
       //Check if charged (p +/- , pi +/- , mu +/- , e +/- , K +/-)
-      //JM why not more (eg. sig +/-)
       if(std::abs(pdgcaf) == 2212 || std::abs(pdgcaf) == 211 || std::abs(pdgcaf) == 13 || std::abs(pdgcaf) == 11 || std::abs(pdgcaf) == 321) {
 
         double rad_curvature = 100*transverse_mom/(0.3*B_field); //p = 0.3*B*r where p in GeV/c, B in T, r in m (*100 to convert to cm)
@@ -538,6 +538,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
   duneobj->particle_isstoppedinendgap = new std::vector<bool>; duneobj->particle_isstoppedinendgap->reserve(7*duneobj->nEvents); 
   duneobj->particle_isstoppedinbarrel= new std::vector<bool>; duneobj->particle_isstoppedinbarrel->reserve(7*duneobj->nEvents);
   duneobj->particle_isstoppedinendcap = new std::vector<bool>; duneobj->particle_isstoppedinendcap->reserve(7*duneobj->nEvents); 
+  duneobj->particle_isescaped = new std::vector<bool>; duneobj->particle_isescaped->reserve(7*duneobj->nEvents); 
   duneobj->particle_startx = new std::vector<double>; duneobj->particle_startx->reserve(7*duneobj->nEvents); 
   duneobj->particle_startr2 = new std::vector<double>; duneobj->particle_startr2->reserve(7*duneobj->nEvents); 
   duneobj->particle_endr = new std::vector<double>; duneobj->particle_endr->reserve(7*duneobj->nEvents); 
@@ -557,6 +558,9 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
   int num_notin_fdv = 0;
   int num_nanenergy = 0;
   int num_nanparticles = 0;
+
+  int numr1rej = 0;
+  int numr1rejesc = 0;
 
   double pixel_spacing_cm = pixel_spacing/10; //convert to cm
 
@@ -670,6 +674,12 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
 
       if (!IsParticleAccepted(duneobj, iSample, i_event, i_truepart, pixel_spacing_cm, pdgmass)) {
         isEventAccepted = false;
+        if (duneobj->particle_bangle->back()>60. && duneobj->particle_bangle->back()<120. && duneobj->particle_momentum->back() > 1.) {
+          numr1rej++;
+          if (duneobj->particle_isescaped->back()) {
+            numr1rejesc++;
+          }
+        }
       }
     }
 
@@ -724,6 +734,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
     if(duneobj->rw_isCC[i_event] == 1) numCC++;
   }
   MACH3LOG_INFO("nEvents = {}, numCC = {}, numFDV = {}", duneobj->nEvents, numCC, num_in_fdv);
+  MACH3LOG_INFO("num region 1 rejected = {}, num region 1 rej and esc = {}, percentage = {}", numr1rej, numr1rejesc, numr1rejesc*100/numr1rej);
   _sampleFile->Close();
   _sampleFile_geant->Close();
   return duneobj->nEvents;
@@ -858,6 +869,8 @@ double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, i
       return static_cast<double>(dunendgarmcSamples[iSample].particle_isstoppedinendgap->at(iEvent));
     case kParticle_IsStoppedInBarrelGap:
       return static_cast<double>(dunendgarmcSamples[iSample].particle_isstoppedinbarrelgap->at(iEvent));
+    case kParticle_IsEscaped:
+      return static_cast<double>(dunendgarmcSamples[iSample].particle_isescaped->at(iEvent));
     default:
       return *GetPointerToKinematicParameter(KinPar, iSample, iEvent);
   }

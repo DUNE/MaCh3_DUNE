@@ -19,7 +19,7 @@ class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
     TH1* Get1DParticleVarHist(std::string ProjectionVar_StrX, std::vector< KinematicCut > SelectionVec, int WeightStyle, TAxis* AxisX);
     TH2* Get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< KinematicCut > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY);
     
-    enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kIsGoodCAFEvent, kParticle_Event, kParticle_Momentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_IsAccepted, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_NTurns, kParticle_NHits, kParticle_TrackLengthYZ, kParticle_MomResMS, kParticle_MomResYZ, kParticle_MomResX, kParticle_StartR2, kParticle_EndR, kParticle_EndX, kParticle_StartX};
+    enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kIsGoodCAFEvent, kParticle_Event, kParticle_Momentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_IsAccepted, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_IsEscaped, kParticle_NTurns, kParticle_NHits, kParticle_TrackLengthYZ, kParticle_MomResMS, kParticle_MomResYZ, kParticle_MomResX, kParticle_StartR2, kParticle_EndR, kParticle_EndX, kParticle_StartX};
 
   protected:
     //Functions required by core
@@ -165,6 +165,7 @@ class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
       {"Particle_IsStoppedInGap",kParticle_IsStoppedInGap},
       {"Particle_IsStoppedInEndGap",kParticle_IsStoppedInEndGap},
       {"Particle_IsStoppedInBarrelGap",kParticle_IsStoppedInBarrelGap},
+      {"Particle_IsEscaped",kParticle_IsEscaped},
       {"Particle_NTurns",kParticle_NTurns},
       {"Particle_NHits",kParticle_NHits},
       {"Particle_TrackLengthYZ",kParticle_TrackLengthYZ},
@@ -215,6 +216,7 @@ class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
       {kParticle_IsStoppedInGap,"Particle_IsStoppedInGap"},
       {kParticle_IsStoppedInEndGap,"Particle_IsStoppedInEndGap"},
       {kParticle_IsStoppedInBarrelGap,"Particle_IsStoppedInBarrelGap"},
+      {kParticle_IsEscaped,"Particle_IsEscaped"},
       {kParticle_NTurns,"Particle_NTurns"},
       {kParticle_NHits,"Particle_NHits"},
       {kParticle_TrackLengthYZ,"Particle_TrackLengthYZ"},
