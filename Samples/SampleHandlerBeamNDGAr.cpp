@@ -174,7 +174,6 @@ bool SampleHandlerBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
     }
     nummatched++;
 
-
     //Ignore neutrons and neutrinos (they will be accepted by default for now but will not appear on particle-level plots)
     if(std::abs(pdgcaf) == 2112 || std::abs(pdgcaf) == 14 || std::abs(pdgcaf) == 12 
         /*||(std::abs(_MCPStartX->at(i_anapart))-TPC_centre_x)>=TPCFidLength || start_radius>=TPCFidRadius*/){
@@ -202,6 +201,7 @@ bool SampleHandlerBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
 
     //Fill particle-level kinematic variables with default or actual (if possible at this stage) values
     duneobj->particle_event->push_back(i_event);
+    duneobj->particle_trkid->push_back(_MCPTrkID->at(i_anapart));
     duneobj->particle_pdg->push_back(pdgcaf);
     duneobj->particle_energy->push_back(static_cast<double>(sr->mc.nu[0].prim[i_truepart].p.E));
     duneobj->particle_momentum->push_back(mom_tot);
@@ -227,6 +227,7 @@ bool SampleHandlerBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
     duneobj->particle_nturns->push_back(M3::_BAD_DOUBLE_); //default (updates later)
     duneobj->particle_nhits->push_back(M3::_BAD_DOUBLE_); //default (updates later)
     duneobj->particle_tracklengthyz->push_back(M3::_BAD_DOUBLE_); //default (updates later)
+   
     nparticlesinsample[i_sample]++;
 
     //If particle is not stopped in the tpc or ecal 
@@ -458,11 +459,12 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
     _data->SetBranchAddress("MCPEndPZ", &_MCPEndPZ);
     _data->SetBranchAddress("PDG", &_PDG);
     _data->SetBranchAddress("MCPTrkID", &_MCPTrkID);
+    _data->SetBranchAddress("MotherTrkID", &_MotherTrkID);
     _data->SetBranchAddress("SimHitTrkID", &_SimHitTrkID);
     _data->SetBranchAddress("SimHitEnergy", &_SimHitEnergy);
   }
   duneobj->norm_s = 1.;
-  double downsampling = 1; //default 1, set to eg. 0.01 for quick testing
+  double downsampling = 0.001; //default 1, set to eg. 0.01 for quick testing
   bool do_geometric_correction = false;
   duneobj->pot_s = pot/(downsampling*1e21);
   duneobj->nEvents = static_cast<int>(std::round(downsampling*static_cast<double>(_data->GetEntries())));
@@ -524,6 +526,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
 
   //Particle-level kinematic variables
   duneobj->particle_event = new std::vector<int>; duneobj->particle_event->reserve(7*duneobj->nEvents);
+  duneobj->particle_trkid = new std::vector<int>; duneobj->particle_trkid->reserve(7*duneobj->nEvents);
   duneobj->particle_ecaldepositfraction = new std::vector<double>; duneobj->particle_ecaldepositfraction->reserve(7*duneobj->nEvents);
   duneobj->particle_pdg = new std::vector<int>; duneobj->particle_pdg->reserve(7*duneobj->nEvents); 
   duneobj->particle_energy = new std::vector<double>; duneobj->particle_energy->reserve(7*duneobj->nEvents); 
@@ -558,9 +561,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
   int num_notin_fdv = 0;
   int num_nanenergy = 0;
   int num_nanparticles = 0;
-
-  int numr1rej = 0;
-  int numr1rejesc = 0;
 
   double pixel_spacing_cm = pixel_spacing/10; //convert to cm
 
@@ -655,9 +655,11 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
     double muonenergy = 0.;
     bool isEventAccepted = true;
 
-    int ntrueparticles = sr->mc.nu[0].nprim;
+    int ntrueprimparticles = sr->mc.nu[0].nprim;
+    int ntruesecparticles = sr->mc.nu[0].nsec;
 
-    for(int i_truepart =0; i_truepart<ntrueparticles; i_truepart++){
+    //Loop through primary particles
+    for(int i_truepart =0; i_truepart<ntrueprimparticles; i_truepart++){
       int partpdg = sr->mc.nu[0].prim[i_truepart].pdg;
       double pdgmass = MaCh3Utils::GetMassFromPDG(partpdg);
       if(std::abs(partpdg) == 13) {
@@ -674,12 +676,46 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
 
       if (!IsParticleAccepted(duneobj, iSample, i_event, i_truepart, pixel_spacing_cm, pdgmass)) {
         isEventAccepted = false;
-        if (duneobj->particle_bangle->back()>60. && duneobj->particle_bangle->back()<120. && duneobj->particle_momentum->back() > 1.) {
-          numr1rej++;
-          if (duneobj->particle_isescaped->back()) {
-            numr1rejesc++;
-          }
+      }
+    }
+
+    //Loop through secondary particles
+    for(int i_secpart = 0; i_secpart<ntruesecparticles; i_secpart++) {
+      //Find corresponding anatree particle
+      for(unsigned int i_anapart =0; i_anapart<_MCPStartPX->size(); i_anapart++){
+        //Select particle in the anatree that is the same as in the caf (same pdg and momentum and start position)
+        if((_PDG->at(i_anapart) != sr->mc.nu[0].sec[i_secpart].pdg) || 
+            (std::abs(_MCPStartPX->at(i_anapart)-static_cast<double>(sr->mc.nu[0].sec[i_secpart].p.px))>0.001*std::abs(_MCPStartPX->at(i_anapart))) ||
+            (std::abs(_MCPStartPY->at(i_anapart)-static_cast<double>(sr->mc.nu[0].sec[i_secpart].p.py))>0.001*std::abs(_MCPStartPY->at(i_anapart))) ||
+            (std::abs(_MCPStartPZ->at(i_anapart)-static_cast<double>(sr->mc.nu[0].sec[i_secpart].p.pz))>0.001*std::abs(_MCPStartPZ->at(i_anapart))) ||
+            (std::abs(_MCPStartX->at(i_anapart)-static_cast<double>(sr->mc.nu[0].sec[i_secpart].start_pos.x))>0.001*std::abs(_MCPStartX->at(i_anapart))) ||
+            (std::abs(_MCPStartY->at(i_anapart)-static_cast<double>(sr->mc.nu[0].sec[i_secpart].start_pos.y))>0.001*std::abs(_MCPStartY->at(i_anapart))) ||
+            (std::abs(_MCPStartZ->at(i_anapart)-static_cast<double>(sr->mc.nu[0].sec[i_secpart].start_pos.z))>0.001*std::abs(_MCPStartZ->at(i_anapart)))
+          ){
+          continue;
         }
+
+        //Find mother particle
+        auto mother_index_it = std::find(duneobj->particle_trkid->begin(), duneobj->particle_trkid->end(), _MotherTrkID->at(i_anapart));
+        auto sec_index_it = std::find(duneobj->particle_trkid->begin(), duneobj->particle_trkid->end(), _MCPTrkID->at(i_anapart));
+
+        //Check if mother particle is primary
+        if (mother_index_it == duneobj->particle_trkid->end()) {
+          //Check if sec particle is actually primary (dodgy caf event)
+          if (sec_index_it != duneobj->particle_trkid->end()) continue;
+          std::cout<<std::endl;
+          MACH3LOG_INFO("Mother ID not found: mother is nonprimary (or neutron/neutrino).");
+          continue;
+        }
+        long int mother_index = std::distance(duneobj->particle_trkid->begin(), mother_index_it);
+
+        double xstart = _MCPStartX->at(i_anapart)-TPC_centre_x;
+        double ystart = _MCPStartY->at(i_anapart)-TPC_centre_y;
+        double zstart = _MCPStartZ->at(i_anapart)-TPC_centre_z;
+        double start_radius = std::sqrt(ystart*ystart + zstart*zstart);
+        std::cout<<std::endl;
+        MACH3LOG_INFO("SecPart: PDG {}, StartR {}, StartX {}", _PDG->at(i_anapart), start_radius, xstart);
+        MACH3LOG_INFO("MotherPart: PDG {} EndR {}, EndX {}, Index {}", duneobj->particle_pdg->at(mother_index), duneobj->particle_endr->at(mother_index), duneobj->particle_endx->at(mother_index), mother_index);
       }
     }
 
@@ -707,7 +743,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
       else if ((lep_perpangle < 45 || lep_perpangle > 135) && lep_momentum > 0.3) duneobj->geometric_correction[i_event] = 2.;
     }
 
-    int ntruesecparticles = sr->mc.nu[0].nsec;
     for(int i_truepart =0; i_truepart<ntruesecparticles; i_truepart++){
       if(std::abs(sr->mc.nu[0].sec[i_truepart].pdg) == 13){
         duneobj->ntruemuon[i_event]++;
@@ -734,7 +769,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
     if(duneobj->rw_isCC[i_event] == 1) numCC++;
   }
   MACH3LOG_INFO("nEvents = {}, numCC = {}, numFDV = {}", duneobj->nEvents, numCC, num_in_fdv);
-  MACH3LOG_INFO("num region 1 rejected = {}, num region 1 rej and esc = {}, percentage = {}", numr1rej, numr1rejesc, numr1rejesc*100/numr1rej);
   _sampleFile->Close();
   _sampleFile_geant->Close();
   return duneobj->nEvents;
@@ -1012,7 +1046,7 @@ TH1* SampleHandlerBeamNDGAr::Get1DParticleVarHist(std::string ProjectionVar_Str,
     _h1DVar = new TH1D("", "", int(xBinEdges.size())-1, xBinEdges.data());
   }
 
-  //Loop over all particles
+  //Loop over all primary particles
   for (int iSample=0;iSample<GetNMCSamples();iSample++) {
     for (int iParticle=0;iParticle<nparticlesinsample[iSample];iParticle++) {
       int event = static_cast<int>(std::round(ReturnKinematicParameter("Particle_Event", iSample, iParticle)));

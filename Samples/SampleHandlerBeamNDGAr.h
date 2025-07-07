@@ -77,6 +77,7 @@ class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
     std::vector<double> *_MCPEndPZ=0;
     std::vector<int> *_PDG = 0;
     std::vector<int> *_MCPTrkID=0;
+    std::vector<int> *_MotherTrkID=0;
     std::vector<int> *_SimHitTrkID=0;
     std::vector<double> *_SimHitEnergy=0;
 
