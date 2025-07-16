@@ -28,6 +28,9 @@ int main(int argc, char * argv[]) {
 
   ParameterHandlerGeneric* xsec = nullptr;
   ParameterHandlerOsc* osc = nullptr;
+  // HH: Add a check to skip osc cov if OscCovFile is not specified, similar to MaCh3Factory.cpp
+  std::vector<double> oscpars = GetFromManager<std::vector<double>>(FitManager->raw()["General"]["OscillationParameters"], {});
+  bool useosc = oscpars.size() > 0;
 
   //####################################################################################
   //Create samplePDFSKBase Objs
@@ -42,7 +45,9 @@ int main(int argc, char * argv[]) {
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
 
-  osc->SetParameters(FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>());
+  if (useosc){
+    osc->SetParameters(FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>());
+  }
   for (unsigned sample_i = 0 ; sample_i < DUNEPdfs.size() ; ++sample_i) {
     
     std::string name = DUNEPdfs[sample_i]->GetTitle();
@@ -122,13 +127,15 @@ int main(int argc, char * argv[]) {
     if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false)) {
       xsec->ThrowParameters();
     }
-    osc->SetParameters();
-    osc->ThrowParameters();
+    if (useosc) {
+      osc->SetParameters();
+      osc->ThrowParameters();
+    }
   }
   
 
   //Add systematic objects
-  MaCh3Fitter->AddSystObj(osc);
+  if (useosc) MaCh3Fitter->AddSystObj(osc);
   if (GetFromManager(FitManager->raw()["General"]["StatOnly"], false)){
     MACH3LOG_INFO("Running a stat-only fit so no systematics will be applied");
   }

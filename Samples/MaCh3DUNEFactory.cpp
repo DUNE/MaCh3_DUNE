@@ -95,26 +95,32 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<SampleHandlerFD*> &D
   std::vector<double> oscpars = GetFromManager<std::vector<double>>(FitManager->raw()["General"]["OscillationParameters"], {});
 
   std::string OscPars = "";
+  bool useosc = oscpars.size() > 0;
 
-  for (unsigned int i=0;i<oscpars.size();i++) {
-    OscPars+=std::to_string(oscpars[i]);
-    OscPars+=", ";
-  }
-  MACH3LOG_INFO("Oscillation Parameters being used: {} ", OscPars);
-
-  osc = new ParameterHandlerOsc(OscMatrixFile,OscMatrixName.c_str());
-  osc->SetName("osc_cov");
-  osc->SetParameters(oscpars);
-
-  std::vector<std::string> OscFixParams = GetFromManager<std::vector<std::string>>(FitManager->raw()["General"]["Systematics"]["OscFix"], {});
-  if (OscFixParams.size() == 1 && OscFixParams.at(0) == "All") {
-    for (int j = 0; j < osc->GetNumParams(); j++) {
-      osc->ToggleFixParameter(j);
+  if (useosc){
+    for (unsigned int i=0;i<oscpars.size();i++) {
+      OscPars+=std::to_string(oscpars[i]);
+      OscPars+=", ";
     }
-  } else {
-    for (unsigned int j = 0; j < OscFixParams.size(); j++) {
-      osc->ToggleFixParameter(OscFixParams.at(j));
+    MACH3LOG_INFO("Oscillation Parameters being used: {} ", OscPars);
+
+    osc = new ParameterHandlerOsc(OscMatrixFile,OscMatrixName.c_str());
+    osc->SetName("osc_cov");
+    osc->SetParameters(oscpars);
+
+    std::vector<std::string> OscFixParams = GetFromManager<std::vector<std::string>>(FitManager->raw()["General"]["Systematics"]["OscFix"], {});
+    if (OscFixParams.size() == 1 && OscFixParams.at(0) == "All") {
+      for (int j = 0; j < osc->GetNumParams(); j++) {
+        osc->ToggleFixParameter(j);
+      }
+    } else {
+      for (unsigned int j = 0; j < OscFixParams.size(); j++) {
+        osc->ToggleFixParameter(OscFixParams.at(j));
+      }
     }
+  } 
+  else {
+    MACH3LOG_WARN("No OscillationParameters found, skipping oscillation parameters.");
   }
 
   MACH3LOG_INFO("Osc cov setup");
