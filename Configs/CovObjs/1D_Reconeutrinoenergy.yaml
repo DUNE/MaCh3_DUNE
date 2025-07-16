@@ -1,0 +1,1261 @@
+Systematics:
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 0
+      - .10000000000000000000
+    Names:
+      FancyName: reco_energy_1
+      ParameterName: reco_energy_1
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - .10000000000000000000
+      - .20000000000000000000
+    Names:
+      FancyName: reco_energy_2
+      ParameterName: reco_energy_2
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - .20000000000000000000
+      - .30000000000000000000
+    Names:
+      FancyName: reco_energy_3
+      ParameterName: reco_energy_3
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - .30000000000000000000
+      - .40000000000000000000
+    Names:
+      FancyName: reco_energy_4
+      ParameterName: reco_energy_4
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - .40000000000000000000
+      - .50000000000000000000
+    Names:
+      FancyName: reco_energy_5
+      ParameterName: reco_energy_5
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - .50000000000000000000
+      - .60000000000000000000
+    Names:
+      FancyName: reco_energy_6
+      ParameterName: reco_energy_6
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - .60000000000000000000
+      - .70000000000000000000
+    Names:
+      FancyName: reco_energy_7
+      ParameterName: reco_energy_7
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - .70000000000000000000
+      - .80000000000000000000
+    Names:
+      FancyName: reco_energy_8
+      ParameterName: reco_energy_8
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - .80000000000000000000
+      - .90000000000000000000
+    Names:
+      FancyName: reco_energy_9
+      ParameterName: reco_energy_9
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - .90000000000000000000
+      - 1.00000000000000000000
+    Names:
+      FancyName: reco_energy_10
+      ParameterName: reco_energy_10
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 1.10000000000000000000
+    Names:
+      FancyName: reco_energy_11
+      ParameterName: reco_energy_11
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 1.10000000000000000000
+      - 1.20000000000000000000
+    Names:
+      FancyName: reco_energy_12
+      ParameterName: reco_energy_12
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 1.20000000000000000000
+      - 1.30000000000000000000
+    Names:
+      FancyName: reco_energy_13
+      ParameterName: reco_energy_13
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 1.30000000000000000000
+      - 1.40000000000000000000
+    Names:
+      FancyName: reco_energy_14
+      ParameterName: reco_energy_14
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 1.40000000000000000000
+      - 1.50000000000000000000
+    Names:
+      FancyName: reco_energy_15
+      ParameterName: reco_energy_15
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 1.50000000000000000000
+      - 1.60000000000000000000
+    Names:
+      FancyName: reco_energy_16
+      ParameterName: reco_energy_16
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 1.60000000000000000000
+      - 1.70000000000000000000
+    Names:
+      FancyName: reco_energy_17
+      ParameterName: reco_energy_17
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 1.70000000000000000000
+      - 1.80000000000000000000
+    Names:
+      FancyName: reco_energy_18
+      ParameterName: reco_energy_18
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 1.80000000000000000000
+      - 1.90000000000000000000
+    Names:
+      FancyName: reco_energy_19
+      ParameterName: reco_energy_19
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 1.90000000000000000000
+      - 2.00000000000000000000
+    Names:
+      FancyName: reco_energy_20
+      ParameterName: reco_energy_20
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 2.10000000000000000000
+    Names:
+      FancyName: reco_energy_21
+      ParameterName: reco_energy_21
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 2.10000000000000000000
+      - 2.20000000000000000000
+    Names:
+      FancyName: reco_energy_22
+      ParameterName: reco_energy_22
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 2.20000000000000000000
+      - 2.30000000000000000000
+    Names:
+      FancyName: reco_energy_23
+      ParameterName: reco_energy_23
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 2.30000000000000000000
+      - 2.40000000000000000000
+    Names:
+      FancyName: reco_energy_24
+      ParameterName: reco_energy_24
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 2.40000000000000000000
+      - 2.50000000000000000000
+    Names:
+      FancyName: reco_energy_25
+      ParameterName: reco_energy_25
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 2.50000000000000000000
+      - 2.60000000000000000000
+    Names:
+      FancyName: reco_energy_26
+      ParameterName: reco_energy_26
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 2.60000000000000000000
+      - 2.70000000000000000000
+    Names:
+      FancyName: reco_energy_27
+      ParameterName: reco_energy_27
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 2.70000000000000000000
+      - 2.80000000000000000000
+    Names:
+      FancyName: reco_energy_28
+      ParameterName: reco_energy_28
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 2.80000000000000000000
+      - 2.90000000000000000000
+    Names:
+      FancyName: reco_energy_29
+      ParameterName: reco_energy_29
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 2.90000000000000000000
+      - 3.00000000000000000000
+    Names:
+      FancyName: reco_energy_30
+      ParameterName: reco_energy_30
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 3.10000000000000000000
+    Names:
+      FancyName: reco_energy_31
+      ParameterName: reco_energy_31
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 3.10000000000000000000
+      - 3.20000000000000000000
+    Names:
+      FancyName: reco_energy_32
+      ParameterName: reco_energy_32
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 3.20000000000000000000
+      - 3.30000000000000000000
+    Names:
+      FancyName: reco_energy_33
+      ParameterName: reco_energy_33
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 3.30000000000000000000
+      - 3.40000000000000000000
+    Names:
+      FancyName: reco_energy_34
+      ParameterName: reco_energy_34
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 3.40000000000000000000
+      - 3.50000000000000000000
+    Names:
+      FancyName: reco_energy_35
+      ParameterName: reco_energy_35
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 3.50000000000000000000
+      - 3.60000000000000000000
+    Names:
+      FancyName: reco_energy_36
+      ParameterName: reco_energy_36
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 3.60000000000000000000
+      - 3.70000000000000000000
+    Names:
+      FancyName: reco_energy_37
+      ParameterName: reco_energy_37
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 3.70000000000000000000
+      - 3.80000000000000000000
+    Names:
+      FancyName: reco_energy_38
+      ParameterName: reco_energy_38
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 3.80000000000000000000
+      - 3.90000000000000000000
+    Names:
+      FancyName: reco_energy_39
+      ParameterName: reco_energy_39
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 3.90000000000000000000
+      - 4.00000000000000000000
+    Names:
+      FancyName: reco_energy_40
+      ParameterName: reco_energy_40
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 4.10000000000000000000
+    Names:
+      FancyName: reco_energy_41
+      ParameterName: reco_energy_41
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 4.10000000000000000000
+      - 4.20000000000000000000
+    Names:
+      FancyName: reco_energy_42
+      ParameterName: reco_energy_42
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 4.20000000000000000000
+      - 4.30000000000000000000
+    Names:
+      FancyName: reco_energy_43
+      ParameterName: reco_energy_43
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 4.30000000000000000000
+      - 4.40000000000000000000
+    Names:
+      FancyName: reco_energy_44
+      ParameterName: reco_energy_44
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 4.40000000000000000000
+      - 4.50000000000000000000
+    Names:
+      FancyName: reco_energy_45
+      ParameterName: reco_energy_45
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 4.50000000000000000000
+      - 4.60000000000000000000
+    Names:
+      FancyName: reco_energy_46
+      ParameterName: reco_energy_46
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 4.60000000000000000000
+      - 4.70000000000000000000
+    Names:
+      FancyName: reco_energy_47
+      ParameterName: reco_energy_47
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 4.70000000000000000000
+      - 4.80000000000000000000
+    Names:
+      FancyName: reco_energy_48
+      ParameterName: reco_energy_48
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 4.80000000000000000000
+      - 4.90000000000000000000
+    Names:
+      FancyName: reco_energy_49
+      ParameterName: reco_energy_49
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 4.90000000000000000000
+      - 5.00000000000000000000
+    Names:
+      FancyName: reco_energy_50
+      ParameterName: reco_energy_50
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 5.10000000000000000000
+    Names:
+      FancyName: reco_energy_51
+      ParameterName: reco_energy_51
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 5.10000000000000000000
+      - 5.20000000000000000000
+    Names:
+      FancyName: reco_energy_52
+      ParameterName: reco_energy_52
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 5.20000000000000000000
+      - 5.30000000000000000000
+    Names:
+      FancyName: reco_energy_53
+      ParameterName: reco_energy_53
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 5.30000000000000000000
+      - 5.40000000000000000000
+    Names:
+      FancyName: reco_energy_54
+      ParameterName: reco_energy_54
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 5.40000000000000000000
+      - 5.50000000000000000000
+    Names:
+      FancyName: reco_energy_55
+      ParameterName: reco_energy_55
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 5.50000000000000000000
+      - 5.60000000000000000000
+    Names:
+      FancyName: reco_energy_56
+      ParameterName: reco_energy_56
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 5.60000000000000000000
+      - 5.70000000000000000000
+    Names:
+      FancyName: reco_energy_57
+      ParameterName: reco_energy_57
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 5.70000000000000000000
+      - 5.80000000000000000000
+    Names:
+      FancyName: reco_energy_58
+      ParameterName: reco_energy_58
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 5.80000000000000000000
+      - 5.90000000000000000000
+    Names:
+      FancyName: reco_energy_59
+      ParameterName: reco_energy_59
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: true
+    KinematicCuts:
+    - RecoNeutrinoEnergy:
+      - 5.90000000000000000000
+      - 6.00000000000000000000
+    Names:
+      FancyName: reco_energy_60
+      ParameterName: reco_energy_60
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
