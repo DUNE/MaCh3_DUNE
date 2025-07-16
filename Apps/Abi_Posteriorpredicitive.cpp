@@ -13,6 +13,9 @@ int main(int argc, char* argv[]) {
 
   auto fitMan = std::unique_ptr<manager>(new manager(argv[1]));
   std::string OutFileName = GetFromManager<std::string>(fitMan->raw()["General"]["OutputFile"], "EventRates.root");
+  //auto var_names = Get<std::string>(fitMan->raw()["Predictive"]["var_names"], __FILE__, __LINE__);
+  bool plotVarspectra = true;
+  std::vector<std::string> var_names = {"RecoNeutrinoEnergy"};
 
   auto PosteriorFile = Get<std::string>(fitMan->raw()["Predictive"]["PosteriorFiles"], __FILE__, __LINE__);
   MCMCProcessor Processor(PosteriorFile);
@@ -30,6 +33,35 @@ int main(int argc, char* argv[]) {
 
   std::vector<samplePDFFDBase*> DUNEPdfs;
   MakeMaCh3DuneInstance(fitMan.get(), DUNEPdfs, xsec, osc);
+
+
+  fOut->cd();
+  /////////////////// Variations - which projections to plot
+
+  TH1D* Hist1D = nullptr;
+  for (size_t iPDF=0;iPDF<DUNEPdfs.size();iPDF++)
+  {
+    // Get nominal spectra and event rates
+    Hist1D = (TH1D*)DUNEPdfs[iPDF]->get1DHist();
+
+    std::vector<TH1D*> Hist1D_Vars;
+    if(plotVarspectra){
+      for(size_t var_i = 0 ; var_i < var_names.size() ; var_i++)
+      {
+        Hist1D_Vars.push_back(static_cast<TH1D*>(DUNEPdfs[iPDF]->get1DVarHist(var_names[var_i])->Clone((DUNEPdfs[iPDF]->GetTitle() + var_names[var_i]).c_str())));
+      }
+    }
+
+    MACH3LOG_INFO("{:>35} | {}", DUNEPdfs[iPDF]->GetTitle(), Hist1D->Integral());
+    Hist1D->Write(DUNEPdfs[iPDF]->GetTitle().c_str());
+    if(plotVarspectra)
+    {
+      for(size_t var_i = 0 ; var_i < var_names.size() ; var_i++)
+      {
+        Hist1D_Vars[var_i]->Write((DUNEPdfs[iPDF]->GetTitle()+var_names[var_i]).c_str());
+      }
+    }
+  }
 
   /////////// 3. Set up MCMC tree
   TChain* mcmc = new TChain("posteriors");
@@ -96,45 +128,53 @@ int main(int argc, char* argv[]) {
     mcmc->GetEntry(entry);
 
     xsec->setParameters(xsec_draw);
-
-    //std::cout << "Sample " << i << " from entry " << entry << " | Step: " << mcmc_step << " | xsec[0]: " << xsec_draw[0] << std::endl;
+    //xsec->throwParameters();
+    std::cout << "Sample " << i << " from entry " << entry << " | Step: " << mcmc_step << " | xsec[0]: " << xsec_draw[0] << std::endl;
 
     for (size_t j = 0; j < DUNEPdfs.size(); ++j) {
       DUNEPdfs[j]->reweight();
       TH1D* h = static_cast<TH1D*>(DUNEPdfs[j]->get1DHist());
       if (!h) continue;
-
-      TH2D* h2 = static_cast<TH2D*>(DUNEPdfs[j]->get2DHist());
-      if (!h2) continue;
-
-      // Project onto RecoNeutrinoEnergy (X-axis)
-      TH1D* hRecoNuE = h2->ProjectionX();
-
-      // Project onto ELepRec (Y-axis)
-      TH1D* hELepRec = h2->ProjectionY();
-
-      /*std::cout << "PDF " << j << " axis: " 
-          << h->GetXaxis()->GetTitle() 
-          << ", bins: " << h->GetNbinsX() 
-          << ", range: [" << h->GetXaxis()->GetXmin() 
-          << ", " << h->GetXaxis()->GetXmax() << "]"
-          << std::endl;*/
-
-      TString histNameRecoNuE = Form("posterior_prediction_sample%d_projRecoNuE", i);
-      hRecoNuE->SetName(histNameRecoNuE);
-      hRecoNuE->SetTitle("RecoNeutrinoEnergy projection");
-      hRecoNuE->Write();
-
-      TString histNameELepRec = Form("posterior_prediction_sample%d_projELepRec", i);
-      hELepRec->SetName(histNameELepRec);
-      hELepRec->SetTitle("ELepRec projection");
-      hELepRec->Write();
-
+      
       TString histName = Form("posterior_prediction_sample%d_pdf%d", i, (int)j);
       h->SetName(histName);
       h->SetTitle(histName);
       h->Write();
     }
+    const std::vector<KinematicCut> emptySelectionVec;
+    if (plotVarspectra)
+    {
+        for (size_t iPDF = 0; iPDF < DUNEPdfs.size(); iPDF++){
+            //std::cout << "Before reweight: PDF " << iPDF << " integral: " << DUNEPdfs[iPDF]->get1DHist()->Integral() << std::endl;
+            DUNEPdfs[iPDF]->reweight();
+            //std::cout << "After reweight: PDF " << iPDF << " integral: " << DUNEPdfs[iPDF]->get1DHist()->Integral() << std::endl;
+            for (size_t var_i = 0; var_i < var_names.size(); var_i++)
+            {
+
+                std::string var = var_names[var_i];
+
+                TAxis tempAxis;
+                tempAxis.Set(60, 0.0, 6.0); // Example: 50 bins between 0 and 5
+                auto* h = DUNEPdfs[iPDF]->get1DVarHist(var, emptySelectionVec, 0, &tempAxis);
+
+                //std::cout << "Calling get1DVarHist with var: " << var << std::endl;
+
+                if (var.empty()) {
+                    std::cerr << "ERROR: var_names[" << var_i << "] is empty!" << std::endl;
+                    continue;
+                }
+
+                TString Varwritename = DUNEPdfs[iPDF]->GetTitle() + var + var_i;
+                Varwritename += var_i;
+
+                //std::cout << "Calling get1DVarHist with var: " << var << std::endl;
+
+                DUNEPdfs[iPDF]->get1DVarHist(var)->Write(Varwritename);
+                //std::cout << "Written = " << Varwritename << std::endl;
+            }
+        }
+    }
+
   }
   /////////// 7. Wrap up
   std::cout << "[INFO] Writing ROOT file: " << OutFileName << "\n";

@@ -12,7 +12,7 @@ SampleType: "BeamFD"
 SampleName: "ND"
 MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes_GENIE.yaml"
 SelectionCuts:
-POT: 9.99328e+18 #9.99328e+21 #9.99328e+6 #7.24e+21
+POT: 9.99328e+16 #9.99328e+18 #9.99328e+21 #9.99328e+6 #7.24e+21
 DUNESampleBools:
   isFHC: 1
   iselike: no
@@ -27,14 +27,13 @@ SelectionCuts:
     Bounds: [ 0.5, 999 ]
   - KinematicStr: "isCC"
     Bounds: [ 0.8, 1.4 ]
+  - KinematicStr: "RecoNeutrinoEnergy"
+    Bounds: [ 0.1, 9999 ]
 Binning:
    Axes:
     - VarStr: RecoNeutrinoEnergy
-      Uniform: [40, 0.0, 6.0]
+      Uniform: [60, 0.0, 6.0]
       Title: E_{#nu}^{Rec} [GeV]
-    - VarStr: ELepRec
-      Uniform: [30, 0.0, 5.0]
-      Title: E_{lep}^{Rec} [GeV]
 ForceGeneric: True
 DUNESampleBools:
   iselike: no

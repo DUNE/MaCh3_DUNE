@@ -19,8 +19,8 @@ void PlotErrorBands(const std::string& filename, const std::string& histBaseName
     int nFound = 0;
 
     for (int i = 0; i < ntoys; ++i) {
-        std::string histName = histBaseName + std::to_string(i) + "_" + std::to_string(pdfIndex); //posterior_prediction_sample487_pdf0
-
+        //std::string histName = histBaseName + std::to_string(i) + "_projRecoNuE"; //	posterior_prediction_sample73_projELepRec
+        std::string histName = histBaseName + std::to_string(i); //"RecoNeutrinoEnergy00"; //std::to_string(i) + "_projRecoNuE" ;
         TH1D* h = dynamic_cast<TH1D*>(file->Get(histName.c_str()));
         
         if (!h) {
@@ -46,15 +46,12 @@ void PlotErrorBands(const std::string& filename, const std::string& histBaseName
     std::vector<double> mean(nbins, 0.0);
     std::vector<double> stddev(nbins, 0.0);
 
-    // Calculate per-bin mean and variance
+   // Calculate per-bin mean and variance
     for (int bin = 1; bin <= nbins; ++bin) {
-        ////////Check the toys
-        std::cout << "Bin " << bin << " values:\n";
-        for (int i = 0; i < std::min((int)toys.size(), 5); ++i) {
-            std::cout << "  Toy " << i << ": " << toys[i]->GetBinContent(bin) << std::endl;
+        double sum = 0.0;
+        for (auto& h : toys) {
+            sum += h->GetBinContent(bin);
         }
-                double sum = 0.0;
-        for (auto& h : toys) sum += h->GetBinContent(bin);
         double avg = sum / toys.size();
         mean[bin - 1] = avg;
 
@@ -63,11 +60,12 @@ void PlotErrorBands(const std::string& filename, const std::string& histBaseName
             double diff = h->GetBinContent(bin) - avg;
             var += diff * diff;
         }
-        var /= (toys.size() - 1);  // unbiased variance
+        var /= (toys.size() - 1);
         stddev[bin - 1] = std::sqrt(var);
 
-        //std::cout << "Bin = " << bin << ": mean = " << avg << ", stddev = " << std::sqrt(var) << std::endl;
+        std::cout << "Bin " << bin << ": mean = " << avg << ", stddev = " << std::sqrt(var) << std::endl;
     }
+
 
     // Create error band graph
     TGraphAsymmErrors* band = new TGraphAsymmErrors(nbins);
@@ -91,9 +89,10 @@ void PlotErrorBands(const std::string& filename, const std::string& histBaseName
     toys[0]->SetLineWidth(2);
     toys[0]->SetTitle("Prediction with Error Bands");
     toys[0]->GetXaxis()->SetTitle("Reconstructed Neutrino Energy");
-    toys[0]->GetXaxis()->SetRangeUser(0, 30);
+    toys[0]->GetXaxis()->SetRangeUser(0, 1);
+    toys[0]->GetYaxis()->SetRangeUser(0, 10000);
     toys[0]->Draw("HIST");
-    band->Draw("E3 SAME");
+    band->Draw("HIST E");
 
     TLegend* leg = new TLegend(0.6, 0.7, 0.88, 0.88);
     leg->AddEntry(toys[0], "Nominal Prediction", "l");

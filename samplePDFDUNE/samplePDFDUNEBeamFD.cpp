@@ -12,8 +12,10 @@ samplePDFDUNEBeamFD::samplePDFDUNEBeamFD(std::string mc_version_, covarianceXsec
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
   OscCov = nullptr;
-  ExtractQ0Q3BinningFromYAML("/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_5.0GeV_fullgrid_smallerbins.yaml");
+  ExtractQ0Q3BinningFromYAML("/scratch/abipeake/MaCh3_DUNE/configs/CovObjs/q0q3_triangle_1275params.yaml");
+  Extract1DBinningFromYAML("/scratch/abipeake/MaCh3_DUNE/configs/CovObjs/1D_Reconeutrinoenergy.yaml");
   SetupQ0Q3Hist();
+  Setup1DHist();
   
   Initialise();
 }
@@ -23,6 +25,9 @@ samplePDFDUNEBeamFD::~samplePDFDUNEBeamFD() {
 
 TH2D* samplePDFDUNEBeamFD::GetQ0Q3FillingHist() const {
   return fQ0Q3Hist;
+}
+TH1D* samplePDFDUNEBeamFD::Get1DFillingHist() const {
+  return f1DHist;
 }
 
 
@@ -72,113 +77,6 @@ void samplePDFDUNEBeamFD::Init() {
   em_res_fd_pos = -999;
   cvn_numu_fd_pos = -999;
   cvn_nue_fd_pos = -999;
-
-  /*
-  nFDDetectorSystPointers = funcParsIndex.size();
-  std::unordered_map<std::string, const double*> FDDetectorSystPointersMap;
-  FDDetectorSystPointers = std::vector<const double*>(nFDDetectorSystPointers);
-
-  for(auto FuncPar_i  = 0 ; FuncPar_i < funcParsIndex.size() ; ++FuncPar_i){
-    FDDetectorSystPointersMap.insert(std::pair<std::string, const double*>(funcParsNames.at(FuncPar_i), XsecCov->retPointer(funcParsIndex.at(FuncPar_i))));
-  }
-
-  int func_it = 0;
-  for (std::vector<int>::iterator it = funcParsIndex.begin(); it != funcParsIndex.end(); ++it, ++func_it) {
-    std::string name = funcParsNames.at(func_it);
-    
-    if (name == "TotalEScaleFD") {
-      tot_escale_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(tot_escale_fd_pos);
-    }
-    else if (name == "TotalEScaleSqrtFD") {
-      tot_escale_sqrt_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(tot_escale_sqrt_fd_pos);
-    }
-    else if (name == "TotalEScaleInvSqrtFD") {
-      tot_escale_invsqrt_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(tot_escale_invsqrt_fd_pos);
-    }
-    else if (name == "HadEScaleFD") {
-      had_escale_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(had_escale_fd_pos);
-    }
-    else if (name == "HadEScaleSqrtFD") {
-      had_escale_sqrt_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(had_escale_sqrt_fd_pos);
-    }
-    else if (name == "HadEScaleInvSqrtFD") {
-      had_escale_invsqrt_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(had_escale_invsqrt_fd_pos);
-    }
-    else if (name == "MuEScaleFD") {
-      mu_escale_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(mu_escale_fd_pos);
-    }
-    else if (name == "MuEScaleSqrtFD") {
-      mu_escale_sqrt_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(mu_escale_sqrt_fd_pos);
-    }
-    else if (name == "MuEScaleInvSqrtFD") {
-      mu_escale_invsqrt_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(mu_escale_invsqrt_fd_pos);
-    }
-    else if (name == "NEScaleFD") {
-      n_escale_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(n_escale_fd_pos);
-    }
-    else if (name == "NEScaleSqrtFD") {
-      n_escale_sqrt_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(n_escale_sqrt_fd_pos);
-    }
-    else if (name == "NEScaleInvSqrtFD") {
-      n_escale_invsqrt_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(n_escale_invsqrt_fd_pos);
-    }
-    else if (name == "EMEScaleFD") {
-      em_escale_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(em_escale_fd_pos);
-    }
-    else if (name == "EMEScaleSqrtFD") {
-      em_escale_sqrt_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(em_escale_sqrt_fd_pos);
-    }
-    else if (name == "EMEScaleInvSqrtFD") {
-      em_escale_invsqrt_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(em_escale_invsqrt_fd_pos);
-    }
-    else if (name == "HadResFD") {
-      had_res_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(had_res_fd_pos);
-    }
-    else if (name == "MuResFD") {
-      mu_res_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(mu_res_fd_pos);
-    }
-    else if (name == "NResFD") {
-      n_res_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(n_res_fd_pos);
-    }
-    else if (name == "EMResFD") {
-      em_res_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(em_res_fd_pos);
-    }
-    else if (name == "CVNNumuFD") {
-      cvn_numu_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(cvn_numu_fd_pos);
-    }
-    else if (name == "CVNNueFD") {
-      cvn_nue_fd_pos = *it;
-      FDDetectorSystPointers[func_it] = XsecCov->retPointer(cvn_nue_fd_pos);
-    }
-    
-    else { 
-      std::cerr << "Found a functional parameter which wasn't specified in the xml | samplePDFDUNEBeamFD:" << name << std::endl;
-      throw;
-    }
-  }
-  */
-
-  
   
   MACH3LOG_INFO("-------------------------------------------------------------------");
 }
@@ -242,7 +140,7 @@ void samplePDFDUNEBeamFD::SetupWeightPointers() {
   }
 }
 
-
+/*
 void samplePDFDUNEBeamFD::ExtractQ0Q3BinningFromYAML(const std::string& yaml_file) {
   std::set<double> q0_set, q3_set;
   fxsec_BinDefs.clear();
@@ -259,8 +157,8 @@ void samplePDFDUNEBeamFD::ExtractQ0Q3BinningFromYAML(const std::string& yaml_fil
       double q0_min = -1, q0_max = -1, q3_min = -1, q3_max = -1;
 
       for (const auto& cut : cuts) {
-        if (cut["TrueNeutrinoEnergy"]) {
-          const auto& q0 = cut["TrueNeutrinoEnergy"];
+        if (cut["q0"]) {
+          const auto& q0 = cut["q0"];
           if (q0.IsSequence() && q0.size() == 2) {
             q0_min = q0[0].as<double>();
             q0_max = q0[1].as<double>();
@@ -268,8 +166,8 @@ void samplePDFDUNEBeamFD::ExtractQ0Q3BinningFromYAML(const std::string& yaml_fil
             q0_set.insert(q0_max);
           }
         }
-        if (cut["ERecProxy_minus_Enu"]) {
-          const auto& q3 = cut["ERecProxy_minus_Enu"];
+        if (cut["q3"]) {
+          const auto& q3 = cut["q3"];
           if (q3.IsSequence() && q3.size() == 2) {
             q3_min = q3[0].as<double>();
             q3_max = q3[1].as<double>();
@@ -278,10 +176,6 @@ void samplePDFDUNEBeamFD::ExtractQ0Q3BinningFromYAML(const std::string& yaml_fil
           }
         }
       }
-      /*
-      if (q0_min >= 0 && q3_min >= 0) {
-        fxsec_BinDefs.push_back({index++, q0_min, q0_max, q3_min, q3_max});
-      }*/
       if (q0_max > q0_min && q3_max > q3_min) {
         fxsec_BinDefs.push_back({index++, q0_min, q0_max, q3_min, q3_max});
       }
@@ -296,10 +190,75 @@ void samplePDFDUNEBeamFD::ExtractQ0Q3BinningFromYAML(const std::string& yaml_fil
   } catch (const std::exception& e) {
     std::cerr << "YAML parsing failed in samplePDFDUNE: " << e.what() << "\n";
   }
+} */
+
+std::pair<std::vector<double>, std::vector<double>> 
+samplePDFDUNEBeamFD::ExtractQ0Q3BinningFromYAML(const std::string& yaml_file) {
+  std::set<double> q0_set, q3_set;
+  fxsec_BinDefs.clear();
+
+  try {
+    YAML::Node config = YAML::LoadFile(yaml_file);
+    const auto& systs = config["Systematics"];
+    int index = 0;
+
+    for (const auto& systematic : systs) {
+      const auto& sys = systematic["Systematic"];
+      const auto& cuts = sys["KinematicCuts"];
+
+      double q0_min = -1, q0_max = -1, q3_min = -1, q3_max = -1;
+
+      for (const auto& cut : cuts) {
+        if (cut["q0"]) {
+          const auto& q0 = cut["q0"];
+          if (q0.IsSequence() && q0.size() == 2) {
+            q0_min = q0[0].as<double>();
+            q0_max = q0[1].as<double>();
+            q0_set.insert(q0_min);
+            q0_set.insert(q0_max);
+          }
+        }
+        if (cut["q3"]) {
+          const auto& q3 = cut["q3"];
+          if (q3.IsSequence() && q3.size() == 2) {
+            q3_min = q3[0].as<double>();
+            q3_max = q3[1].as<double>();
+            q3_set.insert(q3_min);
+            q3_set.insert(q3_max);
+          }
+        }
+      }
+
+      if (q0_max > q0_min && q3_max > q3_min) {
+        fxsec_BinDefs.push_back({index++, q0_min, q0_max, q3_min, q3_max});
+      }
+    }
+    fQ0Edges.assign(q0_set.begin(), q0_set.end());
+    fQ3Edges.assign(q3_set.begin(), q3_set.end());
+
+
+    std::vector<double> q0_edges(q0_set.begin(), q0_set.end());
+    std::vector<double> q3_edges(q3_set.begin(), q3_set.end());
+
+    std::cout << "[samplePDFDUNE] Loaded " << fxsec_BinDefs.size() << " q0/q3 bins.\n";
+
+    return {q0_edges, q3_edges};
+
+  } catch (const std::exception& e) {
+    std::cerr << "YAML parsing failed in samplePDFDUNE: " << e.what() << "\n";
+    return {{}, {}};
+  }
 }
+
 
 void samplePDFDUNEBeamFD::SetupQ0Q3Hist() {
   if (fQ0Q3Hist) delete fQ0Q3Hist;
+
+  if (fQ0Edges.empty() || fQ3Edges.empty()) {
+  std::cerr << "❌ Error: q0/q3 edges not set before calling SetupQ0Q3Hist()" << std::endl;
+  throw std::runtime_error("Missing q0/q3 bin edges");
+  }
+
 
   int nQ3Bins = static_cast<int>(fQ3Edges.size()) - 1;
   int nQ0Bins = static_cast<int>(fQ0Edges.size()) - 1;
@@ -313,15 +272,108 @@ void samplePDFDUNEBeamFD::SetupQ0Q3Hist() {
                      nQ3Bins, &fQ3Edges[0],
                      nQ0Bins, &fQ0Edges[0]);
 
-  if (fQ0Edges.empty() || fQ3Edges.empty()) {
-  std::cerr << "❌ Error: q0/q3 edges not set before calling SetupQ0Q3Hist()" << std::endl;
-  throw std::runtime_error("Missing q0/q3 bin edges");
-  }
-
+  
   fQ0Q3Hist->SetDirectory(nullptr);
 }
 
+void samplePDFDUNEBeamFD::Setup1DHist() {
+  if (f1DHist) delete f1DHist;
+  if (f1DEdges.empty()) {
+  std::cerr << " Error: q0 edges not set before calling Setup1DHist()" << std::endl;
+  throw std::runtime_error("Missing q0 bin edges");
+  }
+  int n1DBins = static_cast<int>(f1DEdges.size()) - 1;
+  f1DHist = new TH1D("fQ0Q3Hist", "q_{0} ; q_{3} [GeV]; q_{0} [GeV]",
+                     n1DBins, &f1DEdges[0]);
 
+  
+  f1DHist->SetDirectory(nullptr);
+}
+
+/*
+void samplePDFDUNEBeamFD::Extract1DBinningFromYAML(const std::string& yaml_file) {
+  std::set<double> q0_set;
+  fxsec_BinDefs_1D.clear();
+
+  try {
+    YAML::Node config = YAML::LoadFile(yaml_file);
+    const auto& systs = config["Systematics"];
+    int index = 0;
+
+    for (const auto& systematic : systs) {
+      const auto& sys = systematic["Systematic"];
+      const auto& cuts = sys["KinematicCuts"];
+
+      double q0_min = -1, q0_max = -1;
+
+      for (const auto& cut : cuts) {
+        if (cut["RecoNeutrinoEnergy"]) {
+          const auto& q0 = cut["RecoNeutrinoEnergy"];
+          if (q0.IsSequence() && q0.size() == 2) {
+            q0_min = q0[0].as<double>();
+            q0_max = q0[1].as<double>();
+            q0_set.insert(q0_min);
+            q0_set.insert(q0_max);
+          }
+        }
+      }
+      if (q0_max > q0_min) {
+        fxsec_BinDefs_1D.push_back({index++, q0_min, q0_max});
+      }
+    }
+    f1DEdges.assign(q0_set.begin(), q0_set.end());
+
+    std::cout << "[samplePDFDUNE] Loaded " << fxsec_BinDefs.size() << " q0/q3 bins.\n";
+
+  } catch (const std::exception& e) {
+    std::cerr << "YAML parsing failed in samplePDFDUNE: " << e.what() << "\n";
+  }
+}*/
+
+std::vector<double> samplePDFDUNEBeamFD::Extract1DBinningFromYAML(const std::string& yaml_file) {
+  std::set<double> q0_set;
+  fxsec_BinDefs_1D.clear();
+
+  try {
+    YAML::Node config = YAML::LoadFile(yaml_file);
+    const auto& systs = config["Systematics"];
+    int index = 0;
+
+    for (const auto& systematic : systs) {
+      const auto& sys = systematic["Systematic"];
+      const auto& cuts = sys["KinematicCuts"];
+
+      double q0_min = -1, q0_max = -1;
+
+      for (const auto& cut : cuts) {
+        if (cut["RecoNeutrinoEnergy"]) {
+          const auto& q0 = cut["RecoNeutrinoEnergy"];
+          if (q0.IsSequence() && q0.size() == 2) {
+            q0_min = q0[0].as<double>();
+            q0_max = q0[1].as<double>();
+            q0_set.insert(q0_min);
+            q0_set.insert(q0_max);
+          }
+        }
+      }
+
+      if (q0_max > q0_min) {
+        fxsec_BinDefs_1D.push_back({index++, q0_min, q0_max});
+      }
+    }
+    f1DEdges.assign(q0_set.begin(), q0_set.end());
+
+    std::vector<double> q0_edges(q0_set.begin(), q0_set.end());
+
+    std::cout << "[samplePDFDUNE] Loaded " << fxsec_BinDefs_1D.size() << " 1D q0 bins.\n";
+
+    return q0_edges;
+
+  } catch (const std::exception& e) {
+    std::cerr << "YAML parsing failed in samplePDFDUNE: " << e.what() << "\n";
+    return {};
+  }
+}
 
 
 int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
@@ -360,6 +412,12 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
     static_cast<Int_t>(fQ0Edges.size() - 1), &fQ0Edges[0]);
 
   h_q0q3_filling->SetDirectory(nullptr);  // Prevent ROOT memory ownership issues
+
+  // Assume q0_edges and q3_edges were parsed already
+  h_1D_filling = new TH1D("h1D_filling", "q0 from MC",
+    static_cast<Int_t>(f1DEdges.size() - 1), &f1DEdges[0]);
+
+  h_1D_filling->SetDirectory(nullptr);  // Prevent ROOT memory ownership issues
 
   //Reco Variables
   double _erec;
@@ -623,7 +681,6 @@ Double_t _Ehad_veto;
   duneobj->theta_lep = new double[duneobj->nEvents];
   duneobj->rw_yrec = new double[duneobj->nEvents];
   
-  
   duneobj->enurec_minus_enutrue = new double[duneobj->nEvents];
   duneobj->ERec_QE = new double[duneobj->nEvents];
   duneobj->erec_proxy = new double[duneobj->nEvents];
@@ -636,8 +693,6 @@ Double_t _Ehad_veto;
   duneobj->Ehad_veto = new float[duneobj->nEvents];
   duneobj->isNC = new bool[duneobj->nEvents];
 
-
-
   _data->GetEntry(0);
   bool need_global_bin_numbers = (XVarStr == "global_bin_number");
   //FILL DUNE STRUCT
@@ -649,7 +704,6 @@ Double_t _Ehad_veto;
     duneobj->muon_contained[i] = _muon_contained;
     duneobj->muon_tracker[i] = _muon_tracker;
     duneobj->Ehad_veto[i] = static_cast<float>(_Ehad_veto);
-
 
     duneobj->nupdg[i] = sample_nupdg[iSample];
     duneobj->nupdgUnosc[i] = sample_nupdgunosc[iSample];    
@@ -800,6 +854,8 @@ Double_t _Ehad_veto;
 
     //h_q0q3_filling->Fill((TVector3{_NuMomX, _NuMomY, _NuMomZ} -TVector3{_LepMomX, _LepMomY, _LepMomZ}).Mag() , (_ev - _LepE));
     fQ0Q3Hist->Fill( (_Elep_reco) + eHad_truth - _ev, _ev );
+    f1DHist->Fill( _ev );
+  //DB Grab the associated enum with the argument string
     //int bin = fQ0Q3Hist->FindBin((_Elep_reco + eHad_truth - _ev),_ev);
     //std::cout << "[DEBUG] Bin content after fill: " << fQ0Q3Hist->GetBinContent(bin) << std::endl;
     
@@ -1276,60 +1332,60 @@ std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::st
   std::vector<double> ReturnVec;
   
   switch(KinematicParameter){
-  case kIsFHC:
-    ReturnVec.resize(3);
-    ReturnVec[0] = -0.5;
-    ReturnVec[1] = 0.5;
-    ReturnVec[2] = 1.5;
-    break;
-    
-  case kTrueNeutrinoEnergy:
-  case kRecoNeutrinoEnergy:
-    ReturnVec.resize(XBinEdges.size());
-    for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
-    break;
+    case kIsFHC:
+      ReturnVec.resize(3);
+      ReturnVec[0] = -0.5;
+      ReturnVec[1] = 0.5;
+      ReturnVec[2] = 1.5;
+      break;
+      
+    case kTrueNeutrinoEnergy:
+    case kRecoNeutrinoEnergy:
+      ReturnVec.resize(XBinEdges.size());
+      for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
+      break;
 
-  case kOscChannel:
-    ReturnVec.resize(GetNsamples());
-    for (int bin_i=0;bin_i<GetNsamples();bin_i++) {ReturnVec[bin_i] = bin_i;}
-    break;
+    case kOscChannel:
+      ReturnVec.resize(GetNsamples());
+      for (int bin_i=0;bin_i<GetNsamples();bin_i++) {ReturnVec[bin_i] = bin_i;}
+      break;
 
-  case kM3Mode:
-    ReturnVec.resize(Modes->GetNModes());
-    for (int bin_i=0;bin_i<Modes->GetNModes();bin_i++) {ReturnVec[bin_i] = bin_i;}
-    break;
+    case kM3Mode:
+      ReturnVec.resize(Modes->GetNModes());
+      for (int bin_i=0;bin_i<Modes->GetNModes();bin_i++) {ReturnVec[bin_i] = bin_i;}
+      break;
 
-  case kTrueXPos:
-  case kTrueYPos:
-  case kTrueZPos:
-  case kCVNNue:
-  case kCVNNumu:
-  case kq0:
-  case kq3:
-  case k_pT:
-  case k_pz:
-  case k_global_bin_number:
-  case kp_lep:
-  case ktheta_lep:
-  case kELepRec:
-  case kEHadRec:
-  case kERec_minus_Etrue:
-  case kERecQE:
-  case kERecProxy_minus_Enu:
-  case kyRec:
-  case keHad_av:
-  case kisCC:
+      //returnvec = AbiFuncc(config)
+    case kTrueXPos:
+    case kTrueYPos:
+    case kTrueZPos:
+    case kCVNNue:
+    case kCVNNumu:
+    case kq0:
+    case kq3:
+    case k_pT:
+    case k_pz:
+    case k_global_bin_number:
+    case kp_lep:
+    case ktheta_lep:
+    case kELepRec:
+    case kEHadRec:
+    case kERec_minus_Etrue:
+    case kERecQE:
+    case kERecProxy_minus_Enu:
+    case kyRec:
+    case keHad_av:
+    case kisCC:
+      {
+          std::vector<double> ReturnVec_1Dconfig = Extract1DBinningFromYAML("/scratch/abipeake/MaCh3_DUNE/configs/CovObjs/1D_Reconeutrinoenergy.yaml") ;
+          std::pair<std::vector<double>, std::vector<double>>  ReturnVec_2Dconfig = ExtractQ0Q3BinningFromYAML("/scratch/abipeake/MaCh3_DUNE/configs/CovObjs//scratch/abipeake/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_fullgrid_smallerbins.yaml");
+          ReturnVec = ReturnVec_1Dconfig;
+          break;
+      }
 
-    ReturnVec.resize(2);
-    ReturnVec[0] = 1e-8;
-    ReturnVec[1] = 1e8;
-    break;
-
-  default:
-    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", static_cast<int>(KinematicParameter));
-    throw MaCh3Exception(__FILE__, __LINE__);
-
+    default:
+      MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", static_cast<int>(KinematicParameter));
+      throw MaCh3Exception(__FILE__, __LINE__);
   }      
-  
   return ReturnVec;
 }
