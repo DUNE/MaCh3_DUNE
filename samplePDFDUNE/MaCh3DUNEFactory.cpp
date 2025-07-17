@@ -174,6 +174,12 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<samplePDFFDBase*> &D
     DUNEPdfs.back()->setXsecWeightSwitchOffVector(FitManager->getXsecWeightSwitchOffVector());
 #endif
   }
+  // Adaptive MCMC stuff
+
+  if (FitManager->raw()["AdaptionOptions"]){ 
+    xsec->initialiseAdaption(FitManager->raw());
+  }
+
 
   return;
 }
