@@ -305,41 +305,36 @@ bool SampleHandlerBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
     double sec_end_radius = std::sqrt(sec_yend_centre*sec_yend_centre + sec_zend_centre*sec_zend_centre);
     double sec_end_length = _MCPEndX->at(i_anasec)-TPC_centre_x;
 
-    // bool sec_stops_in_tpc = std::abs(sec_end_length)<=TPCInstrumentedLength && sec_end_radius<=TPCInstrumentedRadius;
-    // bool sec_stops_before_ecal = std::abs(sec_end_length)<ECALEndCapStart && sec_end_radius<ECALInnerRadius;
     bool sec_stops_beyond_ecal = std::abs(sec_end_length)>ECALEndCapEnd || sec_end_radius>ECALOuterRadius;
-    // bool sec_stops_in_ecal = !(sec_stops_before_ecal || sec_stops_beyond_ecal);
+    int sec_pdg = _PDG->at(i_anasec);
+    int sec_charge = GetChargeFromPDG(sec_pdg);
 
     //Ignore secondary nuclei
-    int sec_pdg = _PDG->at(i_anasec);
     if (sec_pdg > 1000000000) {
       if ((stops_in_tpc || stops_in_ecal) && sec_stops_beyond_ecal) {
         duneobj->particle_n_esc_sec_nuc->back() += 1.;  
       }
       continue;
     }
-
-    double sec_px = _MCPStartPX->at(i_anasec);
-    double sec_py = _MCPStartPY->at(i_anasec);
-    double sec_pz = _MCPStartPZ->at(i_anasec);
-    double sec_mass = MaCh3Utils::GetMassFromPDG(sec_pdg);
-    double sec_energy = std::sqrt(sec_px*sec_px + sec_py*sec_py + sec_pz* sec_pz + sec_mass*sec_mass);
-    if (sec_pdg == 2112 || sec_pdg == 2212) sec_energy -= sec_mass; //n&p don't get rest mass from Enu
-    int sec_charge = GetChargeFromPDG(sec_pdg);
-
-    //bool is_decay_sec = false;
-    //if(_MCPProc->at(i_anasec) == "Decay" && _MotherTrkID->at(i_anasec) == prim_trkid) is_decay_sec = true;
     
     //Determine criteria for possible rejection based on secondaries
     if ((stops_in_tpc || stops_in_ecal) && sec_stops_beyond_ecal && sec_charge != 0) {
       escaped_secondaries = true;
+
+      double sec_px = _MCPEndPX->at(i_anasec);
+      double sec_py = _MCPEndPY->at(i_anasec);
+      double sec_pz = _MCPEndPZ->at(i_anasec);
+      double sec_mass = MaCh3Utils::GetMassFromPDG(sec_pdg);
+      double sec_energy = std::sqrt(sec_px*sec_px + sec_py*sec_py + sec_pz* sec_pz + sec_mass*sec_mass);
+      if (sec_pdg == 2112 || sec_pdg == 2212) sec_energy -= sec_mass; //n&p don't get rest mass from Enu
+
       duneobj->particle_n_esc_sec->back() += 1.;
       duneobj->particle_esc_sec_energy->back() += sec_energy;
       duneobj->particle_esc_sec_energy_frac->back() += sec_energy/energy;
     }
   }
-  //Not to worry if escaped secondaries have <X% energy of the primary
-  if (duneobj->particle_esc_sec_energy_frac->back() < 0.05) escaped_secondaries = false;
+  //Not to worry if escaped secondaries combined have <X% energy of the primary
+  if (duneobj->particle_esc_sec_energy_frac->back() < 0.1) escaped_secondaries = false;
 
   //If primary particle or its secondaries are not stopped in the tpc or ecal 
   if((!stops_in_tpc && !stops_in_ecal) || escaped_secondaries) {
@@ -740,6 +735,8 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
       duneobj->rw_yrec[i_event] = static_cast<double>(0);
     }
     duneobj->rw_etru[i_event] = static_cast<double>(sr->mc.nu[0].E); // in GeV
+    if(std::isnan(sr->mc.nu[0].E)) MACH3LOG_INFO("Nan Enu...");
+
     duneobj->rw_isCC[i_event] = static_cast<int>(sr->mc.nu[0].iscc);
     duneobj->rw_nuPDGunosc[i_event] = sr->mc.nu[0].pdgorig;
     duneobj->rw_nuPDG[i_event] = sr->mc.nu[0].pdg;
@@ -828,7 +825,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
       if (!IsParticleAccepted(duneobj, iSample, i_event, i_anaprim, pixel_spacing_cm, prim_to_sec_ID, ID_to_index)) {
         isEventAccepted = false;
       }
-      
+
       //Get pi0 information
       if (pdg == 111 && duneobj->in_fdv[i_event] && duneobj->rw_etru[i_event]>=1 && duneobj->rw_etru[i_event]<5 && duneobj->rw_isCC[i_event]) {
         numpi0++;
@@ -888,8 +885,8 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
   }
   MACH3LOG_INFO("nEvents = {}, numCC = {}, numFDV = {}", duneobj->nEvents, numCC, num_in_fdv);
   MACH3LOG_INFO("numpi0 = {}, contained = {}, tpcdecay = {}, ecaldecay = {}, gapdecay = {}",
-    numpi0, numpi0contained, numpi0tpcdecay, numpi0ecaldecay, numpi0gapdecay);
-  
+      numpi0, numpi0contained, numpi0tpcdecay, numpi0ecaldecay, numpi0gapdecay);
+
   _sampleFile->Close();
   _sampleFile_geant->Close();
   return duneobj->nEvents;

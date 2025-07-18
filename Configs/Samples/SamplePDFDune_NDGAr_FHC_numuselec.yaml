@@ -28,10 +28,10 @@ SampleCuts:
   spatial_resolution: 2.5
   adc_sampling_frequency: 20.
   drift_velocity: 3.011
-#  TPCFidLength: 209.
-#  TPCFidRadius: 160.0
-  TPCFidLength: 250.0
-  TPCFidRadius: 240.0
+  TPCFidLength: 209.
+  TPCFidRadius: 160.0
+#  TPCFidLength: 250.0
+#  TPCFidRadius: 240.0
   TPCInstrumentedLength: 259.0
   TPCInstrumentedRadius: 249.45
   ECALInnerRadius: 278.02
