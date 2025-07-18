@@ -42,7 +42,7 @@ void changeAxisTitle(TAxis* axis) {
   else if (title == "Particle_EndR") axis->SetTitle("Track End Radius (cm)");
 }
 
-void makeAcceptanceCorrectionPlots(const char* inputfilename, const char* outputfilename = "/vols/dune/jmm224/newMaCh3/MaCh3_DUNE/outputs/AcceptancePlots.pdf") {
+void makeAcceptanceCorrectionPlots(const char* inputfilename, const char* outputfilename = "/vols/dune/jmm224/newMaCh3/MaCh3_DUNE/Outputs/acceptance_plots/AcceptancePlots.pdf") {
 
   TFile* inputfile = TFile::Open(inputfilename, "READ");
   if (!inputfile || inputfile->IsZombie()) {
@@ -52,6 +52,7 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename, const char* output
 
   gStyle->SetOptStat(0);
   TCanvas* canvas = new TCanvas("canvas", "Acceptance Correction Plots", 800, 600);
+  gPad->SetTopMargin(0.13);
   canvas->Print(Form("%s[", outputfilename));
 
   TIter next(inputfile->GetListOfKeys());
