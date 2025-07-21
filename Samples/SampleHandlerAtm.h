@@ -121,6 +121,9 @@ protected:
 
   /// Is the sample e-like
   bool IsELike;
+
+  /// Multiplicative scaling to scale from the assumed 400ktyr value in the CAF files
+  double ExposureScaling;
 };
 
 #endif
