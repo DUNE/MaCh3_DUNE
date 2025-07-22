@@ -95,6 +95,8 @@ struct dunemc_base {
   double *rw_reco_rad;
   double *rw_rad;
 
+  double *enu_proxy_minus_enutrue;
+
   double *rw_elep_reco;
   double *rw_elep_true;
 

@@ -423,7 +423,7 @@ Double_t _Ehad_veto;
   duneobj->theta_lep = new double[duneobj->nEvents];
   duneobj->rw_yrec = new double[duneobj->nEvents];
   
-  duneobj->enurec_minus_enutrue = new double[duneobj->nEvents];
+  duneobj->enu_proxy_minus_enutrue = new double[duneobj->nEvents];
   duneobj->ERec_QE = new double[duneobj->nEvents];
   duneobj->erec_proxy = new double[duneobj->nEvents];
   duneobj->erec_proxy_minus_enu = new double[duneobj->nEvents];
@@ -496,8 +496,8 @@ Double_t _Ehad_veto;
 
     duneobj->rw_erec_lep[i] = (_Elep_reco); 
     duneobj->rw_erec_had[i] = (_erec - _Elep_reco);
-    duneobj->erec_proxy_minus_enu[i] = (_Elep_reco) + eHad_truth - _ev;
-
+    duneobj->enu_proxy_minus_enutrue[i] = (_LepE) + eHad_truth - _ev;
+    //std::cout << "         _LepE  =  "  << _LepE << std::endl;
     //std::cout<< "_Elep_rec = " << (_Elep_reco) << std::endl;
     //std::cout<< "rw_erec_had[i] = " <<  (_erec -_Elep_reco) << std::endl;
     //std::cout<< "enu true[i] = " << ( _ev) << std::endl;
@@ -664,8 +664,8 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(int KinematicVariable, int 
   case kERecQE:
     KinematicValue = dunemcSamples[iSample].ERec_QE[iEvent];
     break;
-  case kERecProxy_minus_Enu:
-    KinematicValue = dunemcSamples[iSample].erec_proxy_minus_enu[iEvent];
+  case kENuProxy_minus_Enutrue:
+    KinematicValue = dunemcSamples[iSample].enu_proxy_minus_enutrue[iEvent];
     break;
   case kyRec:
     KinematicValue = dunemcSamples[iSample].rw_yrec[iEvent];
@@ -752,8 +752,8 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(std::string KinematicParame
   case kERecQE:
     KinematicValue = dunemcSamples[iSample].ERec_QE[iEvent];
     break;
-  case kERecProxy_minus_Enu:
-    KinematicValue = dunemcSamples[iSample].erec_proxy_minus_enu[iEvent];
+  case kENuProxy_minus_Enutrue:
+    KinematicValue = dunemcSamples[iSample].enu_proxy_minus_enutrue[iEvent];
     break;
   case kyRec:
     KinematicValue = dunemcSamples[iSample].rw_yrec[iEvent];
@@ -841,8 +841,8 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(std::string Ki
  case kERecQE:
    KinematicValue = &(dunemcSamples[iSample].ERec_QE[iEvent]);
    break;
- case kERecProxy_minus_Enu:
-    KinematicValue = &(dunemcSamples[iSample].erec_proxy_minus_enu[iEvent]);
+ case kENuProxy_minus_Enutrue:
+    KinematicValue = &(dunemcSamples[iSample].enu_proxy_minus_enutrue[iEvent]);
     break;
  case kyRec:
     KinematicValue = &(dunemcSamples[iSample].rw_yrec[iEvent]);
@@ -929,8 +929,8 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(double Kinemat
   case kERecQE:
     KinematicValue = &(dunemcSamples[iSample].ERec_QE[iEvent]);
   break;
-  case kERecProxy_minus_Enu:
-    KinematicValue = &(dunemcSamples[iSample].erec_proxy_minus_enu[iEvent]);
+  case kENuProxy_minus_Enutrue:
+    KinematicValue = &(dunemcSamples[iSample].enu_proxy_minus_enutrue[iEvent]);
   break;
   case kyRec:
     KinematicValue = &(dunemcSamples[iSample].rw_yrec[iEvent]);
@@ -1097,7 +1097,7 @@ std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::st
     case kEHadRec:
     case kERec_minus_Etrue:
     case kERecQE:
-    case kERecProxy_minus_Enu:
+    case kENuProxy_minus_Enutrue:
     case kyRec:
     case keHad_av:
     case kisCC:
