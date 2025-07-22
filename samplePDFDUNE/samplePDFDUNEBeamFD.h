@@ -23,7 +23,7 @@ public:
   ~samplePDFDUNEBeamFD();
 
   /// @brief Enum to identify kinematics
-  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC, kq0, kq3, k_pT, k_pz, k_global_bin_number, kp_lep, ktheta_lep, kELepRec, kEHadRec, kERec_minus_Etrue, kERecQE, kERecProxy_minus_Enu, kyRec, keHad_av, kisCC};
+  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC, kq0, kq3, k_pT, k_pz, k_global_bin_number, kp_lep, ktheta_lep, kELepRec, kEHadRec, kERec_minus_Etrue, kERecQE, kENuProxy_minus_Enutrue, kyRec, keHad_av, kisCC};
   std::pair<std::vector<double>, std::vector<double>> Return2DKinematicParameterBinning(std::string KinematicParameterStr);
   std::vector<double> f1DEdges;
   TH1D* f1DHist = nullptr;
@@ -153,7 +153,7 @@ protected:
     {"EHadRec",kEHadRec},
     {"ERec_minus_Etrue",kERec_minus_Etrue},
     {"ERecQE",kERecQE},
-    {"ERecProxy_minus_Enu",kERecProxy_minus_Enu},
+    {"ENuProxy_minus_Enutrue",kENuProxy_minus_Enutrue},
     {"yRec",kyRec},
     {"eHad_av",keHad_av},
     {"isCC", kisCC}
@@ -181,7 +181,7 @@ protected:
     {kEHadRec,"EHadRec"},
     {kERec_minus_Etrue, "ERec_minus_Etrue"},
     {kERecQE, "ERecQE"},
-    {kERecProxy_minus_Enu, "ERecProxy_minus_Enu"},
+    {kENuProxy_minus_Enutrue, "ENuProxy_minus_Enutrue"},
     {kyRec, "yRec"},
     {keHad_av, "eHad_av"},
     {kisCC, "isCC"}
