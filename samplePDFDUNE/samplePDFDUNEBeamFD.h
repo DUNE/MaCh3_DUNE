@@ -6,17 +6,6 @@
 #include <vector>
 #include <string>
 
-struct xsec_BinDef {
-  int index;
-  double q0_min, q0_max;
-  double q3_min, q3_max;
-};
-
-struct xsec_BinDef_1D {
-  int index;
-  double q0_min, q0_max;
-};
-
 #include "StructsDUNE.h"
 /// @brief Base class for handling FD Beam samples
 class samplePDFDUNEBeamFD : virtual public samplePDFFDBase
@@ -35,26 +24,12 @@ public:
 
   /// @brief Enum to identify kinematics
   enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC, kq0, kq3, k_pT, k_pz, k_global_bin_number, kp_lep, ktheta_lep, kELepRec, kEHadRec, kERec_minus_Etrue, kERecQE, kERecProxy_minus_Enu, kyRec, keHad_av, kisCC};
-  
-  std::vector<xsec_BinDef> fxsec_BinDefs;
-  std::vector<double> fQ0Edges, fQ3Edges;
-  TH2D* fQ0Q3Hist = nullptr;
-  std::pair<std::vector<double>, std::vector<double>>  ExtractQ0Q3BinningFromYAML(const std::string& yamlFile);
-  void SetupQ0Q3Hist(); // optional helper to build fQ0Q3Hist
-  TH2D* GetQ0Q3Hist() const { return fQ0Q3Hist; }
-  TH2D* h_q0q3_filling = nullptr; 
-
-  std::vector<xsec_BinDef_1D> fxsec_BinDefs_1D;
+  std::pair<std::vector<double>, std::vector<double>> Return2DKinematicParameterBinning(std::string KinematicParameterStr);
   std::vector<double> f1DEdges;
   TH1D* f1DHist = nullptr;
-  std::vector<double>  Extract1DBinningFromYAML(const std::string& yamlFile);
   void Setup1DHist(); // optional helper to build fQ0Q3Hist
   TH1D* Get1DHist() const { return f1DHist; }
-  TH1D* h_1D_filling = nullptr; 
-
-  // samplePDFDUNEBeamFD.h
-  TH2D* GetQ0Q3FillingHist() const;  // just the declaration
-  TH1D* Get1DFillingHist() const;
+  
 protected:
   /// @brief Initialises object
   void Init();
@@ -182,7 +157,6 @@ protected:
     {"yRec",kyRec},
     {"eHad_av",keHad_av},
     {"isCC", kisCC}
-    
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -213,5 +187,7 @@ protected:
     {kisCC, "isCC"}
   };
 };
+
+
 
 #endif

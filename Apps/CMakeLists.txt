@@ -10,6 +10,9 @@ foreach(app
 	EventRates_New
 	Fit_Abi
 	Fit_fixingparameters
+	Fit_fixingparameters_beluga
+	Abi_Posteriorpredicitive
+	
       )
       
     add_executable(${app} ${app}.cpp)

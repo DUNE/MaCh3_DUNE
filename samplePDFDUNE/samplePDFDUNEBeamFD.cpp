@@ -12,22 +12,12 @@ samplePDFDUNEBeamFD::samplePDFDUNEBeamFD(std::string mc_version_, covarianceXsec
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
   OscCov = nullptr;
-  ExtractQ0Q3BinningFromYAML("/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/q0q3_triangle_1275params.yaml");
-  Extract1DBinningFromYAML("/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/1D_Reconeutrinoenergy.yaml");
-  SetupQ0Q3Hist();
-  Setup1DHist();
+  
   
   Initialise();
 }
 
 samplePDFDUNEBeamFD::~samplePDFDUNEBeamFD() {
-}
-
-TH2D* samplePDFDUNEBeamFD::GetQ0Q3FillingHist() const {
-  return fQ0Q3Hist;
-}
-TH1D* samplePDFDUNEBeamFD::Get1DFillingHist() const {
-  return f1DHist;
 }
 
 
@@ -140,241 +130,6 @@ void samplePDFDUNEBeamFD::SetupWeightPointers() {
   }
 }
 
-/*
-void samplePDFDUNEBeamFD::ExtractQ0Q3BinningFromYAML(const std::string& yaml_file) {
-  std::set<double> q0_set, q3_set;
-  fxsec_BinDefs.clear();
-
-  try {
-    YAML::Node config = YAML::LoadFile(yaml_file);
-    const auto& systs = config["Systematics"];
-    int index = 0;
-
-    for (const auto& systematic : systs) {
-      const auto& sys = systematic["Systematic"];
-      const auto& cuts = sys["KinematicCuts"];
-
-      double q0_min = -1, q0_max = -1, q3_min = -1, q3_max = -1;
-
-      for (const auto& cut : cuts) {
-        if (cut["q0"]) {
-          const auto& q0 = cut["q0"];
-          if (q0.IsSequence() && q0.size() == 2) {
-            q0_min = q0[0].as<double>();
-            q0_max = q0[1].as<double>();
-            q0_set.insert(q0_min);
-            q0_set.insert(q0_max);
-          }
-        }
-        if (cut["q3"]) {
-          const auto& q3 = cut["q3"];
-          if (q3.IsSequence() && q3.size() == 2) {
-            q3_min = q3[0].as<double>();
-            q3_max = q3[1].as<double>();
-            q3_set.insert(q3_min);
-            q3_set.insert(q3_max);
-          }
-        }
-      }
-      if (q0_max > q0_min && q3_max > q3_min) {
-        fxsec_BinDefs.push_back({index++, q0_min, q0_max, q3_min, q3_max});
-      }
-
-    }
-
-    fQ0Edges.assign(q0_set.begin(), q0_set.end());
-    fQ3Edges.assign(q3_set.begin(), q3_set.end());
-
-    std::cout << "[samplePDFDUNE] Loaded " << fxsec_BinDefs.size() << " q0/q3 bins.\n";
-
-  } catch (const std::exception& e) {
-    std::cerr << "YAML parsing failed in samplePDFDUNE: " << e.what() << "\n";
-  }
-} */
-
-std::pair<std::vector<double>, std::vector<double>> 
-samplePDFDUNEBeamFD::ExtractQ0Q3BinningFromYAML(const std::string& yaml_file) {
-  std::set<double> q0_set, q3_set;
-  fxsec_BinDefs.clear();
-
-  try {
-    YAML::Node config = YAML::LoadFile(yaml_file);
-    const auto& systs = config["Systematics"];
-    int index = 0;
-
-    for (const auto& systematic : systs) {
-      const auto& sys = systematic["Systematic"];
-      const auto& cuts = sys["KinematicCuts"];
-
-      double q0_min = -1, q0_max = -1, q3_min = -1, q3_max = -1;
-
-      for (const auto& cut : cuts) {
-        if (cut["q0"]) {
-          const auto& q0 = cut["q0"];
-          if (q0.IsSequence() && q0.size() == 2) {
-            q0_min = q0[0].as<double>();
-            q0_max = q0[1].as<double>();
-            q0_set.insert(q0_min);
-            q0_set.insert(q0_max);
-          }
-        }
-        if (cut["q3"]) {
-          const auto& q3 = cut["q3"];
-          if (q3.IsSequence() && q3.size() == 2) {
-            q3_min = q3[0].as<double>();
-            q3_max = q3[1].as<double>();
-            q3_set.insert(q3_min);
-            q3_set.insert(q3_max);
-          }
-        }
-      }
-
-      if (q0_max > q0_min && q3_max > q3_min) {
-        fxsec_BinDefs.push_back({index++, q0_min, q0_max, q3_min, q3_max});
-      }
-    }
-    fQ0Edges.assign(q0_set.begin(), q0_set.end());
-    fQ3Edges.assign(q3_set.begin(), q3_set.end());
-
-
-    std::vector<double> q0_edges(q0_set.begin(), q0_set.end());
-    std::vector<double> q3_edges(q3_set.begin(), q3_set.end());
-
-    std::cout << "[samplePDFDUNE] Loaded " << fxsec_BinDefs.size() << " q0/q3 bins.\n";
-
-    return {q0_edges, q3_edges};
-
-  } catch (const std::exception& e) {
-    std::cerr << "YAML parsing failed in samplePDFDUNE: " << e.what() << "\n";
-    return {{}, {}};
-  }
-}
-
-
-void samplePDFDUNEBeamFD::SetupQ0Q3Hist() {
-  if (fQ0Q3Hist) delete fQ0Q3Hist;
-
-  if (fQ0Edges.empty() || fQ3Edges.empty()) {
-  std::cerr << "❌ Error: q0/q3 edges not set before calling SetupQ0Q3Hist()" << std::endl;
-  throw std::runtime_error("Missing q0/q3 bin edges");
-  }
-
-
-  int nQ3Bins = static_cast<int>(fQ3Edges.size()) - 1;
-  int nQ0Bins = static_cast<int>(fQ0Edges.size()) - 1;
-
-  /*
-  fQ0Q3Hist = new TH2D("fQ0Q3Hist", "q_{0} vs q_{3}; q_{3} [GeV]; q_{0} [GeV]",
-                     nQ3Bins, &fQ3Edges[0],
-                     nQ0Bins, &fQ0Edges[0]);*/
-  
-  fQ0Q3Hist = new TH2D("fQ0Q3Hist", "q_{0} vs q_{3}; q_{3} [GeV]; q_{0} [GeV]",
-                     nQ3Bins, &fQ3Edges[0],
-                     nQ0Bins, &fQ0Edges[0]);
-
-  
-  fQ0Q3Hist->SetDirectory(nullptr);
-}
-
-void samplePDFDUNEBeamFD::Setup1DHist() {
-  if (f1DHist) delete f1DHist;
-  if (f1DEdges.empty()) {
-  std::cerr << " Error: q0 edges not set before calling Setup1DHist()" << std::endl;
-  throw std::runtime_error("Missing q0 bin edges");
-  }
-  int n1DBins = static_cast<int>(f1DEdges.size()) - 1;
-  f1DHist = new TH1D("fQ0Q3Hist", "q_{0} ; q_{3} [GeV]; q_{0} [GeV]",
-                     n1DBins, &f1DEdges[0]);
-
-  
-  f1DHist->SetDirectory(nullptr);
-}
-
-/*
-void samplePDFDUNEBeamFD::Extract1DBinningFromYAML(const std::string& yaml_file) {
-  std::set<double> q0_set;
-  fxsec_BinDefs_1D.clear();
-
-  try {
-    YAML::Node config = YAML::LoadFile(yaml_file);
-    const auto& systs = config["Systematics"];
-    int index = 0;
-
-    for (const auto& systematic : systs) {
-      const auto& sys = systematic["Systematic"];
-      const auto& cuts = sys["KinematicCuts"];
-
-      double q0_min = -1, q0_max = -1;
-
-      for (const auto& cut : cuts) {
-        if (cut["RecoNeutrinoEnergy"]) {
-          const auto& q0 = cut["RecoNeutrinoEnergy"];
-          if (q0.IsSequence() && q0.size() == 2) {
-            q0_min = q0[0].as<double>();
-            q0_max = q0[1].as<double>();
-            q0_set.insert(q0_min);
-            q0_set.insert(q0_max);
-          }
-        }
-      }
-      if (q0_max > q0_min) {
-        fxsec_BinDefs_1D.push_back({index++, q0_min, q0_max});
-      }
-    }
-    f1DEdges.assign(q0_set.begin(), q0_set.end());
-
-    std::cout << "[samplePDFDUNE] Loaded " << fxsec_BinDefs.size() << " q0/q3 bins.\n";
-
-  } catch (const std::exception& e) {
-    std::cerr << "YAML parsing failed in samplePDFDUNE: " << e.what() << "\n";
-  }
-}*/
-
-std::vector<double> samplePDFDUNEBeamFD::Extract1DBinningFromYAML(const std::string& yaml_file) {
-  std::set<double> q0_set;
-  fxsec_BinDefs_1D.clear();
-
-  try {
-    YAML::Node config = YAML::LoadFile(yaml_file);
-    const auto& systs = config["Systematics"];
-    int index = 0;
-
-    for (const auto& systematic : systs) {
-      const auto& sys = systematic["Systematic"];
-      const auto& cuts = sys["KinematicCuts"];
-
-      double q0_min = -1, q0_max = -1;
-
-      for (const auto& cut : cuts) {
-        if (cut["RecoNeutrinoEnergy"]) {
-          const auto& q0 = cut["RecoNeutrinoEnergy"];
-          if (q0.IsSequence() && q0.size() == 2) {
-            q0_min = q0[0].as<double>();
-            q0_max = q0[1].as<double>();
-            q0_set.insert(q0_min);
-            q0_set.insert(q0_max);
-          }
-        }
-      }
-
-      if (q0_max > q0_min) {
-        fxsec_BinDefs_1D.push_back({index++, q0_min, q0_max});
-      }
-    }
-    f1DEdges.assign(q0_set.begin(), q0_set.end());
-
-    std::vector<double> q0_edges(q0_set.begin(), q0_set.end());
-
-    std::cout << "[samplePDFDUNE] Loaded " << fxsec_BinDefs_1D.size() << " 1D q0 bins.\n";
-
-    return q0_edges;
-
-  } catch (const std::exception& e) {
-    std::cerr << "YAML parsing failed in samplePDFDUNE: " << e.what() << "\n";
-    return {};
-  }
-}
-
 
 int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
 
@@ -406,19 +161,6 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   std::cout<< "CalculatePOT() = " << newpot << " -----------------------------------------------------------------------------" << std::endl;
 
    
-  // Assume q0_edges and q3_edges were parsed already
-  h_q0q3_filling = new TH2D("h_q0q3_filling", "q0 vs q3 from MC",
-    static_cast<Int_t>(fQ3Edges.size() - 1), &fQ3Edges[0],
-    static_cast<Int_t>(fQ0Edges.size() - 1), &fQ0Edges[0]);
-
-  h_q0q3_filling->SetDirectory(nullptr);  // Prevent ROOT memory ownership issues
-
-  // Assume q0_edges and q3_edges were parsed already
-  h_1D_filling = new TH1D("h1D_filling", "q0 from MC",
-    static_cast<Int_t>(f1DEdges.size() - 1), &f1DEdges[0]);
-
-  h_1D_filling->SetDirectory(nullptr);  // Prevent ROOT memory ownership issues
-
   //Reco Variables
   double _erec;
   double _erec_nue;
@@ -848,23 +590,6 @@ Double_t _Ehad_veto;
     if(need_global_bin_numbers){
       duneobj->global_bin_number[i] = GetGenericBinningGlobalBinNumber(iSample, i);
     } 
-
-    //std::cout << "[DEBUG] Filling fQ0Q3Hist with _ev = " << _ev 
-      //    << ", (_Elep_reco + eHad_truth - _ev) = " << (_Elep_reco + eHad_truth - _ev) << std::endl;
-
-    //h_q0q3_filling->Fill((TVector3{_NuMomX, _NuMomY, _NuMomZ} -TVector3{_LepMomX, _LepMomY, _LepMomZ}).Mag() , (_ev - _LepE));
-    fQ0Q3Hist->Fill( (_Elep_reco) + eHad_truth - _ev, _ev );
-    f1DHist->Fill( _ev );
-  //DB Grab the associated enum with the argument string
-    //int bin = fQ0Q3Hist->FindBin((_Elep_reco + eHad_truth - _ev),_ev);
-    //std::cout << "[DEBUG] Bin content after fill: " << fQ0Q3Hist->GetBinContent(bin) << std::endl;
-    
-    //std::cout << "[DEBUG] fQ3Edges: [" << fQ3Edges.front() << ", " << fQ3Edges.back() << "]\n";
-    //std::cout << "[DEBUG] fQ0Edges: [" << fQ0Edges.front() << ", " << fQ0Edges.back() << "]\n";
-
-
-    //std::cout << "Filling _eV=" << _ev << ", Enuproxy - Enu =" <<  (_Elep_reco) + eHad_truth - _ev << std::endl;
-
   }
   
   _sampleFile->Close();
@@ -1376,16 +1101,32 @@ std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::st
     case kyRec:
     case keHad_av:
     case kisCC:
-      {
-          std::vector<double> ReturnVec_1Dconfig = Extract1DBinningFromYAML("/scratch/abipeake/MaCh3_DUNE/configs/CovObjs/1D_Reconeutrinoenergy.yaml") ;
-          std::pair<std::vector<double>, std::vector<double>>  ReturnVec_2Dconfig = ExtractQ0Q3BinningFromYAML("/scratch/abipeake/MaCh3_DUNE/configs/CovObjs//scratch/abipeake/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_fullgrid_smallerbins.yaml");
-          ReturnVec = ReturnVec_1Dconfig;
-          break;
-      }
-
     default:
-      MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", static_cast<int>(KinematicParameter));
-      throw MaCh3Exception(__FILE__, __LINE__);
-  }      
-  return ReturnVec;
+        MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", static_cast<int>(KinematicParameter));
+        throw MaCh3Exception(__FILE__, __LINE__);
+    }
+
+    return ReturnVec;
+
 }
+
+
+/*
+std::pair<std::vector<double>, std::vector<double>> samplePDFDUNEBeamFD::Return2DKinematicParameterBinning(std::string KinematicParameterStr) {
+    KinematicTypes KinematicParameter = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameterStr));
+
+    switch (KinematicParameter) {
+        case k_2Dxsec:{
+            return ExtractQ0Q3BinningFromYAML(
+                "/scratch/abipeake/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_fullgrid_smallerbins.yaml"
+            );
+          }
+        default:
+          MACH3LOG_ERROR("2D binning not defined for: {}", static_cast<int>(KinematicParameter));
+          throw MaCh3Exception(__FILE__, __LINE__);
+        
+        default:
+            MACH3LOG_ERROR("2D binning requested for non-2D Kinematic Parameter: {}", static_cast<int>(KinematicParameter));
+            throw MaCh3Exception(__FILE__, __LINE__);
+    }
+}*/
