@@ -5,6 +5,7 @@ SampleType: "BeamFD"
 POT: 1.3628319e+23
 MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
 SampleName: "FD_RHC_nue"
+  #Downsample: 0.1
 
 SelectionCuts:
   - KinematicStr: "TrueXPos"
@@ -31,7 +32,7 @@ InputFiles:
   splinesuffix: "_nueselec_splines.root"
 
 NuOsc:
-  NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
+  NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear_Binned.yaml"
   EqualBinningPerOscChannel: false
 
 SubSamples:
