@@ -21,7 +21,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 8.0
+      MCMC: 0.3
     Type: Functional
 
 - Systematic:
@@ -48,7 +48,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 8.0
+      MCMC: 0.3
     Type: Functional
 
 - Systematic:
@@ -69,7 +69,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 16.0
+      MCMC: 0.3
     Type: Functional
 
 - Systematic:
@@ -92,7 +92,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 16.0
+      MCMC: 0.3
     Type: Functional
 
 - Systematic:
@@ -113,7 +113,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 18.0
+      MCMC: 0.3
     Type: Functional
 
 - Systematic:
@@ -136,7 +136,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 18.0
+      MCMC: 0.3
     Type: Functional
 
 ##### Particle specific energy uncertainties #####
@@ -156,7 +156,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 18.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     SampleNames: ["FD_*"]
@@ -173,7 +173,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 20.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     SampleNames: ["FD_*"]
@@ -190,7 +190,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 7.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     SampleNames: ["FD_FHC_numu", "FD_RHC_numu"]
@@ -209,7 +209,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 15.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     SampleNames: ["FD_FHC_numu", "FD_RHC_numu"]
@@ -228,7 +228,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 20.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     SampleNames: ["FD_FHC_numu", "FD_RHC_numu"]
@@ -247,7 +247,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 20.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     SampleNames: ["FD_*"]
@@ -264,7 +264,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 6.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     SampleNames: ["FD_*"]
@@ -281,7 +281,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 12.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     SampleNames: ["FD_*"]
@@ -298,7 +298,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 10.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     Correlations:
@@ -318,7 +318,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 30.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     Correlations:
@@ -340,7 +340,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 30.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     Correlations:
@@ -360,7 +360,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 20.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     Correlations:
@@ -382,7 +382,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 20.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     Correlations:
@@ -402,7 +402,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 20.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     Correlations:
@@ -424,7 +424,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 20.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     SampleNames: ["FD_*"]
@@ -441,7 +441,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 20.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     SampleNames: ["FD_FHC_numu", "FD_RHC_numu"]
@@ -460,7 +460,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 9.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     SampleNames: ["FD_*"]
@@ -477,7 +477,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 17.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     Correlations:
@@ -497,7 +497,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 22.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     Correlations:
@@ -519,7 +519,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 22.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     SampleNames: ["FD_FHC_numu", "FD_RHC_numu"]
@@ -536,7 +536,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 8.0
+      MCMC: 0.3
     Type: Functional
 - Systematic:
     SampleNames: ["FD_FHC_nue", "FD_RHC_nue"]
@@ -553,7 +553,7 @@ Systematics:
       Generated: 0.0
       PreFitValue: 0.0
     StepScale:
-      MCMC: 8.0
+      MCMC: 0.3
     Type: Functional
 
 ##### FD Fiducial Volume uncertainties #####
@@ -576,7 +576,7 @@ Systematics:
       Generated: 1.0
       PreFitValue: 1.0
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.3
     Type: Norm
 - Systematic:
     Correlations:
@@ -596,5 +596,5 @@ Systematics:
       Generated: 1.0
       PreFitValue: 1.0
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.3
     Type: Norm
