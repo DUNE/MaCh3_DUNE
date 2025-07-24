@@ -184,6 +184,7 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<SampleHandlerFD*> &D
 
   if (FitManager->raw()["AdaptionOptions"]){ 
     xsec->InitialiseAdaption(FitManager->raw());
+    osc->InitialiseAdaption(FitManager->raw());
   }
 
   return;
