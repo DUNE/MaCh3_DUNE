@@ -464,6 +464,22 @@ int SampleHandlerBeamFD::SetupExperimentMC(int iSample) {
 
   duneobj->nEvents = static_cast<int>(_data->GetEntries());
 
+  // HH: Downsampling by choosing the first X% of the events
+  // HH TODO: Instead of choosing the first X% of the events, we should randomly sample X% of the events 
+  if (CheckNodeExists(SampleManager->raw(), "Downsample")) {
+    double downsample = SampleManager->raw()["Downsample"].as<double>();
+    MACH3LOG_INFO("Downsample found in {}, will sample only {} of each file and scale POT correspondingly!", SampleManager->GetFileName(), downsample);
+    duneobj->nEvents = static_cast<int>(duneobj->nEvents*downsample);
+    duneobj->pot_s = duneobj->pot_s/downsample;
+    MACH3LOG_INFO("New number of events: {}", duneobj->nEvents);
+    MACH3LOG_INFO("New POT: {}", pot);
+    MACH3LOG_INFO("New pot_s: {}", duneobj->pot_s);
+    MACH3LOG_INFO("New norm_s: {}", duneobj->norm_s);
+  } else{
+    MACH3LOG_INFO("Downsample not defined in {}, continuing without downsampling!", SampleManager->GetFileName());
+  }
+
+
   // allocate memory for dunemc variables
   duneobj->rw_cvnnumu = new double[duneobj->nEvents];
   duneobj->rw_cvnnue = new double[duneobj->nEvents];
