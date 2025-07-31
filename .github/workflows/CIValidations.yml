@@ -1,0 +1,71 @@
+---
+name: Event Rates Beam
+
+# To add additional run-time tests add (to matrix)
+# - name: <your test>
+#   test_exe: /test/<your exe>
+#   test_config: path/to/tconfiguration
+#   repo_linking_command: ln -sf /path/to/files/ (usually CAFs + splines)
+
+on:
+  pull_request:
+    branches: [develop, main]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - name: Beam Event Rate Validation
+            test_exe: EventRates
+            build_arg: -DCUDAProb3Linear_ENABLED=ON
+            test_config: CIValidations/CIInputs/CIFitConfig.yaml
+            old_output: CIValidations/CIOutputs/BeamEventRates.txt
+            new_output: CIValidations/CIOutputs/BeamEventRates_New.txt
+
+
+    name: Run Test ${{matrix.name}}
+    steps:
+      # Checkout the repository code
+      - uses: actions/checkout@v4
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Start docker container
+        env:
+          MACH3_DUNE_VERSION: ${{ github.event.pull_request.head.ref || github.ref_name }}
+        run: |
+          docker build . \
+          --file Docs/MaCh3DockerFiles/Alma9/Dockerfile \
+          --tag ghcr.io/dune/mach3:alma9_ci \
+          --build-arg MACH3_DUNE_VERSION="${MACH3_DUNE_VERSION}" \
+          --build-arg CMAKE_OPTIONS=${{matrix.build_arg}}
+
+      # Run event rates
+      - name: Run Event Rates
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ghcr.io/dune/mach3:alma9_ci
+          shell: bash
+          run: |
+            dnf install -y diffutils
+            cd ..
+            source ./build/bin/setup.MaCh3.sh
+            source ./build/bin/setup.MaCh3DUNE.sh
+            echo Running ./build/bin/${{matrix.test_exe}} ${{matrix.test_config}} 2>&1 | grep '^\['"${{matrix.test_exe}}"'\.cpp\]' | tee ${{matrix.new_output}}
+            ./build/bin/${{matrix.test_exe}} ${{matrix.test_config}} | grep '^\['"${{matrix.test_exe}}"'\.cpp\]' | tee ${{matrix.new_output}}
+            diff ${{matrix.old_output}} ${{matrix.new_output}} > diff_output.txt
+            DIFF_EXIT=$?
+            cat diff_output.txt
+            if [ $DIFF_EXIT -gt 0 ]; then
+              echo "Differences found:"
+              exit 1
+            else
+              echo "Workflow run successfully, no differences found!"
+            fi

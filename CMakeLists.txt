@@ -81,55 +81,55 @@ if(MaCh3_DUNE_USE_SRProxy)
   find_package(duneanaobj)
 	
   if(NOT duneanaobj_FOUND)
-		CPMFindPackage(
-    	NAME duneanaobj
-    	GIT_TAG feature/Clingification_rebase2024
-    	GITHUB_REPOSITORY luketpickering/duneanaobj
-    	VERSION 4.0.0
+    CPMFindPackage(
+      NAME duneanaobj
+      GIT_TAG feature/Clingification_rebase2024
+      GITHUB_REPOSITORY luketpickering/duneanaobj
+      VERSION 4.0.0
     )
   endif()
-
+  
   if(NOT TARGET duneanaobj::all)
     cmessage(FATAL_ERROR "MaCh3 DUNE Expected dependency target: duneanaobj::all")
   endif()
 else()
-	CPMAddPackage(
- 	  NAME duneanaobj
-	  GIT_TAG ${DUNE_ANAOBJ_BRANCH}
-	  GITHUB_REPOSITORY DUNE/duneanaobj 
-	  DOWNLOAD_ONLY YES
+  CPMAddPackage(
+    NAME duneanaobj
+    GIT_TAG ${DUNE_ANAOBJ_BRANCH}
+    GITHUB_REPOSITORY DUNE/duneanaobj 
+    DOWNLOAD_ONLY YES
   )
-	include_directories(${duneanaobj_SOURCE_DIR})
-
+  include_directories(${duneanaobj_SOURCE_DIR})
+  
   ROOT_GENERATE_DICTIONARY(StandardRecordDict ${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/StandardRecord.h
-  LINKDEF ${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/classes_def.xml)
-
+    LINKDEF ${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/classes_def.xml)
+  
   file(GLOB SR_IMPL_FILES "${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/*.cxx")
   LIST(APPEND SR_IMPL_FILES ${CMAKE_CURRENT_BINARY_DIR}/StandardRecordDict.cxx)
-
+  
   add_library(duneanaobj_StandardRecord SHARED ${SR_IMPL_FILES})
   target_link_libraries(duneanaobj_StandardRecord PUBLIC ROOT::MathCore)
-
+  
   target_include_directories(duneanaobj_StandardRecord PUBLIC 
     $<BUILD_INTERFACE:${duneanaobj_SOURCE_DIR}> 
     $<INSTALL_INTERFACE:include>)
   target_include_directories(duneanaobj_StandardRecord PRIVATE 
     $<BUILD_INTERFACE:${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord> #root puts this in the dictionary
-    )
+  )
   
   set_target_properties(duneanaobj_StandardRecord PROPERTIES EXPORT_NAME all)
   install(TARGETS duneanaobj_StandardRecord EXPORT mach3dune-targets DESTINATION lib)
   
   file(GLOB SR_HEADER_FILES "${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/*.h")
-
+  
   install(FILES ${SR_HEADER_FILES} DESTINATION include/duneanaobj/StandardRecord)
   install(FILES 
     ${CMAKE_CURRENT_BINARY_DIR}/libStandardRecordDict_rdict.pcm 
     ${CMAKE_CURRENT_BINARY_DIR}/libStandardRecordDict.rootmap 
     DESTINATION lib)
-
+  
   add_library(duneanaobj::all ALIAS duneanaobj_StandardRecord)
-
+  
 endif()
 
 ##################################  MaCh3  ######################################
@@ -138,47 +138,56 @@ SET(MaCh3_FOUND FALSE)
 find_package(MaCh3 2.0.0 EXACT QUIET)
 set(MaCh3_CORE_BRANCH v2.0.0 CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
+option(MaCh3DUNE_Atmos "Whether working with atmospherics or beam oscillations" OFF)
 
 if(NOT MaCh3_FOUND)
   cmessage(STATUS "Didn't find MaCh3, attempting to use built in MaCh3")
-
-  if(NOT DEFINED GPU_ENABLED)
-    set(GPU_ENABLED ON)
+  
+  if(NOT DEFINED MaCh3_GPU_ENABLED)
+    set(MaCh3_GPU_ENABLED ON)
   endif()
-
-  if(NOT DEFINED DEBUG_ENABLED)
-    set(DEBUG_ENABLED FALSE)
+  
+  if(NOT DEFINED MaCh3_DEBUG_ENABLED)
+    set(MaCh3_DEBUG_ENABLED FALSE)
   endif()
-
-  if(NOT DEFINED MULTITHREAD_ENABLED)
-    set(MULTITHREAD_ENABLED TRUE)
+  
+  if(NOT DEFINED MaCh3_MULTITHREAD_ENABLED)
+    set(MaCh3_MULTITHREAD_ENABLED TRUE)
   endif()
-
+  
   # Options list construction
   set(MaCh3_OPTIONS
-      "MaCh3_GPU_ENABLED ${GPU_ENABLED}"
-      "MaCh3_DEBUG_ENABLED ${DEBUG_ENABLED}"
-      "MaCh3_MULTITHREAD_ENABLED ${MULTITHREAD_ENABLED}"
-      "MaCh3_CORE_BRANCH ${MaCh3_CORE_BRANCH}"
+    "MaCh3_GPU_ENABLED ${MaCh3_GPU_ENABLED}"
+    "MaCh3_DEBUG_ENABLED ${MaCh3_DEBUG_ENABLED}"
+    "MaCh3_MULTITHREAD_ENABLED ${MaCh3_MULTITHREAD_ENABLED}"
+    "MaCh3_CORE_BRANCH ${MaCh3_CORE_BRANCH}"
   )
 
   # Add LOG_LEVEL if defined
   if (LOG_LEVEL)
     list(APPEND MaCh3_OPTIONS "LOG_LEVEL ${LOG_LEVEL}")
   endif()
+
+  list(APPEND MaCh3_OPTIONS "NuFastLinear_ENABLED TRUE")
+  if (MaCh3DUNE_Atmos)
+    list(APPEND MaCh3_OPTIONS "CUDAProb3_ENABLED TRUE")
+    list(APPEND MaCh3_OPTIONS "CUDAProb3Linear_ENABLED FALSE")
+  else()
+    list(APPEND MaCh3_OPTIONS "CUDAProb3Linear_ENABLED TRUE")
+  endif()
   
   CPMAddPackage(
-      NAME MaCh3
-      GIT_TAG ${MaCh3_CORE_BRANCH}
-      GITHUB_REPOSITORY mach3-software/MaCh3
-      OPTIONS
-      	${MaCh3_OPTIONS}
+    NAME MaCh3
+    GIT_TAG ${MaCh3_CORE_BRANCH}
+    GITHUB_REPOSITORY mach3-software/MaCh3
+    OPTIONS
+    ${MaCh3_OPTIONS}
   )
 else()
   ##KS: This ensure that all executables that are in core will be moved
   FILE(GLOB MaCh3Exe $ENV{MaCh3_ROOT}/Diagnostics/*)
   FILE(COPY ${MaCh3Exe} DESTINATION ${CMAKE_BINARY_DIR}/Diagnostics/)
-
+  
   FILE(GLOB MaCh3Exe $ENV{MaCh3_ROOT}/plotting/*)
   FILE(COPY ${MaCh3Exe} DESTINATION ${CMAKE_BINARY_DIR}/plotting/)
 endif()
@@ -225,7 +234,7 @@ target_compile_options(DUNEMaCh3Warnings INTERFACE
 ################################# Features ##################################
 
 LIST(APPEND ALL_FEATURES
-  )
+)
 cmessage(STATUS "MaCh3DUNE Features: ")
 foreach(f ${ALL_FEATURES})
   cmessage(STATUS "     ${f}: ${MaCh3DUNE_${f}_ENABLED}")
@@ -250,9 +259,9 @@ set_target_properties(MaCh3DUNECompilerOptions PROPERTIES EXPORT_NAME CompilerOp
 
 target_include_directories(MaCh3DUNECompilerOptions
   INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/Apps>
-    $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
-    $<INSTALL_INTERFACE:include>)
+  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/Apps>
+  $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
+  $<INSTALL_INTERFACE:include>)
 
 install(TARGETS MaCh3DUNECompilerOptions
   EXPORT mach3dune-targets
@@ -261,13 +270,6 @@ install(TARGETS MaCh3DUNECompilerOptions
 add_subdirectory(Splines)
 add_subdirectory(Samples)
 add_subdirectory(Apps)
-
-
-# Do we want to build our integration tests?
-if(DEFINED MACH3_BUILD_TESTS AND MACH3_BUILD_TESTS)
-  add_subdirectory(tests)
-endif()
-
 
 add_library(MaCh3DUNEAll INTERFACE)
 set_target_properties(MaCh3DUNEAll PROPERTIES EXPORT_NAME All)
@@ -300,7 +302,7 @@ include(CMakePackageConfigHelpers)
 configure_package_config_file(
   ${CMAKE_CURRENT_LIST_DIR}/cmake/Templates/MaCh3DUNEConfig.cmake.in ${CMAKE_BINARY_DIR}/MaCh3DUNEConfig.cmake
   INSTALL_DESTINATION
-    /this/is/ignored/for/some/reason/thanks/kitware
+  /this/is/ignored/for/some/reason/thanks/kitware
   NO_SET_AND_CHECK_MACRO
   NO_CHECK_REQUIRED_COMPONENTS_MACRO)
 

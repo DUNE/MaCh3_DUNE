@@ -10,8 +10,9 @@ Binning:
   YVarStr: "RecoNeutrinoEnergy"
   YVarBins: [0, 0.23, 0.31, 0.47, 0.81, 1.28, 1.99, 3.17, 5.38, 11.54, 1e8]
 
-SampleBools:
+SampleOptions:
   IsELike: no
+  ExposureScaling: 1.0
 
 InputFiles:
   mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"
