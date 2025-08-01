@@ -107,7 +107,6 @@ struct dunemc_base {
   bool *is_accepted;
 
   //Particle-level kinematic parameters (JM for NDGAr)
-  std::vector<double> *particle_ecaldepositfraction;
   std::vector<int> *particle_event;
   std::vector<int> *particle_trkid;
   std::vector<int> *particle_pdg;
@@ -120,6 +119,7 @@ struct dunemc_base {
   std::vector<double> *particle_endmomentum;
   std::vector<double> *particle_transversemomentum;
   std::vector<bool> *particle_isaccepted;
+  std::vector<bool> *particle_iscontained;
   std::vector<bool> *particle_isdecayed;
   std::vector<bool> *particle_isstoppedintpc;
   std::vector<bool> *particle_isstoppedinecal;
@@ -139,10 +139,8 @@ struct dunemc_base {
   std::vector<double> *particle_momresms;
   std::vector<double> *particle_momresyz;
   std::vector<double> *particle_momresx;
-  std::vector<double> *particle_n_esc_sec_nuc;
-  std::vector<double> *particle_n_esc_sec;
-  std::vector<double> *particle_esc_sec_energy;
-  std::vector<double> *particle_esc_sec_energy_frac;
+  std::vector<double> *particle_edepcrit;
+  std::vector<double> *particle_escsecenergyfrac;
 };
 
 #endif

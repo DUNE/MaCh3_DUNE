@@ -1,6 +1,5 @@
 #include "SampleHandlerBeamNDGAr.h"
 
-#include <random>
 
 SampleHandlerBeamNDGAr::SampleHandlerBeamNDGAr(std::string mc_version_, ParameterHandlerGeneric* ParHandler_) : SampleHandlerFD(mc_version_, ParHandler_) {
   KinematicParameters = &KinematicParametersDUNE;
@@ -32,8 +31,6 @@ void SampleHandlerBeamNDGAr::Init() {
   adc_sampling_frequency = SampleManager->raw()["SampleCuts"]["adc_sampling_frequency"].as<double>(); //NK sampling frequency for ADC - needed to find timing resolution and spatial resolution in x dir in MHz
   drift_velocity = SampleManager->raw()["SampleCuts"]["drift_velocity"].as<double>(); //NK drift velocity of electrons in gas - needed to find timing resolution and spatial resolution in x dir in cm/microsecond
   //  average_gain = SampleManager->raw()["SampleCuts"]["average_gain"].as<double>();
-  pi0_reco_efficiency = SampleManager->raw()["SampleCuts"]["pi0_reco_efficiency"].as<double>(); //efficiency for pi0 reco in ECAL
-  gamma_reco_efficiency = SampleManager->raw()["SampleCuts"]["gamma_reco_efficiency"].as<double>(); //efficiency for gamma reco in ECAL
   TPCFidLength = SampleManager->raw()["SampleCuts"]["TPCFidLength"].as<double>();
   TPCFidRadius = SampleManager->raw()["SampleCuts"]["TPCFidRadius"].as<double>();
   TPCInstrumentedLength = SampleManager->raw()["SampleCuts"]["TPCInstrumentedLength"].as<double>();
@@ -209,14 +206,26 @@ int SampleHandlerBeamNDGAr::GetChargeFromPDG(const int pdg) {
 }
 
 bool SampleHandlerBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, size_t i_anaprim, double pixel_spacing_cm, 
-    std::unordered_map<int,std::vector<int>>& prim_to_sec_ID, std::unordered_map<int,size_t>& ID_to_index){
+    std::unordered_map<int, std::vector<double>>& primID_to_ECalDep, std::unordered_map<int, std::vector<int>>& prim_to_sec_ID, std::unordered_map<int, size_t>& ID_to_index){
 
   bool isAccepted = true;
+  int prim_trkid = _MCPTrkID->at(i_anaprim);
 
-  static std::random_device rd;
-  static std::mt19937 gen(rd());
-  static std::uniform_real_distribution<double> dist(0.0, 1.0);
-
+  //If <2 MeV or <2% of total energy is deposited in last 2 layers of the ecal, shower is contained
+  bool containedShower = false;
+  const double E_crit = 0.002;
+  const double frac_crit = 0.02;
+  const int crit_layers = 2;
+  const int tot_layers = static_cast<int>(primID_to_ECalDep[prim_trkid].size());
+  double EDepCrit = 0.;
+  double EDepTot = 0.;
+  for (int layer = 0; layer < tot_layers; layer++) {
+    if(layer >= tot_layers - crit_layers) EDepCrit += primID_to_ECalDep[prim_trkid][layer];
+    EDepTot += primID_to_ECalDep[prim_trkid][layer];  
+  }
+  if (EDepCrit < E_crit || EDepCrit/EDepTot < frac_crit) containedShower = true;
+  
+  //define primary properties from Anatree
   int pdg = _PDG->at(i_anaprim);
   double mass = MaCh3Utils::GetMassFromPDG(pdg);
   int charge = GetChargeFromPDG(pdg);
@@ -262,6 +271,7 @@ bool SampleHandlerBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
   duneobj->particle_endx->push_back(end_length);
 
   duneobj->particle_isaccepted->push_back(true); //default (updates later)
+  duneobj->particle_iscontained->push_back(containedShower);
   duneobj->particle_isdecayed->push_back(_MCPEndProc->at(i_anaprim) == "Decay");
   duneobj->particle_isstoppedingap->push_back(!stops_in_tpc && stops_before_ecal);
   duneobj->particle_isstoppedinbarrelgap->push_back(!stops_in_tpc && stops_before_ecal && std::abs(end_length)<=TPCInstrumentedLength); 
@@ -275,69 +285,72 @@ bool SampleHandlerBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
   duneobj->particle_momresms->push_back(M3::_BAD_DOUBLE_); //default (updates later)
   duneobj->particle_momresyz->push_back(M3::_BAD_DOUBLE_); //default (updates later)
   duneobj->particle_momresx->push_back(M3::_BAD_DOUBLE_); //default (updates later)
-  duneobj->particle_ecaldepositfraction->push_back(M3::_BAD_DOUBLE_); //default (updates later)
   duneobj->particle_nturns->push_back(M3::_BAD_DOUBLE_); //default (updates later)
   duneobj->particle_nhits->push_back(M3::_BAD_DOUBLE_); //default (updates later)
   duneobj->particle_tracklengthyz->push_back(M3::_BAD_DOUBLE_); //default (updates later)
 
-  duneobj->particle_n_esc_sec_nuc->push_back(M3::_BAD_DOUBLE_); //increments if primary stops in tpc/ecal and secondary nucleus does not
-  duneobj->particle_n_esc_sec->push_back(M3::_BAD_DOUBLE_); //increments if primary stops in tpc/ecal and secondary does not
-  duneobj->particle_esc_sec_energy->push_back(M3::_BAD_DOUBLE_); //add secondary energy if primary stops in tpc/ecal and secondary does not
-  duneobj->particle_esc_sec_energy_frac->push_back(M3::_BAD_DOUBLE_);
-
-  if (stops_in_tpc || stops_in_ecal) { //'escaped secondary' variables default to 0 in this case
-    duneobj->particle_n_esc_sec_nuc->back() = 0.; 
-    duneobj->particle_n_esc_sec->back() = 0.; 
-    duneobj->particle_esc_sec_energy->back() = 0.; 
-    duneobj->particle_esc_sec_energy_frac->back() = 0.; 
-  }
+  duneobj->particle_escsecenergyfrac->push_back(M3::_BAD_DOUBLE_);
+  duneobj->particle_edepcrit->push_back(EDepCrit);
 
   nparticlesinsample[i_sample]++;
 
-  //Deal with secondaries
-  int prim_trkid = _MCPTrkID->at(i_anaprim);
-  bool escaped_secondaries = false; //true if primary stops in TPC but any secondaries do not stop in tpc/ecal
-  for (int i_secID : prim_to_sec_ID[prim_trkid]){ 
-    size_t i_anasec = ID_to_index[i_secID];
+  //Store deposits in text file
+  deposit_outputs << "PDG: " << pdg << " Energy: " << energy << " TPC: " << stops_in_tpc << " ECal: " << stops_in_ecal << " Escapes: " << stops_beyond_ecal << " Contained: " << containedShower << std::endl;
+  for (int layer = 0; layer < tot_layers; layer++) {
+    deposit_outputs << primID_to_ECalDep[prim_trkid][layer] << " ";
+  }
+  deposit_outputs << "\n" << std::endl;
 
-    double sec_yend_centre = _MCPEndY->at(i_anasec)-TPC_centre_y;
-    double sec_zend_centre = _MCPEndZ->at(i_anasec)-TPC_centre_z;
+  //Check if all escaped secondaries are produced in ECal. If so, calculate escape energy
+  bool escSecProdInECal = true;
+  double escECalSecEnergy = 0.;
+  for (int& secID : prim_to_sec_ID[prim_trkid]) {
+    size_t secIndex = ID_to_index[secID];
+    int sec_pdg = _PDG->at(secIndex);
+    if (GetChargeFromPDG(sec_pdg) == 0) continue;
+
+    double sec_yend_centre = _MCPEndY->at(secIndex)-TPC_centre_y;
+    double sec_zend_centre = _MCPEndZ->at(secIndex)-TPC_centre_z;
     double sec_end_radius = std::sqrt(sec_yend_centre*sec_yend_centre + sec_zend_centre*sec_zend_centre);
-    double sec_end_length = _MCPEndX->at(i_anasec)-TPC_centre_x;
+    double sec_end_length = _MCPEndX->at(secIndex)-TPC_centre_x;
 
     bool sec_stops_beyond_ecal = std::abs(sec_end_length)>ECALEndCapEnd || sec_end_radius>ECALOuterRadius;
-    int sec_pdg = _PDG->at(i_anasec);
-    int sec_charge = GetChargeFromPDG(sec_pdg);
 
-    //Ignore secondary nuclei
-    if (sec_pdg > 1000000000) {
-      if ((stops_in_tpc || stops_in_ecal) && sec_stops_beyond_ecal) {
-        duneobj->particle_n_esc_sec_nuc->back() += 1.;  
+    double sec_ystart_centre = _MCPStartY->at(secIndex)-TPC_centre_y;
+    double sec_zstart_centre = _MCPStartZ->at(secIndex)-TPC_centre_z;
+    double sec_start_radius = std::sqrt(sec_ystart_centre*sec_ystart_centre + sec_zstart_centre*sec_zstart_centre);
+    double sec_start_length = _MCPStartX->at(secIndex)-TPC_centre_x;
+
+    bool sec_starts_before_ecal = std::abs(sec_start_length)<ECALEndCapStart && sec_start_radius<ECALInnerRadius;
+    bool sec_starts_beyond_ecal = std::abs(sec_start_length)>ECALEndCapEnd || sec_start_radius>ECALOuterRadius;
+    bool sec_starts_in_ecal = !(sec_starts_before_ecal || sec_starts_beyond_ecal);
+
+    if (sec_stops_beyond_ecal) {
+      if (!sec_starts_in_ecal) {
+        escSecProdInECal = false;
+        break;
       }
-      continue;
-    }
-    
-    //Determine criteria for possible rejection based on secondaries
-    if ((stops_in_tpc || stops_in_ecal) && sec_stops_beyond_ecal && sec_charge != 0) {
-      escaped_secondaries = true;
 
-      double sec_px = _MCPEndPX->at(i_anasec);
-      double sec_py = _MCPEndPY->at(i_anasec);
-      double sec_pz = _MCPEndPZ->at(i_anasec);
       double sec_mass = MaCh3Utils::GetMassFromPDG(sec_pdg);
-      double sec_energy = std::sqrt(sec_px*sec_px + sec_py*sec_py + sec_pz* sec_pz + sec_mass*sec_mass);
-      if (sec_pdg == 2112 || sec_pdg == 2212) sec_energy -= sec_mass; //n&p don't get rest mass from Enu
 
-      duneobj->particle_n_esc_sec->back() += 1.;
-      duneobj->particle_esc_sec_energy->back() += sec_energy;
-      duneobj->particle_esc_sec_energy_frac->back() += sec_energy/energy;
+      double sec_mom2 = _MCPStartPX->at(secIndex)*_MCPStartPX->at(secIndex) + _MCPStartPY->at(secIndex)*_MCPStartPY->at(secIndex) + _MCPStartPZ->at(secIndex)*_MCPStartPZ->at(secIndex);
+      double sec_energy = std::sqrt(sec_mass*sec_mass + sec_mom2);
+      if (sec_pdg == 2212 || sec_pdg == 2112 || sec_pdg > 1000000000) sec_energy -= sec_mass;
+
+      double sec_edep = 0.;
+      for (size_t i_ecaldep=0; i_ecaldep<_SimHitTrkID->size(); i_ecaldep++) {
+        int simhit_trkid = _SimHitTrkID->at(i_ecaldep);
+        if (simhit_trkid == secID) {
+          sec_edep += _SimHitEnergy->at(i_ecaldep);
+        }
+      }
+      escECalSecEnergy += sec_energy - sec_edep;
     }
   }
-  //Not to worry if escaped secondaries combined have <X% energy of the primary
-  if (duneobj->particle_esc_sec_energy_frac->back() < 0.1) escaped_secondaries = false;
-
-  //If primary particle or its secondaries are not stopped in the tpc or ecal 
-  if((!stops_in_tpc && !stops_in_ecal) || escaped_secondaries) {
+  if (escSecProdInECal) {
+    duneobj->particle_escsecenergyfrac->back() = escECalSecEnergy/energy;
+  }
+  if(!containedShower) {
     //Check if charged 
     if(charge != 0) {
       double rad_curvature = 100*transverse_mom/(0.3*B_field); //p = 0.3*B*r where p in GeV/c, B in T, r in m (*100 to convert to cm)
@@ -451,35 +464,8 @@ bool SampleHandlerBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
       }
     }
     else{ 
-      //Neutral particle which doesn't stop in tpc or ecal: reject
+      //Neutral particle which is not contained - reject
       isAccepted = false;
-    }
-  }
-  else {
-    //Particles which stop in tpc or calorimeter (and their secondaries do too!)
-    //Accept pi0 and gamma with some efficiency
-    if((std::abs(pdg)) == 111 && _MCPEndProc->at(i_anaprim) == "Decay"){
-      double pi0recoprob = dist(gen);
-      if(pi0recoprob>pi0_reco_efficiency){
-        isAccepted = false;
-      }
-    }
-    else if((std::abs(pdg)) == 22){
-      double gammarecoprob = dist(gen);
-      if(gammarecoprob>gamma_reco_efficiency){
-        isAccepted = false;
-      }
-    }
-
-    //Store fraction of energy deposited in the calorimeter for particles stopping in calorimeter
-    if (stops_in_ecal){
-      double energydepsum = 0;
-      for(unsigned int i_ecaldep=0; i_ecaldep<_SimHitEnergy->size(); i_ecaldep++){
-        if(_SimHitTrkID->at(i_ecaldep) == _MCPTrkID->at(i_anaprim)){
-          energydepsum = energydepsum + _SimHitEnergy->at(i_ecaldep);
-        }
-      }
-      duneobj->particle_ecaldepositfraction->back() = energydepsum/energy;
     }
   }
   if (isAccepted == false) {duneobj->particle_isaccepted->back() = false;}
@@ -562,7 +548,11 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
     _data->SetBranchAddress("MCPEndProc", &_MCPEndProc);
     _data->SetBranchAddress("MotherTrkID", &_MotherTrkID);
     _data->SetBranchAddress("SimHitTrkID", &_SimHitTrkID);
+    _data->SetBranchAddress("SimHitLayer", &_SimHitLayer);
     _data->SetBranchAddress("SimHitEnergy", &_SimHitEnergy);
+    _data->SetBranchAddress("SimHitX", &_SimHitX);
+    _data->SetBranchAddress("SimHitY", &_SimHitY);
+    _data->SetBranchAddress("SimHitZ", &_SimHitZ);
   }
   duneobj->norm_s = 1.;
   double downsampling = 1.; //default 1, set to eg. 0.01 for quick testing
@@ -570,6 +560,10 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
   duneobj->pot_s = pot/(downsampling*1e21);
   duneobj->nEvents = static_cast<int>(std::round(downsampling*static_cast<double>(_data->GetEntries())));
 
+  deposit_outputs.open("ECal_deposits.txt");
+  if (!deposit_outputs.is_open()) {
+    std::cerr << "Failed to open output file!" << std::endl;
+  }
   // allocate memory for dunendgarmc variables
   duneobj->rw_yrec = new double[duneobj->nEvents];
   duneobj->rw_elep_reco = new double[duneobj->nEvents];
@@ -627,7 +621,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
 
   //Particle-level kinematic variables
   duneobj->particle_event = new std::vector<int>; duneobj->particle_event->reserve(7*duneobj->nEvents);
-  duneobj->particle_ecaldepositfraction = new std::vector<double>; duneobj->particle_ecaldepositfraction->reserve(7*duneobj->nEvents);
   duneobj->particle_pdg = new std::vector<int>; duneobj->particle_pdg->reserve(7*duneobj->nEvents); 
   duneobj->particle_energy = new std::vector<double>; duneobj->particle_energy->reserve(7*duneobj->nEvents); 
   duneobj->particle_momentum = new std::vector<double>; duneobj->particle_momentum->reserve(7*duneobj->nEvents); 
@@ -636,6 +629,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
   duneobj->particle_bangle = new std::vector<double>; duneobj->particle_bangle->reserve(7*duneobj->nEvents);
   duneobj->particle_beamangle = new std::vector<double>; duneobj->particle_beamangle->reserve(7*duneobj->nEvents);
   duneobj->particle_isaccepted = new std::vector<bool>; duneobj->particle_isaccepted->reserve(7*duneobj->nEvents);
+  duneobj->particle_iscontained = new std::vector<bool>; duneobj->particle_iscontained->reserve(7*duneobj->nEvents);
   duneobj->particle_isdecayed = new std::vector<bool>; duneobj->particle_isdecayed->reserve(7*duneobj->nEvents);
   duneobj->particle_isstoppedintpc = new std::vector<bool>; duneobj->particle_isstoppedintpc->reserve(7*duneobj->nEvents); 
   duneobj->particle_isstoppedinecal = new std::vector<bool>; duneobj->particle_isstoppedinecal->reserve(7*duneobj->nEvents); 
@@ -653,12 +647,10 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
   duneobj->particle_nhits = new std::vector<double>; duneobj->particle_nhits->reserve(7*duneobj->nEvents); 
   duneobj->particle_tracklengthyz = new std::vector<double>; duneobj->particle_tracklengthyz->reserve(7*duneobj->nEvents); 
   duneobj->particle_momresms = new std::vector<double>; duneobj->particle_momresms->reserve(7*duneobj->nEvents); 
-  duneobj->particle_momresyz= new std::vector<double>; duneobj->particle_momresyz->reserve(7*duneobj->nEvents);
+  duneobj->particle_momresyz = new std::vector<double>; duneobj->particle_momresyz->reserve(7*duneobj->nEvents);
   duneobj->particle_momresx = new std::vector<double>; duneobj->particle_momresx->reserve(7*duneobj->nEvents); 
-  duneobj->particle_n_esc_sec_nuc = new std::vector<double>; duneobj->particle_n_esc_sec_nuc->reserve(7*duneobj->nEvents); 
-  duneobj->particle_n_esc_sec= new std::vector<double>; duneobj->particle_n_esc_sec->reserve(7*duneobj->nEvents); 
-  duneobj->particle_esc_sec_energy= new std::vector<double>; duneobj->particle_esc_sec_energy->reserve(7*duneobj->nEvents); 
-  duneobj->particle_esc_sec_energy_frac= new std::vector<double>; duneobj->particle_esc_sec_energy_frac->reserve(7*duneobj->nEvents); 
+  duneobj->particle_edepcrit = new std::vector<double>; duneobj->particle_edepcrit->reserve(7*duneobj->nEvents); 
+  duneobj->particle_escsecenergyfrac = new std::vector<double>; duneobj->particle_escsecenergyfrac->reserve(7*duneobj->nEvents); 
 
   int numCC = 0;
   int num_in_fdv = 0;
@@ -756,6 +748,8 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
     std::unordered_map<int, std::vector<int>> prim_to_sec_ID;
     std::unordered_map<int, int> sec_to_prim_ID;
     std::unordered_map<int, size_t> ID_to_index;
+    std::unordered_map<int, std::vector<double>> primID_to_ECalDep;
+    const int tot_ecal_layers = 42;
     std::vector<size_t> prim_indices = {};
     size_t n_ana_particles = _MCPTrkID->size();
 
@@ -795,24 +789,20 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
       else {
         prim_to_sec_ID.insert({secID, {}}); //Inserts key for primary if it doesn't exist already
         prim_indices.push_back(i_anapart);
+        primID_to_ECalDep[secID] = std::vector<double>(tot_ecal_layers,0.);
       }
       //====================================================
+    }
 
-      if(pdg == 13) {
-        duneobj->ntruemuonprim[i_event]++;
-        double p_x = _MCPStartPX->at(i_anapart);
-        double p_y = _MCPStartPY->at(i_anapart);
-        double p_z = _MCPStartPZ->at(i_anapart);
-        double p2 = p_x*p_x + p_y*p_y + p_z*p_z; 
-        if (p2 > muon_p2) {
-          muon_p2 = p2;
-          double mass = MaCh3Utils::GetMassFromPDG(pdg);
-          duneobj->rw_lep_pX[i_event] = p_x;
-          duneobj->rw_lep_pY[i_event] = p_y;
-          duneobj->rw_lep_pZ[i_event] = p_z;
-          duneobj->rw_elep_true[i_event] = std::sqrt(p2 + mass*mass) - mass;
-        }
+    //Fill map from primary ID to ECal deposited energy from shower
+    for (size_t i_ecaldep=0; i_ecaldep<_SimHitTrkID->size(); i_ecaldep++) {
+      int simhit_trkid = _SimHitTrkID->at(i_ecaldep);
+      int simhit_layer = _SimHitLayer->at(i_ecaldep);
+      if (simhit_trkid <= 0) {
+        continue;
       }
+      if (prim_to_sec_ID.find(simhit_trkid) == prim_to_sec_ID.end()) simhit_trkid = sec_to_prim_ID[simhit_trkid];
+      if (simhit_layer > 0) primID_to_ECalDep[simhit_trkid][simhit_layer-1] += _SimHitEnergy->at(i_ecaldep);
     }
 
     bool isEventAccepted = true;
@@ -822,8 +812,25 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
       int pdg = _PDG->at(i_anaprim);
       if(pdg == 2112 || std::abs(pdg) == 14 || std::abs(pdg) == 12 || std::abs(pdg) == 16) continue;
 
-      if (!IsParticleAccepted(duneobj, iSample, i_event, i_anaprim, pixel_spacing_cm, prim_to_sec_ID, ID_to_index)) {
+      if (!IsParticleAccepted(duneobj, iSample, i_event, i_anaprim, pixel_spacing_cm, primID_to_ECalDep, prim_to_sec_ID, ID_to_index)) {
         isEventAccepted = false;
+      }
+
+      //Get primary muon information
+      if(pdg == 13) {
+        duneobj->ntruemuonprim[i_event]++;
+        double p_x = _MCPStartPX->at(i_anaprim);
+        double p_y = _MCPStartPY->at(i_anaprim);
+        double p_z = _MCPStartPZ->at(i_anaprim);
+        double p2 = p_x*p_x + p_y*p_y + p_z*p_z; 
+        if (p2 > muon_p2) {
+          muon_p2 = p2;
+          double mass = MaCh3Utils::GetMassFromPDG(pdg);
+          duneobj->rw_lep_pX[i_event] = p_x;
+          duneobj->rw_lep_pY[i_event] = p_y;
+          duneobj->rw_lep_pZ[i_event] = p_z;
+          duneobj->rw_elep_true[i_event] = std::sqrt(p2 + mass*mass) - mass;
+        }
       }
 
       //Get pi0 information
@@ -887,6 +894,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
   MACH3LOG_INFO("numpi0 = {}, contained = {}, tpcdecay = {}, ecaldecay = {}, gapdecay = {}",
       numpi0, numpi0contained, numpi0tpcdecay, numpi0ecaldecay, numpi0gapdecay);
 
+  deposit_outputs.close();
   _sampleFile->Close();
   _sampleFile_geant->Close();
   return duneobj->nEvents;
@@ -970,14 +978,10 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
       return &dunendgarmcSamples[iSample].particle_endx->at(iEvent);
     case kParticle_StartX:
       return &dunendgarmcSamples[iSample].particle_startx->at(iEvent);
-    case kParticle_NEscSecNuc:
-      return &dunendgarmcSamples[iSample].particle_n_esc_sec_nuc->at(iEvent);
-    case kParticle_NEscSec:
-      return &dunendgarmcSamples[iSample].particle_n_esc_sec->at(iEvent);
-    case kParticle_EscSecEnergy:
-      return &dunendgarmcSamples[iSample].particle_esc_sec_energy->at(iEvent);
+    case kParticle_EDepCrit:
+      return &dunendgarmcSamples[iSample].particle_edepcrit->at(iEvent);
     case kParticle_EscSecEnergyFrac:
-      return &dunendgarmcSamples[iSample].particle_esc_sec_energy_frac->at(iEvent);
+      return &dunendgarmcSamples[iSample].particle_escsecenergyfrac->at(iEvent);
     default:
       MACH3LOG_ERROR("Did not recognise Kinematic Parameter {}", static_cast<int>(KinematicParameter));
       throw MaCh3Exception(__FILE__, __LINE__);
@@ -1021,6 +1025,8 @@ double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, i
       return static_cast<double>(dunendgarmcSamples[iSample].particle_event->at(iEvent));
     case kParticle_IsAccepted:
       return static_cast<double>(dunendgarmcSamples[iSample].particle_isaccepted->at(iEvent));
+    case kParticle_IsContained:
+      return static_cast<double>(dunendgarmcSamples[iSample].particle_iscontained->at(iEvent));
     case kParticle_IsDecayed:
       return static_cast<double>(dunendgarmcSamples[iSample].particle_isdecayed->at(iEvent));
     case kParticle_PDG:

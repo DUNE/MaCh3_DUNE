@@ -22,7 +22,7 @@ class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
     TH1* Get1DParticleVarHist(std::string ProjectionVar_StrX, std::vector< KinematicCut > SelectionVec, int WeightStyle, TAxis* AxisX);
     TH2* Get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< KinematicCut > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY);
     
-    enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kIsGoodCAFEvent, kParticle_Event, kParticle_Momentum, kParticle_EndMomentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_BeamAngle, kParticle_IsAccepted, kParticle_IsDecayed, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_IsEscaped, kParticle_NTurns, kParticle_NHits, kParticle_TrackLengthYZ, kParticle_MomResMS, kParticle_MomResYZ, kParticle_MomResX, kParticle_StartR2, kParticle_EndR, kParticle_EndX, kParticle_StartX, kParticle_NEscSecNuc, kParticle_NEscSec, kParticle_EscSecEnergy, kParticle_EscSecEnergyFrac};
+    enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kIsGoodCAFEvent, kParticle_Event, kParticle_Momentum, kParticle_EndMomentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_BeamAngle, kParticle_IsAccepted, kParticle_IsContained, kParticle_IsDecayed, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_IsEscaped, kParticle_NTurns, kParticle_NHits, kParticle_TrackLengthYZ, kParticle_MomResMS, kParticle_MomResYZ, kParticle_MomResX, kParticle_StartR2, kParticle_EndR, kParticle_EndX, kParticle_StartX, kParticle_EDepCrit, kParticle_EscSecEnergyFrac};
 
   protected:
     //Functions required by core
@@ -50,7 +50,8 @@ class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
     bool isCoordOnTrack(int charge, double ycoord, double zcoord, double centre_circle_y, double centre_circle_z, double theta_start, double theta_spanned);
     double CalcBeta(double p_mag, double& bg, double& gamma, double pdgmass);
     int GetChargeFromPDG(int pdg);
-    bool IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, size_t i_anapart, double pixel_spacing_cm, std::unordered_map<int,std::vector<int>>& prim_to_sec_ID, std::unordered_map<int,size_t>& ID_to_index);
+    bool IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, size_t i_anapart, double pixel_spacing_cm, 
+         std::unordered_map<int,std::vector<double>>& primID_to_EDepCrit, std::unordered_map<int, std::vector<int>>& prim_to_sec_ID, std::unordered_map<int, size_t>& ID_to_index);
 
     bool IsParticleSelected(const int iSample, const int iEvent, const int iParticle);
     std::vector<struct dunemc_base> dunendgarmcSamples;
@@ -85,7 +86,11 @@ class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
     std::vector<std::string> *_MCPEndProc=0;
     std::vector<int> *_MotherTrkID=0;
     std::vector<int> *_SimHitTrkID=0;
+    std::vector<int> *_SimHitLayer=0;
     std::vector<double> *_SimHitEnergy=0;
+    std::vector<double> *_SimHitX=0;
+    std::vector<double> *_SimHitY=0;
+    std::vector<double> *_SimHitZ=0;
 
     //TPC dimensions
     double TPCFidLength;
@@ -133,6 +138,7 @@ class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
     double gamma_reco_efficiency;  //efficiency for gamma reco in ECAL
 
     caf::StandardRecord* sr = new caf::StandardRecord();
+    std::ofstream deposit_outputs;
 
     const std::unordered_map<std::string, int> KinematicParametersDUNE = {
       {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
@@ -166,6 +172,7 @@ class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
       {"Particle_BAngle",kParticle_BAngle},
       {"Particle_BeamAngle",kParticle_BeamAngle},
       {"Particle_IsAccepted",kParticle_IsAccepted},
+      {"Particle_IsContained",kParticle_IsContained},
       {"Particle_IsDecayed",kParticle_IsDecayed},
       {"Particle_PDG",kParticle_PDG},
       {"InFDV",kInFDV},
@@ -186,9 +193,7 @@ class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
       {"Particle_EndR",kParticle_EndR},
       {"Particle_EndX",kParticle_EndX},
       {"Particle_StartX",kParticle_StartX},
-      {"Particle_NEscSecNuc",kParticle_NEscSecNuc},
-      {"Particle_NEscSec",kParticle_NEscSec},
-      {"Particle_EscSecEnergy",kParticle_EscSecEnergy},
+      {"Particle_EDepCrit",kParticle_EDepCrit},
       {"Particle_EscSecEnergyFrac",kParticle_EscSecEnergyFrac},
     };
 
@@ -224,6 +229,7 @@ class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
       {kParticle_BAngle,"Particle_BAngle"},
       {kParticle_BeamAngle,"Particle_BeamAngle"},
       {kParticle_IsAccepted,"Particle_IsAccepted"},
+      {kParticle_IsContained,"Particle_IsContained"},
       {kParticle_IsDecayed,"Particle_IsDecayed"},
       {kParticle_PDG,"Particle_PDG"},
       {kInFDV,"InFDV"},
@@ -244,9 +250,7 @@ class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
       {kParticle_EndR,"Particle_EndR"},
       {kParticle_EndX,"Particle_EndX"},
       {kParticle_StartX,"Particle_StartX"},
-      {kParticle_NEscSecNuc,"Particle_NEscSecNuc"},
-      {kParticle_NEscSec,"Particle_NEscSec"},
-      {kParticle_EscSecEnergy,"Particle_EscSecEnergy"},
+      {kParticle_EDepCrit,"Particle_EDepCrit"},
       {kParticle_EscSecEnergyFrac,"Particle_EscSecEnergyFrac"},
     };
 };

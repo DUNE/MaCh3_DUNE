@@ -12,7 +12,7 @@
 TH1* rebinHist(TH1* hist) {
   if (std::string(hist->GetTitle()).find("BAngle_Momentum") != std::string::npos) {
     TH2D* hist2D = dynamic_cast<TH2D*>(hist);
-    if (hist2D) return (TH1*)hist2D->Rebin2D(2, 4);
+    if (hist2D) return (TH1*)hist2D->Rebin2D(1, 2);
   }
   else if (std::string(hist->GetTitle()).find("BAngle_MomRes") != std::string::npos
     || std::string(hist->GetTitle()).find("Angular_Distribution") != std::string::npos) {
