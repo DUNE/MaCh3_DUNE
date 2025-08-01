@@ -26,11 +26,22 @@ void SampleHandlerBeamFD::Init() {
     MACH3LOG_ERROR("Did not find DUNESampleBools:isFHC in {}, please add this", SampleManager->GetFileName());
     throw MaCh3Exception(__FILE__, __LINE__);
   }
-  
-  if (CheckNodeExists(SampleManager->raw(), "POT")) {
+
+  if (CheckNodeExists(SampleManager->raw(), "Exposure")) {
+    double exposure = SampleManager->raw()["Exposure"].as<double>();
+    if (CheckNodeExists(SampleManager->raw(), "ExposureToPOT")) {
+      double exposure_to_pot = SampleManager->raw()["ExposureToPOT"].as<double>();
+      pot = exposure * exposure_to_pot;
+    } else {
+      MACH3LOG_ERROR("ExposureToPOT not defined in {}, please add this!", SampleManager->GetFileName());
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+    MACH3LOG_INFO("Using {} MWyr exposure, which gives {} POT", exposure, pot);
+  } else if (CheckNodeExists(SampleManager->raw(), "POT")) {
     pot = SampleManager->raw()["POT"].as<double>();
-  } else{
-    MACH3LOG_ERROR("POT not defined in {}, please add this!", SampleManager->GetFileName());
+    MACH3LOG_INFO("Using {} POT rather than exposure", pot);
+  } else {
+    MACH3LOG_ERROR("Exposure or POT not defined in {}, please add this!", SampleManager->GetFileName());
     throw MaCh3Exception(__FILE__, __LINE__);
   }
   
