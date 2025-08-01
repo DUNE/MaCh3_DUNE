@@ -516,6 +516,15 @@ int SampleHandlerBeamFD::SetupExperimentMC(int iSample) {
   duneobj->Target = new int[duneobj->nEvents];
 
   _data->GetEntry(0);
+
+  // HH: A map to keep track of negative energies
+  std::unordered_map<std::string, int> negative_counts;
+  // Initialize the negative counts for each energy variable
+  negative_counts["rw_erec_had"] = 0;
+  negative_counts["rw_erec_lep"] = 0;
+  negative_counts["rw_eRecoN"] = 0;
+  negative_counts["rw_eRecoPi0"] = 0;
+  negative_counts["rw_sum_ehad"] = 0;
   
   //FILL DUNE STRUCT
   for (int i = 0; i < duneobj->nEvents; ++i) { // Loop through tree
@@ -553,12 +562,36 @@ int SampleHandlerBeamFD::SetupExperimentMC(int iSample) {
     duneobj->rw_ePi0[i] = (_ePi0); 
     duneobj->rw_eN[i] = (_eN);
 
-	duneobj->rw_erec_had_sqrt[i] = sqrt(duneobj->rw_erec_had[i]);
+
+    // HH: Add checks to make sure the energies are not negative
+    if (duneobj->rw_erec_had[i] < 0) {
+      duneobj->rw_erec_had[i] = 0;
+      negative_counts["rw_erec_had"]++;
+    }
+    if (duneobj->rw_erec_lep[i] < 0) {
+      duneobj->rw_erec_lep[i] = 0;
+      negative_counts["rw_erec_lep"]++;
+    }
+    if (duneobj->rw_eRecoN[i] < 0) {
+      duneobj->rw_eRecoN[i] = 0;
+      negative_counts["rw_eRecoN"]++;
+    }
+    if (duneobj->rw_eRecoPi0[i] < 0) {
+      duneobj->rw_eRecoPi0[i] = 0;
+      negative_counts["rw_eRecoPi0"]++;
+    } 
+    
+    duneobj->rw_erec_had_sqrt[i] = sqrt(duneobj->rw_erec_had[i]);
     duneobj->rw_erec_lep_sqrt[i] = sqrt(duneobj->rw_erec_lep[i]);
     duneobj->rw_eRecoN_sqrt[i] = sqrt(duneobj->rw_eRecoN[i]);
     duneobj->rw_eRecoPi0_sqrt[i] = sqrt(duneobj->rw_eRecoPi0[i]);
 
     duneobj->rw_sum_ehad[i] = duneobj->rw_eRecoP[i] + duneobj->rw_eRecoPip[i] + duneobj->rw_eRecoPim[i];
+    if (duneobj->rw_sum_ehad[i] < 0) {
+      duneobj->rw_sum_ehad[i] = 0; 
+      negative_counts["rw_sum_ehad"]++;
+    }
+
     duneobj->rw_sum_ehad_sqrt[i] = sqrt(duneobj->rw_sum_ehad[i]);
 
     duneobj->rw_etru[i] = (_ev);
@@ -582,6 +615,13 @@ int SampleHandlerBeamFD::SetupExperimentMC(int iSample) {
     duneobj->mode[i] = M3Mode;
     
     duneobj->flux_w[i] = 1.0;
+  }
+
+  // HH: Give a warning if any negative energies were found
+  for (const auto& pair : negative_counts) {
+    if (pair.second > 0) {
+      MACH3LOG_WARN("Found {} negative values for {} in sample {}", pair.second, pair.first, GetSampleName(iSample));
+    }
   }
   
   _sampleFile->Close();
