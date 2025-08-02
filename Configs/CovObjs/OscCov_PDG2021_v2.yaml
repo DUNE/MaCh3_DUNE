@@ -156,7 +156,7 @@ Systematics:
     DetID: 984
     Error: 0.01
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 9999]
     ParameterGroup: Osc
     ParameterValues:
       Generated: 1284.9
@@ -219,7 +219,7 @@ Systematics:
 
 
     DetID: 984
-    Error: 0.01
+    Error: 0.01e-18
     FlatPrior: true
     ParameterBounds: [0, 999]
     ParameterGroup: Osc
@@ -240,9 +240,9 @@ Systematics:
 
 
     DetID: 984
-    Error: 0.01
+    Error: 1.0
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [-999, 999]
     ParameterGroup: Osc
     ParameterValues:
       Generated: 2.0

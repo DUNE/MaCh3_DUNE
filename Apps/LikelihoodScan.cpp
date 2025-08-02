@@ -25,7 +25,7 @@ int main(int argc, char * argv[]) {
 
   // 1D scan on by default, and 2D off
   const bool do_1d_llhscan = GetFromManager(FitManager->raw()["General"]["1DLLHScan"], true);
-  const bool do_2d_llhscan = GetFromManager(FitManager->raw()["General"]["2DLLHScan"], false);
+  const bool do_2d_llhscan = GetFromManager(FitManager->raw()["General"]["2DLLHScan"], true);
 
   if (!do_1d_llhscan && !do_2d_llhscan) {
     MACH3LOG_ERROR("Neither 1D or 2D llhscan enabled");
@@ -74,7 +74,7 @@ int main(int argc, char * argv[]) {
   }
 
   MaCh3Fitter->AddSystObj(osc);
-  MaCh3Fitter->AddSystObj(xsec);
+  //MaCh3Fitter->AddSystObj(xsec);
   
   if (do_1d_llhscan) {
     MaCh3Fitter->RunLLHScan();
