@@ -30,7 +30,7 @@ cmake .. -DCUDAProb3_ENABLED=[ON,OFF] -DCUDAProb3Linear_ENABLED=[ON,OFF] -DMaCh3
 make install
 ```
 
-Additional cmake options are available in the MaCh3-Core README
+Additional cmake options are available in the [MaCh3-Core README](https://github.com/mach3-software/MaCh3?tab=readme-ov-file#other-cmake-options)
 
 - CUDAProb3 should be used as the default for atmospheric neutrino oscillations
 - CUDAProb3Linear should be used as the default for beam oscillations
