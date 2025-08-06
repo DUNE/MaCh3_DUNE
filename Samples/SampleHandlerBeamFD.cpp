@@ -464,6 +464,21 @@ int SampleHandlerBeamFD::SetupExperimentMC(int iSample) {
 
   duneobj->nEvents = static_cast<int>(_data->GetEntries());
 
+  // HH: Downsampling by choosing the first X% of the events
+  // HH TODO: Instead of choosing the first X% of the events, we should randomly sample X% of the events 
+  if (CheckNodeExists(SampleManager->raw(), "Downsample")) {
+    double downsample = SampleManager->raw()["Downsample"].as<double>();
+    MACH3LOG_INFO("Downsample found in {}, will sample only {} of each file and scale POT correspondingly!", SampleManager->GetFileName(), downsample);
+    duneobj->nEvents = static_cast<int>(duneobj->nEvents*downsample);
+    duneobj->pot_s = duneobj->pot_s/downsample;
+    MACH3LOG_INFO("New number of events: {}", duneobj->nEvents);
+    MACH3LOG_INFO("New POT: {}", pot);
+    MACH3LOG_INFO("New pot_s: {}", duneobj->pot_s);
+    MACH3LOG_INFO("New norm_s: {}", duneobj->norm_s);
+  } else{
+    MACH3LOG_INFO("Downsample not defined in {}, continuing without downsampling!", SampleManager->GetFileName());
+  }
+
   // allocate memory for dunemc variables
   duneobj->rw_cvnnumu = new double[duneobj->nEvents];
   duneobj->rw_cvnnue = new double[duneobj->nEvents];
@@ -514,6 +529,8 @@ int SampleHandlerBeamFD::SetupExperimentMC(int iSample) {
   duneobj->nupdg = new int[duneobj->nEvents];
   duneobj->mode = new double[duneobj->nEvents];
   duneobj->Target = new int[duneobj->nEvents];
+
+  duneobj->rw_lovere = new double[duneobj->nEvents];
 
   _data->GetEntry(0);
   
@@ -590,6 +607,8 @@ int SampleHandlerBeamFD::SetupExperimentMC(int iSample) {
     duneobj->mode[i] = M3Mode;
     
     duneobj->flux_w[i] = 1.0;
+
+    duneobj->rw_lovere[i] = 1284.9 / duneobj->rw_erec_shifted[i]; 
   }
   
   _sampleFile->Close();
@@ -636,6 +655,9 @@ const double* SampleHandlerBeamFD::GetPointerToKinematicParameter(KinematicTypes
   case kTrueCCnumu: 
 	KinematicValue = &(dunemcSamples[iSample].rw_trueccnumu[iEvent]);
  	break;
+  case kLoverE:
+    KinematicValue = &(dunemcSamples[iSample].rw_lovere[iEvent]);
+    break;
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
     throw MaCh3Exception(__FILE__, __LINE__);
@@ -690,6 +712,7 @@ std::vector<double> SampleHandlerBeamFD::ReturnKinematicParameterBinning(std::st
     ReturnVec[2] = 1.5;
     break;
     
+  case kLoverE:
   case kTrueNeutrinoEnergy:
   case kRecoNeutrinoEnergy:
     ReturnVec.resize(XBinEdges.size());

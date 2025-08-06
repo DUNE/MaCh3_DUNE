@@ -121,7 +121,7 @@ int main(int argc, char *argv[]) {
   }
   auto fitMan = std::unique_ptr<manager>(new manager(argv[1]));
 
-  int WeightStyle = 1;
+  int WeightStyle = 0;
   gStyle->SetPalette(1);
   // ###############################################################################################################################
   // Create samplePDFFD objects

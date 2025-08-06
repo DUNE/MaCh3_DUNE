@@ -8,6 +8,8 @@ struct dunemc_base {
 
   int *nupdg;
   int *nupdgUnosc;
+  
+  double *rw_lovere;
 
   double *rw_erec;
   double *rw_erec_shifted;
