@@ -1,3 +1,4 @@
+//Version for applying oscillations....
 #include "samplePDFDUNE/MaCh3DUNEFactory.h"
 #include "samplePDFDUNE/StructsDUNE.h"
 #include "mcmc/mcmc.h"
@@ -34,7 +35,8 @@ int main(int argc, char* argv[]) {
   std::vector<samplePDFFDBase*> DUNEPdfs;
   MakeMaCh3DuneInstance(fitMan.get(), DUNEPdfs, xsec, osc);
 
-
+  // Do we want to fix any of the oscillation parameters? Find out from config file!
+  auto oscfix = GetFromManager<std::vector<int>>(fitMan->raw()["General"]["Systematics"]["OscFix"], {});
   fOut->cd();
   /////////////////// Variations - which projections to plot
 

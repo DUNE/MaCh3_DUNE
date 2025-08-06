@@ -370,7 +370,7 @@ f->Close();
 
   //std::vector<std::string> fixed_names;
 
-  //if (!StartFromPreviousChain) xsec->throwParameters(); -------------get rid for now
+  if (!StartFromPreviousChain) xsec->throwParameters(); //-------------get rid for now
   /*
   std::cout << "Fixed parameters due to low statistics:\n";
   for (const auto& name : fixed_names) {

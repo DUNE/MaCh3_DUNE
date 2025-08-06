@@ -8,6 +8,10 @@
 #include <set>
 #include <iostream>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wfloat-conversion"
+#pragma GCC diagnostic pop
+
 samplePDFDUNEBeamFD::samplePDFDUNEBeamFD(std::string mc_version_, covarianceXsec* xsec_cov_, covarianceOsc* osc_cov_) : samplePDFFDBase(mc_version_, xsec_cov_, osc_cov_) {
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
@@ -434,6 +438,8 @@ Double_t _Ehad_veto;
   duneobj->muon_tracker = new bool[duneobj->nEvents];
   duneobj->Ehad_veto = new float[duneobj->nEvents];
   duneobj->isNC = new bool[duneobj->nEvents];
+  duneobj->enurec_minus_enutrue = new double[duneobj->nEvents];
+  duneobj->relative_enu_bias = new double[duneobj->nEvents];
 
   _data->GetEntry(0);
   bool need_global_bin_numbers = (XVarStr == "global_bin_number");
@@ -459,6 +465,11 @@ Double_t _Ehad_veto;
     duneobj->rw_erec[i] = (_erec);
     duneobj->rw_erec_shifted[i] = (_erec_nue); 
     duneobj->rw_yrec[i] = ((_erec -_Elep_reco)/_erec);
+
+    //std::cout<< " rw_yrec"  << ((_erec -_Elep_reco)/_erec) << std::endl;
+    //std::cout<< " erec  = " <<_erec << std::endl;
+    //std::cout<< " elep_reco  = " << _Elep_reco << std::endl;
+    duneobj->enurec_minus_enutrue[i] = (_erec) - (_ev);
     //if (iselike) {
       //duneobj->rw_erec[i] = (_erec);
       //duneobj->rw_erec_shifted[i] = (_erec_nue); 
@@ -540,6 +551,9 @@ Double_t _Ehad_veto;
 
     duneobj->theta_lep[i] = (_LepNuAngle);
     duneobj->p_lep[i] =(TVector3{_LepMomX, _LepMomY, _LepMomZ}).Mag();
+
+    duneobj->relative_enu_bias[i] = ((_LepE) + eHad_truth - _ev)/(_ev);
+    
 
     //Longer calculation for ERecQE-------------------------------------------------------------------------------
     constexpr double V = 0;        // 0 binding energy for now
@@ -676,6 +690,9 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(int KinematicVariable, int 
   case kisCC:
     KinematicValue = dunemcSamples[iSample].rw_isCC[iEvent];
     break;
+  case kisRelativeEnubias:
+    KinematicValue = (dunemcSamples[iSample].relative_enu_bias[iEvent]);
+    break;
   default:
   MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", static_cast<int>(KinPar));
   MACH3LOG_ERROR("Was given a Kinematic Variable of {}", KinematicVariable);
@@ -763,6 +780,9 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(std::string KinematicParame
     break;
   case kisCC:
     KinematicValue = dunemcSamples[iSample].rw_isCC[iEvent];
+    break;
+  case kisRelativeEnubias:
+    KinematicValue = (dunemcSamples[iSample].relative_enu_bias[iEvent]);
     break;
   default:
    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type {}", KinematicParameter);
@@ -853,6 +873,9 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(std::string Ki
   case kisCC:
     KinematicValue = &(dunemcSamples[iSample].rw_isCC[iEvent]);
     break;
+  case kisRelativeEnubias:
+    KinematicValue = &(dunemcSamples[iSample].relative_enu_bias[iEvent]);
+    break;
  default:
    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", KinematicParameter);
    throw MaCh3Exception(__FILE__, __LINE__);
@@ -940,6 +963,9 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(double Kinemat
     break;
   case kisCC:
     KinematicValue = &(dunemcSamples[iSample].rw_isCC[iEvent]);
+    break;
+  case kisRelativeEnubias:
+    KinematicValue = &(dunemcSamples[iSample].relative_enu_bias[iEvent]);
     break;
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", KinematicVariable);
@@ -1101,6 +1127,7 @@ std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::st
     case kyRec:
     case keHad_av:
     case kisCC:
+    case kisRelativeEnubias:
     default:
         MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", static_cast<int>(KinematicParameter));
         throw MaCh3Exception(__FILE__, __LINE__);

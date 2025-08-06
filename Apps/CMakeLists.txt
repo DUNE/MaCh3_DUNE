@@ -11,8 +11,10 @@ foreach(app
 	Fit_Abi
 	Fit_fixingparameters
 	Fit_fixingparameters_beluga
+	Fit_fixingparameters_beluga_withthrows
 	Abi_Posteriorpredicitive
-	
+	Abi_Posteriorpredictive_fardetector
+	Postfit_xsec_diagnostics
       )
       
     add_executable(${app} ${app}.cpp)
