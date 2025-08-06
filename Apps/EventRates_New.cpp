@@ -159,6 +159,7 @@ int main(int argc, char *argv[]) {
                   LLHString);
   }
 
+  gc1->Print("GenericBinTest.root]");
   gc1->Print("GenericBinTest.pdf]");
   gc1->Print((PrismFileName + "]").c_str());
 

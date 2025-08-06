@@ -1,0 +1,7201 @@
+Systematics:
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -1.00000000000000000000
+      - -.96633333333333333334
+    Names:
+      FancyName: enu_erec_minus_enu_1
+      ParameterName: enu_erec_minus_enu_1
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.96633333333333333334
+      - -.93266666666666666668
+    Names:
+      FancyName: enu_erec_minus_enu_2
+      ParameterName: enu_erec_minus_enu_2
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.93266666666666666668
+      - -.89900000000000000002
+    Names:
+      FancyName: enu_erec_minus_enu_3
+      ParameterName: enu_erec_minus_enu_3
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.89900000000000000002
+      - -.86533333333333333336
+    Names:
+      FancyName: enu_erec_minus_enu_4
+      ParameterName: enu_erec_minus_enu_4
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.86533333333333333336
+      - -.83166666666666666670
+    Names:
+      FancyName: enu_erec_minus_enu_5
+      ParameterName: enu_erec_minus_enu_5
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.83166666666666666670
+      - -.79800000000000000004
+    Names:
+      FancyName: enu_erec_minus_enu_6
+      ParameterName: enu_erec_minus_enu_6
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.79800000000000000004
+      - -.76433333333333333338
+    Names:
+      FancyName: enu_erec_minus_enu_7
+      ParameterName: enu_erec_minus_enu_7
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.76433333333333333338
+      - -.73066666666666666672
+    Names:
+      FancyName: enu_erec_minus_enu_8
+      ParameterName: enu_erec_minus_enu_8
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.73066666666666666672
+      - -.69700000000000000006
+    Names:
+      FancyName: enu_erec_minus_enu_9
+      ParameterName: enu_erec_minus_enu_9
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.69700000000000000006
+      - -.66333333333333333340
+    Names:
+      FancyName: enu_erec_minus_enu_10
+      ParameterName: enu_erec_minus_enu_10
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.66333333333333333340
+      - -.62966666666666666674
+    Names:
+      FancyName: enu_erec_minus_enu_11
+      ParameterName: enu_erec_minus_enu_11
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.62966666666666666674
+      - -.59600000000000000008
+    Names:
+      FancyName: enu_erec_minus_enu_12
+      ParameterName: enu_erec_minus_enu_12
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.59600000000000000008
+      - -.56233333333333333342
+    Names:
+      FancyName: enu_erec_minus_enu_13
+      ParameterName: enu_erec_minus_enu_13
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.56233333333333333342
+      - -.52866666666666666676
+    Names:
+      FancyName: enu_erec_minus_enu_14
+      ParameterName: enu_erec_minus_enu_14
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.52866666666666666676
+      - -.49500000000000000010
+    Names:
+      FancyName: enu_erec_minus_enu_15
+      ParameterName: enu_erec_minus_enu_15
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.49500000000000000010
+      - -.46133333333333333344
+    Names:
+      FancyName: enu_erec_minus_enu_16
+      ParameterName: enu_erec_minus_enu_16
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.46133333333333333344
+      - -.42766666666666666678
+    Names:
+      FancyName: enu_erec_minus_enu_17
+      ParameterName: enu_erec_minus_enu_17
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.42766666666666666678
+      - -.39400000000000000012
+    Names:
+      FancyName: enu_erec_minus_enu_18
+      ParameterName: enu_erec_minus_enu_18
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.39400000000000000012
+      - -.36033333333333333346
+    Names:
+      FancyName: enu_erec_minus_enu_19
+      ParameterName: enu_erec_minus_enu_19
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.36033333333333333346
+      - -.32666666666666666680
+    Names:
+      FancyName: enu_erec_minus_enu_20
+      ParameterName: enu_erec_minus_enu_20
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.32666666666666666680
+      - -.29300000000000000014
+    Names:
+      FancyName: enu_erec_minus_enu_21
+      ParameterName: enu_erec_minus_enu_21
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.29300000000000000014
+      - -.25933333333333333348
+    Names:
+      FancyName: enu_erec_minus_enu_22
+      ParameterName: enu_erec_minus_enu_22
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.25933333333333333348
+      - -.22566666666666666682
+    Names:
+      FancyName: enu_erec_minus_enu_23
+      ParameterName: enu_erec_minus_enu_23
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.22566666666666666682
+      - -.19200000000000000016
+    Names:
+      FancyName: enu_erec_minus_enu_24
+      ParameterName: enu_erec_minus_enu_24
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.19200000000000000016
+      - -.15833333333333333350
+    Names:
+      FancyName: enu_erec_minus_enu_25
+      ParameterName: enu_erec_minus_enu_25
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.15833333333333333350
+      - -.12466666666666666684
+    Names:
+      FancyName: enu_erec_minus_enu_26
+      ParameterName: enu_erec_minus_enu_26
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.12466666666666666684
+      - -.09100000000000000018
+    Names:
+      FancyName: enu_erec_minus_enu_27
+      ParameterName: enu_erec_minus_enu_27
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.09100000000000000018
+      - -.05733333333333333352
+    Names:
+      FancyName: enu_erec_minus_enu_28
+      ParameterName: enu_erec_minus_enu_28
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.05733333333333333352
+      - -.02366666666666666686
+    Names:
+      FancyName: enu_erec_minus_enu_29
+      ParameterName: enu_erec_minus_enu_29
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 0
+      - 1.00000000000000000000
+    - isRelativeEnubias:
+      - -.02366666666666666686
+      - .00999999999999999980
+    Names:
+      FancyName: enu_erec_minus_enu_30
+      ParameterName: enu_erec_minus_enu_30
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -1.00000000000000000000
+      - -.96633333333333333334
+    Names:
+      FancyName: enu_erec_minus_enu_31
+      ParameterName: enu_erec_minus_enu_31
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.96633333333333333334
+      - -.93266666666666666668
+    Names:
+      FancyName: enu_erec_minus_enu_32
+      ParameterName: enu_erec_minus_enu_32
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.93266666666666666668
+      - -.89900000000000000002
+    Names:
+      FancyName: enu_erec_minus_enu_33
+      ParameterName: enu_erec_minus_enu_33
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.89900000000000000002
+      - -.86533333333333333336
+    Names:
+      FancyName: enu_erec_minus_enu_34
+      ParameterName: enu_erec_minus_enu_34
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.86533333333333333336
+      - -.83166666666666666670
+    Names:
+      FancyName: enu_erec_minus_enu_35
+      ParameterName: enu_erec_minus_enu_35
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.83166666666666666670
+      - -.79800000000000000004
+    Names:
+      FancyName: enu_erec_minus_enu_36
+      ParameterName: enu_erec_minus_enu_36
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.79800000000000000004
+      - -.76433333333333333338
+    Names:
+      FancyName: enu_erec_minus_enu_37
+      ParameterName: enu_erec_minus_enu_37
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.76433333333333333338
+      - -.73066666666666666672
+    Names:
+      FancyName: enu_erec_minus_enu_38
+      ParameterName: enu_erec_minus_enu_38
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.73066666666666666672
+      - -.69700000000000000006
+    Names:
+      FancyName: enu_erec_minus_enu_39
+      ParameterName: enu_erec_minus_enu_39
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.69700000000000000006
+      - -.66333333333333333340
+    Names:
+      FancyName: enu_erec_minus_enu_40
+      ParameterName: enu_erec_minus_enu_40
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.66333333333333333340
+      - -.62966666666666666674
+    Names:
+      FancyName: enu_erec_minus_enu_41
+      ParameterName: enu_erec_minus_enu_41
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.62966666666666666674
+      - -.59600000000000000008
+    Names:
+      FancyName: enu_erec_minus_enu_42
+      ParameterName: enu_erec_minus_enu_42
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.59600000000000000008
+      - -.56233333333333333342
+    Names:
+      FancyName: enu_erec_minus_enu_43
+      ParameterName: enu_erec_minus_enu_43
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.56233333333333333342
+      - -.52866666666666666676
+    Names:
+      FancyName: enu_erec_minus_enu_44
+      ParameterName: enu_erec_minus_enu_44
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.52866666666666666676
+      - -.49500000000000000010
+    Names:
+      FancyName: enu_erec_minus_enu_45
+      ParameterName: enu_erec_minus_enu_45
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.49500000000000000010
+      - -.46133333333333333344
+    Names:
+      FancyName: enu_erec_minus_enu_46
+      ParameterName: enu_erec_minus_enu_46
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.46133333333333333344
+      - -.42766666666666666678
+    Names:
+      FancyName: enu_erec_minus_enu_47
+      ParameterName: enu_erec_minus_enu_47
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.42766666666666666678
+      - -.39400000000000000012
+    Names:
+      FancyName: enu_erec_minus_enu_48
+      ParameterName: enu_erec_minus_enu_48
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.39400000000000000012
+      - -.36033333333333333346
+    Names:
+      FancyName: enu_erec_minus_enu_49
+      ParameterName: enu_erec_minus_enu_49
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.36033333333333333346
+      - -.32666666666666666680
+    Names:
+      FancyName: enu_erec_minus_enu_50
+      ParameterName: enu_erec_minus_enu_50
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.32666666666666666680
+      - -.29300000000000000014
+    Names:
+      FancyName: enu_erec_minus_enu_51
+      ParameterName: enu_erec_minus_enu_51
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.29300000000000000014
+      - -.25933333333333333348
+    Names:
+      FancyName: enu_erec_minus_enu_52
+      ParameterName: enu_erec_minus_enu_52
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.25933333333333333348
+      - -.22566666666666666682
+    Names:
+      FancyName: enu_erec_minus_enu_53
+      ParameterName: enu_erec_minus_enu_53
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.22566666666666666682
+      - -.19200000000000000016
+    Names:
+      FancyName: enu_erec_minus_enu_54
+      ParameterName: enu_erec_minus_enu_54
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.19200000000000000016
+      - -.15833333333333333350
+    Names:
+      FancyName: enu_erec_minus_enu_55
+      ParameterName: enu_erec_minus_enu_55
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.15833333333333333350
+      - -.12466666666666666684
+    Names:
+      FancyName: enu_erec_minus_enu_56
+      ParameterName: enu_erec_minus_enu_56
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.12466666666666666684
+      - -.09100000000000000018
+    Names:
+      FancyName: enu_erec_minus_enu_57
+      ParameterName: enu_erec_minus_enu_57
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.09100000000000000018
+      - -.05733333333333333352
+    Names:
+      FancyName: enu_erec_minus_enu_58
+      ParameterName: enu_erec_minus_enu_58
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.05733333333333333352
+      - -.02366666666666666686
+    Names:
+      FancyName: enu_erec_minus_enu_59
+      ParameterName: enu_erec_minus_enu_59
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 1.00000000000000000000
+      - 2.00000000000000000000
+    - isRelativeEnubias:
+      - -.02366666666666666686
+      - .00999999999999999980
+    Names:
+      FancyName: enu_erec_minus_enu_60
+      ParameterName: enu_erec_minus_enu_60
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -1.00000000000000000000
+      - -.96633333333333333334
+    Names:
+      FancyName: enu_erec_minus_enu_61
+      ParameterName: enu_erec_minus_enu_61
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.96633333333333333334
+      - -.93266666666666666668
+    Names:
+      FancyName: enu_erec_minus_enu_62
+      ParameterName: enu_erec_minus_enu_62
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.93266666666666666668
+      - -.89900000000000000002
+    Names:
+      FancyName: enu_erec_minus_enu_63
+      ParameterName: enu_erec_minus_enu_63
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.89900000000000000002
+      - -.86533333333333333336
+    Names:
+      FancyName: enu_erec_minus_enu_64
+      ParameterName: enu_erec_minus_enu_64
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.86533333333333333336
+      - -.83166666666666666670
+    Names:
+      FancyName: enu_erec_minus_enu_65
+      ParameterName: enu_erec_minus_enu_65
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.83166666666666666670
+      - -.79800000000000000004
+    Names:
+      FancyName: enu_erec_minus_enu_66
+      ParameterName: enu_erec_minus_enu_66
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.79800000000000000004
+      - -.76433333333333333338
+    Names:
+      FancyName: enu_erec_minus_enu_67
+      ParameterName: enu_erec_minus_enu_67
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.76433333333333333338
+      - -.73066666666666666672
+    Names:
+      FancyName: enu_erec_minus_enu_68
+      ParameterName: enu_erec_minus_enu_68
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.73066666666666666672
+      - -.69700000000000000006
+    Names:
+      FancyName: enu_erec_minus_enu_69
+      ParameterName: enu_erec_minus_enu_69
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.69700000000000000006
+      - -.66333333333333333340
+    Names:
+      FancyName: enu_erec_minus_enu_70
+      ParameterName: enu_erec_minus_enu_70
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.66333333333333333340
+      - -.62966666666666666674
+    Names:
+      FancyName: enu_erec_minus_enu_71
+      ParameterName: enu_erec_minus_enu_71
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.62966666666666666674
+      - -.59600000000000000008
+    Names:
+      FancyName: enu_erec_minus_enu_72
+      ParameterName: enu_erec_minus_enu_72
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.59600000000000000008
+      - -.56233333333333333342
+    Names:
+      FancyName: enu_erec_minus_enu_73
+      ParameterName: enu_erec_minus_enu_73
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.56233333333333333342
+      - -.52866666666666666676
+    Names:
+      FancyName: enu_erec_minus_enu_74
+      ParameterName: enu_erec_minus_enu_74
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.52866666666666666676
+      - -.49500000000000000010
+    Names:
+      FancyName: enu_erec_minus_enu_75
+      ParameterName: enu_erec_minus_enu_75
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.49500000000000000010
+      - -.46133333333333333344
+    Names:
+      FancyName: enu_erec_minus_enu_76
+      ParameterName: enu_erec_minus_enu_76
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.46133333333333333344
+      - -.42766666666666666678
+    Names:
+      FancyName: enu_erec_minus_enu_77
+      ParameterName: enu_erec_minus_enu_77
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.42766666666666666678
+      - -.39400000000000000012
+    Names:
+      FancyName: enu_erec_minus_enu_78
+      ParameterName: enu_erec_minus_enu_78
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.39400000000000000012
+      - -.36033333333333333346
+    Names:
+      FancyName: enu_erec_minus_enu_79
+      ParameterName: enu_erec_minus_enu_79
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.36033333333333333346
+      - -.32666666666666666680
+    Names:
+      FancyName: enu_erec_minus_enu_80
+      ParameterName: enu_erec_minus_enu_80
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.32666666666666666680
+      - -.29300000000000000014
+    Names:
+      FancyName: enu_erec_minus_enu_81
+      ParameterName: enu_erec_minus_enu_81
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.29300000000000000014
+      - -.25933333333333333348
+    Names:
+      FancyName: enu_erec_minus_enu_82
+      ParameterName: enu_erec_minus_enu_82
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.25933333333333333348
+      - -.22566666666666666682
+    Names:
+      FancyName: enu_erec_minus_enu_83
+      ParameterName: enu_erec_minus_enu_83
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.22566666666666666682
+      - -.19200000000000000016
+    Names:
+      FancyName: enu_erec_minus_enu_84
+      ParameterName: enu_erec_minus_enu_84
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.19200000000000000016
+      - -.15833333333333333350
+    Names:
+      FancyName: enu_erec_minus_enu_85
+      ParameterName: enu_erec_minus_enu_85
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.15833333333333333350
+      - -.12466666666666666684
+    Names:
+      FancyName: enu_erec_minus_enu_86
+      ParameterName: enu_erec_minus_enu_86
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.12466666666666666684
+      - -.09100000000000000018
+    Names:
+      FancyName: enu_erec_minus_enu_87
+      ParameterName: enu_erec_minus_enu_87
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.09100000000000000018
+      - -.05733333333333333352
+    Names:
+      FancyName: enu_erec_minus_enu_88
+      ParameterName: enu_erec_minus_enu_88
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.05733333333333333352
+      - -.02366666666666666686
+    Names:
+      FancyName: enu_erec_minus_enu_89
+      ParameterName: enu_erec_minus_enu_89
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 2.00000000000000000000
+      - 3.00000000000000000000
+    - isRelativeEnubias:
+      - -.02366666666666666686
+      - .00999999999999999980
+    Names:
+      FancyName: enu_erec_minus_enu_90
+      ParameterName: enu_erec_minus_enu_90
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -1.00000000000000000000
+      - -.96633333333333333334
+    Names:
+      FancyName: enu_erec_minus_enu_91
+      ParameterName: enu_erec_minus_enu_91
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.96633333333333333334
+      - -.93266666666666666668
+    Names:
+      FancyName: enu_erec_minus_enu_92
+      ParameterName: enu_erec_minus_enu_92
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.93266666666666666668
+      - -.89900000000000000002
+    Names:
+      FancyName: enu_erec_minus_enu_93
+      ParameterName: enu_erec_minus_enu_93
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.89900000000000000002
+      - -.86533333333333333336
+    Names:
+      FancyName: enu_erec_minus_enu_94
+      ParameterName: enu_erec_minus_enu_94
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.86533333333333333336
+      - -.83166666666666666670
+    Names:
+      FancyName: enu_erec_minus_enu_95
+      ParameterName: enu_erec_minus_enu_95
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.83166666666666666670
+      - -.79800000000000000004
+    Names:
+      FancyName: enu_erec_minus_enu_96
+      ParameterName: enu_erec_minus_enu_96
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.79800000000000000004
+      - -.76433333333333333338
+    Names:
+      FancyName: enu_erec_minus_enu_97
+      ParameterName: enu_erec_minus_enu_97
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.76433333333333333338
+      - -.73066666666666666672
+    Names:
+      FancyName: enu_erec_minus_enu_98
+      ParameterName: enu_erec_minus_enu_98
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.73066666666666666672
+      - -.69700000000000000006
+    Names:
+      FancyName: enu_erec_minus_enu_99
+      ParameterName: enu_erec_minus_enu_99
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.69700000000000000006
+      - -.66333333333333333340
+    Names:
+      FancyName: enu_erec_minus_enu_100
+      ParameterName: enu_erec_minus_enu_100
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.66333333333333333340
+      - -.62966666666666666674
+    Names:
+      FancyName: enu_erec_minus_enu_101
+      ParameterName: enu_erec_minus_enu_101
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.62966666666666666674
+      - -.59600000000000000008
+    Names:
+      FancyName: enu_erec_minus_enu_102
+      ParameterName: enu_erec_minus_enu_102
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.59600000000000000008
+      - -.56233333333333333342
+    Names:
+      FancyName: enu_erec_minus_enu_103
+      ParameterName: enu_erec_minus_enu_103
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.56233333333333333342
+      - -.52866666666666666676
+    Names:
+      FancyName: enu_erec_minus_enu_104
+      ParameterName: enu_erec_minus_enu_104
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.52866666666666666676
+      - -.49500000000000000010
+    Names:
+      FancyName: enu_erec_minus_enu_105
+      ParameterName: enu_erec_minus_enu_105
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.49500000000000000010
+      - -.46133333333333333344
+    Names:
+      FancyName: enu_erec_minus_enu_106
+      ParameterName: enu_erec_minus_enu_106
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.46133333333333333344
+      - -.42766666666666666678
+    Names:
+      FancyName: enu_erec_minus_enu_107
+      ParameterName: enu_erec_minus_enu_107
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.42766666666666666678
+      - -.39400000000000000012
+    Names:
+      FancyName: enu_erec_minus_enu_108
+      ParameterName: enu_erec_minus_enu_108
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.39400000000000000012
+      - -.36033333333333333346
+    Names:
+      FancyName: enu_erec_minus_enu_109
+      ParameterName: enu_erec_minus_enu_109
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.36033333333333333346
+      - -.32666666666666666680
+    Names:
+      FancyName: enu_erec_minus_enu_110
+      ParameterName: enu_erec_minus_enu_110
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.32666666666666666680
+      - -.29300000000000000014
+    Names:
+      FancyName: enu_erec_minus_enu_111
+      ParameterName: enu_erec_minus_enu_111
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.29300000000000000014
+      - -.25933333333333333348
+    Names:
+      FancyName: enu_erec_minus_enu_112
+      ParameterName: enu_erec_minus_enu_112
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.25933333333333333348
+      - -.22566666666666666682
+    Names:
+      FancyName: enu_erec_minus_enu_113
+      ParameterName: enu_erec_minus_enu_113
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.22566666666666666682
+      - -.19200000000000000016
+    Names:
+      FancyName: enu_erec_minus_enu_114
+      ParameterName: enu_erec_minus_enu_114
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.19200000000000000016
+      - -.15833333333333333350
+    Names:
+      FancyName: enu_erec_minus_enu_115
+      ParameterName: enu_erec_minus_enu_115
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.15833333333333333350
+      - -.12466666666666666684
+    Names:
+      FancyName: enu_erec_minus_enu_116
+      ParameterName: enu_erec_minus_enu_116
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.12466666666666666684
+      - -.09100000000000000018
+    Names:
+      FancyName: enu_erec_minus_enu_117
+      ParameterName: enu_erec_minus_enu_117
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.09100000000000000018
+      - -.05733333333333333352
+    Names:
+      FancyName: enu_erec_minus_enu_118
+      ParameterName: enu_erec_minus_enu_118
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.05733333333333333352
+      - -.02366666666666666686
+    Names:
+      FancyName: enu_erec_minus_enu_119
+      ParameterName: enu_erec_minus_enu_119
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 3.00000000000000000000
+      - 4.00000000000000000000
+    - isRelativeEnubias:
+      - -.02366666666666666686
+      - .00999999999999999980
+    Names:
+      FancyName: enu_erec_minus_enu_120
+      ParameterName: enu_erec_minus_enu_120
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -1.00000000000000000000
+      - -.96633333333333333334
+    Names:
+      FancyName: enu_erec_minus_enu_121
+      ParameterName: enu_erec_minus_enu_121
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.96633333333333333334
+      - -.93266666666666666668
+    Names:
+      FancyName: enu_erec_minus_enu_122
+      ParameterName: enu_erec_minus_enu_122
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.93266666666666666668
+      - -.89900000000000000002
+    Names:
+      FancyName: enu_erec_minus_enu_123
+      ParameterName: enu_erec_minus_enu_123
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.89900000000000000002
+      - -.86533333333333333336
+    Names:
+      FancyName: enu_erec_minus_enu_124
+      ParameterName: enu_erec_minus_enu_124
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.86533333333333333336
+      - -.83166666666666666670
+    Names:
+      FancyName: enu_erec_minus_enu_125
+      ParameterName: enu_erec_minus_enu_125
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.83166666666666666670
+      - -.79800000000000000004
+    Names:
+      FancyName: enu_erec_minus_enu_126
+      ParameterName: enu_erec_minus_enu_126
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.79800000000000000004
+      - -.76433333333333333338
+    Names:
+      FancyName: enu_erec_minus_enu_127
+      ParameterName: enu_erec_minus_enu_127
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.76433333333333333338
+      - -.73066666666666666672
+    Names:
+      FancyName: enu_erec_minus_enu_128
+      ParameterName: enu_erec_minus_enu_128
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.73066666666666666672
+      - -.69700000000000000006
+    Names:
+      FancyName: enu_erec_minus_enu_129
+      ParameterName: enu_erec_minus_enu_129
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.69700000000000000006
+      - -.66333333333333333340
+    Names:
+      FancyName: enu_erec_minus_enu_130
+      ParameterName: enu_erec_minus_enu_130
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.66333333333333333340
+      - -.62966666666666666674
+    Names:
+      FancyName: enu_erec_minus_enu_131
+      ParameterName: enu_erec_minus_enu_131
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.62966666666666666674
+      - -.59600000000000000008
+    Names:
+      FancyName: enu_erec_minus_enu_132
+      ParameterName: enu_erec_minus_enu_132
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.59600000000000000008
+      - -.56233333333333333342
+    Names:
+      FancyName: enu_erec_minus_enu_133
+      ParameterName: enu_erec_minus_enu_133
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.56233333333333333342
+      - -.52866666666666666676
+    Names:
+      FancyName: enu_erec_minus_enu_134
+      ParameterName: enu_erec_minus_enu_134
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.52866666666666666676
+      - -.49500000000000000010
+    Names:
+      FancyName: enu_erec_minus_enu_135
+      ParameterName: enu_erec_minus_enu_135
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.49500000000000000010
+      - -.46133333333333333344
+    Names:
+      FancyName: enu_erec_minus_enu_136
+      ParameterName: enu_erec_minus_enu_136
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.46133333333333333344
+      - -.42766666666666666678
+    Names:
+      FancyName: enu_erec_minus_enu_137
+      ParameterName: enu_erec_minus_enu_137
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.42766666666666666678
+      - -.39400000000000000012
+    Names:
+      FancyName: enu_erec_minus_enu_138
+      ParameterName: enu_erec_minus_enu_138
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.39400000000000000012
+      - -.36033333333333333346
+    Names:
+      FancyName: enu_erec_minus_enu_139
+      ParameterName: enu_erec_minus_enu_139
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.36033333333333333346
+      - -.32666666666666666680
+    Names:
+      FancyName: enu_erec_minus_enu_140
+      ParameterName: enu_erec_minus_enu_140
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.32666666666666666680
+      - -.29300000000000000014
+    Names:
+      FancyName: enu_erec_minus_enu_141
+      ParameterName: enu_erec_minus_enu_141
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.29300000000000000014
+      - -.25933333333333333348
+    Names:
+      FancyName: enu_erec_minus_enu_142
+      ParameterName: enu_erec_minus_enu_142
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.25933333333333333348
+      - -.22566666666666666682
+    Names:
+      FancyName: enu_erec_minus_enu_143
+      ParameterName: enu_erec_minus_enu_143
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.22566666666666666682
+      - -.19200000000000000016
+    Names:
+      FancyName: enu_erec_minus_enu_144
+      ParameterName: enu_erec_minus_enu_144
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.19200000000000000016
+      - -.15833333333333333350
+    Names:
+      FancyName: enu_erec_minus_enu_145
+      ParameterName: enu_erec_minus_enu_145
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.15833333333333333350
+      - -.12466666666666666684
+    Names:
+      FancyName: enu_erec_minus_enu_146
+      ParameterName: enu_erec_minus_enu_146
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.12466666666666666684
+      - -.09100000000000000018
+    Names:
+      FancyName: enu_erec_minus_enu_147
+      ParameterName: enu_erec_minus_enu_147
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.09100000000000000018
+      - -.05733333333333333352
+    Names:
+      FancyName: enu_erec_minus_enu_148
+      ParameterName: enu_erec_minus_enu_148
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.05733333333333333352
+      - -.02366666666666666686
+    Names:
+      FancyName: enu_erec_minus_enu_149
+      ParameterName: enu_erec_minus_enu_149
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 4.00000000000000000000
+      - 5.00000000000000000000
+    - isRelativeEnubias:
+      - -.02366666666666666686
+      - .00999999999999999980
+    Names:
+      FancyName: enu_erec_minus_enu_150
+      ParameterName: enu_erec_minus_enu_150
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -1.00000000000000000000
+      - -.96633333333333333334
+    Names:
+      FancyName: enu_erec_minus_enu_151
+      ParameterName: enu_erec_minus_enu_151
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.96633333333333333334
+      - -.93266666666666666668
+    Names:
+      FancyName: enu_erec_minus_enu_152
+      ParameterName: enu_erec_minus_enu_152
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.93266666666666666668
+      - -.89900000000000000002
+    Names:
+      FancyName: enu_erec_minus_enu_153
+      ParameterName: enu_erec_minus_enu_153
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.89900000000000000002
+      - -.86533333333333333336
+    Names:
+      FancyName: enu_erec_minus_enu_154
+      ParameterName: enu_erec_minus_enu_154
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.86533333333333333336
+      - -.83166666666666666670
+    Names:
+      FancyName: enu_erec_minus_enu_155
+      ParameterName: enu_erec_minus_enu_155
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.83166666666666666670
+      - -.79800000000000000004
+    Names:
+      FancyName: enu_erec_minus_enu_156
+      ParameterName: enu_erec_minus_enu_156
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.79800000000000000004
+      - -.76433333333333333338
+    Names:
+      FancyName: enu_erec_minus_enu_157
+      ParameterName: enu_erec_minus_enu_157
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.76433333333333333338
+      - -.73066666666666666672
+    Names:
+      FancyName: enu_erec_minus_enu_158
+      ParameterName: enu_erec_minus_enu_158
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.73066666666666666672
+      - -.69700000000000000006
+    Names:
+      FancyName: enu_erec_minus_enu_159
+      ParameterName: enu_erec_minus_enu_159
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.69700000000000000006
+      - -.66333333333333333340
+    Names:
+      FancyName: enu_erec_minus_enu_160
+      ParameterName: enu_erec_minus_enu_160
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.66333333333333333340
+      - -.62966666666666666674
+    Names:
+      FancyName: enu_erec_minus_enu_161
+      ParameterName: enu_erec_minus_enu_161
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.62966666666666666674
+      - -.59600000000000000008
+    Names:
+      FancyName: enu_erec_minus_enu_162
+      ParameterName: enu_erec_minus_enu_162
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.59600000000000000008
+      - -.56233333333333333342
+    Names:
+      FancyName: enu_erec_minus_enu_163
+      ParameterName: enu_erec_minus_enu_163
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.56233333333333333342
+      - -.52866666666666666676
+    Names:
+      FancyName: enu_erec_minus_enu_164
+      ParameterName: enu_erec_minus_enu_164
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.52866666666666666676
+      - -.49500000000000000010
+    Names:
+      FancyName: enu_erec_minus_enu_165
+      ParameterName: enu_erec_minus_enu_165
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.49500000000000000010
+      - -.46133333333333333344
+    Names:
+      FancyName: enu_erec_minus_enu_166
+      ParameterName: enu_erec_minus_enu_166
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.46133333333333333344
+      - -.42766666666666666678
+    Names:
+      FancyName: enu_erec_minus_enu_167
+      ParameterName: enu_erec_minus_enu_167
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.42766666666666666678
+      - -.39400000000000000012
+    Names:
+      FancyName: enu_erec_minus_enu_168
+      ParameterName: enu_erec_minus_enu_168
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.39400000000000000012
+      - -.36033333333333333346
+    Names:
+      FancyName: enu_erec_minus_enu_169
+      ParameterName: enu_erec_minus_enu_169
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.36033333333333333346
+      - -.32666666666666666680
+    Names:
+      FancyName: enu_erec_minus_enu_170
+      ParameterName: enu_erec_minus_enu_170
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.32666666666666666680
+      - -.29300000000000000014
+    Names:
+      FancyName: enu_erec_minus_enu_171
+      ParameterName: enu_erec_minus_enu_171
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.29300000000000000014
+      - -.25933333333333333348
+    Names:
+      FancyName: enu_erec_minus_enu_172
+      ParameterName: enu_erec_minus_enu_172
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.25933333333333333348
+      - -.22566666666666666682
+    Names:
+      FancyName: enu_erec_minus_enu_173
+      ParameterName: enu_erec_minus_enu_173
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.22566666666666666682
+      - -.19200000000000000016
+    Names:
+      FancyName: enu_erec_minus_enu_174
+      ParameterName: enu_erec_minus_enu_174
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.19200000000000000016
+      - -.15833333333333333350
+    Names:
+      FancyName: enu_erec_minus_enu_175
+      ParameterName: enu_erec_minus_enu_175
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.15833333333333333350
+      - -.12466666666666666684
+    Names:
+      FancyName: enu_erec_minus_enu_176
+      ParameterName: enu_erec_minus_enu_176
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.12466666666666666684
+      - -.09100000000000000018
+    Names:
+      FancyName: enu_erec_minus_enu_177
+      ParameterName: enu_erec_minus_enu_177
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.09100000000000000018
+      - -.05733333333333333352
+    Names:
+      FancyName: enu_erec_minus_enu_178
+      ParameterName: enu_erec_minus_enu_178
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.05733333333333333352
+      - -.02366666666666666686
+    Names:
+      FancyName: enu_erec_minus_enu_179
+      ParameterName: enu_erec_minus_enu_179
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 5.00000000000000000000
+      - 6.00000000000000000000
+    - isRelativeEnubias:
+      - -.02366666666666666686
+      - .00999999999999999980
+    Names:
+      FancyName: enu_erec_minus_enu_180
+      ParameterName: enu_erec_minus_enu_180
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -1.00000000000000000000
+      - -.96633333333333333334
+    Names:
+      FancyName: enu_erec_minus_enu_181
+      ParameterName: enu_erec_minus_enu_181
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.96633333333333333334
+      - -.93266666666666666668
+    Names:
+      FancyName: enu_erec_minus_enu_182
+      ParameterName: enu_erec_minus_enu_182
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.93266666666666666668
+      - -.89900000000000000002
+    Names:
+      FancyName: enu_erec_minus_enu_183
+      ParameterName: enu_erec_minus_enu_183
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.89900000000000000002
+      - -.86533333333333333336
+    Names:
+      FancyName: enu_erec_minus_enu_184
+      ParameterName: enu_erec_minus_enu_184
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.86533333333333333336
+      - -.83166666666666666670
+    Names:
+      FancyName: enu_erec_minus_enu_185
+      ParameterName: enu_erec_minus_enu_185
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.83166666666666666670
+      - -.79800000000000000004
+    Names:
+      FancyName: enu_erec_minus_enu_186
+      ParameterName: enu_erec_minus_enu_186
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.79800000000000000004
+      - -.76433333333333333338
+    Names:
+      FancyName: enu_erec_minus_enu_187
+      ParameterName: enu_erec_minus_enu_187
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.76433333333333333338
+      - -.73066666666666666672
+    Names:
+      FancyName: enu_erec_minus_enu_188
+      ParameterName: enu_erec_minus_enu_188
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.73066666666666666672
+      - -.69700000000000000006
+    Names:
+      FancyName: enu_erec_minus_enu_189
+      ParameterName: enu_erec_minus_enu_189
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.69700000000000000006
+      - -.66333333333333333340
+    Names:
+      FancyName: enu_erec_minus_enu_190
+      ParameterName: enu_erec_minus_enu_190
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.66333333333333333340
+      - -.62966666666666666674
+    Names:
+      FancyName: enu_erec_minus_enu_191
+      ParameterName: enu_erec_minus_enu_191
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.62966666666666666674
+      - -.59600000000000000008
+    Names:
+      FancyName: enu_erec_minus_enu_192
+      ParameterName: enu_erec_minus_enu_192
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.59600000000000000008
+      - -.56233333333333333342
+    Names:
+      FancyName: enu_erec_minus_enu_193
+      ParameterName: enu_erec_minus_enu_193
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.56233333333333333342
+      - -.52866666666666666676
+    Names:
+      FancyName: enu_erec_minus_enu_194
+      ParameterName: enu_erec_minus_enu_194
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.52866666666666666676
+      - -.49500000000000000010
+    Names:
+      FancyName: enu_erec_minus_enu_195
+      ParameterName: enu_erec_minus_enu_195
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.49500000000000000010
+      - -.46133333333333333344
+    Names:
+      FancyName: enu_erec_minus_enu_196
+      ParameterName: enu_erec_minus_enu_196
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.46133333333333333344
+      - -.42766666666666666678
+    Names:
+      FancyName: enu_erec_minus_enu_197
+      ParameterName: enu_erec_minus_enu_197
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.42766666666666666678
+      - -.39400000000000000012
+    Names:
+      FancyName: enu_erec_minus_enu_198
+      ParameterName: enu_erec_minus_enu_198
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.39400000000000000012
+      - -.36033333333333333346
+    Names:
+      FancyName: enu_erec_minus_enu_199
+      ParameterName: enu_erec_minus_enu_199
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.36033333333333333346
+      - -.32666666666666666680
+    Names:
+      FancyName: enu_erec_minus_enu_200
+      ParameterName: enu_erec_minus_enu_200
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.32666666666666666680
+      - -.29300000000000000014
+    Names:
+      FancyName: enu_erec_minus_enu_201
+      ParameterName: enu_erec_minus_enu_201
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.29300000000000000014
+      - -.25933333333333333348
+    Names:
+      FancyName: enu_erec_minus_enu_202
+      ParameterName: enu_erec_minus_enu_202
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.25933333333333333348
+      - -.22566666666666666682
+    Names:
+      FancyName: enu_erec_minus_enu_203
+      ParameterName: enu_erec_minus_enu_203
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.22566666666666666682
+      - -.19200000000000000016
+    Names:
+      FancyName: enu_erec_minus_enu_204
+      ParameterName: enu_erec_minus_enu_204
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.19200000000000000016
+      - -.15833333333333333350
+    Names:
+      FancyName: enu_erec_minus_enu_205
+      ParameterName: enu_erec_minus_enu_205
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.15833333333333333350
+      - -.12466666666666666684
+    Names:
+      FancyName: enu_erec_minus_enu_206
+      ParameterName: enu_erec_minus_enu_206
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.12466666666666666684
+      - -.09100000000000000018
+    Names:
+      FancyName: enu_erec_minus_enu_207
+      ParameterName: enu_erec_minus_enu_207
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.09100000000000000018
+      - -.05733333333333333352
+    Names:
+      FancyName: enu_erec_minus_enu_208
+      ParameterName: enu_erec_minus_enu_208
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.05733333333333333352
+      - -.02366666666666666686
+    Names:
+      FancyName: enu_erec_minus_enu_209
+      ParameterName: enu_erec_minus_enu_209
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.00000000000000000000
+      - 7.00000000000000000000
+    - isRelativeEnubias:
+      - -.02366666666666666686
+      - .00999999999999999980
+    Names:
+      FancyName: enu_erec_minus_enu_210
+      ParameterName: enu_erec_minus_enu_210
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -1.00000000000000000000
+      - -.96633333333333333334
+    Names:
+      FancyName: enu_erec_minus_enu_211
+      ParameterName: enu_erec_minus_enu_211
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.96633333333333333334
+      - -.93266666666666666668
+    Names:
+      FancyName: enu_erec_minus_enu_212
+      ParameterName: enu_erec_minus_enu_212
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.93266666666666666668
+      - -.89900000000000000002
+    Names:
+      FancyName: enu_erec_minus_enu_213
+      ParameterName: enu_erec_minus_enu_213
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.89900000000000000002
+      - -.86533333333333333336
+    Names:
+      FancyName: enu_erec_minus_enu_214
+      ParameterName: enu_erec_minus_enu_214
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.86533333333333333336
+      - -.83166666666666666670
+    Names:
+      FancyName: enu_erec_minus_enu_215
+      ParameterName: enu_erec_minus_enu_215
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.83166666666666666670
+      - -.79800000000000000004
+    Names:
+      FancyName: enu_erec_minus_enu_216
+      ParameterName: enu_erec_minus_enu_216
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.79800000000000000004
+      - -.76433333333333333338
+    Names:
+      FancyName: enu_erec_minus_enu_217
+      ParameterName: enu_erec_minus_enu_217
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.76433333333333333338
+      - -.73066666666666666672
+    Names:
+      FancyName: enu_erec_minus_enu_218
+      ParameterName: enu_erec_minus_enu_218
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.73066666666666666672
+      - -.69700000000000000006
+    Names:
+      FancyName: enu_erec_minus_enu_219
+      ParameterName: enu_erec_minus_enu_219
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.69700000000000000006
+      - -.66333333333333333340
+    Names:
+      FancyName: enu_erec_minus_enu_220
+      ParameterName: enu_erec_minus_enu_220
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.66333333333333333340
+      - -.62966666666666666674
+    Names:
+      FancyName: enu_erec_minus_enu_221
+      ParameterName: enu_erec_minus_enu_221
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.62966666666666666674
+      - -.59600000000000000008
+    Names:
+      FancyName: enu_erec_minus_enu_222
+      ParameterName: enu_erec_minus_enu_222
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.59600000000000000008
+      - -.56233333333333333342
+    Names:
+      FancyName: enu_erec_minus_enu_223
+      ParameterName: enu_erec_minus_enu_223
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.56233333333333333342
+      - -.52866666666666666676
+    Names:
+      FancyName: enu_erec_minus_enu_224
+      ParameterName: enu_erec_minus_enu_224
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.52866666666666666676
+      - -.49500000000000000010
+    Names:
+      FancyName: enu_erec_minus_enu_225
+      ParameterName: enu_erec_minus_enu_225
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.49500000000000000010
+      - -.46133333333333333344
+    Names:
+      FancyName: enu_erec_minus_enu_226
+      ParameterName: enu_erec_minus_enu_226
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.46133333333333333344
+      - -.42766666666666666678
+    Names:
+      FancyName: enu_erec_minus_enu_227
+      ParameterName: enu_erec_minus_enu_227
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.42766666666666666678
+      - -.39400000000000000012
+    Names:
+      FancyName: enu_erec_minus_enu_228
+      ParameterName: enu_erec_minus_enu_228
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.39400000000000000012
+      - -.36033333333333333346
+    Names:
+      FancyName: enu_erec_minus_enu_229
+      ParameterName: enu_erec_minus_enu_229
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.36033333333333333346
+      - -.32666666666666666680
+    Names:
+      FancyName: enu_erec_minus_enu_230
+      ParameterName: enu_erec_minus_enu_230
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.32666666666666666680
+      - -.29300000000000000014
+    Names:
+      FancyName: enu_erec_minus_enu_231
+      ParameterName: enu_erec_minus_enu_231
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.29300000000000000014
+      - -.25933333333333333348
+    Names:
+      FancyName: enu_erec_minus_enu_232
+      ParameterName: enu_erec_minus_enu_232
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.25933333333333333348
+      - -.22566666666666666682
+    Names:
+      FancyName: enu_erec_minus_enu_233
+      ParameterName: enu_erec_minus_enu_233
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.22566666666666666682
+      - -.19200000000000000016
+    Names:
+      FancyName: enu_erec_minus_enu_234
+      ParameterName: enu_erec_minus_enu_234
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.19200000000000000016
+      - -.15833333333333333350
+    Names:
+      FancyName: enu_erec_minus_enu_235
+      ParameterName: enu_erec_minus_enu_235
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.15833333333333333350
+      - -.12466666666666666684
+    Names:
+      FancyName: enu_erec_minus_enu_236
+      ParameterName: enu_erec_minus_enu_236
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.12466666666666666684
+      - -.09100000000000000018
+    Names:
+      FancyName: enu_erec_minus_enu_237
+      ParameterName: enu_erec_minus_enu_237
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.09100000000000000018
+      - -.05733333333333333352
+    Names:
+      FancyName: enu_erec_minus_enu_238
+      ParameterName: enu_erec_minus_enu_238
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.05733333333333333352
+      - -.02366666666666666686
+    Names:
+      FancyName: enu_erec_minus_enu_239
+      ParameterName: enu_erec_minus_enu_239
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 7.00000000000000000000
+      - 8.00000000000000000000
+    - isRelativeEnubias:
+      - -.02366666666666666686
+      - .00999999999999999980
+    Names:
+      FancyName: enu_erec_minus_enu_240
+      ParameterName: enu_erec_minus_enu_240
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -1.00000000000000000000
+      - -.96633333333333333334
+    Names:
+      FancyName: enu_erec_minus_enu_241
+      ParameterName: enu_erec_minus_enu_241
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.96633333333333333334
+      - -.93266666666666666668
+    Names:
+      FancyName: enu_erec_minus_enu_242
+      ParameterName: enu_erec_minus_enu_242
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.93266666666666666668
+      - -.89900000000000000002
+    Names:
+      FancyName: enu_erec_minus_enu_243
+      ParameterName: enu_erec_minus_enu_243
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.89900000000000000002
+      - -.86533333333333333336
+    Names:
+      FancyName: enu_erec_minus_enu_244
+      ParameterName: enu_erec_minus_enu_244
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.86533333333333333336
+      - -.83166666666666666670
+    Names:
+      FancyName: enu_erec_minus_enu_245
+      ParameterName: enu_erec_minus_enu_245
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.83166666666666666670
+      - -.79800000000000000004
+    Names:
+      FancyName: enu_erec_minus_enu_246
+      ParameterName: enu_erec_minus_enu_246
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.79800000000000000004
+      - -.76433333333333333338
+    Names:
+      FancyName: enu_erec_minus_enu_247
+      ParameterName: enu_erec_minus_enu_247
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.76433333333333333338
+      - -.73066666666666666672
+    Names:
+      FancyName: enu_erec_minus_enu_248
+      ParameterName: enu_erec_minus_enu_248
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.73066666666666666672
+      - -.69700000000000000006
+    Names:
+      FancyName: enu_erec_minus_enu_249
+      ParameterName: enu_erec_minus_enu_249
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.69700000000000000006
+      - -.66333333333333333340
+    Names:
+      FancyName: enu_erec_minus_enu_250
+      ParameterName: enu_erec_minus_enu_250
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.66333333333333333340
+      - -.62966666666666666674
+    Names:
+      FancyName: enu_erec_minus_enu_251
+      ParameterName: enu_erec_minus_enu_251
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.62966666666666666674
+      - -.59600000000000000008
+    Names:
+      FancyName: enu_erec_minus_enu_252
+      ParameterName: enu_erec_minus_enu_252
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.59600000000000000008
+      - -.56233333333333333342
+    Names:
+      FancyName: enu_erec_minus_enu_253
+      ParameterName: enu_erec_minus_enu_253
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.56233333333333333342
+      - -.52866666666666666676
+    Names:
+      FancyName: enu_erec_minus_enu_254
+      ParameterName: enu_erec_minus_enu_254
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.52866666666666666676
+      - -.49500000000000000010
+    Names:
+      FancyName: enu_erec_minus_enu_255
+      ParameterName: enu_erec_minus_enu_255
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.49500000000000000010
+      - -.46133333333333333344
+    Names:
+      FancyName: enu_erec_minus_enu_256
+      ParameterName: enu_erec_minus_enu_256
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.46133333333333333344
+      - -.42766666666666666678
+    Names:
+      FancyName: enu_erec_minus_enu_257
+      ParameterName: enu_erec_minus_enu_257
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.42766666666666666678
+      - -.39400000000000000012
+    Names:
+      FancyName: enu_erec_minus_enu_258
+      ParameterName: enu_erec_minus_enu_258
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.39400000000000000012
+      - -.36033333333333333346
+    Names:
+      FancyName: enu_erec_minus_enu_259
+      ParameterName: enu_erec_minus_enu_259
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.36033333333333333346
+      - -.32666666666666666680
+    Names:
+      FancyName: enu_erec_minus_enu_260
+      ParameterName: enu_erec_minus_enu_260
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.32666666666666666680
+      - -.29300000000000000014
+    Names:
+      FancyName: enu_erec_minus_enu_261
+      ParameterName: enu_erec_minus_enu_261
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.29300000000000000014
+      - -.25933333333333333348
+    Names:
+      FancyName: enu_erec_minus_enu_262
+      ParameterName: enu_erec_minus_enu_262
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.25933333333333333348
+      - -.22566666666666666682
+    Names:
+      FancyName: enu_erec_minus_enu_263
+      ParameterName: enu_erec_minus_enu_263
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.22566666666666666682
+      - -.19200000000000000016
+    Names:
+      FancyName: enu_erec_minus_enu_264
+      ParameterName: enu_erec_minus_enu_264
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.19200000000000000016
+      - -.15833333333333333350
+    Names:
+      FancyName: enu_erec_minus_enu_265
+      ParameterName: enu_erec_minus_enu_265
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.15833333333333333350
+      - -.12466666666666666684
+    Names:
+      FancyName: enu_erec_minus_enu_266
+      ParameterName: enu_erec_minus_enu_266
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.12466666666666666684
+      - -.09100000000000000018
+    Names:
+      FancyName: enu_erec_minus_enu_267
+      ParameterName: enu_erec_minus_enu_267
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.09100000000000000018
+      - -.05733333333333333352
+    Names:
+      FancyName: enu_erec_minus_enu_268
+      ParameterName: enu_erec_minus_enu_268
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.05733333333333333352
+      - -.02366666666666666686
+    Names:
+      FancyName: enu_erec_minus_enu_269
+      ParameterName: enu_erec_minus_enu_269
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 8.00000000000000000000
+      - 9.00000000000000000000
+    - isRelativeEnubias:
+      - -.02366666666666666686
+      - .00999999999999999980
+    Names:
+      FancyName: enu_erec_minus_enu_270
+      ParameterName: enu_erec_minus_enu_270
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -1.00000000000000000000
+      - -.96633333333333333334
+    Names:
+      FancyName: enu_erec_minus_enu_271
+      ParameterName: enu_erec_minus_enu_271
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.96633333333333333334
+      - -.93266666666666666668
+    Names:
+      FancyName: enu_erec_minus_enu_272
+      ParameterName: enu_erec_minus_enu_272
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.93266666666666666668
+      - -.89900000000000000002
+    Names:
+      FancyName: enu_erec_minus_enu_273
+      ParameterName: enu_erec_minus_enu_273
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.89900000000000000002
+      - -.86533333333333333336
+    Names:
+      FancyName: enu_erec_minus_enu_274
+      ParameterName: enu_erec_minus_enu_274
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.86533333333333333336
+      - -.83166666666666666670
+    Names:
+      FancyName: enu_erec_minus_enu_275
+      ParameterName: enu_erec_minus_enu_275
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.83166666666666666670
+      - -.79800000000000000004
+    Names:
+      FancyName: enu_erec_minus_enu_276
+      ParameterName: enu_erec_minus_enu_276
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.79800000000000000004
+      - -.76433333333333333338
+    Names:
+      FancyName: enu_erec_minus_enu_277
+      ParameterName: enu_erec_minus_enu_277
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.76433333333333333338
+      - -.73066666666666666672
+    Names:
+      FancyName: enu_erec_minus_enu_278
+      ParameterName: enu_erec_minus_enu_278
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.73066666666666666672
+      - -.69700000000000000006
+    Names:
+      FancyName: enu_erec_minus_enu_279
+      ParameterName: enu_erec_minus_enu_279
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.69700000000000000006
+      - -.66333333333333333340
+    Names:
+      FancyName: enu_erec_minus_enu_280
+      ParameterName: enu_erec_minus_enu_280
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.66333333333333333340
+      - -.62966666666666666674
+    Names:
+      FancyName: enu_erec_minus_enu_281
+      ParameterName: enu_erec_minus_enu_281
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.62966666666666666674
+      - -.59600000000000000008
+    Names:
+      FancyName: enu_erec_minus_enu_282
+      ParameterName: enu_erec_minus_enu_282
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.59600000000000000008
+      - -.56233333333333333342
+    Names:
+      FancyName: enu_erec_minus_enu_283
+      ParameterName: enu_erec_minus_enu_283
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.56233333333333333342
+      - -.52866666666666666676
+    Names:
+      FancyName: enu_erec_minus_enu_284
+      ParameterName: enu_erec_minus_enu_284
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.52866666666666666676
+      - -.49500000000000000010
+    Names:
+      FancyName: enu_erec_minus_enu_285
+      ParameterName: enu_erec_minus_enu_285
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.49500000000000000010
+      - -.46133333333333333344
+    Names:
+      FancyName: enu_erec_minus_enu_286
+      ParameterName: enu_erec_minus_enu_286
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.46133333333333333344
+      - -.42766666666666666678
+    Names:
+      FancyName: enu_erec_minus_enu_287
+      ParameterName: enu_erec_minus_enu_287
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.42766666666666666678
+      - -.39400000000000000012
+    Names:
+      FancyName: enu_erec_minus_enu_288
+      ParameterName: enu_erec_minus_enu_288
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.39400000000000000012
+      - -.36033333333333333346
+    Names:
+      FancyName: enu_erec_minus_enu_289
+      ParameterName: enu_erec_minus_enu_289
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.36033333333333333346
+      - -.32666666666666666680
+    Names:
+      FancyName: enu_erec_minus_enu_290
+      ParameterName: enu_erec_minus_enu_290
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.32666666666666666680
+      - -.29300000000000000014
+    Names:
+      FancyName: enu_erec_minus_enu_291
+      ParameterName: enu_erec_minus_enu_291
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.29300000000000000014
+      - -.25933333333333333348
+    Names:
+      FancyName: enu_erec_minus_enu_292
+      ParameterName: enu_erec_minus_enu_292
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.25933333333333333348
+      - -.22566666666666666682
+    Names:
+      FancyName: enu_erec_minus_enu_293
+      ParameterName: enu_erec_minus_enu_293
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.22566666666666666682
+      - -.19200000000000000016
+    Names:
+      FancyName: enu_erec_minus_enu_294
+      ParameterName: enu_erec_minus_enu_294
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.19200000000000000016
+      - -.15833333333333333350
+    Names:
+      FancyName: enu_erec_minus_enu_295
+      ParameterName: enu_erec_minus_enu_295
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.15833333333333333350
+      - -.12466666666666666684
+    Names:
+      FancyName: enu_erec_minus_enu_296
+      ParameterName: enu_erec_minus_enu_296
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.12466666666666666684
+      - -.09100000000000000018
+    Names:
+      FancyName: enu_erec_minus_enu_297
+      ParameterName: enu_erec_minus_enu_297
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.09100000000000000018
+      - -.05733333333333333352
+    Names:
+      FancyName: enu_erec_minus_enu_298
+      ParameterName: enu_erec_minus_enu_298
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.05733333333333333352
+      - -.02366666666666666686
+    Names:
+      FancyName: enu_erec_minus_enu_299
+      ParameterName: enu_erec_minus_enu_299
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    Sample_Name: ["ND"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 9.00000000000000000000
+      - 10.00000000000000000000
+    - isRelativeEnubias:
+      - -.02366666666666666686
+      - .00999999999999999980
+    Names:
+      FancyName: enu_erec_minus_enu_300
+      ParameterName: enu_erec_minus_enu_300
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec

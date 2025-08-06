@@ -23,7 +23,7 @@ public:
   ~samplePDFDUNEBeamFD();
 
   /// @brief Enum to identify kinematics
-  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC, kq0, kq3, k_pT, k_pz, k_global_bin_number, kp_lep, ktheta_lep, kELepRec, kEHadRec, kERec_minus_Etrue, kERecQE, kENuProxy_minus_Enutrue, kyRec, keHad_av, kisCC};
+  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC, kq0, kq3, k_pT, k_pz, k_global_bin_number, kp_lep, ktheta_lep, kELepRec, kEHadRec, kERec_minus_Etrue, kERecQE, kENuProxy_minus_Enutrue, kyRec, keHad_av, kisCC, kisRelativeEnubias};
   std::pair<std::vector<double>, std::vector<double>> Return2DKinematicParameterBinning(std::string KinematicParameterStr);
   std::vector<double> f1DEdges;
   TH1D* f1DHist = nullptr;
@@ -156,7 +156,8 @@ protected:
     {"ENuProxy_minus_Enutrue",kENuProxy_minus_Enutrue},
     {"yRec",kyRec},
     {"eHad_av",keHad_av},
-    {"isCC", kisCC}
+    {"isCC", kisCC},
+    {"isRelativeEnubias",  kisRelativeEnubias}
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -184,7 +185,8 @@ protected:
     {kENuProxy_minus_Enutrue, "ENuProxy_minus_Enutrue"},
     {kyRec, "yRec"},
     {keHad_av, "eHad_av"},
-    {kisCC, "isCC"}
+    {kisCC, "isCC"},
+    {kisRelativeEnubias, "isRelativeEnubias"}
   };
 };
 

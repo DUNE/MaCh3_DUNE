@@ -108,6 +108,7 @@ struct dunemc_base {
   double *theta_lep;
   double *p_lep;
   double *enurec_minus_enutrue;
+  double *relative_enu_bias;
   double *erec_proxy;
   double *erec_proxy_minus_enu;
   double *eHad_av;
