@@ -22,7 +22,7 @@ Binned:
   
 OscProbCalcerSetup:
   ImplementationName: "CUDAProb3"
-  EarthModelFileName: "./Inputs/Atmospherics/PREM_4layer_quad.dat"
+  EarthModelFileName: "./Inputs/Atmospherics/PREM_4layer.dat"
 
   UseEarthModelSystematics: true
   Layers: 4

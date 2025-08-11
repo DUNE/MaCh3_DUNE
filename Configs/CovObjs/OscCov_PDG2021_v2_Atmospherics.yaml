@@ -54,7 +54,7 @@ Systematics:
 
     SampleNames: ["FD_*", "ATM"]
     Error: 0.0007
-    FlatPrior: true
+    FlatPrior: false
     ParameterBounds: [0, 1]
     ParameterGroup: Osc
     ParameterValues:
