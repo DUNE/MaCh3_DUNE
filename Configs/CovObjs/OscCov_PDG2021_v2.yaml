@@ -12,15 +12,15 @@ Systematics:
 
 
     SampleNames: ["FD_*", "ATM"]
-    Error: 0.0129961532770277840
+    Error: 0.013
     FlatPrior: false
     ParameterBounds: [0, 1]
     ParameterGroup: Osc
     ParameterValues:
-      Generated: 0.307
-      PreFitValue: 0.307
+      Generated: 0.310
+      PreFitValue: 0.310
     StepScale:
-      MCMC: 1.0
+      MCMC: 0.2
     Type: Osc
 
 
@@ -36,10 +36,10 @@ Systematics:
     ParameterBounds: [0, 1]
     ParameterGroup: Osc
     ParameterValues:
-      Generated: 0.546
-      PreFitValue: 0.546
+      Generated: 0.580
+      PreFitValue: 0.580
     StepScale:
-      MCMC: 1.0
+      MCMC: 0.4
     Type: Osc
 
 
@@ -50,15 +50,15 @@ Systematics:
 
 
     SampleNames: ["FD_*", "ATM"]
-    Error: 0.0007
+    Error: 0.00065
     FlatPrior: true
     ParameterBounds: [0, 1]
     ParameterGroup: Osc
     ParameterValues:
-      Generated: 0.0220
-      PreFitValue: 0.0220
+      Generated: 0.0224
+      PreFitValue: 0.0224
     StepScale:
-      MCMC: 5.0
+      MCMC: 0.5
     Type: Osc
 
 
@@ -74,10 +74,10 @@ Systematics:
     ParameterBounds: [-999, 999]
     ParameterGroup: Osc
     ParameterValues:
-      Generated: 0.0000753
-      PreFitValue: 0.0000753
+      Generated: 0.0000739
+      PreFitValue: 0.0000739
     StepScale:
-      MCMC: 1.0
+      MCMC: 0.2
     Type: Osc
 
 
@@ -96,7 +96,7 @@ Systematics:
       Generated: 0.002536
       PreFitValue: 0.002536
     StepScale:
-      MCMC: 1.0
+      MCMC: 0.1
     Type: Osc
 
 
@@ -107,16 +107,16 @@ Systematics:
 
 
     SampleNames: ["FD_*", "ATM"]
-    Error: 6.28331122896200340
+    Error: 5.00
     FlatPrior: true
     # It has special treatment as it is continuous param
     ParameterBounds: [-999, 999]
     ParameterGroup: Osc
     ParameterValues:
-      Generated: -1.601
-      PreFitValue: -1.601
+      Generated: 1.5708
+      PreFitValue: 1.5708
     StepScale:
-      MCMC: 1.0
+      MCMC: 0.4
     Type: Osc
 
 
@@ -151,8 +151,8 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Osc
     ParameterValues:
-      Generated: 2.6
-      PreFitValue: 2.6
+      Generated: 2.848
+      PreFitValue: 2.848
     StepScale:
       MCMC: 1.0
     Type: Osc
