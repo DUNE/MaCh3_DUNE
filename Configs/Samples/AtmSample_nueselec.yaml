@@ -15,10 +15,26 @@ SampleOptions:
   IsELike: yes
   ExposureScaling: 1.0
 
+# Muyuan adding flux systematics section
+# not change the subsample section
+# because flux reweight is only applied based on the nutype, energy and costheta
+# of each event
+FluxSplines:
+  File: "Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root" # Using the SolMin spline file for flux systematics
+  Flavors:
+    - PDG: 12
+      Tag: "NuE"
+    - PDG: -12
+      Tag: "ANuE"
+    - PDG: 14
+      Tag: "NuM"
+    - PDG: -14
+      Tag: "ANuM"
+
 InputFiles:
   mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"
   mtuplesuffix: "_nueselec.root"
-  splineprefix: ""
+  splineprefix: "" 
   splinesuffix: ""
 
 NuOsc:
