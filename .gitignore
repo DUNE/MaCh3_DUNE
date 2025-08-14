@@ -13,3 +13,4 @@ Inputs/Atmospherics/CAFs
 nohup.out
 *.txt
 *.log
+.cache/

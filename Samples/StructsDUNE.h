@@ -119,7 +119,7 @@ struct dunemc_base {
   std::vector<double> *particle_endmomentum;
   std::vector<double> *particle_transversemomentum;
   std::vector<bool> *particle_isaccepted;
-  std::vector<bool> *particle_iscontained;
+  std::vector<bool> *particle_iscurvatureresolved;
   std::vector<bool> *particle_isdecayed;
   std::vector<bool> *particle_isstoppedintpc;
   std::vector<bool> *particle_isstoppedinecal;
@@ -140,7 +140,6 @@ struct dunemc_base {
   std::vector<double> *particle_momresyz;
   std::vector<double> *particle_momresx;
   std::vector<double> *particle_edepcrit;
-  std::vector<double> *particle_escsecenergyfrac;
 };
 
 #endif

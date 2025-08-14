@@ -1,6 +1,5 @@
 #include "SampleHandlerBeamNDGAr.h"
 
-
 SampleHandlerBeamNDGAr::SampleHandlerBeamNDGAr(std::string mc_version_, ParameterHandlerGeneric* ParHandler_) : SampleHandlerFD(mc_version_, ParHandler_) {
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
@@ -116,7 +115,7 @@ double SampleHandlerBeamNDGAr::FindNHits(double pixel_spacing_cm, double centre_
     double ycoord = TPC_centre_y + pixel*pixel_spacing_cm;
     double quadratic_ineq_y = rad_curvature*rad_curvature-(ycoord-centre_circle_y)*(ycoord-centre_circle_y);
 
-    if (quadratic_ineq_y >=0) {
+    if (quadratic_ineq_y >= 0) {
       double zcoord1 = centre_circle_z + std::sqrt(quadratic_ineq_y);
       if (isCoordOnTrack(charge, ycoord, zcoord1, centre_circle_y, centre_circle_z, theta_start, theta_spanned)) num_intersections++;
       if (fmod(std::abs(zcoord1 - TPC_centre_z),pixel_spacing_cm)==0) num_vertices++;
@@ -130,7 +129,7 @@ double SampleHandlerBeamNDGAr::FindNHits(double pixel_spacing_cm, double centre_
     double zcoord = TPC_centre_z + pixel*pixel_spacing_cm;
     double quadratic_ineq_z = rad_curvature*rad_curvature-(zcoord-centre_circle_z)*(zcoord-centre_circle_z);
 
-    if (quadratic_ineq_z >=0) {
+    if (quadratic_ineq_z >= 0) {
       double ycoord1 = centre_circle_y + std::sqrt(quadratic_ineq_z);
       if (isCoordOnTrack(charge, ycoord1, zcoord, centre_circle_y, centre_circle_z, theta_start, theta_spanned)) num_intersections++;
       if (fmod(std::abs(ycoord1 - TPC_centre_y),pixel_spacing_cm)==0) num_vertices++;
@@ -205,50 +204,73 @@ int SampleHandlerBeamNDGAr::GetChargeFromPDG(const int pdg) {
   }
 }
 
-bool SampleHandlerBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_sample, int i_event, size_t i_anaprim, double pixel_spacing_cm, 
-    std::unordered_map<int, std::vector<double>>& primID_to_ECalDep, std::unordered_map<int, std::vector<int>>& prim_to_sec_ID, std::unordered_map<int, size_t>& ID_to_index){
-
-  bool isAccepted = true;
-  int prim_trkid = _MCPTrkID->at(i_anaprim);
-
-  //If <2 MeV or <2% of total energy is deposited in last 2 layers of the ecal, shower is contained
-  bool containedShower = false;
-  const double E_crit = 0.002;
-  const double frac_crit = 0.02;
-  const int crit_layers = 2;
-  const int tot_layers = static_cast<int>(primID_to_ECalDep[prim_trkid].size());
-  double EDepCrit = 0.;
-  double EDepTot = 0.;
-  for (int layer = 0; layer < tot_layers; layer++) {
-    if(layer >= tot_layers - crit_layers) EDepCrit += primID_to_ECalDep[prim_trkid][layer];
-    EDepTot += primID_to_ECalDep[prim_trkid][layer];  
+void SampleHandlerBeamNDGAr::EraseDescendants(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID) {
+  for (int daughterID : mother_to_daughter_ID[motherID]) {
+    EraseDescendants(daughterID, mother_to_daughter_ID);
   }
-  if (EDepCrit < E_crit || EDepCrit/EDepTot < frac_crit) containedShower = true;
-  
-  //define primary properties from Anatree
-  int pdg = _PDG->at(i_anaprim);
-  double mass = MaCh3Utils::GetMassFromPDG(pdg);
+  mother_to_daughter_ID.erase(motherID);
+}
+
+// Removes descendants of primID which can be reconstructed from curvature from mother_to_daughter_ID map
+bool SampleHandlerBeamNDGAr::CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, std::unordered_map<int, size_t>& ID_to_index, dunemc_base *duneobj, double pixel_spacing_cm) {
+  if (IsResolvedFromCurvature(duneobj, static_cast<int>(ID_to_index[id]), pixel_spacing_cm)) { // If mother can be reconstructed from curvature, remove her and her descendants
+    EraseDescendants(id, mother_to_daughter_ID);
+    return true;
+  }
+  auto& daughters = mother_to_daughter_ID[id]; // Here every particle is added to the map (even if it has no daughters)
+  std::vector<int> filtered_daughters = {};
+  for (int daughterID : daughters) { // Check secondary tree for any others which can be reconstructed from curvature
+    if (!CurvatureResolutionFilter(daughterID, mother_to_daughter_ID, ID_to_index, duneobj, pixel_spacing_cm)) {
+      filtered_daughters.push_back(daughterID); 
+    }
+  }
+  daughters = std::move(filtered_daughters); // Update with filtered daughters
+  return false;
+}
+
+double SampleHandlerBeamNDGAr::CalcEDepCrit(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers) {
+  auto it = mother_to_daughter_ID.find(motherID);
+  double EDepCrit = 0.;
+  if (it != mother_to_daughter_ID.end()) {
+    const int crit_layers = 2;
+    for (int i_layer=tot_layers-crit_layers; i_layer<tot_layers; i_layer++) {
+      EDepCrit += ID_to_ECalDep.at(motherID)[i_layer];
+    }
+    for (int daughterID : it->second) {
+      EDepCrit += CalcEDepCrit(daughterID, mother_to_daughter_ID, ID_to_ECalDep, tot_layers);
+    }
+  }
+  return EDepCrit;
+}
+
+bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_base *duneobj, int i_anapart, double pixel_spacing_cm){
+  // Get particle properties from Anatree
+  double xstart = _MCPStartX->at(i_anapart);
+  double ystart = _MCPStartY->at(i_anapart);
+  double zstart = _MCPStartZ->at(i_anapart);
+  double start_radius = std::sqrt((ystart-TPC_centre_y)*(ystart-TPC_centre_y) + (zstart-TPC_centre_z)*(zstart-TPC_centre_z));
+  double start_length = xstart - TPC_centre_x;
+  bool starts_in_tpc = std::abs(start_length)<=TPCInstrumentedLength && start_radius<=TPCInstrumentedRadius;
+  if (!starts_in_tpc) return false;
+
+  int pdg = _PDG->at(i_anapart);
+  if (pdg > 1000000000) return false;
   int charge = GetChargeFromPDG(pdg);
-  double p_x = _MCPStartPX->at(i_anaprim);
-  double p_y = _MCPStartPY->at(i_anaprim);
-  double p_z = _MCPStartPZ->at(i_anaprim);
+  double mass = MaCh3Utils::GetMassFromPDG(pdg);
+  double p_x = _MCPStartPX->at(i_anapart);
+  double p_y = _MCPStartPY->at(i_anapart);
+  double p_z = _MCPStartPZ->at(i_anapart);
   double p_beam = p_y*BeamDirection[1] + p_z*BeamDirection[2];
 
   double energy = std::sqrt(p_x*p_x + p_y*p_y + p_z*p_z + mass*mass);
   double transverse_mom = std::sqrt(p_y*p_y + p_z*p_z); //transverse to B-field
   double mom_tot = std::sqrt(p_x*p_x + transverse_mom*transverse_mom);
-  double end_mom = std::sqrt(_MCPEndPX->at(i_anaprim)*_MCPEndPX->at(i_anaprim) + _MCPEndPY->at(i_anaprim)*_MCPEndPY->at(i_anaprim) + _MCPEndPZ->at(i_anaprim)*_MCPEndPZ->at(i_anaprim)); 
+  double end_mom = std::sqrt(_MCPEndPX->at(i_anapart)*_MCPEndPX->at(i_anapart) + _MCPEndPY->at(i_anapart)*_MCPEndPY->at(i_anapart) + _MCPEndPZ->at(i_anapart)*_MCPEndPZ->at(i_anapart)); 
 
-  //Determine stopping region 
-  double xstart = _MCPStartX->at(i_anaprim);
-  double ystart = _MCPStartY->at(i_anaprim);
-  double zstart = _MCPStartZ->at(i_anaprim);
-  double start_radius = std::sqrt((ystart-TPC_centre_y)*(ystart-TPC_centre_y) + (zstart-TPC_centre_z)*(zstart-TPC_centre_z));
-
-  double yend_centre = _MCPEndY->at(i_anaprim)-TPC_centre_y;
-  double zend_centre = _MCPEndZ->at(i_anaprim)-TPC_centre_z;
+  double yend_centre = _MCPEndY->at(i_anapart)-TPC_centre_y;
+  double zend_centre = _MCPEndZ->at(i_anapart)-TPC_centre_z;
   double end_radius = std::sqrt(yend_centre*yend_centre + zend_centre*zend_centre); 
-  double end_length = _MCPEndX->at(i_anaprim)-TPC_centre_x;
+  double end_length = _MCPEndX->at(i_anapart)-TPC_centre_x;
 
   bool stops_in_tpc = std::abs(end_length)<=TPCInstrumentedLength && end_radius<=TPCInstrumentedRadius;
   bool stops_before_ecal = std::abs(end_length)<ECALEndCapStart && end_radius<ECALInnerRadius;
@@ -256,220 +278,143 @@ bool SampleHandlerBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
   bool stops_in_ecal = !(stops_before_ecal || stops_beyond_ecal);
 
   //Fill particle-level kinematic variables with default or actual (if possible at this stage) values
-  duneobj->particle_event->push_back(i_event);
-  duneobj->particle_pdg->push_back(pdg);
-  duneobj->particle_energy->push_back(energy);
-  duneobj->particle_momentum->push_back(mom_tot);
-  duneobj->particle_endmomentum->push_back(end_mom);
-  duneobj->particle_transversemomentum->push_back(transverse_mom); //momentum transverse to B-field
-  duneobj->particle_bangle->push_back(acos(p_x/mom_tot)*180/M_PI); //angle to B-field
-  duneobj->particle_beamangle->push_back(acos(p_beam/mom_tot)*180/M_PI);
+  if (_MotherTrkID->at(i_anapart) == 0) {
+    duneobj->particle_pdg->back() = pdg;
+    duneobj->particle_energy->back() = energy;
+    duneobj->particle_momentum->back() = mom_tot;
+    duneobj->particle_endmomentum->back() = end_mom;
+    duneobj->particle_transversemomentum->back() = transverse_mom; //momentum transverse to B-field
+    duneobj->particle_bangle->back() = acos(p_x/mom_tot)*180/M_PI; //angle to B-field
+    duneobj->particle_beamangle->back() = acos(p_beam/mom_tot)*180/M_PI;
 
-  duneobj->particle_startx->push_back(xstart-TPC_centre_x);
-  duneobj->particle_startr2->push_back(start_radius*start_radius);
-  duneobj->particle_endr->push_back(end_radius);
-  duneobj->particle_endx->push_back(end_length);
+    duneobj->particle_startx->back() = start_length;
+    duneobj->particle_startr2->back() = start_radius*start_radius;
+    duneobj->particle_endr->back() = end_radius;
+    duneobj->particle_endx->back() = end_length;
 
-  duneobj->particle_isaccepted->push_back(true); //default (updates later)
-  duneobj->particle_iscontained->push_back(containedShower);
-  duneobj->particle_isdecayed->push_back(_MCPEndProc->at(i_anaprim) == "Decay");
-  duneobj->particle_isstoppedingap->push_back(!stops_in_tpc && stops_before_ecal);
-  duneobj->particle_isstoppedinbarrelgap->push_back(!stops_in_tpc && stops_before_ecal && std::abs(end_length)<=TPCInstrumentedLength); 
-  duneobj->particle_isstoppedinendgap->push_back(!stops_in_tpc && stops_before_ecal && std::abs(end_length)>TPCInstrumentedLength); 
-  duneobj->particle_isstoppedinecal->push_back(stops_in_ecal);
-  duneobj->particle_isstoppedinbarrel->push_back(stops_in_ecal && end_radius>=ECALInnerRadius);
-  duneobj->particle_isstoppedinendcap->push_back(stops_in_ecal && end_radius<ECALInnerRadius);
-  duneobj->particle_isstoppedintpc->push_back(stops_in_tpc);
-  duneobj->particle_isescaped->push_back(stops_beyond_ecal);
-
-  duneobj->particle_momresms->push_back(M3::_BAD_DOUBLE_); //default (updates later)
-  duneobj->particle_momresyz->push_back(M3::_BAD_DOUBLE_); //default (updates later)
-  duneobj->particle_momresx->push_back(M3::_BAD_DOUBLE_); //default (updates later)
-  duneobj->particle_nturns->push_back(M3::_BAD_DOUBLE_); //default (updates later)
-  duneobj->particle_nhits->push_back(M3::_BAD_DOUBLE_); //default (updates later)
-  duneobj->particle_tracklengthyz->push_back(M3::_BAD_DOUBLE_); //default (updates later)
-
-  duneobj->particle_escsecenergyfrac->push_back(M3::_BAD_DOUBLE_);
-  duneobj->particle_edepcrit->push_back(EDepCrit);
-
-  nparticlesinsample[i_sample]++;
-
-  //Store deposits in text file
-  deposit_outputs << "PDG: " << pdg << " Energy: " << energy << " TPC: " << stops_in_tpc << " ECal: " << stops_in_ecal << " Escapes: " << stops_beyond_ecal << " Contained: " << containedShower << std::endl;
-  for (int layer = 0; layer < tot_layers; layer++) {
-    deposit_outputs << primID_to_ECalDep[prim_trkid][layer] << " ";
+    duneobj->particle_isdecayed->back() = _MCPEndProc->at(i_anapart) == "Decay";
+    duneobj->particle_isstoppedingap->back() = !stops_in_tpc && stops_before_ecal;
+    duneobj->particle_isstoppedinbarrelgap->back() = !stops_in_tpc && stops_before_ecal && std::abs(end_length)<=TPCInstrumentedLength; 
+    duneobj->particle_isstoppedinendgap->back() = !stops_in_tpc && stops_before_ecal && std::abs(end_length)>TPCInstrumentedLength; 
+    duneobj->particle_isstoppedinecal->back() = stops_in_ecal;
+    duneobj->particle_isstoppedinbarrel->back() = stops_in_ecal && end_radius>=ECALInnerRadius;
+    duneobj->particle_isstoppedinendcap->back() = stops_in_ecal && end_radius<ECALInnerRadius;
+    duneobj->particle_isstoppedintpc->back() = stops_in_tpc;
+    duneobj->particle_isescaped->back() = stops_beyond_ecal;
   }
-  deposit_outputs << "\n" << std::endl;
 
-  //Check if all escaped secondaries are produced in ECal. If so, calculate escape energy
-  bool escSecProdInECal = true;
-  double escECalSecEnergy = 0.;
-  for (int& secID : prim_to_sec_ID[prim_trkid]) {
-    size_t secIndex = ID_to_index[secID];
-    int sec_pdg = _PDG->at(secIndex);
-    if (GetChargeFromPDG(sec_pdg) == 0) continue;
+  if (charge == 0) return false;
 
-    double sec_yend_centre = _MCPEndY->at(secIndex)-TPC_centre_y;
-    double sec_zend_centre = _MCPEndZ->at(secIndex)-TPC_centre_z;
-    double sec_end_radius = std::sqrt(sec_yend_centre*sec_yend_centre + sec_zend_centre*sec_zend_centre);
-    double sec_end_length = _MCPEndX->at(secIndex)-TPC_centre_x;
+  double rad_curvature = 100*transverse_mom/(0.3*B_field); //p = 0.3*B*r where p in GeV/c, B in T, r in m (*100 to convert to cm)
+  double theta_xT = atan(p_x/transverse_mom); //helix pitch angle
+  double pitch = std::abs(2*M_PI*rad_curvature*tan(theta_xT)); //distance between two turns of a helix in cm
+  double tan_theta = tan(theta_xT);
 
-    bool sec_stops_beyond_ecal = std::abs(sec_end_length)>ECALEndCapEnd || sec_end_radius>ECALOuterRadius;
+  //Find centre of circular path
+  double centre_circle_y;
+  double centre_circle_z;
+  double L_yz; //length of curved track in y-z plane
+  double theta_spanned = 0;
 
-    double sec_ystart_centre = _MCPStartY->at(secIndex)-TPC_centre_y;
-    double sec_zstart_centre = _MCPStartZ->at(secIndex)-TPC_centre_z;
-    double sec_start_radius = std::sqrt(sec_ystart_centre*sec_ystart_centre + sec_zstart_centre*sec_zstart_centre);
-    double sec_start_length = _MCPStartX->at(secIndex)-TPC_centre_x;
-
-    bool sec_starts_before_ecal = std::abs(sec_start_length)<ECALEndCapStart && sec_start_radius<ECALInnerRadius;
-    bool sec_starts_beyond_ecal = std::abs(sec_start_length)>ECALEndCapEnd || sec_start_radius>ECALOuterRadius;
-    bool sec_starts_in_ecal = !(sec_starts_before_ecal || sec_starts_beyond_ecal);
-
-    if (sec_stops_beyond_ecal) {
-      if (!sec_starts_in_ecal) {
-        escSecProdInECal = false;
-        break;
-      }
-
-      double sec_mass = MaCh3Utils::GetMassFromPDG(sec_pdg);
-
-      double sec_mom2 = _MCPStartPX->at(secIndex)*_MCPStartPX->at(secIndex) + _MCPStartPY->at(secIndex)*_MCPStartPY->at(secIndex) + _MCPStartPZ->at(secIndex)*_MCPStartPZ->at(secIndex);
-      double sec_energy = std::sqrt(sec_mass*sec_mass + sec_mom2);
-      if (sec_pdg == 2212 || sec_pdg == 2112 || sec_pdg > 1000000000) sec_energy -= sec_mass;
-
-      double sec_edep = 0.;
-      for (size_t i_ecaldep=0; i_ecaldep<_SimHitTrkID->size(); i_ecaldep++) {
-        int simhit_trkid = _SimHitTrkID->at(i_ecaldep);
-        if (simhit_trkid == secID) {
-          sec_edep += _SimHitEnergy->at(i_ecaldep);
-        }
-      }
-      escECalSecEnergy += sec_energy - sec_edep;
-    }
+  if (charge == 1) {
+    centre_circle_y = ystart + (rad_curvature*p_z/transverse_mom); //Note plus sign here as cross product gives F in direction of ( pz j - py k) F= q v x B
+    centre_circle_z = zstart - (rad_curvature*p_y/transverse_mom);
   }
-  if (escSecProdInECal) {
-    duneobj->particle_escsecenergyfrac->back() = escECalSecEnergy/energy;
+  else {
+    centre_circle_y = ystart - (rad_curvature*p_z/transverse_mom); //Note minus sign here as cross product gives F in direction of ( -pz j + py k)
+    centre_circle_z = zstart + (rad_curvature*p_y/transverse_mom);
   }
-  if(!containedShower) {
-    //Check if charged 
-    if(charge != 0) {
-      double rad_curvature = 100*transverse_mom/(0.3*B_field); //p = 0.3*B*r where p in GeV/c, B in T, r in m (*100 to convert to cm)
-      double theta_xT = atan(p_x/transverse_mom); //helix pitch angle
-      double pitch = std::abs(2*M_PI*rad_curvature*tan(theta_xT)); //distance between two turns of a helix in cm
-      double tan_theta = tan(theta_xT);
+  double theta_start = atan2(ystart - centre_circle_y, zstart - centre_circle_z);
 
-      //Find centre of circular path
-      double centre_circle_y;
-      double centre_circle_z;
-      double L_yz; //length of curved track in y-z plane
-      double theta_spanned = 0;
+  if (stops_in_tpc) { 
+    theta_spanned = std::abs(xstart - _MCPEndX->at(i_anapart))*2*M_PI/pitch; 
+  }
+  else { //Case where primary exits TPC
 
-      if (charge == 1) {
-        centre_circle_y = ystart + (rad_curvature*p_z/transverse_mom); //Note plus sign here as cross product gives F in direction of ( pz j - py k) F= q v x B
-        centre_circle_z = zstart - (rad_curvature*p_y/transverse_mom);
+    //Find Position where track leaves TPC. Intersection of two circles.
+    double m_const = (TPC_centre_z - centre_circle_z)/(TPC_centre_y-centre_circle_y); //gradient of line between two intersection points
+    double a_const = (TPCInstrumentedRadius*TPCInstrumentedRadius-rad_curvature*rad_curvature - (TPC_centre_y*TPC_centre_y - centre_circle_y*centre_circle_y)-(TPC_centre_z*TPC_centre_z - centre_circle_z*centre_circle_z))/(2*(centre_circle_y-TPC_centre_y));
+    double quadraticformula_b = -(2*m_const*(a_const - TPC_centre_y) + 2*TPC_centre_z);
+    double quadraticformula_a = m_const*m_const + 1;
+    double quadraticformula_c = (a_const - TPC_centre_y)*(a_const - TPC_centre_y) + TPC_centre_z*TPC_centre_z - TPCInstrumentedRadius*TPCInstrumentedRadius;
+
+
+    if(quadraticformula_b*quadraticformula_b - 4*quadraticformula_a*quadraticformula_c > 0){
+      double z_intersect_1 = (-quadraticformula_b + std::sqrt(quadraticformula_b*quadraticformula_b - 4*quadraticformula_a*quadraticformula_c))/(2*quadraticformula_a);
+      double y_intersect_1 = -m_const*z_intersect_1 + a_const;
+      double z_intersect_2 = (-quadraticformula_b - std::sqrt(quadraticformula_b*quadraticformula_b - 4*quadraticformula_a*quadraticformula_c))/(2*quadraticformula_a);
+      double y_intersect_2 = -m_const*z_intersect_2 + a_const;
+
+      //Find angle wrt y in yz plane where track starts and where it intersects TPC boundary
+      double theta_1 = atan2(y_intersect_1 - centre_circle_y, z_intersect_1 - centre_circle_z);
+      double theta_2 = atan2(y_intersect_2 - centre_circle_y, z_intersect_2 - centre_circle_z);
+
+      double theta_diff_1, theta_diff_2;
+      //Lorentz force - if positively charged, theta is increasing and vice versa
+      if(charge == 1){ 
+        theta_diff_1 = (theta_1 > theta_start) ? (theta_1 - theta_start) : (2*M_PI + theta_1 - theta_start);
+        theta_diff_2 = (theta_2 > theta_start) ? (theta_2 - theta_start) : (2*M_PI + theta_2 - theta_start);
       }
       else {
-        centre_circle_y = ystart - (rad_curvature*p_z/transverse_mom); //Note minus sign here as cross product gives F in direction of ( -pz j + py k)
-        centre_circle_z = zstart + (rad_curvature*p_y/transverse_mom);
+        theta_diff_1 = (theta_1 < theta_start) ? (theta_start - theta_1) : (2*M_PI + theta_start - theta_1);
+        theta_diff_2 = (theta_2 < theta_start) ? (theta_start - theta_2) : (2*M_PI + theta_start - theta_2);
       }
-      double theta_start = atan2(ystart - centre_circle_y, zstart - centre_circle_z);
 
-      if (stops_in_tpc) { //Case where primary stops in TPC but secondaries do not
-        theta_spanned = std::abs(xstart - _MCPEndX->at(i_anaprim))*2*M_PI/pitch; 
+      if(theta_diff_1 < theta_diff_2){
+        theta_spanned = theta_diff_1;
       }
-      else { //Case where primary exits TPC
-
-        //Find Position where track leaves TPC. Intersection of two circles.
-        double m_const = (TPC_centre_z - centre_circle_z)/(TPC_centre_y-centre_circle_y); //gradient of line between two intersection points
-        double a_const = (TPCInstrumentedRadius*TPCInstrumentedRadius-rad_curvature*rad_curvature - (TPC_centre_y*TPC_centre_y - centre_circle_y*centre_circle_y)-(TPC_centre_z*TPC_centre_z - centre_circle_z*centre_circle_z))/(2*(centre_circle_y-TPC_centre_y));
-        double quadraticformula_b = -(2*m_const*(a_const - TPC_centre_y) + 2*TPC_centre_z);
-        double quadraticformula_a = m_const*m_const + 1;
-        double quadraticformula_c = (a_const - TPC_centre_y)*(a_const - TPC_centre_y) + TPC_centre_z*TPC_centre_z - TPCInstrumentedRadius*TPCInstrumentedRadius;
-
-
-        if(quadraticformula_b*quadraticformula_b - 4*quadraticformula_a*quadraticformula_c > 0){
-          double z_intersect_1 = (-quadraticformula_b + std::sqrt(quadraticformula_b*quadraticformula_b - 4*quadraticformula_a*quadraticformula_c))/(2*quadraticformula_a);
-          double y_intersect_1 = -m_const*z_intersect_1 + a_const;
-          double z_intersect_2 = (-quadraticformula_b - std::sqrt(quadraticformula_b*quadraticformula_b - 4*quadraticformula_a*quadraticformula_c))/(2*quadraticformula_a);
-          double y_intersect_2 = -m_const*z_intersect_2 + a_const;
-
-          //Find angle wrt y in yz plane where track starts and where it intersects TPC boundary
-          double theta_1 = atan2(y_intersect_1 - centre_circle_y, z_intersect_1 - centre_circle_z);
-          double theta_2 = atan2(y_intersect_2 - centre_circle_y, z_intersect_2 - centre_circle_z);
-
-          double theta_diff_1, theta_diff_2;
-          //Lorentz force - if positively charged, theta is increasing and vice versa
-          if(charge == 1){ 
-            theta_diff_1 = (theta_1 > theta_start) ? (theta_1 - theta_start) : (2*M_PI + theta_1 - theta_start);
-            theta_diff_2 = (theta_2 > theta_start) ? (theta_2 - theta_start) : (2*M_PI + theta_2 - theta_start);
-          }
-          else {
-            theta_diff_1 = (theta_1 < theta_start) ? (theta_start - theta_1) : (2*M_PI + theta_start - theta_1);
-            theta_diff_2 = (theta_2 < theta_start) ? (theta_start - theta_2) : (2*M_PI + theta_start - theta_2);
-          }
-
-          if(theta_diff_1 < theta_diff_2){
-            theta_spanned = theta_diff_1;
-          }
-          else {
-            theta_spanned = theta_diff_2;
-          }
-
-          double x_end = (p_x > 0) ? (xstart + theta_spanned*pitch/(2*M_PI)) : (xstart - theta_spanned*pitch/(2*M_PI));
-
-          //Check if escapes through end caps
-          if (x_end > TPC_centre_x + TPCInstrumentedLength) {
-            theta_spanned = (TPC_centre_x + TPCInstrumentedLength - xstart)*2*M_PI/pitch;
-          }
-          else if (x_end < TPC_centre_x - TPCInstrumentedLength) { 
-            theta_spanned = (xstart - (TPC_centre_x - TPCInstrumentedLength))*2*M_PI/pitch;
-          }
-        }
-        else { //Radius of curvature small enough to spiral within TPC (must leave through end caps)
-          if (p_x > 0) theta_spanned = (TPC_centre_x + TPCInstrumentedLength - xstart)*2*M_PI/pitch;
-          else theta_spanned = (xstart - (TPC_centre_x - TPCInstrumentedLength))*2*M_PI/pitch;
-        }
+      else {
+        theta_spanned = theta_diff_2;
       }
-      double nturns = theta_spanned/(2*M_PI);
-      L_yz = rad_curvature*theta_spanned;
 
-      double length_track_x = (theta_spanned/(2*M_PI))*pitch;
-      double bg = 0; 
-      double gamma = 0;
-      double beta = CalcBeta(mom_tot, bg, gamma, mass);
+      double x_end = (p_x > 0) ? (xstart + theta_spanned*pitch/(2*M_PI)) : (xstart - theta_spanned*pitch/(2*M_PI));
 
-      double nhits = FindNHits(pixel_spacing_cm, centre_circle_y, centre_circle_z, rad_curvature, theta_start, theta_spanned, charge);
-      if (nturns > 1) nhits *= nturns;
-
-      double sigmax = (drift_velocity/100)*(1/(adc_sampling_frequency));
-      double sigmax_frac = sigmax/(std::abs(length_track_x)/100);
-      double sigmayz = (spatial_resolution/(1000)); //needs to be in m
-      double momres_yz = transverse_mom*(std::sqrt(720/(nhits+4)) * (sigmayz*transverse_mom/(0.3*B_field*(L_yz/100)*(L_yz/100)))
-          * std::sqrt(1-(1/21)*(L_yz/rad_curvature)*(L_yz/rad_curvature)));
-      double momres_ms = transverse_mom*(0.016/(0.3*B_field*(L_yz/100)*cos(theta_xT)*beta))*std::sqrt(L_yz/X0);
-      double momres_tottransverse = std::sqrt(momres_yz*momres_yz + momres_ms*momres_ms)/transverse_mom;
-      double sigma_theta = (cos(theta_xT)*cos(theta_xT) * (pitch/(2*M_PI*rad_curvature)) *
-          std::sqrt(sigmax_frac*sigmax_frac + momres_tottransverse*momres_tottransverse));
-      double momres_frac = std::sqrt(momres_tottransverse*momres_tottransverse + (sigma_theta*tan_theta)*(sigma_theta*tan_theta));
-
-      duneobj->particle_nturns->back() = nturns;
-      duneobj->particle_nhits->back() = nhits;
-      duneobj->particle_tracklengthyz->back() = L_yz;
-      duneobj->particle_momresms->back() = momres_ms/transverse_mom;
-      duneobj->particle_momresyz->back() = momres_yz/transverse_mom;
-      duneobj->particle_momresx->back() = std::abs(sigma_theta*tan_theta);
-
-      if(momres_frac > momentum_resolution_threshold){
-        isAccepted = false;
+      //Check if escapes through end caps
+      if (x_end > TPC_centre_x + TPCInstrumentedLength) {
+        theta_spanned = (TPC_centre_x + TPCInstrumentedLength - xstart)*2*M_PI/pitch;
+      }
+      else if (x_end < TPC_centre_x - TPCInstrumentedLength) { 
+        theta_spanned = (xstart - (TPC_centre_x - TPCInstrumentedLength))*2*M_PI/pitch;
       }
     }
-    else{ 
-      //Neutral particle which is not contained - reject
-      isAccepted = false;
+    else { //Radius of curvature small enough to spiral within TPC (must leave through end caps)
+      if (p_x > 0) theta_spanned = (TPC_centre_x + TPCInstrumentedLength - xstart)*2*M_PI/pitch;
+      else theta_spanned = (xstart - (TPC_centre_x - TPCInstrumentedLength))*2*M_PI/pitch;
     }
   }
-  if (isAccepted == false) {duneobj->particle_isaccepted->back() = false;}
-  return isAccepted;
+  double nturns = theta_spanned/(2*M_PI);
+  L_yz = rad_curvature*theta_spanned;
+
+  double length_track_x = (theta_spanned/(2*M_PI))*pitch;
+  double bg = 0; 
+  double gamma = 0;
+  double beta = CalcBeta(mom_tot, bg, gamma, mass);
+
+  double nhits = FindNHits(pixel_spacing_cm, centre_circle_y, centre_circle_z, rad_curvature, theta_start, theta_spanned, charge);
+  if (nturns > 1) nhits *= nturns;
+
+  double sigmax = (drift_velocity/100)*(1/(adc_sampling_frequency));
+  double sigmax_frac = sigmax/(std::abs(length_track_x)/100);
+  double sigmayz = (spatial_resolution/(1000)); //needs to be in m
+  double momres_yz = transverse_mom*(std::sqrt(720/(nhits+4)) * (sigmayz*transverse_mom/(0.3*B_field*(L_yz/100)*(L_yz/100)))
+    * std::sqrt(1-(1/21)*(L_yz/rad_curvature)*(L_yz/rad_curvature)));
+  double momres_ms = transverse_mom*(0.016/(0.3*B_field*(L_yz/100)*cos(theta_xT)*beta))*std::sqrt(L_yz/X0);
+  double momres_tottransverse = std::sqrt(momres_yz*momres_yz + momres_ms*momres_ms)/transverse_mom;
+  double sigma_theta = (cos(theta_xT)*cos(theta_xT) * (pitch/(2*M_PI*rad_curvature)) *
+    std::sqrt(sigmax_frac*sigmax_frac + momres_tottransverse*momres_tottransverse));
+  double momres_frac = std::sqrt(momres_tottransverse*momres_tottransverse + (sigma_theta*tan_theta)*(sigma_theta*tan_theta));
+
+  if (_MotherTrkID->at(i_anapart) == 0) {
+    duneobj->particle_nturns->back() = nturns;
+    duneobj->particle_nhits->back() = nhits;
+    duneobj->particle_tracklengthyz->back() = L_yz;
+    duneobj->particle_momresms->back() = momres_ms/transverse_mom;
+    duneobj->particle_momresyz->back() = momres_yz/transverse_mom;
+    duneobj->particle_momresx->back() = std::abs(sigma_theta*tan_theta);
+  }
+
+  if(momres_frac > momentum_resolution_threshold) return false;
+  return true;
 }
 
 int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
@@ -560,10 +505,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
   duneobj->pot_s = pot/(downsampling*1e21);
   duneobj->nEvents = static_cast<int>(std::round(downsampling*static_cast<double>(_data->GetEntries())));
 
-  deposit_outputs.open("ECal_deposits.txt");
-  if (!deposit_outputs.is_open()) {
-    std::cerr << "Failed to open output file!" << std::endl;
-  }
   // allocate memory for dunendgarmc variables
   duneobj->rw_yrec = new double[duneobj->nEvents];
   duneobj->rw_elep_reco = new double[duneobj->nEvents];
@@ -629,7 +570,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
   duneobj->particle_bangle = new std::vector<double>; duneobj->particle_bangle->reserve(7*duneobj->nEvents);
   duneobj->particle_beamangle = new std::vector<double>; duneobj->particle_beamangle->reserve(7*duneobj->nEvents);
   duneobj->particle_isaccepted = new std::vector<bool>; duneobj->particle_isaccepted->reserve(7*duneobj->nEvents);
-  duneobj->particle_iscontained = new std::vector<bool>; duneobj->particle_iscontained->reserve(7*duneobj->nEvents);
+  duneobj->particle_iscurvatureresolved = new std::vector<bool>; duneobj->particle_iscurvatureresolved->reserve(7*duneobj->nEvents);
   duneobj->particle_isdecayed = new std::vector<bool>; duneobj->particle_isdecayed->reserve(7*duneobj->nEvents);
   duneobj->particle_isstoppedintpc = new std::vector<bool>; duneobj->particle_isstoppedintpc->reserve(7*duneobj->nEvents); 
   duneobj->particle_isstoppedinecal = new std::vector<bool>; duneobj->particle_isstoppedinecal->reserve(7*duneobj->nEvents); 
@@ -650,16 +591,9 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
   duneobj->particle_momresyz = new std::vector<double>; duneobj->particle_momresyz->reserve(7*duneobj->nEvents);
   duneobj->particle_momresx = new std::vector<double>; duneobj->particle_momresx->reserve(7*duneobj->nEvents); 
   duneobj->particle_edepcrit = new std::vector<double>; duneobj->particle_edepcrit->reserve(7*duneobj->nEvents); 
-  duneobj->particle_escsecenergyfrac = new std::vector<double>; duneobj->particle_escsecenergyfrac->reserve(7*duneobj->nEvents); 
 
   int numCC = 0;
   int num_in_fdv = 0;
-
-  int numpi0 = 0;
-  int numpi0contained = 0;
-  int numpi0tpcdecay = 0;
-  int numpi0ecaldecay = 0;
-  int numpi0gapdecay = 0;
 
   double pixel_spacing_cm = pixel_spacing/10; //convert to cm
 
@@ -727,7 +661,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
       duneobj->rw_yrec[i_event] = static_cast<double>(0);
     }
     duneobj->rw_etru[i_event] = static_cast<double>(sr->mc.nu[0].E); // in GeV
-    if(std::isnan(sr->mc.nu[0].E)) MACH3LOG_INFO("Nan Enu...");
 
     duneobj->rw_isCC[i_event] = static_cast<int>(sr->mc.nu[0].iscc);
     duneobj->rw_nuPDGunosc[i_event] = sr->mc.nu[0].pdgorig;
@@ -743,86 +676,102 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
     duneobj->rw_vtx_y[i_event] = static_cast<double>(sr->mc.nu[0].vtx.y);
     duneobj->rw_vtx_z[i_event] = static_cast<double>(sr->mc.nu[0].vtx.z);
 
-    double muon_p2 = 0.;
-
-    std::unordered_map<int, std::vector<int>> prim_to_sec_ID;
-    std::unordered_map<int, int> sec_to_prim_ID;
+    // Deal with truth-level information 
+    std::unordered_map<int, std::vector<int>> mother_to_daughter_ID;
     std::unordered_map<int, size_t> ID_to_index;
-    std::unordered_map<int, std::vector<double>> primID_to_ECalDep;
+    std::unordered_map<int, std::vector<double>> ID_to_ECalDep;
+    std::vector<int> prim_IDs = {};
     const int tot_ecal_layers = 42;
-    std::vector<size_t> prim_indices = {};
     size_t n_ana_particles = _MCPTrkID->size();
 
-    //Loop through all particles in AnaTree
+    // Fill maps
     for (size_t i_anapart=0; i_anapart<n_ana_particles; i_anapart++) {
       int pdg = _PDG->at(i_anapart);
       if (pdg == 13) duneobj->ntruemuon[i_event]++;
 
-      //===== Handle the filling of prim_to_sec_ID map =====
       int secID = _MCPTrkID->at(i_anapart);
       int motherID = _MotherTrkID->at(i_anapart);
-
+      ID_to_ECalDep[secID] = std::vector<double>(tot_ecal_layers,0.);
       ID_to_index[secID] = i_anapart;
-
-      if (motherID != 0) { 
-        if (sec_to_prim_ID.find(motherID) != sec_to_prim_ID.end()) { //If mother is already stored as a secondary, find the mother's primary
-          int primID = sec_to_prim_ID[motherID];
-          sec_to_prim_ID[secID] = primID;
-          std::vector<int>& secvec = prim_to_sec_ID[primID];
-          secvec.push_back(secID);
-
-          if (prim_to_sec_ID.find(secID) != prim_to_sec_ID.end()) { //If secondary is stored as a primary, bring its secondaries along too
-            std::vector<int>& secsecvec = prim_to_sec_ID[secID];
-            secvec.insert(secvec.end(), secsecvec.begin(), secsecvec.end());
-            prim_to_sec_ID.erase(secID);
-
-            for (int& id : secsecvec) {
-              sec_to_prim_ID[id] = primID;
-            }
-          }
-        }
-        else { //Otherwise, use the mother
-          sec_to_prim_ID[secID] = motherID;
-          prim_to_sec_ID[motherID].push_back(secID);
-        }
-      }
-      else {
-        prim_to_sec_ID.insert({secID, {}}); //Inserts key for primary if it doesn't exist already
-        prim_indices.push_back(i_anapart);
-        primID_to_ECalDep[secID] = std::vector<double>(tot_ecal_layers,0.);
-      }
-      //====================================================
+      mother_to_daughter_ID[motherID].push_back(secID);
+      if (motherID == 0) prim_IDs.push_back(secID);
     }
 
-    //Fill map from primary ID to ECal deposited energy from shower
+    // Fill map from particle ID to ECal deposited energy
     for (size_t i_ecaldep=0; i_ecaldep<_SimHitTrkID->size(); i_ecaldep++) {
       int simhit_trkid = _SimHitTrkID->at(i_ecaldep);
       int simhit_layer = _SimHitLayer->at(i_ecaldep);
-      if (simhit_trkid <= 0) {
+      if (simhit_trkid <= 0 || simhit_layer <= 0) {
         continue;
       }
-      if (prim_to_sec_ID.find(simhit_trkid) == prim_to_sec_ID.end()) simhit_trkid = sec_to_prim_ID[simhit_trkid];
-      if (simhit_layer > 0) primID_to_ECalDep[simhit_trkid][simhit_layer-1] += _SimHitEnergy->at(i_ecaldep);
+      ID_to_ECalDep[simhit_trkid][simhit_layer-1] += _SimHitEnergy->at(i_ecaldep);
     }
 
+    double muon_p2 = 0.;
     bool isEventAccepted = true;
-    //Now can loop through primaries will full access to information from secondaries
-    for (size_t& i_anaprim : prim_indices) {
-      //Ignore neutrons and neutrinos (they will be accepted by default for now but will not appear on particle-level plots)
-      int pdg = _PDG->at(i_anaprim);
-      if(pdg == 2112 || std::abs(pdg) == 14 || std::abs(pdg) == 12 || std::abs(pdg) == 16) continue;
 
-      if (!IsParticleAccepted(duneobj, iSample, i_event, i_anaprim, pixel_spacing_cm, primID_to_ECalDep, prim_to_sec_ID, ID_to_index)) {
+    for (int& primID : prim_IDs) {
+      // Do not require the reconstruction of neutrons and neutrinos
+      size_t i_anaprim = ID_to_index[primID];
+      int pdg = _PDG->at(i_anaprim);
+      if (pdg == 2112 || std::abs(pdg) == 12 || std::abs(pdg) == 14 || std::abs(pdg) == 16) continue;
+
+      // Fill default values for particle-level parameters:
+      duneobj->particle_event->push_back(i_event);
+      duneobj->particle_pdg->push_back(M3::_BAD_INT_);
+      duneobj->particle_energy->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_momentum->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_endmomentum->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_transversemomentum->push_back(M3::_BAD_DOUBLE_); //momentum transverse to B-field
+      duneobj->particle_bangle->push_back(M3::_BAD_DOUBLE_); //angle to B-field
+      duneobj->particle_beamangle->push_back(M3::_BAD_DOUBLE_);
+
+      duneobj->particle_startx->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_startr2->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_endr->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_endx->push_back(M3::_BAD_DOUBLE_);
+
+      duneobj->particle_isaccepted->push_back(true); 
+      duneobj->particle_iscurvatureresolved->push_back(false);
+      duneobj->particle_isdecayed->push_back(false);
+      duneobj->particle_isstoppedingap->push_back(false);
+      duneobj->particle_isstoppedinbarrelgap->push_back(false);
+      duneobj->particle_isstoppedinendgap->push_back(false);
+      duneobj->particle_isstoppedinecal->push_back(false);
+      duneobj->particle_isstoppedinbarrel->push_back(false);
+      duneobj->particle_isstoppedinendcap->push_back(false);
+      duneobj->particle_isstoppedintpc->push_back(false);
+      duneobj->particle_isescaped->push_back(false);
+
+      duneobj->particle_momresms->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_momresyz->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_momresx->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_nturns->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_nhits->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_tracklengthyz->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_edepcrit->push_back(CalcEDepCrit(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers));
+
+      nparticlesinsample[iSample]++;
+
+      // Remove particles (and their descendants) from mother_to_daughter_ID who's momentum we get from curvature
+      if (CurvatureResolutionFilter(primID, mother_to_daughter_ID, ID_to_index, duneobj, pixel_spacing_cm)) {
+        duneobj->particle_iscurvatureresolved->back() = true;
+      }
+      // Find energy deposited by non-curvature-resolved particles in critical region of the calorimeter
+      double EDepCrit = CalcEDepCrit(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers);
+
+      if (EDepCrit > 0.002) {
         isEventAccepted = false;
+        duneobj->particle_isaccepted->back() = false;
       }
 
-      //Get primary muon information
+      // Get primary muon information
       if(pdg == 13) {
         duneobj->ntruemuonprim[i_event]++;
         double p_x = _MCPStartPX->at(i_anaprim);
         double p_y = _MCPStartPY->at(i_anaprim);
         double p_z = _MCPStartPZ->at(i_anaprim);
-        double p2 = p_x*p_x + p_y*p_y + p_z*p_z; 
+        double p2 = p_x*p_x + p_y*p_y + p_z*p_z;
         if (p2 > muon_p2) {
           muon_p2 = p2;
           double mass = MaCh3Utils::GetMassFromPDG(pdg);
@@ -831,19 +780,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
           duneobj->rw_lep_pZ[i_event] = p_z;
           duneobj->rw_elep_true[i_event] = std::sqrt(p2 + mass*mass) - mass;
         }
-      }
-
-      //Get pi0 information
-      if (pdg == 111 && duneobj->in_fdv[i_event] && duneobj->rw_etru[i_event]>=1 && duneobj->rw_etru[i_event]<5 && duneobj->rw_isCC[i_event]) {
-        numpi0++;
-        if (!duneobj->particle_isescaped->back()) {
-          numpi0contained++;
-          if (duneobj->particle_isdecayed->back()) {
-            if (duneobj->particle_isstoppedintpc->back()) numpi0tpcdecay++;
-            if (duneobj->particle_isstoppedingap->back()) numpi0gapdecay++;
-            if (duneobj->particle_isstoppedinecal->back()) numpi0ecaldecay++;
-          }
-        } 
       }
     }
 
@@ -891,10 +827,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
     if(duneobj->rw_isCC[i_event] == 1) numCC++;
   }
   MACH3LOG_INFO("nEvents = {}, numCC = {}, numFDV = {}", duneobj->nEvents, numCC, num_in_fdv);
-  MACH3LOG_INFO("numpi0 = {}, contained = {}, tpcdecay = {}, ecaldecay = {}, gapdecay = {}",
-      numpi0, numpi0contained, numpi0tpcdecay, numpi0ecaldecay, numpi0gapdecay);
 
-  deposit_outputs.close();
   _sampleFile->Close();
   _sampleFile_geant->Close();
   return duneobj->nEvents;
@@ -980,8 +913,6 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
       return &dunendgarmcSamples[iSample].particle_startx->at(iEvent);
     case kParticle_EDepCrit:
       return &dunendgarmcSamples[iSample].particle_edepcrit->at(iEvent);
-    case kParticle_EscSecEnergyFrac:
-      return &dunendgarmcSamples[iSample].particle_escsecenergyfrac->at(iEvent);
     default:
       MACH3LOG_ERROR("Did not recognise Kinematic Parameter {}", static_cast<int>(KinematicParameter));
       throw MaCh3Exception(__FILE__, __LINE__);
@@ -1025,8 +956,8 @@ double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, i
       return static_cast<double>(dunendgarmcSamples[iSample].particle_event->at(iEvent));
     case kParticle_IsAccepted:
       return static_cast<double>(dunendgarmcSamples[iSample].particle_isaccepted->at(iEvent));
-    case kParticle_IsContained:
-      return static_cast<double>(dunendgarmcSamples[iSample].particle_iscontained->at(iEvent));
+    case kParticle_IsCurvatureResolved:
+      return static_cast<double>(dunendgarmcSamples[iSample].particle_iscurvatureresolved->at(iEvent));
     case kParticle_IsDecayed:
       return static_cast<double>(dunendgarmcSamples[iSample].particle_isdecayed->at(iEvent));
     case kParticle_PDG:
@@ -1187,7 +1118,7 @@ TH1* SampleHandlerBeamNDGAr::Get1DParticleVarHist(std::string ProjectionVar_Str,
   //Loop over all primary particles
   for (int iSample=0;iSample<GetNMCSamples();iSample++) {
     for (int iParticle=0;iParticle<nparticlesinsample[iSample];iParticle++) {
-      int event = static_cast<int>(std::round(ReturnKinematicParameter("Particle_Event", iSample, iParticle)));
+      int event = static_cast<int>(ReturnKinematicParameter("Particle_Event", iSample, iParticle));
       if (IsParticleSelected(iSample,event,iParticle)) {
         double Weight = GetEventWeight(iSample,event);
         if (WeightStyle==1) {
@@ -1241,7 +1172,7 @@ TH2* SampleHandlerBeamNDGAr::Get2DParticleVarHist(std::string ProjectionVar_StrX
   //JM Loop over all particles
   for (int iSample=0;iSample<GetNMCSamples();iSample++) {
     for (int iParticle=0;iParticle<nparticlesinsample[iSample];iParticle++) {
-      int event = static_cast<int>(std::round(ReturnKinematicParameter("Particle_Event", iSample, iParticle)));
+      int event = static_cast<int>(ReturnKinematicParameter("Particle_Event", iSample, iParticle));
       if (IsParticleSelected(iSample,event,iParticle)) {
         double Weight = GetEventWeight(iSample,event);
         if (WeightStyle==1) {
