@@ -312,13 +312,14 @@ bool SampleHandlerBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
     //Ignore secondary nuclei
     if (sec_pdg > 1000000000) {
       if ((stops_in_tpc || stops_in_ecal) && sec_stops_beyond_ecal) {
+        escaped_secondaries = true;
         duneobj->particle_n_esc_sec_nuc->back() += 1.;  
       }
       continue;
     }
     
     //Determine criteria for possible rejection based on secondaries
-    if ((stops_in_tpc || stops_in_ecal) && sec_stops_beyond_ecal && sec_charge != 0) {
+    if ((stops_in_tpc || stops_in_ecal) && sec_stops_beyond_ecal && sec_charge != 0) { //COMMENT ALERT
       escaped_secondaries = true;
 
       double sec_px = _MCPEndPX->at(i_anasec);
@@ -334,7 +335,7 @@ bool SampleHandlerBeamNDGAr::IsParticleAccepted(dunemc_base *duneobj, int i_samp
     }
   }
   //Not to worry if escaped secondaries combined have <X% energy of the primary
-  if (duneobj->particle_esc_sec_energy_frac->back() < 0.1) escaped_secondaries = false;
+  if (duneobj->particle_esc_sec_energy_frac->back() < 0.05) escaped_secondaries = false;
 
   //If primary particle or its secondaries are not stopped in the tpc or ecal 
   if((!stops_in_tpc && !stops_in_ecal) || escaped_secondaries) {

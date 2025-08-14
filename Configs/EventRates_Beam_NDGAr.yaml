@@ -1,5 +1,5 @@
 General:
-  OutputFile: "Outputs/projections_outputs/Projections_CC_BField0_5_FidRad_160_FidLen_209_InstRad_249_45_InstLen_259_WithECal_mustcontainchargedsecondaries_10percthreshold.root"
+  OutputFile: "Outputs/projections_outputs/Projections_CC_BField0_5_FidRad_160_FidLen_209_InstRad_249_45_InstLen_259_WithECal_mustcontainallsecondaries_5percthershold.root"
   #OutputFile: "Outputs/projections_outputs/Projections_CC_BField0_5_FidRad_160_FidLen_209_InstRad_249_45_InstLen_259_WithECal.root"
   #OutputFile: "outputs/testing.root"
   DUNESamples: ["Configs/Samples/SamplePDFDune_NDGAr_FHC_numuselec.yaml"]	
