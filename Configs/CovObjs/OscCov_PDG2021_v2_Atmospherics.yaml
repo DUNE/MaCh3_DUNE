@@ -58,7 +58,7 @@ Systematics:
       PreFitValue: 0.0220
     # If trained with non-flat prior, change to the order of 1.0
     StepScale:
-      MCMC: 20.0
+      MCMC: 1.0
     Type: Osc
 
 
@@ -96,7 +96,7 @@ Systematics:
       Generated: 0.002536
       PreFitValue: 0.002536
     StepScale:
-      MCMC: 5.0
+      MCMC: 1.0
     Type: Osc
 
 
@@ -116,7 +116,7 @@ Systematics:
       Generated: -1.601
       PreFitValue: -1.601
     StepScale:
-      MCMC: 0.05
+      MCMC: 1.0
     Type: Osc
 
 
@@ -126,7 +126,7 @@ Systematics:
       ParameterName: ProdH
 
 
-    SampleNames: ["FD_*", "ATM"]
+    SampleNames: ["ATM"]
     Error: 1.0
     FlatPrior: true
     ParameterBounds: [0, 999]
@@ -135,5 +135,42 @@ Systematics:
       Generated: 25
       PreFitValue: 25
     StepScale:
-      MCMC: 5.0
+      MCMC: 1.0
     Type: Osc
+
+- Systematic:
+    Names:
+      FancyName: baseline
+      ParameterName: baseline
+
+
+    SampleNames: ["FD_*"]
+    Error: 0.01
+    FlatPrior: true
+    ParameterBounds: [0, 9999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 1284.9
+      PreFitValue: 1284.9
+    StepScale:
+      MCMC: 1.0
+    Type: Oscillation
+
+
+- Systematic:
+    Names:
+      FancyName: density
+      ParameterName: density
+
+
+    SampleNames: ["FD_*"]
+    Error: 0.01
+    FlatPrior: true
+    ParameterBounds: [0, 999]
+    ParameterGroup: Osc
+    ParameterValues:
+      Generated: 2.6
+      PreFitValue: 2.6
+    StepScale:
+      MCMC: 1.0
+    Type: Oscillation

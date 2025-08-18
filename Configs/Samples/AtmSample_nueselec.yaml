@@ -1,5 +1,5 @@
 ---
-SampleTitle: "nueselec"
+SampleTitle: "Atm_nueselec"
 SampleType: "Atm"
 MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
 SampleName: "ATM"

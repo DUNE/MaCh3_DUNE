@@ -117,6 +117,8 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<SampleHandlerFD*> &D
     }
   }
 
+  osc->SetStepScale(FitManager->raw()["General"]["Systematics"]["OscStepScale"].as<double>());
+
   MACH3LOG_INFO("Osc cov setup");
   MACH3LOG_INFO("------------------------------");
 

@@ -2,7 +2,9 @@
 SampleTitle: "FHC_numu"
 SampleType: "BeamFD"
 
-POT: 1.3628319e+23
+ExposureToPOT: 4.05e20	#Equal to 9.72e21 POT / 24 ktMWyr
+Exposure: 24.0 # In ktMWyr
+
 MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
 SampleName: "FD_FHC_numu"
 

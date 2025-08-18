@@ -2,13 +2,22 @@
 General:
   OutputFile: "DuneEventRates.root"
 
-  DUNESamples: ["Configs/Samples/AtmSample_numuselec.yaml"]
-
+  DUNESamples:
+#    - "Configs/Samples/AtmSample_numuselec.yaml"
+#    - "Configs/Samples/AtmSample_nueselec.yaml"
+    - "Configs/Samples/SamplePDFDune_FHC_numuselec.yaml"
+    - "Configs/Samples/SamplePDFDune_FHC_nueselec.yaml"
+    - "Configs/Samples/SamplePDFDune_RHC_numuselec.yaml"
+    - "Configs/Samples/SamplePDFDune_RHC_nueselec.yaml"
+#    - "Configs/Samples/SamplePDFDuneND_FHC_CCnumuselec.yaml"
+#    - "Configs/Samples/SamplePDFDuneND_RHC_CCnumuselec.yaml"
+    
   # Nu-FIT
   # OscillationParameters: [0.310, 0.582, 0.224, 7.39E-5, 2.5254E-3, -2.498, 25]
 
   # Nu-FIT 5.2 w. SK atm
-  OscillationParameters: [0.303, 0.452, 0.0223, 7.41E-5, 2.51E-3, -2.233, 25]
+  #OscillationParameters: [0.303, 0.452, 0.0223, 7.41E-5, 2.51E-3, -2.233, 25, 1284.9, 2.848]
+  OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 25, 1284.9, 2.848]
 
   # T2K-like best-fit
   # OscillationParameters: [0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 25]
@@ -21,8 +30,12 @@ General:
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.1
     XsecAtGen: false
+
     OscCovFile: ["Configs/CovObjs/OscCov_PDG2021_v2_Atmospherics.yaml"]
     OscCovName: "osc_cov"
+    OscStepScale: 0.1
+
+    NDCovFile: "Inputs/det_sys_cov.root"
 
   Fitter:
     FitTestLikelihood: false

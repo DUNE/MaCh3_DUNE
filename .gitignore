@@ -12,3 +12,8 @@ Doc
 Inputs/Atmospherics/CAFs
 nohup.out
 output*.txt
+
+Inputs/DUNE_CAF_files
+Inputs/DUNE_ND_CAF_files
+Inputs/DUNE_ND_spline_files
+Inputs/DUNE_spline_files
