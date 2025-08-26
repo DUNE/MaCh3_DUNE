@@ -1,5 +1,5 @@
 General:
-  OutputFile: "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/Chain_testing/adaptive_fit_nonefixed_27thmau.root"
+  OutputFile: "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/Chain_testing/adap"
   DUNESamples:
      - "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/Samples/OA_samples_subsamples/0m_CC_q0q3.yaml"
    
@@ -20,7 +20,6 @@ General:
   MCMC:
     NSteps: 2000000 #50000
     AutoSave: 10000
-    BurnInSteps: 0
   Output:
     FileName: "TestEventRates_fit_10000.root"
     OUTPUTNAME: "TestLLH__fit_10000.root"
@@ -44,15 +43,3 @@ AdaptionOptions:
       DoAdaption: True
       MatrixBlocks: []
       UseExternalMatrix: False
-  
-Predictive:
-  PosteriorFiles: "Chain_testing/Enurec_Elep_test_largerxsecscale4.root"
-  Ntoy: 1000
-  ThrowDetCov: true
-  FixXSec: false
-  FixFlux: false
-  VarNames: ["RecoNeutrinoEnergy", "q0", "q3", "ELepRec"  ]
-  
-NDOptions:
-  PlotByMode: false
-

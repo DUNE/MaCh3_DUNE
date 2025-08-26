@@ -99,8 +99,17 @@ int main(int argc, char *argv[]) {
 
   std::vector<TH1D *> DUNEHists;
   for (auto Sample : DUNEPdfs) {
+
+    // inside the loop over samples
+    xsec->setParameters();
+    Sample->reweight(); 
     TH1D *Asimov_1D = (TH1D*)Sample->get1DHist()->Clone((Sample->GetTitle()+"_asimov").c_str());
     //Sample->addData(Sample->get1DHist()->Clone((Sample->GetTitle() + "_asimovdata").c_str()));
+    std::cout << Sample->GetTitle() 
+              << " Asimov integral = " << Asimov_1D->Integral() 
+              << " entries = " << Asimov_1D->GetEntries() << std::endl;
+
+
     Sample -> addData(Asimov_1D); 
     Sample->reweight();
     xsec->setParameters();
@@ -114,6 +123,15 @@ int main(int argc, char *argv[]) {
     std::cout<<"current value  = " << current_value << std::endl; 
     Sample->reweight();
 
+      /*
+     if (Sample->GetNDim() == 1) {
+       auto myhist2 = (TH1D*)Sample->get1DHist()->Clone((Sample->GetTitle()+"_draw").c_str());
+        myhist2->Draw("HIST");
+        gc1->Print("GenericBinTest.pdf");
+        gc1->Print(PrismFileName.c_str());
+        DUNEHists.push_back(myhist2);
+      }*/
+
 
     if (Sample->generic_binning.GetNDimensions()) {
 
@@ -123,6 +141,7 @@ int main(int argc, char *argv[]) {
       gc1->Print("GenericBinTest.pdf");
       gc1->Print(PrismFileName.c_str());
 
+     
       if (Sample->generic_binning.GetNDimensions() == 2) {
         auto myhist2 = GetGenericBinningTH2(*Sample, "myhist2");
         myhist2->Draw("COLZ");

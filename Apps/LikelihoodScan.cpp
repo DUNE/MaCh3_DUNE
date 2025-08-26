@@ -10,6 +10,7 @@
 #include <TRint.h>
 #include <TLegend.h>
 #include <TColor.h>
+#include <TMarker.h>
 #include <TMath.h>
 
 #include "Samples/MaCh3DUNEFactory.h"
@@ -20,8 +21,8 @@ int main(int argc, char * argv[]) {
   auto FitManager = MaCh3ManagerFactory(argc, argv);
 
   // 1D scan on by default, and 2D off
-  const bool do_1d_llhscan = GetFromManager(FitManager->raw()["General"]["1DLLHScan"], true);
-  const bool do_2d_llhscan = GetFromManager(FitManager->raw()["General"]["2DLLHScan"], false);
+  const bool do_1d_llhscan = false;  //GetFromManager(FitManager->raw()["General"]["1DLLHScan"], true);
+  const bool do_2d_llhscan =  true; //GetFromManager(FitManager->raw()["General"]["2DLLHScan"], false);
 
   if (!do_1d_llhscan && !do_2d_llhscan) {
     MACH3LOG_ERROR("Neither 1D or 2D llhscan enabled");
@@ -30,9 +31,9 @@ int main(int argc, char * argv[]) {
 
   //###############################################################################################################################
   //Create samplePDFFD objects
-  
+
   ParameterHandlerGeneric* xsec = nullptr;
-  
+
   std::vector<SampleHandlerFD*> DUNEPdfs;
   MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
 
@@ -54,15 +55,15 @@ int main(int argc, char * argv[]) {
   auto MaCh3Fitter = MaCh3FitterFactory(FitManager.get());
 
   //###############################################################################################################################
-  //Lets benefit from the core code utilities 
-  
+  //Lets benefit from the core code utilities
+
   //Add samples to FitterBase
   for(auto Sample : DUNEPdfs){
     MaCh3Fitter->AddSampleHandler(Sample);
   }
 
   MaCh3Fitter->AddSystObj(xsec);
-  
+
   if (do_1d_llhscan) {
     MaCh3Fitter->RunLLHScan();
   }

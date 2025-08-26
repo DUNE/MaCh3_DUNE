@@ -444,6 +444,8 @@ Double_t _Ehad_veto;
   _data->GetEntry(0);
   bool need_global_bin_numbers = (XVarStr == "global_bin_number");
   //FILL DUNE STRUCT
+
+  int conditionCounter = 0;
   for (int i = 0; i < duneobj->nEvents; ++i) { // Loop through tree
     
     _data->GetEntry(i);
@@ -462,7 +464,8 @@ Double_t _Ehad_veto;
     duneobj->rw_cvnnue_shifted[i] = (_cvnnue);
     double el = 0.0;
 
-    duneobj->rw_erec[i] = (_erec);
+    duneobj->rw_erec[i] = (_erec); //------------------------------------original version!!
+    
     duneobj->rw_erec_shifted[i] = (_erec_nue); 
     duneobj->rw_yrec[i] = ((_erec -_Elep_reco)/_erec);
 
@@ -502,10 +505,19 @@ Double_t _Ehad_veto;
     ///////////EHadAv = eP + ePip + ePim +ePi0 + eOther + (nipi0*0.1349)
     double eHad_truth =  _eP + _ePip + _ePim + _ePi0 + _eOther + (_nipi0 *0.1349); 
     duneobj->eHad_av[i]= eHad_truth;
+    //std::cout << "eHad_truth = " << eHad_truth << std::endl;
     //std::cout << "eHad_av = " << _eP + _ePip + _ePim + _ePi0 + _eOther + (_nipi0 *0.1349) << std::endl;
+    //duneobj->rw_erec[i] = _Elep_reco + eHad_truth;//////////////////////new test for stephen and laura :)
+
     
 
-    duneobj->rw_erec_lep[i] = (_Elep_reco); 
+    //std::cout << "Original Enu rec = rw_erec = " <<  (_erec) << std::endl;
+    //std::cout << "Enu rec = _Elep_reco + _erec_had = " << _Elep_reco << " + " << eHad_truth << " = " << (_Elep_reco + eHad_truth) << std::endl;
+
+    
+
+
+   
     duneobj->rw_erec_had[i] = (_erec - _Elep_reco);
     duneobj->enu_proxy_minus_enutrue[i] = (_LepE) + eHad_truth - _ev;
     //std::cout << "         _LepE  =  "  << _LepE << std::endl;
@@ -515,7 +527,25 @@ Double_t _Ehad_veto;
     //std::cout<< "yrec[i] = " << ((_erec -_Elep_reco)/_erec) << std::endl;
     //std::cout<< "erec_proxy_minus_enu[i] = " <<  (_Elep_reco) + eHad_truth - _ev << std::endl;
     duneobj->isNC[i] = _isNC;
+   
+    /*
+    if(_Elep_reco > 1.0 * _erec ){
+      //conditionCounter++;
+      std::cout << "condition _Elep_reco > 1.0 * _erec is satisfied..." << std::endl; 
+      std::cout<< "Original Enu. rec = " << _erec << std::endl;
+      std::cout<< "Erec lep.  = " << _Elep_reco << std::endl;
+      std::cout<< "Ehad av (truth Ehad = )  = " << eHad_truth << std::endl;
+    }
+    */
+    if(_Elep_reco != 0.0 ){
+       duneobj->rw_erec_lep[i] = (_Elep_reco);
+    }
+    
 
+
+    
+
+    //std::cout<< "Erec lep.  = " << _Elep_reco << std::endl;
     
     duneobj->rw_eRecoP[i] = (_eRecoP); 
     duneobj->rw_eRecoPip[i] = (_eRecoPip); 
@@ -523,7 +553,7 @@ Double_t _Ehad_veto;
     duneobj->rw_eRecoPi0[i] = (_eRecoPi0); 
     duneobj->rw_eRecoN[i] = (_eRecoN); 
     
-    duneobj->rw_LepE[i] = (_LepE); 
+    duneobj->rw_LepE[i] =(_LepE); 
     duneobj->rw_eP[i] = (_eP); 
     duneobj->rw_ePip[i] = (_ePip); 
     duneobj->rw_ePim[i] = (_ePim); 
@@ -605,6 +635,9 @@ Double_t _Ehad_veto;
       duneobj->global_bin_number[i] = GetGenericBinningGlobalBinNumber(iSample, i);
     } 
   }
+
+  std::cout << "Condition was satisfied " << conditionCounter << " times." << std::endl;
+
   
   _sampleFile->Close();
   return duneobj->nEvents;
@@ -667,7 +700,7 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(int KinematicVariable, int 
     KinematicValue = dunemcSamples[iSample].theta_lep[iEvent];
     break;
   case kELepRec:
-    KinematicValue = dunemcSamples[iSample].rw_LepE[iEvent];
+    KinematicValue = dunemcSamples[iSample].rw_erec_lep[iEvent];
     break;
   case kEHadRec:
     KinematicValue = dunemcSamples[iSample].rw_erec_had[iEvent];
@@ -758,7 +791,7 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(std::string KinematicParame
     KinematicValue = dunemcSamples[iSample].theta_lep[iEvent];
     break;
   case kELepRec:
-    KinematicValue = dunemcSamples[iSample].rw_LepE[iEvent];
+    KinematicValue = dunemcSamples[iSample].rw_erec_lep[iEvent];
     break;
   case kEHadRec:
     KinematicValue = dunemcSamples[iSample].rw_erec_had[iEvent];
@@ -850,7 +883,7 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(std::string Ki
    KinematicValue = &(dunemcSamples[iSample].theta_lep[iEvent]);
    break;
  case kELepRec:
-   KinematicValue = &(dunemcSamples[iSample].rw_LepE[iEvent]);
+   KinematicValue = &(dunemcSamples[iSample].rw_erec_lep[iEvent]);
    break;
  case kEHadRec:
    KinematicValue = &(dunemcSamples[iSample].rw_erec_had[iEvent]);
@@ -941,7 +974,7 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(double Kinemat
     KinematicValue = &(dunemcSamples[iSample].theta_lep[iEvent]);
   break;
   case kELepRec:
-    KinematicValue = &(dunemcSamples[iSample].rw_LepE[iEvent]);
+    KinematicValue = &(dunemcSamples[iSample].rw_erec_lep[iEvent]);
   break;
   case kEHadRec:
     KinematicValue = &(dunemcSamples[iSample].rw_erec_had[iEvent]);

@@ -1,0 +1,51 @@
+# isrhc = "true for rhc or false for fhc"; #default to false
+# mtupleprefix = "common part at beginning of path to mtuple files"
+# mtuplesuffix = "common part at end of path to mtuple files"
+# splineprefix = "common part at beginning of path to spline files"
+# splinesuffix = "common part at endof path to spline files"
+# up_bnd = "upper boundary on erec" #deault to 30.
+# isfitqun = true for fitqun variable samples false otherwise #default to true
+#Add samples to the sample list as shown below
+SampleTitle: "ND_FHC_CCnumu"
+SampleType: "BeamFD"
+SampleName: "ND"
+MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes_GENIE.yaml"
+SelectionCuts:
+POT: 9.99328e+21 #9.99328e+18 #9.99328e+21 #9.99328e+6 #7.24e+21
+DUNESampleBools:
+  isFHC: 1
+  iselike: no
+SelectionCuts:
+Binning:
+   Axes:
+    - VarStr: TrueNeutrinoEnergy 
+      VarBins: [0., 0.9184172, 1.52906693, 2.02735711, 2.48656571, 2.94088911 ,3.4147533, 3.95701026, 4.6458231,6, 5.77918906, 10.0]
+      Title: E_{#nu}^{True} [GeV]
+    - VarStr: isRelativeEnubias
+      VarBins: [-1.00000000e+00, -6.82740596e-01, -6.05276014e-01, -5.55442110e-01, -5.17943332e-01, -4.87845628e-01, -4.62681974e-01, -4.41465559e-01, -4.22222765e-01, -4.05446996e-01, -3.90151441e-01, -3.76336102e-01, -3.63507572e-01, -3.52159257e-01, -3.41304348e-01, -3.30942843e-01, -3.21568149e-01, -3.12193454e-01, -3.03805569e-01, -2.95911089e-01, -2.88016610e-01, -2.81108940e-01, -2.73707865e-01, -2.67293600e-01, -2.60879336e-01, -2.54465071e-01, -2.48544211e-01, -2.43116756e-01, -2.37689301e-01, -2.32261847e-01, -2.26834392e-01, -2.21900342e-01, -2.16966292e-01, -2.12525647e-01, -2.08085002e-01, -2.03150953e-01, -1.99203713e-01, -1.94763068e-01, -1.90322423e-01, -1.86375183e-01, -1.82427943e-01, -1.78480703e-01, -1.74533464e-01, -1.71079629e-01, -1.67132389e-01, -1.63678554e-01, -1.59731314e-01, -1.56277479e-01, -1.52823644e-01, -1.49369809e-01, -1.45915975e-01, -1.42955545e-01, -1.39501710e-01, -1.36047875e-01, -1.33087445e-01, -1.29633610e-01, -1.26673180e-01, -1.23219345e-01, -1.20258915e-01, -1.17298486e-01, -1.14338056e-01, -1.10884221e-01, -1.07923791e-01, -1.04963361e-01, -1.02002931e-01, -9.90425012e-02, -9.60820713e-02, -9.31216414e-02, -9.01612115e-02, -8.72007816e-02, -8.42403517e-02, -8.12799218e-02, -7.83194919e-02, -7.53590620e-02, -7.23986321e-02, -6.99316072e-02, -6.69711773e-02, -6.40107474e-02, -6.10503175e-02, -5.80898876e-02, -5.51294577e-02, -5.21690278e-02, -4.92085979e-02, -4.62481681e-02, -4.27943332e-02, -3.98339033e-02, -3.68734734e-02, -3.39130435e-02, -3.09526136e-02, -2.74987787e-02, -2.45383488e-02, -2.10845139e-02, -1.81240840e-02, -1.46702491e-02, -1.12164143e-02, -7.76257938e-03, -4.30874450e-03, -8.54909624e-04, 2.59892526e-03, 6.54616512e-03, 1.00000000e-02]
+
+      Title: E_{#nu}^{bias}/ E_{#nu}^{True
+ForceGeneric: True
+DUNESampleBools:
+  iselike: no
+NuOsc:
+  NuOscConfigFile: "configs/NuOsc/NuFASTLinear.yaml"
+  EqualBinningPerOscChannel: false
+InputFiles:
+  mtupleprefix: "inputs/"
+  mtuplesuffix: ".root"
+  splineprefix: "" 
+  splinesuffix: ""
+SampleCuts:
+  up_bnd: 100.
+NSubSamples: 3
+Sample_Name: ["ND"]
+SubSamples:
+  - Name: "CAFv7_0m_130_FHC"
+    LatexName: "CAFv7_0m_130_FHC"
+    mtuplefile: "CAFv7_0m_130_FHC"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+    signal: false

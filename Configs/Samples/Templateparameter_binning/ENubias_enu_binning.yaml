@@ -1,0 +1,51 @@
+# for each list specify:
+# isrhc = "true for rhc or false for fhc"; #default to false
+# mtupleprefix = "common part at beginning of path to mtuple files"
+# mtuplesuffix = "common part at end of path to mtuple files"
+# splineprefix = "common part at beginning of path to spline files"
+# splinesuffix = "common part at endof path to spline files"
+# up_bnd = "upper boundary on erec" #deault to 30.
+# isfitqun = true for fitqun variable samples false otherwise #default to true
+#Add samples to the sample list as shown below
+SampleTitle: "ND_FHC_CCnumu"
+SampleType: "BeamFD"
+SampleName: "ND"
+MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes_GENIE.yaml"
+SelectionCuts:
+POT: 9.99328e+21 #9.99328e+18 #9.99328e+21 #9.99328e+6 #7.24e+21
+DUNESampleBools:
+  isFHC: 1
+  iselike: no
+SelectionCuts:
+Binning:
+   Axes:
+    - VarStr: TrueNeutrinoEnergy 
+      VarBins: [0.0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0, 3.25, 3.5, 3.75, 4.0, 5.0, 10.0]
+      Title: E_{#nu}^{True} [GeV]
+    - VarStr: isRelativeEnubias
+      VarBins: [-1.0, -0.75, -0.5, -0.49902296, -0.47777235, -0.4579873, -0.43820225, -0.41988276, -0.40156326, -0.38470933, -0.3678554, -0.35246702, -0.33634587, -0.32169028, -0.30630191, -0.29237909, -0.2777235, -0.26380068, -0.24987787, -0.23668784, -0.22276502, -0.20957499, -0.19638495, -0.18319492, -0.17000489, -0.15681485, -0.14362482, -0.13043478, -0.11651197, -0.10332193, -0.08939912, -0.07547631, -0.06082071, -0.04616512, -0.03150953, -0.01612115, 0.0, 0.005]
+      Title: E_{#nu}^{bias}/ E_{#nu}^{True}
+ForceGeneric: True
+DUNESampleBools:
+  iselike: no
+NuOsc:
+  NuOscConfigFile: "configs/NuOsc/NuFASTLinear.yaml"
+  EqualBinningPerOscChannel: false
+InputFiles:
+  mtupleprefix: "inputs/"
+  mtuplesuffix: ".root"
+  splineprefix: "" 
+  splinesuffix: ""
+SampleCuts:
+  up_bnd: 100.
+NSubSamples: 3
+Sample_Name: ["ND"]
+SubSamples:
+  - Name: "CAFv7_0m_130_FHC"
+    LatexName: "CAFv7_0m_130_FHC"
+    mtuplefile: "CAFv7_0m_130_FHC"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+    signal: false

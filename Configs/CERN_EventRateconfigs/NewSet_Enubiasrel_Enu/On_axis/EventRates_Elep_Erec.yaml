@@ -1,0 +1,46 @@
+General:
+  OutputFile: "/scratch/abipeake/FinalChains/Enubiasratio_Enu_erecyrecnew/Enubiasratio_Enu_erecyrecnew_chain_0_job_1.root"
+  DUNESamples:
+    - "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/Samples/OA_samples_subsamples/Binningfor_Enubias_Enu/CERN_Erec_Elep_binning_august.yaml"
+  OscillationParameters: [0.0, 0.0, 0.0, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848, 0.5] 
+  OscillatorConfigName: "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/OscillatorObj.yaml"
+
+  Systematics:
+    XsecCovFile: ["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_Enubias_relative_20thaugbinning.yaml"]
+    XsecCovName: "xsec_cov"
+    XsecStepScale: 0.001
+    XsecAtGen: false 
+    OscCovFile: ["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/OscCov_ND.yaml"]
+    OscCovName: "osc_cov"
+    xsec_var1: "TrueNeutrinoEnergy"
+    xsec_var2: "isRelativeEnubias"
+    Parameter_fixing_threshold: 0.00000000000000000000000000000000000000000000000000000001 
+
+  Fitter:
+    FitTestLikelihood: false
+  MCMC:
+    NSteps: 500000 #50000
+    AutoSave: 10000
+    BurnInSteps: 1
+  Output:
+    FileName: "TestEventRates_fit_10000.root"
+    OUTPUTNAME: "TestLLH__fit_10000.root"
+
+  ProcessMCMC: Yes
+  Seed: 0
+  Debug: Yes
+AdaptionOptions:
+  Settings:
+    StartThrow: 0           # start throwing from the matrix immediately
+    StartUpdate: 999999          # but since DoAdaption is false, no updates happen
+    EndUpdate: 99999
+    UpdateStep: 1
+    SaveNIterations: 1000
+    OutputFileName: "Covariance_matrices/Offaxis_comparisons/initial_elep_ercec_forenubiasenu.root"
+  Covariance:
+    xsec_cov:
+      DoAdaption: true     # turn adaption OFF
+      UseExternalMatrix: false
+      ExternalMatrixFileName: ""
+      ExternalMatrixName: ""
+      ExternalMeansName: ""

@@ -1,0 +1,60 @@
+General:
+  OutputFile: "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/Chain_testing/CERN/august8thtest4.root"
+  DUNESamples:
+     - "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/Samples/OA_samples_subsamples/CERN_0m_ptpzEnrec_2295bins.yaml"
+
+  OscillationParameters: [0.0, 0.0, 0.0, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848, 0.5] #[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848]#[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848] #[0.0, 0.0, 0.0, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848] #[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848]
+  OscillatorConfigName: "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/OscillatorObj.yaml"
+
+  Systematics:
+    XsecCovFile: ["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/q0q3_0.0_5.0GeV_triangle_10e4bins.yaml"]
+    XsecCovName: "xsec_cov"
+    XsecStepScale: 0.001
+    XsecAtGen: false 
+    OscCovFile: ["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/OscCov_ND.yaml"]
+    OscCovName: "osc_cov"
+    xsec_var1: "q0"
+    xsec_var2: "q3"
+    Parameter_fixing_threshold: 0.00000000000000000000000000000000000000000000000000000001 
+
+  Fitter:
+    FitTestLikelihood: false
+  MCMC:
+    NSteps: 1000000 #50000
+    AutoSave: 10000
+    BurnInSteps: 1
+  Output:
+    FileName: "TestEventRates_fit_10000.root"
+    OUTPUTNAME: "TestLLH__fit_10000.root"
+
+  ProcessMCMC: No
+  Seed: 0
+  Debug: No
+LLHScan:
+  ParPoints: 1000
+AdaptionOptions:
+  Settings:
+    StartThrow:  100000
+    StartUpdate: 1000
+    EndUpdate:   1000000
+    UpdateStep:  1000
+    SaveNIterations: 10000
+    OutputFileName: /scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/Covariance_matrices/tuesday12thaug_q0q3_eleperec_covmat.root
+
+  Covariance:
+    xsec_cov:
+      DoAdaption: True
+      MatrixBlocks: []
+      UseExternalMatrix: False
+      PrincipalComponentThreshold: 0.99 
+
+Predictive:
+  PosteriorFiles: "posterior_enutrueenubias_erecyrec.root"
+  Ntoy: 1000
+  ThrowDetCov: true
+  FixXSec: false
+  FixFlux: false
+  VarNames: ["RecoNeutrinoEnergy", "q0", "q3", "ELepRec"  ]
+
+NDOptions:
+  PlotByMode: false

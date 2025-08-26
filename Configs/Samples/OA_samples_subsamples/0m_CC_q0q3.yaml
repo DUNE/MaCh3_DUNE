@@ -12,27 +12,22 @@ SampleType: "BeamFD"
 SampleName: "ND"
 MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes_GENIE.yaml"
 SelectionCuts:
-POT: 9.99328e+18 #9.99328e+21 #9.99328e+6 #7.24e+21
+POT: 3.0e21 #9.99328e+21 #9.99328e+6 #7.24e+21
 DUNESampleBools:
   isFHC: 1
   iselike: no
 SelectionCuts:
-  - KinematicStr: "TrueXPos"
-    Bounds: [ -310.0, 310.0 ]
-  - KinematicStr: "TrueYPos"
-    Bounds: [ -550.0, 550.0 ]
-  - KinematicStr: "TrueZPos"
-    Bounds: [ 50.0, 1244.0 ]
-  - KinematicStr: "CVNNumu"
-    Bounds: [ 0.5, 999 ]
 Binning:
   Axes:
      - VarStr: "q3"
-       Uniform: [50, 0.0, 5.0]
+       Uniform: [100, 0.0, 5.0]
        Title: "q_{3} [GeV/c]"
      - VarStr: "q0"
-       Uniform: [50, 0.0, 5.0]
+       Uniform: [100, 0.0, 5.0]
        Title: "q_{0} [GeV/c]"
+     #- VarStr: "TrueNeutrinoEnergy"
+      # VarBins: [0.0, 1.0, 2.0,  3.0, 4.0, 8.0, 20.0]
+       #Title: "E_{#nu} [GeV/c]"
   ForceGeneric: True
 DUNESampleBools:
   iselike: no
@@ -40,13 +35,13 @@ NuOsc:
   NuOscConfigFile: "configs/NuOsc/NuFASTLinear.yaml"
   EqualBinningPerOscChannel: false
 InputFiles:
-  mtupleprefix: /scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/inputs/ #"/project/rpp-nilic/abipeake/"
+  mtupleprefix: "/project/rpp-nilic/abipeake/"
   mtuplesuffix: ".root"
   splineprefix: "" 
   splinesuffix: ""
 SampleCuts:
   up_bnd: 100.
-NSubSamples: 1
+NSubSamples: 4
 Sample_Name: ["ND"]
 SubSamples:
   - Name: "CAFv7_0m_130_FHC"
@@ -54,6 +49,30 @@ SubSamples:
     mtuplefile: "CAFv7_0m_130_FHC"
     splinefile: ""
     samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_0m_131_FHC"
+    LatexName: "CAFv7_0m_131_FHC"
+    mtuplefile: "CAFv7_0m_131_FHC"
+    splinefile: ""
+    samplevecno: 1
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_0m_132_FHC"
+    LatexName: "CAFv7_0m_132_FHC"
+    mtuplefile: "CAFv7_0m_132_FHC"
+    splinefile: ""
+    samplevecno: 2
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_0m_133_FHC"
+    LatexName: "CAFv7_0m_133_FHC"
+    mtuplefile: "CAFv7_0m_133_FHC"
+    splinefile: ""
+    samplevecno: 3
     nutype: 14
     oscnutype: 14
     signal: false
