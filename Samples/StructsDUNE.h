@@ -5,10 +5,10 @@ struct dunemc_base {
 
   /*
   int nEvents; // how many MC events are there
-  double pot_s;
-  double norm_s;
   double osc_channel;
   */
+  double pot_s;
+  double norm_s;
   
   int Target; //Target the interaction was on
   
@@ -17,7 +17,6 @@ struct dunemc_base {
   double OscChannelIndex;
   
   double rw_erec;
-  /*
   double rw_erec_shifted;
   double rw_erec_had;
   double rw_erec_lep;
@@ -34,14 +33,12 @@ struct dunemc_base {
   double rw_ePim;
   double rw_ePi0;
   double rw_eN;
-  */
   
   double rw_etru;
   double rw_mom;
   double rw_theta;
   //double rw_Q2;
 
-  /*
   double rw_cvnnumu;
   double rw_cvnnue;
   double rw_cvnnumu_shifted;
@@ -49,16 +46,17 @@ struct dunemc_base {
   int rw_reco_nue;
   int rw_reco_numu;
   double rw_berpaacvwgt;
-  */
   int rw_isCC;
   /*
   int rw_nuPDGunosc;
   int rw_nuPDG;
   int rw_run;
   bool    *rw_isFHC;
+  */
   double rw_vtx_x;
   double rw_vtx_y;
   double rw_vtx_z;
+  /*
   double rw_reco_q;
   double reco_numu;
   double rw_Q0;
@@ -98,6 +96,7 @@ struct dunemc_base {
   double rw_elep_reco;
   double rw_elep_true;
 
+*/
   double rw_erec_had_sqrt;
   double rw_erec_lep_sqrt;
   double rw_eRecoPi0_sqrt;
@@ -106,6 +105,7 @@ struct dunemc_base {
   double rw_sum_ehad_sqrt;
   double rw_trueccnue;
   double rw_trueccnumu;
+  /*
 
   int nrecoparticles;
   bool *in_fdv;

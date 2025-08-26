@@ -12,3 +12,4 @@ Doc
 Inputs/Atmospherics/CAFs
 nohup.out
 output*.txt
+.cache/

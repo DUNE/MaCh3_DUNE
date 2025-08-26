@@ -12,14 +12,14 @@ else()
   message(STATUS "Building Atm, BeamFD and BeamND samples")
   set(HEADERS
     SampleHandlerAtm.h
-    #SampleHandlerBeamFD.h
-    #SampleHandlerBeamND.h
+    SampleHandlerBeamFD.h
+    # SampleHandlerBeamND.h
     MaCh3DUNEFactory.h
   )
   set(SOURCE_FILES
     SampleHandlerAtm.cpp
-    #SampleHandlerBeamFD.cpp
-    #SampleHandlerBeamND.cpp
+    SampleHandlerBeamFD.cpp
+    # SampleHandlerBeamND.cpp
     MaCh3DUNEFactory.cpp
   )
 endif()

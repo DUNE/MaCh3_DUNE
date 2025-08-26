@@ -3,8 +3,8 @@
 #ifdef BUILD_NDGAR
 #include "Samples/SampleHandlerBeamNDGAr.h"
 #else
-//#include "Samples/SampleHandlerBeamFD.h"
-//#include "Samples/SampleHandlerBeamND.h"
+#include "Samples/SampleHandlerBeamFD.h"
+// #include "Samples/SampleHandlerBeamND.h"
 #include "Samples/SampleHandlerAtm.h"
 #endif
 
@@ -14,19 +14,17 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
   (void)NDCov_FHC;
   (void)NDCov_RHC;
   
-#ifdef BUILD_NDGAR
-  (void)NDCov_FHC;
-  (void)NDCov_RHC;
+  #ifdef BUILD_NDGAR
   if (SampleType == "BeamNDGAr") {
     Sample = new SampleHandlerBeamNDGAr(SampleConfig, xsec);
   } else {
     MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
     throw MaCh3Exception(__FILE__, __LINE__);
   }
-#else
-  /*
+  #else
   if (SampleType == "BeamFD") {
     Sample = new SampleHandlerBeamFD(SampleConfig, xsec);
+  /*
   } else if (SampleType == "BeamND") {
     
     if (NDCov_FHC == nullptr || NDCov_RHC == nullptr) {
@@ -41,8 +39,8 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
     else {NDCov = NDCov_RHC;}
     
     Sample = new SampleHandlerBeamND(SampleConfig, xsec, NDCov);
-    } else*/
-  if (SampleType == "Atm") {
+  */
+  } else if (SampleType == "Atm") {
     Sample = new SampleHandlerAtm(SampleConfig, xsec, Oscillator_);
   } else {
     MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
@@ -112,9 +110,15 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<SampleHandlerFD*> &D
   
   // ==========================================================
 
-  std::string OscillatorConfig = Get<std::string>(FitManager->raw()["General"]["SharedNuOscillatorObject"]["ATM"], __FILE__, __LINE__);
-  std::vector<const double*> OscParams = xsec->GetOscParsFromSampleName("ATM");
-  std::shared_ptr<OscillationHandler> AtmOscHandler = std::make_shared<OscillationHandler>(OscillatorConfig,true,OscParams,12);
+  std::shared_ptr<OscillationHandler> AtmOscHandler;
+
+  if (CheckNodeExists(FitManager->raw(), "General", "SharedNuOscillatorObject", "ATM") == false) {
+    MACH3LOG_INFO("No SharedNuOscillatorObject specified, so not creating one");
+  } else {
+    std::string OscillatorConfig = Get<std::string>(FitManager->raw()["General"]["SharedNuOscillatorObject"]["ATM"], __FILE__, __LINE__);
+    std::vector<const double*> OscParams = xsec->GetOscParsFromSampleName("ATM");
+    AtmOscHandler = std::make_shared<OscillationHandler>(OscillatorConfig,true,OscParams,12);
+  }
 
   // ==========================================================
   
@@ -132,6 +136,7 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<SampleHandlerFD*> &D
 
     if (!(NDCov_FHC && NDCov_RHC)) {
       MACH3LOG_ERROR("Could not find NDCov objects from file: {}",NDCovMatrixFile);
+      throw MaCh3Exception(__FILE__, __LINE__);
     }
 
     NDCovFile->Close();

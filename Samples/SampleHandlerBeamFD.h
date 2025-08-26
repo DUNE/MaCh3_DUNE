@@ -15,7 +15,7 @@ public:
   /// @param mc_version Config Name
   /// @param xsec_cov Cross-section covariance matrix
   /// @param osc_cov Oscillation covariance matrix
-  SampleHandlerBeamFD(std::string mc_version, ParameterHandlerGeneric* xsec_cov, ParameterHandlerOsc* osc_cov);
+  SampleHandlerBeamFD(std::string mc_version, ParameterHandlerGeneric* xsec_cov);
 
   /// @brief destructor
   ~SampleHandlerBeamFD();
@@ -28,13 +28,11 @@ protected:
   void Init();
 
   /// @brief Function to setup MC from file
-  /// @param iSample sample ID
   /// @return Total number of events
-  int SetupExperimentMC(int iSample);
+  int SetupExperimentMC();
 
   /// @brief Tells FD base which variables to point to/be set to
-  /// @param iSample Sample ID
-  void SetupFDMC(int iSample);
+  void SetupFDMC();
 
   /// @brief Sets up pointers weights for each event (oscillation/xsec/etc.)
   void SetupWeightPointers();
@@ -54,100 +52,92 @@ protected:
 	kRecoCVNNumu, kRecoCVNNue
   };
   void RegisterFunctionalParameters() override;
-  void resetShifts(int iSample, int iEvent) override;
+  void resetShifts(int iEvent) override;
 
   // Global energy scale systematics
-  void TotalEScale(const double * par, std::size_t iSample, std::size_t iEvent);
-  void TotalEScaleNotCCNumu(const double * par, std::size_t iSample, std::size_t iEvent);
-  void TotalEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
-  void TotalEScaleSqrtNotCCNumu(const double * par, std::size_t iSample, std::size_t iEvent);
-  void TotalEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
-  void TotalEScaleInvSqrtNotCCNumu(const double * par, std::size_t iSample, std::size_t iEvent);
+  void TotalEScale(const double * par, std::size_t iEvent);
+  void TotalEScaleNotCCNumu(const double * par, std::size_t iEvent);
+  void TotalEScaleSqrt(const double * par, std::size_t iEvent);
+  void TotalEScaleSqrtNotCCNumu(const double * par, std::size_t iEvent);
+  void TotalEScaleInvSqrt(const double * par, std::size_t iEvent);
+  void TotalEScaleInvSqrtNotCCNumu(const double * par, std::size_t iEvent);
 
   // Particle specific energy uncertainties
   // Charged hadron
-  void HadEScale(const double * par, std::size_t iSample, std::size_t iEvent);
-  void HadEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
-  void HadEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  void HadEScale(const double * par, std::size_t iEvent);
+  void HadEScaleSqrt(const double * par, std::size_t iEvent);
+  void HadEScaleInvSqrt(const double * par, std::size_t iEvent);
   // Muons
-  void MuEScale(const double * par, std::size_t iSample, std::size_t iEvent);
-  void MuEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
-  void MuEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  void MuEScale(const double * par, std::size_t iEvent);
+  void MuEScaleSqrt(const double * par, std::size_t iEvent);
+  void MuEScaleInvSqrt(const double * par, std::size_t iEvent);
   // Neutrons
-  void NEScale(const double * par, std::size_t iSample, std::size_t iEvent);
-  void NEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
-  void NEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  void NEScale(const double * par, std::size_t iEvent);
+  void NEScaleSqrt(const double * par, std::size_t iEvent);
+  void NEScaleInvSqrt(const double * par, std::size_t iEvent);
   // Electromagnetic showers
-  void EMEScale(const double * par, std::size_t iSample, std::size_t iEvent);
-  void EMEScaleCCNue(const double * par, std::size_t iSample, std::size_t iEvent);
-  void EMEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
-  void EMEScaleSqrtCCNue(const double * par, std::size_t iSample, std::size_t iEvent);
-  void EMEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent);
-  void EMEScaleInvSqrtCCNue(const double * par, std::size_t iSample, std::size_t iEvent);
+  void EMEScale(const double * par, std::size_t iEvent);
+  void EMEScaleCCNue(const double * par, std::size_t iEvent);
+  void EMEScaleSqrt(const double * par, std::size_t iEvent);
+  void EMEScaleSqrtCCNue(const double * par, std::size_t iEvent);
+  void EMEScaleInvSqrt(const double * par, std::size_t iEvent);
+  void EMEScaleInvSqrtCCNue(const double * par, std::size_t iEvent);
 
   // Resolution uncertainties
-  void HadRes(const double * par, std::size_t iSample, std::size_t iEvent);
-  void MuRes(const double * par, std::size_t iSample, std::size_t iEvent);
-  void NRes(const double * par, std::size_t iSample, std::size_t iEvent);
-  void EMRes(const double * par, std::size_t iSample, std::size_t iEvent);
-  void EMResCCNue(const double * par, std::size_t iSample, std::size_t iEvent);
+  void HadRes(const double * par, std::size_t iEvent);
+  void MuRes(const double * par, std::size_t iEvent);
+  void NRes(const double * par, std::size_t iEvent);
+  void EMRes(const double * par, std::size_t iEvent);
+  void EMResCCNue(const double * par, std::size_t iEvent);
 
   //Reconstruction (CVN) uncertainties
-  void RecoCVNNumu(const double * par, std::size_t iSample, std::size_t iEvent);
-  void RecoCVNNue(const double * par, std::size_t iSample, std::size_t iEvent);
+  void RecoCVNNumu(const double * par, std::size_t iEvent);
+  void RecoCVNNue(const double * par, std::size_t iEvent);
 
-  /*
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter Type
-  /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Value of kinematic parameter corresponding for a given event 
-  double ReturnKinematicParameter (KinematicTypes KinPar, int iSample, int iEvent);*/
+  double ReturnKinematicParameter (KinematicTypes KinPar, int iEvent);
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter ID as int
-  /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Value of kinematic parameter corresponding for a given event 
-  double ReturnKinematicParameter (int KinematicVariable, int iSample, int iEvent);
+  double ReturnKinematicParameter (int KinematicVariable, int iEvent);
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicParameter Kinematic parameter name as string (gets cast -> int)
-  /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Value of kinematic parameter corresponding for a given event
-  double ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
+  double ReturnKinematicParameter(std::string KinematicParameter, int iEvent);
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinPar Kinematic Parameter Type
-  /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Pointer to KinPar for a given event
-  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent);
+  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent);
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicParameter Kinematic parameter name as string (gets cast -> int)
-  /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Pointer to KinPar for a given event
-  const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
+  const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent);
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter as double (gets cast -> int)
-  /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Pointer to KinPar for a given event
-  const double* GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent); 
+  const double* GetPointerToKinematicParameter(double KinematicVariable, int iEvent); 
 
-  std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameter);
+  // std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameter);
   inline std::string ReturnStringFromKinematicParameter(int KinematicParameterStr);
   
   //DB functions which could be initialised to do something which is non-trivial
 
   /// @brief NOT IMPLEMENTED: Dunder method to calculate xsec weights
-  /// @param iSample sample ID
   /// @param iEvent Event number
-  double CalcXsecWeightFunc(int iSample, int iEvent) {(void) iSample; (void)iEvent; return 1.;}
+  double CalcXsecWeightFunc(int iEvent) {(void)iEvent; return 1.;}
 
   // dunemc
   /// DUNE MC sampels
@@ -187,6 +177,12 @@ protected:
     {kTrueCCnue,"IsTrueCCnue"},
     {kTrueCCnumu,"IsTrueCCnumu"}
   };
+  std::unordered_map<std::string, std::vector<double>> norm_map;
+
+  /// @brief Cleanup memory
+  void CleanMemoryBeforeFit() override {};
 };
+  
+
 
 #endif
