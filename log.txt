@@ -1,0 +1,1042 @@
+nohup: ignoring input
+================================
+MUYUAN TESTING: This is the NEW EventRates!
+MUYUAN TESTING: Timestamp Aug 22, 2025
+================================
+[Monitor.cpp][info] ##################################
+[Monitor.cpp][info] Welcome to:  
+[Monitor.cpp][info]   __  __        _____ _     ____  
+[Monitor.cpp][info]  |  \/  |      / ____| |   |___ \ 
+[Monitor.cpp][info]  | \  / | __ _| |    | |__   __) |
+[Monitor.cpp][info]  | |\/| |/ _` | |    | '_ \ |__ < 
+[Monitor.cpp][info]  | |  | | (_| | |____| | | |___) |
+[Monitor.cpp][info]  |_|  |_|\__,_|\_____|_| |_|____/ 
+[Monitor.cpp][info] Version: 2.2.0
+[Monitor.cpp][info] ##################################
+[Monitor.cpp][info] Using following CPU:
+[Monitor.cpp][info] model name	: AMD EPYC Processor
+[Monitor.cpp][info] cpu MHz		: 2794.882
+[Monitor.cpp][info] Architecture:                         x86_64
+[Monitor.cpp][info] L1d cache:                            128 KiB (4 instances)
+[Monitor.cpp][info] L1i cache:                            256 KiB (4 instances)
+[Monitor.cpp][info] L2 cache:                             2 MiB (4 instances)
+[Monitor.cpp][info] L3 cache:                             8 MiB (1 instance)
+[Monitor.cpp][info] Thread(s) per core:                   1
+[Monitor.cpp][info] CPU(s):                               4
+[Monitor.cpp][info] With available threads                4
+[Manager.cpp][info] Setting config to be: Configs/EventRates_Atmospherics.yaml
+[Manager.cpp][info] Config is now: 
+[Monitor.cpp][info] General:
+[Monitor.cpp][info]   OutputFile: DuneEventRates.root
+[Monitor.cpp][info]   DUNESamples:
+[Monitor.cpp][info]     - Configs/Samples/AtmSample_numuselec.yaml
+[Monitor.cpp][info]   OscillationParameters: [0.303, 0.452, 0.0223, 7.41E-5, 2.51E-3, -2.233, 25, 1221.5, 3480., 5701., 6371., 1., 1., 1., 1., 0.468, 0.468, 0.496, 0.496]
+[Monitor.cpp][info]   Systematics:
+[Monitor.cpp][info]     XsecCovFile: [Configs/CovObjs/xsec_covariance_DUNE_systs_2022a_FD_v3.yaml, Configs/CovObjs/OscCov_PDG2021_v2_Atmospherics.yaml]
+[Monitor.cpp][info]     XsecCovName: xsec_cov
+[Monitor.cpp][info]     XsecStepScale: 0.1
+[Monitor.cpp][info]     XsecAtGen: false
+[Monitor.cpp][info]     XsecFix: []
+[Monitor.cpp][info]   SharedNuOscillatorObject:
+[Monitor.cpp][info]     ATM: Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml
+[Monitor.cpp][info]   Fitter:
+[Monitor.cpp][info]     FitTestLikelihood: false
+[Monitor.cpp][info]   MCMC:
+[Monitor.cpp][info]     NSteps: 20000
+[Monitor.cpp][info]     AutoSave: 5000
+[Monitor.cpp][info]   Output:
+[Monitor.cpp][info]     FileName: TestEventRates.root
+[Monitor.cpp][info]     OUTPUTNAME: TestLLH.root
+[Monitor.cpp][info]   Seed: 0
+[Monitor.cpp][info]   Debug: No
+[Monitor.cpp][info]   StartFromPos: false
+[Monitor.cpp][info]   PosFileName: chain_0.root
+[Monitor.cpp][info] ProcessMCMC:
+[Monitor.cpp][info]   BurnInSteps: 80000
+[Monitor.cpp][info]   Thinning: [false, 100]
+[Monitor.cpp][info]   PrintToPDF: true
+[Monitor.cpp][info]   PlotCorr: true
+[Monitor.cpp][info]   ExcludedTypes: []
+[Monitor.cpp][info]   ExcludedNames: []
+[Monitor.cpp][info]   Posterior1DCut: Weight
+[Monitor.cpp][info]   PlotRelativeToPrior: false
+[Monitor.cpp][info]   PlotErrorForFlatPrior: false
+[Monitor.cpp][info]   FancyNames: true
+[Monitor.cpp][info]   PlotBinValue: false
+[Monitor.cpp][info]   Post2DPlotThreshold: 0.0
+[Monitor.cpp][info]   Smoothing: false
+[Monitor.cpp][info]   MakeViolin: true
+[Monitor.cpp][info]   MakeSubOptimality: [false, 100]
+[Monitor.cpp][info]   DiagnoseCovarianceMatrix: false
+[Monitor.cpp][info]   MakeCredibleIntervals: true
+[Monitor.cpp][info]   CredibleRegions: [0.99, 0.90, 0.68]
+[Monitor.cpp][info]   CredibleIntervalsColours: [436, 430, 422]
+[Monitor.cpp][info]   CredibleInSigmas: false
+[Monitor.cpp][info]   MakeCredibleRegions: true
+[Monitor.cpp][info]   CredibleRegions: [0.99, 0.90, 0.68]
+[Monitor.cpp][info]   CredibleRegionStyle: [2, 1, 3]
+[Monitor.cpp][info]   CredibleRegionColor: [413, 406, 416]
+[Monitor.cpp][info]   CredibleInSigmas: false
+[Monitor.cpp][info]   Draw2DPosterior: false
+[Monitor.cpp][info]   DrawBestFit: true
+[Monitor.cpp][info]   CalcSavageDickey: true
+[Monitor.cpp][info]   SavageDickey:
+[Monitor.cpp][info]     - [delta_cp, 0.0, [-3.14, 3.14]]
+[Monitor.cpp][info]   CalcBayesFactor: true
+[Monitor.cpp][info]   BayesFactor:
+[Monitor.cpp][info]     - [delm2_23, [IH, NH], [-0.01, 0], [0, 0.01]]
+[Monitor.cpp][info]     - [sin2th_23, [LO, UO], [0, 0.5], [0.5, 1]]
+[Monitor.cpp][info]   GetTrianglePlot: true
+[Monitor.cpp][info]   TrianglePlot:
+[Monitor.cpp][info]     - [OscPars, [delm2_23, sin2th_23, sin2th_13, delta_cp]]
+[Monitor.cpp][info]   ReweightPrior: true
+[Monitor.cpp][info]   PriorReweighting: [[sin2th_13], [0.0220], [0.0007]]
+[Monitor.cpp][info]   JarlskogAnalysis: true
+[Monitor.cpp][info]   CalcBipolarPlot: false
+[Monitor.cpp][info]   CalcParameterEvolution: false
+[Monitor.cpp][info] Projections: [{Name: RecoNuEnergy, VarString: RecoNeutrinoEnergy, VarBins: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4], KinematicCuts: [{Range: [0.1, 0.8], Name: TrueNuEnergy, VarString: TrueNeutrinoEnergy}, {Range: [0.4, 1.0], Name: TrueCosZ, VarString: TrueCosineZ}], CategoryCuts: [{Name: OscillationChannel_Single, VarString: OscChannel, Breakdown: [[0.0], [1.0], [2.0], [3.0], [4.0], [5.0], [6.0], [7.0], [8.0], [9.0], [10.0], [11.0]], Names: [nue_x_nue, nue_x_numu, nue_x_nutau, numu_x_nue, numu_x_numu, numu_x_nutau, nuebar_x_nuebar, nuebar_x_numubar, nuebar_x_nutaubar, numubar_x_nuebar, numubar_x_numubar, numubar_x_nutaubar]}, {Name: OscillationChannel_Group, VarString: OscChannel, Breakdown: [[0.0, 1.0, 2.0, 3.0, 4.0, 5.0], [6.0, 7.0, 8.0, 9.0, 10.0, 11.0]], Names: [Nu, Nubar]}, {Name: Mode_Single, VarString: Mode, Breakdown: [[0.0], [1.0], [2.0], [3.0], [4.0], [5.0], [6.0], [7.0], [8.0], [9.0], [10.0], [11.0], [12.0], [13.0], [14.0], [15.0], [16.0], [17.0], [18.0], [19.0], [20.0], [21.0], [22.0], [23.0], [24.0], [25.0], [26.0]]}, {Name: Mode_Group, VarString: Mode, Breakdown: [[0.0], [2.0], [3.0], [9.0], [15.0], [16.0], [1.0, 4.0, 5.0, 6.0, 7.0, 8.0, 10.0, 11.0, 12.0, 13.0], [14.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0]], Names: [CCQE, CCDIS, CCRES, CCMEC, NCDIS, NCRES, CCOth, NCOth]}]}, {Name: TrueNuEnergy, VarString: TrueNeutrinoEnergy, VarBins: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]}]
+[ParameterHandlerBase.cpp][info] Constructing instance of ParameterHandler using
+[ParameterHandlerBase.cpp][info] Configs/CovObjs/xsec_covariance_DUNE_systs_2022a_FD_v3.yaml
+[ParameterHandlerBase.cpp][info] Configs/CovObjs/OscCov_PDG2021_v2_Atmospherics.yaml
+[ParameterHandlerBase.cpp][info] as an input
+[ParameterHandlerBase.cpp][info] Principal component analysis but given the threshold for the principal components to be less than 0, or greater than (or equal to) 1. This will not work
+[ParameterHandlerBase.cpp][info] Please specify a number between 0 and 1
+[ParameterHandlerBase.cpp][info] You specified: 
+[ParameterHandlerBase.cpp][info] Am instead calling the usual non-PCA constructor...
+[ParameterHandlerBase.cpp][info] Enabling Flipping for parameter sin2th_23 with value 0.5112
+[ParameterHandlerBase.cpp][info] Enabling Flipping for parameter delm2_23 with value 0
+[ParameterHandlerBase.cpp][info] Enabling CircularBounds for parameter delta_cp with range [-3.141592, 3.141592]
+[ParameterHandlerBase.cpp][info] Had to shift diagonal 0 time(s) to allow the covariance matrix to be decomposed
+[ParameterHandlerBase.cpp][info] Had to shift diagonal 0 time(s) to allow the covariance matrix to be decomposed
+[ParameterTunes.cpp][info] Found 1 tunes:
+[ParameterTunes.cpp][info]   Tune 0 Generated
+[ParameterHandlerBase.cpp][info] Created covariance matrix from files: 
+[ParameterHandlerBase.cpp][info] Configs/CovObjs/xsec_covariance_DUNE_systs_2022a_FD_v3.yaml 
+[ParameterHandlerBase.cpp][info] Configs/CovObjs/OscCov_PDG2021_v2_Atmospherics.yaml 
+[ParameterHandlerBase.cpp][info] ----------------
+[ParameterHandlerBase.cpp][info] Found 20 systematics parameters in total
+[ParameterHandlerBase.cpp][info] ----------------
+[ParameterHandlerGeneric.cpp][info] #################################################
+[ParameterHandlerGeneric.cpp][info] Printing ParameterHandlerGeneric:
+[ParameterHandlerGeneric.cpp][info] ============================================================================================================================================================
+[ParameterHandlerGeneric.cpp][info] #     |  Name                                     |  Prior      |  Error      |  Lower      |  Upper      |  StepScale  |  SampleNames          |  Type      
+[ParameterHandlerGeneric.cpp][info] ------------------------------------------------------------------------------------------------------------------------------------------------------------
+[ParameterHandlerGeneric.cpp][info] 0     |  atmflux_0                                |  1          |  +/- 0.20   |  0          |  9999       |  1          |  ATM                  |  Functional
+[ParameterHandlerGeneric.cpp][info] 1     |  sin2th_12                                |  0.307      |  +/- 0.01   |  0          |  1          |  1          |  FD_*, ATM            |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 2     |  sin2th_23                                |  0.546      |  +/- 0.02   |  0          |  1          |  1          |  FD_*, ATM            |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 3     |  sin2th_13                                |  0.022      |  +/- 0.00   |  0          |  1          |  20         |  FD_*, ATM            |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 4     |  delm2_12                                 |  7.53e-05   |  +/- 0.00   |  -999       |  999        |  1          |  FD_*, ATM            |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 5     |  delm2_23                                 |  0.002536   |  +/- 0.00   |  -999       |  999        |  5          |  FD_*, ATM            |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 6     |  delta_cp                                 |  -1.601     |  +/- 6.28   |  -999       |  999        |  0.05       |  FD_*, ATM            |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 7     |  ProdH                                    |  25         |  +/- 1.00   |  0          |  999        |  5          |  FD_*, ATM            |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 8     |  r_1                                      |  1221.5     |  +/- 61.08  |  0          |  9999       |  1          |                       |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 9     |  r_2                                      |  3480       |  +/- 112.92 |  0          |  9999       |  1          |                       |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 10    |  r_3                                      |  5701       |  +/- 111.05 |  0          |  9999       |  1          |                       |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 11    |  r_4                                      |  6371       |  +/- 3.00   |  0          |  9999       |  1          |                       |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 12    |  w_1                                      |  1          |  +/- 0.10   |  0          |  999        |  1          |                       |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 13    |  w_2                                      |  1          |  +/- 0.10   |  0          |  999        |  1          |                       |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 14    |  w_3                                      |  1          |  +/- 0.10   |  0          |  999        |  1          |                       |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 15    |  w_4                                      |  1          |  +/- 0.10   |  0          |  999        |  1          |                       |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 16    |  elecdensity_1                            |  0.468      |  +/- 0.03   |  0          |  999        |  1          |                       |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 17    |  elecdensity_2                            |  0.468      |  +/- 0.03   |  0          |  999        |  1          |                       |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 18    |  elecdensity_3                            |  0.496      |  +/- 0.03   |  0          |  999        |  1          |                       |  Oscillation
+[ParameterHandlerGeneric.cpp][info] 19    |  elecdensity_4                            |  0.496      |  +/- 0.03   |  0          |  999        |  1          |                       |  Oscillation
+[ParameterHandlerGeneric.cpp][info] ============================================================================================================================================================
+[ParameterHandlerGeneric.cpp][info] Normalisation parameters:  0
+[ParameterHandlerGeneric.cpp][info] Spline parameters: 0
+[ParameterHandlerGeneric.cpp][info] Functional parameters: 1
+[ParameterHandlerGeneric.cpp][info] ┌────┬──────────┬────────────────────────────────────────┐
+[ParameterHandlerGeneric.cpp][info] │#   │Global #  │Name                                    │
+[ParameterHandlerGeneric.cpp][info] ├────┼──────────┼────────────────────────────────────────┤
+[ParameterHandlerGeneric.cpp][info] │0   │0         │atmflux_0                               │
+[ParameterHandlerGeneric.cpp][info] └────┴──────────┴────────────────────────────────────────┘
+[ParameterHandlerGeneric.cpp][info] Oscillation parameters: 19
+[ParameterHandlerGeneric.cpp][info] ┌────┬──────────┬────────────────────────────────────────┐
+[ParameterHandlerGeneric.cpp][info] │#   │Global #  │Name                                    │
+[ParameterHandlerGeneric.cpp][info] ├────┼──────────┼────────────────────────────────────────┤
+[ParameterHandlerGeneric.cpp][info] │0   │1         │sin2th_12                               │
+[ParameterHandlerGeneric.cpp][info] │1   │2         │sin2th_23                               │
+[ParameterHandlerGeneric.cpp][info] │2   │3         │sin2th_13                               │
+[ParameterHandlerGeneric.cpp][info] │3   │4         │delm2_12                                │
+[ParameterHandlerGeneric.cpp][info] │4   │5         │delm2_23                                │
+[ParameterHandlerGeneric.cpp][info] │5   │6         │delta_cp                                │
+[ParameterHandlerGeneric.cpp][info] │6   │7         │ProdH                                   │
+[ParameterHandlerGeneric.cpp][info] │7   │8         │r_1                                     │
+[ParameterHandlerGeneric.cpp][info] │8   │9         │r_2                                     │
+[ParameterHandlerGeneric.cpp][info] │9   │10        │r_3                                     │
+[ParameterHandlerGeneric.cpp][info] │10  │11        │r_4                                     │
+[ParameterHandlerGeneric.cpp][info] │11  │12        │w_1                                     │
+[ParameterHandlerGeneric.cpp][info] │12  │13        │w_2                                     │
+[ParameterHandlerGeneric.cpp][info] │13  │14        │w_3                                     │
+[ParameterHandlerGeneric.cpp][info] │14  │15        │w_4                                     │
+[ParameterHandlerGeneric.cpp][info] │15  │16        │elecdensity_1                           │
+[ParameterHandlerGeneric.cpp][info] │16  │17        │elecdensity_2                           │
+[ParameterHandlerGeneric.cpp][info] │17  │18        │elecdensity_3                           │
+[ParameterHandlerGeneric.cpp][info] │18  │19        │elecdensity_4                           │
+[ParameterHandlerGeneric.cpp][info] └────┴──────────┴────────────────────────────────────────┘
+[ParameterHandlerGeneric.cpp][info] Printing parameter groups
+[ParameterHandlerGeneric.cpp][info] Found 19: Osc params
+[ParameterHandlerGeneric.cpp][info] Found 1: AtmFlux params
+[ParameterHandlerGeneric.cpp][info] Finished
+[ParameterHandlerGeneric.cpp][info] #################################################
+[MaCh3DUNEFactory.cpp][info] cov xsec setup
+[MaCh3DUNEFactory.cpp][info] ------------------------------
+[MaCh3DUNEFactory.cpp][info] xsec parameters loop done
+[ParameterHandlerBase.cpp][info] xsec_cov setStepScale() = 0.1
+[OscillationHandler.cpp][info] [NuOscillator] OscillatorFactory creating OscillatorBase object from config: Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml
+Found 3 entries in file ./Inputs/Atmospherics/PREM_4layer.dat
+[MaCh3DUNEFactory.cpp][info] -------------------------------------------------------------------
+[MaCh3DUNEFactory.cpp][info] Loading DUNE samples..
+[Manager.cpp][info] Setting config to be: Configs/Samples/AtmSample_numuselec.yaml
+[Manager.cpp][info] Config is now: 
+[Monitor.cpp][info] SampleTitle: numuselec
+[Monitor.cpp][info] SampleType: Atm
+[Monitor.cpp][info] MaCh3ModeConfig: Configs/CovObjs/MaCh3Modes.yaml
+[Monitor.cpp][info] SampleName: ATM
+[Monitor.cpp][info] BinningFile: Configs/Samples/AtmosphericParameterBinning.yaml
+[Monitor.cpp][info] Binning:
+[Monitor.cpp][info]   XVarStr: RecoCosineZ
+[Monitor.cpp][info]   XVarBins: [-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1]
+[Monitor.cpp][info]   YVarStr: RecoNeutrinoEnergy
+[Monitor.cpp][info]   YVarBins: [0, 0.23, 0.31, 0.47, 0.81, 1.28, 1.99, 3.17, 5.38, 11.54, 1e8]
+[Monitor.cpp][info] SampleOptions:
+[Monitor.cpp][info]   IsELike: no
+[Monitor.cpp][info]   ExposureScaling: 1.0
+[Monitor.cpp][info] FluxSplines: ~
+[Monitor.cpp][info] File: Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root
+[Monitor.cpp][info] Flavors:
+[Monitor.cpp][info]   - PDG: 12
+[Monitor.cpp][info]     Tag: NuE
+[Monitor.cpp][info]   - PDG: -12
+[Monitor.cpp][info]     Tag: ANuE
+[Monitor.cpp][info]   - PDG: 14
+[Monitor.cpp][info]     Tag: NuM
+[Monitor.cpp][info]   - PDG: -14
+[Monitor.cpp][info]     Tag: ANuM
+[Monitor.cpp][info] InputFiles:
+[Monitor.cpp][info]   mtupleprefix: Inputs/Atmospherics/CAFs/atm_hd
+[Monitor.cpp][info]   mtuplesuffix: _numuselec.root
+[Monitor.cpp][info]   splineprefix: ""
+[Monitor.cpp][info]   splinesuffix: ""
+[Monitor.cpp][info] NuOsc:
+[Monitor.cpp][info]   NuOscConfigFile: Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml
+[Monitor.cpp][info]   EqualBinningPerOscChannel: true
+[Monitor.cpp][info] SubSamples:
+[Monitor.cpp][info]   - Name: nue_x_nue
+[Monitor.cpp][info]     LatexName: nue_x_nue
+[Monitor.cpp][info]     mtuplefile: nue_x_nue
+[Monitor.cpp][info]     splinefile: nue_x_nue
+[Monitor.cpp][info]     nutype: 12
+[Monitor.cpp][info]     oscnutype: 12
+[Monitor.cpp][info]   - Name: nue_x_numu
+[Monitor.cpp][info]     LatexName: nue_x_numu
+[Monitor.cpp][info]     mtuplefile: nue_x_numu
+[Monitor.cpp][info]     splinefile: nue_x_numu
+[Monitor.cpp][info]     nutype: 12
+[Monitor.cpp][info]     oscnutype: 14
+[Monitor.cpp][info]   - Name: nue_x_nutau
+[Monitor.cpp][info]     LatexName: nue_x_nutau
+[Monitor.cpp][info]     mtuplefile: nue_x_nutau
+[Monitor.cpp][info]     splinefile: nue_x_nutau
+[Monitor.cpp][info]     nutype: 12
+[Monitor.cpp][info]     oscnutype: 16
+[Monitor.cpp][info]   - Name: numu_x_nue
+[Monitor.cpp][info]     LatexName: numu_x_nue
+[Monitor.cpp][info]     mtuplefile: numu_x_nue
+[Monitor.cpp][info]     splinefile: numu_x_nue
+[Monitor.cpp][info]     nutype: 14
+[Monitor.cpp][info]     oscnutype: 12
+[Monitor.cpp][info]   - Name: numu_x_numu
+[Monitor.cpp][info]     LatexName: numu_x_numu
+[Monitor.cpp][info]     mtuplefile: numu_x_numu
+[Monitor.cpp][info]     splinefile: numu_x_numu
+[Monitor.cpp][info]     nutype: 14
+[Monitor.cpp][info]     oscnutype: 14
+[Monitor.cpp][info]   - Name: numu_x_nutau
+[Monitor.cpp][info]     LatexName: numu_x_nutau
+[Monitor.cpp][info]     mtuplefile: numu_x_nutau
+[Monitor.cpp][info]     splinefile: numu_x_nutau
+[Monitor.cpp][info]     nutype: 14
+[Monitor.cpp][info]     oscnutype: 16
+[Monitor.cpp][info]   - Name: nuebar_x_nuebar
+[Monitor.cpp][info]     LatexName: nuebar_x_nuebar
+[Monitor.cpp][info]     mtuplefile: nuebar_x_nuebar
+[Monitor.cpp][info]     splinefile: nuebar_x_nuebar
+[Monitor.cpp][info]     nutype: -12
+[Monitor.cpp][info]     oscnutype: -12
+[Monitor.cpp][info]   - Name: nuebar_x_numubar
+[Monitor.cpp][info]     LatexName: nuebar_x_numubar
+[Monitor.cpp][info]     mtuplefile: nuebar_x_numubar
+[Monitor.cpp][info]     splinefile: nuebar_x_numubar
+[Monitor.cpp][info]     nutype: -12
+[Monitor.cpp][info]     oscnutype: -14
+[Monitor.cpp][info]   - Name: nuebar_x_nutaubar
+[Monitor.cpp][info]     LatexName: nuebar_x_nutaubar
+[Monitor.cpp][info]     mtuplefile: nuebar_x_nutaubar
+[Monitor.cpp][info]     splinefile: nuebar_x_nutaubar
+[Monitor.cpp][info]     nutype: -12
+[Monitor.cpp][info]     oscnutype: -16
+[Monitor.cpp][info]   - Name: numubar_x_nuebar
+[Monitor.cpp][info]     LatexName: numubar_x_nuebar
+[Monitor.cpp][info]     mtuplefile: numubar_x_nuebar
+[Monitor.cpp][info]     splinefile: numubar_x_nuebar
+[Monitor.cpp][info]     nutype: -14
+[Monitor.cpp][info]     oscnutype: -12
+[Monitor.cpp][info]   - Name: numubar_x_numubar
+[Monitor.cpp][info]     LatexName: numubar_x_numubar
+[Monitor.cpp][info]     mtuplefile: numubar_x_numubar
+[Monitor.cpp][info]     splinefile: numubar_x_numubar
+[Monitor.cpp][info]     nutype: -14
+[Monitor.cpp][info]     oscnutype: -14
+[Monitor.cpp][info]   - Name: numubar_x_nutaubar
+[Monitor.cpp][info]     LatexName: numubar_x_nutaubar
+[Monitor.cpp][info]     mtuplefile: numubar_x_nutaubar
+[Monitor.cpp][info]     splinefile: numubar_x_nutaubar
+[Monitor.cpp][info]     nutype: -14
+[Monitor.cpp][info]     oscnutype: -16
+[SampleHandlerFD.cpp][info] -------------------------------------------------------------------
+[SampleHandlerFD.cpp][info] Creating SampleHandlerFD object
+[SampleHandlerFD.cpp][warning] You have passed an Oscillator object through the constructor of a SampleHandlerFD object - this will be used for all oscillation channels
+[Manager.cpp][info] Setting config to be: Configs/Samples/AtmSample_numuselec.yaml
+[Manager.cpp][info] Config is now: 
+[Monitor.cpp][info] SampleTitle: numuselec
+[Monitor.cpp][info] SampleType: Atm
+[Monitor.cpp][info] MaCh3ModeConfig: Configs/CovObjs/MaCh3Modes.yaml
+[Monitor.cpp][info] SampleName: ATM
+[Monitor.cpp][info] BinningFile: Configs/Samples/AtmosphericParameterBinning.yaml
+[Monitor.cpp][info] Binning:
+[Monitor.cpp][info]   XVarStr: RecoCosineZ
+[Monitor.cpp][info]   XVarBins: [-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1]
+[Monitor.cpp][info]   YVarStr: RecoNeutrinoEnergy
+[Monitor.cpp][info]   YVarBins: [0, 0.23, 0.31, 0.47, 0.81, 1.28, 1.99, 3.17, 5.38, 11.54, 1e8]
+[Monitor.cpp][info] SampleOptions:
+[Monitor.cpp][info]   IsELike: no
+[Monitor.cpp][info]   ExposureScaling: 1.0
+[Monitor.cpp][info] FluxSplines: ~
+[Monitor.cpp][info] File: Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root
+[Monitor.cpp][info] Flavors:
+[Monitor.cpp][info]   - PDG: 12
+[Monitor.cpp][info]     Tag: NuE
+[Monitor.cpp][info]   - PDG: -12
+[Monitor.cpp][info]     Tag: ANuE
+[Monitor.cpp][info]   - PDG: 14
+[Monitor.cpp][info]     Tag: NuM
+[Monitor.cpp][info]   - PDG: -14
+[Monitor.cpp][info]     Tag: ANuM
+[Monitor.cpp][info] InputFiles:
+[Monitor.cpp][info]   mtupleprefix: Inputs/Atmospherics/CAFs/atm_hd
+[Monitor.cpp][info]   mtuplesuffix: _numuselec.root
+[Monitor.cpp][info]   splineprefix: ""
+[Monitor.cpp][info]   splinesuffix: ""
+[Monitor.cpp][info] NuOsc:
+[Monitor.cpp][info]   NuOscConfigFile: Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml
+[Monitor.cpp][info]   EqualBinningPerOscChannel: true
+[Monitor.cpp][info] SubSamples:
+[Monitor.cpp][info]   - Name: nue_x_nue
+[Monitor.cpp][info]     LatexName: nue_x_nue
+[Monitor.cpp][info]     mtuplefile: nue_x_nue
+[Monitor.cpp][info]     splinefile: nue_x_nue
+[Monitor.cpp][info]     nutype: 12
+[Monitor.cpp][info]     oscnutype: 12
+[Monitor.cpp][info]   - Name: nue_x_numu
+[Monitor.cpp][info]     LatexName: nue_x_numu
+[Monitor.cpp][info]     mtuplefile: nue_x_numu
+[Monitor.cpp][info]     splinefile: nue_x_numu
+[Monitor.cpp][info]     nutype: 12
+[Monitor.cpp][info]     oscnutype: 14
+[Monitor.cpp][info]   - Name: nue_x_nutau
+[Monitor.cpp][info]     LatexName: nue_x_nutau
+[Monitor.cpp][info]     mtuplefile: nue_x_nutau
+[Monitor.cpp][info]     splinefile: nue_x_nutau
+[Monitor.cpp][info]     nutype: 12
+[Monitor.cpp][info]     oscnutype: 16
+[Monitor.cpp][info]   - Name: numu_x_nue
+[Monitor.cpp][info]     LatexName: numu_x_nue
+[Monitor.cpp][info]     mtuplefile: numu_x_nue
+[Monitor.cpp][info]     splinefile: numu_x_nue
+[Monitor.cpp][info]     nutype: 14
+[Monitor.cpp][info]     oscnutype: 12
+[Monitor.cpp][info]   - Name: numu_x_numu
+[Monitor.cpp][info]     LatexName: numu_x_numu
+[Monitor.cpp][info]     mtuplefile: numu_x_numu
+[Monitor.cpp][info]     splinefile: numu_x_numu
+[Monitor.cpp][info]     nutype: 14
+[Monitor.cpp][info]     oscnutype: 14
+[Monitor.cpp][info]   - Name: numu_x_nutau
+[Monitor.cpp][info]     LatexName: numu_x_nutau
+[Monitor.cpp][info]     mtuplefile: numu_x_nutau
+[Monitor.cpp][info]     splinefile: numu_x_nutau
+[Monitor.cpp][info]     nutype: 14
+[Monitor.cpp][info]     oscnutype: 16
+[Monitor.cpp][info]   - Name: nuebar_x_nuebar
+[Monitor.cpp][info]     LatexName: nuebar_x_nuebar
+[Monitor.cpp][info]     mtuplefile: nuebar_x_nuebar
+[Monitor.cpp][info]     splinefile: nuebar_x_nuebar
+[Monitor.cpp][info]     nutype: -12
+[Monitor.cpp][info]     oscnutype: -12
+[Monitor.cpp][info]   - Name: nuebar_x_numubar
+[Monitor.cpp][info]     LatexName: nuebar_x_numubar
+[Monitor.cpp][info]     mtuplefile: nuebar_x_numubar
+[Monitor.cpp][info]     splinefile: nuebar_x_numubar
+[Monitor.cpp][info]     nutype: -12
+[Monitor.cpp][info]     oscnutype: -14
+[Monitor.cpp][info]   - Name: nuebar_x_nutaubar
+[Monitor.cpp][info]     LatexName: nuebar_x_nutaubar
+[Monitor.cpp][info]     mtuplefile: nuebar_x_nutaubar
+[Monitor.cpp][info]     splinefile: nuebar_x_nutaubar
+[Monitor.cpp][info]     nutype: -12
+[Monitor.cpp][info]     oscnutype: -16
+[Monitor.cpp][info]   - Name: numubar_x_nuebar
+[Monitor.cpp][info]     LatexName: numubar_x_nuebar
+[Monitor.cpp][info]     mtuplefile: numubar_x_nuebar
+[Monitor.cpp][info]     splinefile: numubar_x_nuebar
+[Monitor.cpp][info]     nutype: -14
+[Monitor.cpp][info]     oscnutype: -12
+[Monitor.cpp][info]   - Name: numubar_x_numubar
+[Monitor.cpp][info]     LatexName: numubar_x_numubar
+[Monitor.cpp][info]     mtuplefile: numubar_x_numubar
+[Monitor.cpp][info]     splinefile: numubar_x_numubar
+[Monitor.cpp][info]     nutype: -14
+[Monitor.cpp][info]     oscnutype: -14
+[Monitor.cpp][info]   - Name: numubar_x_nutaubar
+[Monitor.cpp][info]     LatexName: numubar_x_nutaubar
+[Monitor.cpp][info]     mtuplefile: numubar_x_nutaubar
+[Monitor.cpp][info]     splinefile: numubar_x_nutaubar
+[Monitor.cpp][info]     nutype: -14
+[Monitor.cpp][info]     oscnutype: -16
+[SampleHandlerAtm.cpp][info] === TESTING: Loading numu energy and cosine splines ===
+[SampleHandlerAtm.cpp][error] Available keys under FluxSplines:
+[SampleHandlerAtm.cpp][warning] Using hardcoded spline file path: Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root
+[SampleHandlerAtm.cpp][info] Loading test splines from: Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root
+[SampleHandlerAtm.cpp][info] Spline file exists and is readable
+[SampleHandlerAtm.cpp][info] Loading nue splines...
+[SampleHandlerAtm.cpp][info] Attempting to load spline 'atmflux_NuE_E' from file 'Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root'
+[SampleHandlerAtm.cpp][info] Successfully opened file: Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root
+[SampleHandlerAtm.cpp][info] Successfully retrieved spline: atmflux_NuE_E
+[SampleHandlerAtm.cpp][info] Spline 'atmflux_NuE_E' has 41 points, range: [0.10599514, 9.828767594999999]
+[SampleHandlerAtm.cpp][info] Successfully cloned spline: atmflux_NuE_E
+[SampleHandlerAtm.cpp][info] Closed file and completed loading spline: atmflux_NuE_E
+[SampleHandlerAtm.cpp][info] Attempting to load spline 'atmflux_NuE_Cos' from file 'Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root'
+[SampleHandlerAtm.cpp][info] Successfully opened file: Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root
+[SampleHandlerAtm.cpp][info] Successfully retrieved spline: atmflux_NuE_Cos
+[SampleHandlerAtm.cpp][info] Spline 'atmflux_NuE_Cos' has 20 points, range: [-0.95, 0.95]
+[SampleHandlerAtm.cpp][info] Successfully cloned spline: atmflux_NuE_Cos
+[SampleHandlerAtm.cpp][info] Closed file and completed loading spline: atmflux_NuE_Cos
+[SampleHandlerAtm.cpp][info] Loading anti-nue splines...
+[SampleHandlerAtm.cpp][info] Attempting to load spline 'atmflux_ANuE_E' from file 'Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root'
+[SampleHandlerAtm.cpp][info] Successfully opened file: Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root
+[SampleHandlerAtm.cpp][info] Successfully retrieved spline: atmflux_ANuE_E
+[SampleHandlerAtm.cpp][info] Spline 'atmflux_ANuE_E' has 41 points, range: [0.10599514, 9.828767594999999]
+[SampleHandlerAtm.cpp][info] Successfully cloned spline: atmflux_ANuE_E
+[SampleHandlerAtm.cpp][info] Closed file and completed loading spline: atmflux_ANuE_E
+[SampleHandlerAtm.cpp][info] Attempting to load spline 'atmflux_ANuE_Cos' from file 'Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root'
+[SampleHandlerAtm.cpp][info] Successfully opened file: Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root
+[SampleHandlerAtm.cpp][info] Successfully retrieved spline: atmflux_ANuE_Cos
+[SampleHandlerAtm.cpp][info] Spline 'atmflux_ANuE_Cos' has 20 points, range: [-0.95, 0.95]
+[SampleHandlerAtm.cpp][info] Successfully cloned spline: atmflux_ANuE_Cos
+[SampleHandlerAtm.cpp][info] Closed file and completed loading spline: atmflux_ANuE_Cos
+[SampleHandlerAtm.cpp][info] Loading numu splines...
+[SampleHandlerAtm.cpp][info] Attempting to load spline 'atmflux_NuM_E' from file 'Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root'
+[SampleHandlerAtm.cpp][info] Successfully opened file: Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root
+[SampleHandlerAtm.cpp][info] Successfully retrieved spline: atmflux_NuM_E
+[SampleHandlerAtm.cpp][info] Spline 'atmflux_NuM_E' has 41 points, range: [0.10599514, 9.828767594999999]
+[SampleHandlerAtm.cpp][info] Successfully cloned spline: atmflux_NuM_E
+[SampleHandlerAtm.cpp][info] Closed file and completed loading spline: atmflux_NuM_E
+[SampleHandlerAtm.cpp][info] Attempting to load spline 'atmflux_NuM_Cos' from file 'Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root'
+[SampleHandlerAtm.cpp][info] Successfully opened file: Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root
+[SampleHandlerAtm.cpp][info] Successfully retrieved spline: atmflux_NuM_Cos
+[SampleHandlerAtm.cpp][info] Spline 'atmflux_NuM_Cos' has 20 points, range: [-0.95, 0.95]
+[SampleHandlerAtm.cpp][info] Successfully cloned spline: atmflux_NuM_Cos
+[SampleHandlerAtm.cpp][info] Closed file and completed loading spline: atmflux_NuM_Cos
+[SampleHandlerAtm.cpp][info] Loading anti-numu splines...
+[SampleHandlerAtm.cpp][info] Attempting to load spline 'atmflux_ANuM_E' from file 'Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root'
+[SampleHandlerAtm.cpp][info] Successfully opened file: Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root
+[SampleHandlerAtm.cpp][info] Successfully retrieved spline: atmflux_ANuM_E
+[SampleHandlerAtm.cpp][info] Spline 'atmflux_ANuM_E' has 41 points, range: [0.10599514, 9.828767594999999]
+[SampleHandlerAtm.cpp][info] Successfully cloned spline: atmflux_ANuM_E
+[SampleHandlerAtm.cpp][info] Closed file and completed loading spline: atmflux_ANuM_E
+[SampleHandlerAtm.cpp][info] Attempting to load spline 'atmflux_ANuM_Cos' from file 'Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root'
+[SampleHandlerAtm.cpp][info] Successfully opened file: Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root
+[SampleHandlerAtm.cpp][info] Successfully retrieved spline: atmflux_ANuM_Cos
+[SampleHandlerAtm.cpp][info] Spline 'atmflux_ANuM_Cos' has 20 points, range: [-0.95, 0.95]
+[SampleHandlerAtm.cpp][info] Successfully cloned spline: atmflux_ANuM_Cos
+[SampleHandlerAtm.cpp][info] Closed file and completed loading spline: atmflux_ANuM_Cos
+[SampleHandlerAtm.cpp][info] === All atmospheric flux splines loaded successfully! ===
+[SampleHandlerAtm.cpp][info] Spline summary:
+[SampleHandlerAtm.cpp][info]   nue_E:    41 points, range [0.106, 9.829]
+[SampleHandlerAtm.cpp][info]   nue_Cos:  20 points, range [-0.950, 0.950]
+[SampleHandlerAtm.cpp][info]   anue_E:   41 points, range [0.106, 9.829]
+[SampleHandlerAtm.cpp][info]   anue_Cos: 20 points, range [-0.950, 0.950]
+[SampleHandlerAtm.cpp][info]   numu_E:   41 points, range [0.106, 9.829]
+[SampleHandlerAtm.cpp][info]   numu_Cos: 20 points, range [-0.950, 0.950]
+[SampleHandlerAtm.cpp][info]   anumu_E:  41 points, range [0.106, 9.829]
+[SampleHandlerAtm.cpp][info]   anumu_Cos:20 points, range [-0.950, 0.950]
+[MaCh3Modes.cpp][info] Printing MaCh3 Modes Called: DUNE Interaction modes
+[MaCh3Modes.cpp][info] ========================================================================
+[MaCh3Modes.cpp][info] #     |  Name                 |  FancyName            |  SIMB Modes                    
+[MaCh3Modes.cpp][info] ------------------------------------------------------------------------
+[MaCh3Modes.cpp][info] 0     |  CCQE                 |  CCQE                 |  0                             
+[MaCh3Modes.cpp][info] 1     |  CC1Kaon              |  CC1Kaon              |  40                            
+[MaCh3Modes.cpp][info] 2     |  CCDIS                |  CCDIS                |  2                             
+[MaCh3Modes.cpp][info] 3     |  CCRES                |  CCRES                |  1                             
+[MaCh3Modes.cpp][info] 4     |  CCCOH                |  CCCOH                |  3                             
+[MaCh3Modes.cpp][info] 5     |  CCDiff               |  CCDiff               |  11                            
+[MaCh3Modes.cpp][info] 6     |  CCNuEl               |  CCNuEl               |  5                             
+[MaCh3Modes.cpp][info] 7     |  CCIMD                |  CCIMD                |  41                            
+[MaCh3Modes.cpp][info] 8     |  CCAnuGam             |  CCAnuGam             |  9                             
+[MaCh3Modes.cpp][info] 9     |  CCMEC                |  CCMEC                |  10                            
+[MaCh3Modes.cpp][info] 10    |  CCCOHEL              |  CCCOHEL              |  4                             
+[MaCh3Modes.cpp][info] 11    |  CCIBD                |  CCIBD                |  7                             
+[MaCh3Modes.cpp][info] 12    |  CCGlRES              |  CCGlRES              |  8                             
+[MaCh3Modes.cpp][info] 13    |  CCIMDAnn             |  CCIMDAnn             |  6                             
+[MaCh3Modes.cpp][info] 14    |  NCQE                 |  NCQE                 |  12                            
+[MaCh3Modes.cpp][info] 15    |  NCDIS                |  NCDIS                |  14                            
+[MaCh3Modes.cpp][info] 16    |  NCRES                |  NCRES                |  13                            
+[MaCh3Modes.cpp][info] 17    |  NCCOH                |  NCCOH                |  15                            
+[MaCh3Modes.cpp][info] 18    |  NCDiff               |  NCDiff               |  23                            
+[MaCh3Modes.cpp][info] 19    |  NCNuEl               |  NCNuEl               |  17                            
+[MaCh3Modes.cpp][info] 20    |  NCIMD                |  NCIMD                |  43                            
+[MaCh3Modes.cpp][info] 21    |  NCAnuGam             |  NCAnuGam             |  21                            
+[MaCh3Modes.cpp][info] 22    |  NCMEC                |  NCMEC                |  22                            
+[MaCh3Modes.cpp][info] 23    |  NCCOHEL              |  NCCOHEL              |  16                            
+[MaCh3Modes.cpp][info] 24    |  NCIBD                |  NCIBD                |  19                            
+[MaCh3Modes.cpp][info] 25    |  NCGlRES              |  NCGlRES              |  20                            
+[MaCh3Modes.cpp][info] 26    |  NCIMDAnn             |  NCIMDAnn             |  18                            
+[MaCh3Modes.cpp][info] ========================================================================
+[MaCh3Modes.cpp][info] ==========================
+[MaCh3Modes.cpp][info] SIMB Modes |  Name                          
+[MaCh3Modes.cpp][info] --------------------------
+[MaCh3Modes.cpp][info] 0          |  CCQE                          
+[MaCh3Modes.cpp][info] 1          |  CCRES                         
+[MaCh3Modes.cpp][info] 2          |  CCDIS                         
+[MaCh3Modes.cpp][info] 3          |  CCCOH                         
+[MaCh3Modes.cpp][info] 4          |  CCCOHEL                       
+[MaCh3Modes.cpp][info] 5          |  CCNuEl                        
+[MaCh3Modes.cpp][info] 6          |  CCIMDAnn                      
+[MaCh3Modes.cpp][info] 7          |  CCIBD                         
+[MaCh3Modes.cpp][info] 8          |  CCGlRES                       
+[MaCh3Modes.cpp][info] 9          |  CCAnuGam                      
+[MaCh3Modes.cpp][info] 10         |  CCMEC                         
+[MaCh3Modes.cpp][info] 11         |  CCDiff                        
+[MaCh3Modes.cpp][info] 12         |  NCQE                          
+[MaCh3Modes.cpp][info] 13         |  NCRES                         
+[MaCh3Modes.cpp][info] 14         |  NCDIS                         
+[MaCh3Modes.cpp][info] 15         |  NCCOH                         
+[MaCh3Modes.cpp][info] 16         |  NCCOHEL                       
+[MaCh3Modes.cpp][info] 17         |  NCNuEl                        
+[MaCh3Modes.cpp][info] 18         |  NCIMDAnn                      
+[MaCh3Modes.cpp][info] 19         |  NCIBD                         
+[MaCh3Modes.cpp][info] 20         |  NCGlRES                       
+[MaCh3Modes.cpp][info] 21         |  NCAnuGam                      
+[MaCh3Modes.cpp][info] 22         |  NCMEC                         
+[MaCh3Modes.cpp][info] 23         |  NCDiff                        
+[MaCh3Modes.cpp][info] 24         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 25         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 26         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 27         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 28         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 29         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 30         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 31         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 32         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 33         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 34         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 35         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 36         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 37         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 38         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 39         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 40         |  CC1Kaon                       
+[MaCh3Modes.cpp][info] 41         |  CCIMD                         
+[MaCh3Modes.cpp][info] 42         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 43         |  NCIMD                         
+[MaCh3Modes.cpp][info] ==========================
+[Manager.cpp][warning] Didn't find a TestStatistic specified
+[Manager.cpp][warning] Defaulting to using a Poisson likelihood
+[SampleHandlerFD.cpp][info] Found 2 dimensions for sample binning
+[SampleHandlerFD.cpp][info]   Nominal mode weights to apply: 
+[SampleHandlerFD.cpp][info]     - CCQE: 1
+[SampleHandlerFD.cpp][info]     - CC1Kaon: 1
+[SampleHandlerFD.cpp][info]     - CCDIS: 1
+[SampleHandlerFD.cpp][info]     - CCRES: 1
+[SampleHandlerFD.cpp][info]     - CCCOH: 1
+[SampleHandlerFD.cpp][info]     - CCDiff: 1
+[SampleHandlerFD.cpp][info]     - CCNuEl: 1
+[SampleHandlerFD.cpp][info]     - CCIMD: 1
+[SampleHandlerFD.cpp][info]     - CCAnuGam: 1
+[SampleHandlerFD.cpp][info]     - CCMEC: 1
+[SampleHandlerFD.cpp][info]     - CCCOHEL: 1
+[SampleHandlerFD.cpp][info]     - CCIBD: 1
+[SampleHandlerFD.cpp][info]     - CCGlRES: 1
+[SampleHandlerFD.cpp][info]     - CCIMDAnn: 1
+[SampleHandlerFD.cpp][info]     - NCQE: 1
+[SampleHandlerFD.cpp][info]     - NCDIS: 1
+[SampleHandlerFD.cpp][info]     - NCRES: 1
+[SampleHandlerFD.cpp][info]     - NCCOH: 1
+[SampleHandlerFD.cpp][info]     - NCDiff: 1
+[SampleHandlerFD.cpp][info]     - NCNuEl: 1
+[SampleHandlerFD.cpp][info]     - NCIMD: 1
+[SampleHandlerFD.cpp][info]     - NCAnuGam: 1
+[SampleHandlerFD.cpp][info]     - NCMEC: 1
+[SampleHandlerFD.cpp][info]     - NCCOHEL: 1
+[SampleHandlerFD.cpp][info]     - NCIBD: 1
+[SampleHandlerFD.cpp][info]     - NCGlRES: 1
+[SampleHandlerFD.cpp][info]     - NCIMDAnn: 1
+MUYUAN DEBUG: SampleHandlerAtm::Init() called!
+[SampleHandlerAtm.cpp][info] 	Processing event: 0/6610924
+[SampleHandlerAtm.cpp][warning] Skipping event 5235/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 13966/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 18877/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 19191/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 30780/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 30853/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 36353/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 40707/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 50548/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 53521/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 53993/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 60135/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 60929/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 61677/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 64490/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 68875/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 71695/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 76999/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 77390/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 78212/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 86989/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 88138/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 93283/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 100360/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 102398/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 102621/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 107601/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 109524/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 110434/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 112080/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 112436/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 112937/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 117387/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 119480/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 129572/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 130260/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 130287/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 134667/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 135140/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 135578/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 140284/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 144739/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 160306/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 161583/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 163201/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 164021/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 164354/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 166082/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 169363/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 238260/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 247235/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 272122/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 304224/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 351018/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 364123/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 375849/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 377204/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 473668/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 511255/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 517646/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 544622/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 639542/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][info] 	Processing event: 661092/6610924
+[SampleHandlerAtm.cpp][warning] Skipping event 710863/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 720812/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 789530/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 793919/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 795062/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 803824/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 825885/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 838783/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 870801/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 874567/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 874710/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 936996/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 958868/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 962241/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1026865/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1112838/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1132619/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1140334/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1170702/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1198657/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1226819/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1291997/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][info] 	Processing event: 1322184/6610924
+[SampleHandlerAtm.cpp][warning] Skipping event 1342566/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1343354/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1435750/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1488940/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1499009/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1507702/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1532167/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1540489/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1549659/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1551578/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1564689/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1598535/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1604197/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1622552/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1646727/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1657012/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1710828/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1737860/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1751051/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1765596/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1818965/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1970527/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1982375/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 1982540/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][info] 	Processing event: 1983276/6610924
+[SampleHandlerAtm.cpp][warning] Skipping event 1998562/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2000478/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2021427/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2024215/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2053784/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2069983/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2094537/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2116457/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2116671/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2163887/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2213250/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2245291/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2418918/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2421074/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2426523/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2439992/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2446207/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2447726/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2459023/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2469221/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2487871/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2495030/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2495900/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2503536/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2506179/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2519455/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2539440/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2546673/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2555404/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2560315/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2560629/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2572218/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2572291/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2577791/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2582145/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2591986/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2594959/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2595431/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2601573/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2602367/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2603115/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2605928/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2610313/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2613133/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2618437/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2618828/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2619650/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2628427/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2629576/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2634721/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2641798/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2643836/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2644059/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][info] 	Processing event: 2644368/6610924
+[SampleHandlerAtm.cpp][warning] Skipping event 2649039/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2650962/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2651872/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2653518/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2653874/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2654375/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2658825/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2660918/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2671010/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2671698/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2671725/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2676105/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2676578/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2677016/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2681722/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2686177/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2701744/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2703021/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2704639/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2705459/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2705792/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2707520/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2710801/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2779698/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2788673/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2813560/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2845662/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2892456/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2905561/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2917287/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 2918642/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3015106/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3052693/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3059084/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3086060/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3180980/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3252301/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3262250/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][info] 	Processing event: 3305460/6610924
+[SampleHandlerAtm.cpp][warning] Skipping event 3330968/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3335357/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3336500/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3345262/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3367323/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3380221/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3412239/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3416005/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3416148/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3478434/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3500306/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3503679/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3568303/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3654276/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3674057/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3681772/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3712140/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3740095/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3768257/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3833435/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3884004/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 3884792/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][info] 	Processing event: 3966552/6610924
+[SampleHandlerAtm.cpp][warning] Skipping event 3977188/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4030378/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4040447/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4049140/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4073605/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4081927/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4091097/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4093016/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4106127/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4139973/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4145635/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4163990/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4188165/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4198450/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4252266/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4279298/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4292489/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4307034/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4360403/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4511965/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4523813/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4523978/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4540000/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4541916/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4562865/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4565653/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4595222/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4611421/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][info] 	Processing event: 4627644/6610924
+[SampleHandlerAtm.cpp][warning] Skipping event 4635975/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4657895/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4658109/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4705325/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4754688/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4786729/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4960356/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4962512/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4967961/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4981430/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4987645/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 4989164/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5000461/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5010659/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5029309/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5036468/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5037338/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5044974/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5047617/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5060893/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5080878/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5083446/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5085236/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5086054/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5086239/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5089362/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5090366/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5094106/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5103699/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5105169/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5105834/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5105842/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5109960/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5113363/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5115194/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5116964/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5122331/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5123278/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5123827/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5123857/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5123890/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5131397/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5132266/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5196928/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5251379/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5274197/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][info] 	Processing event: 5288736/6610924
+[SampleHandlerAtm.cpp][warning] Skipping event 5319921/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5347927/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5418009/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5611601/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5623538/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5630970/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5661899/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5666677/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5688196/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5702711/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5734082/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5739256/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5793792/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5797164/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5798611/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5805126/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5809442/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5809547/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5817977/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5822821/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5830085/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5844243/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5847470/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5849260/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5850078/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5850263/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5853386/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5854390/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5858130/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5867723/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5869193/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5869858/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5869866/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5873984/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5877387/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5879218/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5880988/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5886355/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5887302/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5887851/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5887881/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5887914/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5895421/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 5896290/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][info] 	Processing event: 5949828/6610924
+[SampleHandlerAtm.cpp][warning] Skipping event 5960952/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6015403/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6038221/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6083945/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6111951/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6182033/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6375625/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6387562/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6394994/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6425923/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6430701/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6452220/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6466735/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6498106/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6503280/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6557816/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6561188/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6562635/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6569150/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6573466/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6573571/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6582001/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6586845/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6594109/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][warning] Skipping event 6608267/6610924 -> Reconstructed Cosine Z is NAN
+[SampleHandlerAtm.cpp][info] 	Processing event: 6610920/6610924
+[SampleHandlerFD.cpp][info] =============================================
+[SampleHandlerFD.cpp][info] Total number of events is: 6610924
+[SampleHandlerFD.cpp][info] Setting up NuOscillator..
+[SampleHandlerFD.cpp][info] You have passed an OscillatorBase object through the constructor of a SampleHandlerFD object - this will be used for all oscillation channels
+[SampleHandlerFD.cpp][info] Setting up Sample Binning..
+[SampleHandlerFD.cpp][info] Setting up Sample Binning
+[SampleHandlerFD.cpp][info] XBinning:
+[SampleHandlerFD.cpp][info] -1.000000, -0.800000, -0.600000, -0.400000, -0.200000, 0.000000, 0.200000, 0.400000, 0.600000, 0.800000, 1.000000, 
+[SampleHandlerFD.cpp][info] YBinning:
+[SampleHandlerFD.cpp][info] 0.000000, 0.230000, 0.310000, 0.470000, 0.810000, 1.280000, 1.990000, 3.170000, 5.380000, 11.540000, 100000000.000000, 
+[SampleHandlerFD.cpp][info] Setting up 2D binning with RecoCosineZ and RecoNeutrinoEnergy
+[SampleHandlerFD.cpp][info] Setting up Splines..
+[SampleHandlerFD.cpp][info] Setting up Normalisation Pointers..
+[SampleHandlerFD.cpp][info] Setting up Functional Pointers..
+[SampleHandlerAtm.cpp][info] Registering atmospheric flux functional parameters
+[SampleHandlerAtm.cpp][info] Registered atmflux_0 functional parameter
+[SampleHandlerFD.cpp][info] Adding functional parameter: atmflux_0 to funcParsMap with key: 0
+[SampleHandlerFD.cpp][info] Finished setting up functional parameters
+[SampleHandlerFD.cpp][info] Setting up Weight Pointers..
+[SampleHandlerAtm.cpp][info] === SampleHandlerAtm::SetupWeightPointers() called ===
+[SampleHandlerAtm.cpp][info] Found 0 norm parameters for sample ATM
+[SampleHandlerAtm.cpp][info] Calculating flux weights for 6610924 events
+[SampleHandlerAtm.cpp][info] nue Event 0: original_flux=0.008915, spline=1.016874, final_flux=0.009065, energy=2.271, cosZ=0.284
+[SampleHandlerAtm.cpp][info] nue Event 1: original_flux=0.002028, spline=1.007738, final_flux=0.002044, energy=11.862, cosZ=0.542
+[SampleHandlerAtm.cpp][info] nue Event 2: original_flux=0.006794, spline=1.015640, final_flux=0.006901, energy=2.061, cosZ=0.543
+[SampleHandlerAtm.cpp][info] numu Event 2541438: original_flux=0.016600, spline=1.035404, final_flux=0.017187, energy=2.271, cosZ=0.284
+[SampleHandlerAtm.cpp][info] numu Event 2541439: original_flux=0.008432, spline=1.020749, final_flux=0.008607, energy=11.862, cosZ=0.542
+[SampleHandlerAtm.cpp][info] numu Event 2541440: original_flux=0.015121, spline=1.057247, final_flux=0.015987, energy=2.061, cosZ=0.543
+[SampleHandlerAtm.cpp][info] anue Event 5082876: original_flux=0.004154, spline=1.032237, final_flux=0.004288, energy=19.942, cosZ=0.046
+[SampleHandlerAtm.cpp][info] anue Event 5082877: original_flux=0.005588, spline=1.144519, final_flux=0.006395, energy=6.871, cosZ=0.166
+[SampleHandlerAtm.cpp][info] anue Event 5082878: original_flux=0.000513, spline=1.024310, final_flux=0.000525, energy=33.169, cosZ=0.803
+[SampleHandlerAtm.cpp][info] anumu Event 5846900: original_flux=0.010466, spline=1.011671, final_flux=0.010588, energy=19.942, cosZ=0.046
+[SampleHandlerAtm.cpp][info] anumu Event 5846901: original_flux=0.013534, spline=1.092165, final_flux=0.014781, energy=6.871, cosZ=0.166
+[SampleHandlerAtm.cpp][info] anumu Event 5846902: original_flux=0.004745, spline=1.010928, final_flux=0.004797, energy=33.169, cosZ=0.803
+[SampleHandlerAtm.cpp][info] Found 763977 anumu events (PDG: -14)
+[SampleHandlerAtm.cpp][info] Found 763977 anue events (PDG: -12)
+[SampleHandlerAtm.cpp][info] Found 364 unknown events (PDG: 0)
+[SampleHandlerAtm.cpp][info] Found 2541303 nue events (PDG: 12)
+[SampleHandlerAtm.cpp][info] Found 2541303 numu events (PDG: 14)
+[SampleHandlerAtm.cpp][info] === SampleHandlerAtm::SetupWeightPointers() finished ===
+[SampleHandlerFD.cpp][info] Setting up Kinematic Map..
+[SampleHandlerFD.cpp][info] =======================================================
+[EventRates.cpp][info] Event rate for numuselec : 29760.11
+[SampleHandlerFD.cpp][info] -------------------------------------------------
+[SampleHandlerFD.cpp][info] Integral breakdown for sample: numuselec
+[SampleHandlerFD.cpp][info] 
+[SampleHandlerFD.cpp][info] | Mode     | nue_x_nue         | nue_x_numu        | nue_x_nutau       | numu_x_nue        | numu_x_numu       | numu_x_nutau      | nuebar_x_nuebar   | nuebar_x_numubar  | nuebar_x_nutaubar | numubar_x_nuebar  | numubar_x_numubar | numubar_x_nutaubar | Total      |
+[SampleHandlerFD.cpp][info] -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[SampleHandlerFD.cpp][info] | CCQE     | 111.7271          | 403.6605          | 1.4005            | 21.9956           | 10412.1717        | 14.7055           | 13.4429           | 40.7112           | 0.0504            | 1.0981            | 2520.2699         | 8.0276            | 13549.2610 |
+[SampleHandlerFD.cpp][info] | CC1Kaon  | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[SampleHandlerFD.cpp][info] | CCDIS    | 190.3062          | 60.0712           | 0.7384            | 18.8356           | 3208.8296         | 36.6849           | 27.8653           | 2.8014            | 0.0281            | 0.3153            | 1093.5679         | 13.2155           | 4653.2593  |
+[SampleHandlerFD.cpp][info] | CCRES    | 176.1893          | 90.3027           | 1.2781            | 15.7762           | 4626.0932         | 15.5480           | 25.2216           | 9.0017            | 0.0347            | 0.6921            | 1541.1926         | 8.2214            | 6509.5516  |
+[SampleHandlerFD.cpp][info] | CCCOH    | 3.6032            | 0.8643            | 0.0000            | 0.4077            | 41.4641           | 0.0000            | 3.3816            | 0.2628            | 0.0000            | 0.1166            | 41.0239           | 0.0076            | 91.1318    |
+[SampleHandlerFD.cpp][info] | CCDiff   | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0001            | 0.0000            | 0.0000            | 0.0084            | 0.0000            | 0.0085     |
+[SampleHandlerFD.cpp][info] | CCNuEl   | 0.0430            | 0.0002            | 0.0000            | 0.0082            | 0.4646            | 0.0000            | 0.0416            | 0.0000            | 0.0000            | 0.0004            | 0.0000            | 0.0000            | 0.5581     |
+[SampleHandlerFD.cpp][info] | CCIMD    | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[SampleHandlerFD.cpp][info] | CCAnuGam | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[SampleHandlerFD.cpp][info] | CCMEC    | 28.2018           | 52.5767           | 0.3144            | 3.6914            | 2073.0602         | 3.5886            | 2.8642            | 8.2662            | 0.0192            | 0.1373            | 793.7431          | 2.8926            | 2969.3557  |
+[SampleHandlerFD.cpp][info] | CCCOHEL  | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[SampleHandlerFD.cpp][info] | CCIBD    | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[SampleHandlerFD.cpp][info] | CCGlRES  | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[SampleHandlerFD.cpp][info] | CCIMDAnn | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[SampleHandlerFD.cpp][info] | NCQE     | 15.0441           | 0.0000            | 0.0000            | 0.0000            | 29.9583           | 0.0000            | 2.9907            | 0.0000            | 0.0000            | 0.0000            | 7.3327            | 0.0000            | 55.3257    |
+[SampleHandlerFD.cpp][info] | NCDIS    | 205.4500          | 0.0000            | 0.0000            | 0.0000            | 520.2122          | 0.0000            | 65.8758           | 0.0000            | 0.0000            | 0.0000            | 201.5865          | 0.0000            | 993.1245   |
+[SampleHandlerFD.cpp][info] | NCRES    | 216.3375          | 0.0000            | 0.0000            | 0.0000            | 448.5698          | 0.0000            | 74.1738           | 0.0000            | 0.0000            | 0.0000            | 185.4835          | 0.0000            | 924.5646   |
+[SampleHandlerFD.cpp][info] | NCCOH    | 0.1654            | 0.0000            | 0.0000            | 0.0000            | 0.1707            | 0.0000            | 0.0905            | 0.0000            | 0.0000            | 0.0000            | 0.3009            | 0.0000            | 0.7275     |
+[SampleHandlerFD.cpp][info] | NCDiff   | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[SampleHandlerFD.cpp][info] | NCNuEl   | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0090            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0139            | 0.0000            | 0.0228     |
+[SampleHandlerFD.cpp][info] | NCIMD    | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[SampleHandlerFD.cpp][info] | NCAnuGam | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[SampleHandlerFD.cpp][info] | NCMEC    | 3.3139            | 0.0000            | 0.0000            | 0.0000            | 5.7313            | 0.0000            | 1.1038            | 0.0000            | 0.0000            | 0.0000            | 3.0729            | 0.0000            | 13.2219    |
+[SampleHandlerFD.cpp][info] | NCCOHEL  | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[SampleHandlerFD.cpp][info] | NCIBD    | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[SampleHandlerFD.cpp][info] | NCGlRES  | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[SampleHandlerFD.cpp][info] | NCIMDAnn | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000            | 0.0000     |
+[SampleHandlerFD.cpp][info] | Total    | 950.3815          | 607.4756          | 3.7314            | 60.7147           | 21366.7345        | 70.5270           | 217.0519          | 61.0434           | 0.1325            | 2.3599            | 6387.5960         | 32.3646           | 29760.1129 |
+[SampleHandlerFD.cpp][info] -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[SampleHandlerFD.cpp][info] 
+Info in <TCanvas::Print>: pdf file DuneEventRates.pdf has been created
+Info in <TCanvas::Print>: Current canvas added to pdf file DuneEventRates.pdf
+Info in <TCanvas::Print>: pdf file DuneEventRates.pdf has been closed
+MUYUAN DEBUG: Exiting before making breakdowns

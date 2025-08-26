@@ -1,23 +1,49 @@
 ---
 Systematics:
 - Systematic:
-    SampleNames: ["ATM"]
-    Error: 0.123224219401
-    FlatPrior: false
-    KinematicCuts:
-    - TrueNeutrinoEnergy:
-      - 0.0
-      - 0.5
+    SampleNames: ["ATM"] # lists all the samples this systematic applies to
+    # Error: 1.0 # absolute error on the parameter, 1sigma error band
+    Error: 0.2 # absolute error on the parameter, 1sigma error band
+
+    FlatPrior: false # penalty term, for atmospheric, always true
+    # KinematicCuts:
+    # - TrueNeutrinoEnergy:
+    #   - 0.0
+    #   - 0.5 # energy range for this systematic, 0 to 0.5 GeV
     Names:
-      FancyName: b_104
-      ParameterName: b_104
-    ParameterBounds:
-    - 0.0
-    - 9999.0
-    ParameterGroup: Xsec
+      FancyName: atmflux_0 # latex style name for plots atmflux_0 
+      ParameterName: atmflux_0 # atmflux_0
+    # ParameterBounds: [-9999.0, 9999.0] # like a normalization term, scale the events. addative scale  # 1.0 + parameter dial value * functional response(TSpline function)
+    ParameterBounds: [0, 9999.0]
+    ParameterGroup: AtmFlux
     ParameterValues:
       Generated: 1.0
       PreFitValue: 1.0
     StepScale:
-      MCMC: 0.3
-    Type: Norm
+      MCMC: 1.0 # irrevant for atm flux
+    Type: Functional # should be functional, uses RegisterFunctionalParameters() with function pointers
+    # Type: Norm # debugging, norm uses CalcXsecWeightFunc()
+
+# ---
+# Systematics:
+# - Systematic:
+#     SampleNames: ["ATM"]
+#     Error: 0.123224219401
+#     FlatPrior: false
+#     KinematicCuts:
+#     - TrueNeutrinoEnergy:
+#       - 0.0
+#       - 0.5
+#     Names:
+#       FancyName: b_104
+#       ParameterName: b_104
+#     ParameterBounds:
+#     - 0.0
+#     - 9999.0
+#     ParameterGroup: Xsec
+#     ParameterValues:
+#       Generated: 1.0
+#       PreFitValue: 1.0
+#     StepScale:
+#       MCMC: 0.3
+#     Type: Norm

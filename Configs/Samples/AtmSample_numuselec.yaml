@@ -15,6 +15,18 @@ SampleOptions:
   IsELike: no
   ExposureScaling: 1.0
 
+FluxSplines:
+File: "Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root"
+Flavors:
+  - PDG: 12
+    Tag: "NuE"
+  - PDG: -12
+    Tag: "ANuE"
+  - PDG: 14
+    Tag: "NuM"
+  - PDG: -14
+    Tag: "ANuM"
+
 InputFiles:
   mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"
   mtuplesuffix: "_numuselec.root"

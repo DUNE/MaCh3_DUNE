@@ -6,7 +6,7 @@
 
 #include "StructsDUNE.h"
 /// @brief Base class for handling atmospheric samples
-class SampleHandlerAtm : virtual public SampleHandlerFD
+class SampleHandlerAtm : virtual public SampleHandlerFD // Inherits from SampleHandlerFD
 {
 public:
   /// @brief Constructor
@@ -18,9 +18,10 @@ public:
   ~SampleHandlerAtm();
 
   /// @brief Enum to identify kinematics
+  // Define available kinetmatic variables that can be used for binning and cuts
   enum KinematicTypes{kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueCosZ,kRecoCosZ,kOscChannel,kMode};
   
-protected:
+protected: // Core functions
   /// @brief Initialises object
   void Init();
 
@@ -34,7 +35,10 @@ protected:
   void SetupFDMC();
 
   /// @brief Sets up pointers weights for each event (oscillation/xsec/etc.)
-  void SetupWeightPointers();
+  // void SetupWeightPointers();
+  void SetupWeightPointers() override; // muyuan changed this. without voerride, the compiler
+  //treats it as a new function rather than overriding the base class function, so when the 
+  /// base class function is called, it doesn't call this one
 
   /// @brief Sets up splines 
   void SetupSplines();
@@ -42,14 +46,18 @@ protected:
   /// @brief Cleanup memory
   void CleanMemoryBeforeFit() override {};
 
-  void RegisterFunctionalParameters() override {};
+
+  /// @brief Muyuan's function to register functional parameters
+  /// @details Not implemented, but required by the base class
+  // void RegisterFunctionalParameters() override {};
+  void RegisterFunctionalParameters() override;
   
   //DB functions which could be initialised to do something which is non-trivial
   
   /// @brief NOT IMPLEMENTED: Dunder method to calculate xsec weights
   /// @param iSample sample ID
   /// @param iEvent Event number
-  double CalcXsecWeightFunc(int iEvent) {(void) iEvent; return 1.;}
+  double CalcXsecWeightFunc(int iEvent) {(void) iEvent; return 1.;} // always return 1.0 (no effect)
   
   /// @brief NOT IMPLEMENTED: Apply kinematic shifts
   /// @param iSample Sample Number
@@ -127,6 +135,42 @@ protected:
 
   /// Multiplicative scaling to scale from the assumed 400ktyr value in the CAF files
   double ExposureScaling;
+
+
+private:
+  // MUYUAN: Test spline for atmospheric flux
+  TSpline3* spline_nue_E;
+  TSpline3* spline_nue_Cos;
+  TSpline3* spline_anue_E;
+  TSpline3* spline_anue_Cos;
+  TSpline3* spline_numu_E;
+  TSpline3* spline_numu_Cos;
+  TSpline3* spline_anumu_E;
+  TSpline3* spline_anumu_Cos;
+
+  // MUYUAN: Parameter values for flux variations
+  double param_atmflux_nue;
+  double param_atmflux_anue;
+  double param_atmflux_numu;
+  double param_atmflux_anumu;
+  
+  // MUYUAN: Spline loading functions
+  void LoadFluxSplines();
+  TSpline3* LoadSingleSpline(const std::string& filename, const std::string& splinename);
+  
+  // MUYUAN: Flux weight calculation
+  double CalculateFluxWeight(int iEvent);
+
 };
+
+
+
+
+
+
+
+
+
+
 
 #endif

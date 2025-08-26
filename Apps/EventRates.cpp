@@ -40,6 +40,12 @@ void Write1DHistogramsToPdf(std::string OutFileName, std::vector<TH1*> Histogram
 }
 
 int main(int argc, char * argv[]) {
+
+  std::cout << "================================" << std::endl;
+  std::cout << "MUYUAN TESTING: This is the NEW EventRates!" << std::endl;
+  std::cout << "MUYUAN TESTING: Timestamp Aug 22, 2025" << std::endl;
+  std::cout << "================================" << std::endl;
+
   MaCh3Utils::MaCh3Usage(argc, argv);
   auto fitMan = std::unique_ptr<manager>(new manager(argv[1]));
 
@@ -63,11 +69,16 @@ int main(int argc, char * argv[]) {
     MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetTitle(), EventRateString);
 
     Sample->PrintIntegral();
+    break; // muyuan add
   }
 
   std::string OutFileName = GetFromManager<std::string>(fitMan->raw()["General"]["OutputFile"], "EventRatesOutput.root");
   Write1DHistogramsToFile(OutFileName, DUNEHists); 
   Write1DHistogramsToPdf(OutFileName, DUNEHists);
+
+  //Muyuan : add early exit for debugging
+  std::cout << "MUYUAN DEBUG: Exiting before making breakdowns" << std::endl;
+  return 0;
 
   //###############################################################################################################################
   //Make oscillation channel breakdown
