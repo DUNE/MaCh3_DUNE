@@ -5,10 +5,10 @@ Q0_MIN=0.0
 Q0_MAX=5.0
 Q3_MIN=0.0
 Q3_MAX=5.0
-Q0_BINS=50
-Q3_BINS=50
-OUTPUT_FILE="q0q3_0.0_5.0GeV_triangle_morebins.yaml"
-PARAM_LIST_FILE="q0q3_0.0_5.0GeV_triangle_parameter_list_morebins.txt"
+Q0_BINS=100
+Q3_BINS=100
+OUTPUT_FILE="q0q3_0.0_5.0GeV_triangle_10e4bins.yaml"
+PARAM_LIST_FILE="q0q3_0.0_5.0GeV_triangle_parameter_list_10e4bins.txt"
 
 # Calculate bin widths
 Q0_STEP=$(echo "($Q0_MAX - $Q0_MIN) / $Q0_BINS" | bc -l)

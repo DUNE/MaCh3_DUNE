@@ -15,6 +15,10 @@
 
 #include "mcmc/mcmc.h"
 #include "samplePDFDUNE/MaCh3DUNEFactory.h"
+#include <filesystem>
+
+#include "covariance/covarianceBase.h"
+#include "covariance/covarianceXsec.h"
 
 #include <iostream>
 #include <fstream>
@@ -35,6 +39,9 @@
 
 #include <ctime>
 #include <sstream>
+
+namespace fs = std::filesystem;
+
 
 std::string AddTimestampToFilename(const std::string& baseName) { /////////////function to make sure I dont overwrite any of the files produced :)
     time_t now = time(0);
@@ -253,7 +260,7 @@ int main(int argc, char* argv[]) {
 
 
   //stuff added from Liban
-
+  /*
   std::string throwmatrixfilename = GetFromManager<std::string>(FitManager->raw()["General"]["ThrowMatrixFile"], "");
   std::string throwmatrixname = GetFromManager<std::string>(FitManager->raw()["General"]["ThrowMatrixName"], "");
   if (throwmatrixfilename == "") {
@@ -271,6 +278,9 @@ int main(int argc, char* argv[]) {
       MACH3LOG_ERROR("Couldn't find throw matrix {} in file {}", throwmatrixname, throwmatrixfilename);
       throw MaCh3Exception(__FILE__ , __LINE__ );
     }
+
+    MACH3LOG_INFO("DEBUG: Throw matrix filename is '{}'", throwmatrixfilename);
+
     // Reset individual step scales to 1.0
     xsec->resetIndivStepScale();
     // Keep global step scale flexible, but it should be 1
@@ -289,6 +299,77 @@ int main(int argc, char* argv[]) {
     }
     std::cout << std::endl;
   }
+  */
+
+  std::string stepScaleYamlFile = GetFromManager<std::string>(FitManager->raw()["General"]["StepScaleFile"], "");
+/*
+if (fs::exists(stepScaleYamlFile)) {
+  xsec->LoadStepScalesFromYaml(stepScaleYamlFile);
+} else {
+  MACH3LOG_WARN("Step scale YAML file {} not found, using defaults", stepScaleYamlFile);
+}*/
+
+
+
+  std::string throwmatrixfilename = GetFromManager<std::string>(FitManager->raw()["General"]["ThrowMatrixFile"], "");
+std::string throwmatrixname = GetFromManager<std::string>(FitManager->raw()["General"]["ThrowMatrixName"], "");
+
+if (throwmatrixfilename == "") {
+    MACH3LOG_INFO("No throw matrix file specified, will throw from covariance matrix.");
+}
+else {
+    TFile *throwmatrixfile = new TFile(throwmatrixfilename.c_str());
+    if (throwmatrixfile->IsZombie()) {
+        MACH3LOG_ERROR("Couldn't find {}", throwmatrixfilename);
+        throw MaCh3Exception(__FILE__, __LINE__);
+    }
+    MACH3LOG_INFO("Found throw matrix file {}.", throwmatrixfilename);
+    TMatrixDSym *throwmatrix = throwmatrixfile->Get<TMatrixDSym>(throwmatrixname.c_str());
+    if (!throwmatrix) {
+        MACH3LOG_ERROR("Couldn't find throw matrix {} in file {}", throwmatrixname, throwmatrixfilename);
+        throw MaCh3Exception(__FILE__, __LINE__);
+    }
+
+    MACH3LOG_INFO("DEBUG: Throw matrix filename is '{}'", throwmatrixfilename);
+
+    // ===== DEBUG: BEFORE reset =====
+    MACH3LOG_INFO("BEFORE reset: global step scale = {}", xsec->GetGlobalStepScale());
+    for (int i = 0; i < xsec->GetNumParams(); i++) {
+        MACH3LOG_INFO("BEFORE reset: param {} step scale = {}", i, xsec->GetIndivStepScale(i));
+    }
+
+    // Reset individual step scales to 1.0
+    xsec->resetIndivStepScale();
+
+    // ===== DEBUG: AFTER reset =====
+    MACH3LOG_INFO("AFTER reset: global step scale = {}", xsec->GetGlobalStepScale());
+    for (int i = 0; i < xsec->GetNumParams(); i++) {
+        MACH3LOG_INFO("AFTER reset: param {} step scale = {}", i, xsec->GetIndivStepScale(i));
+    }
+
+    // Keep global step scale flexible, but it should be 1
+    double globalStepScale = FitManager->raw()["General"]["Systematics"]["XsecStepScale"].as<double>();
+    if (globalStepScale != 1.0) {
+        MACH3LOG_WARN("Global step scale is not 1.0, it is set to {}. This may cause issues when using adapted throw matrix.", globalStepScale);
+    }
+    xsec->setStepScale(globalStepScale);
+
+    // ===== DEBUG: AFTER setStepScale =====
+    MACH3LOG_INFO("AFTER setStepScale: global step scale = {}", xsec->GetGlobalStepScale());
+    for (int i = 0; i < xsec->GetNumParams(); i++) {
+        MACH3LOG_INFO("AFTER setStepScale: param {} step scale = {}", i, xsec->GetIndivStepScale(i));
+    }
+
+    MACH3LOG_WARN("I have set all the individual step scales to 1.0 since we are using an external throw matrix");
+    xsec->setThrowMatrix(throwmatrix);
+    MACH3LOG_INFO("Set throw matrix from file {} with name {}", throwmatrixfilename, throwmatrixname);
+
+    // Print the throw matrix diagonals
+    for (int i = 0; i < throwmatrix->GetNrows(); i++) {
+        std::cout << (*throwmatrix)(i, i) << " ";
+    }
+    std::cout << std::endl;
+}
 
   //
   bool StartFromPreviousChain = GetFromManager(FitManager->raw()["General"]["StartFromPos"], false);
@@ -440,6 +521,12 @@ for (int ix = 1; ix <= h_q0q3_combined->GetNbinsX(); ++ix) {
 
 
   MaCh3Fitter->runMCMC();
+
+  // After step scales have been updated in your covariance object (e.g., xsec)
+
+  xsec->SaveUpdatedMatrixConfig();
+  MACH3LOG_INFO("Saved updated step   scales to Modified_Matrix.yaml");
+
 
 
   /*

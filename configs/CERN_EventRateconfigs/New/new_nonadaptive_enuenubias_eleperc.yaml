@@ -1,0 +1,66 @@
+General:
+  OutputFile: "new_nonadaptive_enuenubias_eleperc_chain_0_job_0_posterior_likelihoodscan.root"
+  DUNESamples:
+     - "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/Samples/OA_samples_subsamples/CERN_binningfor_relativeenubias_enu.yaml"
+
+  OscillationParameters: [0.0, 0.0, 0.0, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848, 0.5] #[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848]#[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848] #[0.0, 0.0, 0.0, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848] #[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848]
+  OscillatorConfigName: "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/OscillatorObj.yaml"
+
+  Systematics:
+    XsecCovFile: ["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_Enubias_relative.yaml"]
+    XsecCovName: "xsec_cov"
+    XsecStepScale: 1
+    XsecAtGen: false 
+    OscCovFile: ["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/OscCov_ND.yaml"]
+    OscCovName: "osc_cov"
+    xsec_var1: "TrueNeutrinoEnergy"
+    xsec_var2: "isRelativeEnubias"
+    Parameter_fixing_threshold: 0.00000000000000000000000000000000000000000000000000000001 
+
+  Fitter:
+    FitTestLikelihood: false
+  MCMC:
+    NSteps: 2000000 #50000
+    AutoSave: 10000
+    BurnInSteps: 1
+  Output:
+    FileName: "TestEventRates_fit_10000.root"
+    OUTPUTNAME: "TestLLH__fit_10000.root"
+
+  ProcessMCMC: Yes
+  Seed: 0
+  Debug: No
+  
+
+  ThrowMatrixFile: "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/Covariance_matrices/tuesday12th_enu_enubias_erec_elep_secondcovamt.root"
+  ThrowMatrixName: "xsec_cov_posfit_matrix"
+  
+LLHScan:
+  ParPoints: 1000
+AdaptionOptions:
+  Settings:
+    StartThrow:  1000
+    StartUpdate: 0
+    EndUpdate:   2000000
+    UpdateStep:  1000
+    SaveNIterations: 2000000
+    OutputFileName: /scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/Covariance_matrices/tuesday12th_enu_enubias_erec_elep_secondcovamt.root
+
+  Covariance:
+    xsec_cov:
+      DoAdaption: False
+      MatrixBlocks: []
+      UseExternalMatrix: False
+      PrincipalComponentThreshold: 0.99 
+
+Predictive:
+  PosteriorFiles: "/scratch/abipeake/August_tesing/new_nonadaptive_enuenubias_eleperc/new_nonadaptive_enuenubias_eleperc_chain_0_job_0.root"
+  Ntoy: 1000
+  ThrowDetCov: true
+  FixXSec: false
+  FixFlux: false
+  VarNames: ["RecoNeutrinoEnergy", "q0", "q3", "ELepRec"  ]
+  SamplePosterior: 100
+
+NDOptions:
+  PlotByMode: false

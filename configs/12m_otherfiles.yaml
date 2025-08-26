@@ -1,0 +1,200 @@
+# for each list specify:
+# isrhc = "true for rhc or false for fhc"; #default to false
+# mtupleprefix = "common part at beginning of path to mtuple files"
+# mtuplesuffix = "common part at end of path to mtuple files"
+# splineprefix = "common part at beginning of path to spline files"
+# splinesuffix = "common part at endof path to spline files"
+# up_bnd = "upper boundary on erec" #deault to 30.
+# isfitqun = true for fitqun variable samples false otherwise #default to true
+#Add samples to the sample list as shown below
+SampleName: "ND_FHC_CCnumu"
+SampleType: "BeamFD"
+SelectionCuts:
+POT: 1.3628319e+23
+SelectionCuts:
+  - KinematicStr: "TrueXPos"
+    Bounds: [ -310.0, 310.0 ]
+  - KinematicStr: "TrueYPos"
+    Bounds: [ -550.0, 550.0 ]
+  - KinematicStr: "TrueZPos"
+    Bounds: [ 50.0, 1244.0 ]
+  - KinematicStr: "CVNNumu"
+    Bounds: [ 0.5, 999 ]
+Binning:
+  Axes:
+# Appropriate values for VarStr
+# TrueNeutrinoEnergy
+# RecoNeutrinoEnergy
+# CVNNumu
+# CVNNue
+# q0
+# q3
+# ERecQE
+# ELepRec
+# EHadRec
+    - VarStr: "RecoNeutrinoEnergy" 
+      Uniform: [10,0.1,2.5]
+      Title: "E_{#nu}^{Rec} [GeV]"
+    - VarStr: "p_lep" 
+      Uniform: [20,0,2.5]
+      Title: "p_{lep.}^{Rec} [GeV]"
+    - VarStr: "theta_lep" 
+      Uniform: [5,0,1.5]
+      Title: "#theta_{lep.}^{Rec} [GeV]"
+  # if you want to use the generic binning with a single 
+  # axis, useful for calculated VarStr that cannot be referenced
+  ForceGeneric: True
+DUNESampleBools:
+  iselike: no
+NuOsc:
+  NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
+InputFiles:
+  mtupleprefix: "/project/rpp-nilic/abipeake/"
+  mtuplesuffix: ""
+  splineprefix: "" 
+  splinesuffix: ""
+SampleCuts:
+  up_bnd: 100.
+NSubSamples: 20
+DetID: 1
+SubSamples:
+  - name: "CAFv7_12m_subset20.root"
+    mtuplefile: "CAFv7_12m_subset20.root"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset21.root"
+    mtuplefile: "CAFv7_12m_subset21.root"
+    splinefile: ""
+    samplevecno: 1
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset22.root"
+    mtuplefile: "CAFv7_12m_subset22.root"
+    splinefile: ""
+    samplevecno: 2
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset23.root"
+    mtuplefile: "CAFv7_12m_subset23.root"
+    splinefile: ""
+    samplevecno: 3
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset24.root"
+    mtuplefile: "CAFv7_12m_subset24.root"
+    splinefile: ""
+    samplevecno: 4
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset25.root"
+    mtuplefile: "CAFv7_12m_subset25.root"
+    splinefile: ""
+    samplevecno: 5
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset26.root"
+    mtuplefile: "CAFv7_12m_subset26.root"
+    splinefile: ""
+    samplevecno: 6
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset27.root"
+    mtuplefile: "CAFv7_12m_subset27.root"
+    splinefile: ""
+    samplevecno: 7
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset28.root"
+    mtuplefile: "CAFv7_12m_subset28.root"
+    splinefile: ""
+    samplevecno: 8
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset29.root"
+    mtuplefile: "CAFv7_12m_subset29.root"
+    splinefile: ""
+    samplevecno: 9
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset10.root"
+    mtuplefile: "CAFv7_12m_subset10.root"
+    splinefile: ""
+    samplevecno: 10
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset11.root"
+    mtuplefile: "CAFv7_12m_subset11.root"
+    splinefile: ""
+    samplevecno: 11
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset12.root"
+    mtuplefile: "CAFv7_12m_subset12.root"
+    splinefile: ""
+    samplevecno: 12
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset13.root"
+    mtuplefile: "CAFv7_12m_subset13.root"
+    splinefile: ""
+    samplevecno: 13
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset14.root"
+    mtuplefile: "CAFv7_12m_subset14.root"
+    splinefile: ""
+    samplevecno: 14
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset15.root"
+    mtuplefile: "CAFv7_12m_subset15.root"
+    splinefile: ""
+    samplevecno: 15
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset16.root"
+    mtuplefile: "CAFv7_12m_subset16.root"
+    splinefile: ""
+    samplevecno: 16
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset17.root"
+    mtuplefile: "CAFv7_12m_subset17.root"
+    splinefile: ""
+    samplevecno: 17
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset18.root"
+    mtuplefile: "CAFv7_12m_subset18.root"
+    splinefile: ""
+    samplevecno: 18
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_12m_subset19.root"
+    mtuplefile: "CAFv7_12m_subset19.root"
+    splinefile: ""
+    samplevecno: 19
+    nutype: 14
+    oscnutype: 14
+    signal: false

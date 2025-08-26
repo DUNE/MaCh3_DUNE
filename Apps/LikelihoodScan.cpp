@@ -10,6 +10,7 @@
 #include <TRint.h>
 #include <TLegend.h>
 #include <TColor.h>
+#include <TMarker.h>
 #include <TMath.h>
 
 #include "mcmc/mcmc.h"
@@ -24,8 +25,8 @@ int main(int argc, char * argv[]) {
   manager* FitManager = new manager(argv[1]);
 
   // 1D scan on by default, and 2D off
-  const bool do_1d_llhscan = GetFromManager(FitManager->raw()["General"]["1DLLHScan"], true);
-  const bool do_2d_llhscan = GetFromManager(FitManager->raw()["General"]["2DLLHScan"], false);
+  const bool do_1d_llhscan = false;  //GetFromManager(FitManager->raw()["General"]["1DLLHScan"], true);
+  const bool do_2d_llhscan =  true; //GetFromManager(FitManager->raw()["General"]["2DLLHScan"], false);
 
   if (!do_1d_llhscan && !do_2d_llhscan) {
     MACH3LOG_ERROR("Neither 1D or 2D llhscan enabled");
@@ -43,9 +44,9 @@ int main(int argc, char * argv[]) {
 
   //###############################################################################################################################
   //Perform reweight, print total integral, and set data
-  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
-  for (int i = 0; i < oscpars.size(); i++)
-    osc->setPar(i, oscpars.at(i));
+//  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
+  //for (int i = 0; i < oscpars.size(); i++)
+    //osc->setPar(i, oscpars.at(i));
 
   std::vector<TH1*> DUNEHists;
   for(auto Sample : DUNEPdfs){
@@ -55,7 +56,7 @@ int main(int argc, char * argv[]) {
     else if (Sample->GetNDim() == 2)
       DUNEHists.push_back(Sample->get2DHist());
 
-    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetTitle(), Sample->get1DHist()->Integral());
+    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetSampleName(), Sample->get1DHist()->Integral());
     if (Sample->GetNDim() == 1)
       Sample->addData((TH1D*)DUNEHists.back());
     else if (Sample->GetNDim() == 2)
@@ -71,11 +72,13 @@ int main(int argc, char * argv[]) {
     MaCh3Fitter->addSamplePDF(Sample);
   }
 
-  MaCh3Fitter->addSystObj(osc);
+  //MaCh3Fitter->addSystObj(osc);
   MaCh3Fitter->addSystObj(xsec);
+  
   
   if (do_1d_llhscan)
     MaCh3Fitter->RunLLHScan();
   if (do_2d_llhscan)
     MaCh3Fitter->Run2DLLHScan();
+
 }

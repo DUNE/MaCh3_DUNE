@@ -1,0 +1,64 @@
+General:
+  OutputFile: "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/Chain_testing/CERN/Eventrate_enproxyuminus_enu.root"
+  DUNESamples:
+    - "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/Samples/OA_samples_subsamples/CERN_0m_Erecyrec_lessfinefinning.yaml"
+  OscillationParameters: [0.0, 0.0, 0.0, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848, 0.5] #[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848]#[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848] #[0.0, 0.0, 0.0, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848] #[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848]
+  OscillatorConfigName: "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/OscillatorObj.yaml"
+
+  Systematics:
+    XsecCovFile: ["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/q0q3_triangle_1275params.yaml"] #["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/q0q3_onebin.yaml"] #["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/q0q3_triangle_1275params.yaml"]
+    XsecCovName: "xsec_cov"
+    XsecStepScale: 0.005
+    XsecAtGen: false 
+    OscCovFile: ["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/OscCov_ND.yaml"]
+    OscCovName: "osc_cov"
+    xsec_var1: "q0"
+    xsec_var2: "q3"
+    Parameter_fixing_threshold: 0.00000000000000000000000000000000000000000000000000000001 
+
+  Fitter:
+    FitTestLikelihood: false
+  MCMC:
+    NSteps: 3000000 
+    AutoSave: 10000
+    BurnInSteps: 1
+  Output:
+    FileName: "TestEventRates_fit_10000.root"
+    OUTPUTNAME: "TestLLH__fit_10000.root"
+
+  ProcessMCMC: No
+  Seed: 0
+  Debug: No #/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/Covariance_matrices/q0q3_1275_Erecyrec_lessfine_covmat.root
+  ThrowMatrixFile: /scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/Covariance_matrices/q0q3_1275_Erecyrec_lessfine_covmat_updatedtuesday.root
+  # Entry in the throw matrix
+  ThrowMatrixName: "1000_xsec_cov_throw_matrix"
+  # ThrowMatrixName: "4600000_xsec_cov_throw_matrix"
+LLHScan:
+  ParPoints: 1000
+AdaptionOptions:
+  Settings:
+    StartThrow:  1000
+    StartUpdate: 0
+    EndUpdate:   3000000
+    UpdateStep:  10000
+    SaveNIterations: 100000
+    OutputFileName: /scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/Covariance_matrices/q0q3_1275_Erecyrec_lessfine_covmat_updatedtuesdaynext.root
+
+
+  Covariance:
+    xsec_cov:
+      DoAdaption: True
+      MatrixBlocks: []
+      UseExternalMatrix: False
+      PrincipalComponentThreshold: 0.99 
+
+Predictive:
+  PosteriorFiles: "posterior_625q0q3bins_erecyrec.root"
+  Ntoy: 1000
+  ThrowDetCov: true
+  FixXSec: false
+  FixFlux: false
+  VarNames: ["RecoNeutrinoEnergy", "q0", "q3", "ELepRec"  ]
+
+NDOptions:
+  PlotByMode: false

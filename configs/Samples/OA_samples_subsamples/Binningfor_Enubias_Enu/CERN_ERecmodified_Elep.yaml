@@ -1,0 +1,71 @@
+# for each list specify:
+# isrhc = "true for rhc or false for fhc"; #default to false
+# mtupleprefix = "common part at beginning of path to mtuple files"
+# mtuplesuffix = "common part at end of path to mtuple files"
+# splineprefix = "common part at beginning of path to spline files"
+# splinesuffix = "common part at endof path to spline files"
+# up_bnd = "upper boundary on erec" #deault to 30.
+# isfitqun = true for fitqun variable samples false otherwise #default to true
+#Add samples to the sample list as shown below
+SampleTitle: "ND_FHC_CCnumu"
+SampleType: "BeamFD"
+SampleName: "ND"
+MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes_GENIE.yaml"
+SelectionCuts:
+POT: 3.0e+21 #9.99328e+21 #9.99328e+6 #7.24e+21
+DUNESampleBools:
+  isFHC: 1
+  iselike: no
+SelectionCuts:
+  - KinematicStr: "CVNNumu"
+    Bounds: [ 0.5, 999 ]
+  - KinematicStr: "isCC"
+    Bounds: [ 0.8, 1.4 ]
+Binning:
+   Axes:
+    - VarStr: RecoNeutrinoEnergy
+      VarBins: [0.,0.025, 0.5,0.6, 0.7 ,0.8, 0.9, 1., 1.1, 1.2, 1.3, 1.4, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 10.]
+      Title: E_{#nu}^{Rec} [GeV]
+    - VarStr: ELepRec
+      Uniform: [45, 0.0, 4.5]
+      Title: E_{lep}^{Rec} [GeV]
+ForceGeneric: True
+DUNESampleBools:
+  iselike: no
+NuOsc:
+  NuOscConfigFile: "configs/NuOsc/NuFASTLinear.yaml"
+  EqualBinningPerOscChannel: false
+InputFiles:
+  mtupleprefix: "/project/rpp-nilic/abipeake/"
+  mtuplesuffix: ".root"
+  splineprefix: "" 
+  splinesuffix: ""
+SampleCuts:
+  up_bnd: 100.
+NSubSamples: 3
+Sample_Name: ["ND"]
+SubSamples:
+  - Name: "CAFv7_0m_130_FHC"
+    LatexName: "CAFv7_0m_130_FHC"
+    mtuplefile: "CAFv7_0m_130_FHC"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_0m_131_FHC"
+    LatexName: "CAFv7_0m_131_FHC"
+    mtuplefile: "CAFv7_0m_131_FHC"
+    splinefile: ""
+    samplevecno: 1
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_0m_132_FHC"
+    LatexName: "CAFv7_0m_132_FHC"
+    mtuplefile: "CAFv7_0m_132_FHC"
+    splinefile: ""
+    samplevecno: 2
+    nutype: 14
+    oscnutype: 14
+    signal: false

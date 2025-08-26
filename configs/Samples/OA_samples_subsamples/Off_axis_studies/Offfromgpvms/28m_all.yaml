@@ -1,0 +1,63 @@
+Binning:
+  Axes:
+  - Title: E_{#nu}^{Rec} [GeV]
+    Uniform:
+    - 10
+    - 0.1
+    - 5.5
+    VarStr: RecoNeutrinoEnergy
+  - Title: p_{lep.}^{Rec} [GeV]
+    Uniform:
+    - 20
+    - 0
+    - 8
+    VarStr: p_lep
+  - Title: '#theta_{lep.}^{Rec} [GeV]'
+    Uniform:
+    - 6
+    - 0
+    - 3
+    VarStr: theta_lep
+  ForceGeneric: true
+DUNESampleBools:
+  iselike: false
+DetID: 1
+InputFiles:
+  mtupleprefix: /pnfs/dune/persistent/users/chasnip/NDCAF_OnAxisHadd/FHC/
+  mtuplesuffix: ''
+  splineprefix: ''
+  splinesuffix: ''
+NEvents: 1e21
+NSubSamples: 1
+NuOsc:
+  NuOscConfigFile: configs/NuOsc/CUDAProb3Linear.yaml
+POT: 1.65e+20
+SampleCuts:
+  up_bnd: 100.0
+SampleName: ND_FHC_CCnumu
+SampleType: BeamFD
+SelectionCuts:
+- Bounds:
+  - -310.0
+  - 310.0
+  KinematicStr: TrueXPos
+- Bounds:
+  - -550.0
+  - 550.0
+  KinematicStr: TrueYPos
+- Bounds:
+  - 50.0
+  - 1244.0
+  KinematicStr: TrueZPos
+- Bounds:
+  - 0.5
+  - 999
+  KinematicStr: CVNNumu
+SubSamples:
+- mtuplefile: CAFv7_28m_subset28.root
+  name: CAFv7_28m_subset28.root
+  nutype: 14
+  oscnutype: 14
+  samplevecno: 0
+  signal: false
+  splinefile: ''

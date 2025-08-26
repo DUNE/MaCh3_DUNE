@@ -1,26 +1,30 @@
 General:
-  OutputFile: "Chain_testing/newxsecmodel_thursday_100k.root"
+  OutputFile: "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/Chain_testing/help.root"
   DUNESamples:
+    # - "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/Samples/OA_samples_subsamples/CERN_0m_pzptEnu.yaml"
      - "configs/Samples/OA_samples_subsamples/0m_CC_Enurec_Elep.yaml"
      #- "configs/Samples/OA_samples_subsamples/0m_CC_newconfig.yaml"
      #- "configs/Samples/OA_samples_subsamples/0m_CC_Enurec_Elep.yaml"
 
   OscillationParameters: [0.0, 0.0, 0.0, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848, 0.5] #[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848]#[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848] #[0.0, 0.0, 0.0, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848] #[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848]
-  OscillatorConfigName: "configs/OscillatorObj.yaml"
+  OscillatorConfigName: "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/OscillatorObj.yaml"
 
   Systematics:
-    XsecCovFile: ["configs/CovObjs/TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_5.0GeV_fullgrid_smallerbins.yaml"]
+    XsecCovFile: ["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_fullgrid_wider.yaml"]
     XsecCovName: "xsec_cov"
-    XsecStepScale: 0.01
+    XsecStepScale: 0.001
     XsecAtGen: false 
-    OscCovFile: ["configs/CovObjs/OscCov_ND.yaml"]
+    OscCovFile: ["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/OscCov_ND.yaml"]
     OscCovName: "osc_cov"
+    xsec_var1: "TrueNeutrinoEnergy"
+    xsec_var2: "ERecProxy_minus_Enu"
+
 
   Fitter:
     FitTestLikelihood: false
   MCMC:
-    NSteps: 100000 #50000
-    AutoSave: 10000
+    NSteps: 1000000 #50000
+    AutoSave: 1000
     BurnInSteps: 1
   Output:
     FileName: "TestEventRates_fit_10000.root"
@@ -33,9 +37,9 @@ LLHScan:
   ParPoints: 1000
 AdaptionOptions:
   Settings:
-    StartThrow:  20000
-    StartUpdate: 2000
-    EndUpdate:   85000
+    StartThrow:  5000
+    StartUpdate: 0
+    EndUpdate:   1000000
     UpdateStep:  1000
     SaveNIterations: 10000
     OutputFileName: mcmc_covariance.root
@@ -57,4 +61,3 @@ Predictive:
 
 NDOptions:
   PlotByMode: false
-

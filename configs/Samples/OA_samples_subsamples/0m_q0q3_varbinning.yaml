@@ -1,0 +1,78 @@
+# for each list specify:
+# isrhc = "true for rhc or false for fhc"; #default to false
+# mtupleprefix = "common part at beginning of path to mtuple files"
+# mtuplesuffix = "common part at end of path to mtuple files"
+# splineprefix = "common part at beginning of path to spline files"
+# splinesuffix = "common part at endof path to spline files"
+# up_bnd = "upper boundary on erec" #deault to 30.
+# isfitqun = true for fitqun variable samples false otherwise #default to true
+#Add samples to the sample list as shown below
+SampleTitle: "ND_FHC_CCnumu"
+SampleType: "BeamFD"
+SampleName: "ND"
+MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes_GENIE.yaml"
+SelectionCuts:
+POT: 3.0e21 #3.9e18 #3.0e21 #9.99328e+21 #9.99328e+6 #7.24e+21
+DUNESampleBools:
+  isFHC: 1
+  iselike: no
+SelectionCuts:
+Binning:
+  Axes:
+     - VarStr: "q3"
+       VarBins: [0.00,0.05,0.10,0.15,0.20,0.25,0.30,0.35,0.40,0.45,0.50,0.55,0.60,0.65,0.70,0.75,0.80,0.85,0.90,0.95,1.00,1.05,1.10,1.15,1.20,1.25,1.30,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,1.80,1.85,1.90,1.95,2.00,2.05,2.10,2.15,2.20,2.25,2.30,2.35,2.40,2.45,2.50,2.55,2.60,2.65,2.70,2.75,2.80,2.85,2.90,2.95,3.00,3.05,3.10,3.15,3.20,3.25,3.30,3.35,3.40,3.45,3.50,3.55,3.60,3.65,3.70,3.75,3.80,3.85,3.90,3.95,4.00,4.50,5.00]
+       Title: "q_{3} [GeV/c]"
+     - VarStr: "q0"
+       VarBins: [0.00,0.05,0.10,0.15,0.20,0.25,0.30,0.35,0.40,0.45,0.50,0.55,0.60,0.65,0.70,0.75,0.80,0.85,0.90,0.95,1.00,1.05,1.10,1.15,1.20,1.25,1.30,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,1.80,1.85,1.90,1.95,2.00,2.05,2.10,2.15,2.20,2.25,2.30,2.35,2.40,2.45,2.50,2.55,2.60,2.65,2.70,2.75,2.80,2.85,2.90,2.95,3.00,3.05,3.10,3.15,3.20,3.25,3.30,3.35,3.40,3.45,3.50,3.55,3.60,3.65,3.70,3.75,3.80,3.85,3.90,3.95,4.00,4.05,4.10,4.15,4.20,4.25,4.30,4.35,4.40,4.45,4.50,4.55,4.60,4.65,4.70,4.75,4.80,4.85,4.90,4.95,5.00]
+       Title: "q_{0} [GeV/c]"
+     #- VarStr: "TrueNeutrinoEnergy"
+      # VarBins: [0.0, 1.0, 2.0,  3.0, 4.0, 8.0, 20.0]
+       #Title: "E_{#nu} [GeV/c]"
+  ForceGeneric: True
+DUNESampleBools:
+  iselike: no
+NuOsc:
+  NuOscConfigFile: "configs/NuOsc/NuFASTLinear.yaml"
+  EqualBinningPerOscChannel: false
+InputFiles:
+  mtupleprefix: "/project/rpp-nilic/abipeake/"
+  mtuplesuffix: ".root"
+  splineprefix: "" 
+  splinesuffix: ""
+SampleCuts:
+  up_bnd: 100.
+NSubSamples: 4
+Sample_Name: ["ND"]
+SubSamples:
+  - Name: "CAFv7_0m_130_FHC"
+    LatexName: "CAFv7_0m_130_FHC"
+    mtuplefile: "CAFv7_0m_130_FHC"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_0m_131_FHC"
+    LatexName: "CAFv7_0m_131_FHC"
+    mtuplefile: "CAFv7_0m_131_FHC"
+    splinefile: ""
+    samplevecno: 1
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_0m_132_FHC"
+    LatexName: "CAFv7_0m_132_FHC"
+    mtuplefile: "CAFv7_0m_132_FHC"
+    splinefile: ""
+    samplevecno: 2
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_0m_133_FHC"
+    LatexName: "CAFv7_0m_133_FHC"
+    mtuplefile: "CAFv7_0m_133_FHC"
+    splinefile: ""
+    samplevecno: 3
+    nutype: 14
+    oscnutype: 14
+    signal: false

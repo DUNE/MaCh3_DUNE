@@ -1,0 +1,117 @@
+#########################################
+DiagMCMC:
+  ExcludedTypes: []
+  ExcludedNames: []
+  nBatches: 20
+  nLags: 10000
+  PlotRelativeToPrior: "false"
+
+
+#########################################
+ProcessMCMC:
+  #Select which parameters blocks to reject for example ND and FD detector, look for starting string
+  ExcludedTypes: []
+  #Select which parameter names to remove, for example all flux, look for starting string
+  ExcludedNames: []
+  #AdditionalCuts
+  Posterior1DCut: ""
+  #Posterior1DCut: "delm2_23 > 0"
+
+  #Basic settings
+  PlotRelativeToPrior: false
+  PrintToPDF: true
+  #if false it will not plot error band for parameters with flat prior
+  PlotErrorForFlatPrior: true
+  FancyNames: true
+  PlotBinValue: false
+
+  #Correlation related
+  Smoothing: true
+
+  #Functionality 1D
+  MakeCredibleIntervals: true
+  CalcBayesFactor: true
+  CalcSavageDickey: true
+  CalcBipolarPlot: false
+  CalcParameterEvolution: true
+
+  #Functionality 2D
+  PlotCorr: true
+  MakeSubOptimality: ["false", 100]
+  MakeViolin: true
+  MakeCredibleRegions: false
+  GetTrianglePlot: true
+  #Perform some covariance stability test
+  DiagnoseCovarianceMatrix: false
+  # Assign weight to each mcmc step according to new prior
+  ReweightPrior: false
+  #Perform Kolmogorov Smirnov test, only works when at least two files are being processed
+  PerformKStest: true
+
+  #KS: Credible Intervals/Regions Cosmetic, code has default values so even if you don't pass anything still code will produce fancy plots :)
+  CredibleIntervals: [0.99, 0.90, 0.68]
+  #In case of sigma, please set CredibleInSigmas to true first
+  #CredibleIntervals: [3, 2, 1]
+  #kCyan+4, kCyan-2, kCyan-10
+  CredibleIntervalsColours: [436, 430, 422]
+
+  #If true Credible intervals should be in percentage
+  CredibleInSigmas: false
+  CredibleRegions: [0.99, 0.90, 0.68]
+  #In case of sigma, please set CredibleInSigmas to true first
+  #CredibleRegions: [3, 2, 1]
+  # kDashed, kSolid, kDotted
+  CredibleRegionStyle: [2, 1, 3]
+  #kGreen-3, kGreen-10, kGreen
+  CredibleRegionColor: [413, 406, 416]
+
+  #KS: Plot only 2D posteriors with correlations greater than 0.2
+  Post2DPlotThreshold: 0.2
+
+  # Used for diagnostic covariance matrix
+  NIntervals: 5
+
+  BayesFactor:
+    
+  SavageDickey:
+    
+  BipolarPlot:
+    
+    #KS: Feel free to pass whatever combination you like
+  TrianglePlot:
+    
+  #First is paramter name and second number of intervals
+  ParameterEvolution:
+    
+  Thinning: [false, 100]
+
+  #First param name, then new prior and new prior error
+  # apply reactor constraints [vector of param names] [vector of new central value] [vector of new prior errors]
+  #PriorReweighting: [ ["sin2th_13"], [0.0220], [0.0007] ]
+  #Fancy example, not physics motivated but to show functionality
+  #PriorReweighting: [ ["MAQE", "Pauli_Blocking_C_nu"], [1.05, 0.1], [ 0.04, 0.5] ]
+
+#########################################
+GetPenaltyTerm:
+#  PenaltySets: ["Norm", "Spline"]
+
+  #KS: Goes as vector with names based on which we select, true or false whether we want to be inclusive or exclusive and fancy name
+  Norm:
+    - ["Norm_Param"]
+    - false
+    - "-logL_{Norm}"
+  Spline:
+    - ["BinnedSplineParam"]
+    - false
+    - "-logL_{Spline}"
+
+
+
+#########################################
+MatrixPlotter:
+
+  Titles: ["Norm"]
+
+  Norm: ["enu_erec_minus_enu_220", "enu_erec_minus_enu_257","enu_erec_minus_enu_294",  "enu_erec_minus_enu_331", "enu_erec_minus_enu_368", "enu_erec_minus_enu_405", "enu_erec_minus_enu_442", "enu_erec_minus_enu_479", "enu_erec_minus_enu_516", "enu_erec_minus_enu_553","enu_erec_minus_enu_590" ,
+    "enu_erec_minus_enu_219", "enu_erec_minus_enu_256", " enu_erec_minus_enu_293", "enu_erec_minus_enu_330", "enu_erec_minus_enu_367","enu_erec_minus_enu_404", "enu_erec_minus_enu_441", "enu_erec_minus_enu_478","enu_erec_minus_enu_515", "enu_erec_minus_enu_552","enu_erec_minus_enu_589" ] #["enu_erec_minus_enu_1","enu_erec_minus_enu_2","enu_erec_minus_enu_3","enu_erec_minus_enu_4","enu_erec_minus_enu_5","enu_erec_minus_enu_6","enu_erec_minus_enu_7","enu_erec_minus_enu_8","enu_erec_minus_enu_9","enu_erec_minus_enu_10","enu_erec_minus_enu_11","enu_erec_minus_enu_12","enu_erec_minus_enu_13","enu_erec_minus_enu_14","enu_erec_minus_enu_15","enu_erec_minus_enu_16","enu_erec_minus_enu_17","enu_erec_minus_enu_18","enu_erec_minus_enu_19","enu_erec_minus_enu_20","enu_erec_minus_enu_21","enu_erec_minus_enu_22","enu_erec_minus_enu_23","enu_erec_minus_enu_24","enu_erec_minus_enu_25","enu_erec_minus_enu_26","enu_erec_minus_enu_27","enu_erec_minus_enu_28","enu_erec_minus_enu_29","enu_erec_minus_enu_30","enu_erec_minus_enu_31","enu_erec_minus_enu_32","enu_erec_minus_enu_33","enu_erec_minus_enu_34","enu_erec_minus_enu_35","enu_erec_minus_enu_36","enu_erec_minus_enu_37","enu_erec_minus_enu_38","enu_erec_minus_enu_39","enu_erec_minus_enu_40","enu_erec_minus_enu_41","enu_erec_minus_enu_42","enu_erec_minus_enu_43","enu_erec_minus_enu_44","enu_erec_minus_enu_45","enu_erec_minus_enu_46","enu_erec_minus_enu_47","enu_erec_minus_enu_48","enu_erec_minus_enu_49","enu_erec_minus_enu_50","enu_erec_minus_enu_51","enu_erec_minus_enu_52","enu_erec_minus_enu_53","enu_erec_minus_enu_54","enu_erec_minus_enu_55","enu_erec_minus_enu_56","enu_erec_minus_enu_57","enu_erec_minus_enu_58","enu_erec_minus_enu_59","enu_erec_minus_enu_60","enu_erec_minus_enu_61","enu_erec_minus_enu_62","enu_erec_minus_enu_63","enu_erec_minus_enu_64","enu_erec_minus_enu_65","enu_erec_minus_enu_66","enu_erec_minus_enu_67","enu_erec_minus_enu_68","enu_erec_minus_enu_69","enu_erec_minus_enu_70","enu_erec_minus_enu_71","enu_erec_minus_enu_72","enu_erec_minus_enu_73","enu_erec_minus_enu_74","enu_erec_minus_enu_75","enu_erec_minus_enu_76","enu_erec_minus_enu_77","enu_erec_minus_enu_78","enu_erec_minus_enu_79","enu_erec_minus_enu_80","enu_erec_minus_enu_81","enu_erec_minus_enu_82","enu_erec_minus_enu_83","enu_erec_minus_enu_84","enu_erec_minus_enu_85","enu_erec_minus_enu_86","enu_erec_minus_enu_87","enu_erec_minus_enu_88","enu_erec_minus_enu_89","enu_erec_minus_enu_90","enu_erec_minus_enu_91","enu_erec_minus_enu_92","enu_erec_minus_enu_93","enu_erec_minus_enu_94","enu_erec_minus_enu_95","enu_erec_minus_enu_96","enu_erec_minus_enu_97","enu_erec_minus_enu_98","enu_erec_minus_enu_99","enu_erec_minus_enu_100","enu_erec_minus_enu_101","enu_erec_minus_enu_102","enu_erec_minus_enu_103","enu_erec_minus_enu_104","enu_erec_minus_enu_105","enu_erec_minus_enu_106","enu_erec_minus_enu_107","enu_erec_minus_enu_108","enu_erec_minus_enu_109","enu_erec_minus_enu_110","enu_erec_minus_enu_111","enu_erec_minus_enu_112","enu_erec_minus_enu_113","enu_erec_minus_enu_114","enu_erec_minus_enu_115","enu_erec_minus_enu_116","enu_erec_minus_enu_117","enu_erec_minus_enu_118","enu_erec_minus_enu_119","enu_erec_minus_enu_120","enu_erec_minus_enu_121","enu_erec_minus_enu_122","enu_erec_minus_enu_123","enu_erec_minus_enu_124","enu_erec_minus_enu_125","enu_erec_minus_enu_126","enu_erec_minus_enu_127","enu_erec_minus_enu_128","enu_erec_minus_enu_129","enu_erec_minus_enu_130","enu_erec_minus_enu_131","enu_erec_minus_enu_132","enu_erec_minus_enu_133","enu_erec_minus_enu_134","enu_erec_minus_enu_135","enu_erec_minus_enu_136","enu_erec_minus_enu_137","enu_erec_minus_enu_138","enu_erec_minus_enu_139","enu_erec_minus_enu_140","enu_erec_minus_enu_141","enu_erec_minus_enu_142","enu_erec_minus_enu_143","enu_erec_minus_enu_144","enu_erec_minus_enu_145","enu_erec_minus_enu_146","enu_erec_minus_enu_147","enu_erec_minus_enu_148","enu_erec_minus_enu_149","enu_erec_minus_enu_150","enu_erec_minus_enu_151","enu_erec_minus_enu_152","enu_erec_minus_enu_153","enu_erec_minus_enu_154","enu_erec_minus_enu_155","enu_erec_minus_enu_156","enu_erec_minus_enu_157","enu_erec_minus_enu_158","enu_erec_minus_enu_159","enu_erec_minus_enu_160","enu_erec_minus_enu_161","enu_erec_minus_enu_162","enu_erec_minus_enu_163","enu_erec_minus_enu_164","enu_erec_minus_enu_165","enu_erec_minus_enu_166","enu_erec_minus_enu_167","enu_erec_minus_enu_168","enu_erec_minus_enu_169","enu_erec_minus_enu_170","enu_erec_minus_enu_171","enu_erec_minus_enu_172","enu_erec_minus_enu_173","enu_erec_minus_enu_174","enu_erec_minus_enu_175","enu_erec_minus_enu_176","enu_erec_minus_enu_177","enu_erec_minus_enu_178","enu_erec_minus_enu_179","enu_erec_minus_enu_180","enu_erec_minus_enu_181","enu_erec_minus_enu_182","enu_erec_minus_enu_183","enu_erec_minus_enu_184","enu_erec_minus_enu_185","enu_erec_minus_enu_186","enu_erec_minus_enu_187","enu_erec_minus_enu_188","enu_erec_minus_enu_189","enu_erec_minus_enu_190","enu_erec_minus_enu_191","enu_erec_minus_enu_192","enu_erec_minus_enu_193","enu_erec_minus_enu_194","enu_erec_minus_enu_195","enu_erec_minus_enu_196","enu_erec_minus_enu_197","enu_erec_minus_enu_198","enu_erec_minus_enu_199","enu_erec_minus_enu_200","enu_erec_minus_enu_201","enu_erec_minus_enu_202","enu_erec_minus_enu_203","enu_erec_minus_enu_204","enu_erec_minus_enu_205","enu_erec_minus_enu_206","enu_erec_minus_enu_207","enu_erec_minus_enu_208","enu_erec_minus_enu_209","enu_erec_minus_enu_210","enu_erec_minus_enu_211","enu_erec_minus_enu_212","enu_erec_minus_enu_213","enu_erec_minus_enu_214","enu_erec_minus_enu_215","enu_erec_minus_enu_216","enu_erec_minus_enu_217","enu_erec_minus_enu_218","enu_erec_minus_enu_219","enu_erec_minus_enu_220","enu_erec_minus_enu_221","enu_erec_minus_enu_222","enu_erec_minus_enu_223","enu_erec_minus_enu_224","enu_erec_minus_enu_225","enu_erec_minus_enu_226","enu_erec_minus_enu_227","enu_erec_minus_enu_228","enu_erec_minus_enu_229","enu_erec_minus_enu_230","enu_erec_minus_enu_231","enu_erec_minus_enu_232","enu_erec_minus_enu_233","enu_erec_minus_enu_234","enu_erec_minus_enu_235","enu_erec_minus_enu_236","enu_erec_minus_enu_237","enu_erec_minus_enu_238","enu_erec_minus_enu_239","enu_erec_minus_enu_240","enu_erec_minus_enu_241","enu_erec_minus_enu_242","enu_erec_minus_enu_243","enu_erec_minus_enu_244","enu_erec_minus_enu_245","enu_erec_minus_enu_246","enu_erec_minus_enu_247","enu_erec_minus_enu_248","enu_erec_minus_enu_249","enu_erec_minus_enu_250","enu_erec_minus_enu_251","enu_erec_minus_enu_252","enu_erec_minus_enu_253","enu_erec_minus_enu_254","enu_erec_minus_enu_255","enu_erec_minus_enu_256","enu_erec_minus_enu_257","enu_erec_minus_enu_258","enu_erec_minus_enu_259","enu_erec_minus_enu_260","enu_erec_minus_enu_261","enu_erec_minus_enu_262","enu_erec_minus_enu_263","enu_erec_minus_enu_264","enu_erec_minus_enu_265","enu_erec_minus_enu_266","enu_erec_minus_enu_267","enu_erec_minus_enu_268","enu_erec_minus_enu_269","enu_erec_minus_enu_270","enu_erec_minus_enu_271","enu_erec_minus_enu_272","enu_erec_minus_enu_273","enu_erec_minus_enu_274","enu_erec_minus_enu_275","enu_erec_minus_enu_276","enu_erec_minus_enu_277","enu_erec_minus_enu_278","enu_erec_minus_enu_279","enu_erec_minus_enu_280","enu_erec_minus_enu_281","enu_erec_minus_enu_282","enu_erec_minus_enu_283","enu_erec_minus_enu_284","enu_erec_minus_enu_285","enu_erec_minus_enu_286","enu_erec_minus_enu_287","enu_erec_minus_enu_288","enu_erec_minus_enu_289","enu_erec_minus_enu_290","enu_erec_minus_enu_291","enu_erec_minus_enu_292","enu_erec_minus_enu_293","enu_erec_minus_enu_294","enu_erec_minus_enu_295","enu_erec_minus_enu_296","enu_erec_minus_enu_297","enu_erec_minus_enu_298","enu_erec_minus_enu_299","enu_erec_minus_enu_300","enu_erec_minus_enu_301","enu_erec_minus_enu_302","enu_erec_minus_enu_303","enu_erec_minus_enu_304","enu_erec_minus_enu_305","enu_erec_minus_enu_306","enu_erec_minus_enu_307","enu_erec_minus_enu_308","enu_erec_minus_enu_309","enu_erec_minus_enu_310","enu_erec_minus_enu_311","enu_erec_minus_enu_312","enu_erec_minus_enu_313","enu_erec_minus_enu_314","enu_erec_minus_enu_315","enu_erec_minus_enu_316","enu_erec_minus_enu_317","enu_erec_minus_enu_318","enu_erec_minus_enu_319","enu_erec_minus_enu_320","enu_erec_minus_enu_321","enu_erec_minus_enu_322","enu_erec_minus_enu_323","enu_erec_minus_enu_324","enu_erec_minus_enu_325","enu_erec_minus_enu_326","enu_erec_minus_enu_327","enu_erec_minus_enu_328","enu_erec_minus_enu_329","enu_erec_minus_enu_330","enu_erec_minus_enu_331","enu_erec_minus_enu_332","enu_erec_minus_enu_333","enu_erec_minus_enu_334","enu_erec_minus_enu_335","enu_erec_minus_enu_336","enu_erec_minus_enu_337","enu_erec_minus_enu_338","enu_erec_minus_enu_339","enu_erec_minus_enu_340","enu_erec_minus_enu_341","enu_erec_minus_enu_342","enu_erec_minus_enu_343","enu_erec_minus_enu_344","enu_erec_minus_enu_345","enu_erec_minus_enu_346","enu_erec_minus_enu_347","enu_erec_minus_enu_348","enu_erec_minus_enu_349","enu_erec_minus_enu_350","enu_erec_minus_enu_351","enu_erec_minus_enu_352","enu_erec_minus_enu_353","enu_erec_minus_enu_354","enu_erec_minus_enu_355","enu_erec_minus_enu_356","enu_erec_minus_enu_357","enu_erec_minus_enu_358","enu_erec_minus_enu_359","enu_erec_minus_enu_360","enu_erec_minus_enu_361","enu_erec_minus_enu_362","enu_erec_minus_enu_363","enu_erec_minus_enu_364","enu_erec_minus_enu_365","enu_erec_minus_enu_366","enu_erec_minus_enu_367","enu_erec_minus_enu_368","enu_erec_minus_enu_369","enu_erec_minus_enu_370","enu_erec_minus_enu_371","enu_erec_minus_enu_372","enu_erec_minus_enu_373","enu_erec_minus_enu_374","enu_erec_minus_enu_375","enu_erec_minus_enu_376","enu_erec_minus_enu_377","enu_erec_minus_enu_378","enu_erec_minus_enu_379","enu_erec_minus_enu_380","enu_erec_minus_enu_381","enu_erec_minus_enu_382","enu_erec_minus_enu_383","enu_erec_minus_enu_384","enu_erec_minus_enu_385","enu_erec_minus_enu_386","enu_erec_minus_enu_387","enu_erec_minus_enu_388","enu_erec_minus_enu_389","enu_erec_minus_enu_390","enu_erec_minus_enu_391","enu_erec_minus_enu_392","enu_erec_minus_enu_393","enu_erec_minus_enu_394","enu_erec_minus_enu_395","enu_erec_minus_enu_396","enu_erec_minus_enu_397","enu_erec_minus_enu_398","enu_erec_minus_enu_399","enu_erec_minus_enu_400","enu_erec_minus_enu_401","enu_erec_minus_enu_402","enu_erec_minus_enu_403","enu_erec_minus_enu_404","enu_erec_minus_enu_405","enu_erec_minus_enu_406","enu_erec_minus_enu_407","enu_erec_minus_enu_408","enu_erec_minus_enu_409","enu_erec_minus_enu_410","enu_erec_minus_enu_411","enu_erec_minus_enu_412","enu_erec_minus_enu_413","enu_erec_minus_enu_414","enu_erec_minus_enu_415","enu_erec_minus_enu_416","enu_erec_minus_enu_417","enu_erec_minus_enu_418","enu_erec_minus_enu_419","enu_erec_minus_enu_420","enu_erec_minus_enu_421","enu_erec_minus_enu_422","enu_erec_minus_enu_423","enu_erec_minus_enu_424","enu_erec_minus_enu_425","enu_erec_minus_enu_426","enu_erec_minus_enu_427","enu_erec_minus_enu_428","enu_erec_minus_enu_429","enu_erec_minus_enu_430","enu_erec_minus_enu_431","enu_erec_minus_enu_432","enu_erec_minus_enu_433","enu_erec_minus_enu_434","enu_erec_minus_enu_435","enu_erec_minus_enu_436","enu_erec_minus_enu_437","enu_erec_minus_enu_438","enu_erec_minus_enu_439","enu_erec_minus_enu_440","enu_erec_minus_enu_441","enu_erec_minus_enu_442","enu_erec_minus_enu_443","enu_erec_minus_enu_444","enu_erec_minus_enu_445","enu_erec_minus_enu_446","enu_erec_minus_enu_447","enu_erec_minus_enu_448","enu_erec_minus_enu_449","enu_erec_minus_enu_450","enu_erec_minus_enu_451","enu_erec_minus_enu_452","enu_erec_minus_enu_453","enu_erec_minus_enu_454","enu_erec_minus_enu_455","enu_erec_minus_enu_456","enu_erec_minus_enu_457","enu_erec_minus_enu_458","enu_erec_minus_enu_459","enu_erec_minus_enu_460","enu_erec_minus_enu_461","enu_erec_minus_enu_462","enu_erec_minus_enu_463","enu_erec_minus_enu_464","enu_erec_minus_enu_465","enu_erec_minus_enu_466","enu_erec_minus_enu_467","enu_erec_minus_enu_468","enu_erec_minus_enu_469","enu_erec_minus_enu_470","enu_erec_minus_enu_471","enu_erec_minus_enu_472","enu_erec_minus_enu_473","enu_erec_minus_enu_474","enu_erec_minus_enu_475","enu_erec_minus_enu_476","enu_erec_minus_enu_477","enu_erec_minus_enu_478","enu_erec_minus_enu_479","enu_erec_minus_enu_480","enu_erec_minus_enu_481","enu_erec_minus_enu_482","enu_erec_minus_enu_483","enu_erec_minus_enu_484","enu_erec_minus_enu_485","enu_erec_minus_enu_486","enu_erec_minus_enu_487","enu_erec_minus_enu_488","enu_erec_minus_enu_489","enu_erec_minus_enu_490","enu_erec_minus_enu_491","enu_erec_minus_enu_492","enu_erec_minus_enu_493","enu_erec_minus_enu_494","enu_erec_minus_enu_495","enu_erec_minus_enu_496","enu_erec_minus_enu_497","enu_erec_minus_enu_498","enu_erec_minus_enu_499","enu_erec_minus_enu_500","enu_erec_minus_enu_501","enu_erec_minus_enu_502","enu_erec_minus_enu_503","enu_erec_minus_enu_504","enu_erec_minus_enu_505","enu_erec_minus_enu_506","enu_erec_minus_enu_507","enu_erec_minus_enu_508","enu_erec_minus_enu_509","enu_erec_minus_enu_510","enu_erec_minus_enu_511","enu_erec_minus_enu_512","enu_erec_minus_enu_513","enu_erec_minus_enu_514","enu_erec_minus_enu_515","enu_erec_minus_enu_516","enu_erec_minus_enu_517","enu_erec_minus_enu_518","enu_erec_minus_enu_519","enu_erec_minus_enu_520","enu_erec_minus_enu_521","enu_erec_minus_enu_522","enu_erec_minus_enu_523","enu_erec_minus_enu_524","enu_erec_minus_enu_525","enu_erec_minus_enu_526","enu_erec_minus_enu_527","enu_erec_minus_enu_528","enu_erec_minus_enu_529","enu_erec_minus_enu_530","enu_erec_minus_enu_531","enu_erec_minus_enu_532","enu_erec_minus_enu_533","enu_erec_minus_enu_534","enu_erec_minus_enu_535","enu_erec_minus_enu_536","enu_erec_minus_enu_537","enu_erec_minus_enu_538","enu_erec_minus_enu_539","enu_erec_minus_enu_540","enu_erec_minus_enu_541","enu_erec_minus_enu_542","enu_erec_minus_enu_543","enu_erec_minus_enu_544","enu_erec_minus_enu_545","enu_erec_minus_enu_546","enu_erec_minus_enu_547","enu_erec_minus_enu_548","enu_erec_minus_enu_549","enu_erec_minus_enu_550","enu_erec_minus_enu_551","enu_erec_minus_enu_552","enu_erec_minus_enu_553","enu_erec_minus_enu_554","enu_erec_minus_enu_555","enu_erec_minus_enu_556","enu_erec_minus_enu_557","enu_erec_minus_enu_558","enu_erec_minus_enu_559","enu_erec_minus_enu_560","enu_erec_minus_enu_561","enu_erec_minus_enu_562","enu_erec_minus_enu_563","enu_erec_minus_enu_564","enu_erec_minus_enu_565","enu_erec_minus_enu_566","enu_erec_minus_enu_567","enu_erec_minus_enu_568","enu_erec_minus_enu_569","enu_erec_minus_enu_570","enu_erec_minus_enu_571","enu_erec_minus_enu_572","enu_erec_minus_enu_573","enu_erec_minus_enu_574","enu_erec_minus_enu_575","enu_erec_minus_enu_576","enu_erec_minus_enu_577","enu_erec_minus_enu_578","enu_erec_minus_enu_579","enu_erec_minus_enu_580","enu_erec_minus_enu_581","enu_erec_minus_enu_582","enu_erec_minus_enu_583","enu_erec_minus_enu_584","enu_erec_minus_enu_585","enu_erec_minus_enu_586","enu_erec_minus_enu_587","enu_erec_minus_enu_588","enu_erec_minus_enu_589","enu_erec_minus_enu_590","enu_erec_minus_enu_591","enu_erec_minus_enu_592","enu_erec_minus_enu_593","enu_erec_minus_enu_594","enu_erec_minus_enu_595","enu_erec_minus_enu_596","enu_erec_minus_enu_597","enu_erec_minus_enu_598","enu_erec_minus_enu_599","enu_erec_minus_enu_600","enu_erec_minus_enu_601","enu_erec_minus_enu_602","enu_erec_minus_enu_603","enu_erec_minus_enu_604","enu_erec_minus_enu_605","enu_erec_minus_enu_606","enu_erec_minus_enu_607","enu_erec_minus_enu_608","enu_erec_minus_enu_609","enu_erec_minus_enu_610","enu_erec_minus_enu_611","enu_erec_minus_enu_612","enu_erec_minus_enu_613","enu_erec_minus_enu_614","enu_erec_minus_enu_615","enu_erec_minus_enu_616","enu_erec_minus_enu_617","enu_erec_minus_enu_618","enu_erec_minus_enu_619","enu_erec_minus_enu_620","enu_erec_minus_enu_621","enu_erec_minus_enu_622","enu_erec_minus_enu_623","enu_erec_minus_enu_624","enu_erec_minus_enu_625","enu_erec_minus_enu_626","enu_erec_minus_enu_627","enu_erec_minus_enu_628","enu_erec_minus_enu_629","enu_erec_minus_enu_630","enu_erec_minus_enu_631","enu_erec_minus_enu_632","enu_erec_minus_enu_633","enu_erec_minus_enu_634","enu_erec_minus_enu_635","enu_erec_minus_enu_636","enu_erec_minus_enu_637","enu_erec_minus_enu_638","enu_erec_minus_enu_639","enu_erec_minus_enu_640","enu_erec_minus_enu_641","enu_erec_minus_enu_642","enu_erec_minus_enu_643","enu_erec_minus_enu_644","enu_erec_minus_enu_645","enu_erec_minus_enu_646","enu_erec_minus_enu_647","enu_erec_minus_enu_648","enu_erec_minus_enu_649","enu_erec_minus_enu_650","enu_erec_minus_enu_651","enu_erec_minus_enu_652","enu_erec_minus_enu_653","enu_erec_minus_enu_654","enu_erec_minus_enu_655","enu_erec_minus_enu_656","enu_erec_minus_enu_657","enu_erec_minus_enu_658","enu_erec_minus_enu_659","enu_erec_minus_enu_660","enu_erec_minus_enu_661","enu_erec_minus_enu_662","enu_erec_minus_enu_663","enu_erec_minus_enu_664","enu_erec_minus_enu_665","enu_erec_minus_enu_666"]
+  

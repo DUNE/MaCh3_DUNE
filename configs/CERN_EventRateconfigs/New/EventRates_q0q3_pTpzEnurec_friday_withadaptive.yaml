@@ -1,0 +1,62 @@
+General:
+  OutputFile: "/scratch/abipeake/August_tesing/EventRates_newq0q3_pTpzEnurec_updated_nonadaptive/EventRates_newq0q3_pTpzEnurec_updated_nonadaptive_chain_0_job_0.root"
+  DUNESamples:
+    - "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/Samples/OA_samples_subsamples/CERN_0m_ptpzEnrec_2295bins.yaml"
+  OscillationParameters: [0.0, 0.0, 0.0, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848, 0.5] 
+  OscillatorConfigName: "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/OscillatorObj.yaml"
+
+  Systematics:
+    XsecCovFile: ["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/q0_q3_systematics.yaml"] 
+    XsecCovName: "xsec_cov"
+    XsecStepScale: 1
+    XsecAtGen: false 
+    OscCovFile: ["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/OscCov_ND.yaml"]
+    OscCovName: "osc_cov"
+    xsec_var1: "q0"
+    xsec_var2: "q3"
+    Parameter_fixing_threshold: 0.00000000000000000000000000000000000000000000000000000001 
+
+  Fitter:
+    FitTestLikelihood: false
+  MCMC:
+    NSteps: 3000000 #50000
+    AutoSave: 1000
+    BurnInSteps: 1
+  Output:
+    FileName: "TestEventRates_fit_10000.root"
+    OUTPUTNAME: "TestLLH__fit_10000.root"
+
+  ProcessMCMC: No
+  Seed: 0
+  Debug: No
+  ThrowMatrixFile:  /scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/Covariance_matrices/friday_q0q3bin_ptpzenu_covmat2.root
+  ThrowMatrixName: "1000_xsec_cov_throw_matrix"
+  # 
+LLHScan:
+  ParPoints: 1000
+AdaptionOptions:
+  Settings:
+    StartThrow:  10000
+    StartUpdate: 0
+    EndUpdate:   3000000
+    UpdateStep:  1000
+    SaveNIterations: 3000000
+    OutputFileName: /scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/Covariance_matrices/friday_q0q3bin_ptpzenu_covmat2_afteradaptive.root
+
+  Covariance:
+    xsec_cov:
+      DoAdaption: False
+      MatrixBlocks: []
+      UseExternalMatrix: False
+      PrincipalComponentThreshold: 0.99 
+
+Predictive:
+  PosteriorFiles: "posterior_625q0q3bins_erecyrec.root"
+  Ntoy: 1000
+  ThrowDetCov: true
+  FixXSec: false
+  FixFlux: false
+  VarNames: ["RecoNeutrinoEnergy", "q0", "q3", "ELepRec"  ]
+
+NDOptions:
+  PlotByMode: false

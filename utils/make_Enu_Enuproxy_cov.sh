@@ -3,12 +3,12 @@
 # User-defined variables
 ENE_MIN=0.0
 ENE_MAX=10.0
-EREC_MINUS_ENE_MIN=-60.0
+EREC_MINUS_ENE_MIN=-1.5
 EREC_MINUS_ENE_MAX=0.0
-ENE_BINS=50
-EREC_MINUS_ENE_BINS=60
-OUTPUT_FILE="TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_fullgrid_smallerbins.yaml"
-PARAM_LIST_FILE="TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_parameter_list.txt"
+ENE_BINS=10
+EREC_MINUS_ENE_BINS=30
+OUTPUT_FILE="TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_test.yaml"
+PARAM_LIST_FILE="TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_parameter_list_widerma.txt"
 
 # Calculate bin widths
 ENE_STEP=$(echo "($ENE_MAX - $ENE_MIN) / $ENE_BINS" | bc -l)

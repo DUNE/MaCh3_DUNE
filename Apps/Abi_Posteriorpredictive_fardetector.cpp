@@ -1,9 +1,11 @@
-//Version for applying oscillations....
 #include "samplePDFDUNE/MaCh3DUNEFactory.h"
 #include "samplePDFDUNE/StructsDUNE.h"
 #include "mcmc/mcmc.h"
 #include "manager/manager.h"
 #include "covariance/covarianceBase.h"
+#include <regex>  // add this include at the top if not already there
+
+
 
 int main(int argc, char* argv[]) {
   /////////// 1. Setup
@@ -28,21 +30,38 @@ int main(int argc, char* argv[]) {
   TFile* fOut = new TFile(OutFileName.c_str(), "RECREATE");
 
   /////////// 2. Covariance and PDFs
-  std::vector<std::string> xsecCovMatrixFile = Processor.GetXSecCov();
+  //std::vector<std::string> xsecCovMatrixFile = Processor.GetXSecCov();
+  std::vector<std::string> xsecCovMatrixFile = {"/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_Enubias_relative.yaml"};//{"/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_Enubias_relative.yaml"};//Processor.GetXSecCov();
   covarianceXsec* xsec = new covarianceXsec(xsecCovMatrixFile, "xsec_cov");
-  covarianceOsc* osc = nullptr;
+  //covarianceOsc* osc = nullptr;
+
+  //std::vector<std::string> xsecCovMatrixFile = {"/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_Enubias_relative.yaml"};
+  //covarianceXsec* xsec = new covarianceXsec(xsecCovMatrixFile, "xsec_cov");
+  //covarianceOsc* osc = nullptr;
+  auto OscCovName = GetFromManager<std::string>(fitMan->raw()["General"]["Systematics"]["OscCovName"], "osc_cov");
+ auto OscCovFile = GetFromManager<std::vector<std::string>>(fitMan->raw()["General"]["Systematics"]["OscCovFile"], {});
+
+  covarianceOsc* osc = new covarianceOsc(OscCovFile, OscCovName);
+
+  auto OscPars = GetFromManager<std::vector<double>>(fitMan->raw()["General"]["OscillationParameters"], {});
+  osc->setParameters(OscPars);
 
   std::vector<samplePDFFDBase*> DUNEPdfs;
+  //MakeMaCh3DuneInstance(fitMan.get(), DUNEPdfs, xsec, osc);
   MakeMaCh3DuneInstance(fitMan.get(), DUNEPdfs, xsec, osc);
 
-  // Do we want to fix any of the oscillation parameters? Find out from config file!
-  auto oscfix = GetFromManager<std::vector<int>>(fitMan->raw()["General"]["Systematics"]["OscFix"], {});
+  for (auto pdf : DUNEPdfs) {
+    std::cout << pdf->GetTitle() << " integral: " << pdf->get1DHist()->Integral() << std::endl;
+}
+
+
   fOut->cd();
   /////////////////// Variations - which projections to plot
 
   TH1D* Hist1D = nullptr;
   for (size_t iPDF=0;iPDF<DUNEPdfs.size();iPDF++)
   {
+
     // Get nominal spectra and event rates
     Hist1D = (TH1D*)DUNEPdfs[iPDF]->get1DHist();
 
@@ -66,6 +85,9 @@ int main(int argc, char* argv[]) {
       }
     }
   }
+  for (auto pdf : DUNEPdfs) {
+    std::cout << pdf->GetTitle() << " integral: " << pdf->get1DHist()->Integral() << std::endl;
+}
 
   /////////// 3. Set up MCMC tree
   TChain* mcmc = new TChain("posteriors");
@@ -82,14 +104,86 @@ int main(int argc, char* argv[]) {
   }
 
   /////////// 4. Bind branches
+  //std::vector<double> xsec_nominal = xsec->getNominalArray();
+  //std::vector<double> xsec_draw(xsec_nominal.size(), 0.0);
+
   std::vector<double> xsec_nominal = xsec->getNominalArray();
-  std::vector<double> xsec_draw(xsec_nominal.size(), 0.0);
+  std::vector<double> xsec_draw    = xsec_nominal;  // start from nominal, not zeros
+
+  std::cout << "[INFO] Bound " << no_of_branches
+          << " xsec branches out of " << xsec_draw.size() << std::endl;
+
+
 
   int mcmc_step = -1;
   mcmc->SetBranchAddress("step", &mcmc_step);
   
-  int no_of_xsec_branches = 0;
+  //int no_of_xsec_branches = 0;
 
+  /////////////////
+  // --- 4. Bind branches
+//std::vector<double> xsec_nominal = xsec->getNominalArray();
+//std::vector<double> xsec_draw    = xsec_nominal;   // **** important change ****
+
+//int mcmc_step = -1;
+//mcmc->SetBranchAddress("step", &mcmc_step);
+
+/*
+for (const auto& bname : branch_names) {
+  if (bname.Contains("LogL") || bname.Contains("_PCA")) continue; // keep if you don't want PCA
+  if (bname.BeginsWith("xsec_")) {
+    TString index_str = bname; index_str.ReplaceAll("xsec_", "");
+    int index = index_str.Atoi();
+    if (index >= 0 && index < static_cast<int>(xsec_draw.size())) {
+      mcmc->SetBranchAddress(bname, &xsec_draw[index]);
+      ++no_of_xsec_branches;
+    }
+  }
+}*/
+//int no_of_xsec_branches = 0;
+std::regex re("^xsec_([0-9]+)$");  // only accept exact "xsec_<int>"
+int no_of_xsec_branches = 0;
+
+// Ensure xsec_draw is ready
+if (xsec_draw.empty()) xsec_draw.resize(1, 0.0);
+
+for (const auto& bname : branch_names) {
+    std::cmatch match;
+    if (std::regex_match(bname.Data(), match, re)) {
+        int index = std::stoi(match[1]);
+
+        // dynamically resize vector if needed
+        if (index >= static_cast<int>(xsec_draw.size())) {
+            std::cout << "[INFO] Resizing xsec_draw from "
+                      << xsec_draw.size() << " to " << (index + 1) << std::endl;
+            xsec_draw.resize(index + 1, 0.0);
+        }
+
+        mcmc->SetBranchAddress(bname, &xsec_draw[index]);
+        ++no_of_xsec_branches;
+
+        std::cout << "[DEBUG] Bound " << bname 
+                  << " -> index " << index << std::endl;
+    }
+}
+
+std::cout << "[INFO] Bound " << no_of_xsec_branches
+          << " xsec branches out of " << xsec_draw.size() << std::endl;
+
+// Optional: sanity check first entry values
+mcmc->GetEntry(0);  // read first entry
+for (size_t i = 0; i < std::min(xsec_draw.size(), size_t(10)); ++i)
+    std::cout << "[DEBUG] xsec_draw[" << i << "] = " << xsec_draw[i] << std::endl;
+
+/*
+xsec->setParameters(xsec_draw);
+std::cout << "Sample " << i << " from entry " << entry
+          << " | Step: " << mcmc_step
+          << " | xsec[0]: " << xsec_draw[0] << std::endl;
+*/
+
+  ////////////////////
+  /*
   for (const auto& bname : branch_names) {
     if (bname.Contains("LogL") || bname.Contains("_PCA")) continue;
 
@@ -102,7 +196,7 @@ int main(int argc, char* argv[]) {
         ++no_of_xsec_branches;
       }
     }
-  }
+  }*/
 
   /////////// 5. Sample steps with burn-in check
   int nEntries = mcmc->GetEntries();
@@ -117,7 +211,7 @@ int main(int argc, char* argv[]) {
     } while ((unsigned int)mcmc_step < burn_in);
 
     mcmc_draw_entries[i] = entry;
-    //std::cout << "[DEBUG] Entry: " << entry << " -> step: " << mcmc_step << std::endl;
+    std::cout << "[DEBUG] Entry: " << entry << " -> step: " << mcmc_step << std::endl;
   }
 
   /////////// 6. Reweight and write predictions
@@ -149,9 +243,9 @@ int main(int argc, char* argv[]) {
     if (plotVarspectra)
     {
         for (size_t iPDF = 0; iPDF < DUNEPdfs.size(); iPDF++){
-            //std::cout << "Before reweight: PDF " << iPDF << " integral: " << DUNEPdfs[iPDF]->get1DHist()->Integral() << std::endl;
+            std::cout << "Before reweight: PDF " << iPDF << " integral: " << DUNEPdfs[iPDF]->get1DHist()->Integral() << std::endl;
             DUNEPdfs[iPDF]->reweight();
-            //std::cout << "After reweight: PDF " << iPDF << " integral: " << DUNEPdfs[iPDF]->get1DHist()->Integral() << std::endl;
+            std::cout << "After reweight: PDF " << iPDF << " integral: " << DUNEPdfs[iPDF]->get1DHist()->Integral() << std::endl;
             for (size_t var_i = 0; var_i < var_names.size(); var_i++)
             {
 
@@ -168,8 +262,8 @@ int main(int argc, char* argv[]) {
                     continue;
                 }
 
-                TString Varwritename = DUNEPdfs[iPDF]->GetTitle() + var + var_i;
-                Varwritename += var_i;
+                TString Varwritename = Form("%s_%s_%d", DUNEPdfs[iPDF]->GetTitle().c_str(), var.c_str(), (int)var_i);
+
 
                 //std::cout << "Calling get1DVarHist with var: " << var << std::endl;
 
