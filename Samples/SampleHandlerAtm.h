@@ -137,7 +137,7 @@ protected: // Core functions
   double ExposureScaling;
 
 
-private:
+private: // MUYUAN made
   // MUYUAN: Test spline for atmospheric flux
   TSpline3* spline_nue_E;
   TSpline3* spline_nue_Cos;
@@ -147,6 +147,12 @@ private:
   TSpline3* spline_numu_Cos;
   TSpline3* spline_anumu_E;
   TSpline3* spline_anumu_Cos;
+
+  // MUYUAN: added to SetupExperimentMC, info from StructsDUNE.h
+  std::vector<double> original_flux_weights;
+
+  void AtmFluxShift(const double* par, std::size_t iSample, std::size_t iEvent);
+
 
   // MUYUAN: Parameter values for flux variations
   double param_atmflux_nue;

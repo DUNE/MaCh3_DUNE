@@ -9,6 +9,12 @@
 #include <cstdlib>
 #include <fstream>
 
+// Muyuan's current approach
+// LoadFluxSplines() → calls LoadSingleSpline() for each neutrino type
+// SetupWeightPointers() → calls CalculateFluxWeight() for each event
+// CalculateFluxWeight() → evaluates splines and returns combined weight
+// Original flux weight gets permanently modified: dunemcSamples[i].flux_w = original_weight * spline_weight
+
 // MUYUAN: LoadSingleSpline function
 TSpline3* SampleHandlerAtm::LoadSingleSpline(const std::string& filename, const std::string& splinename) {
   MACH3LOG_INFO("Attempting to load spline '{}' from file '{}'", splinename, filename);
@@ -179,7 +185,8 @@ double SampleHandlerAtm::CalculateFluxWeight(int iEvent) {
   MACH3LOG_DEBUG("Event {}: {} E={:.3f}, cosZ={:.3f}, E_weight={:.6f}, cosZ_weight={:.6f}, final_weight={:.6f}", 
                  iEvent, neutrino_type, energy, cosZ, energy_weight, cosZ_weight, final_weight);
   
-  return final_weight;
+  // return the response (deviation from 1.0), not the absolute weight
+  return final_weight - 1.0;
 
   // Can implement more complex logic if needed
   // Below, we scale the final weight by a parameter specific to the neutrino type
@@ -196,6 +203,41 @@ double SampleHandlerAtm::CalculateFluxWeight(int iEvent) {
   // return weight;
   
 }
+
+// * correct way of applying weight 
+// Muyuan: apply the flux weight
+// following similar logic https://github.com/DUNE/MaCh3_DUNE/blob/e47b67efeccf0dec2305d320440a540c338506b9/Samples/SampleHandlerBeamFD.cpp#L57-L63
+void SampleHandlerAtm::AtmFluxShift(const double* par, std::size_t iSample, std::size_t iEvent) {
+  (void)iSample; // supres unused parameter warning
+  //calculate the spline response for this event
+  double spline_response = CalculateFluxWeight(static_cast<int>(iEvent)); // return respone response instead of abs weight
+  // Apply the systematic by modifying the flux weight directly
+  // Original flux weight * (1.0 + Dial_Value * Spline_Response)
+
+  // Apply the systematic: Weight = Original * (1.0 + Dial_Value * Spline_Response)
+  dunemcSamples[iEvent].flux_w = original_flux_weights[iEvent] * (1.0 + (*par) * spline_response);
+  
+  // Debug output for first few calls
+  static int debug_calls = 0;
+  debug_calls++;
+  if (debug_calls <= 5) {
+    int pdg = dunemcSamples[iEvent].nupdgUnosc;
+    std::string neutrino_type;
+    switch(pdg) {
+      case 12: neutrino_type = "nue"; break;
+      case -12: neutrino_type = "anue"; break;
+      case 14: neutrino_type = "numu"; break;
+      case -14: neutrino_type = "anumu"; break;
+      default: neutrino_type = "unknown"; break;
+    }
+    
+    MACH3LOG_INFO("AtmFluxShift {} Event {}: dial={:.6f}, response={:.6f}, orig_flux={:.6f}, new_flux={:.6f}", 
+                  neutrino_type, iEvent, *par, spline_response, original_flux_weights[iEvent], dunemcSamples[iEvent].flux_w);
+  }
+}
+
+
+
 
 
 // Enhanced constructor initialization
@@ -268,17 +310,9 @@ void SampleHandlerAtm::SetupSplines() {
 void SampleHandlerAtm::RegisterFunctionalParameters() {
   MACH3LOG_INFO("Registering atmospheric flux functional parameters");
   
-  // Register the expected atmflux_0 parameter that controls all flux variations
-  RegisterIndividualFunctionalParameter("atmflux_0", 0, 
-    [&](const double* params, std::size_t nParams) -> void {
-      if (nParams > 0) {
-        // Use single parameter to control all flux types
-        param_atmflux_nue = params[0];
-        param_atmflux_anue = params[0];
-        param_atmflux_numu = params[0];
-        param_atmflux_anumu = params[0];
-        MACH3LOG_DEBUG("atmflux_0 parameter updated: {}", params[0]);
-      }
+  RegisterIndividualFunctionalParameter("atmflux_0", 0,
+    [this](const double* par, std::size_t iEvent) { 
+      this->AtmFluxShift(par, 0, iEvent);  // Pass 0 for iSample
     }
   );
   
@@ -286,91 +320,112 @@ void SampleHandlerAtm::RegisterFunctionalParameters() {
 }
 
 // Enhanced SetupWeightPointers with proper parameter handling
+// void SampleHandlerAtm::SetupWeightPointers() { // no ability to be recalled after initialization
+//   MACH3LOG_INFO("=== SampleHandlerAtm::SetupWeightPointers() called ===");
+  
+//   // Initialize flux parameters
+//   param_atmflux_nue = 1.0;
+//   param_atmflux_anue = 1.0;
+//   param_atmflux_numu = 1.0;
+//   param_atmflux_anumu = 1.0;
+  
+//   std::vector<NormParameter> norm_parameters = ParHandler->GetNormParsFromSampleName(GetSampleName());
+//   MACH3LOG_INFO("Found {} norm parameters for sample {}", norm_parameters.size(), GetSampleName());
+
+//   // Calculate flux weights for all events using splines
+//   MACH3LOG_INFO("Calculating flux weights for {} events", dunemcSamples.size());
+  
+//   std::map<int, int> pdg_counts;
+//   std::map<int, std::string> pdg_names = {{12, "nue"}, {-12, "anue"}, {14, "numu"}, {-14, "anumu"}};
+  
+//   for (size_t i = 0; i < dunemcSamples.size(); ++i) {
+//     int pdg = dunemcSamples[i].nupdgUnosc;
+//     pdg_counts[pdg]++;
+    
+//     // Calculate the new flux weight using splines
+//     double original_weight = dunemcSamples[i].flux_w;
+//     double spline_weight = CalculateFluxWeight(static_cast<int>(i));
+    
+//     // Multiply original flux weight by spline weight
+//     dunemcSamples[i].flux_w = original_weight * spline_weight;
+    
+//     // Debug output for first few events of each type
+//     if (pdg_counts[pdg] <= 3 && pdg_names.count(pdg)) {
+//       MACH3LOG_INFO("{} Event {}: original_flux={:.6f}, spline={:.6f}, final_flux={:.6f}, energy={:.3f}, cosZ={:.3f}", 
+//                     pdg_names[pdg], i, original_weight, spline_weight, dunemcSamples[i].flux_w, 
+//                     dunemcSamples[i].rw_etru, dunemcSamples[i].rw_truecz);
+//     }
+//   }
+  
+//   // Log statistics
+//   for (const auto& pair : pdg_counts) {
+//     std::string name = pdg_names.count(pair.first) ? pdg_names[pair.first] : "unknown";
+//     MACH3LOG_INFO("Found {} {} events (PDG: {})", pair.second, name, pair.first);
+//   }
+
+//   // Setup weight pointers for all events
+//   for (size_t i = 0; i < dunemcSamples.size(); ++i) {
+//     MCSamples[i].total_weight_pointers.clear(); // Clear any existing pointers
+    
+//     // Add basic weights
+//     MCSamples[i].total_weight_pointers.push_back(&(dunemcSamples[i].flux_w));
+//     MCSamples[i].total_weight_pointers.push_back(MCSamples[i].osc_w_pointer);
+//     MCSamples[i].total_weight_pointers.push_back(&(MCSamples[i].xsec_w));
+//     MCSamples[i].total_weight_pointers.push_back(&(ExposureScaling));
+
+//     // Add appropriate flux parameter based on neutrino type
+//     int pdg = dunemcSamples[i].nupdgUnosc;
+//     switch(pdg) {
+//       case 12:  // nue
+//         MCSamples[i].total_weight_pointers.push_back(&param_atmflux_nue);
+//         break;
+//       case -12: // anti-nue
+//         MCSamples[i].total_weight_pointers.push_back(&param_atmflux_anue);
+//         break;
+//       case 14:  // numu
+//         MCSamples[i].total_weight_pointers.push_back(&param_atmflux_numu);
+//         break;
+//       case -14: // anti-numu
+//         MCSamples[i].total_weight_pointers.push_back(&param_atmflux_anumu);
+//         break;
+//       default:
+//         // For unknown PDG codes, add a dummy parameter (always 1.0)
+//         static double dummy_param = 1.0;
+//         MCSamples[i].total_weight_pointers.push_back(&dummy_param);
+//         break;
+//     }
+    
+//     // Add any additional norm parameters from the parameter handler
+//     for (const auto& param : norm_parameters) {
+//       std::string param_name = param.name;
+//       if (param_name.find("atmflux") != std::string::npos) {
+//         MCSamples[i].total_weight_pointers.push_back(ParHandler->RetPointer(param.index));
+//         if (i == 0) { // Log only once
+//           MACH3LOG_INFO("Adding norm parameter {} with index {}", param_name, param.index);
+//         }
+//       }
+//     }
+//   }
+  
+//   MACH3LOG_INFO("=== SampleHandlerAtm::SetupWeightPointers() finished ===");
+// }
+
+// Muyuan brought this back to original form. this method only sets up the pointers
+// at the beginning of the fit. 
 void SampleHandlerAtm::SetupWeightPointers() {
   MACH3LOG_INFO("=== SampleHandlerAtm::SetupWeightPointers() called ===");
   
-  // Initialize flux parameters
-  param_atmflux_nue = 1.0;
-  param_atmflux_anue = 1.0;
-  param_atmflux_numu = 1.0;
-  param_atmflux_anumu = 1.0;
-  
-  std::vector<NormParameter> norm_parameters = ParHandler->GetNormParsFromSampleName(GetSampleName());
-  MACH3LOG_INFO("Found {} norm parameters for sample {}", norm_parameters.size(), GetSampleName());
-
-  // Calculate flux weights for all events using splines
-  MACH3LOG_INFO("Calculating flux weights for {} events", dunemcSamples.size());
-  
-  std::map<int, int> pdg_counts;
-  std::map<int, std::string> pdg_names = {{12, "nue"}, {-12, "anue"}, {14, "numu"}, {-14, "anumu"}};
-  
+  // Setup weight pointers for all events - BASIC WEIGHTS ONLY
   for (size_t i = 0; i < dunemcSamples.size(); ++i) {
-    int pdg = dunemcSamples[i].nupdgUnosc;
-    pdg_counts[pdg]++;
+    MCSamples[i].total_weight_pointers.clear();
     
-    // Calculate the new flux weight using splines
-    double original_weight = dunemcSamples[i].flux_w;
-    double spline_weight = CalculateFluxWeight(static_cast<int>(i));
+    // Add only the standard weights
+    MCSamples[i].total_weight_pointers.push_back(&(dunemcSamples[i].flux_w));   // Original flux weight
+    MCSamples[i].total_weight_pointers.push_back(MCSamples[i].osc_w_pointer);    // Oscillation weight  
+    MCSamples[i].total_weight_pointers.push_back(&(MCSamples[i].xsec_w));        // Cross-section weight
+    MCSamples[i].total_weight_pointers.push_back(&(ExposureScaling));            // Exposure scaling
     
-    // Multiply original flux weight by spline weight
-    dunemcSamples[i].flux_w = original_weight * spline_weight;
-    
-    // Debug output for first few events of each type
-    if (pdg_counts[pdg] <= 3 && pdg_names.count(pdg)) {
-      MACH3LOG_INFO("{} Event {}: original_flux={:.6f}, spline={:.6f}, final_flux={:.6f}, energy={:.3f}, cosZ={:.3f}", 
-                    pdg_names[pdg], i, original_weight, spline_weight, dunemcSamples[i].flux_w, 
-                    dunemcSamples[i].rw_etru, dunemcSamples[i].rw_truecz);
-    }
-  }
-  
-  // Log statistics
-  for (const auto& pair : pdg_counts) {
-    std::string name = pdg_names.count(pair.first) ? pdg_names[pair.first] : "unknown";
-    MACH3LOG_INFO("Found {} {} events (PDG: {})", pair.second, name, pair.first);
-  }
-
-  // Setup weight pointers for all events
-  for (size_t i = 0; i < dunemcSamples.size(); ++i) {
-    MCSamples[i].total_weight_pointers.clear(); // Clear any existing pointers
-    
-    // Add basic weights
-    MCSamples[i].total_weight_pointers.push_back(&(dunemcSamples[i].flux_w));
-    MCSamples[i].total_weight_pointers.push_back(MCSamples[i].osc_w_pointer);
-    MCSamples[i].total_weight_pointers.push_back(&(MCSamples[i].xsec_w));
-    MCSamples[i].total_weight_pointers.push_back(&(ExposureScaling));
-
-    // Add appropriate flux parameter based on neutrino type
-    int pdg = dunemcSamples[i].nupdgUnosc;
-    switch(pdg) {
-      case 12:  // nue
-        MCSamples[i].total_weight_pointers.push_back(&param_atmflux_nue);
-        break;
-      case -12: // anti-nue
-        MCSamples[i].total_weight_pointers.push_back(&param_atmflux_anue);
-        break;
-      case 14:  // numu
-        MCSamples[i].total_weight_pointers.push_back(&param_atmflux_numu);
-        break;
-      case -14: // anti-numu
-        MCSamples[i].total_weight_pointers.push_back(&param_atmflux_anumu);
-        break;
-      default:
-        // For unknown PDG codes, add a dummy parameter (always 1.0)
-        static double dummy_param = 1.0;
-        MCSamples[i].total_weight_pointers.push_back(&dummy_param);
-        break;
-    }
-    
-    // Add any additional norm parameters from the parameter handler
-    for (const auto& param : norm_parameters) {
-      std::string param_name = param.name;
-      if (param_name.find("atmflux") != std::string::npos) {
-        MCSamples[i].total_weight_pointers.push_back(ParHandler->RetPointer(param.index));
-        if (i == 0) { // Log only once
-          MACH3LOG_INFO("Adding norm parameter {} with index {}", param_name, param.index);
-        }
-      }
-    }
+    // NO ATMOSPHERIC FLUX LOGIC HERE - that's handled by the functional parameter system
   }
   
   MACH3LOG_INFO("=== SampleHandlerAtm::SetupWeightPointers() finished ===");
@@ -449,9 +504,15 @@ int SampleHandlerAtm::SetupExperimentMC() { // Heart of the code
 
     dunemcSamples[iEvent].flux_w = sr->mc.nu[0].genweight;
   }
+  // setup original weight
+  original_flux_weights.resize(nEntries);
+  for (int i = 0; i < nEntries; i++) {
+    original_flux_weights[i] = dunemcSamples[i].flux_w;
+  }
 
   delete Chain;
   gErrorIgnoreLevel = CurrErrorLevel;
+
 
   return nEntries; // Return the number of events processed
 }

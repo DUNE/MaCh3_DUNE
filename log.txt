@@ -978,28 +978,14 @@ MUYUAN DEBUG: SampleHandlerAtm::Init() called!
 [SampleHandlerFD.cpp][info] Finished setting up functional parameters
 [SampleHandlerFD.cpp][info] Setting up Weight Pointers..
 [SampleHandlerAtm.cpp][info] === SampleHandlerAtm::SetupWeightPointers() called ===
-[SampleHandlerAtm.cpp][info] Found 0 norm parameters for sample ATM
-[SampleHandlerAtm.cpp][info] Calculating flux weights for 6610924 events
-[SampleHandlerAtm.cpp][info] nue Event 0: original_flux=0.008915, spline=1.016874, final_flux=0.009065, energy=2.271, cosZ=0.284
-[SampleHandlerAtm.cpp][info] nue Event 1: original_flux=0.002028, spline=1.007738, final_flux=0.002044, energy=11.862, cosZ=0.542
-[SampleHandlerAtm.cpp][info] nue Event 2: original_flux=0.006794, spline=1.015640, final_flux=0.006901, energy=2.061, cosZ=0.543
-[SampleHandlerAtm.cpp][info] numu Event 2541438: original_flux=0.016600, spline=1.035404, final_flux=0.017187, energy=2.271, cosZ=0.284
-[SampleHandlerAtm.cpp][info] numu Event 2541439: original_flux=0.008432, spline=1.020749, final_flux=0.008607, energy=11.862, cosZ=0.542
-[SampleHandlerAtm.cpp][info] numu Event 2541440: original_flux=0.015121, spline=1.057247, final_flux=0.015987, energy=2.061, cosZ=0.543
-[SampleHandlerAtm.cpp][info] anue Event 5082876: original_flux=0.004154, spline=1.032237, final_flux=0.004288, energy=19.942, cosZ=0.046
-[SampleHandlerAtm.cpp][info] anue Event 5082877: original_flux=0.005588, spline=1.144519, final_flux=0.006395, energy=6.871, cosZ=0.166
-[SampleHandlerAtm.cpp][info] anue Event 5082878: original_flux=0.000513, spline=1.024310, final_flux=0.000525, energy=33.169, cosZ=0.803
-[SampleHandlerAtm.cpp][info] anumu Event 5846900: original_flux=0.010466, spline=1.011671, final_flux=0.010588, energy=19.942, cosZ=0.046
-[SampleHandlerAtm.cpp][info] anumu Event 5846901: original_flux=0.013534, spline=1.092165, final_flux=0.014781, energy=6.871, cosZ=0.166
-[SampleHandlerAtm.cpp][info] anumu Event 5846902: original_flux=0.004745, spline=1.010928, final_flux=0.004797, energy=33.169, cosZ=0.803
-[SampleHandlerAtm.cpp][info] Found 763977 anumu events (PDG: -14)
-[SampleHandlerAtm.cpp][info] Found 763977 anue events (PDG: -12)
-[SampleHandlerAtm.cpp][info] Found 364 unknown events (PDG: 0)
-[SampleHandlerAtm.cpp][info] Found 2541303 nue events (PDG: 12)
-[SampleHandlerAtm.cpp][info] Found 2541303 numu events (PDG: 14)
 [SampleHandlerAtm.cpp][info] === SampleHandlerAtm::SetupWeightPointers() finished ===
 [SampleHandlerFD.cpp][info] Setting up Kinematic Map..
 [SampleHandlerFD.cpp][info] =======================================================
+[SampleHandlerAtm.cpp][info] AtmFluxShift nue Event 0: dial=1.000000, response=0.016874, orig_flux=0.008915, new_flux=0.009065
+[SampleHandlerAtm.cpp][info] AtmFluxShift nue Event 1: dial=1.000000, response=0.007738, orig_flux=0.002028, new_flux=0.002044
+[SampleHandlerAtm.cpp][info] AtmFluxShift numu Event 4958193: dial=1.000000, response=0.001827, orig_flux=0.008117, new_flux=0.008132
+[SampleHandlerAtm.cpp][info] AtmFluxShift nue Event 1652731: dial=1.000000, response=0.042202, orig_flux=0.009337, new_flux=0.009731
+[SampleHandlerAtm.cpp][info] AtmFluxShift numu Event 3305462: dial=1.000000, response=0.052564, orig_flux=0.014635, new_flux=0.015404
 [EventRates.cpp][info] Event rate for numuselec : 29760.11
 [SampleHandlerFD.cpp][info] -------------------------------------------------
 [SampleHandlerFD.cpp][info] Integral breakdown for sample: numuselec
