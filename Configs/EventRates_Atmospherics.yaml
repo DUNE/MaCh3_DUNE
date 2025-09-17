@@ -10,7 +10,7 @@ General:
   # OscillationParameters: [0.310, 0.582, 0.224, 7.39E-5, 2.5254E-3, -2.498, 25]
 
   # Nu-FIT 5.2 w. SK atm
-  OscillationParameters: [0.303, 0.452, 0.0223, 7.41E-5, 2.51E-3, -2.233, 25,  1221.5, 3480., 5701., 6371., 1., 1., 1., 1., 0.468, 0.468, 0.496, 0.496]
+  # OscillationParameters: [0.303, 0.452, 0.0223, 7.41E-5, 2.51E-3, -2.233, 25,  1221.5, 3480., 5701., 6371., 1., 1., 1., 1., 0.468, 0.468, 0.496, 0.496]
   #OscillationParameters: [0.303, 0.452, 0.0223, 7.41E-5, 2.51E-3, -2.233, 25]
 
   # T2K-like best-fit
@@ -19,21 +19,34 @@ General:
   # Unoscillated
   # OscillationParameters: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.5]
 
+  # NSI global best fit
+  # OscillationParameters: [0.303, 0.451, 0.02225, 7.41E-5, 2.45E-3, -2.233, 0.5, 0.02, 0.03, 0.0, 0.03, 0.0, 0.0, 0.0, 0.0, 0.02, 0.02, 0.02, 15.0]
+  OscillationParameters: [0.303, 0.451, 0.02225, 7.41E-5, 2.45E-3, -2.233, 0.0, 0.2, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 15.0]
+
+
+
   Systematics:
-    XsecCovFile: ["Configs/CovObjs/xsec_covariance_DUNE_systs_2022a_FD_v3.yaml", "Configs/CovObjs/OscCov_PDG2021_v2_Atmospherics.yaml"]
+    # XsecCovFile: ["Configs/CovObjs/xsec_covariance_DUNE_systs_2022a_FD_v3.yaml", "Configs/CovObjs/OscCov_PDG2021_v2_Atmospherics.yaml"]
+    XsecCovFile: ["Configs/CovObjs/xsec_covariance_DUNE_systs_2022a_FD_v3.yaml", "Configs/CovObjs/OscCov_PDG2021_v2_NSI.yaml"] # Muyuan changed to this for NSI
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.1
     XsecAtGen: false
     XsecFix: []
 
+    OscCovFile: ["Configs/CovObjs/OscCov_PDG2021_v2_NSI.yaml"] # Muyuan moved it here, oscillation parameter uncertainties
+    OscCovName: "osc_cov"
+    OscFix: ["ElecCoup", "UpCoup", "DownCoup", "ProdH"] # Muyuan fixing parameters
+
   SharedNuOscillatorObject:
     ATM: "Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml"
+
 
   Fitter:
     FitTestLikelihood: false
 
   MCMC:
-    NSteps: 20000
+    # NSteps: 20000
+    NSteps: 20
     AutoSave: 5000
 
   Output:

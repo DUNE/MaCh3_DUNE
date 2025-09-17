@@ -21,8 +21,12 @@ Binned:
 #  CosineZAxisHistName: "CosineZAxisBinning"  
   
 OscProbCalcerSetup:
-  ImplementationName: "CUDAProb3"
+  # ImplementationName: "CUDAProb3"
+  ImplementationName: "OscProb" # Muyuan made this change
+  PMNSType: "NSI"
   EarthModelFileName: "./Inputs/Atmospherics/PREM_4layer.dat"
+  PREMFile: "./build/Inputs/OscProb_prem_4+1layers.txt" # Muyuan add
+  DetDepth: 1.5 # Muyuan add
 
   UseEarthModelSystematics: true
   Layers: 4

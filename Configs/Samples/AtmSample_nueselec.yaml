@@ -15,14 +15,28 @@ SampleOptions:
   IsELike: yes
   ExposureScaling: 1.0
 
+FluxSplines:
+File: "Inputs/DUNE_atmospheric_spline_files/atmflux_SolMin_splines.root"
+Flavors:
+  - PDG: 12
+    Tag: "NuE"
+  - PDG: -12
+    Tag: "ANuE"
+  - PDG: 14
+    Tag: "NuM"
+  - PDG: -14
+    Tag: "ANuM"
+
 InputFiles:
-  mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"
+  # mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"
+  mtupleprefix: "/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/Atmospheric/v1/atm_hd"
   mtuplesuffix: "_nueselec.root"
   splineprefix: ""
   splinesuffix: ""
 
 NuOsc:
-  NuOscConfigFile: "Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml"
+  # NuOscConfigFile: "Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml"
+  NuOscConfigFile: "Configs/NuOsc/OscProb.yaml"
   EqualBinningPerOscChannel: true
 
 SubSamples:

@@ -231,8 +231,8 @@ void SampleHandlerAtm::AtmFluxShift(const double* par, std::size_t iSample, std:
       default: neutrino_type = "unknown"; break;
     }
     
-    MACH3LOG_INFO("AtmFluxShift {} Event {}: dial={:.6f}, response={:.6f}, orig_flux={:.6f}, new_flux={:.6f}", 
-                  neutrino_type, iEvent, *par, spline_response, original_flux_weights[iEvent], dunemcSamples[iEvent].flux_w);
+    // MACH3LOG_INFO("AtmFluxShift {} Event {}: dial={:.6f}, response={:.6f}, orig_flux={:.6f}, new_flux={:.6f}", 
+                  // neutrino_type, iEvent, *par, spline_response, original_flux_weights[iEvent], dunemcSamples[iEvent].flux_w);
   }
 }
 

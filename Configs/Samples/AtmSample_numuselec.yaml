@@ -28,13 +28,15 @@ Flavors:
     Tag: "ANuM"
 
 InputFiles:
-  mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"
+  # mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"
+  mtupleprefix: "/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/Atmospheric/v1/atm_hd"
   mtuplesuffix: "_numuselec.root"
   splineprefix: ""
   splinesuffix: ""
 
 NuOsc:
-  NuOscConfigFile: "Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml"
+  # NuOscConfigFile: "Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml"
+  NuOscConfigFile: "Configs/NuOsc/OscProb.yaml"
   EqualBinningPerOscChannel: true
 
 SubSamples:
