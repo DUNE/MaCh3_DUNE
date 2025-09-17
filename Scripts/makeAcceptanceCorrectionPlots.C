@@ -1,4 +1,5 @@
-#include "TH1.h"
+#include <TH1.h>
+#include "TH2.h"
 #include "TList.h"
 #include "TFile.h"
 #include "TString.h"
@@ -12,7 +13,7 @@
 TH1* rebinHist(TH1* hist) {
   if (std::string(hist->GetTitle()).find("BAngle_Momentum") != std::string::npos) {
     TH2D* hist2D = dynamic_cast<TH2D*>(hist);
-    if (hist2D) return (TH1*)hist2D->Rebin2D(2, 4);
+    if (hist2D) return (TH1*)hist2D->Rebin2D(1, 2);
   }
   else if (std::string(hist->GetTitle()).find("BAngle_MomRes") != std::string::npos
     || std::string(hist->GetTitle()).find("Angular_Distribution") != std::string::npos) {
@@ -82,9 +83,9 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename, const char* output
       std::string basename = histname.substr(0,accstringpos) + histname.substr(accstringpos+9);
       TH1* acceptedHist = (TH1*)obj;
       TH1* totalHist = (TH1*)inputfile->Get(basename.c_str());
-      TH1* acceptedRebinned = rebinHist(acceptedHist);
-      TH1* totalRebinned = rebinHist(totalHist);
       if (totalHist) {
+        TH1* acceptedRebinned = rebinHist(acceptedHist);
+        TH1* totalRebinned = rebinHist(totalHist);
         TH1* acceptanceHist = (TH1*)acceptedRebinned->Clone((basename+" Acceptance").c_str());
         acceptanceHist->Divide(totalRebinned);
         for(int i_x =0; i_x<acceptanceHist->GetNbinsX(); i_x++){
@@ -100,7 +101,8 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename, const char* output
         acceptanceHist->SetTitle(("Acceptance_"+rawtitle).c_str());
         acceptanceHist->SetMarkerSize(0.4);
         //acceptanceHist->Draw("COLZ TEXT0");
-        acceptanceHist->Draw("COLZ");
+        if (obj->InheritsFrom(TH1D::Class())) acceptanceHist->Draw("HIST");
+        else acceptanceHist->Draw("COLZ");
         acceptanceHist->GetXaxis()->SetTitleOffset(1.3);
         canvas->Print(outputfilename);
         std::cout << "\nDrawn acceptance histogram: " << acceptanceHist->GetName() << std::endl;
