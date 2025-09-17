@@ -22,7 +22,7 @@ public:
   TH1* Get1DParticleVarHist(std::string ProjectionVar_StrX, std::vector< KinematicCut > SelectionVec, int WeightStyle, TAxis* AxisX);
   TH2* Get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< KinematicCut > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY);
 
-  enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kIsGoodCAFEvent, kParticle_Event, kParticle_Momentum, kParticle_EndMomentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_BeamAngle, kParticle_IsAccepted, kParticle_IsCurvatureResolved, kParticle_IsDecayed, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_IsEscaped, kParticle_NTurns, kParticle_NHits, kParticle_TrackLengthYZ, kParticle_MomResMS, kParticle_MomResYZ, kParticle_MomResX, kParticle_StartR2, kParticle_EndR, kParticle_EndX, kParticle_StartX, kParticle_EDepCrit};
+  enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kIsGoodCAFEvent, kParticle_Event, kParticle_Momentum, kParticle_EndMomentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_BeamAngle, kParticle_IsAccepted, kParticle_IsCurvatureResolved, kParticle_IsDecayed, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_IsEscaped, kParticle_PipMuCurv, kParticle_NTurns, kParticle_NHits, kParticle_TrackLengthYZ, kParticle_MomResMS, kParticle_MomResYZ, kParticle_MomResX, kParticle_StartR2, kParticle_EndR, kParticle_EndX, kParticle_StartX, kParticle_EDepCrit};
 
 protected:
   //Functions required by core
@@ -51,8 +51,8 @@ protected:
   double CalcBeta(double p_mag, double& bg, double& gamma, double pdgmass);
   int GetChargeFromPDG(int pdg);
   bool IsResolvedFromCurvature(dunemc_base *duneobj, int i_anapart, double pixel_spacing_cm);
-  double CalcEDepCrit(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers);
-  bool CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, std::unordered_map<int, size_t>& ID_to_index, dunemc_base *duneobj, double pixel_spacing_cm);
+  double CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers, const int crit_layers);
+  bool CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, dunemc_base *duneobj, double pixel_spacing_cm);
   void EraseDescendants(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID);
 
   bool IsParticleSelected(const int iSample, const int iEvent, const int iParticle);
@@ -184,6 +184,7 @@ protected:
     {"Particle_IsStoppedInEndGap",kParticle_IsStoppedInEndGap},
     {"Particle_IsStoppedInBarrelGap",kParticle_IsStoppedInBarrelGap},
     {"Particle_IsEscaped",kParticle_IsEscaped},
+    {"Particle_PipMuCurv",kParticle_PipMuCurv},
     {"Particle_NTurns",kParticle_NTurns},
     {"Particle_NHits",kParticle_NHits},
     {"Particle_TrackLengthYZ",kParticle_TrackLengthYZ},
@@ -240,6 +241,7 @@ protected:
     {kParticle_IsStoppedInEndGap,"Particle_IsStoppedInEndGap"},
     {kParticle_IsStoppedInBarrelGap,"Particle_IsStoppedInBarrelGap"},
     {kParticle_IsEscaped,"Particle_IsEscaped"},
+    {kParticle_PipMuCurv,"Particle_PipMuCurv"},
     {kParticle_NTurns,"Particle_NTurns"},
     {kParticle_NHits,"Particle_NHits"},
     {kParticle_TrackLengthYZ,"Particle_TrackLengthYZ"},

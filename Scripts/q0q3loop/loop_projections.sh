@@ -38,7 +38,6 @@ for range in "${RANGES[@]}"; do
   yq eval ".General.OutputFile = \"${OUTPUT_FILE}\"" -i "$CONFIG"
 
   # Find index of the Enu cut in the GeneralKinematicCuts list
-  # ENU_INDEX=$(yq eval '.GeneralKinematicCuts | map(.Name == "Enu") | index(true)' "$CONFIG")
   ENU_INDEX=$(yq eval '.GeneralKinematicCuts | to_entries | map(select(.value.Name == "Enu")) | .[0].key' "$CONFIG")
 
   if [[ "$ENU_INDEX" == "null" ]]; then

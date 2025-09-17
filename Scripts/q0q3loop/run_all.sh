@@ -12,7 +12,7 @@ done
 echo "All projections completed."
 
 echo "Running ROOT macro for roughness analysis..."
-root -l -b -q 'Scripts/q0q3loop/calc_roughness.C'
+root -l -b -q 'Scripts/q0q3loop/test_acceptance_metrics.C'
 
 echo "All done!"
 

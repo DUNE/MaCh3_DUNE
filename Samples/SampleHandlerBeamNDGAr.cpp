@@ -212,12 +212,22 @@ void SampleHandlerBeamNDGAr::EraseDescendants(int motherID, std::unordered_map<i
 }
 
 // Removes descendants of primID which can be reconstructed from curvature from mother_to_daughter_ID map
-bool SampleHandlerBeamNDGAr::CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, std::unordered_map<int, size_t>& ID_to_index, dunemc_base *duneobj, double pixel_spacing_cm) {
-  if (IsResolvedFromCurvature(duneobj, static_cast<int>(ID_to_index[id]), pixel_spacing_cm)) { // If mother can be reconstructed from curvature, remove her and her descendants
-    EraseDescendants(id, mother_to_daughter_ID);
+bool SampleHandlerBeamNDGAr::CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, dunemc_base *duneobj, double pixel_spacing_cm) {
+  if (IsResolvedFromCurvature(duneobj, static_cast<int>(ID_to_index.at(id)), pixel_spacing_cm)) { // If mother can be reconstructed from curvature, remove her and her descendants
+    int index = static_cast<int>(ID_to_index.at(id));
+    int motherID = _MotherTrkID->at(index);
+    if (motherID != 0) {
+      int mother_index = static_cast<int>(ID_to_index.at(motherID));
+
+      // If decay mu+ of a primary pi+
+      if (_PDG->at(index) == -13 && _PDG->at(mother_index) == 211 && _MotherTrkID->at(mother_index) == 0 && _MCPProc->at(index) == "Decay") {
+        duneobj->particle_pipmucurv->back() = true;
+      }
+      EraseDescendants(id, mother_to_daughter_ID);
+    }
     return true;
   }
-  auto& daughters = mother_to_daughter_ID[id]; // Here every particle is added to the map (even if it has no daughters)
+  auto& daughters = mother_to_daughter_ID.at(id); 
   std::vector<int> filtered_daughters = {};
   for (int daughterID : daughters) { // Check secondary tree for any others which can be reconstructed from curvature
     if (!CurvatureResolutionFilter(daughterID, mother_to_daughter_ID, ID_to_index, duneobj, pixel_spacing_cm)) {
@@ -228,16 +238,15 @@ bool SampleHandlerBeamNDGAr::CurvatureResolutionFilter(int id, std::unordered_ma
   return false;
 }
 
-double SampleHandlerBeamNDGAr::CalcEDepCrit(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers) {
+double SampleHandlerBeamNDGAr::CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers, const int crit_layers) {
   auto it = mother_to_daughter_ID.find(motherID);
   double EDepCrit = 0.;
   if (it != mother_to_daughter_ID.end()) {
-    const int crit_layers = 2;
     for (int i_layer=tot_layers-crit_layers; i_layer<tot_layers; i_layer++) {
       EDepCrit += ID_to_ECalDep.at(motherID)[i_layer];
     }
     for (int daughterID : it->second) {
-      EDepCrit += CalcEDepCrit(daughterID, mother_to_daughter_ID, ID_to_ECalDep, tot_layers);
+      EDepCrit += CalcEDepCal(daughterID, mother_to_daughter_ID, ID_to_ECalDep, tot_layers, crit_layers);
     }
   }
   return EDepCrit;
@@ -580,6 +589,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
   duneobj->particle_isstoppedinbarrel= new std::vector<bool>; duneobj->particle_isstoppedinbarrel->reserve(7*duneobj->nEvents);
   duneobj->particle_isstoppedinendcap = new std::vector<bool>; duneobj->particle_isstoppedinendcap->reserve(7*duneobj->nEvents); 
   duneobj->particle_isescaped = new std::vector<bool>; duneobj->particle_isescaped->reserve(7*duneobj->nEvents); 
+  duneobj->particle_pipmucurv = new std::vector<bool>; duneobj->particle_pipmucurv->reserve(7*duneobj->nEvents); 
   duneobj->particle_startx = new std::vector<double>; duneobj->particle_startx->reserve(7*duneobj->nEvents); 
   duneobj->particle_startr2 = new std::vector<double>; duneobj->particle_startr2->reserve(7*duneobj->nEvents); 
   duneobj->particle_endr = new std::vector<double>; duneobj->particle_endr->reserve(7*duneobj->nEvents); 
@@ -594,6 +604,12 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
 
   int numCC = 0;
   int num_in_fdv = 0;
+  int n_pip = 0;
+  int n_pip_contained = 0;
+  int n_pip_curvyseccontainment = 0;
+  int n_pip_redundantcurvysec = 0;
+  int n_pipmucurv = 0;
+  int n_pipmucurvcontained = 0;
 
   double pixel_spacing_cm = pixel_spacing/10; //convert to cm
 
@@ -680,7 +696,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
     std::unordered_map<int, std::vector<int>> mother_to_daughter_ID;
     std::unordered_map<int, size_t> ID_to_index;
     std::unordered_map<int, std::vector<double>> ID_to_ECalDep;
-    std::vector<int> prim_IDs = {};
     const int tot_ecal_layers = 42;
     size_t n_ana_particles = _MCPTrkID->size();
 
@@ -694,7 +709,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
       ID_to_ECalDep[secID] = std::vector<double>(tot_ecal_layers,0.);
       ID_to_index[secID] = i_anapart;
       mother_to_daughter_ID[motherID].push_back(secID);
-      if (motherID == 0) prim_IDs.push_back(secID);
+      mother_to_daughter_ID[secID]; //Ensure all particles are added to the map (even if no secondaries)
     }
 
     // Fill map from particle ID to ECal deposited energy
@@ -709,8 +724,9 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
 
     double muon_p2 = 0.;
     bool isEventAccepted = true;
+    int crit_layers = 2; // Number of outer layers of the calorimeter forming the 'critical' region
 
-    for (int& primID : prim_IDs) {
+    for (int& primID : mother_to_daughter_ID[0]) {
       // Do not require the reconstruction of neutrons and neutrinos
       size_t i_anaprim = ID_to_index[primID];
       int pdg = _PDG->at(i_anaprim);
@@ -722,8 +738,8 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
       duneobj->particle_energy->push_back(M3::_BAD_DOUBLE_);
       duneobj->particle_momentum->push_back(M3::_BAD_DOUBLE_);
       duneobj->particle_endmomentum->push_back(M3::_BAD_DOUBLE_);
-      duneobj->particle_transversemomentum->push_back(M3::_BAD_DOUBLE_); //momentum transverse to B-field
-      duneobj->particle_bangle->push_back(M3::_BAD_DOUBLE_); //angle to B-field
+      duneobj->particle_transversemomentum->push_back(M3::_BAD_DOUBLE_); // momentum transverse to B-field
+      duneobj->particle_bangle->push_back(M3::_BAD_DOUBLE_); // angle to B-field
       duneobj->particle_beamangle->push_back(M3::_BAD_DOUBLE_);
 
       duneobj->particle_startx->push_back(M3::_BAD_DOUBLE_);
@@ -742,6 +758,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
       duneobj->particle_isstoppedinendcap->push_back(false);
       duneobj->particle_isstoppedintpc->push_back(false);
       duneobj->particle_isescaped->push_back(false);
+      duneobj->particle_pipmucurv->push_back(false); // whether the mu+ from pi+ decay is resolved from curvature
 
       duneobj->particle_momresms->push_back(M3::_BAD_DOUBLE_);
       duneobj->particle_momresyz->push_back(M3::_BAD_DOUBLE_);
@@ -749,20 +766,43 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
       duneobj->particle_nturns->push_back(M3::_BAD_DOUBLE_);
       duneobj->particle_nhits->push_back(M3::_BAD_DOUBLE_);
       duneobj->particle_tracklengthyz->push_back(M3::_BAD_DOUBLE_);
-      duneobj->particle_edepcrit->push_back(CalcEDepCrit(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers));
+      duneobj->particle_edepcrit->push_back(CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers, crit_layers));
 
       nparticlesinsample[iSample]++;
 
-      // Remove particles (and their descendants) from mother_to_daughter_ID who's momentum we get from curvature
+      bool isCurvatureResolved = false;
+      // Remove descendants (and their descendants) from mother_to_daughter_ID who's momentum we get from curvature
       if (CurvatureResolutionFilter(primID, mother_to_daughter_ID, ID_to_index, duneobj, pixel_spacing_cm)) {
+        isCurvatureResolved = true;
         duneobj->particle_iscurvatureresolved->back() = true;
       }
-      // Find energy deposited by non-curvature-resolved particles in critical region of the calorimeter
-      double EDepCrit = CalcEDepCrit(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers);
 
-      if (EDepCrit > 0.002) {
+      // Find energy deposited by by primary and non-curvature-resolved descendants in critical region of calorimeter
+      double EDepCrit = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers, crit_layers);
+      double EDepTot = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers, tot_ecal_layers);
+      bool isContained = true;
+      if (EDepCrit > 0.002 && EDepCrit/EDepTot > 0.02) {
+        isContained = false;
+      }
+
+      if (!(isContained || isCurvatureResolved)) {
         isEventAccepted = false;
         duneobj->particle_isaccepted->back() = false;
+      }
+
+      if (pdg == 211 && duneobj->in_fdv[i_event] && duneobj->rw_isCC[i_event]) { // pi+
+        n_pip++; 
+        if (duneobj->particle_pipmucurv->back()) n_pipmucurv++;
+        if (EDepCrit <= 0.002) { // pi+ contained
+          n_pip_contained++;
+          if (duneobj->particle_pipmucurv->back()) n_pipmucurvcontained++;
+          if(duneobj->particle_edepcrit->back() > 0.002) { // pi+ only contained due to curvy secondary removal
+            n_pip_curvyseccontainment++; 
+            if (isCurvatureResolved) { // pi+ only contained due to curvy sec removal but curvature resolved anyway
+              n_pip_redundantcurvysec++;
+            }
+          }
+        }
       }
 
       // Get primary muon information
@@ -827,6 +867,8 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
     if(duneobj->rw_isCC[i_event] == 1) numCC++;
   }
   MACH3LOG_INFO("nEvents = {}, numCC = {}, numFDV = {}", duneobj->nEvents, numCC, num_in_fdv);
+  MACH3LOG_INFO("n_pip = {}, n_pip_contained = {}, n_pip_curvyseccontainment = {}, n_pip_redundantcurvysec = {}, n_pipmucurv = {}, n_pipmucurvcontained = {}.",
+                n_pip, n_pip_contained, n_pip_curvyseccontainment, n_pip_redundantcurvysec, n_pipmucurv, n_pipmucurvcontained);
 
   _sampleFile->Close();
   _sampleFile_geant->Close();
@@ -974,6 +1016,8 @@ double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, i
       return static_cast<double>(dunendgarmcSamples[iSample].particle_isstoppedinbarrelgap->at(iEvent));
     case kParticle_IsEscaped:
       return static_cast<double>(dunendgarmcSamples[iSample].particle_isescaped->at(iEvent));
+    case kParticle_PipMuCurv:
+      return static_cast<double>(dunendgarmcSamples[iSample].particle_pipmucurv->at(iEvent));
     default:
       return *GetPointerToKinematicParameter(KinPar, iSample, iEvent);
   }
