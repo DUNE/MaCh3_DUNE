@@ -1,5 +1,5 @@
 General:
-  OutputFile: "Outputs/projections_outputs/Projections_CC_BField0_3_FidRad_160_FidLen_209_InstRad_249_45_InstLen_259_WithECal_seccurve_2layers_2Mev_2perc.root"
+  OutputFile: "Outputs/projections_outputs/Projections_CC_BField0_5_FidRad_170_FidLen_200_InstRad_260_InstLen_250_containedif_15mm_2Mev_2perc_smallecal.root"
   #OutputFile: "Outputs/projections_outputs/Projections_CC_BField0_5_FidRad_160_FidLen_209_InstRad_249_45_InstLen_259_WithECal.root"
   #OutputFile: "outputs/testing.root"
   DUNESamples: ["Configs/Samples/SamplePDFDune_NDGAr_FHC_numuselec.yaml"]	
@@ -36,27 +36,6 @@ GeneralKinematicCuts:
 - Name: "IsCC"
   VarString: "IsCC"
   Range: [1.,2.]
-#- Name: "Enu"
-#  VarString: "TrueNeutrinoEnergy"
-#  Range: [1.,5.]
-#- Name: "StoppedInTPC"
-#  VarString: "Particle_IsStoppedInTPC"
-#  Range: [1.,2.]
-#- Name: "StoppedInECal"
-#  VarString: "Particle_IsStoppedInECal"
-#  Range: [1.,2.]
-#- Name: "StoppedInGap"
-#  VarString: "Particle_IsStoppedInGap"
-#  Range: [1.,2.]
-#- Name: "StoppedInEndGap"
-#  VarString: "Particle_IsStoppedInEndGap"
-#  Range: [1.,2.]
-#- Name: "StoppedInBarrelGap"
-#  VarString: "Particle_IsStoppedInBarrelGap"
-#  Range: [1.,2.]
-#- Name: "Escaped"
-#  VarString: "Particle_IsEscaped"
-#  Range: [1.,2.]
 
 "Projections": [
   {
@@ -565,6 +544,26 @@ GeneralKinematicCuts:
     ]
   },
   {
+    "Name": "Particle_End_Position",
+    "VarStrings": ["Particle_EndX", "Particle_EndR"],
+    "VarBins": [[500,-500.,500.],[500,0.,500.]],
+  },
+  {
+    "Name": "Particle_End_Position",
+    "VarStrings": ["Particle_EndX", "Particle_EndR"],
+    "VarBins": [[100,270.,280.],[100,0.,400.]],
+  },
+  {
+    "Name": "Particle_End_Position",
+    "VarStrings": ["Particle_EndX", "Particle_EndR"],
+    "VarBins": [[100,-280.,-270.],[100,0.,400.]],
+  },
+  {
+    "Name": "Particle_End_Position",
+    "VarStrings": ["Particle_EndX", "Particle_EndR"],
+    "VarBins": [[1,-340.,340.],[500,289,299.]],
+  },
+  {
     "Name": "Pi+_ECal_End_Position",
     "VarStrings": ["Particle_EndX", "Particle_EndR"],
     "VarBins": [[500,-500.,500.],[400,0.,400.]],
@@ -640,92 +639,14 @@ GeneralKinematicCuts:
     ]
   },
   {
-    "Name": "pi+_TPC_decaymom",
-    "VarStrings": ["Particle_EndMomentum"],
-    "VarBins":[[100,0.,2.]],
-    "KinematicCuts": [
-      {
-        "VarString": "Particle_PDG",
-        "Name": "PDG",
-        "Range": [210.5,211.5]
-      },
-      {
-        "VarString": "Particle_IsStoppedInTPC",
-        "Name": "TPC",
-        "Range": [1.,2.]
-      },
-      {
-        "VarString": "Particle_IsDecayed",
-        "Name": "Decayed",
-        "Range": [1.,2.]
-      }
-    ]
+    "Name": "Particle_MomResYZ_BAngle",
+    "VarStrings": ["Particle_BAngle", "Particle_MomResYZ"],
+    "VarBins": [[90,0.,180.],[50,0.,0.2]]
   },
   {
-    "Name": "pi-_TPC_decaymom",
-    "VarStrings": ["Particle_EndMomentum"],
-    "VarBins":[[100,0.,2.]],
-    "KinematicCuts": [
-      {
-        "VarString": "Particle_PDG",
-        "Name": "PDG",
-        "Range": [-211.5,-210.5]
-      },
-      {
-        "VarString": "Particle_IsStoppedInTPC",
-        "Name": "TPC",
-        "Range": [1.,2.]
-      },
-      {
-        "VarString": "Particle_IsDecayed",
-        "Name": "Decayed",
-        "Range": [1.,2.]
-      }
-    ]
-  },
-  {
-    "Name": "pi+_ECal_decaymom",
-    "VarStrings": ["Particle_EndMomentum"],
-    "VarBins":[[100,0.,2.]],
-    "KinematicCuts": [
-      {
-        "VarString": "Particle_PDG",
-        "Name": "PDG",
-        "Range": [210.5,211.5]
-      },
-      {
-        "VarString": "Particle_IsStoppedInECal",
-        "Name": "ECal",
-        "Range": [1.,2.]
-      },
-      {
-        "VarString": "Particle_IsDecayed",
-        "Name": "Decayed",
-        "Range": [1.,2.]
-      }
-    ]
-  },
-  {
-    "Name": "pi-_ECal_decaymom",
-    "VarStrings": ["Particle_EndMomentum"],
-    "VarBins":[[100,0.,2.]],
-    "KinematicCuts": [
-      {
-        "VarString": "Particle_PDG",
-        "Name": "PDG",
-        "Range": [-211.5,-210.5]
-      },
-      {
-        "VarString": "Particle_IsStoppedInECal",
-        "Name": "ECal",
-        "Range": [1.,2.]
-      },
-      {
-        "VarString": "Particle_IsDecayed",
-        "Name": "Decayed",
-        "Range": [1.,2.]
-      }
-    ]
+    "Name": "Particle_MomResMS_BAngle",
+    "VarStrings": ["Particle_BAngle", "Particle_MomResMS"],
+    "VarBins": [[90,0.,180.],[50,0.,0.2]]
   },
   {
     "Name": "pi+_escaped_EDepCrit",
@@ -877,383 +798,6 @@ GeneralKinematicCuts:
         "VarString": "Particle_PDG",
         "Name": "PDG",
         "Range": [110.5,111.5]
-      }
-    ]
-  },
-  {
-    "Name": "TrueQ3_vs_TrueQ0_0.00_to_1.50",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [0.,1.5],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "Accepted_TrueQ3_vs_TrueQ0_0.00_to_1.50",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "IsEventAccepted",
-        "VarString": "Event_IsAccepted"
-      },
-      {
-        "Range": [0.,1.5],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "TrueQ3_vs_TrueQ0_1.50_to_1.75",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [1.5,1.75],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "Accepted_TrueQ3_vs_TrueQ0_1.50_to_1.75",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "IsEventAccepted",
-        "VarString": "Event_IsAccepted"
-      },
-      {
-        "Range": [1.5,1.75],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "TrueQ3_vs_TrueQ0_1.75_to_2.00",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [1.75,2.00],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "Accepted_TrueQ3_vs_TrueQ0_1.75_to_2.00",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "IsEventAccepted",
-        "VarString": "Event_IsAccepted"
-      },
-      {
-        "Range": [1.75,2.00],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "TrueQ3_vs_TrueQ0_2.00_to_2.25",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [2.00,2.25],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "Accepted_TrueQ3_vs_TrueQ0_2.00_to_2.25",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "IsEventAccepted",
-        "VarString": "Event_IsAccepted"
-      },
-      {
-        "Range": [2.00,2.25],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "TrueQ3_vs_TrueQ0_2.25_to_2.50",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [2.25,2.50],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "Accepted_TrueQ3_vs_TrueQ0_2.25_to_2.50",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "IsEventAccepted",
-        "VarString": "Event_IsAccepted"
-      },
-      {
-        "Range": [2.25,2.50],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "TrueQ3_vs_TrueQ0_2.50_to_2.75",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [2.50,2.75],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "Accepted_TrueQ3_vs_TrueQ0_2.50_to_2.75",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "IsEventAccepted",
-        "VarString": "Event_IsAccepted"
-      },
-      {
-        "Range": [2.50,2.75],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "TrueQ3_vs_TrueQ0_2.75_to_3.00",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [2.75,3.00],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "Accepted_TrueQ3_vs_TrueQ0_2.75_to_3.00",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "IsEventAccepted",
-        "VarString": "Event_IsAccepted"
-      },
-      {
-        "Range": [2.75,3.00],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "TrueQ3_vs_TrueQ0_3.00_to_3.25",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [3.00,3.25],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "Accepted_TrueQ3_vs_TrueQ0_3.00_to_3.25",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "IsEventAccepted",
-        "VarString": "Event_IsAccepted"
-      },
-      {
-        "Range": [3.00,3.25],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "TrueQ3_vs_TrueQ0_3.25_to_3.50",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [3.25,3.50],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "Accepted_TrueQ3_vs_TrueQ0_3.25_to_3.50",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "IsEventAccepted",
-        "VarString": "Event_IsAccepted"
-      },
-      {
-        "Range": [3.25,3.50],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "TrueQ3_vs_TrueQ0_3.50_to_4.00",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [3.50,4.00],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "Accepted_TrueQ3_vs_TrueQ0_3.50_to_4.00",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "IsEventAccepted",
-        "VarString": "Event_IsAccepted"
-      },
-      {
-        "Range": [3.50,4.00],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "TrueQ3_vs_TrueQ0_4.00_to_4.50",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [4.00,4.50],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "Accepted_TrueQ3_vs_TrueQ0_4.00_to_4.50",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "IsEventAccepted",
-        "VarString": "Event_IsAccepted"
-      },
-      {
-        "Range": [4.00,4.50],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "TrueQ3_vs_TrueQ0_4.50_to_5.00",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [4.50,5.00],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "Accepted_TrueQ3_vs_TrueQ0_4.50_to_5.00",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "IsEventAccepted",
-        "VarString": "Event_IsAccepted"
-      },
-      {
-        "Range": [4.50,5.00],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "TrueQ3_vs_TrueQ0_5.00_to_10.00",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [5.00,10.00],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
-      }
-    ]
-  },
-  {
-    "Name": "Accepted_TrueQ3_vs_TrueQ0_5.00_to_10.00",
-    "VarStrings": ["TrueQ3","TrueQ0"],
-    "VarBins": [[175,0.,3.5],[150,0.,3.]],
-    "KinematicCuts": [
-      {
-        "Range": [1.,2.],
-        "Name": "IsEventAccepted",
-        "VarString": "Event_IsAccepted"
-      },
-      {
-        "Range": [5.00,10.00],
-        "Name": "Enu",
-        "VarString": "TrueNeutrinoEnergy",
       }
     ]
   },
