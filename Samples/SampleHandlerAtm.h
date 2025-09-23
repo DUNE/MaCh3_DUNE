@@ -138,15 +138,23 @@ protected: // Core functions
 
 
 private: // MUYUAN made
+
+  struct SplineSet {
+    TSpline3* energy_spline;
+    TSpline3* cosZ_spline;
+    double energy_min, energy_max;
+    double cosZ_min, cosZ_max;
+  };
+  SplineSet spline_sets[4]; // [0]=nue, [1]=anue, [2]=numu, [3]=anumu
   // MUYUAN: Test spline for atmospheric flux
-  TSpline3* spline_nue_E;
-  TSpline3* spline_nue_Cos;
-  TSpline3* spline_anue_E;
-  TSpline3* spline_anue_Cos;
-  TSpline3* spline_numu_E;
-  TSpline3* spline_numu_Cos;
-  TSpline3* spline_anumu_E;
-  TSpline3* spline_anumu_Cos;
+  // TSpline3* spline_nue_E;
+  // TSpline3* spline_nue_Cos;
+  // TSpline3* spline_anue_E;
+  // TSpline3* spline_anue_Cos;
+  // TSpline3* spline_numu_E;
+  // TSpline3* spline_numu_Cos;
+  // TSpline3* spline_anumu_E;
+  // TSpline3* spline_anumu_Cos;
 
   // MUYUAN: added to SetupExperimentMC, info from StructsDUNE.h
   std::vector<double> original_flux_weights;
