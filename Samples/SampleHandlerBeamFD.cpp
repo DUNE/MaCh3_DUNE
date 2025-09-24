@@ -324,8 +324,6 @@ void SampleHandlerBeamFD::resetShifts(int iEvent) {
 
 void SampleHandlerBeamFD::SetupWeightPointers() {
   for (size_t i = 0; i < dunemcSamples.size(); ++i) {
-    // MCSamples[i].ntotal_weight_pointers[j] = 6;
-    // MCSamples[i].total_weight_pointers[j].resize(MCSamples[i].ntotal_weight_pointers[j]);
     MCSamples[i].total_weight_pointers.push_back(&(dunemcSamples[i].pot_s));
     MCSamples[i].total_weight_pointers.push_back( &(dunemcSamples[i].norm_s));
     MCSamples[i].total_weight_pointers.push_back( MCSamples[i].osc_w_pointer);
@@ -365,7 +363,6 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   
   
   if(_data){
-    // MACH3LOG_INFO("Found \"caf\" tree in {}", mc_files[iSample]);
     MACH3LOG_INFO("Number of entries in TChain: {}", _data->GetEntries());
   }
   else{

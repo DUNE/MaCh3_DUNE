@@ -4,7 +4,7 @@
 #include "Samples/SampleHandlerBeamNDGAr.h"
 #else
 #include "Samples/SampleHandlerBeamFD.h"
-// #include "Samples/SampleHandlerBeamND.h"
+#include "Samples/SampleHandlerBeamND.h"
 #include "Samples/SampleHandlerAtm.h"
 #endif
 
@@ -24,7 +24,6 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
   #else
   if (SampleType == "BeamFD") {
     Sample = new SampleHandlerBeamFD(SampleConfig, xsec);
-  /*
   } else if (SampleType == "BeamND") {
     
     if (NDCov_FHC == nullptr || NDCov_RHC == nullptr) {
@@ -39,7 +38,6 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
     else {NDCov = NDCov_RHC;}
     
     Sample = new SampleHandlerBeamND(SampleConfig, xsec, NDCov);
-  */
   } else if (SampleType == "Atm") {
     Sample = new SampleHandlerAtm(SampleConfig, xsec, Oscillator_);
   } else {

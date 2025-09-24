@@ -13,13 +13,13 @@ else()
   set(HEADERS
     SampleHandlerAtm.h
     SampleHandlerBeamFD.h
-    # SampleHandlerBeamND.h
+    SampleHandlerBeamND.h
     MaCh3DUNEFactory.h
   )
   set(SOURCE_FILES
     SampleHandlerAtm.cpp
     SampleHandlerBeamFD.cpp
-    # SampleHandlerBeamND.cpp
+    SampleHandlerBeamND.cpp
     MaCh3DUNEFactory.cpp
   )
 endif()

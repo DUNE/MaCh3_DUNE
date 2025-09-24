@@ -56,12 +56,10 @@ struct dunemc_base {
   double rw_vtx_x;
   double rw_vtx_y;
   double rw_vtx_z;
-  /*
   double rw_reco_q;
   double reco_numu;
   double rw_Q0;
   double rw_Q3;
-  */
 
   //double beam_w;
   double flux_w;
