@@ -4,7 +4,7 @@ General:
 
   DUNESamples:
     - "Configs/Samples/AtmSample_numuselec.yaml"
-    - "Configs/Samples/AtmSample_nueselec.yaml"    
+    # - "Configs/Samples/AtmSample_nueselec.yaml"    
 
   # Nu-FIT
   # OscillationParameters: [0.310, 0.582, 0.224, 7.39E-5, 2.5254E-3, -2.498, 25]
@@ -21,7 +21,7 @@ General:
 
   # NSI global best fit
   # OscillationParameters: [0.303, 0.451, 0.02225, 7.41E-5, 2.45E-3, -2.233, 0.5, 0.02, 0.03, 0.0, 0.03, 0.0, 0.0, 0.0, 0.0, 0.02, 0.02, 0.02, 15.0]
-  OscillationParameters: [0.303, 0.451, 0.02225, 7.41E-5, 2.45E-3, -2.233, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 15.0] # Null NSI
+  OscillationParameters: [0.303, 0.451, 0.02225, 7.41E-5, 2.45E-3, -2.233, 0.0, 0.2, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 15.0]
 
 
 
@@ -35,9 +35,7 @@ General:
 
     OscCovFile: ["Configs/CovObjs/OscCov_PDG2021_v2_NSI.yaml"] # Muyuan moved it here, oscillation parameter uncertainties
     OscCovName: "osc_cov"
-    # OscFix: ["ElecCoup", "UpCoup", "DownCoup", "ProdH"] # Muyuan fixing parameters
-    # all fixed OscFix: ["Eps_ee", "Eps_emu", "Eps_etau", "Eps_mumu", "Eps_mutau", "Eps_tautau", "Delta_emu", "Delta_etau", "Delta_mutau", "ElecCoup", "UpCoup", "DownCoup", "ProdH"] # Muyuan fixing parameters
-    OscFix: ["Eps_ee", "Eps_emu", "Eps_etau", "Eps_mumu", "Eps_mutau", "Eps_tautau", "Delta_emu", "Delta_etau", "Delta_mutau", "ElecCoup", "UpCoup", "DownCoup", "ProdH"] # Muyuan fixing parameters
+    OscFix: ["ElecCoup", "UpCoup", "DownCoup", "ProdH"] # Muyuan fixing parameters
 
   SharedNuOscillatorObject:
     ATM: "Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml"
@@ -48,7 +46,7 @@ General:
 
   MCMC:
     # NSteps: 20000
-    NSteps: 100
+    NSteps: 10000
     AutoSave: 5000
 
   Output:

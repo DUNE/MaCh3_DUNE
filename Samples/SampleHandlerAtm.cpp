@@ -9,7 +9,7 @@
 #include <cstdlib>
 #include <fstream>
 
-// OPTIMIZED: Load all splines in one file operation
+// OPTIMIZED: Load all splines in one file operation and pre-compute grids
 void SampleHandlerAtm::LoadFluxSplines() {
   MACH3LOG_INFO("=== Loading atmospheric flux splines ===");
   
@@ -105,6 +105,113 @@ void SampleHandlerAtm::LoadFluxSplines() {
                   neutrino_types[i], spline_sets[i].cosZ_spline->GetNp(), 
                   spline_sets[i].cosZ_min, spline_sets[i].cosZ_max);
   }
+  
+  // After loading splines, pre-compute grids and cache responses
+  PrecomputeSplineGrids();
+}
+
+void SampleHandlerAtm::PrecomputeSplineGrids() {
+  MACH3LOG_INFO("Pre-computing spline grids for fast lookup...");
+  
+  // Define grid resolution (balance memory vs accuracy)
+  const int ENERGY_BINS = 200;  // Adjust based on your needs
+  const int COSZ_BINS = 100;    // Adjust based on your needs
+  
+  const char* neutrino_names[4] = {"nue", "anue", "numu", "anumu"};
+  
+  for (int i = 0; i < 4; ++i) {
+    const SplineSet& splines = spline_sets[i];
+    SplineGrid& grid = spline_grids[i];
+    
+    // Set up grid parameters
+    grid.energy_min = splines.energy_min;
+    grid.energy_max = splines.energy_max;
+    grid.cosZ_min = splines.cosZ_min;
+    grid.cosZ_max = splines.cosZ_max;
+    grid.energy_bins = ENERGY_BINS;
+    grid.cosZ_bins = COSZ_BINS;
+    grid.energy_step = (grid.energy_max - grid.energy_min) / ENERGY_BINS;
+    grid.cosZ_step = (grid.cosZ_max - grid.cosZ_min) / COSZ_BINS;
+    
+    // Create 2D histogram for fast lookup
+    std::string hist_name = Form("spline_grid_%s", neutrino_names[i]);
+    grid.energy_cosZ_grid = new TH2D(hist_name.c_str(), hist_name.c_str(),
+                                     ENERGY_BINS, grid.energy_min, grid.energy_max,
+                                     COSZ_BINS, grid.cosZ_min, grid.cosZ_max);
+    
+    // Pre-compute all grid points (this is the expensive part, done once)
+    MACH3LOG_INFO("Computing {} grid ({} x {} = {} points)...", 
+                  neutrino_names[i], ENERGY_BINS, COSZ_BINS, ENERGY_BINS * COSZ_BINS);
+    
+    for (int e_bin = 1; e_bin <= ENERGY_BINS; ++e_bin) {
+      double energy = grid.energy_cosZ_grid->GetXaxis()->GetBinCenter(e_bin);
+      
+      for (int cz_bin = 1; cz_bin <= COSZ_BINS; ++cz_bin) {
+        double cosZ = grid.energy_cosZ_grid->GetYaxis()->GetBinCenter(cz_bin);
+        
+        // Evaluate splines at this point
+        double energy_weight = 1.0;
+        double cosZ_weight = 1.0;
+        
+        if (energy >= splines.energy_min && energy <= splines.energy_max) {
+          energy_weight = splines.energy_spline->Eval(energy);
+        }
+        if (cosZ >= splines.cosZ_min && cosZ <= splines.cosZ_max) {
+          cosZ_weight = splines.cosZ_spline->Eval(cosZ);
+        }
+        
+        double combined_weight = energy_weight * cosZ_weight;
+        grid.energy_cosZ_grid->SetBinContent(e_bin, cz_bin, combined_weight - 1.0); // Store response
+      }
+    }
+    
+    MACH3LOG_INFO("Grid for {} completed", neutrino_names[i]);
+  }
+  
+  MACH3LOG_INFO("All spline grids pre-computed successfully!");
+}
+
+void SampleHandlerAtm::CacheAllSplineResponses() {
+  MACH3LOG_INFO("Caching spline responses for all events...");
+  
+  // FIX: Use nEvents member variable instead of declaring new one
+  size_t numEvents = dunemcSamples.size();
+  cached_spline_responses.resize(numEvents);
+  
+  for (size_t iEvent = 0; iEvent < numEvents; ++iEvent) {
+    double energy = dunemcSamples[iEvent].rw_etru;
+    double cosZ = dunemcSamples[iEvent].rw_truecz;
+    
+    // Cache response for all neutrino types
+    for (int i = 0; i < 4; ++i) {
+      const SplineGrid& grid = spline_grids[i];
+      
+      // Fast histogram lookup (much faster than spline evaluation)
+      if (energy >= grid.energy_min && energy <= grid.energy_max &&
+          cosZ >= grid.cosZ_min && cosZ <= grid.cosZ_max) {
+        int bin = grid.energy_cosZ_grid->FindBin(energy, cosZ);
+        cached_spline_responses[iEvent][i] = grid.energy_cosZ_grid->GetBinContent(bin);
+      } else {
+        cached_spline_responses[iEvent][i] = 0.0; // Outside range
+      }
+    }
+    
+    // Progress logging
+    if (iEvent % (numEvents/10) == 0) {
+      MACH3LOG_INFO("Cached responses for {}/{} events", iEvent, numEvents);
+    }
+  }
+  
+  responses_cached = true;
+  MACH3LOG_INFO("All {} event responses cached!", numEvents);
+}
+
+// Ultra-fast flux weight calculation using cached values
+double SampleHandlerAtm::GetCachedFluxWeight(int iEvent, int pdg_index) const {
+  if (!responses_cached || pdg_index < 0 || pdg_index >= 4) {
+    return 0.0;
+  }
+  return cached_spline_responses[iEvent][pdg_index];
 }
 
 // OPTIMIZED: Fast flux weight calculation with pre-computed lookup
@@ -121,44 +228,19 @@ double SampleHandlerAtm::CalculateFluxWeight(int iEvent) {
     default: return 0.0;       // Unknown PDG, return 0 response
   }
   
-  double energy = dunemcSamples[iEvent].rw_etru;
-  double cosZ = dunemcSamples[iEvent].rw_truecz;
-  
-  const SplineSet& splines = spline_sets[idx];
-  
-  // OPTIMIZED: Fast range checks with pre-computed values (no function calls)
-  double energy_weight = 1.0;
-  double cosZ_weight = 1.0;
-  
-  if (energy >= splines.energy_min && energy <= splines.energy_max) {
-    energy_weight = splines.energy_spline->Eval(energy);
-  }
-  
-  if (cosZ >= splines.cosZ_min && cosZ <= splines.cosZ_max) {
-    cosZ_weight = splines.cosZ_spline->Eval(cosZ);
-  }
-  
-  // Return response (deviation from 1.0), not the absolute weight
-  return (energy_weight * cosZ_weight) - 1.0;
+  // Use cached response (extremely fast lookup)
+  return GetCachedFluxWeight(iEvent, idx);
 }
 
 // OPTIMIZED: Simplified AtmFluxShift with minimal operations
 void SampleHandlerAtm::AtmFluxShift(const double* par, std::size_t iSample, std::size_t iEvent) {
   (void)iSample; // suppress unused parameter warning
   
-  // Calculate the spline response for this event
+  // Calculate the spline response for this event (now ultra-fast)
   double spline_response = CalculateFluxWeight(static_cast<int>(iEvent));
   
   // Apply the systematic: Weight = Original * (1.0 + Dial_Value * Spline_Response)
   dunemcSamples[iEvent].flux_w = original_flux_weights[iEvent] * (1.0 + (*par) * spline_response);
-  
-  // OPTIMIZED: Minimal debug output (only first 3 calls, no string operations)
-  static int debug_calls = 0;
-  if (debug_calls < 3) {
-    debug_calls++;
-    // Minimal logging without string formatting in hot path
-    // MACH3LOG_INFO("AtmFluxShift call {}: dial={:.6f}, response={:.6f}", debug_calls, *par, spline_response);
-  }
 }
 
 // Enhanced constructor initialization
@@ -172,7 +254,19 @@ SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGene
     spline_sets[i].energy_max = 0.0;
     spline_sets[i].cosZ_min = 0.0;
     spline_sets[i].cosZ_max = 0.0;
+    
+    spline_grids[i].energy_cosZ_grid = nullptr;
+    spline_grids[i].energy_min = 0.0;
+    spline_grids[i].energy_max = 0.0;
+    spline_grids[i].cosZ_min = 0.0;
+    spline_grids[i].cosZ_max = 0.0;
+    spline_grids[i].energy_bins = 0;
+    spline_grids[i].cosZ_bins = 0;
+    spline_grids[i].energy_step = 0.0;
+    spline_grids[i].cosZ_step = 0.0;
   }
+  
+  responses_cached = false;
   
   // Initialize flux parameters
   param_atmflux_nue = 1.0;
@@ -188,16 +282,19 @@ SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGene
   Initialise();
 }
 
-// OPTIMIZED: Enhanced destructor to clean up spline sets
+// OPTIMIZED: Enhanced destructor to clean up spline sets and grids
 SampleHandlerAtm::~SampleHandlerAtm() {
-  MACH3LOG_INFO("Cleaning up atmospheric flux splines");
+  MACH3LOG_INFO("Cleaning up atmospheric flux splines and grids");
   
-  // Clean up all splines in the sets
+  // Clean up all splines and grids in the sets
   for (int i = 0; i < 4; ++i) {
     delete spline_sets[i].energy_spline;
     delete spline_sets[i].cosZ_spline;
+    delete spline_grids[i].energy_cosZ_grid;
+    
     spline_sets[i].energy_spline = nullptr;
     spline_sets[i].cosZ_spline = nullptr;
+    spline_grids[i].energy_cosZ_grid = nullptr;
   }
 }
 
@@ -270,7 +367,6 @@ int SampleHandlerAtm::SetupExperimentMC() {
     }
     
     if(sr->common.ixn.pandora.size() != 1) {
-      // OPTIMIZED: Reduced logging in hot loop
       continue;
     }
     
@@ -319,6 +415,9 @@ int SampleHandlerAtm::SetupExperimentMC() {
   for (int i = 0; i < nEntries; i++) {
     original_flux_weights[i] = dunemcSamples[i].flux_w;
   }
+
+  // IMPORTANT: Cache spline responses AFTER loading all events
+  CacheAllSplineResponses();
 
   delete Chain;
   gErrorIgnoreLevel = CurrErrorLevel;
