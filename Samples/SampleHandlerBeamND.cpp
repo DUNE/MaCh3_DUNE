@@ -374,7 +374,8 @@ void SampleHandlerBeamND::setNDCovMatrix() {
   {
     for (int yBin = 0; yBin < nYBinsNDCov; yBin++) 
     {
-        double CV = SampleHandlerFD_data[yBin][xBin];
+        const int idx = Binning.GetBinSafe(xBin, yBin);
+        double CV = SampleHandlerFD_data[idx];
         FlatCV.push_back(CV);
 
         if(CV>0) (*NDCovMatrix)(iter,iter) += 1/CV;
@@ -439,11 +440,12 @@ double SampleHandlerBeamND::GetLikelihood()
   {
     for (int yBin = 0; yBin < nYBinsNDCov; yBin++) 
     {
-        double MCPred = SampleHandlerFD_array[yBin][xBin];
-        FlatMCPred.push_back(MCPred);
+      const int idx = Binning.GetBinSafe(xBin, yBin);
+      double MCPred = SampleHandlerFD_array[idx];
+      FlatMCPred.push_back(MCPred);
 
-        double DataVal = SampleHandlerFD_data[yBin][xBin];
-        FlatData.push_back(DataVal);
+      double DataVal = SampleHandlerFD_data[idx];
+      FlatData.push_back(DataVal);
     }
   }
 
