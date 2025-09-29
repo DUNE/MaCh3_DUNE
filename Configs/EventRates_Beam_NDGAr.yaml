@@ -564,6 +564,28 @@ GeneralKinematicCuts:
     "VarBins": [[1,-340.,340.],[500,289,299.]],
   },
   {
+    "Name": "Particle_End_Position_Transverse",
+    "VarStrings": ["Particle_EndZ", "Particle_EndY"],
+    "VarBins": [[350,-350,350],[350,-350,350]],
+  },
+  {
+    "Name": "Particle_End_Position_Transverse",
+    "VarStrings": ["Particle_EndZ", "Particle_EndY"],
+    "VarBins": [[400,250,350],[400,-50,50]],
+  },
+  {
+    "Name": "Particle_ECAL_Depth",
+    "VarStrings": ["Particle_ECALDepth"],
+    "VarBins": [[320,0.,80.]],
+    "KinematicCuts": [
+      {
+        "Name": "End_Length",
+        "VarString": "Particle_EndX",
+        "Range": [-270.,270.]
+      }
+    ]
+  },
+  {
     "Name": "Pi+_ECal_End_Position",
     "VarStrings": ["Particle_EndX", "Particle_EndR"],
     "VarBins": [[500,-500.,500.],[400,0.,400.]],

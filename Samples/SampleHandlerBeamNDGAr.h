@@ -22,7 +22,7 @@ public:
   TH1* Get1DParticleVarHist(std::string ProjectionVar_StrX, std::vector< KinematicCut > SelectionVec, int WeightStyle, TAxis* AxisX);
   TH2* Get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< KinematicCut > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY);
 
-  enum KinematicTypes {kTrueNeutrinoEnergy, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kTrueLepEnergy, kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kParticle_Event, kParticle_Momentum, kParticle_EndMomentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_BeamAngle, kParticle_IsAccepted, kParticle_IsCurvatureResolved, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_IsEscaped, kParticle_NTurns, kParticle_NHits, kParticle_TrackLengthYZ, kParticle_MomResMS, kParticle_MomResYZ, kParticle_MomResX, kParticle_StartR2, kParticle_EndR, kParticle_EndX, kParticle_StartX, kParticle_EDepCrit};
+  enum KinematicTypes {kTrueNeutrinoEnergy, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kTrueLepEnergy, kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kParticle_Event, kParticle_Momentum, kParticle_EndMomentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_BeamAngle, kParticle_IsAccepted, kParticle_IsCurvatureResolved, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_IsEscaped, kParticle_NTurns, kParticle_NHits, kParticle_TrackLengthYZ, kParticle_MomResMS, kParticle_MomResYZ, kParticle_MomResX, kParticle_StartR2, kParticle_EndR, kParticle_EndX, kParticle_EndY, kParticle_EndZ, kParticle_ECALDepth, kParticle_StartX, kParticle_EDepCrit};
 
 protected:
   //Functions required by core
@@ -51,7 +51,8 @@ protected:
   double CalcBeta(double p_mag, double& bg, double& gamma, double pdgmass);
   int GetChargeFromPDG(int pdg);
   bool IsResolvedFromCurvature(dunemc_base *duneobj, int i_anapart, double pixel_spacing_cm);
-  double CalcEDepCal(int motherID, const std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<std::vector<double>>>& ID_to_ECalDep, double r_crit, double x_crit);
+  double GetCalDepth(double x, double y, double z);
+  double CalcEDepCal(int motherID, const std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<std::vector<double>>>& ID_to_ECalDep, double crit_reg, std::unordered_map<int, double>& ecal_layer_deposits, bool store_deposits);
   bool CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, dunemc_base *duneobj, double pixel_spacing_cm);
   void EraseDescendants(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID);
 
@@ -140,6 +141,9 @@ protected:
   double adc_sampling_frequency;
   double drift_velocity;
 
+  // ecal deposits output file
+  std::ofstream ecal_deposits;
+
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
     {"TrueXPos",kTrueXPos},
@@ -182,6 +186,9 @@ protected:
     {"Particle_StartR2",kParticle_StartR2},
     {"Particle_EndR",kParticle_EndR},
     {"Particle_EndX",kParticle_EndX},
+    {"Particle_EndY",kParticle_EndY},
+    {"Particle_EndZ",kParticle_EndZ},
+    {"Particle_ECALDepth",kParticle_ECALDepth},
     {"Particle_StartX",kParticle_StartX},
     {"Particle_EDepCrit",kParticle_EDepCrit},
   };
@@ -228,6 +235,9 @@ protected:
     {kParticle_StartR2,"Particle_StartR2"},
     {kParticle_EndR,"Particle_EndR"},
     {kParticle_EndX,"Particle_EndX"},
+    {kParticle_EndY,"Particle_EndY"},
+    {kParticle_EndZ,"Particle_EndZ"},
+    {kParticle_ECALDepth,"Particle_ECALDepth"},
     {kParticle_StartX,"Particle_StartX"},
     {kParticle_EDepCrit,"Particle_EDepCrit"},
   };

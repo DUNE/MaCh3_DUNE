@@ -21,9 +21,8 @@ SampleCuts:
   TPCFidRadius: 170.0
   TPCInstrumentedLength: 250.
   TPCInstrumentedRadius: 260.
-  ECALInnerRadius: 290.38
-  # ECALOuterRadius: 365.32
-  ECALOuterRadius: 353.38
+  ECALInnerRadius: 289.88 # Shortest distance from TPC centre to ECal inner boundary
+  ECALOuterRadius: 352.88 # Shortest distance from TPC centre to ECal outer boundary
   ECALEndCapStart: 275.
   ECALEndCapEnd: 338.
   MuIDInnerRadius: 407.44

@@ -233,17 +233,43 @@ bool SampleHandlerBeamNDGAr::CurvatureResolutionFilter(int id, std::unordered_ma
   return false;
 }
 
-double SampleHandlerBeamNDGAr::CalcEDepCal(int trkID, const std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<std::vector<double>>>& ID_to_ECalDep, double crit_r, double crit_x) {
+// Returns depth of a coordinate position in the dodecoganol ecal, or +/- 999 if it is beyond or within the ecal boundaries
+double SampleHandlerBeamNDGAr::GetCalDepth(double x, double y, double z) {
+  x = x - TPC_centre_x;
+  y = y - TPC_centre_y;
+  z = z - TPC_centre_z;
+  if (std::abs(x) > ECALEndCapEnd) return 999.; // beyond ecal lengthways
+
+  double theta = atan2(y, z) + M_PI + M_PI/12.;
+  double remainder = fmod(theta, M_PI/6.);
+  double theta_segment;
+  if (remainder < M_PI/12.) theta_segment = theta - remainder;
+  else theta_segment = theta + M_PI/6. - remainder;
+
+  double r = std::sqrt(y*y + z*z);
+  double projected_r = r*cos(theta_segment - theta);
+
+  if (projected_r > ECALOuterRadius) return 999.; // beyond ecal radially
+  else if (projected_r >= ECALInnerRadius) return projected_r - ECALInnerRadius; // in barrel
+  else if (std::abs(x) >= ECALEndCapStart && r <= ECALInnerRadius) return std::abs(x) - ECALEndCapStart; // in end cap
+  else return -999.; // before ecal
+}
+
+double SampleHandlerBeamNDGAr::CalcEDepCal(int trkID, const std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<std::vector<double>>>& ID_to_ECalDep, double crit_reg, std::unordered_map<int, double>& ecal_layer_deposits, bool store_deposits = false) {
   double EDepCrit = 0.;
   auto it = mother_to_daughter_ID.find(trkID);
   if (it != mother_to_daughter_ID.end()) {
     if(ID_to_ECalDep.find(trkID) != ID_to_ECalDep.end()) {
-      for (std::vector<double> calhit : ID_to_ECalDep.at(trkID)) {
-        if (calhit[1] > ECALOuterRadius - crit_r || std::abs(calhit[2]) > ECALEndCapEnd - std::abs(crit_x)) EDepCrit += calhit[0];
+      for (const auto& calhit : ID_to_ECalDep.at(trkID)) {
+        if (ECALOuterRadius - ECALInnerRadius - calhit[1] < crit_reg) EDepCrit += calhit[0];
+        if (store_deposits) {
+          int layer = static_cast<int>(calhit[1]/1.5);
+          ecal_layer_deposits[layer] += calhit[0];
+        }
       }
     }
     for (int daughterID : it->second) {
-      EDepCrit += CalcEDepCal(daughterID, mother_to_daughter_ID, ID_to_ECalDep, crit_r, crit_x);
+      EDepCrit += CalcEDepCal(daughterID, mother_to_daughter_ID, ID_to_ECalDep, crit_reg, ecal_layer_deposits, store_deposits);
     }
   }
   return EDepCrit;
@@ -277,10 +303,11 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_base *duneobj, int i
   double zend_centre = _MCPEndZ->at(i_particle)-TPC_centre_z;
   double end_radius = std::sqrt(yend_centre*yend_centre + zend_centre*zend_centre); 
   double end_length = _MCPEndX->at(i_particle)-TPC_centre_x;
+  double ecal_depth = GetCalDepth(_MCPEndX->at(i_particle), _MCPEndY->at(i_particle), _MCPEndZ->at(i_particle));
 
   bool stops_in_tpc = std::abs(end_length)<=TPCInstrumentedLength && end_radius<=TPCInstrumentedRadius;
-  bool stops_before_ecal = std::abs(end_length)<ECALEndCapStart && end_radius<ECALInnerRadius;
-  bool stops_beyond_ecal = std::abs(end_length)>ECALEndCapEnd || end_radius>ECALOuterRadius;
+  bool stops_before_ecal = ecal_depth == -999.;
+  bool stops_beyond_ecal = ecal_depth == 999.;
   bool stops_in_ecal = !(stops_before_ecal || stops_beyond_ecal);
 
   //Fill particle-level kinematic variables with default or actual (if possible at this stage) values
@@ -297,6 +324,9 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_base *duneobj, int i
     duneobj->particle_startr2->back() = start_radius*start_radius;
     duneobj->particle_endr->back() = end_radius;
     duneobj->particle_endx->back() = end_length;
+    duneobj->particle_endy->back() = yend_centre;
+    duneobj->particle_endz->back() = zend_centre;
+    duneobj->particle_ecaldepth->back() = ecal_depth;
 
     duneobj->particle_isstoppedingap->back() = !stops_in_tpc && stops_before_ecal;
     duneobj->particle_isstoppedinbarrelgap->back() = !stops_in_tpc && stops_before_ecal && std::abs(end_length)<=TPCInstrumentedLength; 
@@ -425,6 +455,7 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_base *duneobj, int i
 int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
 
   dunemc_base *duneobj = &(dunendgarmcSamples[iSample]);
+  ecal_deposits.open("CalorimeterDeposits.txt");
 
   MACH3LOG_INFO("-------------------------------------------------------------------");
   MACH3LOG_INFO("Input File: {}", mc_files.at(iSample));
@@ -578,6 +609,9 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
   duneobj->particle_startr2 = new std::vector<double>; duneobj->particle_startr2->reserve(avg_particles_per_event*duneobj->nEvents); 
   duneobj->particle_endr = new std::vector<double>; duneobj->particle_endr->reserve(avg_particles_per_event*duneobj->nEvents); 
   duneobj->particle_endx = new std::vector<double>; duneobj->particle_endx->reserve(avg_particles_per_event*duneobj->nEvents); 
+  duneobj->particle_endy = new std::vector<double>; duneobj->particle_endy->reserve(avg_particles_per_event*duneobj->nEvents); 
+  duneobj->particle_endz = new std::vector<double>; duneobj->particle_endz->reserve(avg_particles_per_event*duneobj->nEvents); 
+  duneobj->particle_ecaldepth = new std::vector<double>; duneobj->particle_ecaldepth->reserve(avg_particles_per_event*duneobj->nEvents); 
   duneobj->particle_nturns = new std::vector<double>; duneobj->particle_nturns->reserve(avg_particles_per_event*duneobj->nEvents); 
   duneobj->particle_nhits = new std::vector<double>; duneobj->particle_nhits->reserve(avg_particles_per_event*duneobj->nEvents); 
   duneobj->particle_tracklengthyz = new std::vector<double>; duneobj->particle_tracklengthyz->reserve(avg_particles_per_event*duneobj->nEvents); 
@@ -590,22 +624,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
   int num_in_fdv = 0;
 
   double pixel_spacing_cm = pixel_spacing/10; //convert to cm
-  
-  double tpc_radius = 0.;
-  double tpc_lengthpos = 0.;
-  double tpc_lengthneg = 0.;
-  double ecal_inner_radius = 999999.;
-  double ecal_inner_lengthpos = 999999.;
-  double ecal_inner_lengthneg = -999999.;
-  double ecal_outer_radius = 0.;
-  double ecal_outer_lengthpos = 0.;
-  double ecal_outer_lengthneg = 0.;
-  double muid_inner_radius = 999999.;
-  double muid_inner_lengthpos = 999999.;
-  double muid_inner_lengthneg = -999999.;
-  double muid_outer_radius = 0.;
-  double muid_outer_lengthpos = 0.;
-  double muid_outer_lengthneg = 0.;
 
   for (int i_event = 0; i_event < (duneobj->nEvents); ++i_event) { 
     simTree->GetEntry(i_event);
@@ -624,15 +642,15 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
     std::unordered_map<int, std::vector<int>> mother_to_daughter_ID;
     std::unordered_map<int, size_t> ID_to_index;
     std::unordered_map<int, std::vector<std::vector<double>>> ID_to_ECalDep; // Each deposition is vector of size 3: [energy, radius, x]
-    std::unordered_map<int, std::vector<std::vector<double>>> ID_to_TPCDep;  // Each deposition is vector of size 3: [energy, radius, x]
-    std::unordered_map<int, std::vector<std::vector<double>>> ID_to_MuIDDep; // Each deposition is vector of size 3: [energy, radius, x]
+    std::unordered_map<int, double> ID_to_TPCDep;  // Each deposition is vector of size 3: [energy, radius, x]
+    std::unordered_map<int, double> ID_to_MuIDDep; // Each deposition is vector of size 3: [energy, radius, x]
     size_t n_particles = _MCPTrkID->size();
 
     // Fill maps
     for (size_t i_particle=0; i_particle<n_particles; i_particle++) {
       int pdg = _MCPPDG->at(i_particle);
       if (pdg == 13) duneobj->ntruemuon[i_event]++;
-      
+
       int trkID = _MCPTrkID->at(i_particle);
       int motherID = _MCPMotherTrkID->at(i_particle);
       ID_to_index[trkID] = i_particle;
@@ -645,17 +663,9 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
       int trkid = _CalHitTrkID->at(i_calhit);
       if (trkid <= 0) continue;
       double dep_energy = _CalHitEnergy->at(i_calhit)/1000.;
-      double dep_r = std::sqrt((_CalHitZ->at(i_calhit)-TPC_centre_z)*(_CalHitZ->at(i_calhit)-TPC_centre_z) + 
-                               (_CalHitY->at(i_calhit)-TPC_centre_y)*(_CalHitY->at(i_calhit)-TPC_centre_y));
-      double dep_x = _CalHitX->at(i_calhit) - TPC_centre_x;
-      ID_to_ECalDep[trkid].push_back({dep_energy, dep_r, dep_x});
-
-      if (dep_r < ecal_inner_radius && std::abs(dep_x) < 200.) ecal_inner_radius = dep_r;
-      if (dep_r > ecal_outer_radius) ecal_outer_radius = dep_r;
-      if (std::abs(dep_x) < std::abs(ecal_inner_lengthpos) && dep_r < 200. && dep_x > 0.) ecal_inner_lengthpos = dep_x;
-      if (std::abs(dep_x) < std::abs(ecal_inner_lengthneg) && dep_r < 200. && dep_x < 0.) ecal_inner_lengthneg = dep_x;
-      if (std::abs(dep_x) > std::abs(ecal_outer_lengthpos) && dep_x > 0.) ecal_outer_lengthpos = dep_x;
-      if (std::abs(dep_x) > std::abs(ecal_outer_lengthneg) && dep_x < 0.) ecal_outer_lengthneg = dep_x;
+      double dep_depth = GetCalDepth(_CalHitX->at(i_calhit), _CalHitY->at(i_calhit), _CalHitZ->at(i_calhit));
+      if (std::abs(dep_depth) == 999.) MACH3LOG_ERROR("Recorded calorimeter hit outside the calorimeter");
+      ID_to_ECalDep[trkid].push_back({dep_energy, dep_depth});
     }
 
     // Fill map from particle ID to TPC deposited energy
@@ -663,14 +673,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
       int trkid = _TPCHitTrkID->at(i_tpchit);
       if (trkid <= 0) continue;
       double dep_energy = _TPCHitEnergy->at(i_tpchit)/1000.;
-      double dep_r = std::sqrt((_TPCHitZ->at(i_tpchit)-TPC_centre_z)*(_TPCHitZ->at(i_tpchit)-TPC_centre_z) + 
-                               (_TPCHitY->at(i_tpchit)-TPC_centre_y)*(_TPCHitY->at(i_tpchit)-TPC_centre_y));
-      double dep_x = _TPCHitX->at(i_tpchit) - TPC_centre_x;
-      ID_to_TPCDep[trkid].push_back({dep_energy, dep_r, dep_x});
-
-      if (dep_r > tpc_radius) tpc_radius = dep_r;
-      if (std::abs(dep_x) > std::abs(tpc_lengthpos) && dep_x > 0.) tpc_lengthpos = dep_x;
-      if (std::abs(dep_x) > std::abs(tpc_lengthneg) && dep_x < 0.) tpc_lengthneg = dep_x;
+      ID_to_TPCDep[trkid] = dep_energy;
     }
 
     // Fill map from particle ID to MuID deposited energy
@@ -678,22 +681,12 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
       int trkid = _MuIDHitTrkID->at(i_muidhit);
       if (trkid <= 0) continue;
       double dep_energy = _MuIDHitEnergy->at(i_muidhit)/1000.;
-      double dep_r = std::sqrt((_MuIDHitZ->at(i_muidhit)-TPC_centre_z)*(_MuIDHitZ->at(i_muidhit)-TPC_centre_z) + 
-                               (_MuIDHitY->at(i_muidhit)-TPC_centre_y)*(_MuIDHitY->at(i_muidhit)-TPC_centre_y));
-      double dep_x = _MuIDHitX->at(i_muidhit) - TPC_centre_x;
-      ID_to_MuIDDep[trkid].push_back({dep_energy, dep_r, dep_x});
-
-      if (dep_r < muid_inner_radius && std::abs(dep_x) < 200.) muid_inner_radius = dep_r;
-      if (dep_r > muid_outer_radius) muid_outer_radius = dep_r;
-      if (std::abs(dep_x) < std::abs(muid_inner_lengthpos) && dep_r < 200. && dep_x > 0.) muid_inner_lengthpos = dep_x;
-      if (std::abs(dep_x) < std::abs(muid_inner_lengthneg) && dep_r < 200. && dep_x < 0.) muid_inner_lengthneg = dep_x;
-      if (std::abs(dep_x) > std::abs(muid_outer_lengthpos) && dep_x > 0.) muid_outer_lengthpos = dep_x;
-      if (std::abs(dep_x) > std::abs(muid_outer_lengthneg) && dep_x < 0.) muid_outer_lengthneg = dep_x;
+      ID_to_MuIDDep[trkid] = dep_energy;
     }
 
     double muon_p2 = 0.;
     bool isEventAccepted = true;
-    double r_crit = 1.5, x_crit = 1.5; // Outer number of cm defining the calorimeter's 'critical region'
+    double crit_reg = 3.; // Outer number of cm defining the calorimeter's 'critical region'
 
     for (int& primID : mother_to_daughter_ID[0]) {
       // Do not require the reconstruction of neutrons and neutrinos
@@ -715,6 +708,9 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
       duneobj->particle_startr2->push_back(M3::_BAD_DOUBLE_);
       duneobj->particle_endr->push_back(M3::_BAD_DOUBLE_);
       duneobj->particle_endx->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_endy->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_endz->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_ecaldepth->push_back(M3::_BAD_DOUBLE_);
 
       duneobj->particle_isaccepted->push_back(true); 
       duneobj->particle_iscurvatureresolved->push_back(false);
@@ -733,7 +729,13 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
       duneobj->particle_nturns->push_back(M3::_BAD_DOUBLE_);
       duneobj->particle_nhits->push_back(M3::_BAD_DOUBLE_);
       duneobj->particle_tracklengthyz->push_back(M3::_BAD_DOUBLE_);
-      duneobj->particle_edepcrit->push_back(CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, r_crit, x_crit));
+
+      ecal_deposits << "\n" << primID << ")" << std::endl;
+      std::unordered_map<int, double> ecal_layer_deposits; 
+      duneobj->particle_edepcrit->push_back(CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, crit_reg, ecal_layer_deposits, true));
+      for (int i_layer=0; i_layer<42; i_layer++) {
+        ecal_deposits << "Energy: " << ecal_layer_deposits[i_layer] << " Depth: " << i_layer << std::endl;
+      }
 
       nparticlesinsample[iSample]++;
 
@@ -744,9 +746,12 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
       }
       duneobj->particle_iscurvatureresolved->back() = isCurvatureResolved;
 
+      ecal_deposits << "Primary: PDG = " << pdg << " Energy = " << duneobj->particle_energy->back() << " TPC = " << duneobj->particle_isstoppedintpc->back() <<
+        " Gap = " << duneobj->particle_isstoppedingap->back() << " ECal = " << duneobj->particle_isstoppedinecal->back() << std::endl;
+
       // Find energy deposited by by primary and non-curvature-resolved descendants in critical region of calorimeter
-      double EDepCrit = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, r_crit, x_crit);
-      double EDepTot = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, ECALOuterRadius, ECALEndCapEnd);
+      double EDepCrit = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, crit_reg, ecal_layer_deposits);
+      double EDepTot = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, ECALOuterRadius, ecal_layer_deposits);
       bool isContained = true;
       if (EDepCrit > 0.002 && EDepCrit/EDepTot > 0.02) {
         isContained = false;
@@ -831,10 +836,10 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
     if(duneobj->rw_isCC[i_event] == 1) numCC++;
   }
   MACH3LOG_INFO("nEvents = {}, numCC = {}, numFDV = {}", duneobj->nEvents, numCC, num_in_fdv);
-  MACH3LOG_INFO("TPC rad: {}. TPC len: {}, {}.\nECal rad: {}, {}. ECal inner len: {}, {}. ECal outer len: {}, {}.\nMuID rad: {}, {}. MuID inner len: {}, {}. MuID outer len: {}, {}.", tpc_radius, tpc_lengthneg, tpc_lengthpos, ecal_inner_radius, ecal_outer_radius, ecal_inner_lengthneg, ecal_inner_lengthpos, ecal_outer_lengthneg, ecal_outer_lengthpos, muid_inner_radius, muid_outer_radius, muid_inner_lengthneg, muid_inner_lengthpos, muid_outer_lengthneg, muid_outer_lengthpos);
 
   simFile->Close();
   genieFile->Close();
+  ecal_deposits.close();
   return duneobj->nEvents;
 }
 
@@ -898,6 +903,12 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
       return &dunendgarmcSamples[iSample].particle_endr->at(iEvent);
     case kParticle_EndX:
       return &dunendgarmcSamples[iSample].particle_endx->at(iEvent);
+    case kParticle_EndY:
+      return &dunendgarmcSamples[iSample].particle_endy->at(iEvent);
+    case kParticle_EndZ:
+      return &dunendgarmcSamples[iSample].particle_endz->at(iEvent);
+    case kParticle_ECALDepth:
+      return &dunendgarmcSamples[iSample].particle_ecaldepth->at(iEvent);
     case kParticle_StartX:
       return &dunendgarmcSamples[iSample].particle_startx->at(iEvent);
     case kParticle_EDepCrit:
