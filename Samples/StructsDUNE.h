@@ -133,7 +133,10 @@ struct dunemc_base {
   std::vector<double> *particle_startx;
   std::vector<double> *particle_startr2;
   std::vector<double> *particle_endr;
+  std::vector<double> *particle_enddepth;
   std::vector<double> *particle_endx;
+  std::vector<double> *particle_endy;
+  std::vector<double> *particle_endz;
   std::vector<double> *particle_nturns;
   std::vector<double> *particle_nhits;
   std::vector<double> *particle_tracklengthyz;

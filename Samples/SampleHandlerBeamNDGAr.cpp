@@ -238,6 +238,33 @@ bool SampleHandlerBeamNDGAr::CurvatureResolutionFilter(int id, std::unordered_ma
   return false;
 }
 
+// Returns depth of a coordinate position in the dodecoganol ecal, or +/- 999 if it is beyond or within the ecal boundaries
+double SampleHandlerBeamNDGAr::GetCalDepth(double x, double y, double z) {
+  x = x - TPC_centre_x;
+  y = y - TPC_centre_y;
+  z = z - TPC_centre_z;
+  if (std::abs(x) > ECALEndCapEnd) return 999.; // beyond ecal lengthways
+
+  double theta = atan2(y, z) + M_PI;
+  double remainder = fmod(theta, M_PI/6.);
+  double theta_segment;
+  if (remainder < M_PI/12.) theta_segment = theta - remainder;
+  else theta_segment = theta + M_PI/6. - remainder;
+
+  double r = std::sqrt(y*y + z*z);
+  double projected_r = r*cos(theta_segment - theta);
+
+  // if (projected_r > ECALOuterRadius) return 999.; // beyond ecal radially
+  // else if (projected_r >= ECALInnerRadius) return projected_r - ECALInnerRadius; // in barrel
+  // else if (std::abs(x) >= ECALEndCapStart && r <= ECALInnerRadius) return std::abs(x) - ECALEndCapStart; // in end cap
+  // else return -999.; // before ecal
+  
+  if (projected_r > ECALOuterRadius) return 999.; // beyond ecal radially
+  else if (projected_r >= ECALInnerRadius) return projected_r - ECALInnerRadius; // in barrel
+  else if (std::abs(x) >= ECALEndCapStart && r <= ECALInnerRadius) return std::abs(x) - ECALEndCapStart; // in end cap
+  else return -999.; // before ecal
+}
+
 double SampleHandlerBeamNDGAr::CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers, const int crit_layers) {
   auto it = mother_to_daughter_ID.find(motherID);
   double EDepCrit = 0.;
@@ -299,7 +326,10 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_base *duneobj, int i
     duneobj->particle_startx->back() = start_length;
     duneobj->particle_startr2->back() = start_radius*start_radius;
     duneobj->particle_endr->back() = end_radius;
+    duneobj->particle_enddepth->back() = GetCalDepth(_MCPEndX->at(i_anapart), _MCPEndY->at(i_anapart), _MCPEndZ->at(i_anapart));
     duneobj->particle_endx->back() = end_length;
+    duneobj->particle_endy->back() = yend_centre;
+    duneobj->particle_endz->back() = zend_centre;
 
     duneobj->particle_isdecayed->back() = _MCPEndProc->at(i_anapart) == "Decay";
     duneobj->particle_isstoppedingap->back() = !stops_in_tpc && stops_before_ecal;
@@ -509,7 +539,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
     _data->SetBranchAddress("SimHitZ", &_SimHitZ);
   }
   duneobj->norm_s = 1.;
-  double downsampling = 1.; //default 1, set to eg. 0.01 for quick testing
+  double downsampling = 0.01; //default 1, set to eg. 0.01 for quick testing
   bool do_geometric_correction = false;
   duneobj->pot_s = pot/(downsampling*1e21);
   duneobj->nEvents = static_cast<int>(std::round(downsampling*static_cast<double>(_data->GetEntries())));
@@ -593,7 +623,10 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
   duneobj->particle_startx = new std::vector<double>; duneobj->particle_startx->reserve(7*duneobj->nEvents); 
   duneobj->particle_startr2 = new std::vector<double>; duneobj->particle_startr2->reserve(7*duneobj->nEvents); 
   duneobj->particle_endr = new std::vector<double>; duneobj->particle_endr->reserve(7*duneobj->nEvents); 
+  duneobj->particle_enddepth = new std::vector<double>; duneobj->particle_enddepth->reserve(7*duneobj->nEvents); 
   duneobj->particle_endx = new std::vector<double>; duneobj->particle_endx->reserve(7*duneobj->nEvents); 
+  duneobj->particle_endy = new std::vector<double>; duneobj->particle_endy->reserve(7*duneobj->nEvents); 
+  duneobj->particle_endz = new std::vector<double>; duneobj->particle_endz->reserve(7*duneobj->nEvents); 
   duneobj->particle_nturns = new std::vector<double>; duneobj->particle_nturns->reserve(7*duneobj->nEvents); 
   duneobj->particle_nhits = new std::vector<double>; duneobj->particle_nhits->reserve(7*duneobj->nEvents); 
   duneobj->particle_tracklengthyz = new std::vector<double>; duneobj->particle_tracklengthyz->reserve(7*duneobj->nEvents); 
@@ -610,6 +643,10 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
   int n_pip_redundantcurvysec = 0;
   int n_pipmucurv = 0;
   int n_pipmucurvcontained = 0;
+  double ecalinnerrad = 999.;
+  double ecalouterrad = 0.;
+  double endcapstart = 999.;
+  double endcapend = 0.;
 
   double pixel_spacing_cm = pixel_spacing/10; //convert to cm
 
@@ -720,6 +757,26 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
         continue;
       }
       ID_to_ECalDep[simhit_trkid][simhit_layer-1] += _SimHitEnergy->at(i_ecaldep);
+
+      double hitx = _SimHitX->at(i_ecaldep);
+      double hity = _SimHitY->at(i_ecaldep);
+      double hitz = _SimHitZ->at(i_ecaldep);
+      double hitr = std::sqrt((hity - TPC_centre_y)*(hity - TPC_centre_y) + (hitz - TPC_centre_z)*(hitz - TPC_centre_z));
+
+      double dep_depth = GetCalDepth(hitx, hity, hitz);
+      int layer_calc = static_cast<int>(dep_depth)+1; // in barrel
+      
+      if (std::abs(hitx - TPC_centre_x) > endcapend && hitr < 200) endcapend = std::abs(hitx - TPC_centre_x);
+      if (std::abs(hitx - TPC_centre_x) < endcapstart && hitr < 200) endcapstart = std::abs(hitx - TPC_centre_x);
+      if (dep_depth + ECALInnerRadius > ecalouterrad && std::abs(hitx - TPC_centre_x) < 200) ecalouterrad = dep_depth + ECALInnerRadius;
+      if (dep_depth + ECALInnerRadius < ecalinnerrad && std::abs(hitx - TPC_centre_x) < 200) ecalinnerrad = dep_depth + ECALInnerRadius;
+      
+      if (layer_calc != simhit_layer && std::abs(_SimHitX->at(i_ecaldep)-TPC_centre_x)<200) {
+        MACH3LOG_INFO("Miscalculated layer for hit. Simhitlayer = {}, calculated layer = {}, depth = {} cm.", simhit_layer, layer_calc, dep_depth);
+      }
+      else if (std::abs(_SimHitX->at(i_ecaldep)-TPC_centre_x)<200) {
+        MACH3LOG_INFO( "Correctly calculated layer for hit. Simhitlayer = {}, depth = {} cm.", simhit_layer, dep_depth);
+      }
     }
 
     double muon_p2 = 0.;
@@ -745,7 +802,10 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
       duneobj->particle_startx->push_back(M3::_BAD_DOUBLE_);
       duneobj->particle_startr2->push_back(M3::_BAD_DOUBLE_);
       duneobj->particle_endr->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_enddepth->push_back(M3::_BAD_DOUBLE_);
       duneobj->particle_endx->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_endy->push_back(M3::_BAD_DOUBLE_);
+      duneobj->particle_endz->push_back(M3::_BAD_DOUBLE_);
 
       duneobj->particle_isaccepted->push_back(true); 
       duneobj->particle_iscurvatureresolved->push_back(false);
@@ -869,6 +929,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
   MACH3LOG_INFO("nEvents = {}, numCC = {}, numFDV = {}", duneobj->nEvents, numCC, num_in_fdv);
   MACH3LOG_INFO("n_pip = {}, n_pip_contained = {}, n_pip_curvyseccontainment = {}, n_pip_redundantcurvysec = {}, n_pipmucurv = {}, n_pipmucurvcontained = {}.",
                 n_pip, n_pip_contained, n_pip_curvyseccontainment, n_pip_redundantcurvysec, n_pipmucurv, n_pipmucurvcontained);
+  MACH3LOG_INFO("ECAL radius: {} cm to {} cm. ECAL end caps: {} cm to {} cm.", ecalinnerrad, ecalouterrad, endcapstart, endcapend);
 
   _sampleFile->Close();
   _sampleFile_geant->Close();
@@ -949,8 +1010,14 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
       return &dunendgarmcSamples[iSample].particle_startr2->at(iEvent);
     case kParticle_EndR:
       return &dunendgarmcSamples[iSample].particle_endr->at(iEvent);
+    case kParticle_EndDepth:
+      return &dunendgarmcSamples[iSample].particle_enddepth->at(iEvent);
     case kParticle_EndX:
       return &dunendgarmcSamples[iSample].particle_endx->at(iEvent);
+    case kParticle_EndY:
+      return &dunendgarmcSamples[iSample].particle_endy->at(iEvent);
+    case kParticle_EndZ:
+      return &dunendgarmcSamples[iSample].particle_endz->at(iEvent);
     case kParticle_StartX:
       return &dunendgarmcSamples[iSample].particle_startx->at(iEvent);
     case kParticle_EDepCrit:

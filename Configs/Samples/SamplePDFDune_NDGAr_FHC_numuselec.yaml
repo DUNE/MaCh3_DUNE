@@ -30,22 +30,29 @@ SampleCuts:
   drift_velocity: 3.011
   TPCFidLength: 209.
   TPCFidRadius: 160.0
-#  TPCFidLength: 250.0
-#  TPCFidRadius: 240.0
   TPCInstrumentedLength: 259.0
   TPCInstrumentedRadius: 249.45
-  ECALInnerRadius: 278.02
-  ECALOuterRadius: 322.25
-  ECALEndCapStart: 329.25
-  ECALEndCapEnd: 374.4
+
+  ECALInnerRadius: 277.628
+  ECALOuterRadius: 322.714
+  ECALEndCapStart: 329.321
+  ECALEndCapEnd: 374.399
+
+  # ECALInnerRadius: 278.02
+  # ECALOuterRadius: 322.25
+  # ECALEndCapStart: 329.25
+  # ECALEndCapEnd: 374.4
+  
   gamma_reco_efficiency: 1.0
   pi0_reco_efficiency: 1.0
 
 InputFiles:
   mtupleprefix: "Inputs/DUNE_NDGAr_CAF_files/NDGAr_FHC_ger_"
   mtuplesuffix: "_numuselec.root"
-  splineprefix: "Inputs/DUNE_NDGAr_spline_files/NDGAr_FHC_ger_"
-  splinesuffix: "_numuselec_2dsplinesnewreco.root"
+  splineprefix: ""
+  splinesuffix: ""
+  # splineprefix: "Inputs/DUNE_NDGAr_spline_files/NDGAr_FHC_ger_"
+  # splinesuffix: "_numuselec_2dsplinesnewreco.root"
 
 NuOsc:
   NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
@@ -55,6 +62,7 @@ SubSamples:
   - Name: "FHC_numu_x_numu"
     LatexName: "FHC_numu_x_numu"
     mtuplefile: "numu_x_numu"
-    splinefile: "numu_x_numu"
+    # splinefile: "numu_x_numu"
+    splinefile: ""
     nutype: 14
     oscnutype: 14

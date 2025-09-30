@@ -43,7 +43,7 @@ void changeAxisTitle(TAxis* axis) {
   else if (title == "Particle_EndR") axis->SetTitle("Track End Radius (cm)");
 }
 
-void makeAcceptanceCorrectionPlots(const char* inputfilename, const char* outputfilename = "/vols/dune/jmm224/newMaCh3/MaCh3_DUNE/Outputs/acceptance_plots/AcceptancePlots.pdf") {
+void makeAcceptanceCorrectionPlots(const char* inputfilename) {
 
   TFile* inputfile = TFile::Open(inputfilename, "READ");
   if (!inputfile || inputfile->IsZombie()) {
@@ -51,10 +51,24 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename, const char* output
     return;
   }
 
+  std::string outputfilename = "Outputs/acceptance_plots/";
+  std::string inputfilestring(inputfilename);
+  const std::string token = "Projections";
+  size_t pos = inputfilestring.find(token);
+  if (pos != std::string::npos) {  // rfind==0 means "prefix at position 0"
+    outputfilename += "AcceptancePlots" + inputfilestring.substr(pos + token.size());
+    const std::string suffix = ".root";
+    outputfilename = outputfilename.substr(0, outputfilename.size() - suffix.size()) + ".pdf";
+  }
+  else {
+    outputfilename = "Outputs/acceptance_plots/AcceptancePlots.pdf";
+  }
+  const char* outputfile = strdup(outputfilename.c_str());
+
   gStyle->SetOptStat(0);
   TCanvas* canvas = new TCanvas("canvas", "Acceptance Correction Plots", 800, 600);
   gPad->SetTopMargin(0.13);
-  canvas->Print(Form("%s[", outputfilename));
+  canvas->Print(Form("%s[", outputfile));  
 
   TIter next(inputfile->GetListOfKeys());
   TKey* key;
@@ -75,7 +89,7 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename, const char* output
     if (obj->InheritsFrom(TH1D::Class())) rawHist->Draw("HIST");
     else rawHist->Draw("COLZ");
     rawHist->GetXaxis()->SetTitleOffset(1.3);
-    canvas->Print(outputfilename);
+    canvas->Print(outputfile);
     std::cout << "Drawn histogram: " << key->GetName() << std::endl;
 
     if (histtitle.size()>9 && histtitle.substr(0,9) == "Accepted_") {
@@ -104,12 +118,12 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename, const char* output
         if (obj->InheritsFrom(TH1D::Class())) acceptanceHist->Draw("HIST");
         else acceptanceHist->Draw("COLZ");
         acceptanceHist->GetXaxis()->SetTitleOffset(1.3);
-        canvas->Print(outputfilename);
+        canvas->Print(outputfile);
         std::cout << "\nDrawn acceptance histogram: " << acceptanceHist->GetName() << std::endl;
       }
     }
   }
-  canvas->Print(Form("%s]", outputfilename));
+  canvas->Print(Form("%s]", outputfile));
   inputfile->Close();
   delete inputfile;
   delete canvas;
