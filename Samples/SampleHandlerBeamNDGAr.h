@@ -22,7 +22,7 @@ public:
   TH1* Get1DParticleVarHist(std::string ProjectionVar_StrX, std::vector< KinematicCut > SelectionVec, int WeightStyle, TAxis* AxisX);
   TH2* Get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< KinematicCut > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY);
 
-  enum KinematicTypes {kTrueNeutrinoEnergy, kRecoNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kNMuonsRecoOverTruth, kRecoLepEnergy, kTrueLepEnergy, kRecoXPos, kRecoYPos, kRecoZPos, kRecoRad, kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kIsGoodCAFEvent, kParticle_Event, kParticle_Momentum, kParticle_EndMomentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_BeamAngle, kParticle_IsAccepted, kParticle_IsCurvatureResolved, kParticle_IsDecayed, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_IsEscaped, kParticle_PipMuCurv, kParticle_NTurns, kParticle_NHits, kParticle_TrackLengthYZ, kParticle_MomResMS, kParticle_MomResYZ, kParticle_MomResX, kParticle_StartR2, kParticle_EndR, kParticle_EndDepth, kParticle_EndX, kParticle_EndY, kParticle_EndZ, kParticle_StartX, kParticle_EDepCrit};
+  enum KinematicTypes {kTrueNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kTrueLepEnergy, kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted, kParticle_Event, kParticle_Momentum, kParticle_EndMomentum, kParticle_TransverseMomentum, kParticle_BAngle, kParticle_BeamAngle, kParticle_IsAccepted, kParticle_IsCurvatureResolved, kParticle_IsDecayed, kParticle_PDG, kInFDV, kIsCC, kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInGap, kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_IsEscaped, kParticle_NTurns, kParticle_NHits, kParticle_TrackLengthYZ, kParticle_MomResMS, kParticle_MomResYZ, kParticle_MomResX, kParticle_StartR2, kParticle_EndR, kParticle_EndDepth, kParticle_EndX, kParticle_EndY, kParticle_EndZ, kParticle_StartX, kParticle_EDepCrit};
 
 protected:
   //Functions required by core
@@ -52,6 +52,7 @@ protected:
   int GetChargeFromPDG(int pdg);
   bool IsResolvedFromCurvature(dunemc_base *duneobj, int i_anapart, double pixel_spacing_cm);
   double GetCalDepth(double x, double y, double z);
+  double DepthToLayer(double depth, double r);
   double CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers, const int crit_layers);
   bool CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, dunemc_base *duneobj, double pixel_spacing_cm);
   void EraseDescendants(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID);
@@ -61,16 +62,20 @@ protected:
 
   TFile *_sampleFile;
   TTree *_data;
-  TFile *_sampleFile_geant;
-  TTree *_data_geant;
-  TString _nutype;
-  //int _mode;
 
   double pot;
   int *nparticlesinsample;
   double _BeRPA_cvwgt = 1;
 
   //Geant vectors
+  std::vector<double>* _MCVertX=0;
+  std::vector<double>*  _MCVertY=0;
+  std::vector<double>* _MCVertZ=0;
+  std::vector<double>* _MCNuPx=0;
+  std::vector<double>* _MCNuPy=0;
+  std::vector<double>* _MCNuPz=0;
+  std::vector<bool>* _IsNC=0;
+  std::vector<int>* _MCMode=0;
   std::vector<double> *_MCPStartX=0;
   std::vector<double> *_MCPStartY=0;
   std::vector<double> *_MCPStartZ=0;
@@ -104,59 +109,29 @@ protected:
   double ECALOuterRadius;
   double ECALEndCapStart;
   double ECALEndCapEnd;
-  double TPC_centre_x =0.;
-  double TPC_centre_y = -150.;
+  double TPC_centre_x = -0.00012207;
+  double TPC_centre_y = -150.473;
   double TPC_centre_z = 1486.;
   double BeamDirection[3] = {0.,-0.101,0.995};
 
   double X0 = 1193; //in cm From Federico's Kalman Filter Paper
 
-  //pixel vars
-  double pixelymin;
-  double pixelymax;
-  double pixelzmin;
-  double pixelzmax;
-  std::vector<double> yboundarypositions;
-  std::vector<double> zboundarypositions;
-
-  //configurable sample bools
-  bool iscalo_reco; //NK Added so we can easily change what energy reconstruction we are using
-  bool iselike;
-  bool incl_geant; //NK - Added so we can use GArAnaTrees
-  bool ecal_containment; //NK Do we count containment if the particle stops in the ECAL?
-
   //configurable sample cuts
-  double muonscore_threshold; //NK Added so we can optimise muon threshold
-  double protondEdxscore;
-  double protontofscore;
-  double recovertexradiusthreshold;
-  double pionenergy_threshold; //NK Added so we can find pion energy threshold
   double B_field;
   double momentum_resolution_threshold;
   double pixel_spacing;
   double spatial_resolution;
   double adc_sampling_frequency;
   double drift_velocity;
-  double pi0_reco_efficiency;  //efficiency for pi0 reco in ECAL 
-  double gamma_reco_efficiency;  //efficiency for gamma reco in ECAL
-
-  caf::StandardRecord* sr = new caf::StandardRecord();
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
-    {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},
     {"Mode",kMode},
     {"TrueXPos",kTrueXPos},
     {"TrueYPos",kTrueYPos},
     {"TrueZPos",kTrueZPos},
     {"TrueRad",kTrueRad},
-    {"NMuonsRecoOverTruth",kNMuonsRecoOverTruth},
-    {"RecoLepEnergy",kRecoLepEnergy},
     {"TrueLepEnergy",kTrueLepEnergy},
-    {"RecoXPos",kRecoXPos},
-    {"RecoYPos",kRecoYPos},
-    {"RecoZPos",kRecoZPos},
-    {"RecoRad",kRecoRad},
     {"LepPT",kLepPT},
     {"LepPZ",kLepPZ},
     {"LepTheta",kLepTheta},
@@ -166,7 +141,6 @@ protected:
     {"TrueQ0",kTrueQ0},
     {"TrueQ3",kTrueQ3},
     {"Event_IsAccepted",kEvent_IsAccepted},
-    {"IsGoodCAFEvent",kIsGoodCAFEvent},
     {"Particle_Event",kParticle_Event},
     {"Particle_Momentum",kParticle_Momentum},
     {"Particle_EndMomentum",kParticle_EndMomentum},
@@ -185,7 +159,6 @@ protected:
     {"Particle_IsStoppedInEndGap",kParticle_IsStoppedInEndGap},
     {"Particle_IsStoppedInBarrelGap",kParticle_IsStoppedInBarrelGap},
     {"Particle_IsEscaped",kParticle_IsEscaped},
-    {"Particle_PipMuCurv",kParticle_PipMuCurv},
     {"Particle_NTurns",kParticle_NTurns},
     {"Particle_NHits",kParticle_NHits},
     {"Particle_TrackLengthYZ",kParticle_TrackLengthYZ},
@@ -204,19 +177,12 @@ protected:
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
     {kTrueNeutrinoEnergy,"TrueNeutrinoEnergy"},
-    {kRecoNeutrinoEnergy,"RecoNeutrinoEnergy"},
     {kMode,"Mode"},
     {kTrueXPos,"TrueXPos"},
     {kTrueYPos,"TrueYPos"},
     {kTrueZPos,"TrueZPos"},
     {kTrueRad,"TrueRad"},
-    {kNMuonsRecoOverTruth,"NMuonsRecoOverTruth"},
-    {kRecoLepEnergy,"RecoLepEnergy"},
     {kTrueLepEnergy,"TrueLepEnergy"},
-    {kRecoXPos,"RecoXPos"},
-    {kRecoYPos,"RecoYPos"},
-    {kRecoZPos,"RecoZPos"},
-    {kRecoRad,"RecoRad"},
     {kLepPT,"LepPT"},
     {kLepPZ,"LepPZ"},
     {kLepTheta,"LepTheta"},
@@ -226,7 +192,6 @@ protected:
     {kTrueQ0,"TrueQ0"},
     {kTrueQ3,"TrueQ3"},
     {kEvent_IsAccepted,"Event_IsAccepted"},
-    {kIsGoodCAFEvent,"IsGoodCAFEvent"},
     {kParticle_Event, "Particle_Event"},
     {kParticle_Momentum,"Particle_Momentum"},
     {kParticle_EndMomentum,"Particle_EndMomentum"},
@@ -245,7 +210,6 @@ protected:
     {kParticle_IsStoppedInEndGap,"Particle_IsStoppedInEndGap"},
     {kParticle_IsStoppedInBarrelGap,"Particle_IsStoppedInBarrelGap"},
     {kParticle_IsEscaped,"Particle_IsEscaped"},
-    {kParticle_PipMuCurv,"Particle_PipMuCurv"},
     {kParticle_NTurns,"Particle_NTurns"},
     {kParticle_NHits,"Particle_NHits"},
     {kParticle_TrackLengthYZ,"Particle_TrackLengthYZ"},

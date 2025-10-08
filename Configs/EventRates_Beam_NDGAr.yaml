@@ -1,5 +1,5 @@
 General:
-  OutputFile: "Outputs/projections_outputs/Projections_CC_BField0_5_FidRad_160_FidLen_209_InstRad_249_45_InstLen_259_WithECal_seccurve_2layers_2Mev_2perc_DS.root"
+  OutputFile: "Outputs/projections_outputs/Projections_CC_BField0_5_FidRad_160_FidLen_209_InstRad_249_45_InstLen_259_WithECal_seccurve_2layers_2MeV_2perc.root"
   #OutputFile: "Outputs/projections_outputs/Projections_CC_BField0_5_FidRad_160_FidLen_209_InstRad_249_45_InstLen_259_WithECal.root"
   #OutputFile: "outputs/testing.root"
   DUNESamples: ["Configs/Samples/SamplePDFDune_NDGAr_FHC_numuselec.yaml"]	
@@ -36,9 +36,9 @@ GeneralKinematicCuts:
 - Name: "IsCC"
   VarString: "IsCC"
   Range: [1.,2.]
-#- Name: "Enu"
-#  VarString: "TrueNeutrinoEnergy"
-#  Range: [1.,5.]
+- Name: "Enu"
+  VarString: "TrueNeutrinoEnergy"
+  Range: [0.,5.]
 #- Name: "StoppedInTPC"
 #  VarString: "Particle_IsStoppedInTPC"
 #  Range: [1.,2.]
@@ -893,23 +893,6 @@ GeneralKinematicCuts:
     ]
   },
   {
-    "Name": "proton_ecal_EDepCrit",
-    "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
-    "KinematicCuts": [
-      {
-        "VarString": "Particle_IsStoppedInECal",
-        "Name": "ECal",
-        "Range": [1.,2.]
-      },
-      {
-        "VarString": "Particle_PDG",
-        "Name": "PDG",
-        "Range": [2211.5,2212.5]
-      }
-    ]
-  },
-  {
     "Name": "mu_ecal_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
     "VarBins": [[100,0.,0.1]],
@@ -923,6 +906,89 @@ GeneralKinematicCuts:
         "VarString": "Particle_PDG",
         "Name": "PDG",
         "Range": [12.5,13.5]
+      }
+    ]
+  },
+  {
+    "Name": "pi+_ecal_EDepCrit_nodecay",
+    "VarStrings": ["Particle_EDepCrit"],
+    "VarBins": [[100,0.,0.1]],
+    "KinematicCuts": [
+      {
+        "VarString": "Particle_IsStoppedInECal",
+        "Name": "Escaped",
+        "Range": [1.,2.]
+      },
+      {
+        "VarString": "Particle_PDG",
+        "Name": "PDG",
+        "Range": [210.5,211.5]
+      },
+      {
+        "VarString": "Particle_IsDecayed",
+        "Name": "Decayed",
+        "Range": [0.,0.5]
+      }
+    ]
+  },
+  {
+    "Name": "pi-_ecal_EDepCrit_nodecay",
+    "VarStrings": ["Particle_EDepCrit"],
+    "VarBins": [[100,0.,0.1]],
+    "KinematicCuts": [
+      {
+        "VarString": "Particle_IsStoppedInECal",
+        "Name": "Escaped",
+        "Range": [1.,2.]
+      },
+      {
+        "VarString": "Particle_PDG",
+        "Name": "PDG",
+        "Range": [-211.5,-210.5]
+      },
+      {
+        "VarString": "Particle_IsDecayed",
+        "Name": "Decayed",
+        "Range": [0.,0.5]
+      }
+    ]
+  },
+  {
+    "Name": "mu_ecal_EDepCrit_nodecay",
+    "VarStrings": ["Particle_EDepCrit"],
+    "VarBins": [[100,0.,0.1]],
+    "KinematicCuts": [
+      {
+        "VarString": "Particle_IsStoppedInECal",
+        "Name": "Escaped",
+        "Range": [1.,2.]
+      },
+      {
+        "VarString": "Particle_PDG",
+        "Name": "PDG",
+        "Range": [12.5,13.5]
+      },
+      {
+        "VarString": "Particle_IsDecayed",
+        "Name": "Decayed",
+        "Range": [0.,0.5]
+      }
+    ]
+  },
+  {
+    "Name": "proton_ecal_EDepCrit",
+    "VarStrings": ["Particle_EDepCrit"],
+    "VarBins": [[100,0.,0.1]],
+    "KinematicCuts": [
+      {
+        "VarString": "Particle_IsStoppedInECal",
+        "Name": "ECal",
+        "Range": [1.,2.]
+      },
+      {
+        "VarString": "Particle_PDG",
+        "Name": "PDG",
+        "Range": [2211.5,2212.5]
       }
     ]
   },
