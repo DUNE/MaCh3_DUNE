@@ -569,7 +569,7 @@ Systematics:
       FancyName: NumuFVFD
       ParameterName: NumuFVFD
     ParameterBounds:
-    - -9999.0
+    - 0.
     - 9999.0
     ParameterGroup: DetSysts
     ParameterValues:
@@ -589,7 +589,7 @@ Systematics:
       FancyName: NueFVFD
       ParameterName: NueFVFD
     ParameterBounds:
-    - -9999.0
+    - 0.
     - 9999.0
     ParameterGroup: DetSysts
     ParameterValues:

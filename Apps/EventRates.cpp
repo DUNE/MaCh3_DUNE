@@ -47,10 +47,9 @@ int main(int argc, char * argv[]) {
   //Create SampleHandlerFD objects
   
   ParameterHandlerGeneric* xsec = nullptr;
-  ParameterHandlerOsc* osc = nullptr;
   
   std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(fitMan.get(), DUNEPdfs, xsec, osc);
+  MakeMaCh3DuneInstance(fitMan.get(), DUNEPdfs, xsec);
 
   //###############################################################################################################################
   //Perform reweight and print total integral
@@ -58,12 +57,9 @@ int main(int argc, char * argv[]) {
   std::vector<TH1*> DUNEHists;
   for(auto Sample : DUNEPdfs){
     Sample->Reweight();
-    if (Sample->GetNDim() == 1)
-      DUNEHists.push_back(Sample->Get1DHist());
-    else if (Sample->GetNDim() == 2)
-      DUNEHists.push_back(Sample->Get2DHist());
+    DUNEHists.push_back(Sample->GetMCHist(Sample->GetNDim()));
 
-    std::string EventRateString = fmt::format("{:.2f}", Sample->Get1DHist()->Integral());
+    std::string EventRateString = fmt::format("{:.2f}", Sample->GetMCHist(Sample->GetNDim())->Integral());
     MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetTitle(), EventRateString);
 
     Sample->PrintIntegral();
@@ -82,7 +78,7 @@ int main(int argc, char * argv[]) {
   
   for(auto Sample : DUNEPdfs) {
     MACH3LOG_INFO("======================");
-    int nOscChannels = Sample->GetNMCSamples();
+    int nOscChannels = Sample->GetNOscChannels();
     for (int iOscChan=0;iOscChan<nOscChannels;iOscChan++) {
       std::vector< KinematicCut > SelectionVec;
 
