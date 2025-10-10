@@ -45,12 +45,7 @@ struct dunemc_base {
   int rw_reco_numu;
   double rw_berpaacvwgt;
   int rw_isCC;
-  /*
-  int rw_nuPDGunosc;
-  int rw_nuPDG;
-  int rw_run;
-  bool    *rw_isFHC;
-  */
+
   double rw_vtx_x;
   double rw_vtx_y;
   double rw_vtx_z;
@@ -88,50 +83,50 @@ struct dunemc_base {
   double rw_sum_ehad_sqrt;
   double rw_trueccnue;
   double rw_trueccnumu;
-
-  int nrecoparticles;
-  bool in_fdv;
-  bool is_accepted;
 };
 
 struct dunemc_plotting {
 
-  std::vector<int> particle_event;
-  std::vector<int> particle_trkid;
-  std::vector<int> particle_pdg;
-  std::vector<double> particle_energy;
-  std::vector<double> particle_theta;
-  std::vector<double> particle_bangle;
-  std::vector<double> particle_beamangle;
-  std::vector<double> particle_dedx;
-  std::vector<double> particle_momentum;
-  std::vector<double> particle_endmomentum;
-  std::vector<double> particle_transversemomentum;
-  std::vector<bool> particle_isaccepted;
-  std::vector<bool> particle_iscurvatureresolved;
-  std::vector<bool> particle_isdecayed;
-  std::vector<bool> particle_isstoppedintpc;
-  std::vector<bool> particle_isstoppedinecal;
-  std::vector<bool> particle_isstoppedingap;
-  std::vector<bool> particle_isstoppedinbarrelgap;
-  std::vector<bool> particle_isstoppedinendgap;
-  std::vector<bool> particle_isstoppedinbarrel;
-  std::vector<bool> particle_isstoppedinendcap;
-  std::vector<bool> particle_isescaped;
-  std::vector<double> particle_startx;
-  std::vector<double> particle_startr2;
-  std::vector<double> particle_endr;
-  std::vector<double> particle_enddepth;
-  std::vector<double> particle_endx;
-  std::vector<double> particle_endy;
-  std::vector<double> particle_endz;
-  std::vector<double> particle_nturns;
-  std::vector<double> particle_nhits;
-  std::vector<double> particle_tracklengthyz;
-  std::vector<double> particle_momresms;
-  std::vector<double> particle_momresyz;
-  std::vector<double> particle_momresx;
-  std::vector<double> particle_edepcrit;
+  bool in_fdv;
+  bool is_accepted;
+  double geometric_correction;
+
+  std::vector<int> particle_event = {};
+  std::vector<int> particle_trkid = {};
+  std::vector<int> particle_pdg = {};
+  std::vector<double> particle_energy = {};
+  std::vector<double> particle_theta = {};
+  std::vector<double> particle_bangle = {};
+  std::vector<double> particle_beamangle = {};
+  std::vector<double> particle_dedx = {};
+  std::vector<double> particle_momentum = {};
+  std::vector<double> particle_endmomentum = {};
+  std::vector<double> particle_transversemomentum = {};
+  std::vector<bool> particle_isaccepted = {};
+  std::vector<bool> particle_iscurvatureresolved = {};
+  std::vector<bool> particle_isdecayed = {};
+  std::vector<bool> particle_isstoppedintpc = {};
+  std::vector<bool> particle_isstoppedinecal = {};
+  std::vector<bool> particle_isstoppedingap = {};
+  std::vector<bool> particle_isstoppedinbarrelgap = {};
+  std::vector<bool> particle_isstoppedinendgap = {};
+  std::vector<bool> particle_isstoppedinbarrel = {};
+  std::vector<bool> particle_isstoppedinendcap = {};
+  std::vector<bool> particle_isescaped = {};
+  std::vector<double> particle_startx = {};
+  std::vector<double> particle_startr2 = {};
+  std::vector<double> particle_endr = {};
+  std::vector<double> particle_enddepth = {};
+  std::vector<double> particle_endx = {};
+  std::vector<double> particle_endy = {};
+  std::vector<double> particle_endz = {};
+  std::vector<double> particle_nturns = {};
+  std::vector<double> particle_nhits = {};
+  std::vector<double> particle_tracklengthyz = {};
+  std::vector<double> particle_momresms = {};
+  std::vector<double> particle_momresyz = {};
+  std::vector<double> particle_momresx = {};
+  std::vector<double> particle_edepcrit = {};
 };
 
 #endif

@@ -16,6 +16,7 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
   
   #ifdef BUILD_NDGAR
   if (SampleType == "BeamNDGAr") {
+    (void)Oscillator_;
     Sample = new SampleHandlerBeamNDGAr(SampleConfig, xsec);
   } else {
     MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
