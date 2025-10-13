@@ -13,7 +13,7 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
 
   (void)NDCov_FHC;
   (void)NDCov_RHC;
-  
+
   #ifdef BUILD_NDGAR
   if (SampleType == "BeamNDGAr") {
     (void)Oscillator_;
@@ -26,18 +26,18 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
   if (SampleType == "BeamFD") {
     Sample = new SampleHandlerBeamFD(SampleConfig, xsec, BeamOscillator_);
   } else if (SampleType == "BeamND") {
-    
+
     if (NDCov_FHC == nullptr || NDCov_RHC == nullptr) {
       MACH3LOG_ERROR("NDCov objects are not defined");
       throw MaCh3Exception(__FILE__, __LINE__);
     }
-    
+
     TMatrixD* NDCov = nullptr;
     manager* tempSampleManager = new manager(SampleConfig.c_str());
     int isFHC = tempSampleManager->raw()["DUNESampleBools"]["isFHC"].as<int>();
     if(isFHC) {NDCov = NDCov_FHC;}
     else {NDCov = NDCov_RHC;}
-    
+
     Sample = new SampleHandlerBeamND(SampleConfig, xsec, NDCov);
   } else if (SampleType == "Atm") {
     Sample = new SampleHandlerAtm(SampleConfig, xsec, AtmOscillator_);
@@ -46,7 +46,7 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
     throw MaCh3Exception(__FILE__, __LINE__);
   }
 #endif
-  
+
   return Sample;
 }
 
@@ -65,7 +65,7 @@ void MakeMaCh3DuneInstance(std::unique_ptr<manager>& FitManager, std::vector<Sam
   }
 
   // ==========================================================
-  
+
   // Get inputted systematic parameters covariance matrices
   std::vector<std::string> xsecCovMatrixFile;
   if (CheckNodeExists(FitManager->raw(), "General", "Systematics", "XsecCovFile") ){
@@ -80,7 +80,7 @@ void MakeMaCh3DuneInstance(std::unique_ptr<manager>& FitManager, std::vector<Sam
     xsec = new ParameterHandlerGeneric(xsecCovMatrixFile, "xsec_cov");
   }
   else{
-    MACH3LOG_INFO("covariance Xsec has already been created so I am not re-initialising the object"); 
+    MACH3LOG_INFO("covariance Xsec has already been created so I am not re-initialising the object");
   }
 
   MACH3LOG_INFO("cov xsec setup");
@@ -106,7 +106,7 @@ void MakeMaCh3DuneInstance(std::unique_ptr<manager>& FitManager, std::vector<Sam
 
   std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
   xsec->SetGroupOnlyParameters("Osc", oscpars);
-  
+
   // ==========================================================
 
   std::shared_ptr<OscillationHandler> AtmOscHandler;
@@ -130,7 +130,7 @@ void MakeMaCh3DuneInstance(std::unique_ptr<manager>& FitManager, std::vector<Sam
   }
 
   // ==========================================================
-  
+
   TMatrixD* NDCov_FHC = nullptr;
   TMatrixD* NDCov_RHC = nullptr;
 
@@ -173,7 +173,7 @@ void MakeMaCh3DuneInstance(std::unique_ptr<manager>& FitManager, std::vector<Sam
   }
   // Adaptive MCMC stuff
 
-  if (FitManager->raw()["AdaptionOptions"]){ 
+  if (FitManager->raw()["AdaptionOptions"]){
     xsec->initialiseAdaption(FitManager->raw());
   }
 
