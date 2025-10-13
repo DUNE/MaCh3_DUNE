@@ -496,7 +496,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   readBranch("SimHitY", &_SimHitY);
   readBranch("SimHitZ", &_SimHitZ);
 
-  double downsampling = 0.01; //default 1, set to eg. 0.01 for quick testing
+  double downsampling = 1; //default 1, set to eg. 0.01 for quick testing
   int nEntries = static_cast<int>(downsampling*static_cast<double>(_data->GetEntries()));
 
   dunendgarmcFitting.resize(nEntries);
@@ -515,40 +515,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     }
 
     size_t n_particles_in_event = _MCPTrkID->size();
-
-    // Resize vectors for particle-level parameters
-    dunendgarmcPlotting[i_event].particle_pdg.resize(n_particles_in_event);
-    dunendgarmcPlotting[i_event].particle_energy.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_momentum.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_endmomentum.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_transversemomentum.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_bangle.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_beamangle.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_isaccepted.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_iscurvatureresolved.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_isdecayed.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_isstoppedintpc.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_isstoppedinecal.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_isstoppedingap.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_isstoppedinbarrelgap.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_isstoppedinendgap.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_isstoppedinbarrel.resize(n_particles_in_event);
-    dunendgarmcPlotting[i_event].particle_isstoppedinendcap.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_isescaped.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_startx.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_startr2.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_endr.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_enddepth.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_endx.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_endy.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_endz.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_nturns.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_nhits.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_tracklengthyz.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_momresms.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_momresyz.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_momresx.resize(n_particles_in_event); 
-    dunendgarmcPlotting[i_event].particle_edepcrit.resize(n_particles_in_event); 
 
     if (_MCVertY->size() != 1 || _MCVertZ->size() != 1) {
       MACH3LOG_INFO("Event {}] MCVertY size: {}. MCVertZ size: {}", i_event, _MCVertY->size(), _MCVertZ->size());
@@ -617,6 +583,41 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     double muon_p2 = 0.;
     bool isEventAccepted = true;
     int crit_layers = 2; // Number of outer layers of the calorimeter forming the 'critical' region
+
+    // Resize vectors for particle-level parameters
+    size_t n_prim_in_event = mother_to_daughter_ID[0].size();
+    dunendgarmcPlotting[i_event].particle_pdg.resize(n_prim_in_event);
+    dunendgarmcPlotting[i_event].particle_energy.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_momentum.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_endmomentum.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_transversemomentum.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_bangle.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_beamangle.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_isaccepted.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_iscurvatureresolved.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_isdecayed.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_isstoppedintpc.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_isstoppedinecal.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_isstoppedingap.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_isstoppedinbarrelgap.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_isstoppedinendgap.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_isstoppedinbarrel.resize(n_prim_in_event);
+    dunendgarmcPlotting[i_event].particle_isstoppedinendcap.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_isescaped.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_startx.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_startr2.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_endr.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_enddepth.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_endx.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_endy.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_endz.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_nturns.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_nhits.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_tracklengthyz.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_momresms.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_momresyz.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_momresx.resize(n_prim_in_event); 
+    dunendgarmcPlotting[i_event].particle_edepcrit.resize(n_prim_in_event); 
 
     for (int& primID : mother_to_daughter_ID[0]) {
       // Do not require the reconstruction of neutrons and neutrinos
