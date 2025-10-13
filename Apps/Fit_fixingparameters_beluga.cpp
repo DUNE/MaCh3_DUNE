@@ -29,12 +29,14 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-
+#include <filesystem> 
 
 #include <string>
 
 #include <ctime>
 #include <sstream>
+
+namespace fs = std::filesystem; 
 
 std::string AddTimestampToFilename(const std::string& baseName) { /////////////function to make sure I dont overwrite any of the files produced :)
     time_t now = time(0);
@@ -348,7 +350,8 @@ int main(int argc, char* argv[]) {
     //std::cout << "Hist get2DVarHist integral: " << h->Integral() << std::endl;
     h->GetXaxis()->SetTitle("xsec_var1");
     h->GetYaxis()->SetTitle("xsec_var2");
-    h->Write();
+    //h->Write();
+    h->Write("", TObject::kOverwrite);
     if (!h_q0q3_combined) {
         h_q0q3_combined = (TH2D*)h->Clone("h_q0q3_combined");
         std::cout << "[DEBUG] Cloned histogram integral: " << h_q0q3_combined->Integral() << std::endl;
@@ -437,8 +440,7 @@ for (int ix = 1; ix <= h_q0q3_combined->GetNbinsX(); ++ix) {
   std::cout << "[DEBUG] h_q0q3->IsOnHeap(): " << h_q0q3_combined->IsOnHeap() << std::endl;
   std::cout << "[DEBUG] gDirectory: " << gDirectory->GetName() << std::endl;
   
-
-
+  
   MaCh3Fitter->runMCMC();
 
 
