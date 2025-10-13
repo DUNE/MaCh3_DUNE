@@ -17,10 +17,14 @@ foreach(app
 	Abi_Posteriorpredictive_fardetector
 	EventRates_choosingbinning
 	Abi_Posteriorpredictive_withosc
-	MatrixPlotter
 	Postfit_xsec_diagnostics
 	Likelihood_Scan_abi
-	Postfit_xsec_diagnostics_withcorr
+	Post_xsec_diagnostics_withcorr
+	Postfit_xsec_diagnostics_withcorr_comparisons
+	Extract_xsec_fromyaml
+	Compare_onaxis_vs_offaxis
+	Compare_runplans
+	Compare_onaxis_vs_offaxis_new
       )
       
     add_executable(${app} ${app}.cpp)

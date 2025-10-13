@@ -220,7 +220,7 @@ int main(int argc, char* argv[])
       }
       
      
-      //osc->setParameters(oscpars);
+      osc->setParameters(oscpars);
 
       for (size_t iPDF=0; iPDF < T2KPdfs.size(); iPDF++)
       {

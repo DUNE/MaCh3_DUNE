@@ -42,6 +42,10 @@
 
 namespace fs = std::filesystem;
 
+#include <filesystem>
+namespace fs = std::filesystem;
+
+
 
 std::string AddTimestampToFilename(const std::string& baseName) { /////////////function to make sure I dont overwrite any of the files produced :)
     time_t now = time(0);
@@ -224,6 +228,10 @@ int main(int argc, char* argv[]) {
 
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
+
+  // Ensure the parent directory exists
+
+
   
   if (!OutputFile || OutputFile->IsZombie()) {
     std::cerr << "Failed to open output file: " << OutputFileName << std::endl;
@@ -429,7 +437,7 @@ else {
     //std::cout << "Hist get2DVarHist integral: " << h->Integral() << std::endl;
     h->GetXaxis()->SetTitle("xsec_var1");
     h->GetYaxis()->SetTitle("xsec_var2");
-    h->Write();
+    h->Write("", TObject::kOverwrite);
     if (!h_q0q3_combined) {
         h_q0q3_combined = (TH2D*)h->Clone("h_q0q3_combined");
         std::cout << "[DEBUG] Cloned histogram integral: " << h_q0q3_combined->Integral() << std::endl;
@@ -519,7 +527,7 @@ for (int ix = 1; ix <= h_q0q3_combined->GetNbinsX(); ++ix) {
   std::cout << "[DEBUG] gDirectory: " << gDirectory->GetName() << std::endl;
   
 
-
+ 
   MaCh3Fitter->runMCMC();
 
   // After step scales have been updated in your covariance object (e.g., xsec)

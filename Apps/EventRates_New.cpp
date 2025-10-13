@@ -75,8 +75,15 @@ int main(int argc, char *argv[]) {
 
 
   covarianceXsec *xsec = nullptr;
-  covarianceOsc *osc = nullptr;
+  //covarianceOsc *osc = nullptr;
+  auto OscCovFile = GetFromManager<std::vector<std::string>>(fitMan->raw()["General"]["Systematics"]["OscCovFile"], {});
+  auto OscCovName = GetFromManager<std::string>(fitMan->raw()["General"]["Systematics"]["OscCovName"], "osc_cov");
 
+  covarianceOsc* osc = new covarianceOsc(OscCovFile, OscCovName);
+
+  auto OscPars = GetFromManager<std::vector<double>>(fitMan->raw()["General"]["OscillationParameters"], {});
+  osc->setParameters(OscPars);
+  
  // std::string hists_file (OutFileName + "event_histograms").c_str();
   // ####################################################################################
   // Create samplePDFFD objects
@@ -99,11 +106,13 @@ int main(int argc, char *argv[]) {
 
   std::vector<TH1D *> DUNEHists;
   for (auto Sample : DUNEPdfs) {
-
+    osc->setParameters(OscPars);
     // inside the loop over samples
     xsec->setParameters();
     Sample->reweight(); 
     TH1D *Asimov_1D = (TH1D*)Sample->get1DHist()->Clone((Sample->GetTitle()+"_asimov").c_str());
+    Asimov_1D->SetEntries(Asimov_1D->Integral());
+
     //Sample->addData(Sample->get1DHist()->Clone((Sample->GetTitle() + "_asimovdata").c_str()));
     std::cout << Sample->GetTitle() 
               << " Asimov integral = " << Asimov_1D->Integral() 
@@ -117,21 +126,21 @@ int main(int argc, char *argv[]) {
     double error = xsec->getDiagonalError(0);
     std::cout<<"nominal  = " << nominal << std::endl; 
     std::cout<<"error  = " << error << std::endl; 
-    xsec->setParCurrProp(0, nominal);////////// set //+(2*error)
+    xsec->setParCurrProp(0, nominal+(2*error));////////// set //+(2*error)
     std::cout<< "nominal value = " << nominal <<std::endl;;
     double current_value = xsec->getParProp(0);
     std::cout<<"current value  = " << current_value << std::endl; 
     Sample->reweight();
 
-      /*
+    
      if (Sample->GetNDim() == 1) {
        auto myhist2 = (TH1D*)Sample->get1DHist()->Clone((Sample->GetTitle()+"_draw").c_str());
+        myhist2->Scale(1, "WIDTH");
         myhist2->Draw("HIST");
         gc1->Print("GenericBinTest.pdf");
         gc1->Print(PrismFileName.c_str());
         DUNEHists.push_back(myhist2);
-      }*/
-
+      }
 
     if (Sample->generic_binning.GetNDimensions()) {
 
