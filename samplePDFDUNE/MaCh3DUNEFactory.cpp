@@ -1,4 +1,8 @@
 #include "samplePDFDUNE/MaCh3DUNEFactory.h"
+#include "samplePDFDUNE/samplePDFDUNEBeamFD.h"
+#include "samplePDFDUNE/samplePDFDUNEBeamND.h"
+#include "samplePDFDUNE/samplePDFDUNEBeamFD_actuallyFD.h"   // Make sure this is BEFORE usage
+#include "samplePDFDUNE/samplePDFDUNEAtm.h"
 
 samplePDFFDBase* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, covarianceXsec* &xsec, covarianceOsc* &osc, TMatrixD* NDCov_FHC, TMatrixD* NDCov_RHC) {
 
@@ -15,11 +19,15 @@ samplePDFFDBase* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
     throw MaCh3Exception(__FILE__, __LINE__);
   }
 #else
-  if (SampleType == "BeamFD") {
+  if (SampleType == "reallyisBeamFD") {
+    // True Far Detector version — uses samplePDFDUNEBeamFD_actuallyFD
+    Sample = new samplePDFDUNEBeamFD_actuallyFD(SampleConfig, xsec, osc);
+  }
+  else if (SampleType == "BeamFD") {
+    // Misnamed ND version kept for backward compatibility
     Sample = new samplePDFDUNEBeamFD(SampleConfig, xsec, osc);
-  } 
+  }
   else if (SampleType == "BeamND") {
-
     if (NDCov_FHC == nullptr || NDCov_RHC == nullptr) {
       MACH3LOG_ERROR("NDCov objects are not defined");
       throw MaCh3Exception(__FILE__, __LINE__);

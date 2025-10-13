@@ -1,5 +1,5 @@
 #pragma once
-
+#include "samplePDFDUNE/samplePDFDUNEBeamFD_actuallyFD.h"
 #ifdef BUILD_NDGAR
 #include "samplePDFDUNE/samplePDFDUNEBeamNDGAr.h"
 #else
