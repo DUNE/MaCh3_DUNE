@@ -16,7 +16,7 @@ public:
   SampleHandlerBeamNDGAr(std::string mc_version, ParameterHandlerGeneric* xsec_cov);
   ~SampleHandlerBeamNDGAr();
 
-  enum KinematicTypes {kTrueNeutrinoEnergy, kMode, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kTrueLepEnergy,
+  enum KinematicTypes {kTrueNeutrinoEnergy, kMode, kOscChannel, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kTrueLepEnergy,
     kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted,  kInFDV, kIsCC};
   
   enum KinematicVecs {kParticle_Energy, kParticle_Momentum, kParticle_EndMomentum, kParticle_TransverseMomentum, 
@@ -71,13 +71,14 @@ protected:
   double _BeRPA_cvwgt = 1;
 
   //Geant vectors
+  void clearBranchVectors();
   std::vector<float>* _MCVertX=0;
   std::vector<float>*  _MCVertY=0;
   std::vector<float>* _MCVertZ=0;
   std::vector<float>* _MCNuPx=0;
   std::vector<float>* _MCNuPy=0;
   std::vector<float>* _MCNuPz=0;
-  std::vector<bool>* _IsNC=0;
+  std::vector<int>* _IsNC=0;
   std::vector<int>* _MCMode=0;
   std::vector<float> *_MCPStartX=0;
   std::vector<float> *_MCPStartY=0;
@@ -130,6 +131,7 @@ protected:
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
     {"Mode",kMode},
+    {"OscillationChannel",kOscChannel},
     {"TrueXPos",kTrueXPos},
     {"TrueYPos",kTrueYPos},
     {"TrueZPos",kTrueZPos},
@@ -151,6 +153,7 @@ protected:
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
     {kTrueNeutrinoEnergy,"TrueNeutrinoEnergy"},
     {kMode,"Mode"},
+    {kOscChannel,"OscillationChannel"},
     {kTrueXPos,"TrueXPos"},
     {kTrueYPos,"TrueYPos"},
     {kTrueZPos,"TrueZPos"},

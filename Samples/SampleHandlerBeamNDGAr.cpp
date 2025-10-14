@@ -441,6 +441,40 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
   return true;
 }
 
+void SampleHandlerBeamNDGAr::clearBranchVectors() {
+  _MCVertX->clear();
+  _MCVertY->clear();
+  _MCVertZ->clear();
+  _MCNuPx->clear();
+  _MCNuPy->clear();
+  _MCNuPz->clear();
+  _IsNC->clear();
+  _MCMode->clear();
+  _MCPStartX->clear();
+  _MCPStartY->clear();
+  _MCPStartZ->clear();
+  _MCPEndX->clear();
+  _MCPEndY->clear();
+  _MCPEndZ->clear();
+  _MCPStartPX->clear();
+  _MCPStartPY->clear();
+  _MCPStartPZ->clear();
+  _MCPEndPX->clear();
+  _MCPEndPY->clear();
+  _MCPEndPZ->clear();
+  _PDG ->clear();
+  _MCPTrkID->clear();
+  _MCPProc->clear();
+  _MCPEndProc->clear();
+  _MotherTrkID->clear();
+  _SimHitTrkID->clear();
+  _SimHitLayer->clear();
+  _SimHitEnergy->clear();
+  _SimHitX->clear();
+  _SimHitY->clear();
+  _SimHitZ->clear();
+}
+
 int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
   MACH3LOG_INFO("-------------------------------------------------------------------");
@@ -508,6 +542,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   bool do_geometric_correction = false;
 
   for (int i_event = 0; i_event < nEntries; ++i_event) { 
+    if (i_event != 0) clearBranchVectors();
     _data->GetEntry(i_event);
 
     if (i_event % (nEntries/100) == 0) {
@@ -516,9 +551,8 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
     size_t n_particles_in_event = _MCPTrkID->size();
 
-    if (_MCVertY->size() != 1 || _MCVertZ->size() != 1) {
-      MACH3LOG_INFO("Event {}] MCVertY size: {}. MCVertZ size: {}", i_event, _MCVertY->size(), _MCVertZ->size());
-      throw MaCh3Exception(__FILE__,__LINE__);
+    if (_MCVertY->size() != 1 || _MCVertZ->size() != 1 || _IsNC->size() != 1) {
+      MACH3LOG_INFO("Event {}] MCVertY size: {}. MCVertZ size: {}. IsNC size: {}.", i_event, _MCVertY->size(), _MCVertZ->size(), _IsNC->size());
     }
 
     double radius = std::sqrt((_MCVertY->at(0)-TPC_centre_y)*(_MCVertY->at(0)-TPC_centre_y) + (_MCVertZ->at(0)-TPC_centre_z)*(_MCVertZ->at(0)-TPC_centre_z)); //find radius of interaction vertex
@@ -534,6 +568,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     dunendgarmcFitting[i_event].rw_isCC = static_cast<int>(!_IsNC->at(0));
     dunendgarmcFitting[i_event].nupdg = 14;
     dunendgarmcFitting[i_event].nupdgUnosc = 14;
+    dunendgarmcFitting[i_event].OscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, dunendgarmcFitting[i_event].nupdgUnosc, dunendgarmcFitting[i_event].nupdg));
     dunendgarmcFitting[i_event].rw_berpaacvwgt = _BeRPA_cvwgt;
 
     dunendgarmcFitting[i_event].rw_vtx_x = _MCVertX->at(0);
@@ -722,6 +757,8 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
       return &dunendgarmcFitting[iEvent].rw_etru; 
     case kMode:
       return &dunendgarmcFitting[iEvent].mode;
+    case kOscChannel:
+      return &dunendgarmcFitting[iEvent].OscChannelIndex;
     case kTrueXPos:
       return &dunendgarmcFitting[iEvent].rw_vtx_x;
     case kTrueYPos:
