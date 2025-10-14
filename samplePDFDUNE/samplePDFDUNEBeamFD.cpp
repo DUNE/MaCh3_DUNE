@@ -452,7 +452,7 @@ Double_t _Ehad_veto;
   // bad bad bad, but stops the singleton check happening for every event, 
   //  all this is reading, so should be thread safe, myabe use eigen vectors 
   //  rather than TH1Ds eventually.
-  auto flux_helper = &ana::OffAxisFluxUncertaintyHelper::Get();
+  auto flux_helper = &OffAxisFluxUncertaintyHelper::Get();
 
   int conditionCounter = 0;
   for (int i = 0; i < duneobj->nEvents; ++i) { // Loop through tree
@@ -643,13 +643,13 @@ Double_t _Ehad_veto;
       duneobj->global_bin_number[i] = GetGenericBinningGlobalBinNumber(iSample, i);
     }
 
-    duneobj->off_axis_pos_m.push_back(_det_x * 100 + _vtx_x);
-    duneobj->flux_focussing_syst_bin.push_back(flux_helper->GetFocussingBin(
-        sample_nupdg, _ev, off_axis_pos_m.back(), 0, true, isFHC, false));
-    duneobj->flux_hadprod_syst_bin.push_back(flux_helper->GetHadProdBin(
-        sample_nupdg, _ev, off_axis_pos_m.back(), 0, true, isFHC, false));
     duneobj->flux_syst_nu_config.push_back(
-        flux_helper->GetNuConfig(sample_nupdg, true, isFHC, false));
+        flux_helper->GetNuConfig(duneobj->nupdgUnosc[i], true, isFHC, false));
+
+    duneobj->flux_focussing_syst_bin.push_back(flux_helper->GetFocussingBin(
+        duneobj->flux_syst_nu_config.back(), _ev, float(_det_x * 100 + _vtx_x)));
+    duneobj->flux_hadprod_syst_bin.push_back(flux_helper->GetHadProdBin(
+        duneobj->flux_syst_nu_config.back(), _ev, float(_det_x * 100 + _vtx_x)));
   }
 
   std::cout << "Condition was satisfied " << conditionCounter << " times." << std::endl;
@@ -1198,29 +1198,29 @@ void samplePDFDUNEBeamFD::RegisterFunctionalParameters() {
   // bad bad bad, but stops the singleton check happening for every event, 
   //  all this is reading, so should be thread safe, myabe use eigen vectors 
   //  rather than TH1Ds eventually.
-  auto flux_helper = &ana::OffAxisFluxUncertaintyHelper::Get();
+  auto flux_helper = &OffAxisFluxUncertaintyHelper::Get();
 
-  for (size_t i = 0; i < flux_helper->GetNFocussingParams(); i++) {
-    RegisterIndividualFunctionalParameter(
+  for (int i = 0; i < int(flux_helper->GetNFocussingParams()); i++) {
+    RegisterIndividualFuncPar(
         flux_helper->GetFocussingParamName(i), i,
-        [this, flux_helper](const double *par, std::size_t iSample, std::size_t iEvent) {
+        [this, flux_helper, i](const double *par, std::size_t iSample, std::size_t iEvent) {
           dunemcSamples[iSample].flux_w[iEvent] *=
               flux_helper->GetFluxFocussingWeight(
-                  i, *par, dunemcSamples[iSample].off_axis_pos_m[iEvent],
-                  dunemcSamples[iSample].flux_focussing_syst_bin[iEvent],
-                  dunemcSamples[iSample].flux_syst_nu_config[iEvent])
+                  i, *par,
+                  dunemcSamples[iSample].flux_syst_nu_config[iEvent],
+                  dunemcSamples[iSample].flux_focussing_syst_bin[iEvent]);
         });
   }
 
-  for (size_t i = 0; i < flux_helper->GetNHadProdParams(); i++) {
-    RegisterIndividualFunctionalParameter(
-        "Flux_HadProd_Param_" + std::to_string(i), flux_helper->GetNFocussingParams()+i,
-        [this, flux_helper](const double *par, std::size_t iSample, std::size_t iEvent) {
+  for (int i = 0; i < int(flux_helper->GetNHadProdPCAComponents()); i++) {
+    RegisterIndividualFuncPar(
+        "Flux_HadProd_Param_" + std::to_string(i), int(flux_helper->GetNFocussingParams())+i,
+        [this, flux_helper, i](const double *par, std::size_t iSample, std::size_t iEvent) {
           dunemcSamples[iSample].flux_w[iEvent] *=
               flux_helper->GetFluxHadProdWeight(
-                  i, *par, dunemcSamples[iSample].off_axis_pos_m[iEvent],
-                  dunemcSamples[iSample].flux_hadprod_syst_bin[iEvent],
-                  dunemcSamples[iSample].flux_syst_nu_config[iEvent])
+                  i, *par,
+                  dunemcSamples[iSample].flux_syst_nu_config[iEvent],
+                  dunemcSamples[iSample].flux_hadprod_syst_bin[iEvent]);
         });
   }
 }

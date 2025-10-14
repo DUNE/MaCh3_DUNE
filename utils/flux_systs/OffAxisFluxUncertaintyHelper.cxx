@@ -1,4 +1,4 @@
-#include "OffAxisFluxUncertaintyHelper.h"
+#include "utils/flux_systs/OffAxisFluxUncertaintyHelper.h"
 
 #include "TAxis.h"
 #include "TFile.h"
@@ -420,9 +420,8 @@ OffAxisFluxUncertaintyHelper::GetNDOffAxisShifts(TFile *f, std::string nd_dir,
   return OffAxisUncerts;
 }
 
-int OffAxisFluxUncertaintyHelper::GetFocussingBin(int nu_pdg, double enu_GeV,
-                                                  double off_axis_pos_m,
-                                                  int nu_config) const {
+int OffAxisFluxUncertaintyHelper::GetFocussingBin(int nu_config, double enu_GeV,
+                                                  double off_axis_pos_m) const {
 
   if (nu_config < kFD_numu_numode) {
     // Sign flip in off axis position
@@ -458,10 +457,8 @@ int OffAxisFluxUncertaintyHelper::GetFocussingBin(int nu_pdg, double enu_GeV,
   }
 }
 
-int OffAxisFluxUncertaintyHelper::GetHadProdBin(int nu_pdg, double enu_GeV,
-                                                double off_axis_pos_m,
-                                                int nu_config) const {
-
+int OffAxisFluxUncertaintyHelper::GetHadProdBin(int nu_config, double enu_GeV,
+                                                double off_axis_pos_m) const {
   if (nu_config < kFD_numu_numode) {
     int bin_oa =
         hadprod.OffAxisTAxes.front()[nu_config]->FindFixBin(off_axis_pos_m);
@@ -498,9 +495,8 @@ int OffAxisFluxUncertaintyHelper::GetHadProdBin(int nu_pdg, double enu_GeV,
 
 double OffAxisFluxUncertaintyHelper::GetFluxFocussingWeight(size_t param_id,
                                                             double param_val,
-                                                            int bin,
-                                                            int nucfg) const {
-
+                                                            int nucfg,
+                                                            int bin) const {
   if (nucfg == kUnhandled) {
     return 1;
   }
@@ -525,9 +521,8 @@ double OffAxisFluxUncertaintyHelper::GetFluxFocussingWeight(size_t param_id,
 
 double OffAxisFluxUncertaintyHelper::GetFluxHadProdWeight(size_t param_id,
                                                           double param_val,
-                                                          int bin,
-                                                          int nucfg) const {
-
+                                                          int nucfg,
+                                                          int bin) const {
   if (nucfg == kUnhandled) {
     return 1;
   }

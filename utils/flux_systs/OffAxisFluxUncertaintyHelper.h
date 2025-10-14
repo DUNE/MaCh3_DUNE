@@ -68,17 +68,16 @@ public:
   std::vector<std::unique_ptr<TH1>>
   GetNDOffAxisShifts(TFile *f, std::string nd_dir, std::string hname) const;
 
-  int GetFocussingBin(int nu_pdg, double enu_GeV, double off_axis_pos_m,
-                      int nu_config) const;
+  int GetFocussingBin(int nu_config, double enu_GeV,
+                      double off_axis_pos_m) const;
 
-  int GetHadProdBin(int nu_pdg, double enu_GeV, double off_axis_pos_m,
-                    int nu_config) const;
+  int GetHadProdBin(int nu_config, double enu_GeV, double off_axis_pos_m) const;
 
-  double GetFluxFocussingWeight(size_t param_id, double param_val, int bin,
-                                int nu_config) const;
+  double GetFluxFocussingWeight(size_t param_id, double param_val,
+                                int nu_config, int bin) const;
 
-  double GetFluxHadProdWeight(size_t param_id, double param_val, int bin,
-                              int nu_config) const;
+  double GetFluxHadProdWeight(size_t param_id, double param_val, int nu_config,
+                              int bin) const;
 
   struct {
     size_t NParams;

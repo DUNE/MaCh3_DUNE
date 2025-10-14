@@ -33,7 +33,7 @@ void CopyDir(TDirectory *source, TDirectory *dest, bool pca_limit) {
       if (pca_limit) {
         if (std::string(key->GetName()).substr(0, 9) == "param_pca") {
           int pca_num = std::stoi(std::string(key->GetName()).substr(10));
-          if (pca_num > 20) {
+          if (pca_num >= 20) {
             continue;
           }
         } else {

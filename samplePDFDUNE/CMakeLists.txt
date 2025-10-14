@@ -13,12 +13,14 @@ else()
 	set(HEADERS
 		samplePDFDUNEAtm.h
   	samplePDFDUNEBeamFD.h
+    # samplePDFDUNEBeamFD_actuallyFD.h
    	samplePDFDUNEBeamND.h
 		MaCh3DUNEFactory.h
 	)
 	set(SOURCE_FILES
 		samplePDFDUNEAtm.cpp
     samplePDFDUNEBeamFD.cpp
+    # samplePDFDUNEBeamFD_actuallyFD.cpp
     samplePDFDUNEBeamND.cpp
     MaCh3DUNEFactory.cpp
 	)
@@ -36,7 +38,7 @@ if(NOT CPU_ONLY)
   set_target_properties(SamplePDFDUNE PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 endif()
 
-target_link_libraries(SamplePDFDUNE PUBLIC splinesDUNE duneanaobj::all MaCh3::All MaCh3DUNECompilerOptions)
+target_link_libraries(SamplePDFDUNE PUBLIC splinesDUNE duneanaobj::all MaCh3::All MaCh3DUNECompilerOptions OffAxisFluxUncertaintyHelper)
 target_link_libraries(SamplePDFDUNE PRIVATE DUNEMaCh3Warnings)
 
 target_include_directories(SamplePDFDUNE PUBLIC
