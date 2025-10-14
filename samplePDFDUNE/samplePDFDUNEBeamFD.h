@@ -47,7 +47,7 @@ protected:
   void SetupWeightPointers();
   void SetupSplines();
 
-  void RegisterFunctionalParameters(){};
+  void RegisterFunctionalParameters();
   double CalculatePOT();
   
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE

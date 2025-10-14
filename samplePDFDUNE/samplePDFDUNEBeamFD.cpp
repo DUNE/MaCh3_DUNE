@@ -1,4 +1,7 @@
 #include "samplePDFDUNEBeamFD.h"
+
+#include "utils/flux_systs/OffAxisFluxUncertaintyHelper.h"
+
 #include "TVector3.h"
 #include <cstdlib>
 #include <iostream>
@@ -16,7 +19,6 @@ samplePDFDUNEBeamFD::samplePDFDUNEBeamFD(std::string mc_version_, covarianceXsec
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
   OscCov = nullptr;
-  
   
   Initialise();
 }
@@ -184,6 +186,7 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   double _vtx_x;
   double _vtx_y;
   double _vtx_z;
+  double _det_x;
 
   //Truth Variables
   int _mode;  
@@ -332,6 +335,8 @@ Double_t _Ehad_veto;
   _data->SetBranchAddress("vtx_y", &_vtx_y);
   _data->SetBranchStatus("vtx_z", 1);
   _data->SetBranchAddress("vtx_z", &_vtx_z);  
+  _data->SetBranchStatus("det_x", 1);
+  _data->SetBranchAddress("det_x", &_det_x);  
 
 
   _data->SetBranchStatus("LepMomX", 1);
@@ -358,7 +363,6 @@ Double_t _Ehad_veto;
   _data->SetBranchAddress("isNC", &_isNC);
 
   
-
   TH1D* norm = _sampleFile->Get<TH1D>("norm");
   if(!norm){
     MACH3LOG_ERROR("Add a norm KEY to the root file using MakeNormHists.cxx");
@@ -444,6 +448,11 @@ Double_t _Ehad_veto;
   _data->GetEntry(0);
   bool need_global_bin_numbers = (XVarStr == "global_bin_number");
   //FILL DUNE STRUCT
+
+  // bad bad bad, but stops the singleton check happening for every event, 
+  //  all this is reading, so should be thread safe, myabe use eigen vectors 
+  //  rather than TH1Ds eventually.
+  auto flux_helper = &ana::OffAxisFluxUncertaintyHelper::Get();
 
   int conditionCounter = 0;
   for (int i = 0; i < duneobj->nEvents; ++i) { // Loop through tree
@@ -584,7 +593,6 @@ Double_t _Ehad_veto;
 
     duneobj->relative_enu_bias[i] = ((_LepE) + eHad_truth - _ev)/(_ev);
     
-
     //Longer calculation for ERecQE-------------------------------------------------------------------------------
     constexpr double V = 0;        // 0 binding energy for now
     constexpr double mn = 939.565; // neutron mass
@@ -633,7 +641,15 @@ Double_t _Ehad_veto;
 
     if(need_global_bin_numbers){
       duneobj->global_bin_number[i] = GetGenericBinningGlobalBinNumber(iSample, i);
-    } 
+    }
+
+    duneobj->off_axis_pos_m.push_back(_det_x * 100 + _vtx_x);
+    duneobj->flux_focussing_syst_bin.push_back(flux_helper->GetFocussingBin(
+        sample_nupdg, _ev, off_axis_pos_m.back(), 0, true, isFHC, false));
+    duneobj->flux_hadprod_syst_bin.push_back(flux_helper->GetHadProdBin(
+        sample_nupdg, _ev, off_axis_pos_m.back(), 0, true, isFHC, false));
+    duneobj->flux_syst_nu_config.push_back(
+        flux_helper->GetNuConfig(sample_nupdg, true, isFHC, false));
   }
 
   std::cout << "Condition was satisfied " << conditionCounter << " times." << std::endl;
@@ -1170,6 +1186,44 @@ std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::st
 
 }
 
+void samplePDFDUNEBeamFD::RegisterFunctionalParameters() {
+  MACH3LOG_INFO("Registering functional parameters");
+  // This function manually populates the map of functional parameters
+  // Maps the name of the functional parameter to the pointer of the function
+
+  // This is the part where we manually enter things
+  // A lambda function has to be used so we can refer to a non-static member
+  // function
+
+  // bad bad bad, but stops the singleton check happening for every event, 
+  //  all this is reading, so should be thread safe, myabe use eigen vectors 
+  //  rather than TH1Ds eventually.
+  auto flux_helper = &ana::OffAxisFluxUncertaintyHelper::Get();
+
+  for (size_t i = 0; i < flux_helper->GetNFocussingParams(); i++) {
+    RegisterIndividualFunctionalParameter(
+        flux_helper->GetFocussingParamName(i), i,
+        [this, flux_helper](const double *par, std::size_t iSample, std::size_t iEvent) {
+          dunemcSamples[iSample].flux_w[iEvent] *=
+              flux_helper->GetFluxFocussingWeight(
+                  i, *par, dunemcSamples[iSample].off_axis_pos_m[iEvent],
+                  dunemcSamples[iSample].flux_focussing_syst_bin[iEvent],
+                  dunemcSamples[iSample].flux_syst_nu_config[iEvent])
+        });
+  }
+
+  for (size_t i = 0; i < flux_helper->GetNHadProdParams(); i++) {
+    RegisterIndividualFunctionalParameter(
+        "Flux_HadProd_Param_" + std::to_string(i), flux_helper->GetNFocussingParams()+i,
+        [this, flux_helper](const double *par, std::size_t iSample, std::size_t iEvent) {
+          dunemcSamples[iSample].flux_w[iEvent] *=
+              flux_helper->GetFluxHadProdWeight(
+                  i, *par, dunemcSamples[iSample].off_axis_pos_m[iEvent],
+                  dunemcSamples[iSample].flux_hadprod_syst_bin[iEvent],
+                  dunemcSamples[iSample].flux_syst_nu_config[iEvent])
+        });
+  }
+}
 
 /*
 std::pair<std::vector<double>, std::vector<double>> samplePDFDUNEBeamFD::Return2DKinematicParameterBinning(std::string KinematicParameterStr) {
