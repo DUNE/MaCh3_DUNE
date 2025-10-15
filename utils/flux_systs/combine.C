@@ -45,11 +45,14 @@ void CopyDir(TDirectory *source, TDirectory *dest, bool pca_limit) {
       if (dirname.substr(0, 6) == "param_") {
         dirname = dirname.substr(6);
       }
+      if (dirname.substr(0, 3) == "pca") {
+        dirname = "HadronProduction_" + dirname;
+      }
 
       std::cout << "Copying directory: " << source->GetName() << "/" << dirname
                 << " to " << dest->GetName() << std::endl;
-      CopyDir(source->GetDirectory(key->GetName()), dest->mkdir(dirname.c_str()),
-              pca_limit);
+      CopyDir(source->GetDirectory(key->GetName()),
+              dest->mkdir(dirname.c_str()), pca_limit);
     } else {
       if (std::string(key->GetName()) == "param_names") {
         continue;

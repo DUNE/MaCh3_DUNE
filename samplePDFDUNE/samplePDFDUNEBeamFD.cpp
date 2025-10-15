@@ -1214,7 +1214,7 @@ void samplePDFDUNEBeamFD::RegisterFunctionalParameters() {
 
   for (int i = 0; i < int(flux_helper->GetNHadProdPCAComponents()); i++) {
     RegisterIndividualFuncPar(
-        "Flux_HadProd_Param_" + std::to_string(i), int(flux_helper->GetNFocussingParams())+i,
+        "HadronProduction_pca_" + std::to_string(i), int(flux_helper->GetNFocussingParams())+i,
         [this, flux_helper, i](const double *par, std::size_t iSample, std::size_t iEvent) {
           dunemcSamples[iSample].flux_w[iEvent] *=
               flux_helper->GetFluxHadProdWeight(
