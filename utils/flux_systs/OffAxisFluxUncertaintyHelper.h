@@ -79,6 +79,9 @@ public:
   double GetFluxHadProdWeight(size_t param_id, double param_val, int nu_config,
                               int bin) const;
 
+  std::vector<double> GetFluxFocussingOffAxisBinning();
+  std::vector<double> GetFluxHadProdOffAxisBinning(int nu_config);
+
   struct {
     size_t NParams;
 

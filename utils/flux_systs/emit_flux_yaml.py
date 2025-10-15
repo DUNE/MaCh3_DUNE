@@ -34,7 +34,7 @@ dfp = fin.GetDirectory("FluxParameters")
 for pgroups in dfp.GetListOfKeys():
   for p in dfp.GetDirectory(pgroups.GetName()).GetListOfKeys():
     Systematic = {}
-    Systematic["SampleNames"] = ["ND_*", "FD_*"]
+    Systematic["SampleNames"] = ["*"]
     Systematic["Error"] = 1.0
     Systematic["FlatPrior"] = False
     Systematic["Names"] = { "FancyName": p.GetName(), "ParameterName": p.GetName() }

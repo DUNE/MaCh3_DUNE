@@ -646,10 +646,11 @@ Double_t _Ehad_veto;
     duneobj->flux_syst_nu_config.push_back(
         flux_helper->GetNuConfig(duneobj->nupdgUnosc[i], true, isFHC, false));
 
+    float absoapos_m = float(_det_x + _vtx_x/100);
     duneobj->flux_focussing_syst_bin.push_back(flux_helper->GetFocussingBin(
-        duneobj->flux_syst_nu_config.back(), _ev, float(_det_x * 100 + _vtx_x)));
+        duneobj->flux_syst_nu_config.back(), _ev, absoapos_m));
     duneobj->flux_hadprod_syst_bin.push_back(flux_helper->GetHadProdBin(
-        duneobj->flux_syst_nu_config.back(), _ev, float(_det_x * 100 + _vtx_x)));
+        duneobj->flux_syst_nu_config.back(), _ev, absoapos_m));
   }
 
   std::cout << "Condition was satisfied " << conditionCounter << " times." << std::endl;
@@ -1043,89 +1044,6 @@ void samplePDFDUNEBeamFD::setupFDMC(int iSample) {
   }
   
 }
- 
-void samplePDFDUNEBeamFD::applyShifts(int iSample, int iEvent) {
-
-  (void)iSample;
-  (void)iEvent;
-   
-  //ETA - this is pretty horrific... we need to think of a nicer way to do this.
-  //Don't want to add in hard checks on which systematics are defined but also don't want to hard-code
-  //the order in which the systematics are specified. All of these functions should have access to the 
-  //dunemc struct so they only need to have iSample and iEvent passed to them. Can probably loop over
-  //a vector of std::function objects and pass each of them iSample and iEvent.
-  /*
-   // reset erec back to original value
-  dunemcSamples[iSample].rw_erec_shifted[iEvent] = dunemcSamples[iSample].rw_erec[iEvent];
-
-  // reset cvnnumu back to original value
-  dunemcSamples[iSample].rw_cvnnumu_shifted[iEvent] = dunemcSamples[iSample].rw_cvnnumu[iEvent];
-
-  // reset cvnnue back to original value
-  dunemcSamples[iSample].rw_cvnnue_shifted[iEvent] = dunemcSamples[iSample].rw_cvnnue[iEvent];
-
-  //Calculate values needed
-  double sqrtErecHad =  sqrt(dunemcSamples[iSample].rw_erec_had[iEvent]);
-  double sqrtErecLep =  sqrt(dunemcSamples[iSample].rw_erec_lep[iEvent]);
-  double sqrteRecoPi0 = sqrt(dunemcSamples[iSample].rw_eRecoPi0[iEvent]);
-  double sqrteRecoN = sqrt(dunemcSamples[iSample].rw_eRecoN[iEvent]);
-  double sumEhad = dunemcSamples[iSample].rw_eRecoP[iEvent] + dunemcSamples[iSample].rw_eRecoPip[iEvent] + dunemcSamples[iSample].rw_eRecoPim[iEvent];
-  double sqrtSumEhad = sqrt(sumEhad);
-
-  double invSqrtErecHad =  1/(sqrtErecHad+0.1);
-  double invSqrtErecLep =  1/(sqrtErecLep+0.1);
-  double invSqrteRecoPi0 =  1/(sqrteRecoPi0+0.1);
-  double invSqrteRecoN =  1/(sqrteRecoN+0.1);
-  double invSqrtSumEhad =  1/(sqrtSumEhad+0.1);
-
-  bool CCnumu {dunemcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunemcSamples[iSample].rw_nuPDG[iEvent]==14) && dunemcSamples[iSample].nupdgUnosc==2};
-  bool CCnue {dunemcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunemcSamples[iSample].rw_nuPDG[iEvent]==12) && dunemcSamples[iSample].nupdgUnosc==1};
-  bool NotCCnumu {!(dunemcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunemcSamples[iSample].rw_nuPDG[iEvent]==14)) && dunemcSamples[iSample].nupdgUnosc==2};
-
-
-  TotalEScaleFD(FDDetectorSystPointers[0], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_erec_had[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], NotCCnumu);
-
-  TotalEScaleSqrtFD(FDDetectorSystPointers[1], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_erec_had[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], sqrtErecHad, sqrtErecLep, NotCCnumu);
-
-  TotalEScaleInvSqrtFD(FDDetectorSystPointers[2], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_erec_had[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], invSqrtErecHad, invSqrtErecLep, NotCCnumu);
-
-  HadEScaleFD(FDDetectorSystPointers[3], &dunemcSamples[iSample].rw_erec_shifted[iEvent], sumEhad);
-
-  HadEScaleSqrtFD(FDDetectorSystPointers[4], &dunemcSamples[iSample].rw_erec_shifted[iEvent], sumEhad, sqrtSumEhad);
-
-  HadEScaleInvSqrtFD(FDDetectorSystPointers[5], &dunemcSamples[iSample].rw_erec_shifted[iEvent], sumEhad, invSqrtSumEhad);
-
-  MuEScaleFD(FDDetectorSystPointers[6], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], CCnumu);
-
-  MuEScaleSqrtFD(FDDetectorSystPointers[7], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], sqrtErecLep, CCnumu);
-
-  MuEScaleInvSqrtFD(FDDetectorSystPointers[8], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], invSqrtErecLep, CCnumu);
-
-  NEScaleFD(FDDetectorSystPointers[9], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoN[iEvent]);
-
-  NEScaleSqrtFD(FDDetectorSystPointers[10], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoN[iEvent], sqrteRecoN);
-
-  NEScaleInvSqrtFD(FDDetectorSystPointers[11], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoN[iEvent], invSqrteRecoN);
-
-  EMEScaleFD(FDDetectorSystPointers[12], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoPi0[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], CCnue);
-
-  EMEScaleSqrtFD(FDDetectorSystPointers[13], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoPi0[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], sqrtErecLep, sqrteRecoPi0, CCnue);
-
-  EMEScaleInvSqrtFD(FDDetectorSystPointers[14], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoPi0[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], invSqrtErecLep, invSqrteRecoPi0, CCnue);
-
-  HadResFD(FDDetectorSystPointers[15], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoP[iEvent], dunemcSamples[iSample].rw_eRecoPip[iEvent], dunemcSamples[iSample].rw_eRecoPim[iEvent], dunemcSamples[iSample].rw_eP[iEvent], dunemcSamples[iSample].rw_ePip[iEvent], dunemcSamples[iSample].rw_ePim[iEvent]);
-
-  MuResFD(FDDetectorSystPointers[16], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], dunemcSamples[iSample].rw_LepE[iEvent], CCnumu);
-
-  NResFD(FDDetectorSystPointers[17], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoN[iEvent], dunemcSamples[iSample].rw_eN[iEvent]);
-
-  EMResFD(FDDetectorSystPointers[18], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoPi0[iEvent], dunemcSamples[iSample].rw_ePi0[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], dunemcSamples[iSample].rw_LepE[iEvent], CCnue);
-
-  CVNNumuFD(FDDetectorSystPointers[19], &dunemcSamples[iSample].rw_cvnnumu_shifted[iEvent]);
-
-  CVNNueFD(FDDetectorSystPointers[20], &dunemcSamples[iSample].rw_cvnnue_shifted[iEvent]);
-  */
-}
 
 std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::string KinematicParameterStr) {
   KinematicTypes KinematicParameter = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameterStr));
@@ -1204,11 +1122,12 @@ void samplePDFDUNEBeamFD::RegisterFunctionalParameters() {
     RegisterIndividualFuncPar(
         flux_helper->GetFocussingParamName(i), i,
         [this, flux_helper, i](const double *par, std::size_t iSample, std::size_t iEvent) {
-          dunemcSamples[iSample].flux_w[iEvent] *=
+          double w =
               flux_helper->GetFluxFocussingWeight(
                   i, *par,
                   dunemcSamples[iSample].flux_syst_nu_config[iEvent],
                   dunemcSamples[iSample].flux_focussing_syst_bin[iEvent]);
+              dunemcSamples[iSample].flux_w[iEvent] *= w;
         });
   }
 
@@ -1216,11 +1135,12 @@ void samplePDFDUNEBeamFD::RegisterFunctionalParameters() {
     RegisterIndividualFuncPar(
         "HadronProduction_pca_" + std::to_string(i), int(flux_helper->GetNFocussingParams())+i,
         [this, flux_helper, i](const double *par, std::size_t iSample, std::size_t iEvent) {
-          dunemcSamples[iSample].flux_w[iEvent] *=
+          double w =
               flux_helper->GetFluxHadProdWeight(
                   i, *par,
                   dunemcSamples[iSample].flux_syst_nu_config[iEvent],
                   dunemcSamples[iSample].flux_hadprod_syst_bin[iEvent]);
+              dunemcSamples[iSample].flux_w[iEvent] *= w;
         });
   }
 }

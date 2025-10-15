@@ -88,10 +88,7 @@ protected:
   /// @param iEvent Event number
   double CalcXsecWeightFunc(int iSample, int iEvent) {(void) iSample; (void)iEvent; return 1.;}
 
-  /// @brief Apply kinematic shifts
-  /// @param iSample Sample Number
-  /// @param iEvent Event number
-  void applyShifts(int iSample, int iEvent);
+  void resetShifts(int iSample, int iEvent){ dunemcSamples[iSample].flux_w[iEvent] = 1; };
 
   // dunemc
   /// DUNE MC sampels

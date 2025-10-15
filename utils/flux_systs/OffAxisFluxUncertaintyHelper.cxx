@@ -543,3 +543,21 @@ double OffAxisFluxUncertaintyHelper::GetFluxHadProdWeight(size_t param_id,
                    hadprod.FDuncerts.at(param_id).at(nucfg)->GetBinContent(bin);
   }
 }
+
+std::vector<double>
+OffAxisFluxUncertaintyHelper::GetFluxFocussingOffAxisBinning() {
+  std::vector<double> rtn{focussing.OffAxisTAxes[0]->GetBinLowEdge(1)};
+  for (int i = 0; i < focussing.OffAxisTAxes[0]->GetNbins(); ++i) {
+    rtn.push_back(focussing.OffAxisTAxes[0]->GetBinUpEdge(i + 1));
+  }
+  return rtn;
+}
+std::vector<double>
+OffAxisFluxUncertaintyHelper::GetFluxHadProdOffAxisBinning(int nu_config) {
+  std::vector<double> rtn{
+      hadprod.OffAxisTAxes[0][nu_config]->GetBinLowEdge(1)};
+  for (int i = 0; i < hadprod.OffAxisTAxes[0][nu_config]->GetNbins(); ++i) {
+    rtn.push_back(hadprod.OffAxisTAxes[0][nu_config]->GetBinUpEdge(i + 1));
+  }
+  return rtn;
+}
