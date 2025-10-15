@@ -27,13 +27,12 @@ int main(int argc, char * argv[]) {
   auto OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
 
   ParameterHandlerGeneric* xsec = nullptr;
-  ParameterHandlerOsc* osc = nullptr;
 
   //####################################################################################
   //Create samplePDFSKBase Objs
 
   std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec, osc); 
+  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
 
   //Some place to store the histograms
   std::vector<TH1*> PredictionHistograms;
@@ -42,7 +41,6 @@ int main(int argc, char * argv[]) {
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
 
-  osc->SetParameters(FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>());
   for (unsigned sample_i = 0 ; sample_i < DUNEPdfs.size() ; ++sample_i) {
     
     std::string name = DUNEPdfs[sample_i]->GetTitle();
@@ -50,15 +48,14 @@ int main(int argc, char * argv[]) {
     TString NameTString = TString(name.c_str());
     
     DUNEPdfs[sample_i] -> Reweight();
+    PredictionHistograms.push_back(static_cast<TH1*>(DUNEPdfs[sample_i]->GetMCHist(DUNEPdfs[sample_i]->GetNDim())->Clone(NameTString+"_unosc")));
+
     if (DUNEPdfs[sample_i]->GetNDim() == 1){
-      PredictionHistograms.push_back(static_cast<TH1*>(DUNEPdfs[sample_i] -> Get1DHist() -> Clone(NameTString+"_unosc")));
       DUNEPdfs[sample_i]->AddData(static_cast<TH1D*>(PredictionHistograms[sample_i]));
-    }
-      
-    else if (DUNEPdfs[sample_i]->GetNDim() == 2){
-      PredictionHistograms.push_back(static_cast<TH1*>(DUNEPdfs[sample_i] -> Get2DHist() -> Clone(NameTString+"_unosc")));
+    } else if (DUNEPdfs[sample_i]->GetNDim() == 2){
       DUNEPdfs[sample_i]->AddData(static_cast<TH2D*>(PredictionHistograms[sample_i]));
     }
+    
     else {
       MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting"); 
       throw MaCh3Exception(__FILE__ , __LINE__ );
@@ -80,26 +77,15 @@ int main(int argc, char * argv[]) {
   std::unique_ptr<mcmc> MaCh3Fitter = std::make_unique<mcmc>(FitManager);
 
   bool StartFromPreviousChain = GetFromManager(FitManager->raw()["General"]["StartFromPos"], false);
-
   //Start chain from random position unless continuing a chain
   if(!StartFromPreviousChain){
     if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false)) {
       xsec->ThrowParameters();
     }
-    osc->SetParameters();
-    osc->ThrowParameters();
   }
-  
 
   //Add systematic objects
-  MaCh3Fitter->AddSystObj(osc);
-  if (GetFromManager(FitManager->raw()["General"]["StatOnly"], false)){
-    MACH3LOG_INFO("Running a stat-only fit so no systematics will be applied");
-  }
-  else {
-    MaCh3Fitter->AddSystObj(xsec);
-  }
-
+  MaCh3Fitter->AddSystObj(xsec);
 
   if (StartFromPreviousChain) {
     std::string PreviousChainPath = FitManager->raw()["General"]["PosFileName"].as<std::string>();

@@ -9,10 +9,6 @@
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/StructsDUNE.h"
 
-#ifdef BUILD_NDGAR
-#include "Samples/SampleHandlerBeamNDGAr.h"
-#endif
-
 bool IncludeKinematicCutsInTitle = true;
 
 struct ProjectionKinematicCut {
@@ -119,6 +115,7 @@ int main(int argc, char *argv[]) {
     MACH3LOG_ERROR("Usage: bin/EventRatesDUNEBeam config.cfg");
     return 1;
   }
+
   auto fitMan = std::unique_ptr<manager>(new manager(argv[1]));
 
   int WeightStyle = 0;
@@ -127,21 +124,17 @@ int main(int argc, char *argv[]) {
   // Create samplePDFFD objects
 
   ParameterHandlerGeneric *xsec = nullptr;
-  ParameterHandlerOsc *osc = nullptr;
 
   std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(fitMan.get(), DUNEPdfs, xsec, osc);
+  MakeMaCh3DuneInstance(fitMan.get(), DUNEPdfs, xsec);
 
   // ###############################################################################################################################
   // Perform reweight and print total integral for sanity check
 
   MACH3LOG_INFO("=================================================");
-  std::vector<TH1D*> DUNEHists;
   for (auto Sample : DUNEPdfs) {
     Sample->Reweight();
-    DUNEHists.push_back(Sample->Get1DHist());
-
-    std::string EventRateString = fmt::format("{:.2f}", Sample->Get1DHist()->Integral());
+    std::string EventRateString = fmt::format("{:.2f}", Sample->GetMCHist(Sample->GetNDim())->Integral());
     MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetTitle(), EventRateString);
   }
 
@@ -187,9 +180,6 @@ int main(int argc, char *argv[]) {
       }
     }
     for (auto &KinematicCutConfig: fitMan->raw()["GeneralKinematicCuts"]) {
-#ifdef BUILD_NDGAR
-      if (VarStrings[0].find("Particle_") == std::string::npos && KinematicCutConfig["VarString"].as<std::string>().find("Particle_") != std::string::npos) continue;
-#endif
       std::string KinematicCutName = KinematicCutConfig["Name"].as<std::string>();
       std::string KinematicCutVarString = KinematicCutConfig["VarString"].as<std::string>();
       std::vector<double> KinematicCutRange = KinematicCutConfig["Range"].as< std::vector<double> >();
@@ -309,42 +299,32 @@ int main(int argc, char *argv[]) {
 
       //File->mkdir(Sample->GetName().c_str());
       //TDirectory *dir = File->GetDirectory(Sample->GetName().c_str());
-      std::vector< KinematicCut > SelectionVector;
+      std::vector< KinematicCut > EventSelectionVector;
+      std::vector< KinematicCut > SubEventSelectionVector;
+
       for (size_t iCut=0;iCut<Projections[iProj].KinematicCuts.size();iCut++) {
         KinematicCut Selection;
-        Selection.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString(Projections[iProj].KinematicCuts[iCut].VarString);
         Selection.LowerBound = Projections[iProj].KinematicCuts[iCut].Range[0];
         Selection.UpperBound = Projections[iProj].KinematicCuts[iCut].Range[1];
-
-        SelectionVector.emplace_back(Selection);
+        
+        if (Sample->IsSubEventVarString(Projections[iProj].KinematicCuts[iCut].VarString)) {
+          Selection.ParamToCutOnIt = Sample->ReturnKinematicVectorFromString(Projections[iProj].KinematicCuts[iCut].VarString);
+          SubEventSelectionVector.emplace_back(Selection);
+        }
+        else {
+          Selection.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString(Projections[iProj].KinematicCuts[iCut].VarString);
+          EventSelectionVector.emplace_back(Selection);
+        }
       }
 
       std::string outputname;
       if (histdim==1) {
-#ifdef BUILD_NDGAR
-        if (ProjectionVar_Str[0].find("Particle_") != std::string::npos) {
-          Hist = (TH1*)dynamic_cast<SampleHandlerBeamNDGAr*>(Sample)->Get1DParticleVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
-        }
-        else {
-          Hist = (TH1*)Sample->Get1DVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
-        }
-#else
-        Hist = (TH1*)Sample->Get1DVarHist(ProjectionVar_Str[0],SelectionVector,WeightStyle,&AxisX);
-#endif
+        Hist = (TH1*)Sample->Get1DVarHist(ProjectionVar_Str[0],EventSelectionVector,WeightStyle,&AxisX,SubEventSelectionVector);
         outputname = Sample->GetTitle()+"_"+Projections[iProj].Name;
         Hist->Scale(1.0,"Width");
       } 
       else {
-#ifdef BUILD_NDGAR
-        if (ProjectionVar_Str[0].find("Particle_") != std::string::npos) {
-          Hist = (TH1*)dynamic_cast<SampleHandlerBeamNDGAr*>(Sample)->Get2DParticleVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
-        }
-        else {
-          Hist = (TH1*)Sample->Get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
-        }
-#else
-        Hist = (TH1*)Sample->Get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector,WeightStyle,&AxisX,&AxisY);
-#endif
+        Hist = (TH1*)Sample->Get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],EventSelectionVector,WeightStyle,&AxisX,&AxisY,SubEventSelectionVector);
         outputname = Sample->GetTitle()+"_"+Projections[iProj].Name;
       }
       Hist->SetTitle(ReturnFormattedHistogramNameFromProjection(Projections[iProj]).c_str());
@@ -365,19 +345,27 @@ int main(int argc, char *argv[]) {
           TH1 *BreakdownHist = nullptr;
 
           for (size_t iGroup=0;iGroup<Projections[iProj].CategoryCuts[iCat].Breakdown[iBreak].size();iGroup++) {
-            std::vector< KinematicCut > SelectionVector_IncCategory = std::vector< KinematicCut >(SelectionVector);
+            std::vector< KinematicCut > EventSelectionVector_IncCategory = std::vector< KinematicCut >(EventSelectionVector);
+            std::vector< KinematicCut > SubEventSelectionVector_IncCategory = std::vector< KinematicCut >(SubEventSelectionVector);
 
             KinematicCut Selection;
-            Selection.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString(Projections[iProj].CategoryCuts[iCat].VarString);
             Selection.LowerBound = Projections[iProj].CategoryCuts[iCat].Breakdown[iBreak][iGroup];
             Selection.UpperBound = Projections[iProj].CategoryCuts[iCat].Breakdown[iBreak][iGroup]+1;
-            SelectionVector_IncCategory.emplace_back(Selection);
+
+            if (Sample->IsSubEventVarString(Projections[iProj].CategoryCuts[iCat].VarString)) {
+              Selection.ParamToCutOnIt = Sample->ReturnKinematicVectorFromString(Projections[iProj].CategoryCuts[iCat].VarString);
+              SubEventSelectionVector_IncCategory.emplace_back(Selection);
+            }
+            else {
+              Selection.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString(Projections[iProj].CategoryCuts[iCat].VarString);
+              EventSelectionVector_IncCategory.emplace_back(Selection);
+            }
 
             if (histdim==1) {
-              Hist = Sample->Get1DVarHist(ProjectionVar_Str[0],SelectionVector_IncCategory,WeightStyle,&AxisX);
+              Hist = Sample->Get1DVarHist(ProjectionVar_Str[0],EventSelectionVector_IncCategory,WeightStyle,&AxisX,SubEventSelectionVector_IncCategory);
               Hist->Scale(1.0,"Width");
             }	else {
-              Hist = (TH1*)Sample->Get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],SelectionVector_IncCategory,WeightStyle,&AxisX,&AxisY);
+              Hist = (TH1*)Sample->Get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],EventSelectionVector_IncCategory,WeightStyle,&AxisX,&AxisY,SubEventSelectionVector_IncCategory);
             }
             Hist->SetFillColor(Projections[iProj].CategoryCuts[iCat].Colours[iBreak]);
 

@@ -6,11 +6,13 @@ POT: 1.0e+21
 MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
 SampleName: "ND_GAr"
 
+BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
+
 Binning:
   XVarStr: "TrueNeutrinoEnergy"
   XVarBins: [0., 0.25, 0.5, 0.75, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 4.25, 4.5, 4.75, 5., 5.25, 5.5, 5.75, 6., 6.25, 6.5, 6.75, 7., 7.25, 7.5, 7.75, 8., 8.25, 8.5, 8.75, 9., 9.25, 9.5, 9.75, 10.]
 
-SampleCuts:
+DetectorVariables:
   B_field: 0.5
   momentum_resolution_threshold: 0.05
   pixel_spacing: 6.
@@ -28,6 +30,7 @@ SampleCuts:
   MuIDInnerRadius: 407.44
   MuIDOuterRadius: 438.33
   MuIDLength: 338.
+  downsampling: 1.
 
 InputFiles:
   mtupleprefix: "Inputs/DUNE_NDGAr_FastGarSim/fastgarsim_cdr_"
@@ -37,7 +40,7 @@ InputFiles:
 
 NuOsc:
   NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
-  EqualBinningPerOscChannel: false
+  EqualBinningPerOscChannel: true
 
 SubSamples:
   - Name: "hA"

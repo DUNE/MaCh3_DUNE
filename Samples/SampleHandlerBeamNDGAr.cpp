@@ -4,6 +4,9 @@ SampleHandlerBeamNDGAr::SampleHandlerBeamNDGAr(std::string mc_version_, Paramete
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
 
+  KinematicVectors = &KinematicVectorsDUNE;
+  ReversedKinematicVectors = &ReversedKinematicVectorsDUNE;
+
   Initialise();
 }
 
@@ -11,30 +14,29 @@ SampleHandlerBeamNDGAr::~SampleHandlerBeamNDGAr() {
 }
 
 void SampleHandlerBeamNDGAr::Init() {
-  dunendgarmcSamples.resize(nSamples,dunemc_base());
-  nparticlesinsample = new int[nSamples]();
   pot = SampleManager->raw()["POT"].as<double>();
-  B_field = SampleManager->raw()["SampleCuts"]["B_field"].as<double>(); //NK B field value in T
-  momentum_resolution_threshold = SampleManager->raw()["SampleCuts"]["momentum_resolution_threshold"].as<double>(); //NK momentum_resolution threshold, total as a fraction of momentum
-  pixel_spacing = SampleManager->raw()["SampleCuts"]["pixel_spacing"].as<double>(); //NK pixel spacing in mm to find num hits in y,z plane
-  spatial_resolution = SampleManager->raw()["SampleCuts"]["spatial_resolution"].as<double>(); //NK spatial resolution in mm to find  in y,z plane
-  adc_sampling_frequency = SampleManager->raw()["SampleCuts"]["adc_sampling_frequency"].as<double>(); //NK sampling frequency for ADC - needed to find timing resolution and spatial resolution in x dir in MHz
-  drift_velocity = SampleManager->raw()["SampleCuts"]["drift_velocity"].as<double>(); //NK drift velocity of electrons in gas - needed to find timing resolution and spatial resolution in x dir in cm/microsecond
-  TPCFidLength = SampleManager->raw()["SampleCuts"]["TPCFidLength"].as<double>();
-  TPCFidRadius = SampleManager->raw()["SampleCuts"]["TPCFidRadius"].as<double>();
-  TPCInstrumentedLength = SampleManager->raw()["SampleCuts"]["TPCInstrumentedLength"].as<double>();
-  TPCInstrumentedRadius = SampleManager->raw()["SampleCuts"]["TPCInstrumentedRadius"].as<double>();
-  ECALInnerRadius = SampleManager->raw()["SampleCuts"]["ECALInnerRadius"].as<double>();
-  ECALOuterRadius = SampleManager->raw()["SampleCuts"]["ECALOuterRadius"].as<double>();
-  ECALEndCapStart = SampleManager->raw()["SampleCuts"]["ECALEndCapStart"].as<double>();
-  ECALEndCapEnd = SampleManager->raw()["SampleCuts"]["ECALEndCapEnd"].as<double>();
+  B_field = SampleManager->raw()["DetectorVariables"]["B_field"].as<double>(); //NK B field value in T
+  momentum_resolution_threshold = SampleManager->raw()["DetectorVariables"]["momentum_resolution_threshold"].as<double>(); //NK momentum_resolution threshold, total as a fraction of momentum
+  pixel_spacing = SampleManager->raw()["DetectorVariables"]["pixel_spacing"].as<double>(); //NK pixel spacing in mm to find num hits in y,z plane
+  spatial_resolution = SampleManager->raw()["DetectorVariables"]["spatial_resolution"].as<double>(); //NK spatial resolution in mm to find  in y,z plane
+  adc_sampling_frequency = SampleManager->raw()["DetectorVariables"]["adc_sampling_frequency"].as<double>(); //NK sampling frequency for ADC - needed to find timing resolution and spatial resolution in x dir in MHz
+  drift_velocity = SampleManager->raw()["DetectorVariables"]["drift_velocity"].as<double>(); //NK drift velocity of electrons in gas - needed to find timing resolution and spatial resolution in x dir in cm/microsecond
+  downsampling = SampleManager->raw()["DetectorVariables"]["downsampling"].as<double>(); //JM downsampling fraction
+  TPCFidLength = SampleManager->raw()["DetectorVariables"]["TPCFidLength"].as<double>();
+  TPCFidRadius = SampleManager->raw()["DetectorVariables"]["TPCFidRadius"].as<double>();
+  TPCInstrumentedLength = SampleManager->raw()["DetectorVariables"]["TPCInstrumentedLength"].as<double>();
+  TPCInstrumentedRadius = SampleManager->raw()["DetectorVariables"]["TPCInstrumentedRadius"].as<double>();
+  ECALInnerRadius = SampleManager->raw()["DetectorVariables"]["ECALInnerRadius"].as<double>();
+  ECALOuterRadius = SampleManager->raw()["DetectorVariables"]["ECALOuterRadius"].as<double>();
+  ECALEndCapStart = SampleManager->raw()["DetectorVariables"]["ECALEndCapStart"].as<double>();
+  ECALEndCapEnd = SampleManager->raw()["DetectorVariables"]["ECALEndCapEnd"].as<double>();
 }
 
 void SampleHandlerBeamNDGAr::SetupSplines() {
   ///@todo move all of the spline setup into core
   if(ParHandler->GetNumParamsFromSampleName(SampleName, kSpline) > 0){
     MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", ParHandler->GetNumParamsFromSampleName(SampleName, kSpline));
-    SplineHandler = std::unique_ptr<BinnedSplineHandler>(new BinnedSplineHandlerDUNE(ParHandler,Modes));
+    SplineHandler = std::unique_ptr<BinnedSplineHandler>(new BinnedSplineHandlerDUNE(ParHandler,Modes.get()));
     InitialiseSplineObject();
   }
   else{
@@ -46,26 +48,19 @@ void SampleHandlerBeamNDGAr::SetupSplines() {
 }
 
 void SampleHandlerBeamNDGAr::SetupWeightPointers() {
-  for (int i = 0; i < static_cast<int>(dunendgarmcSamples.size()); ++i) {
-    for (int j = 0; j < dunendgarmcSamples[i].nEvents; ++j) {
-      MCSamples[i].ntotal_weight_pointers[j] = 7;
-      //MCSamples[i].total_weight_pointers[j] = new const double*[MCSamples[i].ntotal_weight_pointers[j]];
-      MCSamples[i].total_weight_pointers[j].resize(MCSamples[i].ntotal_weight_pointers[j]);
-      MCSamples[i].total_weight_pointers[j][0] = &(dunendgarmcSamples[i].pot_s);
-      MCSamples[i].total_weight_pointers[j][1] = &(dunendgarmcSamples[i].norm_s);
-      MCSamples[i].total_weight_pointers[j][2] = MCSamples[i].osc_w_pointer[j];
-      MCSamples[i].total_weight_pointers[j][3] = &(dunendgarmcSamples[i].rw_berpaacvwgt[j]);
-      MCSamples[i].total_weight_pointers[j][4] = &(dunendgarmcSamples[i].flux_w[j]);
-      MCSamples[i].total_weight_pointers[j][5] = &(MCSamples[i].xsec_w[j]);
-      MCSamples[i].total_weight_pointers[j][6] = &(dunendgarmcSamples[i].geometric_correction[j]);
-
-      double totalweight=1.;
-      for (int weighting=0; weighting<MCSamples[i].ntotal_weight_pointers[j]; weighting++) {
-        totalweight *= *(MCSamples[i].total_weight_pointers[j][weighting]);
-      }
-      if (totalweight != 1) MACH3LOG_INFO("Non-unitary weighting! Event {}, Weighting {}", j, totalweight);
-    }
+  for (int i = 0; i < static_cast<int>(dunendgarmcFitting.size()); ++i) {
+      MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].pot_s));
+      MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].norm_s));
+      MCSamples[i].total_weight_pointers.push_back(MCSamples[i].osc_w_pointer);
+      MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].rw_berpaacvwgt));
+      MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].flux_w));
+      MCSamples[i].total_weight_pointers.push_back(&(MCSamples[i].xsec_w));
+      MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcPlotting[i].geometric_correction));
   }
+}
+
+void SampleHandlerBeamNDGAr::CleanMemoryBeforeFit() {
+  CleanVector(dunendgarmcPlotting);
 }
 
 bool SampleHandlerBeamNDGAr::isCoordOnTrack(int charge, double ycoord, double zcoord, double centre_circle_y, double centre_circle_z, double theta_start, double theta_spanned) {
@@ -213,8 +208,8 @@ void SampleHandlerBeamNDGAr::EraseDescendants(int motherID, std::unordered_map<i
 }
 
 // Removes descendants of primID which can be reconstructed from curvature from mother_to_daughter_ID map
-bool SampleHandlerBeamNDGAr::CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, dunemc_base *duneobj, double pixel_spacing_cm) {
-  if (IsResolvedFromCurvature(duneobj, static_cast<int>(ID_to_index.at(id)), pixel_spacing_cm)) { // If mother can be reconstructed from curvature, remove her and her descendants
+bool SampleHandlerBeamNDGAr::CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, dunemc_plotting& plotting_vars, double pixel_spacing_cm) {
+  if (IsResolvedFromCurvature(plotting_vars, static_cast<int>(ID_to_index.at(id)), pixel_spacing_cm)) { // If mother can be reconstructed from curvature, remove her and her descendants
     int index = static_cast<int>(ID_to_index.at(id));
     int motherID = _MCPMotherTrkID->at(index);
     if (motherID != 0) {
@@ -225,7 +220,7 @@ bool SampleHandlerBeamNDGAr::CurvatureResolutionFilter(int id, std::unordered_ma
   auto& daughters = mother_to_daughter_ID.at(id); 
   std::vector<int> filtered_daughters = {};
   for (int daughterID : daughters) { // Check secondary tree for any others which can be reconstructed from curvature
-    if (!CurvatureResolutionFilter(daughterID, mother_to_daughter_ID, ID_to_index, duneobj, pixel_spacing_cm)) {
+    if (!CurvatureResolutionFilter(daughterID, mother_to_daughter_ID, ID_to_index, plotting_vars, pixel_spacing_cm)) {
       filtered_daughters.push_back(daughterID); 
     }
   }
@@ -233,7 +228,7 @@ bool SampleHandlerBeamNDGAr::CurvatureResolutionFilter(int id, std::unordered_ma
   return false;
 }
 
-// Returns depth of a coordinate position in the dodecoganol ecal, or +/- 999 if it is beyond or within the ecal boundaries
+// Returns depth of a coordinate position in the dodecagonal ecal, or +/- 999 if it is beyond/within the ecal boundaries
 double SampleHandlerBeamNDGAr::GetCalDepth(double x, double y, double z) {
   x = x - TPC_centre_x;
   y = y - TPC_centre_y;
@@ -255,27 +250,23 @@ double SampleHandlerBeamNDGAr::GetCalDepth(double x, double y, double z) {
   else return -999.; // before ecal
 }
 
-double SampleHandlerBeamNDGAr::CalcEDepCal(int trkID, const std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<std::vector<double>>>& ID_to_ECalDep, double crit_reg, std::unordered_map<int, double>& ecal_layer_deposits, bool store_deposits = false) {
+double SampleHandlerBeamNDGAr::CalcEDepCal(int trkID, const std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<std::vector<double>>>& ID_to_ECalDep, double crit_reg) {
   double EDepCrit = 0.;
   auto it = mother_to_daughter_ID.find(trkID);
   if (it != mother_to_daughter_ID.end()) {
     if(ID_to_ECalDep.find(trkID) != ID_to_ECalDep.end()) {
       for (const auto& calhit : ID_to_ECalDep.at(trkID)) {
         if (ECALOuterRadius - ECALInnerRadius - calhit[1] < crit_reg) EDepCrit += calhit[0];
-        if (store_deposits) {
-          int layer = static_cast<int>(calhit[1]/1.5);
-          ecal_layer_deposits[layer] += calhit[0];
-        }
       }
     }
     for (int daughterID : it->second) {
-      EDepCrit += CalcEDepCal(daughterID, mother_to_daughter_ID, ID_to_ECalDep, crit_reg, ecal_layer_deposits, store_deposits);
+      EDepCrit += CalcEDepCal(daughterID, mother_to_daughter_ID, ID_to_ECalDep, crit_reg);
     }
   }
   return EDepCrit;
 }
 
-bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_base *duneobj, int i_particle, double pixel_spacing_cm){
+bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_vars, int i_particle, double pixel_spacing_cm){
   // Get particle properties from Anatree
   double xstart = _MCPStartX->at(i_particle);
   double ystart = _MCPStartY->at(i_particle);
@@ -299,11 +290,12 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_base *duneobj, int i
   double mom_tot = std::sqrt(p_x*p_x + transverse_mom*transverse_mom);
   double end_mom = std::sqrt(_MCPEndPX->at(i_particle)*_MCPEndPX->at(i_particle) + _MCPEndPY->at(i_particle)*_MCPEndPY->at(i_particle) + _MCPEndPZ->at(i_particle)*_MCPEndPZ->at(i_particle))/1000.; 
 
-  double yend_centre = _MCPEndY->at(i_particle)-TPC_centre_y;
-  double zend_centre = _MCPEndZ->at(i_particle)-TPC_centre_z;
-  double end_radius = std::sqrt(yend_centre*yend_centre + zend_centre*zend_centre); 
-  double end_length = _MCPEndX->at(i_particle)-TPC_centre_x;
-  double ecal_depth = GetCalDepth(_MCPEndX->at(i_particle), _MCPEndY->at(i_particle), _MCPEndZ->at(i_particle));
+  double xend = _MCPEndX->at(i_particle);
+  double yend = _MCPEndY->at(i_particle);
+  double zend = _MCPEndZ->at(i_particle);
+  double end_radius = std::sqrt((yend-TPC_centre_y)*(yend-TPC_centre_y) + (zend-TPC_centre_z)*(zend-TPC_centre_z)); 
+  double end_length = xend-TPC_centre_x;
+  double end_ecaldepth = GetCalDepth(xend, yend, zend);
 
   bool stops_in_tpc = std::abs(end_length)<=TPCInstrumentedLength && end_radius<=TPCInstrumentedRadius;
   bool stops_before_ecal = ecal_depth == -999.;
@@ -311,31 +303,31 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_base *duneobj, int i
   bool stops_in_ecal = !(stops_before_ecal || stops_beyond_ecal);
 
   //Fill particle-level kinematic variables with default or actual (if possible at this stage) values
-  if (_MCPMotherTrkID->at(i_particle) == 0) {
-    duneobj->particle_pdg->back() = pdg;
-    duneobj->particle_energy->back() = energy;
-    duneobj->particle_momentum->back() = mom_tot;
-    duneobj->particle_endmomentum->back() = end_mom;
-    duneobj->particle_transversemomentum->back() = transverse_mom; //momentum transverse to B-field
-    duneobj->particle_bangle->back() = acos(p_x/mom_tot)*180/M_PI; //angle to B-field
-    duneobj->particle_beamangle->back() = acos(p_beam/mom_tot)*180/M_PI;
+  if (_MotherTrkID->at(i_particle) == 0) {
+    plotting_vars.particle_energy[i_particle] = energy;
+    plotting_vars.particle_momentum[i_particle] = mom_tot;
+    plotting_vars.particle_endmomentum[i_particle] = end_mom;
+    plotting_vars.particle_transversemomentum[i_particle] = transverse_mom; //momentum transverse to B-field
+    plotting_vars.particle_bangle[i_particle] = acos(p_x/mom_tot)*180/M_PI; //angle to B-field
+    plotting_vars.particle_beamangle[i_particle] = acos(p_beam/mom_tot)*180/M_PI;
 
-    duneobj->particle_startx->back() = start_length;
-    duneobj->particle_startr2->back() = start_radius*start_radius;
-    duneobj->particle_endr->back() = end_radius;
-    duneobj->particle_endx->back() = end_length;
-    duneobj->particle_endy->back() = yend_centre;
-    duneobj->particle_endz->back() = zend_centre;
-    duneobj->particle_ecaldepth->back() = ecal_depth;
+    plotting_vars.particle_startx[i_particle] = start_length;
+    plotting_vars.particle_startr2[i_particle] = start_radius*start_radius;
+    plotting_vars.particle_endr[i_particle] = end_radius;
+    plotting_vars.particle_enddepth[i_particle] = end_ecaldepth;
+    plotting_vars.particle_endx[i_particle] = end_length;
+    plotting_vars.particle_endy[i_particle] = yend-TPC_centre_y;
+    plotting_vars.particle_endz[i_particle] = zend-TPC_centre_z;
 
-    duneobj->particle_isstoppedingap->back() = !stops_in_tpc && stops_before_ecal;
-    duneobj->particle_isstoppedinbarrelgap->back() = !stops_in_tpc && stops_before_ecal && std::abs(end_length)<=TPCInstrumentedLength; 
-    duneobj->particle_isstoppedinendgap->back() = !stops_in_tpc && stops_before_ecal && std::abs(end_length)>TPCInstrumentedLength; 
-    duneobj->particle_isstoppedinecal->back() = stops_in_ecal;
-    duneobj->particle_isstoppedinbarrel->back() = stops_in_ecal && end_radius>=ECALInnerRadius;
-    duneobj->particle_isstoppedinendcap->back() = stops_in_ecal && end_radius<ECALInnerRadius;
-    duneobj->particle_isstoppedintpc->back() = stops_in_tpc;
-    duneobj->particle_isescaped->back() = stops_beyond_ecal;
+    plotting_vars.particle_isdecayed[i_particle] = _MCPEndProc->at(i_particle) == "Decay";
+    plotting_vars.particle_isstoppedingap[i_particle] = !stops_in_tpc && stops_before_ecal;
+    plotting_vars.particle_isstoppedinbarrelgap[i_particle] = !stops_in_tpc && stops_before_ecal && std::abs(end_length)<=TPCInstrumentedLength; 
+    plotting_vars.particle_isstoppedinendgap[i_particle] = !stops_in_tpc && stops_before_ecal && std::abs(end_length)>TPCInstrumentedLength; 
+    plotting_vars.particle_isstoppedinecal[i_particle] = stops_in_ecal;
+    plotting_vars.particle_isstoppedinbarrel[i_particle] = stops_in_ecal && end_radius>=ECALInnerRadius;
+    plotting_vars.particle_isstoppedinendcap[i_particle] = stops_in_ecal && end_radius<ECALInnerRadius;
+    plotting_vars.particle_isstoppedintpc[i_particle] = stops_in_tpc;
+    plotting_vars.particle_isescaped[i_particle] = stops_beyond_ecal;
   }
 
   if (charge == 0) return false;
@@ -366,14 +358,14 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_base *duneobj, int i
   }
   else { //Case where primary exits TPC
 
-    //Find Position where track leaves TPC. Intersection of two circles.
+    // Find position where track leaves TPC. Intersection of two circles.
     double m_const = (TPC_centre_z - centre_circle_z)/(TPC_centre_y-centre_circle_y); //gradient of line between two intersection points
     double a_const = (TPCInstrumentedRadius*TPCInstrumentedRadius-rad_curvature*rad_curvature - (TPC_centre_y*TPC_centre_y - centre_circle_y*centre_circle_y)-(TPC_centre_z*TPC_centre_z - centre_circle_z*centre_circle_z))/(2*(centre_circle_y-TPC_centre_y));
     double quadraticformula_b = -(2*m_const*(a_const - TPC_centre_y) + 2*TPC_centre_z);
     double quadraticformula_a = m_const*m_const + 1;
     double quadraticformula_c = (a_const - TPC_centre_y)*(a_const - TPC_centre_y) + TPC_centre_z*TPC_centre_z - TPCInstrumentedRadius*TPCInstrumentedRadius;
 
-
+    // If circles do intersect:
     if(quadraticformula_b*quadraticformula_b - 4*quadraticformula_a*quadraticformula_c > 0){
       double z_intersect_1 = (-quadraticformula_b + std::sqrt(quadraticformula_b*quadraticformula_b - 4*quadraticformula_a*quadraticformula_c))/(2*quadraticformula_a);
       double y_intersect_1 = -m_const*z_intersect_1 + a_const;
@@ -439,31 +431,74 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_base *duneobj, int i
     std::sqrt(sigmax_frac*sigmax_frac + momres_tottransverse*momres_tottransverse));
   double momres_frac = std::sqrt(momres_tottransverse*momres_tottransverse + (sigma_theta*tan_theta)*(sigma_theta*tan_theta));
 
-  if (_MCPMotherTrkID->at(i_particle) == 0) {
-    duneobj->particle_nturns->back() = nturns;
-    duneobj->particle_nhits->back() = nhits;
-    duneobj->particle_tracklengthyz->back() = L_yz;
-    duneobj->particle_momresms->back() = momres_ms/transverse_mom;
-    duneobj->particle_momresyz->back() = momres_yz/transverse_mom;
-    duneobj->particle_momresx->back() = std::abs(sigma_theta*tan_theta);
+  if (_MotherTrkID->at(i_particle) == 0) {
+    plotting_vars.particle_nturns[i_particle] = nturns;
+    plotting_vars.particle_nhits[i_particle] = nhits;
+    plotting_vars.particle_tracklengthyz[i_particle] = L_yz;
+    plotting_vars.particle_momresms[i_particle] = momres_ms/transverse_mom;
+    plotting_vars.particle_momresyz[i_particle] = momres_yz/transverse_mom;
+    plotting_vars.particle_momresx[i_particle] = std::abs(sigma_theta*tan_theta);
   }
 
   if(momres_frac > momentum_resolution_threshold) return false;
   return true;
 }
 
-int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
+void SampleHandlerBeamNDGAr::clearBranchVectors() {
+  _EventID->clear();
+  _MCPStartX->clear();
+  _MCPStartY->clear();
+  _MCPStartZ->clear();
+  _MCPEndX->clear();
+  _MCPEndY->clear();
+  _MCPEndZ->clear();
+  _MCPStartPX->clear();
+  _MCPStartPY->clear();
+  _MCPStartPZ->clear();
+  _MCPEndPX->clear();
+  _MCPEndPY->clear();
+  _MCPEndPZ->clear();
+  _MCPPDG->clear();
+  _MCPTrkID->clear();
+  _MCPMotherTrkID->clear();
+  _TPCHitTrkID->clear();
+  _TPCHitEnergy->clear();
+  _TPCHitX->clear();
+  _TPCHitY->clear();
+  _TPCHitZ->clear();
+  _CalHitTrkID->clear();
+  _CalHitEnergy->clear();
+  _CalHitX->clear();
+  _CalHitY->clear();
+  _CalHitZ->clear();
+  _MuIDHitTrkID->clear();
+  _MuIDHitEnergy->clear();
+  _MuIDHitX->clear();
+  _MuIDHitY->clear();
+  _MuIDHitZ->clear();
+  _Enu->clear();
+  _PXnu->clear();
+  _PYnu->clear();
+  _PZnu->clear();
+  _nuPDG->clear();
+  _Elep->clear();
+  _PXlep->clear();
+  _PYlep->clear();
+  _PZlep->clear();
+  _isCC->clear();
+  _npip->clear();
+  _npim->clear();
+  _npi0->clear();
+}
 
-  dunemc_base *duneobj = &(dunendgarmcSamples[iSample]);
-  ecal_deposits.open("CalorimeterDeposits.txt");
+int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
   MACH3LOG_INFO("-------------------------------------------------------------------");
-  MACH3LOG_INFO("Input File: {}", mc_files.at(iSample));
 
-  // Read fastgarsim output file
+  // Read fastgarsim file
   std::string simFileStr = mc_files.at(iSample);
-  simFile = TFile::Open(simFileStr.c_str(), "READ");
-  simTree = static_cast<TTree*>(simFile->Get("AnaTree"));
+  TFile* simFile = TFile::Open(simFileStr.c_str(), "READ");
+  TTree* simTree = static_cast<TTree*>(simFile->Get("AnaTree"));
 
   if(simTree){
     MACH3LOG_INFO("Found anatree in {}", mc_files[iSample]);
@@ -474,12 +509,13 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
     throw MaCh3Exception(__FILE__, __LINE__);
   }
 
-  // Read Genie input file
+  // Read Genie file
   std::string genieFileStr = "";
   if (simFileStr.find("hA") != std::string::npos) genieFileStr = "Inputs/DUNE_NDGAr_FastGarSim/GenieTrees/numu_argon_G18_10a_gst.root";
   else if (simFileStr.find("hN") != std::string::npos) genieFileStr = "Inputs/DUNE_NDGAr_FastGarSim/GenieTrees/numu_argon_G18_10b_gst.root";
-  genieFile = TFile::Open(genieFileStr.c_str(), "READ");
-  genieTree = static_cast<TTree*>(genieFile->Get("gst"));
+
+  TFile* genieFile = TFile::Open(genieFileStr.c_str(), "READ");
+  TTree* genieTree = static_cast<TTree*>(genieFile->Get("gst"));
 
   if(genieTree){
     MACH3LOG_INFO("Found Genie tree in {}", genieFileStr);
@@ -490,167 +526,99 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
     throw MaCh3Exception(__FILE__, __LINE__);
   }
 
-  // Switching of z and x to ensure x is B-field and z is (approx) beam
-  simTree->SetBranchAddress("eventID", &_EventID);
-  simTree->SetBranchAddress("startZ", &_MCPStartX);
-  simTree->SetBranchAddress("startY", &_MCPStartY);
-  simTree->SetBranchAddress("startX", &_MCPStartZ);
-  simTree->SetBranchAddress("endZ", &_MCPEndX);
-  simTree->SetBranchAddress("endY", &_MCPEndY);
-  simTree->SetBranchAddress("endX", &_MCPEndZ);
-  simTree->SetBranchAddress("startPZ", &_MCPStartPX);
-  simTree->SetBranchAddress("startPY", &_MCPStartPY);
-  simTree->SetBranchAddress("startPX", &_MCPStartPZ);
-  simTree->SetBranchAddress("endPZ", &_MCPEndPX);
-  simTree->SetBranchAddress("endPY", &_MCPEndPY);
-  simTree->SetBranchAddress("endPX", &_MCPEndPZ);
-  simTree->SetBranchAddress("pdgCode", &_MCPPDG);
-  simTree->SetBranchAddress("trackID", &_MCPTrkID);
-  simTree->SetBranchAddress("motherID", &_MCPMotherTrkID);
-  simTree->SetBranchAddress("tpcHitTrackID", &_TPCHitTrkID);
-  simTree->SetBranchAddress("tpcHitEdep", &_TPCHitEnergy);
-  simTree->SetBranchAddress("tpcHitZ", &_TPCHitX);
-  simTree->SetBranchAddress("tpcHitY", &_TPCHitY);
-  simTree->SetBranchAddress("tpcHitX", &_TPCHitZ);
-  simTree->SetBranchAddress("ecalHitTrackID", &_CalHitTrkID);
-  simTree->SetBranchAddress("ecalHitEdep", &_CalHitEnergy);
-  simTree->SetBranchAddress("ecalHitZ", &_CalHitX);
-  simTree->SetBranchAddress("ecalHitY", &_CalHitY);
-  simTree->SetBranchAddress("ecalHitX", &_CalHitZ);
-  simTree->SetBranchAddress("muidHitTrackID", &_MuIDHitTrkID);
-  simTree->SetBranchAddress("muidHitEdep", &_MuIDHitEnergy);
-  simTree->SetBranchAddress("muidHitZ", &_MuIDHitX);
-  simTree->SetBranchAddress("muidHitY", &_MuIDHitY);
-  simTree->SetBranchAddress("muidHitX", &_MuIDHitZ);
+  _data->SetBranchStatus("*", 0);
 
-  genieTree->SetBranchAddress("Ev", &_Enu);
-  genieTree->SetBranchAddress("pxv", &_PXnu);
-  genieTree->SetBranchAddress("pyv", &_PYnu);
-  genieTree->SetBranchAddress("pzv", &_PZnu);
-  genieTree->SetBranchAddress("neu", &_nuPDG);
-  genieTree->SetBranchAddress("El", &_Elep);
-  genieTree->SetBranchAddress("pxl", &_PXlep);
-  genieTree->SetBranchAddress("pyl", &_PYlep);
-  genieTree->SetBranchAddress("pzl", &_PZlep);
-  genieTree->SetBranchAddress("cc", &_isCC);
-  genieTree->SetBranchAddress("nfpip", &_npip);
-  genieTree->SetBranchAddress("nfpim", &_npim);
-  genieTree->SetBranchAddress("nfpi0", &_npi0);
+  auto readBranch = [&](TTree* tree, const char* name, void* addr) {
+    tree->SetBranchStatus(name, 1);
+    tree->SetBranchAddress(name, addr);
+  };
 
-  duneobj->norm_s = 1.;
-  double downsampling = 1.; //default 1, set to eg. 0.01 for quick testing
-  bool do_geometric_correction = false;
-  duneobj->pot_s = pot/(downsampling*1e21);
-  duneobj->nEvents = static_cast<int>(std::round(downsampling*static_cast<double>(simTree->GetEntries())));
+  // Switching of z and x to ensure x is B-field and z is beam
+  readBranch(simTree, "eventID", &_EventID);
+  readBranch(simTree, "startZ", &_MCPStartX);
+  readBranch(simTree, "startY", &_MCPStartY);
+  readBranch(simTree, "startX", &_MCPStartZ);
+  readBranch(simTree, "endZ", &_MCPEndX);
+  readBranch(simTree, "endY", &_MCPEndY);
+  readBranch(simTree, "endX", &_MCPEndZ);
+  readBranch(simTree, "startPZ", &_MCPStartPX);
+  readBranch(simTree, "startPY", &_MCPStartPY);
+  readBranch(simTree, "startPX", &_MCPStartPZ);
+  readBranch(simTree, "endPZ", &_MCPEndPX);
+  readBranch(simTree, "endPY", &_MCPEndPY);
+  readBranch(simTree, "endPX", &_MCPEndPZ);
+  readBranch(simTree, "pdgCode", &_MCPPDG);
+  readBranch(simTree, "trackID", &_MCPTrkID);
+  readBranch(simTree, "motherID", &_MCPMotherTrkID);
+  readBranch(simTree, "tpcHitTrackID", &_TPCHitTrkID);
+  readBranch(simTree, "tpcHitEdep", &_TPCHitEnergy);
+  readBranch(simTree, "tpcHitZ", &_TPCHitX);
+  readBranch(simTree, "tpcHitY", &_TPCHitY);
+  readBranch(simTree, "tpcHitX", &_TPCHitZ);
+  readBranch(simTree, "ecalHitTrackID", &_CalHitTrkID);
+  readBranch(simTree, "ecalHitEdep", &_CalHitEnergy);
+  readBranch(simTree, "ecalHitZ", &_CalHitX);
+  readBranch(simTree, "ecalHitY", &_CalHitY);
+  readBranch(simTree, "ecalHitX", &_CalHitZ);
+  readBranch(simTree, "muidHitTrackID", &_MuIDHitTrkID);
+  readBranch(simTree, "muidHitEdep", &_MuIDHitEnergy);
+  readBranch(simTree, "muidHitZ", &_MuIDHitX);
+  readBranch(simTree, "muidHitY", &_MuIDHitY);
+  readBranch(simTree, "muidHitX", &_MuIDHitZ);
 
-  // allocate memory for dunendgarmc variables
-  duneobj->rw_etru = new double[duneobj->nEvents];
-  duneobj->flux_w = new double[duneobj->nEvents];
-  duneobj->rw_isCC = new int[duneobj->nEvents];
-  duneobj->rw_nuPDG = new int[duneobj->nEvents];
-  duneobj->rw_berpaacvwgt = new double[duneobj->nEvents]; 
-  duneobj->geometric_correction = new double[duneobj->nEvents];
+  readBranch(genieTree, "Ev", &_Enu);
+  readBranch(genieTree, "pxv", &_PXnu);
+  readBranch(genieTree, "pyv", &_PYnu);
+  readBranch(genieTree, "pzv", &_PZnu);
+  readBranch(genieTree, "neu", &_nuPDG);
+  readBranch(genieTree, "El", &_Elep);
+  readBranch(genieTree, "pxl", &_PXlep);
+  readBranch(genieTree, "pyl", &_PYlep);
+  readBranch(genieTree, "pzl", &_PZlep);
+  readBranch(genieTree, "cc", &_isCC);
+  readBranch(genieTree, "nfpip", &_npip);
+  readBranch(genieTree, "nfpim", &_npim);
+  readBranch(genieTree, "nfpi0", &_npi0);
 
-  duneobj->rw_Q0 = new double[duneobj->nEvents];
-  duneobj->rw_Q3 = new double[duneobj->nEvents];
+  int nEntries = static_cast<int>(downsampling*static_cast<double>(_simTree->GetEntries()));
 
-  duneobj->nproton = new int[duneobj->nEvents];
-  duneobj->nneutron = new int[duneobj->nEvents];
-  duneobj->npip = new int[duneobj->nEvents];
-  duneobj->npim = new int[duneobj->nEvents];
-  duneobj->npi0 = new int[duneobj->nEvents];
-
-  duneobj->ntruemuon = new int[duneobj->nEvents];
-  duneobj->ntruemuonprim = new int[duneobj->nEvents];
-
-  duneobj->in_fdv = new bool[duneobj->nEvents];
-  duneobj->rw_elep_true = new double[duneobj->nEvents];
-
-  duneobj->rw_vtx_x = new double[duneobj->nEvents];
-  duneobj->rw_vtx_y = new double[duneobj->nEvents];
-  duneobj->rw_vtx_z = new double[duneobj->nEvents];
-  duneobj->rw_rad = new double[duneobj->nEvents];
-
-  duneobj->rw_lep_pT = new double[duneobj->nEvents];
-  duneobj->rw_lep_pX = new double[duneobj->nEvents];
-  duneobj->rw_lep_pY = new double[duneobj->nEvents];
-  duneobj->rw_lep_pZ = new double[duneobj->nEvents];
-  duneobj->rw_lep_p = new double[duneobj->nEvents];
-
-  duneobj->rw_lep_theta = new double[duneobj->nEvents]; //angle to z (beam)
-  duneobj->rw_lep_phi = new double[duneobj->nEvents]; //angle in xy plane to x (B-field)
-  duneobj->rw_lep_bangle = new double[duneobj->nEvents];
-
-  duneobj->Target = new int[duneobj->nEvents];
-
-  duneobj->is_accepted = new bool[duneobj->nEvents];
-
-  //Particle-level kinematic variables
-  int avg_particles_per_event = 30;
-  duneobj->particle_event = new std::vector<int>; duneobj->particle_event->reserve(avg_particles_per_event*duneobj->nEvents);
-  duneobj->particle_pdg = new std::vector<int>; duneobj->particle_pdg->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_energy = new std::vector<double>; duneobj->particle_energy->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_momentum = new std::vector<double>; duneobj->particle_momentum->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_endmomentum = new std::vector<double>; duneobj->particle_endmomentum->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_transversemomentum = new std::vector<double>; duneobj->particle_transversemomentum->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_bangle = new std::vector<double>; duneobj->particle_bangle->reserve(avg_particles_per_event*duneobj->nEvents);
-  duneobj->particle_beamangle = new std::vector<double>; duneobj->particle_beamangle->reserve(avg_particles_per_event*duneobj->nEvents);
-  duneobj->particle_isaccepted = new std::vector<bool>; duneobj->particle_isaccepted->reserve(avg_particles_per_event*duneobj->nEvents);
-  duneobj->particle_iscurvatureresolved = new std::vector<bool>; duneobj->particle_iscurvatureresolved->reserve(avg_particles_per_event*duneobj->nEvents);
-  duneobj->particle_isstoppedintpc = new std::vector<bool>; duneobj->particle_isstoppedintpc->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_isstoppedinecal = new std::vector<bool>; duneobj->particle_isstoppedinecal->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_isstoppedingap = new std::vector<bool>; duneobj->particle_isstoppedingap->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_isstoppedinbarrelgap = new std::vector<bool>; duneobj->particle_isstoppedinbarrelgap->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_isstoppedinendgap = new std::vector<bool>; duneobj->particle_isstoppedinendgap->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_isstoppedinbarrel= new std::vector<bool>; duneobj->particle_isstoppedinbarrel->reserve(avg_particles_per_event*duneobj->nEvents);
-  duneobj->particle_isstoppedinendcap = new std::vector<bool>; duneobj->particle_isstoppedinendcap->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_isescaped = new std::vector<bool>; duneobj->particle_isescaped->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_startx = new std::vector<double>; duneobj->particle_startx->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_startr2 = new std::vector<double>; duneobj->particle_startr2->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_endr = new std::vector<double>; duneobj->particle_endr->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_endx = new std::vector<double>; duneobj->particle_endx->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_endy = new std::vector<double>; duneobj->particle_endy->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_endz = new std::vector<double>; duneobj->particle_endz->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_ecaldepth = new std::vector<double>; duneobj->particle_ecaldepth->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_nturns = new std::vector<double>; duneobj->particle_nturns->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_nhits = new std::vector<double>; duneobj->particle_nhits->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_tracklengthyz = new std::vector<double>; duneobj->particle_tracklengthyz->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_momresms = new std::vector<double>; duneobj->particle_momresms->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_momresyz = new std::vector<double>; duneobj->particle_momresyz->reserve(avg_particles_per_event*duneobj->nEvents);
-  duneobj->particle_momresx = new std::vector<double>; duneobj->particle_momresx->reserve(avg_particles_per_event*duneobj->nEvents); 
-  duneobj->particle_edepcrit = new std::vector<double>; duneobj->particle_edepcrit->reserve(avg_particles_per_event*duneobj->nEvents); 
-
-  int numCC = 0;
-  int num_in_fdv = 0;
+  dunendgarmcFitting.resize(nEntries);
+  dunendgarmcPlotting.resize(nEntries);
 
   double pixel_spacing_cm = pixel_spacing/10; //convert to cm
+  int numCC = 0;
+  int num_in_fdv = 0;
+  bool do_geometric_correction = false;
 
-  for (int i_event = 0; i_event < (duneobj->nEvents); ++i_event) { 
+  for (int i_event = 0; i_event < nEntries; ++i_event) { 
+
+    if (i_event != 0) clearBranchVectors();
     simTree->GetEntry(i_event);
     genieTree->GetEntry(_EventID);
-    if (i_event % (duneobj->nEvents/100) == 0) {
+
+    if (i_event % (nEntries/100) == 0) {
       MACH3LOG_INFO("\tNow processing event: {}/{}",i_event,duneobj->nEvents);
     }
+
     std::vector<double> vertex = {M3::_BAD_DOUBLE_, M3::_BAD_DOUBLE_, M3::_BAD_DOUBLE_};
 
-    duneobj->rw_etru[i_event] = _Enu; // in GeV
-    duneobj->rw_isCC[i_event] = _isCC;
-    duneobj->rw_nuPDG[i_event] = _nuPDG;
-    duneobj->rw_berpaacvwgt[i_event] = _BeRPA_cvwgt;
+    dunendgarmcFitting[i_event].rw_etru = _Enu;
+    dunendgarmcFitting[i_event].rw_isCC = _isCC;
+    dunendgarmcFitting[i_event].nupdg = _nuPDG;
+    dunendgarmcFitting[i_event].nupdgUnosc = _nuPDG;
+    dunendgarmcFitting[i_event].OscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, dunendgarmcFitting[i_event].nupdgUnosc, dunendgarmcFitting[i_event].nupdg));
+    dunendgarmcFitting[i_event].rw_berpaacvwgt = _BeRPA_cvwgt;
 
-    // Deal with truth-level information 
+<<<<<<< HEAD
     std::unordered_map<int, std::vector<int>> mother_to_daughter_ID;
     std::unordered_map<int, size_t> ID_to_index;
-    std::unordered_map<int, std::vector<std::vector<double>>> ID_to_ECalDep; // Each deposition is vector of size 3: [energy, radius, x]
-    std::unordered_map<int, double> ID_to_TPCDep;  // Each deposition is vector of size 3: [energy, radius, x]
-    std::unordered_map<int, double> ID_to_MuIDDep; // Each deposition is vector of size 3: [energy, radius, x]
+    std::unordered_map<int, std::vector<std::vector<double>>> ID_to_ECalDep; // Each deposition is vector of size 3: [energy, depth, x]
+    std::unordered_map<int, double> ID_to_TPCDep;
+    std::unordered_map<int, double> ID_to_MuIDDep;
     size_t n_particles = _MCPTrkID->size();
 
     // Fill maps
     for (size_t i_particle=0; i_particle<n_particles; i_particle++) {
-      int pdg = _MCPPDG->at(i_particle);
-      if (pdg == 13) duneobj->ntruemuon[i_event]++;
-
       int trkID = _MCPTrkID->at(i_particle);
       int motherID = _MCPMotherTrkID->at(i_particle);
       ID_to_index[trkID] = i_particle;
@@ -688,78 +656,76 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
     bool isEventAccepted = true;
     double crit_reg = 3.; // Outer number of cm defining the calorimeter's 'critical region'
 
+    // Resize vectors for particle-level parameters
+    size_t n_prim_in_event = mother_to_daughter_ID[0].size();
+    dunendgarmcPlotting[i_event].particle_pdg.resize(n_prim_in_event, M3::_BAD_INT_);
+    dunendgarmcPlotting[i_event].particle_energy.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_momentum.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_endmomentum.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_transversemomentum.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_bangle.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_beamangle.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_isaccepted.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].particle_iscurvatureresolved.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].particle_isdecayed.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].particle_isstoppedintpc.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].particle_isstoppedinecal.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].particle_isstoppedingap.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].particle_isstoppedinbarrelgap.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].particle_isstoppedinendgap.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].particle_isstoppedinbarrel.resize(n_prim_in_event, M3::_BAD_INT_);
+    dunendgarmcPlotting[i_event].particle_isstoppedinendcap.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].particle_isescaped.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].particle_startx.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_startr2.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_endr.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_enddepth.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_endx.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_endy.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_endz.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_nturns.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_nhits.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_tracklengthyz.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_momresms.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_momresyz.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_momresx.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_edepcrit.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+
+    // Loop through primaries
     for (int& primID : mother_to_daughter_ID[0]) {
+
       // Do not require the reconstruction of neutrons and neutrinos
       size_t prim_index = ID_to_index[primID];
       int pdg = _MCPPDG->at(prim_index);
       if (pdg == 2112 || std::abs(pdg) == 12 || std::abs(pdg) == 14 || std::abs(pdg) == 16) continue;
 
-      // Fill default values for particle-level parameters:
-      duneobj->particle_event->push_back(i_event);
-      duneobj->particle_pdg->push_back(M3::_BAD_INT_);
-      duneobj->particle_energy->push_back(M3::_BAD_DOUBLE_);
-      duneobj->particle_momentum->push_back(M3::_BAD_DOUBLE_);
-      duneobj->particle_endmomentum->push_back(M3::_BAD_DOUBLE_);
-      duneobj->particle_transversemomentum->push_back(M3::_BAD_DOUBLE_); // momentum transverse to B-field
-      duneobj->particle_bangle->push_back(M3::_BAD_DOUBLE_); // angle to B-field
-      duneobj->particle_beamangle->push_back(M3::_BAD_DOUBLE_);
+      dunendgarmcPlotting[i_event].particle_edepcrit[i_anaprim] = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, crit_reg);
+      dunendgarmcPlotting[i_event].particle_pdg[i_anaprim] = pdg; 
 
-      duneobj->particle_startx->push_back(M3::_BAD_DOUBLE_);
-      duneobj->particle_startr2->push_back(M3::_BAD_DOUBLE_);
-      duneobj->particle_endr->push_back(M3::_BAD_DOUBLE_);
-      duneobj->particle_endx->push_back(M3::_BAD_DOUBLE_);
-      duneobj->particle_endy->push_back(M3::_BAD_DOUBLE_);
-      duneobj->particle_endz->push_back(M3::_BAD_DOUBLE_);
-      duneobj->particle_ecaldepth->push_back(M3::_BAD_DOUBLE_);
-
-      duneobj->particle_isaccepted->push_back(true); 
-      duneobj->particle_iscurvatureresolved->push_back(false);
-      duneobj->particle_isstoppedingap->push_back(false);
-      duneobj->particle_isstoppedinbarrelgap->push_back(false);
-      duneobj->particle_isstoppedinendgap->push_back(false);
-      duneobj->particle_isstoppedinecal->push_back(false);
-      duneobj->particle_isstoppedinbarrel->push_back(false);
-      duneobj->particle_isstoppedinendcap->push_back(false);
-      duneobj->particle_isstoppedintpc->push_back(false);
-      duneobj->particle_isescaped->push_back(false);
-
-      duneobj->particle_momresms->push_back(M3::_BAD_DOUBLE_);
-      duneobj->particle_momresyz->push_back(M3::_BAD_DOUBLE_);
-      duneobj->particle_momresx->push_back(M3::_BAD_DOUBLE_);
-      duneobj->particle_nturns->push_back(M3::_BAD_DOUBLE_);
-      duneobj->particle_nhits->push_back(M3::_BAD_DOUBLE_);
-      duneobj->particle_tracklengthyz->push_back(M3::_BAD_DOUBLE_);
-
-      ecal_deposits << "\n" << primID << ")" << std::endl;
-      std::unordered_map<int, double> ecal_layer_deposits; 
-      duneobj->particle_edepcrit->push_back(CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, crit_reg, ecal_layer_deposits, true));
-      for (int i_layer=0; i_layer<42; i_layer++) {
-        ecal_deposits << "Energy: " << ecal_layer_deposits[i_layer] << " Depth: " << i_layer << std::endl;
-      }
-
-      nparticlesinsample[iSample]++;
-
+      // Check if primary is resolved from curvature
       bool isCurvatureResolved = false;
-      // Remove descendants (and their descendants) from mother_to_daughter_ID who's momentum we get from curvature
-      if (CurvatureResolutionFilter(primID, mother_to_daughter_ID, ID_to_index, duneobj, pixel_spacing_cm)) {
+      // Remove secondaries (and their descendants) from mother_to_daughter_ID who's momentum we get from curvature
+      if (CurvatureResolutionFilter(primID, mother_to_daughter_ID, ID_to_index, dunendgarmcPlotting[i_event], pixel_spacing_cm)) {
         isCurvatureResolved = true;
       }
-      duneobj->particle_iscurvatureresolved->back() = isCurvatureResolved;
-
-      ecal_deposits << "Primary: PDG = " << pdg << " Energy = " << duneobj->particle_energy->back() << " TPC = " << duneobj->particle_isstoppedintpc->back() <<
-        " Gap = " << duneobj->particle_isstoppedingap->back() << " ECal = " << duneobj->particle_isstoppedinecal->back() << std::endl;
+      dunendgarmcPlotting[i_event].particle_iscurvatureresolved[i_anaprim] = isCurvatureResolved;
 
       // Find energy deposited by by primary and non-curvature-resolved descendants in critical region of calorimeter
-      double EDepCrit = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, crit_reg, ecal_layer_deposits);
-      double EDepTot = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, ECALOuterRadius, ecal_layer_deposits);
+      double EDepCrit = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, crit_reg);
+      // double EDepTot = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, ECALOuterRadius);
+
+      // Check for containment
       bool isContained = true;
-      if (EDepCrit > 0.002 && EDepCrit/EDepTot > 0.02) {
+      if (EDepCrit > 0.002) {
         isContained = false;
       }
 
+      // Primary is accepted if contained or curvature resolved
+      bool isParticleAccepted = true;
       if (!(isContained || isCurvatureResolved)) {
+        isParticleAccepted = false;
         isEventAccepted = false;
-        duneobj->particle_isaccepted->back() = false;
+        dunendgarmcPlotting[i_event].particle_isaccepted[i_anaprim] = isParticleAccepted;
       }
 
       // Get primary muon information
@@ -772,147 +738,110 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC(int iSample) {
         if (p2 > muon_p2) {
           muon_p2 = p2;
           double mass = MaCh3Utils::GetMassFromPDG(pdg);
-          duneobj->rw_lep_pX[i_event] = p_x;
-          duneobj->rw_lep_pY[i_event] = p_y;
-          duneobj->rw_lep_pZ[i_event] = p_z;
-          duneobj->rw_elep_true[i_event] = std::sqrt(p2 + mass*mass);
+          dunendgarmcFitting[i_event].rw_lep_pX = p_x;
+          dunendgarmcFitting[i_event].rw_lep_pY = p_y;
+          dunendgarmcFitting[i_event].rw_lep_pZ = p_z;
+          dunendgarmcFitting[i_event].rw_LepE = std::sqrt(p2 + mass*mass);
           vertex = {_MCPStartX->at(prim_index), _MCPStartY->at(prim_index), _MCPStartZ->at(prim_index)};
         }
       }
     }
-    if (vertex[0] == M3::_BAD_DOUBLE_) MACH3LOG_INFO("No vertex found in event {}", i_event);
-    if (std::abs((duneobj->rw_lep_pX[i_event]-_PXlep)/_PXlep) > 0.0001 || std::abs((duneobj->rw_lep_pY[i_event]-_PYlep)/_PYlep) > 0.0001 || std::abs((duneobj->rw_lep_pZ[i_event]-_PZlep)/_PZlep) > 0.0001) {
-      MACH3LOG_INFO("Genie p_lep = [{}, {}, {}] and FastGArSim p_lep = [{}, {}, {}]", _PXlep, _PYlep, _PZlep, duneobj->rw_lep_pX[i_event], duneobj->rw_lep_pY[i_event], duneobj->rw_lep_pZ[i_event]);
-    }
-    if (std::abs((_Elep-duneobj->rw_elep_true[i_event])/_Elep) > 0.001) MACH3LOG_INFO("Found primary muon of energy {} MeV. Should be {} MeV.", duneobj->rw_elep_true[i_event], _Elep);
-
-    if (isEventAccepted) duneobj->is_accepted[i_event]=1;
-    else duneobj->is_accepted[i_event]=0;
-
-    double lep_momentum = std::sqrt(duneobj->rw_lep_pX[i_event]*duneobj->rw_lep_pX[i_event] + duneobj->rw_lep_pY[i_event]*duneobj->rw_lep_pY[i_event] + duneobj->rw_lep_pZ[i_event]*duneobj->rw_lep_pZ[i_event]);
-    double lep_pBeam = duneobj->rw_lep_pX[i_event]*BeamDirection[0] + duneobj->rw_lep_pY[i_event]*BeamDirection[1] + duneobj->rw_lep_pZ[i_event]*BeamDirection[2];
-    double lep_pB = duneobj->rw_lep_pX[i_event];
-    double lep_pPerp = duneobj->rw_lep_pY[i_event]*BeamDirection[2] - duneobj->rw_lep_pZ[i_event]*BeamDirection[1];
-
-    double lep_beamangle = acos(lep_pBeam/lep_momentum)*180/M_PI; //Angle to beam (beam direction: [0.0,0.101,0.995])
-    double lep_bangle = acos(lep_pB/lep_momentum)*180/M_PI; //Angle to B-field (b-field along x)
-    double lep_perpangle = acos(lep_pPerp/lep_momentum)*180/M_PI; //Angle to axis perpendicular to beam and B
-    double lep_phi = atan2(lep_pPerp, lep_pB)*180/M_PI;
-
-    duneobj->rw_lep_theta[i_event] = lep_beamangle;
-    duneobj->rw_lep_phi[i_event] = lep_phi;
-    duneobj->rw_lep_bangle[i_event] = lep_bangle;
-    duneobj->rw_lep_p[i_event] = lep_momentum;
-
-    double radius = std::sqrt((vertex[1]-TPC_centre_y)*(vertex[1]-TPC_centre_y) 
-                              + (vertex[2]-TPC_centre_z)*(vertex[2]-TPC_centre_z)); //find radius of interaction vertex
+    dunendgarmcPlotting[i_event].is_accepted = isEventAccepted;
     duneobj->rw_vtx_x[i_event] = vertex[0]-TPC_centre_x;
     duneobj->rw_vtx_y[i_event] = vertex[1]-TPC_centre_y;
     duneobj->rw_vtx_z[i_event] = vertex[2]-TPC_centre_z;
 
+    // Find lepton kinematic variables
+    double lep_momentum = std::sqrt(dunendgarmcFitting[i_event].rw_lep_pX*dunendgarmcFitting[i_event].rw_lep_pX 
+                                    + dunendgarmcFitting[i_event].rw_lep_pY*dunendgarmcFitting[i_event].rw_lep_pY 
+                                    + dunendgarmcFitting[i_event].rw_lep_pZ*dunendgarmcFitting[i_event].rw_lep_pZ);
+    double lep_pBeam = dunendgarmcFitting[i_event].rw_lep_pY*BeamDirection[1] + dunendgarmcFitting[i_event].rw_lep_pZ*BeamDirection[2];
+    double lep_pB = dunendgarmcFitting[i_event].rw_lep_pX;
+    double lep_pPerp = dunendgarmcFitting[i_event].rw_lep_pY*BeamDirection[2] - dunendgarmcFitting[i_event].rw_lep_pZ*BeamDirection[1];
+    double lep_beamangle = acos(lep_pBeam/lep_momentum)*180/M_PI; //Angle to beam (beam direction: [0.0,-0.101,0.995])
+    double lep_bangle = acos(lep_pB/lep_momentum)*180/M_PI; //Angle to B-field (b-field along x)
+    double lep_perpangle = acos(lep_pPerp/lep_momentum)*180/M_PI; //Angle to axis perpendicular to beam and B
+    double lep_phi = atan2(lep_pPerp, lep_pB)*180/M_PI;
+
+    dunendgarmcFitting[i_event].rw_lep_theta = lep_beamangle;
+    dunendgarmcFitting[i_event].rw_lep_phi = lep_phi;
+    dunendgarmcFitting[i_event].rw_lep_bangle = lep_bangle;
+    dunendgarmcFitting[i_event].rw_lep_p = lep_momentum;
+
+    double radius = std::sqrt((vertex[1]-TPC_centre_y)*(vertex[1]-TPC_centre_y) 
+                              + (vertex[2]-TPC_centre_z)*(vertex[2]-TPC_centre_z)); //find radius of interaction vertex
+    dunendgarmcFitting[i_event].rw_rad = radius;
+
     if(std::abs(vertex[0] - TPC_centre_x) <= TPCFidLength && radius<=TPCFidRadius){
       num_in_fdv++;
-      duneobj->in_fdv[i_event] = 1;
+      dunendgarmcFitting[i_event].in_fdv = 1;
     } else{
-      duneobj->in_fdv[i_event] = 0;
+      dunendgarmcFitting[i_event].in_fdv = 0;
     }
 
-    duneobj->geometric_correction[i_event] = 1.;
+    // Perform 'geometric correction' if do_geometric_correction set to true
+    dunendgarmcPlotting[i_event].geometric_correction = 1.;
     if (do_geometric_correction) {
-      if ((lep_bangle < 45 || lep_bangle > 135) && lep_momentum > 0.3) duneobj->geometric_correction[i_event] = 0.;
-      else if ((lep_perpangle < 45 || lep_perpangle > 135) && lep_momentum > 0.3) duneobj->geometric_correction[i_event] = 2.;
+      if ((lep_bangle < 45 || lep_bangle > 135) && lep_momentum > 0.3) dunendgarmcPlotting[i_event].geometric_correction = 0.;
+      else if ((lep_perpangle < 45 || lep_perpangle > 135) && lep_momentum > 0.3) dunendgarmcPlotting[i_event].geometric_correction = 2.;
     }
 
-    duneobj->rw_rad[i_event] = radius;
-
-    //Assume everything is on Argon for now....
-    duneobj->Target[i_event] = 40;
-
-    duneobj->rw_Q0[i_event] = _Enu - _Elep;
-    duneobj->rw_Q3[i_event] = std::sqrt((_PXnu-_PXlep)*(_PXnu-_PXlep) + (_PYnu-_PYlep)*(_PYnu-_PYlep) + (_PZnu-_PZlep)*(_PZnu-_PZlep));
-    duneobj->rw_lep_pT[i_event] = std::sqrt(lep_momentum*lep_momentum - lep_pBeam*lep_pBeam); 
-
-    duneobj->flux_w[i_event] = 1.0;
-    if(duneobj->rw_isCC[i_event] == 1) numCC++;
+    // Fill remaining event-level kinematic parameters
+    dunendgarmcFitting[i_event].Target = 40; // Assume everything is Argon
+    dunendgarmcFitting[i_event].rw_Q0 = dunendgarmcFitting[i_event].rw_etru - dunendgarmcFitting[i_event].rw_LepE;
+    dunendgarmcFitting[i_event].rw_Q3 = std::sqrt((_MCNuPx->at(0)-dunendgarmcFitting[i_event].rw_lep_pX)*(_MCNuPx->at(0)-dunendgarmcFitting[i_event].rw_lep_pX) + 
+                                                  (_MCNuPy->at(0)-dunendgarmcFitting[i_event].rw_lep_pY)*(_MCNuPy->at(0)-dunendgarmcFitting[i_event].rw_lep_pY) + 
+                                                  (_MCNuPz->at(0)-dunendgarmcFitting[i_event].rw_lep_pZ)*(_MCNuPz->at(0)-dunendgarmcFitting[i_event].rw_lep_pZ));
+    dunendgarmcFitting[i_event].rw_lep_pT = std::sqrt(lep_momentum*lep_momentum - lep_pBeam*lep_pBeam); 
+    dunendgarmcFitting[i_event].norm_s = 1.;
+    dunendgarmcFitting[i_event].pot_s = pot/(downsampling*1e21);
+    dunendgarmcFitting[i_event].flux_w = 1.0;
+    if(dunendgarmcFitting[i_event].rw_isCC == 1) numCC++;
   }
-  MACH3LOG_INFO("nEvents = {}, numCC = {}, numFDV = {}", duneobj->nEvents, numCC, num_in_fdv);
+  MACH3LOG_INFO("nEntries = {}, numCC = {}, numFDV = {}", nEntries, numCC, num_in_fdv);
 
-  simFile->Close();
-  genieFile->Close();
-  ecal_deposits.close();
-  return duneobj->nEvents;
+  simTree->Reset();
+  delete _simTree;
+  genieTree->Reset();
+  delete genieTree;
+
+  return nEntries;
 }
 
 #pragma GCC diagnostic push 
 #pragma GCC diagnostic ignored "-Wswitch-enum"
-const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTypes KinematicParameter, int iSample, int iEvent) {
+const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTypes KinematicParameter, int iEvent) {
   switch(KinematicParameter) {
     case kTrueNeutrinoEnergy:
-      return &dunendgarmcSamples[iSample].rw_etru[iEvent]; 
+      return &dunendgarmcFitting[iEvent].rw_etru; 
+    case kOscChannel:
+      return &dunendgarmcFitting[iEvent].OscChannelIndex;
     case kTrueXPos:
-      return &dunendgarmcSamples[iSample].rw_vtx_x[iEvent];
+      return &dunendgarmcFitting[iEvent].rw_vtx_x;
     case kTrueYPos:
-      return &dunendgarmcSamples[iSample].rw_vtx_y[iEvent];
+      return &dunendgarmcFitting[iEvent].rw_vtx_y;
     case kTrueZPos:
-      return &dunendgarmcSamples[iSample].rw_vtx_z[iEvent];
+      return &dunendgarmcFitting[iEvent].rw_vtx_z;
     case kTrueRad:
-      return &dunendgarmcSamples[iSample].rw_rad[iEvent];
+      return &dunendgarmcFitting[iEvent].rw_rad;
     case kTrueLepEnergy:
-      return &dunendgarmcSamples[iSample].rw_elep_true[iEvent];
+      return &dunendgarmcFitting[iEvent].rw_LepE;
     case kLepPT:
-      return &dunendgarmcSamples[iSample].rw_lep_pT[iEvent];
+      return &dunendgarmcFitting[iEvent].rw_lep_pT;
     case kLepPZ:
-      return &dunendgarmcSamples[iSample].rw_lep_pZ[iEvent];
+      return &dunendgarmcFitting[iEvent].rw_lep_pZ;
     case kLepTheta:
-      return &dunendgarmcSamples[iSample].rw_lep_theta[iEvent];
+      return &dunendgarmcFitting[iEvent].rw_lep_theta;
     case kLepPhi:
-      return &dunendgarmcSamples[iSample].rw_lep_phi[iEvent];
+      return &dunendgarmcFitting[iEvent].rw_lep_phi;
     case kLepBAngle:
-      return &dunendgarmcSamples[iSample].rw_lep_bangle[iEvent];
+      return &dunendgarmcFitting[iEvent].rw_lep_bangle;
     case kLepP:
-      return &dunendgarmcSamples[iSample].rw_lep_p[iEvent];
+      return &dunendgarmcFitting[iEvent].rw_lep_p;
     case kTrueQ0:
-      return &dunendgarmcSamples[iSample].rw_Q0[iEvent];
+      return &dunendgarmcFitting[iEvent].rw_Q0;
     case kTrueQ3:
-      return &dunendgarmcSamples[iSample].rw_Q3[iEvent];
-    case kParticle_Momentum:
-      return &dunendgarmcSamples[iSample].particle_momentum->at(iEvent);
-    case kParticle_EndMomentum:
-      return &dunendgarmcSamples[iSample].particle_endmomentum->at(iEvent);
-    case kParticle_TransverseMomentum:
-      return &dunendgarmcSamples[iSample].particle_transversemomentum->at(iEvent);
-    case kParticle_BAngle:
-      return &dunendgarmcSamples[iSample].particle_bangle->at(iEvent);
-    case kParticle_BeamAngle:
-      return &dunendgarmcSamples[iSample].particle_beamangle->at(iEvent);
-    case kParticle_NTurns:
-      return &dunendgarmcSamples[iSample].particle_nturns->at(iEvent);
-    case kParticle_NHits:
-      return &dunendgarmcSamples[iSample].particle_nhits->at(iEvent);
-    case kParticle_TrackLengthYZ:
-      return &dunendgarmcSamples[iSample].particle_tracklengthyz->at(iEvent);
-    case kParticle_MomResMS:
-      return &dunendgarmcSamples[iSample].particle_momresms->at(iEvent);
-    case kParticle_MomResYZ:
-      return &dunendgarmcSamples[iSample].particle_momresyz->at(iEvent);
-    case kParticle_MomResX:
-      return &dunendgarmcSamples[iSample].particle_momresx->at(iEvent);
-    case kParticle_StartR2:
-      return &dunendgarmcSamples[iSample].particle_startr2->at(iEvent);
-    case kParticle_EndR:
-      return &dunendgarmcSamples[iSample].particle_endr->at(iEvent);
-    case kParticle_EndX:
-      return &dunendgarmcSamples[iSample].particle_endx->at(iEvent);
-    case kParticle_EndY:
-      return &dunendgarmcSamples[iSample].particle_endy->at(iEvent);
-    case kParticle_EndZ:
-      return &dunendgarmcSamples[iSample].particle_endz->at(iEvent);
-    case kParticle_ECALDepth:
-      return &dunendgarmcSamples[iSample].particle_ecaldepth->at(iEvent);
-    case kParticle_StartX:
-      return &dunendgarmcSamples[iSample].particle_startx->at(iEvent);
-    case kParticle_EDepCrit:
-      return &dunendgarmcSamples[iSample].particle_edepcrit->at(iEvent);
+      return &dunendgarmcFitting[iEvent].rw_Q3;
     default:
       MACH3LOG_ERROR("Did not recognise Kinematic Parameter {}", static_cast<int>(KinematicParameter));
       throw MaCh3Exception(__FILE__, __LINE__);
@@ -921,257 +850,156 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
 }
 #pragma GCC diagnostic pop
 
-const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent) {
+const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(double KinematicVariable, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
-  return GetPointerToKinematicParameter(KinPar,iSample,iEvent);
+  return GetPointerToKinematicParameter(KinPar,iEvent);
 }
 
-const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(std::string KinematicParameter, int iSample, int iEvent) {
+const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
-  return GetPointerToKinematicParameter(KinPar,iSample,iEvent);
+  return GetPointerToKinematicParameter(KinPar,iEvent);
 }
 
-double SampleHandlerBeamNDGAr::ReturnKinematicParameter(int KinematicVariable, int iSample, int iEvent) {
+double SampleHandlerBeamNDGAr::ReturnKinematicParameter(int KinematicVariable, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
-  return ReturnKinematicParameter(KinPar,iSample,iEvent);
+  return ReturnKinematicParameter(KinPar,iEvent);
 }
 
-double SampleHandlerBeamNDGAr::ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent) {
+double SampleHandlerBeamNDGAr::ReturnKinematicParameter(std::string KinematicParameter, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
-  return ReturnKinematicParameter(KinPar,iSample,iEvent);
+  return ReturnKinematicParameter(KinPar,iEvent);
 }
 
 #pragma GCC diagnostic push 
 #pragma GCC diagnostic ignored "-Wswitch-enum"
-double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent) {
+double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, int iEvent) {
   //HH: Special cases for dealing with non-doubles
   switch(KinPar) {
     case kEvent_IsAccepted:
-      return static_cast<double>(dunendgarmcSamples[iSample].is_accepted[iEvent]);
+      return static_cast<double>(dunendgarmcPlotting[iEvent].is_accepted);
     case kIsCC:
-      return static_cast<double>(dunendgarmcSamples[iSample].rw_isCC[iEvent]);
+      return static_cast<double>(dunendgarmcFitting[iEvent].rw_isCC);
     case kInFDV:
-      return static_cast<double>(dunendgarmcSamples[iSample].in_fdv[iEvent]);
-    case kParticle_Event:
-      return static_cast<double>(dunendgarmcSamples[iSample].particle_event->at(iEvent));
+      return static_cast<double>(dunendgarmcPlotting[iEvent].in_fdv);
+    default:
+      return *GetPointerToKinematicParameter(KinPar, iEvent);
+  }
+}
+#pragma GCC diagnostic pop
+
+std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(KinematicVecs KinVec, int iEvent) {
+  switch(KinVec) {
     case kParticle_IsAccepted:
-      return static_cast<double>(dunendgarmcSamples[iSample].particle_isaccepted->at(iEvent));
+      return std::vector<double>(
+        dunendgarmcPlotting[iEvent].particle_isaccepted.begin(),
+        dunendgarmcPlotting[iEvent].particle_isaccepted.end());
     case kParticle_IsCurvatureResolved:
-      return static_cast<double>(dunendgarmcSamples[iSample].particle_iscurvatureresolved->at(iEvent));
+      return std::vector<double>(
+        dunendgarmcPlotting[iEvent].particle_iscurvatureresolved.begin(),
+        dunendgarmcPlotting[iEvent].particle_iscurvatureresolved.end());
+    case kParticle_IsDecayed:
+      return std::vector<double>(
+        dunendgarmcPlotting[iEvent].particle_isdecayed.begin(),
+        dunendgarmcPlotting[iEvent].particle_isdecayed.end());
     case kParticle_PDG:
-      return static_cast<double>(dunendgarmcSamples[iSample].particle_pdg->at(iEvent));
+      return std::vector<double>(
+        dunendgarmcPlotting[iEvent].particle_pdg.begin(),
+        dunendgarmcPlotting[iEvent].particle_pdg.end());
     case kParticle_IsStoppedInTPC:
-      return static_cast<double>(dunendgarmcSamples[iSample].particle_isstoppedintpc->at(iEvent));
+      return std::vector<double>(
+        dunendgarmcPlotting[iEvent].particle_isstoppedintpc.begin(),
+        dunendgarmcPlotting[iEvent].particle_isstoppedintpc.end());
     case kParticle_IsStoppedInECal:
-      return static_cast<double>(dunendgarmcSamples[iSample].particle_isstoppedinecal->at(iEvent));
+      return std::vector<double>(
+        dunendgarmcPlotting[iEvent].particle_isstoppedinecal.begin(),
+        dunendgarmcPlotting[iEvent].particle_isstoppedinecal.end());
+    case kParticle_IsStoppedInBarrel:
+      return std::vector<double>(
+        dunendgarmcPlotting[iEvent].particle_isstoppedinbarrel.begin(),
+        dunendgarmcPlotting[iEvent].particle_isstoppedinbarrel.end());
+    case kParticle_IsStoppedInEndCap:
+      return std::vector<double>(
+        dunendgarmcPlotting[iEvent].particle_isstoppedinendcap.begin(),
+        dunendgarmcPlotting[iEvent].particle_isstoppedinendcap.end());
     case kParticle_IsStoppedInGap:
-      return static_cast<double>(dunendgarmcSamples[iSample].particle_isstoppedingap->at(iEvent));
+      return std::vector<double>(
+        dunendgarmcPlotting[iEvent].particle_isstoppedingap.begin(),
+        dunendgarmcPlotting[iEvent].particle_isstoppedingap.end());
     case kParticle_IsStoppedInEndGap:
-      return static_cast<double>(dunendgarmcSamples[iSample].particle_isstoppedinendgap->at(iEvent));
+      return std::vector<double>(
+        dunendgarmcPlotting[iEvent].particle_isstoppedinendgap.begin(),
+        dunendgarmcPlotting[iEvent].particle_isstoppedinendgap.end());
     case kParticle_IsStoppedInBarrelGap:
-      return static_cast<double>(dunendgarmcSamples[iSample].particle_isstoppedinbarrelgap->at(iEvent));
+      return std::vector<double>(
+        dunendgarmcPlotting[iEvent].particle_isstoppedinbarrelgap.begin(),
+        dunendgarmcPlotting[iEvent].particle_isstoppedinbarrelgap.end());
     case kParticle_IsEscaped:
-      return static_cast<double>(dunendgarmcSamples[iSample].particle_isescaped->at(iEvent));
+      return std::vector<double>(
+        dunendgarmcPlotting[iEvent].particle_isescaped.begin(),
+        dunendgarmcPlotting[iEvent].particle_isescaped.end());
+    case kParticle_Energy:
+      return dunendgarmcPlotting[iEvent].particle_energy;
+    case kParticle_Momentum:
+      return dunendgarmcPlotting[iEvent].particle_momentum;
+    case kParticle_EndMomentum:
+      return dunendgarmcPlotting[iEvent].particle_endmomentum;
+    case kParticle_TransverseMomentum:
+      return dunendgarmcPlotting[iEvent].particle_transversemomentum;
+    case kParticle_BAngle:
+      return dunendgarmcPlotting[iEvent].particle_bangle;
+    case kParticle_BeamAngle:
+      return dunendgarmcPlotting[iEvent].particle_beamangle;
+    case kParticle_NTurns:
+      return dunendgarmcPlotting[iEvent].particle_nturns;
+    case kParticle_NHits:
+      return dunendgarmcPlotting[iEvent].particle_nhits;
+    case kParticle_TrackLengthYZ:
+      return dunendgarmcPlotting[iEvent].particle_tracklengthyz;
+    case kParticle_MomResMS:
+      return dunendgarmcPlotting[iEvent].particle_momresms;
+    case kParticle_MomResYZ:
+      return dunendgarmcPlotting[iEvent].particle_momresyz;
+    case kParticle_MomResX:
+      return dunendgarmcPlotting[iEvent].particle_momresx;
+    case kParticle_StartR2:
+      return dunendgarmcPlotting[iEvent].particle_startr2;
+    case kParticle_EndR:
+      return dunendgarmcPlotting[iEvent].particle_endr;
+    case kParticle_EndDepth:
+      return dunendgarmcPlotting[iEvent].particle_enddepth;
+    case kParticle_EndX:
+      return dunendgarmcPlotting[iEvent].particle_endx;
+    case kParticle_EndY:
+      return dunendgarmcPlotting[iEvent].particle_endy;
+    case kParticle_EndZ:
+      return dunendgarmcPlotting[iEvent].particle_endz;
+    case kParticle_StartX:
+      return dunendgarmcPlotting[iEvent].particle_startx;
+    case kParticle_EDepCrit:
+      return dunendgarmcPlotting[iEvent].particle_edepcrit;
     default:
-      return *GetPointerToKinematicParameter(KinPar, iSample, iEvent);
-  }
-}
-#pragma GCC diagnostic pop
-
-void SampleHandlerBeamNDGAr::SetupFDMC(int iSample) {
-  dunemc_base *duneobj = &(dunendgarmcSamples[iSample]);
-  FarDetectorCoreInfo *fdobj = &(MCSamples[iSample]);
-
-  for(int iEvent = 0 ;iEvent < fdobj->nEvents ; ++iEvent){
-    fdobj->rw_etru[iEvent] = &(duneobj->rw_etru[iEvent]);
-    // fdobj->mode[iEvent] = &(duneobj->mode[iEvent]);
-    fdobj->Target[iEvent] = &(duneobj->Target[iEvent]);
+      MACH3LOG_ERROR("Unrecognized Kinematic Vector: {}", static_cast<int>(KinVec));
+      throw MaCh3Exception(__FILE__, __LINE__);
   }
 }
 
-std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicParameterBinning(std::string KinematicParameterStr) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameterStr));
-  return ReturnKinematicParameterBinning(KinPar);
+std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(int KinematicVector, int iEvent) {
+  KinematicVecs KinVec = static_cast<KinematicVecs>(KinematicVector);
+  return ReturnKinematicVector(KinVec, iEvent);
 }
 
-#pragma GCC diagnostic push 
-#pragma GCC diagnostic ignored "-Wswitch-enum"
-std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicParameterBinning(KinematicTypes KinPar) {
-  std::vector<double> binningVector;
-  switch(KinPar){
-    case kTrueNeutrinoEnergy:
-      for(double ibins =0; ibins<10*10; ibins++){
-        double binval = ibins/10;
-        binningVector.push_back(binval);
-      }
-      break;
-    case kTrueXPos:
-      for(double ibins =0; ibins<259*2; ibins++){
-        binningVector.push_back(ibins-259);
-      }
-      break;
-    case kTrueYPos:
-      for(double ibins =0; ibins<277*2; ibins++){
-        binningVector.push_back(ibins-277-150);
-      }
-      break;
-    case kTrueZPos:
-      for(double ibins =0; ibins<277*2; ibins++){
-        binningVector.push_back(ibins-277+1486);
-      }
-      break;
-    case kTrueLepEnergy:
-      for(double ibins =0; ibins<10*10; ibins++){
-        binningVector.push_back(ibins/10);
-      } 
-      break;
-    case kTrueRad:
-      for(double ibins =0; ibins<300; ibins++){
-        binningVector.push_back(ibins);
-      }
-      break;
-    case kLepPT:
-    case kLepPZ:
-      for(double ibins =0; ibins<10*10; ibins++){
-        binningVector.push_back(ibins/10);
-      }
-      break;
-    case kTrueQ0:
-    case kTrueQ3:
-      for(double ibins =0; ibins<3*50+1; ibins++){
-        binningVector.push_back(ibins/50.);
-      }
-      break;
-    default:
-      for(double ibins =0; ibins<10*100; ibins++){
-        binningVector.push_back(ibins/100);
-      }
-      break;
-  }
-  return binningVector;
-}
-#pragma GCC diagnostic pop
-
-TH1* SampleHandlerBeamNDGAr::Get1DParticleVarHist(std::string ProjectionVar_Str, std::vector< KinematicCut > SelectionVec, int WeightStyle, TAxis* Axis) {
-  //DB Grab the associated enum with the argument string
-  int ProjectionVar_Int = ReturnKinematicParameterFromString(ProjectionVar_Str);
-
-  //DB Need to overwrite the Selection member variable so that IsEventSelected function operates correctly.
-  //   Consequently, store the selection cuts already saved in the sample, overwrite the Selection variable, then reset
-  std::vector< KinematicCut > tmp_Selection = Selection;
-  std::vector< KinematicCut > SelectionVecToApply;
-
-  //DB Add all the predefined selections to the selection vector which will be applied
-  for (size_t iSelec=0;iSelec<Selection.size();iSelec++) {
-    SelectionVecToApply.emplace_back(Selection[iSelec]);
-  }
-
-  //DB Add all requested cuts from the argument to the selection vector which will be applied
-  for (size_t iSelec=0;iSelec<SelectionVec.size();iSelec++) {
-    SelectionVecToApply.emplace_back(SelectionVec[iSelec]);
-  }
-
-  //DB Set the member variable to be the cuts to apply
-  Selection = SelectionVecToApply;
-
-  //DB Define the histogram which will be returned
-  TH1D* _h1DVar;
-  if (Axis) {
-    _h1DVar = new TH1D("","",Axis->GetNbins(),Axis->GetXbins()->GetArray());
-  } else {
-    std::vector<double> xBinEdges = ReturnKinematicParameterBinning(ProjectionVar_Str);
-    _h1DVar = new TH1D("", "", int(xBinEdges.size())-1, xBinEdges.data());
-  }
-
-  //Loop over all primary particles
-  for (int iSample=0;iSample<GetNMCSamples();iSample++) {
-    for (int iParticle=0;iParticle<nparticlesinsample[iSample];iParticle++) {
-      int event = static_cast<int>(ReturnKinematicParameter("Particle_Event", iSample, iParticle));
-      if (IsParticleSelected(iSample,event,iParticle)) {
-        double Weight = GetEventWeight(iSample,event);
-        if (WeightStyle==1) {
-          Weight = 1.;
-        }
-        double Var = ReturnKinematicParameter(ProjectionVar_Int,iSample,iParticle);
-        _h1DVar->Fill(Var,Weight);
-      }
-    }
-  }
-
-  //DB Reset the saved selection
-  Selection = tmp_Selection;
-
-  return _h1DVar;
+std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(std::string KinematicVector, int iEvent) {
+  KinematicVecs KinVec = static_cast<KinematicVecs>(ReturnKinematicVectorFromString(KinematicVector));
+  return ReturnKinematicVector(KinVec, iEvent);
 }
 
-TH2* SampleHandlerBeamNDGAr::Get2DParticleVarHist(std::string ProjectionVar_StrX, std::string ProjectionVar_StrY, std::vector< KinematicCut > SelectionVec, int WeightStyle, TAxis* AxisX, TAxis* AxisY) {
-  //DB Grab the associated enum with the argument string
-  int ProjectionVar_IntX = ReturnKinematicParameterFromString(ProjectionVar_StrX);
-  int ProjectionVar_IntY = ReturnKinematicParameterFromString(ProjectionVar_StrY);
-
-  //DB Need to overwrite the Selection member variable so that IsEventSelected function operates correctly.
-  //   Consequently, store the selection cuts already saved in the sample, overwrite the Selection variable, then reset
-  std::vector< KinematicCut > tmp_Selection = Selection;
-  std::vector< KinematicCut > SelectionVecToApply;
-
-  //DB Add all the predefined selections to the selection vector which will be applied
-  for (size_t iSelec=0;iSelec<Selection.size();iSelec++) {
-    SelectionVecToApply.emplace_back(Selection[iSelec]);
+void SampleHandlerBeamNDGAr::SetupFDMC() {
+  for(int iEvent = 0 ;iEvent < int(GetNEvents()) ; ++iEvent){
+    MCSamples[iEvent].rw_etru = &(dunendgarmcFitting[iEvent].rw_etru);
+    MCSamples[iEvent].mode = &(dunendgarmcFitting[iEvent].mode);
+    MCSamples[iEvent].Target = &(dunendgarmcFitting[iEvent].Target);    
+    MCSamples[iEvent].isNC = !dunendgarmcFitting[iEvent].rw_isCC;
+    MCSamples[iEvent].nupdg = &(dunendgarmcFitting[iEvent].nupdg);
+    MCSamples[iEvent].nupdgUnosc = &(dunendgarmcFitting[iEvent].nupdgUnosc);
   }
-
-  //DB Add all requested cuts from the argument to the selection vector which will be applied
-  for (size_t iSelec=0;iSelec<SelectionVec.size();iSelec++) {
-    SelectionVecToApply.emplace_back(SelectionVec[iSelec]);
-  }
-
-  //DB Set the member variable to be the cuts to apply
-  Selection = SelectionVecToApply;
-
-  //DB Define the histogram which will be returned
-  TH2D* _h2DVar;
-  if (AxisX && AxisY) {
-    _h2DVar = new TH2D("","",AxisX->GetNbins(),AxisX->GetXbins()->GetArray(),AxisY->GetNbins(),AxisY->GetXbins()->GetArray());
-  } else {
-    std::vector<double> xBinEdges = ReturnKinematicParameterBinning(ProjectionVar_StrX);
-    std::vector<double> yBinEdges = ReturnKinematicParameterBinning(ProjectionVar_StrY);
-    _h2DVar = new TH2D("", "", int(xBinEdges.size())-1, xBinEdges.data(), int(yBinEdges.size())-1, yBinEdges.data());
-  }
-
-  //JM Loop over all particles
-  for (int iSample=0;iSample<GetNMCSamples();iSample++) {
-    for (int iParticle=0;iParticle<nparticlesinsample[iSample];iParticle++) {
-      int event = static_cast<int>(ReturnKinematicParameter("Particle_Event", iSample, iParticle));
-      if (IsParticleSelected(iSample,event,iParticle)) {
-        double Weight = GetEventWeight(iSample,event);
-        if (WeightStyle==1) {
-          Weight = 1.;
-        }
-        double VarX = ReturnKinematicParameter(ProjectionVar_IntX,iSample,iParticle);
-        double VarY = ReturnKinematicParameter(ProjectionVar_IntY,iSample,iParticle);
-        _h2DVar->Fill(VarX,VarY,Weight);
-      }
-    }
-  }
-
-  //DB Reset the saved selection
-  Selection = tmp_Selection;
-
-  return _h2DVar;
-}
-
-bool SampleHandlerBeamNDGAr::IsParticleSelected(const int iSample, const int iEvent, const int iParticle) {
-  double Val;
-  for (unsigned int iSelection=0;iSelection < Selection.size() ;iSelection++) {
-    std::string SelecVarStr = ReturnStringFromKinematicParameter(Selection[iSelection].ParamToCutOnIt);
-    int SelectionVarElement;
-
-    if (SelecVarStr.find("Particle_") != std::string::npos) {SelectionVarElement = iParticle;}
-    else {SelectionVarElement = iEvent;}
-
-    Val = ReturnKinematicParameter(Selection[iSelection].ParamToCutOnIt, iSample, SelectionVarElement);
-    if ((Val<Selection[iSelection].LowerBound)||(Val>=Selection[iSelection].UpperBound)) {
-      return false;
-    }
-  }
-  return true;
 }

@@ -3,6 +3,7 @@ SampleTitle: "nueselec"
 SampleType: "Atm"
 MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
 SampleName: "ATM"
+BinningFile: "Configs/Samples/AtmosphericParameterBinning.yaml"
 
 Binning:
   XVarStr: "RecoCosineZ"
@@ -10,8 +11,9 @@ Binning:
   YVarStr: "RecoNeutrinoEnergy"
   YVarBins: [0, 0.11, 0.17, 0.26, 0.4, 0.63, 1.03, 1.71, 2.94, 5.48, 1e8]
 
-SampleBools:
+SampleOptions:
   IsELike: yes
+  ExposureScaling: 1.0
 
 InputFiles:
   mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"
@@ -20,7 +22,7 @@ InputFiles:
   splinesuffix: ""
 
 NuOsc:
-  NuOscConfigFile: "Configs/NuOsc/CUDAProb3.yaml"
+  NuOscConfigFile: "Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml"
   EqualBinningPerOscChannel: true
 
 SubSamples:

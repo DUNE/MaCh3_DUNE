@@ -6,6 +6,8 @@ POT: 1.3628319e+23
 MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
 SampleName: "FD_RHC_numu"
 
+BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
+
 SelectionCuts:
   - KinematicStr: "TrueXPos"
     Bounds: [-310.0, 310.0]
