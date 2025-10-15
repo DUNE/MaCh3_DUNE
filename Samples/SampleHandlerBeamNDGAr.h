@@ -53,7 +53,6 @@ protected:
   std::vector<dunemc_plotting> dunendgarmcPlotting;
 
   //NDGAr-specific functions
-
   double FindNHits(double pixel_spacing_cm, double centre_circle_y, double centre_circle_z, double rad_curvature, double theta_start, double theta_spanned, int charge);
   bool isCoordOnTrack(int charge, double ycoord, double zcoord, double centre_circle_y, double centre_circle_z, double theta_start, double theta_spanned);
   double CalcBeta(double p_mag, double& bg, double& gamma, double pdgmass);
@@ -64,7 +63,6 @@ protected:
   double CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers, const int crit_layers);
   bool CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, dunemc_plotting& plotting_vars, double pixel_spacing_cm);
   void EraseDescendants(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID);
-
   bool IsParticleSelected(const int iSample, const int iEvent, const int iParticle);
 
   double pot;
@@ -104,29 +102,31 @@ protected:
   std::vector<float> *_SimHitY=0;
   std::vector<float> *_SimHitZ=0;
 
-  //TPC dimensions
-  double TPCFidLength;
-  double TPCFidRadius;
+  // Fixed detector variables
+  double TPC_centre_x = -0.00012207;
+  double TPC_centre_y = -150.473;
+  double TPC_centre_z = 1486.;
+  double BeamDirection[3] = {0.,-0.101,0.995};
+  double X0 = 1193; //in cm From Federico's Kalman Filter Paper
+
+  // MC-dependent detector variables
   double TPCInstrumentedLength;
   double TPCInstrumentedRadius;
   double ECALInnerRadius;
   double ECALOuterRadius;
   double ECALEndCapStart;
   double ECALEndCapEnd;
-  double TPC_centre_x = -0.00012207;
-  double TPC_centre_y = -150.473;
-  double TPC_centre_z = 1486.;
-  double BeamDirection[3] = {0.,-0.101,0.995};
 
-  double X0 = 1193; //in cm From Federico's Kalman Filter Paper
-
-  //configurable sample cuts
+  // MC-independent configurable detector parameters
+  double TPCFidLength;
+  double TPCFidRadius;
   double B_field;
   double momentum_resolution_threshold;
   double pixel_spacing;
   double spatial_resolution;
   double adc_sampling_frequency;
   double drift_velocity;
+  double downsampling;
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},

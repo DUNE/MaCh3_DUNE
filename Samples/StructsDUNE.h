@@ -1,7 +1,7 @@
 #ifndef _StructsDUNE_h_
 #define _StructsDUNE_h_
 
-struct dunemc_base {
+struct dunemc_base { // Store variables used in fitting
 
   int nEvents; // how many MC events are there
   double osc_channel;
@@ -85,7 +85,7 @@ struct dunemc_base {
   double rw_trueccnumu;
 };
 
-struct dunemc_plotting {
+struct dunemc_plotting { // Store variables just used in plotting (cleared from memory before a fit)
 
   bool in_fdv;
   bool is_accepted;
@@ -102,17 +102,17 @@ struct dunemc_plotting {
   std::vector<double> particle_momentum = {};
   std::vector<double> particle_endmomentum = {};
   std::vector<double> particle_transversemomentum = {};
-  std::vector<bool> particle_isaccepted = {};
-  std::vector<bool> particle_iscurvatureresolved = {};
-  std::vector<bool> particle_isdecayed = {};
-  std::vector<bool> particle_isstoppedintpc = {};
-  std::vector<bool> particle_isstoppedinecal = {};
-  std::vector<bool> particle_isstoppedingap = {};
-  std::vector<bool> particle_isstoppedinbarrelgap = {};
-  std::vector<bool> particle_isstoppedinendgap = {};
-  std::vector<bool> particle_isstoppedinbarrel = {};
-  std::vector<bool> particle_isstoppedinendcap = {};
-  std::vector<bool> particle_isescaped = {};
+  std::vector<int> particle_isaccepted = {};
+  std::vector<int> particle_iscurvatureresolved = {};
+  std::vector<int> particle_isdecayed = {};
+  std::vector<int> particle_isstoppedintpc = {};
+  std::vector<int> particle_isstoppedinecal = {};
+  std::vector<int> particle_isstoppedingap = {};
+  std::vector<int> particle_isstoppedinbarrelgap = {};
+  std::vector<int> particle_isstoppedinendgap = {};
+  std::vector<int> particle_isstoppedinbarrel = {};
+  std::vector<int> particle_isstoppedinendcap = {};
+  std::vector<int> particle_isescaped = {};
   std::vector<double> particle_startx = {};
   std::vector<double> particle_startr2 = {};
   std::vector<double> particle_endr = {};
