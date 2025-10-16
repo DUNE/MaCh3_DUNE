@@ -570,7 +570,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
     std::unordered_map<int, std::vector<int>> mother_to_daughter_ID; // particle track ID -> vector of daughter IDs
     std::unordered_map<int, size_t> ID_to_index; // particle track ID -> index in anatree
-    std::unordered_map<int, std::vector<double>> ID_to_ECalDep; // particle track ID -> total energy deposited in ecal
+    std::unordered_map<int, std::vector<double>> ID_to_ECalDep; // particle track ID -> total energy deposited in each ecal layer
     size_t n_particles_in_event = _MCPTrkID->size();
     const int tot_ecal_layers = 42;
 
