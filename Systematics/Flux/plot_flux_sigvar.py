@@ -88,8 +88,8 @@ with uproot.open("flux_variations_FD_and_PRISM_2023.root") as inpfile:
         fig.text(0.2,0.89,"MaCh3 SigVar On Axis",horizontalalignment="left", size="large")
         fig.text(0.2,0.47,"MaCh3 SigVar On Axis Ratio",horizontalalignment="left", size="large")
 
-        fig.text(0.4,0.89,"MaCh3 SigVar 12 Off Axis",horizontalalignment="left", size="large")
-        fig.text(0.4,0.47,"MaCh3 SigVar 12 Off Axis Ratio",horizontalalignment="left", size="large")
+        fig.text(0.4,0.89,"MaCh3 SigVar 12 m Off Axis",horizontalalignment="left", size="large")
+        fig.text(0.4,0.47,"MaCh3 SigVar 12 m Off Axis Ratio",horizontalalignment="left", size="large")
 
         fig.text(0.65,0.89,"Histograms from inputs",horizontalalignment="left", size="large")
         fig.text(0.65,0.47,"Weights directly from Weight Interface",horizontalalignment="left", size="large")
