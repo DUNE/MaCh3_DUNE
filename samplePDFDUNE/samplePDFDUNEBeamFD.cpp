@@ -646,11 +646,12 @@ Double_t _Ehad_veto;
     duneobj->flux_syst_nu_config.push_back(
         flux_helper->GetNuConfig(duneobj->nupdgUnosc[i], true, isFHC, false));
 
-    float absoapos_m = float(_det_x + _vtx_x/100);
+    // xdir in detsim and flux syst inputs are opposite.
+    double syst_xpos_m = -(_det_x + _vtx_x)/100.0;
     duneobj->flux_focussing_syst_bin.push_back(flux_helper->GetFocussingBin(
-        duneobj->flux_syst_nu_config.back(), _ev, absoapos_m));
+        duneobj->flux_syst_nu_config.back(), _ev, syst_xpos_m));
     duneobj->flux_hadprod_syst_bin.push_back(flux_helper->GetHadProdBin(
-        duneobj->flux_syst_nu_config.back(), _ev, absoapos_m));
+        duneobj->flux_syst_nu_config.back(), _ev, syst_xpos_m));
   }
 
   std::cout << "Condition was satisfied " << conditionCounter << " times." << std::endl;
@@ -1121,26 +1122,25 @@ void samplePDFDUNEBeamFD::RegisterFunctionalParameters() {
   for (int i = 0; i < int(flux_helper->GetNFocussingParams()); i++) {
     RegisterIndividualFuncPar(
         flux_helper->GetFocussingParamName(i), i,
-        [this, flux_helper, i](const double *par, std::size_t iSample, std::size_t iEvent) {
-          double w =
-              flux_helper->GetFluxFocussingWeight(
-                  i, *par,
-                  dunemcSamples[iSample].flux_syst_nu_config[iEvent],
-                  dunemcSamples[iSample].flux_focussing_syst_bin[iEvent]);
-              dunemcSamples[iSample].flux_w[iEvent] *= w;
+        [this, flux_helper, i](const double *par, std::size_t iSample,
+                               std::size_t iEvent) {
+          double w = flux_helper->GetFluxFocussingWeight(
+              i, *par, dunemcSamples[iSample].flux_syst_nu_config[iEvent],
+              dunemcSamples[iSample].flux_focussing_syst_bin[iEvent]);
+          dunemcSamples[iSample].flux_w[iEvent] *= w;
         });
   }
 
   for (int i = 0; i < int(flux_helper->GetNHadProdPCAComponents()); i++) {
     RegisterIndividualFuncPar(
-        "HadronProduction_pca_" + std::to_string(i), int(flux_helper->GetNFocussingParams())+i,
-        [this, flux_helper, i](const double *par, std::size_t iSample, std::size_t iEvent) {
-          double w =
-              flux_helper->GetFluxHadProdWeight(
-                  i, *par,
-                  dunemcSamples[iSample].flux_syst_nu_config[iEvent],
-                  dunemcSamples[iSample].flux_hadprod_syst_bin[iEvent]);
-              dunemcSamples[iSample].flux_w[iEvent] *= w;
+        "HadronProduction_pca_" + std::to_string(i),
+        int(flux_helper->GetNFocussingParams()) + i,
+        [this, flux_helper, i](const double *par, std::size_t iSample,
+                               std::size_t iEvent) {
+          double w = flux_helper->GetFluxHadProdWeight(
+              i, *par, dunemcSamples[iSample].flux_syst_nu_config[iEvent],
+              dunemcSamples[iSample].flux_hadprod_syst_bin[iEvent]);
+          dunemcSamples[iSample].flux_w[iEvent] *= w;
         });
   }
 }

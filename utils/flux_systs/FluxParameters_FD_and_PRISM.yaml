@@ -6,8 +6,8 @@ Systematics:
       FancyName: TargetUpstreamDegredation
       ParameterName: TargetUpstreamDegredation
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - 0
+    - 1.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -15,7 +15,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -24,8 +24,8 @@ Systematics:
       FancyName: TargetTiltTransverseY
       ParameterName: TargetTiltTransverseY
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -33,7 +33,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -42,8 +42,8 @@ Systematics:
       FancyName: TargetTiltTransverseX
       ParameterName: TargetTiltTransverseX
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -51,7 +51,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -60,8 +60,8 @@ Systematics:
       FancyName: TargetLength
       ParameterName: TargetLength
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -69,7 +69,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -78,8 +78,8 @@ Systematics:
       FancyName: TargetDisplaceTransverseY
       ParameterName: TargetDisplaceTransverseY
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -87,7 +87,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -96,8 +96,8 @@ Systematics:
       FancyName: TargetDisplaceTransverseX
       ParameterName: TargetDisplaceTransverseX
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -105,7 +105,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -114,8 +114,8 @@ Systematics:
       FancyName: TargetDensity
       ParameterName: TargetDensity
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -123,7 +123,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -132,8 +132,8 @@ Systematics:
       FancyName: ProtonBeamTransverseY
       ParameterName: ProtonBeamTransverseY
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -141,7 +141,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -150,8 +150,8 @@ Systematics:
       FancyName: ProtonBeamTransverseX
       ParameterName: ProtonBeamTransverseX
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -159,7 +159,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -168,8 +168,8 @@ Systematics:
       FancyName: ProtonBeamRadius
       ParameterName: ProtonBeamRadius
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -177,7 +177,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -186,8 +186,8 @@ Systematics:
       FancyName: ProtonBeamAngleY
       ParameterName: ProtonBeamAngleY
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -195,7 +195,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -204,8 +204,8 @@ Systematics:
       FancyName: ProtonBeamAngleX
       ParameterName: ProtonBeamAngleX
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -213,7 +213,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -222,8 +222,8 @@ Systematics:
       FancyName: HornWaterLayerThickness
       ParameterName: HornWaterLayerThickness
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -231,7 +231,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -240,8 +240,8 @@ Systematics:
       FancyName: HornCurrent
       ParameterName: HornCurrent
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -249,7 +249,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -258,8 +258,8 @@ Systematics:
       FancyName: HornCTiltTransverseY
       ParameterName: HornCTiltTransverseY
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -267,7 +267,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -276,8 +276,8 @@ Systematics:
       FancyName: HornCTiltTransverseX
       ParameterName: HornCTiltTransverseX
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -285,7 +285,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -294,8 +294,8 @@ Systematics:
       FancyName: HornCEllipticityXInducedBField
       ParameterName: HornCEllipticityXInducedBField
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -303,7 +303,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -312,8 +312,8 @@ Systematics:
       FancyName: HornCEccentricityXInducedBField
       ParameterName: HornCEccentricityXInducedBField
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -321,7 +321,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -330,8 +330,8 @@ Systematics:
       FancyName: HornCDisplaceLongitudinalZ
       ParameterName: HornCDisplaceLongitudinalZ
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -339,7 +339,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -348,8 +348,8 @@ Systematics:
       FancyName: HornBTiltTransverseY
       ParameterName: HornBTiltTransverseY
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -357,7 +357,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -366,8 +366,8 @@ Systematics:
       FancyName: HornBTiltTransverseX
       ParameterName: HornBTiltTransverseX
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -375,7 +375,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -384,8 +384,8 @@ Systematics:
       FancyName: HornBEllipticityXInducedBField
       ParameterName: HornBEllipticityXInducedBField
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -393,7 +393,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -402,8 +402,8 @@ Systematics:
       FancyName: HornBDisplaceLongitudinalZ
       ParameterName: HornBDisplaceLongitudinalZ
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -411,7 +411,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -420,8 +420,8 @@ Systematics:
       FancyName: HornATiltTransverseY
       ParameterName: HornATiltTransverseY
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -429,7 +429,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -438,8 +438,8 @@ Systematics:
       FancyName: HornATiltTransverseX
       ParameterName: HornATiltTransverseX
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -447,7 +447,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -456,8 +456,8 @@ Systematics:
       FancyName: HornAEllipticityXInducedBField
       ParameterName: HornAEllipticityXInducedBField
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -465,7 +465,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -474,8 +474,8 @@ Systematics:
       FancyName: HornAEccentricityXInducedBField
       ParameterName: HornAEccentricityXInducedBField
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -483,7 +483,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -492,8 +492,8 @@ Systematics:
       FancyName: HornADisplaceLongitudinalZ
       ParameterName: HornADisplaceLongitudinalZ
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -501,7 +501,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -510,8 +510,8 @@ Systematics:
       FancyName: DecayPipeTiltY
       ParameterName: DecayPipeTiltY
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -519,7 +519,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -528,8 +528,8 @@ Systematics:
       FancyName: DecayPipeTiltX
       ParameterName: DecayPipeTiltX
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -537,7 +537,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -546,8 +546,8 @@ Systematics:
       FancyName: DecayPipeRadius
       ParameterName: DecayPipeRadius
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -555,7 +555,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -564,8 +564,8 @@ Systematics:
       FancyName: DecayPipeLength
       ParameterName: DecayPipeLength
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -573,7 +573,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -582,8 +582,8 @@ Systematics:
       FancyName: DecayPipeGeoBField
       ParameterName: DecayPipeGeoBField
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -591,7 +591,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -600,8 +600,8 @@ Systematics:
       FancyName: DecayPipeEllipticalCrossSectionYB
       ParameterName: DecayPipeEllipticalCrossSectionYB
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -609,7 +609,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -618,8 +618,8 @@ Systematics:
       FancyName: DecayPipeEllipticalCrossSectionXA
       ParameterName: DecayPipeEllipticalCrossSectionXA
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -627,7 +627,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -636,8 +636,8 @@ Systematics:
       FancyName: DecayPipeDisplaceTransverseY
       ParameterName: DecayPipeDisplaceTransverseY
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -645,7 +645,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -654,8 +654,8 @@ Systematics:
       FancyName: DecayPipeDisplaceTransverseX
       ParameterName: DecayPipeDisplaceTransverseX
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -663,7 +663,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -672,8 +672,8 @@ Systematics:
       FancyName: DecayPipe3SegmentBowingY
       ParameterName: DecayPipe3SegmentBowingY
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -681,7 +681,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -690,8 +690,8 @@ Systematics:
       FancyName: DecayPipe3SegmentBowingX
       ParameterName: DecayPipe3SegmentBowingX
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -699,7 +699,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -708,8 +708,8 @@ Systematics:
       FancyName: HornCDisplaceTransverseY
       ParameterName: HornCDisplaceTransverseY
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -717,7 +717,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -726,8 +726,8 @@ Systematics:
       FancyName: HornBDisplaceTransverseY
       ParameterName: HornBDisplaceTransverseY
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -735,7 +735,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -744,8 +744,8 @@ Systematics:
       FancyName: HornADisplaceTransverseY
       ParameterName: HornADisplaceTransverseY
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -753,7 +753,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -762,8 +762,8 @@ Systematics:
       FancyName: HornCDisplaceTransverseX
       ParameterName: HornCDisplaceTransverseX
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -771,7 +771,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -780,8 +780,8 @@ Systematics:
       FancyName: HornBDisplaceTransverseX
       ParameterName: HornBDisplaceTransverseX
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -789,7 +789,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -798,8 +798,8 @@ Systematics:
       FancyName: HornADisplaceTransverseX
       ParameterName: HornADisplaceTransverseX
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -807,7 +807,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -816,8 +816,8 @@ Systematics:
       FancyName: HadronProduction_pca_19
       ParameterName: HadronProduction_pca_19
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -825,7 +825,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -834,8 +834,8 @@ Systematics:
       FancyName: HadronProduction_pca_18
       ParameterName: HadronProduction_pca_18
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -843,7 +843,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -852,8 +852,8 @@ Systematics:
       FancyName: HadronProduction_pca_17
       ParameterName: HadronProduction_pca_17
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -861,7 +861,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -870,8 +870,8 @@ Systematics:
       FancyName: HadronProduction_pca_16
       ParameterName: HadronProduction_pca_16
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -879,7 +879,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -888,8 +888,8 @@ Systematics:
       FancyName: HadronProduction_pca_15
       ParameterName: HadronProduction_pca_15
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -897,7 +897,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -906,8 +906,8 @@ Systematics:
       FancyName: HadronProduction_pca_14
       ParameterName: HadronProduction_pca_14
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -915,7 +915,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -924,8 +924,8 @@ Systematics:
       FancyName: HadronProduction_pca_13
       ParameterName: HadronProduction_pca_13
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -933,7 +933,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -942,8 +942,8 @@ Systematics:
       FancyName: HadronProduction_pca_12
       ParameterName: HadronProduction_pca_12
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -951,7 +951,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -960,8 +960,8 @@ Systematics:
       FancyName: HadronProduction_pca_11
       ParameterName: HadronProduction_pca_11
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -969,7 +969,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -978,8 +978,8 @@ Systematics:
       FancyName: HadronProduction_pca_10
       ParameterName: HadronProduction_pca_10
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -987,7 +987,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -996,8 +996,8 @@ Systematics:
       FancyName: HadronProduction_pca_9
       ParameterName: HadronProduction_pca_9
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -1005,7 +1005,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -1014,8 +1014,8 @@ Systematics:
       FancyName: HadronProduction_pca_8
       ParameterName: HadronProduction_pca_8
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -1023,7 +1023,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -1032,8 +1032,8 @@ Systematics:
       FancyName: HadronProduction_pca_7
       ParameterName: HadronProduction_pca_7
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -1041,7 +1041,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -1050,8 +1050,8 @@ Systematics:
       FancyName: HadronProduction_pca_6
       ParameterName: HadronProduction_pca_6
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -1059,7 +1059,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -1068,8 +1068,8 @@ Systematics:
       FancyName: HadronProduction_pca_5
       ParameterName: HadronProduction_pca_5
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -1077,7 +1077,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -1086,8 +1086,8 @@ Systematics:
       FancyName: HadronProduction_pca_4
       ParameterName: HadronProduction_pca_4
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -1095,7 +1095,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -1104,8 +1104,8 @@ Systematics:
       FancyName: HadronProduction_pca_3
       ParameterName: HadronProduction_pca_3
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -1113,7 +1113,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -1122,8 +1122,8 @@ Systematics:
       FancyName: HadronProduction_pca_2
       ParameterName: HadronProduction_pca_2
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -1131,7 +1131,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -1140,8 +1140,8 @@ Systematics:
       FancyName: HadronProduction_pca_1
       ParameterName: HadronProduction_pca_1
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -1149,7 +1149,7 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 - Systematic:
     Error: 1.0
@@ -1158,8 +1158,8 @@ Systematics:
       FancyName: HadronProduction_pca_0
       ParameterName: HadronProduction_pca_0
     ParameterBounds:
-    - -4.0
-    - 4.0
+    - -3.0
+    - 3.0
     ParameterGroup: Flux
     ParameterValues:
       Generated: 0
@@ -1167,6 +1167,6 @@ Systematics:
     SampleNames:
     - '*'
     StepScale:
-      MCMC: 0.01
+      MCMC: 1
     Type: Functional
 

@@ -38,11 +38,15 @@ for pgroups in dfp.GetListOfKeys():
     Systematic["Error"] = 1.0
     Systematic["FlatPrior"] = False
     Systematic["Names"] = { "FancyName": p.GetName(), "ParameterName": p.GetName() }
-    Systematic["ParameterBounds"] = [-4.0, 4.0]
+    Systematic["ParameterBounds"] = [-3.0, 3.0]
     Systematic["ParameterGroup"] = "Flux"
     Systematic["ParameterValues"] = { "Generated": 0, "PreFitValue": 0 }
-    Systematic["StepScale"] = { "MCMC": 0.01 }
+    Systematic["StepScale"] = { "MCMC": 1 }
     Systematic["Type"] = "Functional"
+
+    if p.GetName() == "TargetUpstreamDegredation":
+      Systematic["ParameterBounds"] = [0, 1.0]
+
     Systematics.append({"Systematic": Systematic})
 
 print(yaml.dump({"Systematics": Systematics}))

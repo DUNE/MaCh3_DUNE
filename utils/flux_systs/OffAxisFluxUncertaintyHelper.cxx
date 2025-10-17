@@ -237,9 +237,9 @@ void OffAxisFluxUncertaintyHelper::Initialize(std::string const &filename,
 
     int param_id = 0;
 
-    for (TObject *key : *d->GetListOfKeys()) {
+    for (size_t i = 0; i < 20; ++i) {
 
-      std::string syst(key->GetName());
+      std::string syst = "HadronProduction_pca_" + std::to_string(param_id);
 
       if (verbose) {
         std::cout << "  Found parameter directory: " << input_dir << "/" << syst
