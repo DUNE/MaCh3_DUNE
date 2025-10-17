@@ -257,6 +257,7 @@ install(TARGETS MaCh3DUNECompilerOptions
   LIBRARY DESTINATION lib/)
 
 add_subdirectory(splines)
+add_subdirectory(utils/flux_systs)
 add_subdirectory(samplePDFDUNE)
 add_subdirectory(Apps)
 

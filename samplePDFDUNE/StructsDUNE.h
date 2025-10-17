@@ -118,6 +118,9 @@ struct dunemc_base {
   bool* muon_tracker;
   float* Ehad_veto;
 
+  std::vector<int> flux_syst_nu_config;
+  std::vector<int> flux_focussing_syst_bin;
+  std::vector<int> flux_hadprod_syst_bin;
 
   //Particle-level kinematic parameters (JM for NDGAr)
   std::vector<double> *particle_ecaldepositfraction;
