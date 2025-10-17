@@ -60,20 +60,35 @@ struct dunemc_base { // Store variables used in fitting
   double mode;
   //int isbound;
 
+  double rw_truecz;
+
+  /*
+  int nproton; ///< number of (post-FSI) primary protons
+  int nneutron; ///< number of (post-FSI) primary neutrons
+  int npip; ///< number of (post-FSI) primary pi+
+  int npim; ///< number of (post-FSI) primary pi-
+  int npi0; ///< number of (post-FSI) primary pi0
+  int ntruemuon; //number of true muons
+  int ntruemuonprim; //number of true primary muons
+  int nrecomuon; //number of reconstructed muons
+  double nmuonsratio; //number of reco muons divided by number of true muons
+  */
+
   double rw_lep_pT;  //transverse lepton momentum
   double rw_lep_pX;
   double rw_lep_pY;
   double rw_lep_pZ; //parallel lepton momentum
-  double rw_lep_p;
-  double rw_lep_phi;
-  double rw_lep_theta;
-  double rw_lep_bangle;
+  double rw_rad;
+
+  /*
   double rw_reco_vtx_x;
   double rw_reco_vtx_y;
   double rw_reco_vtx_z;
   double rw_reco_rad;
-  double rw_rad;
-  double rw_truecz;
+  
+  double rw_elep_reco;
+  double rw_elep_true;
+*/
 
   double rw_erec_had_sqrt;
   double rw_erec_lep_sqrt;
@@ -90,6 +105,10 @@ struct dunemc_plotting { // Store variables just used in plotting (cleared from 
   bool in_fdv;
   bool is_accepted;
   double geometric_correction;
+  double rw_lep_p;
+  double rw_lep_phi;
+  double rw_lep_theta;
+  double rw_lep_bangle;
 
   std::vector<int> particle_event = {};
   std::vector<int> particle_trkid = {};

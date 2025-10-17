@@ -709,10 +709,10 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     double lep_perpangle = acos(lep_pPerp/lep_momentum)*180/M_PI; //Angle to axis perpendicular to beam and B
     double lep_phi = atan2(lep_pPerp, lep_pB)*180/M_PI;
 
-    dunendgarmcFitting[i_event].rw_lep_theta = lep_beamangle;
-    dunendgarmcFitting[i_event].rw_lep_phi = lep_phi;
-    dunendgarmcFitting[i_event].rw_lep_bangle = lep_bangle;
-    dunendgarmcFitting[i_event].rw_lep_p = lep_momentum;
+    dunendgarmcPlotting[i_event].rw_lep_theta = lep_beamangle;
+    dunendgarmcPlotting[i_event].rw_lep_phi = lep_phi;
+    dunendgarmcPlotting[i_event].rw_lep_bangle = lep_bangle;
+    dunendgarmcPlotting[i_event].rw_lep_p = lep_momentum;
 
     // Perform 'geometric correction' if do_geometric_correction set to true
     dunendgarmcPlotting[i_event].geometric_correction = 1.;
@@ -767,13 +767,13 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
     case kLepPZ:
       return &dunendgarmcFitting[iEvent].rw_lep_pZ;
     case kLepTheta:
-      return &dunendgarmcFitting[iEvent].rw_lep_theta;
+      return &dunendgarmcPlotting[iEvent].rw_lep_theta;
     case kLepPhi:
-      return &dunendgarmcFitting[iEvent].rw_lep_phi;
+      return &dunendgarmcPlotting[iEvent].rw_lep_phi;
     case kLepBAngle:
-      return &dunendgarmcFitting[iEvent].rw_lep_bangle;
+      return &dunendgarmcPlotting[iEvent].rw_lep_bangle;
     case kLepP:
-      return &dunendgarmcFitting[iEvent].rw_lep_p;
+      return &dunendgarmcPlotting[iEvent].rw_lep_p;
     case kTrueQ0:
       return &dunendgarmcFitting[iEvent].rw_Q0;
     case kTrueQ3:
