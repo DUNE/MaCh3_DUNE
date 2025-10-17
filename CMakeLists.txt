@@ -268,6 +268,7 @@ install(TARGETS MaCh3DUNECompilerOptions
   LIBRARY DESTINATION lib/)
 
 add_subdirectory(Splines)
+add_subdirectory(Systematics)
 add_subdirectory(Samples)
 add_subdirectory(Apps)
 
