@@ -28,7 +28,7 @@ DetectorVariables:
   ECALEndCapStart: 329.25
   ECALEndCapEnd: 374.4
   downsampling: 1.
-  
+
 InputFiles:
   mtupleprefix: "Inputs/DUNE_NDGAr_AnaTrees/NDGAr_FHC_ger_"
   mtuplesuffix: "_numuselec_geant.root"

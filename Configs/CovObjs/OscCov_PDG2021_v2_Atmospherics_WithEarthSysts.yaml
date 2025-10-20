@@ -154,7 +154,7 @@ Systematics:
     Names:
       FancyName: r_1
       ParameterName: r_1
-    DetID: ["FD","ATM"]
+    DetID: ["FD", "ATM"]
     Error: 61.075
     FlatPrior: false
     ParameterBounds: [0, 9999]
@@ -180,7 +180,7 @@ Systematics:
     Names:
       FancyName: r_2
       ParameterName: r_2
-    DetID: ["FD","ATM"]
+    DetID: ["FD", "ATM"]
     Error: 112.925
     FlatPrior: false
     ParameterBounds: [0, 9999]
@@ -206,7 +206,7 @@ Systematics:
     Names:
       FancyName: r_3
       ParameterName: r_3
-    DetID: ["FD","ATM"]
+    DetID: ["FD", "ATM"]
     Error: 111.050
     FlatPrior: false
     ParameterBounds: [0, 9999]
@@ -232,7 +232,7 @@ Systematics:
     Names:
       FancyName: r_4
       ParameterName: r_4
-    DetID: ["FD","ATM"]
+    DetID: ["FD", "ATM"]
     Error: 3.000
     FlatPrior: false
     ParameterBounds: [0, 9999]
@@ -258,7 +258,7 @@ Systematics:
     Names:
       FancyName: w_1
       ParameterName: w_1
-    DetID: ["FD","ATM"]
+    DetID: ["FD", "ATM"]
     Error: 0.100
     FlatPrior: false
     ParameterBounds: [0, 999]
@@ -284,7 +284,7 @@ Systematics:
     Names:
       FancyName: w_2
       ParameterName: w_2
-    DetID: ["FD","ATM"]
+    DetID: ["FD", "ATM"]
     Error: 0.100
     FlatPrior: false
     ParameterBounds: [0, 999]
@@ -310,7 +310,7 @@ Systematics:
     Names:
       FancyName: w_3
       ParameterName: w_3
-    DetID: ["FD","ATM"]
+    DetID: ["FD", "ATM"]
     Error: 0.100
     FlatPrior: false
     ParameterBounds: [0, 999]
@@ -336,7 +336,7 @@ Systematics:
     Names:
       FancyName: w_4
       ParameterName: w_4
-    DetID: ["FD","ATM"]
+    DetID: ["FD", "ATM"]
     Error: 0.100
     FlatPrior: false
     ParameterBounds: [0, 999]
