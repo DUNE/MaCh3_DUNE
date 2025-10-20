@@ -321,7 +321,7 @@ GeneralKinematicCuts:
       "VarStrings": ["Particle_BAngle", "Particle_Momentum"],
       "VarBins": [[90, 0., 180.], [200, 0., 6.]],
       "KinematicCuts":
-        [{ "Range": [12.5, 13.5], "Name": "PDG", "VarString": "Particle_PDG" }],
+        [{"Range": [12.5, 13.5], "Name": "PDG", "VarString": "Particle_PDG"}],
     },
     {
       "Name": "Accepted_Particle_BAngle_Momentum_Mu-",
@@ -329,7 +329,7 @@ GeneralKinematicCuts:
       "VarBins": [[90, 0., 180.], [200, 0., 6.]],
       "KinematicCuts":
         [
-          { "Range": [12.5, 13.5], "Name": "PDG", "VarString": "Particle_PDG" },
+          {"Range": [12.5, 13.5], "Name": "PDG", "VarString": "Particle_PDG"},
           {
             "Range": [1., 2.],
             "Name": "IsParticleAccepted",
@@ -342,7 +342,7 @@ GeneralKinematicCuts:
       "VarStrings": ["Particle_BAngle", "Particle_Momentum"],
       "VarBins": [[90, 0., 180.], [200, 0., 6.]],
       "KinematicCuts":
-        [{ "Range": [10.5, 11.5], "Name": "PDG", "VarString": "Particle_PDG" }],
+        [{"Range": [10.5, 11.5], "Name": "PDG", "VarString": "Particle_PDG"}],
     },
     {
       "Name": "Accepted_Particle_BAngle_Momentum_e-",
@@ -350,7 +350,7 @@ GeneralKinematicCuts:
       "VarBins": [[90, 0., 180.], [200, 0., 6.]],
       "KinematicCuts":
         [
-          { "Range": [10.5, 11.5], "Name": "PDG", "VarString": "Particle_PDG" },
+          {"Range": [10.5, 11.5], "Name": "PDG", "VarString": "Particle_PDG"},
           {
             "Range": [1., 2.],
             "Name": "IsParticleAccepted",
@@ -500,7 +500,7 @@ GeneralKinematicCuts:
             "Name": "BAngle",
             "VarString": "Particle_BAngle",
           },
-          { "Range": [12.5, 13.5], "Name": "PDG", "VarString": "Particle_PDG" },
+          {"Range": [12.5, 13.5], "Name": "PDG", "VarString": "Particle_PDG"},
         ],
     },
     {
@@ -514,7 +514,7 @@ GeneralKinematicCuts:
             "Name": "BAngle",
             "VarString": "Particle_BAngle",
           },
-          { "Range": [12.5, 13.5], "Name": "PDG", "VarString": "Particle_PDG" },
+          {"Range": [12.5, 13.5], "Name": "PDG", "VarString": "Particle_PDG"},
           {
             "Name": "IsParticleAccepted",
             "Range": [1., 2.],
@@ -836,7 +836,7 @@ GeneralKinematicCuts:
             "Name": "Escaped",
             "Range": [1., 2.],
           },
-          { "VarString": "Particle_PDG", "Name": "PDG", "Range": [12.5, 13.5] },
+          {"VarString": "Particle_PDG", "Name": "PDG", "Range": [12.5, 13.5]},
         ],
     },
     {
@@ -904,7 +904,7 @@ GeneralKinematicCuts:
             "Name": "ECal",
             "Range": [1., 2.],
           },
-          { "VarString": "Particle_PDG", "Name": "PDG", "Range": [12.5, 13.5] },
+          {"VarString": "Particle_PDG", "Name": "PDG", "Range": [12.5, 13.5]},
         ],
     },
     {
@@ -964,7 +964,7 @@ GeneralKinematicCuts:
             "Name": "Escaped",
             "Range": [1., 2.],
           },
-          { "VarString": "Particle_PDG", "Name": "PDG", "Range": [12.5, 13.5] },
+          {"VarString": "Particle_PDG", "Name": "PDG", "Range": [12.5, 13.5]},
           {
             "VarString": "Particle_IsDecayed",
             "Name": "Decayed",
