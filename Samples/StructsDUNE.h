@@ -1,12 +1,10 @@
 #ifndef _StructsDUNE_h_
 #define _StructsDUNE_h_
 
-struct dunemc_base {
+struct dunemc_base { // Store variables used in fitting
 
-  /*
   int nEvents; // how many MC events are there
   double osc_channel;
-  */
   double pot_s;
   double norm_s;
   
@@ -47,12 +45,7 @@ struct dunemc_base {
   int rw_reco_numu;
   double rw_berpaacvwgt;
   int rw_isCC;
-  /*
-  int rw_nuPDGunosc;
-  int rw_nuPDG;
-  int rw_run;
-  bool    *rw_isFHC;
-  */
+
   double rw_vtx_x;
   double rw_vtx_y;
   double rw_vtx_z;
@@ -75,26 +68,28 @@ struct dunemc_base {
   int npip; ///< number of (post-FSI) primary pi+
   int npim; ///< number of (post-FSI) primary pi-
   int npi0; ///< number of (post-FSI) primary pi0
-
   int ntruemuon; //number of true muons
   int ntruemuonprim; //number of true primary muons
   int nrecomuon; //number of reconstructed muons
   double nmuonsratio; //number of reco muons divided by number of true muons
+  */
 
   double rw_lep_pT;  //transverse lepton momentum
   double rw_lep_pX;
   double rw_lep_pY;
   double rw_lep_pZ; //parallel lepton momentum
+  double rw_rad;
+
+  /*
   double rw_reco_vtx_x;
   double rw_reco_vtx_y;
   double rw_reco_vtx_z;
   double rw_reco_rad;
-  double rw_rad;
-
+  
   double rw_elep_reco;
   double rw_elep_true;
-
 */
+
   double rw_erec_had_sqrt;
   double rw_erec_lep_sqrt;
   double rw_eRecoPi0_sqrt;
@@ -103,39 +98,54 @@ struct dunemc_base {
   double rw_sum_ehad_sqrt;
   double rw_trueccnue;
   double rw_trueccnumu;
-  /*
+};
 
-  int nrecoparticles;
-  bool *in_fdv;
-  bool *is_accepted;
-  bool *is_good_caf_event;
+struct dunemc_plotting { // Store variables just used in plotting (cleared from memory before a fit)
 
-  //Particle-level kinematic parameters (JM for NDGAr)
-  double *particle_ecaldepositfraction;
-  int *particle_event;
-  int *particle_pdg;
-  double *particle_energy;
-  double *particle_theta;
-  double *particle_bangle;
-  double *particle_dedx;
-  double *particle_momentum;
-  double *particle_transversemomentum;
-  bool *particle_isaccepted;
-  bool *particle_isstoppedintpc;
-  bool *particle_isstoppedinecal;
-  bool *particle_isstoppedingap;
-  bool *particle_isstoppedinbarrelgap;
-  bool *particle_isstoppedinendgap;
-  bool *particle_isstoppedinbarrel;
-  bool *particle_isstoppedinendcap;
-  double *particle_startx;
-  double *particle_startr2;
-  double *particle_nhits;
-  double *particle_nturns;
-  double *particle_momresms;
-  double *particle_momrestransfrac;
-  double *particle_momrestrans;
-  */
+  bool in_fdv;
+  bool is_accepted;
+  double geometric_correction;
+  double rw_lep_p;
+  double rw_lep_phi;
+  double rw_lep_theta;
+  double rw_lep_bangle;
+
+  std::vector<int> particle_event = {};
+  std::vector<int> particle_trkid = {};
+  std::vector<int> particle_pdg = {};
+  std::vector<double> particle_energy = {};
+  std::vector<double> particle_theta = {};
+  std::vector<double> particle_bangle = {};
+  std::vector<double> particle_beamangle = {};
+  std::vector<double> particle_dedx = {};
+  std::vector<double> particle_momentum = {};
+  std::vector<double> particle_endmomentum = {};
+  std::vector<double> particle_transversemomentum = {};
+  std::vector<int> particle_isaccepted = {};
+  std::vector<int> particle_iscurvatureresolved = {};
+  std::vector<int> particle_isdecayed = {};
+  std::vector<int> particle_isstoppedintpc = {};
+  std::vector<int> particle_isstoppedinecal = {};
+  std::vector<int> particle_isstoppedingap = {};
+  std::vector<int> particle_isstoppedinbarrelgap = {};
+  std::vector<int> particle_isstoppedinendgap = {};
+  std::vector<int> particle_isstoppedinbarrel = {};
+  std::vector<int> particle_isstoppedinendcap = {};
+  std::vector<int> particle_isescaped = {};
+  std::vector<double> particle_startx = {};
+  std::vector<double> particle_startr2 = {};
+  std::vector<double> particle_endr = {};
+  std::vector<double> particle_enddepth = {};
+  std::vector<double> particle_endx = {};
+  std::vector<double> particle_endy = {};
+  std::vector<double> particle_endz = {};
+  std::vector<double> particle_nturns = {};
+  std::vector<double> particle_nhits = {};
+  std::vector<double> particle_tracklengthyz = {};
+  std::vector<double> particle_momresms = {};
+  std::vector<double> particle_momresyz = {};
+  std::vector<double> particle_momresx = {};
+  std::vector<double> particle_edepcrit = {};
 };
 
 #endif

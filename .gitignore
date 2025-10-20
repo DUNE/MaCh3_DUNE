@@ -11,5 +11,6 @@ jupyter_env
 Doc
 Inputs/Atmospherics/CAFs
 nohup.out
-output*.txt
+*.txt
+*.log
 .cache/
