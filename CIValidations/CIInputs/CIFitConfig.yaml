@@ -7,11 +7,10 @@ General:
   OscillatorConfigName: "Configs/OscillatorObj.yaml"
 
   Systematics:
-    XsecCovFile: ["CIValidations/CIInputs/CIXsecConfig.yaml"]
+    XsecCovFile: ["CIValidations/CIInputs/CIXsecConfig.yaml", "Configs/CovObjs/OscCov_PDG2021_v2.yaml"]
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.05
     XsecAtGen: false
-    OscCovFile: ["Configs/CovObjs/OscCov_PDG2021_v2.yaml"]
     OscCovName: "osc_cov"
     OscFix: ["baseline", "density"]
 

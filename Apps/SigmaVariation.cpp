@@ -32,10 +32,9 @@ int main(int argc, char * argv[]) {
   //Create samplePDFFD objects
   
   ParameterHandlerGeneric* xsec = nullptr;
-  ParameterHandlerOsc* osc = nullptr;
 
   std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec, osc);
+  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
 
   //###############################################################################################################################
   //Perform reweight and print total integral
@@ -43,7 +42,7 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("=======================================================");
   for(SampleHandlerFD* Sample: DUNEPdfs){
     Sample->Reweight();
-    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetTitle(), Sample->Get1DHist()->Integral());
+    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetTitle(), Sample->GetMCHist(Sample->GetNDim())->Integral());
   }
   
   //###############################################################################################################################
@@ -53,7 +52,6 @@ int main(int argc, char * argv[]) {
   
   std::vector<ParameterHandlerBase*> CovObjs;
   CovObjs.emplace_back(xsec);
-  CovObjs.emplace_back(osc);
 
   MACH3LOG_INFO("=======================================================");
 
@@ -93,12 +91,7 @@ int main(int argc, char * argv[]) {
 	  File->cd((ParName+"/"+SampleName).c_str());
 	  
 	  DUNEPdfs[iSample]->Reweight();
-	  TH1* Hist;
-	  if (DUNEPdfs[iSample]->GetNDim() == 1) {
-	    Hist = DUNEPdfs[iSample]->Get1DHist();
-	  } else if (DUNEPdfs[iSample]->GetNDim() == 2) {
-	    Hist = DUNEPdfs[iSample]->Get2DHist();
-	  }
+	  TH1* Hist = DUNEPdfs[iSample]->GetMCHist(DUNEPdfs[iSample]->GetNDim());
 	  MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}",SampleName,Hist->Integral());
 	  
 	  Hist->Write(Form("Variation_%i",(int)iSigVar));
