@@ -8,6 +8,7 @@
 #include "TLegend.h"
 #include "DUNEStyle.h"
 
+#include <TKey.h>
 #include <iostream>
 
 TH1* rebinHist(TH1* hist) {
@@ -21,6 +22,18 @@ TH1* rebinHist(TH1* hist) {
     if (hist2D) return (TH1*)hist2D->Rebin2D(2, 2);
   }
   else if (std::string(hist->GetTitle()).find("TrueQ3_vs_TrueQ0") != std::string::npos) {
+    TH2D* hist2D = dynamic_cast<TH2D*>(hist);
+    if (hist2D) return (TH1*)hist2D->Rebin2D(2, 2);
+  }
+  else if (std::string(hist->GetTitle()).find("LepBAngle_vs_LepP") != std::string::npos) {
+    TH2D* hist2D = dynamic_cast<TH2D*>(hist);
+    if (hist2D) return (TH1*)hist2D->Rebin2D(1, 1);
+  }
+  else if (std::string(hist->GetTitle()).find("LeptonBAngle_Q0") != std::string::npos) {
+    TH2D* hist2D = dynamic_cast<TH2D*>(hist);
+    if (hist2D) return (TH1*)hist2D->Rebin2D(2, 2);
+  }
+  else if (std::string(hist->GetTitle()).find("LeptonBAngle_EPi0") != std::string::npos) {
     TH2D* hist2D = dynamic_cast<TH2D*>(hist);
     if (hist2D) return (TH1*)hist2D->Rebin2D(2, 2);
   }

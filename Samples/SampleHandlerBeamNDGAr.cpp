@@ -48,7 +48,7 @@ void SampleHandlerBeamNDGAr::SetupSplines() {
 }
 
 void SampleHandlerBeamNDGAr::SetupWeightPointers() {
-  for (int i = 0; i < static_cast<int>(dunendgarmcFitting.size()); ++i) {
+  for (size_t i = 0; i < dunendgarmcFitting.size(); ++i) {
       MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].pot_s));
       MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].norm_s));
       MCSamples[i].total_weight_pointers.push_back(MCSamples[i].osc_w_pointer);
@@ -198,8 +198,8 @@ void SampleHandlerBeamNDGAr::EraseDescendants(int motherID, std::unordered_map<i
 
 // Removes descendants of primID which can be reconstructed from curvature from mother_to_daughter_ID map
 bool SampleHandlerBeamNDGAr::CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, dunemc_plotting& plotting_vars, double pixel_spacing_cm) {
-  if (IsResolvedFromCurvature(plotting_vars, static_cast<int>(ID_to_index.at(id)), pixel_spacing_cm)) { // If mother can be reconstructed from curvature, remove her and her descendants
-    int index = static_cast<int>(ID_to_index.at(id));
+  if (IsResolvedFromCurvature(plotting_vars, ID_to_index.at(id), pixel_spacing_cm)) { // If mother can be reconstructed from curvature, remove her and her descendants
+    size_t index = ID_to_index.at(id);
     int motherID = _MotherTrkID->at(index);
     if (motherID != 0) {
       EraseDescendants(id, mother_to_daughter_ID);
@@ -255,7 +255,7 @@ double SampleHandlerBeamNDGAr::CalcEDepCal(int motherID, std::unordered_map<int,
   double EDepCrit = 0.;
   if (it != mother_to_daughter_ID.end()) {
     for (int i_layer=tot_layers-crit_layers; i_layer<tot_layers; i_layer++) {
-      EDepCrit += ID_to_ECalDep.at(motherID)[i_layer];
+      EDepCrit += ID_to_ECalDep.at(motherID)[static_cast<size_t>(i_layer)];
     }
     for (int daughterID : it->second) {
       EDepCrit += CalcEDepCal(daughterID, mother_to_daughter_ID, ID_to_ECalDep, tot_layers, crit_layers);
@@ -264,7 +264,7 @@ double SampleHandlerBeamNDGAr::CalcEDepCal(int motherID, std::unordered_map<int,
   return EDepCrit;
 }
 
-bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_vars, int i_anapart, double pixel_spacing_cm){
+bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_vars, size_t i_anapart, double pixel_spacing_cm){
   // Get particle properties from Anatree
   double xstart = _MCPStartX->at(i_anapart);
   double ystart = _MCPStartY->at(i_anapart);
@@ -422,7 +422,7 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
   double sigmax_frac = sigmax/(std::abs(length_track_x)/100);
   double sigmayz = (spatial_resolution/(1000)); //needs to be in m
   double momres_yz = transverse_mom*(std::sqrt(720/(nhits+4)) * (sigmayz*transverse_mom/(0.3*B_field*(L_yz/100)*(L_yz/100)))
-    * std::sqrt(1-(1/21)*(L_yz/rad_curvature)*(L_yz/rad_curvature)));
+    * std::sqrt(1.-(1./21)*(L_yz/rad_curvature)*(L_yz/rad_curvature)));
   double momres_ms = transverse_mom*(0.016/(0.3*B_field*(L_yz/100)*cos(theta_xT)*beta))*std::sqrt(L_yz/X0);
   double momres_tottransverse = std::sqrt(momres_yz*momres_yz + momres_ms*momres_ms)/transverse_mom;
   double sigma_theta = (cos(theta_xT)*cos(theta_xT) * (pitch/(2*M_PI*rad_curvature)) *
@@ -530,7 +530,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   readBranch("SimHitY", &_SimHitY);
   readBranch("SimHitZ", &_SimHitZ);
 
-  int nEntries = static_cast<int>(downsampling*static_cast<double>(_data->GetEntries()));
+  size_t nEntries = static_cast<size_t>(downsampling*static_cast<double>(_data->GetEntries()));
 
   dunendgarmcFitting.resize(nEntries);
   dunendgarmcPlotting.resize(nEntries);
@@ -540,9 +540,9 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   int num_in_fdv = 0;
   bool do_geometric_correction = false;
 
-  for (int i_event = 0; i_event < nEntries; ++i_event) { 
+  for (size_t i_event = 0; i_event < nEntries; ++i_event) { 
     if (i_event != 0) clearBranchVectors();
-    _data->GetEntry(i_event);
+    _data->GetEntry(static_cast<Long64_t>(i_event));
 
     if (i_event % (nEntries/100) == 0) {
       MACH3LOG_INFO("\tNow processing event: {}/{}",i_event,nEntries);
@@ -567,6 +567,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     dunendgarmcFitting[i_event].rw_vtx_x = _MCVertX->at(0);
     dunendgarmcFitting[i_event].rw_vtx_y = _MCVertY->at(0);
     dunendgarmcFitting[i_event].rw_vtx_z = _MCVertZ->at(0);
+    dunendgarmcFitting[i_event].rw_ePi0 = 0.; 
 
     std::unordered_map<int, std::vector<int>> mother_to_daughter_ID; // particle track ID -> vector of daughter IDs
     std::unordered_map<int, size_t> ID_to_index; // particle track ID -> index in anatree
@@ -590,7 +591,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       if (simhit_trkid <= 0 || simhit_layer <= 0) {
         continue;
       }
-      ID_to_ECalDep[simhit_trkid][simhit_layer-1] += _SimHitEnergy->at(i_ecaldep);
+      ID_to_ECalDep[simhit_trkid][static_cast<size_t>(simhit_layer-1)] += _SimHitEnergy->at(i_ecaldep);
 
       double hitx = _SimHitX->at(i_ecaldep);
       double hity = _SimHitY->at(i_ecaldep);
@@ -681,21 +682,27 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       } 
       dunendgarmcPlotting[i_event].particle_isaccepted[i_anaprim] = isParticleAccepted;
 
+      double p_x = _MCPStartPX->at(i_anaprim);
+      double p_y = _MCPStartPY->at(i_anaprim);
+      double p_z = _MCPStartPZ->at(i_anaprim);
+      double p2 = p_x*p_x + p_y*p_y + p_z*p_z;
+
       // Get primary muon information
-      if(pdg == 13) {
-        double p_x = _MCPStartPX->at(i_anaprim);
-        double p_y = _MCPStartPY->at(i_anaprim);
-        double p_z = _MCPStartPZ->at(i_anaprim);
-        double p2 = p_x*p_x + p_y*p_y + p_z*p_z;
-        if (p2 > muon_p2) {
-          muon_p2 = p2;
-          double mass = MaCh3Utils::GetMassFromPDG(pdg);
-          dunendgarmcFitting[i_event].rw_lep_pX = p_x;
-          dunendgarmcFitting[i_event].rw_lep_pY = p_y;
-          dunendgarmcFitting[i_event].rw_lep_pZ = p_z;
-          dunendgarmcFitting[i_event].rw_LepE = std::sqrt(p2 + mass*mass);
-        }
+      if(pdg == 13 && p2 > muon_p2) {
+        muon_p2 = p2;
+        double mass = MaCh3Utils::GetMassFromPDG(pdg);
+        dunendgarmcFitting[i_event].rw_lep_pX = p_x;
+        dunendgarmcFitting[i_event].rw_lep_pY = p_y;
+        dunendgarmcFitting[i_event].rw_lep_pZ = p_z;
+        dunendgarmcFitting[i_event].rw_LepE = std::sqrt(p2 + mass*mass);
       }
+
+      // Get pi0 information 
+      if(pdg == 111) {
+        double mass = MaCh3Utils::GetMassFromPDG(pdg);
+        dunendgarmcFitting[i_event].rw_ePi0 += std::sqrt(p2+mass*mass);
+      }
+
     }
     dunendgarmcPlotting[i_event].is_accepted = isEventAccepted;
 
@@ -739,12 +746,12 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
   _data->Reset();
   delete _data;
-  return nEntries;
+  return static_cast<int>(nEntries);
 }
 
 #pragma GCC diagnostic push 
 #pragma GCC diagnostic ignored "-Wswitch-enum"
-const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTypes KinematicParameter, int iEvent) {
+const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTypes KinematicParameter, size_t iEvent) {
   switch(KinematicParameter) {
     case kTrueNeutrinoEnergy:
       return &dunendgarmcFitting[iEvent].rw_etru; 
@@ -778,6 +785,8 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
       return &dunendgarmcFitting[iEvent].rw_Q0;
     case kTrueQ3:
       return &dunendgarmcFitting[iEvent].rw_Q3;
+    case kEPi0:
+      return &dunendgarmcFitting[iEvent].rw_ePi0;
     default:
       MACH3LOG_ERROR("Did not recognise Kinematic Parameter {}", static_cast<int>(KinematicParameter));
       throw MaCh3Exception(__FILE__, __LINE__);
@@ -788,27 +797,27 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
 
 const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(double KinematicVariable, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
-  return GetPointerToKinematicParameter(KinPar,iEvent);
+  return GetPointerToKinematicParameter(KinPar,static_cast<size_t>(iEvent));
 }
 
 const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
-  return GetPointerToKinematicParameter(KinPar,iEvent);
+  return GetPointerToKinematicParameter(KinPar,static_cast<size_t>(iEvent));
 }
 
 double SampleHandlerBeamNDGAr::ReturnKinematicParameter(int KinematicVariable, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
-  return ReturnKinematicParameter(KinPar,iEvent);
+  return ReturnKinematicParameter(KinPar,static_cast<size_t>(iEvent));
 }
 
 double SampleHandlerBeamNDGAr::ReturnKinematicParameter(std::string KinematicParameter, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
-  return ReturnKinematicParameter(KinPar,iEvent);
+  return ReturnKinematicParameter(KinPar,static_cast<size_t>(iEvent));
 }
 
 #pragma GCC diagnostic push 
 #pragma GCC diagnostic ignored "-Wswitch-enum"
-double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, int iEvent) {
+double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, size_t iEvent) {
   //HH: Special cases for dealing with non-doubles
   switch(KinPar) {
     case kEvent_IsAccepted:
@@ -823,7 +832,7 @@ double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, i
 }
 #pragma GCC diagnostic pop
 
-std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(KinematicVecs KinVec, int iEvent) {
+std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(KinematicVecs KinVec, size_t iEvent) {
   switch(KinVec) {
     case kParticle_IsAccepted:
       return std::vector<double>(
@@ -921,16 +930,16 @@ std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(KinematicVecs 
 
 std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(int KinematicVector, int iEvent) {
   KinematicVecs KinVec = static_cast<KinematicVecs>(KinematicVector);
-  return ReturnKinematicVector(KinVec, iEvent);
+  return ReturnKinematicVector(KinVec, static_cast<size_t>(iEvent));
 }
 
 std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(std::string KinematicVector, int iEvent) {
   KinematicVecs KinVec = static_cast<KinematicVecs>(ReturnKinematicVectorFromString(KinematicVector));
-  return ReturnKinematicVector(KinVec, iEvent);
+  return ReturnKinematicVector(KinVec, static_cast<size_t>(iEvent));
 }
 
 void SampleHandlerBeamNDGAr::SetupFDMC() {
-  for(int iEvent = 0 ;iEvent < int(GetNEvents()) ; ++iEvent){
+  for(size_t iEvent = 0 ;iEvent < GetNEvents() ; ++iEvent){
     MCSamples[iEvent].rw_etru = &(dunendgarmcFitting[iEvent].rw_etru);
     MCSamples[iEvent].mode = &(dunendgarmcFitting[iEvent].mode);
     MCSamples[iEvent].Target = &(dunendgarmcFitting[iEvent].Target);    

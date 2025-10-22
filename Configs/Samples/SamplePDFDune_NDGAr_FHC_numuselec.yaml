@@ -27,7 +27,7 @@ DetectorVariables:
   ECALOuterRadius: 322.252
   ECALEndCapStart: 329.25
   ECALEndCapEnd: 374.4
-  downsampling: 1.
+  downsampling: 1
   
 InputFiles:
   mtupleprefix: "Inputs/DUNE_NDGAr_AnaTrees/NDGAr_FHC_ger_"

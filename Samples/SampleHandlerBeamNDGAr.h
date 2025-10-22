@@ -1,14 +1,9 @@
 #ifndef _SampleHandlerBeamNDGAr_h_
 #define _SampleHandlerBeamNDGAr_h_
 
-#include "Splines/BinnedSplineHandlerDUNE.h"
 #include "Samples/SampleHandlerFD.h"
 #include "Samples/StructsDUNE.h"
-
-#pragma GCC diagnostic push 
-#pragma GCC diagnostic ignored "-Wfloat-conversion"
-#include "duneanaobj/StandardRecord/StandardRecord.h"
-#pragma GCC diagnostic pop
+#include "Splines/BinnedSplineHandlerDUNE.h"
 
 class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
 {
@@ -17,7 +12,7 @@ public:
   ~SampleHandlerBeamNDGAr();
 
   enum KinematicTypes {kTrueNeutrinoEnergy, kMode, kOscChannel, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kTrueLepEnergy,
-    kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted,  kInFDV, kIsCC};
+    kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted,  kInFDV, kIsCC, kEPi0};
   
   enum KinematicVecs {kParticle_Energy, kParticle_Momentum, kParticle_EndMomentum, kParticle_TransverseMomentum, 
     kParticle_BAngle, kParticle_BeamAngle, kParticle_IsAccepted, kParticle_IsCurvatureResolved, kParticle_IsDecayed, kParticle_PDG,
@@ -37,15 +32,15 @@ protected:
   void CleanMemoryBeforeFit() override;
   void RegisterFunctionalParameters() override {};
 
-  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent);
+  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, size_t iEvent);
   const double* GetPointerToKinematicParameter(double KinematicVariable, int iEvent) override;
   const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent) override;
 
-  double ReturnKinematicParameter(KinematicTypes KinPar, int iEvent); // Extra function to deal with non-doubles
+  double ReturnKinematicParameter(KinematicTypes KinPar, size_t iEvent); // Extra function to deal with non-doubles
   double ReturnKinematicParameter(int KinematicVariable, int iEvent) override;
   double ReturnKinematicParameter(std::string KinematicParameter, int iEvent) override;
 
-  std::vector<double> ReturnKinematicVector(KinematicVecs KinVec, int iEvent);
+  std::vector<double> ReturnKinematicVector(KinematicVecs KinVec, size_t iEvent);
   std::vector<double> ReturnKinematicVector(int KinematicVector, int iEvent) override;
   std::vector<double> ReturnKinematicVector(std::string KinematicVector, int iEvent) override;
 
@@ -57,7 +52,7 @@ protected:
   bool isCoordOnTrack(int charge, double ycoord, double zcoord, double centre_circle_y, double centre_circle_z, double theta_start, double theta_spanned);
   double CalcBeta(double p_mag, double& bg, double& gamma, double pdgmass);
   int GetChargeFromPDG(int pdg);
-  bool IsResolvedFromCurvature(dunemc_plotting& plotting_vars, int i_anapart, double pixel_spacing_cm);
+  bool IsResolvedFromCurvature(dunemc_plotting& plotting_vars, size_t i_anapart, double pixel_spacing_cm);
   double GetCalDepth(double x, double y, double z);
   double DepthToLayer(double depth, double r);
   double CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers, const int crit_layers);
@@ -148,6 +143,7 @@ protected:
     {"Event_IsAccepted",kEvent_IsAccepted},
     {"InFDV",kInFDV},
     {"IsCC",kIsCC},
+    {"EPi0",kEPi0},
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -170,6 +166,7 @@ protected:
     {kEvent_IsAccepted,"Event_IsAccepted"},
     {kInFDV,"InFDV"},
     {kIsCC,"IsCC"},
+    {kEPi0,"EPi0"},
   };
     
   const std::unordered_map<std::string, int> KinematicVectorsDUNE = {
