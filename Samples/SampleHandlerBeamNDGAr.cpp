@@ -48,7 +48,7 @@ void SampleHandlerBeamNDGAr::SetupSplines() {
 }
 
 void SampleHandlerBeamNDGAr::SetupWeightPointers() {
-  for (int i = 0; i < static_cast<int>(dunendgarmcFitting.size()); ++i) {
+  for (size_t i = 0; i < dunendgarmcFitting.size(); ++i) {
       MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].pot_s));
       MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].norm_s));
       MCSamples[i].total_weight_pointers.push_back(MCSamples[i].osc_w_pointer);
@@ -209,8 +209,8 @@ void SampleHandlerBeamNDGAr::EraseDescendants(int motherID, std::unordered_map<i
 
 // Removes descendants of primID which can be reconstructed from curvature from mother_to_daughter_ID map
 bool SampleHandlerBeamNDGAr::CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, dunemc_plotting& plotting_vars, double pixel_spacing_cm) {
-  if (IsResolvedFromCurvature(plotting_vars, static_cast<int>(ID_to_index.at(id)), pixel_spacing_cm)) { // If mother can be reconstructed from curvature, remove her and her descendants
-    int index = static_cast<int>(ID_to_index.at(id));
+  if (IsResolvedFromCurvature(plotting_vars, ID_to_index.at(id), pixel_spacing_cm)) { // If mother can be reconstructed from curvature, remove her and her descendants
+    size_t index = ID_to_index.at(id);
     int motherID = _MCPMotherTrkID->at(index);
     if (motherID != 0) {
       EraseDescendants(id, mother_to_daughter_ID);
@@ -263,7 +263,7 @@ double SampleHandlerBeamNDGAr::CalcEDepCal(int trkID, const std::unordered_map<i
   return EDepCrit;
 }
 
-bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_vars, int i_particle, double pixel_spacing_cm){
+bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_vars, size_t i_particle, double pixel_spacing_cm){
   // Get particle properties from Anatree
   double xstart = _MCPStartX->at(i_particle);
   double ystart = _MCPStartY->at(i_particle);
@@ -420,7 +420,7 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
   double sigmax_frac = sigmax/(std::abs(length_track_x)/100);
   double sigmayz = (spatial_resolution/(1000)); //needs to be in m
   double momres_yz = transverse_mom*(std::sqrt(720/(nhits+4)) * (sigmayz*transverse_mom/(0.3*B_field*(L_yz/100)*(L_yz/100)))
-    * std::sqrt(1-(1/21)*(L_yz/rad_curvature)*(L_yz/rad_curvature)));
+    * std::sqrt(1-(1./21)*(L_yz/rad_curvature)*(L_yz/rad_curvature)));
   double momres_ms = transverse_mom*(0.016/(0.3*B_field*(L_yz/100)*cos(theta_xT)*beta))*std::sqrt(L_yz/X0);
   double momres_tottransverse = std::sqrt(momres_yz*momres_yz + momres_ms*momres_ms)/transverse_mom;
   double sigma_theta = (cos(theta_xT)*cos(theta_xT) * (pitch/(2*M_PI*rad_curvature)) *
@@ -568,7 +568,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   readBranch(genieTree, "nfpim", &_npim);
   readBranch(genieTree, "nfpi0", &_npi0);
 
-  int nEntries = static_cast<int>(downsampling*static_cast<double>(simTree->GetEntries()));
+  size_t nEntries = static_cast<size_t>(downsampling*static_cast<double>(simTree->GetEntries()));
 
   dunendgarmcFitting.resize(nEntries);
   dunendgarmcPlotting.resize(nEntries);
@@ -578,10 +578,10 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   int num_in_fdv = 0;
   bool do_geometric_correction = false;
 
-  for (int i_event = 0; i_event < nEntries; ++i_event) { 
+  for (size_t i_event = 0; i_event < nEntries; ++i_event) { 
 
     if (i_event != 0) clearBranchVectors();
-    simTree->GetEntry(i_event);
+    simTree->GetEntry(static_cast<Long64_t>(i_event));
     genieTree->GetEntry(_EventID);
 
     if (i_event % (nEntries/100) == 0) {
@@ -782,12 +782,12 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   delete simFile;
   delete genieFile;
 
-  return nEntries;
+  return static_cast<int>(nEntries);
 }
 
 #pragma GCC diagnostic push 
 #pragma GCC diagnostic ignored "-Wswitch-enum"
-const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTypes KinematicParameter, int iEvent) {
+const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTypes KinematicParameter, size_t iEvent) {
   switch(KinematicParameter) {
     case kTrueNeutrinoEnergy:
       return &dunendgarmcFitting[iEvent].rw_etru; 
@@ -829,27 +829,17 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
 
 const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(double KinematicVariable, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
-  return GetPointerToKinematicParameter(KinPar,iEvent);
+  return GetPointerToKinematicParameter(KinPar,static_cast<size_t>(iEvent));
 }
 
 const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
-  return GetPointerToKinematicParameter(KinPar,iEvent);
-}
-
-double SampleHandlerBeamNDGAr::ReturnKinematicParameter(int KinematicVariable, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
-  return ReturnKinematicParameter(KinPar,iEvent);
-}
-
-double SampleHandlerBeamNDGAr::ReturnKinematicParameter(std::string KinematicParameter, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
-  return ReturnKinematicParameter(KinPar,iEvent);
+  return GetPointerToKinematicParameter(KinPar,static_cast<size_t>(iEvent));
 }
 
 #pragma GCC diagnostic push 
 #pragma GCC diagnostic ignored "-Wswitch-enum"
-double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, int iEvent) {
+double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, size_t iEvent) {
   //HH: Special cases for dealing with non-doubles
   switch(KinPar) {
     case kEvent_IsAccepted:
@@ -864,7 +854,17 @@ double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, i
 }
 #pragma GCC diagnostic pop
 
-std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(KinematicVecs KinVec, int iEvent) {
+double SampleHandlerBeamNDGAr::ReturnKinematicParameter(int KinematicVariable, int iEvent) {
+  KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
+  return ReturnKinematicParameter(KinPar,static_cast<size_t>(iEvent));
+}
+
+double SampleHandlerBeamNDGAr::ReturnKinematicParameter(std::string KinematicParameter, int iEvent) {
+  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
+  return ReturnKinematicParameter(KinPar,static_cast<size_t>(iEvent));
+}
+
+std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(KinematicVecs KinVec, size_t iEvent) {
   switch(KinVec) {
     case kParticle_IsAccepted:
       return std::vector<double>(
@@ -962,16 +962,16 @@ std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(KinematicVecs 
 
 std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(int KinematicVector, int iEvent) {
   KinematicVecs KinVec = static_cast<KinematicVecs>(KinematicVector);
-  return ReturnKinematicVector(KinVec, iEvent);
+  return ReturnKinematicVector(KinVec, static_cast<size_t>(iEvent));
 }
 
 std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(std::string KinematicVector, int iEvent) {
   KinematicVecs KinVec = static_cast<KinematicVecs>(ReturnKinematicVectorFromString(KinematicVector));
-  return ReturnKinematicVector(KinVec, iEvent);
+  return ReturnKinematicVector(KinVec, static_cast<size_t>(iEvent));
 }
 
 void SampleHandlerBeamNDGAr::SetupFDMC() {
-  for(int iEvent = 0 ;iEvent < int(GetNEvents()) ; ++iEvent){
+  for(size_t iEvent = 0 ;iEvent < GetNEvents() ; ++iEvent){
     MCSamples[iEvent].rw_etru = &(dunendgarmcFitting[iEvent].rw_etru);
     MCSamples[iEvent].mode = &(dunendgarmcFitting[iEvent].mode);
     MCSamples[iEvent].Target = &(dunendgarmcFitting[iEvent].Target);    

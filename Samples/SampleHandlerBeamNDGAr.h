@@ -37,15 +37,15 @@ protected:
   void CleanMemoryBeforeFit() override;
   void RegisterFunctionalParameters() override {};
 
-  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent);
+  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, size_t iEvent);
   const double* GetPointerToKinematicParameter(double KinematicVariable, int iEvent) override;
   const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent) override;
 
-  double ReturnKinematicParameter(KinematicTypes KinPar, int iEvent); // Extra function to deal with non-doubles
+  double ReturnKinematicParameter(KinematicTypes KinPar, size_t iEvent); // Extra function to deal with non-doubles
   double ReturnKinematicParameter(int KinematicVariable, int iEvent) override;
   double ReturnKinematicParameter(std::string KinematicParameter, int iEvent) override;
 
-  std::vector<double> ReturnKinematicVector(KinematicVecs KinVec, int iEvent);
+  std::vector<double> ReturnKinematicVector(KinematicVecs KinVec, size_t iEvent);
   std::vector<double> ReturnKinematicVector(int KinematicVector, int iEvent) override;
   std::vector<double> ReturnKinematicVector(std::string KinematicVector, int iEvent) override;
 
@@ -57,7 +57,7 @@ protected:
   bool isCoordOnTrack(int charge, double ycoord, double zcoord, double centre_circle_y, double centre_circle_z, double theta_start, double theta_spanned);
   double CalcBeta(double p_mag, double& bg, double& gamma, double pdgmass);
   int GetChargeFromPDG(int pdg);
-  bool IsResolvedFromCurvature(dunemc_plotting& plotting_vars, int i_anapart, double pixel_spacing_cm);
+  bool IsResolvedFromCurvature(dunemc_plotting& plotting_vars, size_t i_anapart, double pixel_spacing_cm);
   double GetCalDepth(double x, double y, double z);
   double DepthToLayer(double depth, double r);
   double CalcEDepCal(int motherID, const std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<std::vector<double>>>& ID_to_ECalDep, double crit_reg);
