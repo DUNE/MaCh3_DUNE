@@ -606,7 +606,7 @@ GeneralKinematicCuts:
   },
   {
     "Name": "Particle_ECAL_Depth",
-    "VarStrings": ["Particle_ECALDepth"],
+    "VarStrings": ["Particle_EndDepth"],
     "VarBins": [[320,0.,80.]],
     "KinematicCuts": [
       {

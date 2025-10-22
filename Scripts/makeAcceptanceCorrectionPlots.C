@@ -24,6 +24,10 @@ TH1* rebinHist(TH1* hist) {
     TH2D* hist2D = dynamic_cast<TH2D*>(hist);
     if (hist2D) return (TH1*)hist2D->Rebin2D(2, 2);
   }
+  else if (std::string(hist->GetTitle()).find("LepBAngle_vs_LepP") != std::string::npos) {
+    TH2D* hist2D = dynamic_cast<TH2D*>(hist);
+    if (hist2D) return (TH1*)hist2D->Rebin2D(1, 1);
+  }
   return hist;
 }
 
