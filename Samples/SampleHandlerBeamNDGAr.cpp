@@ -331,7 +331,7 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
   if (charge == 0) return false;
 
   double rad_curvature = 100*transverse_mom/(0.3*B_field); //p = 0.3*B*r where p in GeV/c, B in T, r in m (*100 to convert to cm)
-  double theta_xT = atan(p_x/transverse_mom); //helix pitch angle
+  double theta_xT = atan2(p_x, transverse_mom); //helix pitch angle
   double pitch = std::abs(2*M_PI*rad_curvature*tan(theta_xT)); //distance between two turns of a helix in cm
   double tan_theta = tan(theta_xT);
 

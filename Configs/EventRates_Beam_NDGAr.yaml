@@ -283,35 +283,6 @@ GeneralKinematicCuts:
     ]
   },
   {
-    "Name": "Particle_BAngle_Momentum_e-",
-    "VarStrings": ["Particle_BAngle","Particle_Momentum"],
-    "VarBins": [[90,0.,180.],[200,0.,6.]],
-    "KinematicCuts": [
-      {
-        "Range": [10.5,11.5],
-        "Name": "PDG",
-        "VarString": "Particle_PDG"
-      }
-    ]
-  },
-  {
-    "Name": "Accepted_Particle_BAngle_Momentum_e-",
-    "VarStrings": ["Particle_BAngle","Particle_Momentum"],
-    "VarBins": [[90,0.,180.],[200,0.,6.]],
-    "KinematicCuts": [
-      {
-        "Range": [10.5,11.5],
-        "Name": "PDG",
-        "VarString": "Particle_PDG"
-      },
-      {
-        "Range": [1.,2.],
-        "Name": "IsParticleAccepted",
-        "VarString": "Particle_IsAccepted"
-      }
-    ]
-  },
-  {
     "Name": "Lepton_BAngle_Momentum",
     "VarStrings": ["LepBAngle","LepP"],
     "VarBins": [[90,0.,180.],[200,0.,6.]],
@@ -676,7 +647,7 @@ GeneralKinematicCuts:
   {
     "Name": "pi+_escaped_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
+    "VarBins": [[100,0.,0.03]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsEscaped",
@@ -693,7 +664,7 @@ GeneralKinematicCuts:
   {
     "Name": "pi-_escaped_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
+    "VarBins": [[100,0,0.03]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsEscaped",
@@ -710,7 +681,7 @@ GeneralKinematicCuts:
   {
     "Name": "mu_escaped_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
+    "VarBins": [[100,0,0.03]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsEscaped",
@@ -727,7 +698,7 @@ GeneralKinematicCuts:
   {
     "Name": "proton_escaped_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
+    "VarBins": [[100,0,0.03]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsEscaped",
@@ -744,7 +715,7 @@ GeneralKinematicCuts:
   {
     "Name": "pi+_ecal_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
+    "VarBins": [[100,0,0.03]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsStoppedInECal",
@@ -761,7 +732,7 @@ GeneralKinematicCuts:
   {
     "Name": "pi+_barrel_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
+    "VarBins": [[100,0,0.03]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsStoppedInBarrel",
@@ -778,7 +749,7 @@ GeneralKinematicCuts:
   {
     "Name": "pi+_endcap_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
+    "VarBins": [[100,0,0.03]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsStoppedInEndCap",
@@ -795,7 +766,7 @@ GeneralKinematicCuts:
   {
     "Name": "pi-_ecal_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
+    "VarBins": [[100,0,0.03]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsStoppedInECal",
@@ -812,7 +783,7 @@ GeneralKinematicCuts:
   {
     "Name": "pi-_barrel_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
+    "VarBins": [[100,0,0.03]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsStoppedInBarrel",
@@ -829,7 +800,7 @@ GeneralKinematicCuts:
   {
     "Name": "pi-_endcap_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
+    "VarBins": [[100,0,0.03]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsStoppedInEndCap",
@@ -846,7 +817,7 @@ GeneralKinematicCuts:
   {
     "Name": "mu_ecal_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
+    "VarBins": [[100,0,0.03]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsStoppedInECal",
@@ -863,7 +834,7 @@ GeneralKinematicCuts:
   {
     "Name": "mu_barrel_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
+    "VarBins": [[100,0,0.03]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsStoppedInBarrel",
@@ -880,7 +851,7 @@ GeneralKinematicCuts:
   {
     "Name": "mu_endcap_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
+    "VarBins": [[100,0,0.03]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsStoppedInEndCap",
@@ -897,7 +868,7 @@ GeneralKinematicCuts:
   {
     "Name": "proton_ecal_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
+    "VarBins": [[100,0,0.03]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsStoppedInECal",
@@ -914,7 +885,7 @@ GeneralKinematicCuts:
   {
     "Name": "proton_barrel_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
+    "VarBins": [[100,0,0.03]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsStoppedInBarrel",
@@ -931,7 +902,7 @@ GeneralKinematicCuts:
   {
     "Name": "proton_endcap_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
+    "VarBins": [[100,0,0.03]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsStoppedInEndCap",
@@ -948,7 +919,7 @@ GeneralKinematicCuts:
   {
     "Name": "pi0_tpc_EDepCrit",
     "VarStrings": ["Particle_EDepCrit"],
-    "VarBins": [[100,0.,0.1]],
+    "VarBins": [[100,0,0.03]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsStoppedInTPC",
@@ -965,7 +936,7 @@ GeneralKinematicCuts:
   {
     "Name": "pi0_tpc_EDepCrit_vs_Momentum",
     "VarStrings": ["Particle_EDepCrit", "Particle_Momentum"],
-    "VarBins": [[100,0.,0.1], [100,0,5]],
+    "VarBins": [[100,0,0.03], [100,0,3]],
     "KinematicCuts": [
       {
         "VarString": "Particle_IsStoppedInTPC",
