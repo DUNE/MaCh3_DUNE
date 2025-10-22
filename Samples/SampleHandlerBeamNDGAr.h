@@ -5,11 +5,6 @@
 #include "Samples/SampleHandlerFD.h"
 #include "Samples/StructsDUNE.h"
 
-#pragma GCC diagnostic push 
-#pragma GCC diagnostic ignored "-Wfloat-conversion"
-#include "duneanaobj/StandardRecord/StandardRecord.h"
-#pragma GCC diagnostic pop
-
 class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
 {
 public:

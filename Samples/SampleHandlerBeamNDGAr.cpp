@@ -194,8 +194,7 @@ int SampleHandlerBeamNDGAr::GetChargeFromPDG(const int pdg) {
           return 0; 
         default:
           MACH3LOG_ERROR("No saved charge for PDG: {}", pdg);
-          return 0;
-          // throw MaCh3Exception(__FILE__,__LINE__);
+          throw MaCh3Exception(__FILE__,__LINE__);
       }
   }
 }
@@ -711,8 +710,8 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       if (!(isContained || isCurvatureResolved)) {
         isParticleAccepted = false;
         isEventAccepted = false;
-        dunendgarmcPlotting[i_event].particle_isaccepted[prim_index] = isParticleAccepted;
       }
+      dunendgarmcPlotting[i_event].particle_isaccepted[prim_index] = isParticleAccepted;
 
       // Get vertex from primary muon start position
       if (pdg == 13 && std::abs((_MCPStartPX->at(prim_index)/1000.-_PXlep)/_PXlep) < 0.0001
@@ -742,10 +741,10 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     double lep_perpangle = acos(lep_pPerp/lep_momentum)*180/M_PI; //Angle to axis perpendicular to beam and B
     double lep_phi = atan2(lep_pPerp, lep_pB)*180/M_PI;
 
-    dunendgarmcFitting[i_event].rw_lep_theta = lep_beamangle;
-    dunendgarmcFitting[i_event].rw_lep_phi = lep_phi;
-    dunendgarmcFitting[i_event].rw_lep_bangle = lep_bangle;
-    dunendgarmcFitting[i_event].rw_lep_p = lep_momentum;
+    dunendgarmcPlotting[i_event].rw_lep_theta = lep_beamangle;
+    dunendgarmcPlotting[i_event].rw_lep_phi = lep_phi;
+    dunendgarmcPlotting[i_event].rw_lep_bangle = lep_bangle;
+    dunendgarmcPlotting[i_event].rw_lep_p = lep_momentum;
 
     double radius = std::sqrt((vertex[1]-TPC_centre_y)*(vertex[1]-TPC_centre_y) 
                               + (vertex[2]-TPC_centre_z)*(vertex[2]-TPC_centre_z)); //find radius of interaction vertex

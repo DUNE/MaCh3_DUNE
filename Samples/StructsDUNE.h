@@ -64,10 +64,6 @@ struct dunemc_base { // Store variables used in fitting
   double rw_lep_pX;
   double rw_lep_pY;
   double rw_lep_pZ; //parallel lepton momentum
-  double rw_lep_p;
-  double rw_lep_phi;
-  double rw_lep_theta;
-  double rw_lep_bangle;
   double rw_reco_vtx_x;
   double rw_reco_vtx_y;
   double rw_reco_vtx_z;
@@ -89,6 +85,10 @@ struct dunemc_plotting { // Store variables just used in plotting (cleared from 
   bool in_fdv;
   bool is_accepted;
   double geometric_correction;
+  double rw_lep_p;
+  double rw_lep_phi;
+  double rw_lep_theta;
+  double rw_lep_bangle;
 
   std::vector<int> particle_event = {};
   std::vector<int> particle_trkid = {};
