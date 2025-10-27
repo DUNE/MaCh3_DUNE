@@ -91,6 +91,7 @@ void samplePDFDUNEBeamFD_actuallyFD::SetupSplines() {
   
   return;
 }
+/*
 double samplePDFDUNEBeamFD_actuallyFD::CalculatePOT() {
   TChain calc_pot_chain("meta");  // Use correct tree name
 
@@ -118,7 +119,49 @@ double samplePDFDUNEBeamFD_actuallyFD::CalculatePOT() {
 
   std::cout << "Summed POT: " << sum_pot << std::endl;
   return sum_pot;
+}*/
+
+double samplePDFDUNEBeamFD_actuallyFD::CalculatePOT() {
+    double total_gen_pot = 0.0;
+
+    for (const auto& filename : mc_files) {
+        TFile file(filename.c_str(), "READ");
+        if (file.IsZombie()) {
+            std::cerr << "Warning: Cannot open file " << filename << std::endl;
+            continue;
+        }
+
+        // Try to read the "norm" histogram that stores generated POT
+        TH1D* norm = dynamic_cast<TH1D*>(file.Get("norm"));
+        if (!norm) {
+            std::cerr << "Warning: No 'norm' histogram found in " << filename
+                      << " — skipping file." << std::endl;
+            continue;
+        }
+
+        // Bin 2 = generated POT for this sample
+        if (norm->GetNbinsX() < 2) {
+            std::cerr << "Warning: 'norm' histogram in " << filename
+                      << " has fewer than 2 bins — skipping." << std::endl;
+            continue;
+        }
+
+        double gen_pot = norm->GetBinContent(2);
+        std::cout << "[info] File: " << filename
+                  << " | Generated POT (bin 2): " << gen_pot << std::endl;
+
+        total_gen_pot += gen_pot;
+        file.Close();
+    }
+
+    std::cout << "--------------------------------------------------------" << std::endl;
+    std::cout << "Total generated POT across all files: " << total_gen_pot << std::endl;
+    std::cout << "--------------------------------------------------------" << std::endl;
+
+    return total_gen_pot;
 }
+
+
 
 void samplePDFDUNEBeamFD_actuallyFD::SetupWeightPointers() {
   for (size_t i = 0; i < dunemcSamples.size(); ++i) {
@@ -156,6 +199,7 @@ int samplePDFDUNEBeamFD_actuallyFD::setupExperimentMC(int iSample) {
     throw MaCh3Exception(__FILE__, __LINE__);
   }
 
+ /* 
   double _production_pot = 0.0;  // Explicitly initialize
   double gen_pot = 0.0; //set the sum of the pot from each file to be 0,befor any are read in
 
@@ -181,6 +225,9 @@ int samplePDFDUNEBeamFD_actuallyFD::setupExperimentMC(int iSample) {
       }
   }
     std::cout << " final gen_pot  = " << gen_pot << std::endl;
+  */
+  //double newpot = CalculatePOT();
+  //std::cout<< "CalculatePOT() = " << newpot << " -----------------------------------------------------------------------------" << std::endl;
 
    
   //Reco Variables
@@ -240,36 +287,55 @@ int samplePDFDUNEBeamFD_actuallyFD::setupExperimentMC(int iSample) {
   Int_t _nipi0;
   
 
-  // Try to read POT from either the meta tree or the norm histogram
-  TTree* meta = (TTree*)_sampleFile->Get("meta");
-  if (meta) {
-      // old CAF format
-      meta->SetBranchAddress("gen_pot", &gen_pot);
-      meta->GetEntry(0);
-      std::cout << "[info] Loaded gen_pot = " << gen_pot << " from meta tree" << std::endl;
-  } else {
-      // new CAF format
-      TH1D* normHist = (TH1D*)_sampleFile->Get("norm");
-      if (normHist) {
-          gen_pot = normHist->Integral(); // or GetBinContent(2)
-          std::cout << "[info] Loaded gen_pot = " << gen_pot
-                    << " from norm histogram (bin 2 = total POT)" << std::endl;
-      } else {
-          gen_pot = 3.85e21;
-          std::cerr << "[warning] No meta tree or norm histogram found; "
-                      "using default gen_pot = 3.85e21"
-                    << std::endl;
-      }
-  }
-    std::cout << " final gen_pot  = " << gen_pot << std::endl;
+  // ---------------------------------------------------------
+//  1. Compute total generated POT across all samples
+// ---------------------------------------------------------
+static double total_gen_pot = -1.0;
+if (total_gen_pot < 0) {
+    total_gen_pot = CalculatePOT();
+    std::cout << "[Total POT across all CAFs] " << total_gen_pot << std::endl;
+}
 
-Int_t _reco_numu;
-Int_t _muon_contained;
-Int_t _muon_tracker;
-Double_t _Ehad_veto;
+// ---------------------------------------------------------
+// 2. Open norm histogram for this sample
+// ---------------------------------------------------------
+TH1D* norm = dynamic_cast<TH1D*>(_sampleFile->Get("norm"));
+double file_gen_pot = 0.0;
+
+if (!norm) {
+    MACH3LOG_ERROR("Add a norm KEY to the root file using MakeNormHists.cxx");
+    norm = new TH1D("norm","",1,0,1);
+    norm->SetBinContent(1,1);
+    duneobj->norm_s = 1.0;
+} else {
+    duneobj->norm_s = norm->GetBinContent(1);
+    if (norm->GetNbinsX() >= 2) file_gen_pot = norm->GetBinContent(2);
+}
+
+  // ---------------------------------------------------------
+  // 3. Compute normalized POT scaling for this sample
+  // ---------------------------------------------------------
+  double pot_fraction = (total_gen_pot > 0.0) ? file_gen_pot / total_gen_pot : 0.0;
+  duneobj->pot_s = pot/file_gen_pot;
+
+  // ---------------------------------------------------------
+  //  4. Debug output
+  // ---------------------------------------------------------
+  std::cout << "[POT weighting] File: " << mc_files[iSample]
+            << " | file_gen_pot = " << file_gen_pot
+            << " | total_gen_pot = " << total_gen_pot
+            << " | pot_fraction = " << pot_fraction
+            << " | final pot_s = " << duneobj->pot_s << std::endl;
+
+  duneobj->nEvents = static_cast<int>(_data->GetEntries());
 
 
-  
+  Int_t _reco_numu;
+  Int_t _muon_contained;
+  Int_t _muon_tracker;
+  Double_t _Ehad_veto;
+
+
   _data->SetBranchStatus("*", 0);
   _data->SetBranchStatus("Ev", 1);
   _data->SetBranchAddress("Ev", &_Ev);
@@ -405,6 +471,7 @@ Double_t _Ehad_veto;
   _data->SetBranchStatus("isNC", 1);
   _data->SetBranchAddress("isNC", &_isNC);
 
+  /**
   TH1D* norm = _sampleFile->Get<TH1D>("norm");
   if(!norm){
     MACH3LOG_ERROR("Add a norm KEY to the root file using MakeNormHists.cxx");
@@ -412,13 +479,15 @@ Double_t _Ehad_veto;
     norm = new TH1D("norm","",1,0,1);
     norm->SetBinContent(1,1);
     duneobj->norm_s = 1.0; 
-    //duneobj->pot_s = (pot)/(newpot);
-    //std::cout << "(pot)/(newpot)" << (pot)/(newpot) << std::endl;
+    duneobj->pot_s = (pot)/(newpot);
+    std::cout << "(pot)/(newpot)" << (pot)/(newpot) << std::endl;
   }
   else{
     duneobj->norm_s = norm->GetBinContent(1);
     duneobj->pot_s = pot/norm->GetBinContent(2);
-  }
+  }*/
+
+  
 
   std::cout << "pot_s = " << duneobj->pot_s << std::endl;
 
@@ -486,6 +555,7 @@ Double_t _Ehad_veto;
   duneobj->isNC = new bool[duneobj->nEvents];
   duneobj->enurec_minus_enutrue = new double[duneobj->nEvents];
   duneobj->relative_enu_bias = new double[duneobj->nEvents];
+  duneobj->enu_bias = new double[duneobj->nEvents];
 
   _data->GetEntry(0);
   bool need_global_bin_numbers = (XVarStr == "global_bin_number");
@@ -575,7 +645,7 @@ Double_t _Ehad_veto;
     duneobj->rw_vtx_z[i] = (_vtx_z);
 
     //std::cout<< "nupdgUnosc = " << _nuPDGunosc << std::endl;
-    std::cout<< "rw_etru = " << (_Ev) << std::endl;
+    //std::cout<< "rw_etru = " << (_Ev) << std::endl;
     duneobj->rw_pt[i] = TVector3(_LepMomX, _LepMomY, _LepMomZ).Dot(nuMomNorm);
     duneobj->rw_pz[i] =  (TVector3(_LepMomX, _LepMomY, _LepMomZ).Cross(nuMomNorm)).Mag();
     
@@ -586,7 +656,8 @@ Double_t _Ehad_veto;
     duneobj->p_lep[i] =(TVector3{_LepMomX, _LepMomY, _LepMomZ}).Mag();
 
     duneobj->relative_enu_bias[i] = ((_LepE) + eHad_truth - _Ev)/(_Ev);
-    std::cout << "relative_enu_bias = "  <<  ((_LepE) + eHad_truth - _Ev)/(_Ev) << std::endl;
+    duneobj->enu_bias[i] = ((_LepE) + eHad_truth - _Ev);
+    //std::cout << "relative_enu_bias = "  <<  ((_LepE) + eHad_truth - _Ev)/(_Ev) << std::endl;
 
     //Longer calculation for ERecQE-------------------------------------------------------------------------------
     constexpr double V = 0;        // 0 binding energy for now
@@ -734,6 +805,9 @@ double samplePDFDUNEBeamFD_actuallyFD::ReturnKinematicParameter(int KinematicVar
   case kisRelativeEnubias:
     KinematicValue = (dunemcSamples[iSample].relative_enu_bias[iEvent]);
     break;
+  case kEnubias:
+    KinematicValue = (dunemcSamples[iSample].enu_bias[iEvent]);
+    break;
   default:
   MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", static_cast<int>(KinPar));
   MACH3LOG_ERROR("Was given a Kinematic Variable of {}", KinematicVariable);
@@ -824,6 +898,9 @@ double samplePDFDUNEBeamFD_actuallyFD::ReturnKinematicParameter(std::string Kine
     break;
   case kisRelativeEnubias:
     KinematicValue = (dunemcSamples[iSample].relative_enu_bias[iEvent]);
+    break;
+  case kEnubias:
+    KinematicValue = (dunemcSamples[iSample].enu_bias[iEvent]);
     break;
   default:
    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type {}", KinematicParameter);
@@ -917,6 +994,9 @@ const double* samplePDFDUNEBeamFD_actuallyFD::GetPointerToKinematicParameter(std
   case kisRelativeEnubias:
     KinematicValue = &(dunemcSamples[iSample].relative_enu_bias[iEvent]);
     break;
+  case kEnubias:
+    KinematicValue = &(dunemcSamples[iSample].enu_bias[iEvent]);
+    break;
  default:
    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", KinematicParameter);
    throw MaCh3Exception(__FILE__, __LINE__);
@@ -1007,6 +1087,9 @@ const double* samplePDFDUNEBeamFD_actuallyFD::GetPointerToKinematicParameter(dou
     break;
   case kisRelativeEnubias:
     KinematicValue = &(dunemcSamples[iSample].relative_enu_bias[iEvent]);
+    break;
+  case kEnubias:
+    KinematicValue = &(dunemcSamples[iSample].enu_bias[iEvent]);
     break;
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", KinematicVariable);
@@ -1164,6 +1247,7 @@ std::vector<double> samplePDFDUNEBeamFD_actuallyFD::ReturnKinematicParameterBinn
     case keHad_av:
     case kisCC:
     case kisRelativeEnubias:
+    case kEnubias:
     default:
         MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", static_cast<int>(KinematicParameter));
         throw MaCh3Exception(__FILE__, __LINE__);
@@ -1173,23 +1257,3 @@ std::vector<double> samplePDFDUNEBeamFD_actuallyFD::ReturnKinematicParameterBinn
 
 }
 
-
-/*
-std::pair<std::vector<double>, std::vector<double>> samplePDFDUNEBeamFD_actuallyFD::Return2DKinematicParameterBinning(std::string KinematicParameterStr) {
-    KinematicTypes KinematicParameter = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameterStr));
-
-    switch (KinematicParameter) {
-        case k_2Dxsec:{
-            return ExtractQ0Q3BinningFromYAML(
-                "/scratch/abipeake/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_fullgrid_smallerbins.yaml"
-            );
-          }
-        default:
-          MACH3LOG_ERROR("2D binning not defined for: {}", static_cast<int>(KinematicParameter));
-          throw MaCh3Exception(__FILE__, __LINE__);
-        
-        default:
-            MACH3LOG_ERROR("2D binning requested for non-2D Kinematic Parameter: {}", static_cast<int>(KinematicParameter));
-            throw MaCh3Exception(__FILE__, __LINE__);
-    }
-}*/
