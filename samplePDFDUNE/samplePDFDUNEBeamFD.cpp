@@ -75,6 +75,28 @@ void samplePDFDUNEBeamFD::Init() {
   MACH3LOG_INFO("-------------------------------------------------------------------");
 }
 
+// === HH: Functional parameters ===
+void samplePDFDUNEBeamFD::TotalEScaleND(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // Total energy scale uncertainties for anything but CC Numu, see:
+  // https://github.com/DUNE/lblpwgtools/blob/3d475f50a998fbfa6266df9a0c4eb3056c0cdfe5/CAFAna/Systs/EnergySysts.h#L39
+
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_had[iEvent];
+}
+
+void samplePDFDUNEBeamFD::RegisterFunctionalParameters() {
+  MACH3LOG_INFO("Registering functional parameters");
+  // This function manually populates the map of functional parameters
+  // Maps the name of the functional parameter to the pointer of the function
+
+  // This is the part where we manually enter things
+  // A lambda function has to be used so we can refer to a non-static member function
+  RegisterIndividualFuncPar("TotalEScaleND",
+                            kTotalEScaleND,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleND(par, iSample, iEvent); });
+  
+  MACH3LOG_INFO("Finished registering functional parameters");
+}
+
 void samplePDFDUNEBeamFD::SetupSplines() {
 
   ///@todo move all of the spline setup into core
@@ -440,6 +462,7 @@ Double_t _Ehad_veto;
   duneobj->isNC = new bool[duneobj->nEvents];
   duneobj->enurec_minus_enutrue = new double[duneobj->nEvents];
   duneobj->relative_enu_bias = new double[duneobj->nEvents];
+  duneobj->enu_bias = new double[duneobj->nEvents];
 
   _data->GetEntry(0);
   bool need_global_bin_numbers = (XVarStr == "global_bin_number");
@@ -583,6 +606,7 @@ Double_t _Ehad_veto;
     duneobj->p_lep[i] =(TVector3{_LepMomX, _LepMomY, _LepMomZ}).Mag();
 
     duneobj->relative_enu_bias[i] = ((_LepE) + eHad_truth - _ev)/(_ev);
+    duneobj->enu_bias[i] = ((_LepE) + eHad_truth - _ev);
     
 
     //Longer calculation for ERecQE-------------------------------------------------------------------------------
@@ -726,6 +750,9 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(int KinematicVariable, int 
   case kisRelativeEnubias:
     KinematicValue = (dunemcSamples[iSample].relative_enu_bias[iEvent]);
     break;
+  case kEnubias:
+    KinematicValue = (dunemcSamples[iSample].enu_bias[iEvent]);
+    break;
   default:
   MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", static_cast<int>(KinPar));
   MACH3LOG_ERROR("Was given a Kinematic Variable of {}", KinematicVariable);
@@ -816,6 +843,9 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(std::string KinematicParame
     break;
   case kisRelativeEnubias:
     KinematicValue = (dunemcSamples[iSample].relative_enu_bias[iEvent]);
+    break;
+  case kEnubias:
+    KinematicValue = (dunemcSamples[iSample].enu_bias[iEvent]);
     break;
   default:
    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type {}", KinematicParameter);
@@ -909,6 +939,9 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(std::string Ki
   case kisRelativeEnubias:
     KinematicValue = &(dunemcSamples[iSample].relative_enu_bias[iEvent]);
     break;
+  case kEnubias:
+    KinematicValue = &(dunemcSamples[iSample].enu_bias[iEvent]);
+    break;
  default:
    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", KinematicParameter);
    throw MaCh3Exception(__FILE__, __LINE__);
@@ -1000,6 +1033,9 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(double Kinemat
   case kisRelativeEnubias:
     KinematicValue = &(dunemcSamples[iSample].relative_enu_bias[iEvent]);
     break;
+  case kEnubias:
+    KinematicValue = &(dunemcSamples[iSample].enu_bias[iEvent]);
+    break;
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", KinematicVariable);
     throw MaCh3Exception(__FILE__, __LINE__);
@@ -1028,88 +1064,6 @@ void samplePDFDUNEBeamFD::setupFDMC(int iSample) {
   
 }
  
-void samplePDFDUNEBeamFD::applyShifts(int iSample, int iEvent) {
-
-  (void)iSample;
-  (void)iEvent;
-   
-  //ETA - this is pretty horrific... we need to think of a nicer way to do this.
-  //Don't want to add in hard checks on which systematics are defined but also don't want to hard-code
-  //the order in which the systematics are specified. All of these functions should have access to the 
-  //dunemc struct so they only need to have iSample and iEvent passed to them. Can probably loop over
-  //a vector of std::function objects and pass each of them iSample and iEvent.
-  /*
-   // reset erec back to original value
-  dunemcSamples[iSample].rw_erec_shifted[iEvent] = dunemcSamples[iSample].rw_erec[iEvent];
-
-  // reset cvnnumu back to original value
-  dunemcSamples[iSample].rw_cvnnumu_shifted[iEvent] = dunemcSamples[iSample].rw_cvnnumu[iEvent];
-
-  // reset cvnnue back to original value
-  dunemcSamples[iSample].rw_cvnnue_shifted[iEvent] = dunemcSamples[iSample].rw_cvnnue[iEvent];
-
-  //Calculate values needed
-  double sqrtErecHad =  sqrt(dunemcSamples[iSample].rw_erec_had[iEvent]);
-  double sqrtErecLep =  sqrt(dunemcSamples[iSample].rw_erec_lep[iEvent]);
-  double sqrteRecoPi0 = sqrt(dunemcSamples[iSample].rw_eRecoPi0[iEvent]);
-  double sqrteRecoN = sqrt(dunemcSamples[iSample].rw_eRecoN[iEvent]);
-  double sumEhad = dunemcSamples[iSample].rw_eRecoP[iEvent] + dunemcSamples[iSample].rw_eRecoPip[iEvent] + dunemcSamples[iSample].rw_eRecoPim[iEvent];
-  double sqrtSumEhad = sqrt(sumEhad);
-
-  double invSqrtErecHad =  1/(sqrtErecHad+0.1);
-  double invSqrtErecLep =  1/(sqrtErecLep+0.1);
-  double invSqrteRecoPi0 =  1/(sqrteRecoPi0+0.1);
-  double invSqrteRecoN =  1/(sqrteRecoN+0.1);
-  double invSqrtSumEhad =  1/(sqrtSumEhad+0.1);
-
-  bool CCnumu {dunemcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunemcSamples[iSample].rw_nuPDG[iEvent]==14) && dunemcSamples[iSample].nupdgUnosc==2};
-  bool CCnue {dunemcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunemcSamples[iSample].rw_nuPDG[iEvent]==12) && dunemcSamples[iSample].nupdgUnosc==1};
-  bool NotCCnumu {!(dunemcSamples[iSample].rw_isCC[iEvent]==1 && abs(dunemcSamples[iSample].rw_nuPDG[iEvent]==14)) && dunemcSamples[iSample].nupdgUnosc==2};
-
-
-  TotalEScaleFD(FDDetectorSystPointers[0], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_erec_had[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], NotCCnumu);
-
-  TotalEScaleSqrtFD(FDDetectorSystPointers[1], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_erec_had[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], sqrtErecHad, sqrtErecLep, NotCCnumu);
-
-  TotalEScaleInvSqrtFD(FDDetectorSystPointers[2], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_erec_had[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], invSqrtErecHad, invSqrtErecLep, NotCCnumu);
-
-  HadEScaleFD(FDDetectorSystPointers[3], &dunemcSamples[iSample].rw_erec_shifted[iEvent], sumEhad);
-
-  HadEScaleSqrtFD(FDDetectorSystPointers[4], &dunemcSamples[iSample].rw_erec_shifted[iEvent], sumEhad, sqrtSumEhad);
-
-  HadEScaleInvSqrtFD(FDDetectorSystPointers[5], &dunemcSamples[iSample].rw_erec_shifted[iEvent], sumEhad, invSqrtSumEhad);
-
-  MuEScaleFD(FDDetectorSystPointers[6], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], CCnumu);
-
-  MuEScaleSqrtFD(FDDetectorSystPointers[7], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], sqrtErecLep, CCnumu);
-
-  MuEScaleInvSqrtFD(FDDetectorSystPointers[8], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], invSqrtErecLep, CCnumu);
-
-  NEScaleFD(FDDetectorSystPointers[9], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoN[iEvent]);
-
-  NEScaleSqrtFD(FDDetectorSystPointers[10], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoN[iEvent], sqrteRecoN);
-
-  NEScaleInvSqrtFD(FDDetectorSystPointers[11], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoN[iEvent], invSqrteRecoN);
-
-  EMEScaleFD(FDDetectorSystPointers[12], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoPi0[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], CCnue);
-
-  EMEScaleSqrtFD(FDDetectorSystPointers[13], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoPi0[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], sqrtErecLep, sqrteRecoPi0, CCnue);
-
-  EMEScaleInvSqrtFD(FDDetectorSystPointers[14], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoPi0[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], invSqrtErecLep, invSqrteRecoPi0, CCnue);
-
-  HadResFD(FDDetectorSystPointers[15], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoP[iEvent], dunemcSamples[iSample].rw_eRecoPip[iEvent], dunemcSamples[iSample].rw_eRecoPim[iEvent], dunemcSamples[iSample].rw_eP[iEvent], dunemcSamples[iSample].rw_ePip[iEvent], dunemcSamples[iSample].rw_ePim[iEvent]);
-
-  MuResFD(FDDetectorSystPointers[16], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], dunemcSamples[iSample].rw_LepE[iEvent], CCnumu);
-
-  NResFD(FDDetectorSystPointers[17], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoN[iEvent], dunemcSamples[iSample].rw_eN[iEvent]);
-
-  EMResFD(FDDetectorSystPointers[18], &dunemcSamples[iSample].rw_erec_shifted[iEvent], dunemcSamples[iSample].rw_eRecoPi0[iEvent], dunemcSamples[iSample].rw_ePi0[iEvent], dunemcSamples[iSample].rw_erec_lep[iEvent], dunemcSamples[iSample].rw_LepE[iEvent], CCnue);
-
-  CVNNumuFD(FDDetectorSystPointers[19], &dunemcSamples[iSample].rw_cvnnumu_shifted[iEvent]);
-
-  CVNNueFD(FDDetectorSystPointers[20], &dunemcSamples[iSample].rw_cvnnue_shifted[iEvent]);
-  */
-}
 
 std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::string KinematicParameterStr) {
   KinematicTypes KinematicParameter = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameterStr));
@@ -1170,23 +1124,3 @@ std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::st
 
 }
 
-
-/*
-std::pair<std::vector<double>, std::vector<double>> samplePDFDUNEBeamFD::Return2DKinematicParameterBinning(std::string KinematicParameterStr) {
-    KinematicTypes KinematicParameter = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameterStr));
-
-    switch (KinematicParameter) {
-        case k_2Dxsec:{
-            return ExtractQ0Q3BinningFromYAML(
-                "/scratch/abipeake/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_fullgrid_smallerbins.yaml"
-            );
-          }
-        default:
-          MACH3LOG_ERROR("2D binning not defined for: {}", static_cast<int>(KinematicParameter));
-          throw MaCh3Exception(__FILE__, __LINE__);
-        
-        default:
-            MACH3LOG_ERROR("2D binning requested for non-2D Kinematic Parameter: {}", static_cast<int>(KinematicParameter));
-            throw MaCh3Exception(__FILE__, __LINE__);
-    }
-}*/

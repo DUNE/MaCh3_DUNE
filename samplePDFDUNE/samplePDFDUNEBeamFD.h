@@ -23,7 +23,7 @@ public:
   ~samplePDFDUNEBeamFD();
 
   /// @brief Enum to identify kinematics
-  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC, kq0, kq3, k_pT, k_pz, k_global_bin_number, kp_lep, ktheta_lep, kELepRec, kEHadRec, kERec_minus_Etrue, kERecQE, kENuProxy_minus_Enutrue, kyRec, keHad_av, kisCC, kisRelativeEnubias};
+  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC, kq0, kq3, k_pT, k_pz, k_global_bin_number, kp_lep, ktheta_lep, kELepRec, kEHadRec, kERec_minus_Etrue, kERecQE, kENuProxy_minus_Enutrue, kyRec, keHad_av, kisCC, kisRelativeEnubias, kEnubias};
   std::pair<std::vector<double>, std::vector<double>> Return2DKinematicParameterBinning(std::string KinematicParameterStr);
   std::vector<double> f1DEdges;
   TH1D* f1DHist = nullptr;
@@ -33,6 +33,7 @@ public:
 protected:
   /// @brief Initialises object
   void Init();
+
 
   /// @brief Function to setup MC from file
   /// @param iSample sample ID
@@ -47,8 +48,10 @@ protected:
   void SetupWeightPointers();
   void SetupSplines();
 
-  void RegisterFunctionalParameters(){};
+  void RegisterFunctionalParameters();
   double CalculatePOT();
+
+  void TotalEScaleND(const double * par, std::size_t iSample, std::size_t iEvent);
   
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter ID as int
@@ -88,10 +91,7 @@ protected:
   /// @param iEvent Event number
   double CalcXsecWeightFunc(int iSample, int iEvent) {(void) iSample; (void)iEvent; return 1.;}
 
-  /// @brief Apply kinematic shifts
-  /// @param iSample Sample Number
-  /// @param iEvent Event number
-  void applyShifts(int iSample, int iEvent);
+  
 
   // dunemc
   /// DUNE MC sampels
@@ -130,6 +130,9 @@ protected:
 
   /// Number of FD Detector Systematics
   int nFDDetectorSystPointers;
+  //void RegisterIndividualFunctionalParameter(const std::string& fpName, int fpEnum, FuncParFuncType fpFunc);
+
+  enum FuncParEnum {kTotalEScaleND};
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
@@ -157,7 +160,8 @@ protected:
     {"yRec",kyRec},
     {"eHad_av",keHad_av},
     {"isCC", kisCC},
-    {"isRelativeEnubias",  kisRelativeEnubias}
+    {"isRelativeEnubias",  kisRelativeEnubias},
+    {"Enubias", kEnubias}
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -186,7 +190,8 @@ protected:
     {kyRec, "yRec"},
     {keHad_av, "eHad_av"},
     {kisCC, "isCC"},
-    {kisRelativeEnubias, "isRelativeEnubias"}
+    {kisRelativeEnubias, "isRelativeEnubias"},
+    {kEnubias, "Enubias"}
   };
 };
 
