@@ -302,7 +302,8 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
 
   //Fill particle-level kinematic variables with default or actual (if possible at this stage) values
   if (_MotherTrkID->at(i_anapart) == 0) {
-    plotting_vars.particle_energy[i_anapart] = energy;
+    double invis_mass = (pdg == 2212 || pdg == 2112) ? mass : 0.; 
+    plotting_vars.particle_evis[i_anapart] = std::sqrt(energy*energy - invis_mass*invis_mass); // don't include rest mass energy for p/n
     plotting_vars.particle_momentum[i_anapart] = mom_tot;
     plotting_vars.particle_endmomentum[i_anapart] = end_mom;
     plotting_vars.particle_transversemomentum[i_anapart] = transverse_mom; //momentum transverse to B-field
@@ -568,6 +569,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     dunendgarmcFitting[i_event].rw_vtx_y = _MCVertY->at(0);
     dunendgarmcFitting[i_event].rw_vtx_z = _MCVertZ->at(0);
     dunendgarmcFitting[i_event].rw_ePi0 = 0.; 
+    dunendgarmcPlotting[i_event].npi0 = 0; 
 
     std::unordered_map<int, std::vector<int>> mother_to_daughter_ID; // particle track ID -> vector of daughter IDs
     std::unordered_map<int, size_t> ID_to_index; // particle track ID -> index in anatree
@@ -609,13 +611,14 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     }
 
     double muon_p2 = 0.;
+    double pi0_p2 = 0.;
     bool isEventAccepted = true;
-    int crit_layers = 2; // Number of outer layers of the calorimeter forming the 'critical' region
+    int crit_layers = 1; // Number of outer layers of the calorimeter forming the 'critical' region
 
     // Resize vectors for particle-level parameters
     size_t n_prim_in_event = mother_to_daughter_ID[0].size();
     dunendgarmcPlotting[i_event].particle_pdg.resize(n_prim_in_event, M3::_BAD_INT_);
-    dunendgarmcPlotting[i_event].particle_energy.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_evis.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
     dunendgarmcPlotting[i_event].particle_momentum.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
     dunendgarmcPlotting[i_event].particle_endmomentum.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
     dunendgarmcPlotting[i_event].particle_transversemomentum.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
@@ -670,7 +673,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       double EDepCrit = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers, crit_layers);
       // Check for containment
       bool isContained = true;
-      if (EDepCrit > 0.002) {
+      if (EDepCrit > 0.001) {
         isContained = false;
       }
 
@@ -695,14 +698,17 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
         dunendgarmcFitting[i_event].rw_lep_pY = p_y;
         dunendgarmcFitting[i_event].rw_lep_pZ = p_z;
         dunendgarmcFitting[i_event].rw_LepE = std::sqrt(p2 + mass*mass);
+        dunendgarmcPlotting[i_event].lep_tracklengthyz = dunendgarmcPlotting[i_event].particle_tracklengthyz[i_anaprim];
       }
 
       // Get pi0 information 
       if(pdg == 111) {
-        double mass = MaCh3Utils::GetMassFromPDG(pdg);
-        dunendgarmcFitting[i_event].rw_ePi0 += std::sqrt(p2+mass*mass);
+        dunendgarmcPlotting[i_event].npi0 ++;
+        if (p2 > pi0_p2) {
+          double mass = MaCh3Utils::GetMassFromPDG(pdg);
+          dunendgarmcFitting[i_event].rw_ePi0 = std::sqrt(p2+mass*mass);
+        }
       }
-
     }
     dunendgarmcPlotting[i_event].is_accepted = isEventAccepted;
 
@@ -781,6 +787,8 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
       return &dunendgarmcPlotting[iEvent].rw_lep_bangle;
     case kLepP:
       return &dunendgarmcPlotting[iEvent].rw_lep_p;
+    case kLepTrackLengthYZ:
+      return &dunendgarmcPlotting[iEvent].lep_tracklengthyz;
     case kTrueQ0:
       return &dunendgarmcFitting[iEvent].rw_Q0;
     case kTrueQ3:
@@ -826,6 +834,8 @@ double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, s
       return static_cast<double>(dunendgarmcFitting[iEvent].rw_isCC);
     case kInFDV:
       return static_cast<double>(dunendgarmcPlotting[iEvent].in_fdv);
+    case kNPi0:
+      return static_cast<double>(dunendgarmcPlotting[iEvent].npi0);
     default:
       return *GetPointerToKinematicParameter(KinPar, iEvent);
   }
@@ -882,8 +892,8 @@ std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(KinematicVecs 
       return std::vector<double>(
         dunendgarmcPlotting[iEvent].particle_isescaped.begin(),
         dunendgarmcPlotting[iEvent].particle_isescaped.end());
-    case kParticle_Energy:
-      return dunendgarmcPlotting[iEvent].particle_energy;
+    case kParticle_EVis:
+      return dunendgarmcPlotting[iEvent].particle_evis;
     case kParticle_Momentum:
       return dunendgarmcPlotting[iEvent].particle_momentum;
     case kParticle_EndMomentum:

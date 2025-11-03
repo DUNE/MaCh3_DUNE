@@ -12,9 +12,10 @@ public:
   ~SampleHandlerBeamNDGAr();
 
   enum KinematicTypes {kTrueNeutrinoEnergy, kMode, kOscChannel, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kTrueLepEnergy,
-    kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted,  kInFDV, kIsCC, kEPi0};
+    kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted,  kInFDV, kIsCC, kEPi0, kNPi0,
+    kLepTrackLengthYZ};
   
-  enum KinematicVecs {kParticle_Energy, kParticle_Momentum, kParticle_EndMomentum, kParticle_TransverseMomentum, 
+  enum KinematicVecs {kParticle_EVis, kParticle_Momentum, kParticle_EndMomentum, kParticle_TransverseMomentum, 
     kParticle_BAngle, kParticle_BeamAngle, kParticle_IsAccepted, kParticle_IsCurvatureResolved, kParticle_IsDecayed, kParticle_PDG,
     kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInBarrel, kParticle_IsStoppedInEndCap, kParticle_IsStoppedInGap, 
     kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_IsEscaped, kParticle_NTurns, kParticle_NHits,
@@ -137,6 +138,7 @@ protected:
     {"LepTheta",kLepTheta},
     {"LepPhi",kLepPhi},
     {"LepP",kLepP},
+    {"LepTrackLengthYZ",kLepTrackLengthYZ},
     {"LepBAngle",kLepBAngle},
     {"TrueQ0",kTrueQ0},
     {"TrueQ3",kTrueQ3},
@@ -144,6 +146,7 @@ protected:
     {"InFDV",kInFDV},
     {"IsCC",kIsCC},
     {"EPi0",kEPi0},
+    {"NPi0",kNPi0},
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -161,16 +164,18 @@ protected:
     {kLepPhi,"LepPhi"},
     {kLepBAngle,"LepBAngle"},
     {kLepP,"LepP"},
+    {kLepTrackLengthYZ,"LepTrackLengthYZ"},
     {kTrueQ0,"TrueQ0"},
     {kTrueQ3,"TrueQ3"},
     {kEvent_IsAccepted,"Event_IsAccepted"},
     {kInFDV,"InFDV"},
     {kIsCC,"IsCC"},
     {kEPi0,"EPi0"},
+    {kNPi0,"NPi0"},
   };
     
   const std::unordered_map<std::string, int> KinematicVectorsDUNE = {
-    {"Particle_Energy",kParticle_Energy},
+    {"Particle_EVis",kParticle_EVis},
     {"Particle_Momentum",kParticle_Momentum},
     {"Particle_EndMomentum",kParticle_EndMomentum},
     {"Particle_TransverseMomentum",kParticle_TransverseMomentum},
@@ -205,7 +210,7 @@ protected:
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicVectorsDUNE = {
-    {kParticle_Energy,"Particle_Energy"},
+    {kParticle_EVis,"Particle_EVis"},
     {kParticle_Momentum,"Particle_Momentum"},
     {kParticle_EndMomentum,"Particle_EndMomentum"},
     {kParticle_TransverseMomentum,"Particle_TransverseMomentum"},

@@ -1,5 +1,5 @@
 General:
-  OutputFile: "Outputs/projections_outputs/Projections_BField0.5_FidRad160_FidLen209_InstRad249.45_InstLen259_CC_Enu0to5_containedif_2layers2MeV_DS.root"
+  OutputFile: "Outputs/projections_outputs/Projections_BField0.5_FidRad160_FidLen209_InstRad260_InstLen250_CC_Enu0to5_containedif_1layers1MeV.root"
   DUNESamples: ["Configs/Samples/SamplePDFDune_NDGAr_FHC_numuselec.yaml"]
 
   OscillationParameters: []
@@ -29,15 +29,19 @@ General:
   Debug: No
 
 GeneralKinematicCuts:
-  - Name: "InFDV"
+  - Name: InFDV
     VarString: "InFDV"
     Range: [1.,2.]
-  - Name: "IsCC"
-    VarString: "IsCC"
+  - Name: IsCC
+    VarString: IsCC
     Range: [1.,2.]
-  - Name: "Enu"
-    VarString: "TrueNeutrinoEnergy"
+  - Name: Enu
+    VarString: TrueNeutrinoEnergy
     Range: [0.,5.]
+  # - Name: Particle_EDepCrit
+  #   VarString: Particle_EDepCrit
+  #   Range: [0.002, 100]
+
 
 Projections:
   - Name: TrueNeutrinoEnergy
@@ -214,6 +218,63 @@ Projections:
         VarString: Event_IsAccepted
         Range: [1.,2.]
 
+  - Name: Lepton_BAngle_Momentum_0pi0
+    VarStrings: ["LepBAngle","LepP"]
+    VarBins: [[90,0.,180.],[200,0.,6.]]
+    KinematicCuts:
+      - Name: NPi0
+        VarString: NPi0
+        Range: [0,0.5]
+
+  - Name: Accepted_Lepton_BAngle_Momentum_0pi0
+    VarStrings: ["LepBAngle","LepP"]
+    VarBins: [[90,0.,180.],[200,0.,6.]]
+    KinematicCuts:
+      - Name: NPi0
+        VarString: NPi0
+        Range: [0,0.5]
+      - Name: IsEventAccepted
+        VarString: Event_IsAccepted
+        Range: [1.,2.]
+
+  - Name: Lepton_BAngle_Momentum_1pi0
+    VarStrings: ["LepBAngle","LepP"]
+    VarBins: [[90,0.,180.],[200,0.,6.]]
+    KinematicCuts:
+      - Name: NPi0
+        VarString: NPi0
+        Range: [0.5,1.5]
+
+  - Name: Accepted_Lepton_BAngle_Momentum_1pi0
+    VarStrings: ["LepBAngle","LepP"]
+    VarBins: [[90,0.,180.],[200,0.,6.]]
+    KinematicCuts:
+      - Name: NPi0
+        VarString: NPi0
+        Range: [0.5,1.5]
+      - Name: IsEventAccepted
+        VarString: Event_IsAccepted
+        Range: [1.,2.]
+
+  - Name: Lepton_BAngle_Momentum_2+pi0
+    VarStrings: ["LepBAngle","LepP"]
+    VarBins: [[90,0.,180.],[200,0.,6.]]
+    KinematicCuts:
+      - Name: NPi0
+        VarString: NPi0
+        Range: [1.5,10]
+
+  - Name: Accepted_Lepton_BAngle_Momentum_2+pi0
+    VarStrings: ["LepBAngle","LepP"]
+    VarBins: [[90,0.,180.],[200,0.,6.]]
+    KinematicCuts:
+      - Name: NPi0
+        VarString: NPi0
+        Range: [1.5,10]
+      - Name: IsEventAccepted
+        VarString: Event_IsAccepted
+        Range: [1.,2.]
+
   - Name: LeptonBAngle_Q0
     VarStrings: ["LepBAngle", "TrueQ0"]
     VarBins: [[90,0,180],[100,0,5]]
@@ -355,6 +416,37 @@ Projections:
         Range: [2211.5, 2212.5]
       - Name: IsParticleAccepted
         VarString: Particle_IsAccepted
+        Range: [1.,2.]
+
+  - Name: Lepton_TrackLengthYZ_Momentum_banglecut
+    VarStrings: ["LepTrackLengthYZ","LepP"]
+    VarBins: [[100,0,500],[100,0,6]]
+    KinematicCuts:
+      - Name: BAngle
+        VarString: Particle_BAngle
+        Range: [50,130]
+
+  - Name: Accepted_Lepton_TrackLengthYZ_Momentum_banglecut
+    VarStrings: ["LepTrackLengthYZ","LepP"]
+    VarBins: [[100,0,500],[100,0,6]]
+    KinematicCuts:
+      - Name: BAngle
+        VarString: Particle_BAngle
+        Range: [50,130]
+      - Name: IsEventAccepted
+        VarString: Event_IsAccepted
+        Range: [1.,2.]
+
+  - Name: Lepton_TrackLengthYZ_Momentum
+    VarStrings: ["LepTrackLengthYZ","LepP"]
+    VarBins: [[100,0,500],[100,0,6]]
+
+  - Name: Accepted_Lepton_TrackLengthYZ_Momentum
+    VarStrings: ["LepTrackLengthYZ","LepP"]
+    VarBins: [[100,0,500],[100,0,6]]
+    KinematicCuts:
+      - Name: IsEventAccepted
+        VarString: Event_IsAccepted
         Range: [1.,2.]
 
   - Name: Particle_End_Radii
@@ -604,6 +696,46 @@ Projections:
       - Name: TPC
         VarString: Particle_IsStoppedInTPC
         Range: [1.,2.]
+      - Name: PDG
+        VarString: Particle_PDG
+        Range: [110.5,111.5]
+
+  - Name: pi+_EDepCrit
+    VarStrings: ["Particle_EDepCrit"]
+    VarBins: [[100,0,0.03]]
+    KinematicCuts:
+      - Name: PDG
+        VarString: Particle_PDG
+        Range: [210.5,211.5]
+
+  - Name: pi-_EDepCrit
+    VarStrings: ["Particle_EDepCrit"]
+    VarBins: [[100,0,0.03]]
+    KinematicCuts:
+      - Name: PDG
+        VarString: Particle_PDG
+        Range: [-211.5,-210.5]
+
+  - Name: mu_EDepCrit
+    VarStrings: ["Particle_EDepCrit"]
+    VarBins: [[100,0,0.03]]
+    KinematicCuts:
+      - Name: PDG
+        VarString: Particle_PDG
+        Range: [12.5,13.5]
+
+  - Name: proton_EDepCrit
+    VarStrings: ["Particle_EDepCrit"]
+    VarBins: [[100,0,0.03]]
+    KinematicCuts:
+      - Name: PDG
+        VarString: Particle_PDG
+        Range: [2211.5,2212.5]
+
+  - Name: pi0_EDepCrit
+    VarStrings: ["Particle_EDepCrit"]
+    VarBins: [[100,0,0.03]]
+    KinematicCuts:
       - Name: PDG
         VarString: Particle_PDG
         Range: [110.5,111.5]
