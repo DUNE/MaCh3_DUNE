@@ -96,11 +96,14 @@ struct dunemc_plotting { // Store variables just used in plotting (cleared from 
   double rw_lep_phi;
   double rw_lep_theta;
   double rw_lep_bangle;
-
+  double lep_tracklengthyz;
+  int npi0;
+  double rw_ePi0;
+ 
   std::vector<int> particle_event = {};
   std::vector<int> particle_trkid = {};
   std::vector<int> particle_pdg = {};
-  std::vector<double> particle_energy = {};
+  std::vector<double> particle_evis = {};
   std::vector<double> particle_theta = {};
   std::vector<double> particle_bangle = {};
   std::vector<double> particle_beamangle = {};

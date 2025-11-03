@@ -7,7 +7,6 @@
 #include <TLegend.h>
 
 #include "Samples/MaCh3DUNEFactory.h"
-#include "Samples/StructsDUNE.h"
 
 bool IncludeKinematicCutsInTitle = true;
 

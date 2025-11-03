@@ -8,6 +8,8 @@
 #include "TLegend.h"
 #include "DUNEStyle.h"
 
+#include <TKey.h>
+#include <TLatex.h>
 #include <iostream>
 
 TH1* rebinHist(TH1* hist) {
@@ -21,6 +23,18 @@ TH1* rebinHist(TH1* hist) {
     if (hist2D) return (TH1*)hist2D->Rebin2D(2, 2);
   }
   else if (std::string(hist->GetTitle()).find("TrueQ3_vs_TrueQ0") != std::string::npos) {
+    TH2D* hist2D = dynamic_cast<TH2D*>(hist);
+    if (hist2D) return (TH1*)hist2D->Rebin2D(2, 2);
+  }
+  else if (std::string(hist->GetTitle()).find("LepBAngle_vs_LepP") != std::string::npos) {
+    TH2D* hist2D = dynamic_cast<TH2D*>(hist);
+    if (hist2D) return (TH1*)hist2D->Rebin2D(1, 1);
+  }
+  else if (std::string(hist->GetTitle()).find("LeptonBAngle_Q0") != std::string::npos) {
+    TH2D* hist2D = dynamic_cast<TH2D*>(hist);
+    if (hist2D) return (TH1*)hist2D->Rebin2D(2, 2);
+  }
+  else if (std::string(hist->GetTitle()).find("LeptonBAngle_EPi0") != std::string::npos) {
     TH2D* hist2D = dynamic_cast<TH2D*>(hist);
     if (hist2D) return (TH1*)hist2D->Rebin2D(2, 2);
   }
@@ -86,8 +100,27 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename) {
     std::string histname = key->GetName();
     changeAxisTitle(rawHist->GetXaxis());
     changeAxisTitle(rawHist->GetYaxis());
-    if (obj->InheritsFrom(TH1D::Class())) rawHist->Draw("HIST");
-    else rawHist->Draw("COLZ");
+
+    double totEntries = 0;
+
+    if (obj->InheritsFrom(TH1D::Class())) {
+      rawHist->Draw("HIST");
+
+      for (int i = 1; i <= rawHist->GetNbinsX(); i++) { // Undo width scaling
+        totEntries += rawHist->GetBinContent(i) * rawHist->GetBinWidth(i);
+      }
+      totEntries += rawHist->GetBinContent(rawHist->GetNbinsX()+1);
+    }
+    else {
+      rawHist->Draw("COLZ");
+      totEntries = rawHist->Integral(0, rawHist->GetNbinsX()+1);
+    }
+
+    TText text;
+    text.SetNDC();
+    text.SetTextSize(0.03);
+    text.DrawText(0.05,0.05,Form("Entries: %.0f", totEntries));
+
     rawHist->GetXaxis()->SetTitleOffset(1.3);
     canvas->Print(outputfile);
     std::cout << "Drawn histogram: " << key->GetName() << std::endl;
