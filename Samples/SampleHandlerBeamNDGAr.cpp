@@ -568,7 +568,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     dunendgarmcFitting[i_event].rw_vtx_x = _MCVertX->at(0);
     dunendgarmcFitting[i_event].rw_vtx_y = _MCVertY->at(0);
     dunendgarmcFitting[i_event].rw_vtx_z = _MCVertZ->at(0);
-    dunendgarmcFitting[i_event].rw_ePi0 = 0.; 
+    dunendgarmcPlotting[i_event].rw_ePi0 = 0.; 
     dunendgarmcPlotting[i_event].npi0 = 0; 
 
     std::unordered_map<int, std::vector<int>> mother_to_daughter_ID; // particle track ID -> vector of daughter IDs
@@ -706,7 +706,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
         dunendgarmcPlotting[i_event].npi0 ++;
         if (p2 > pi0_p2) {
           double mass = MaCh3Utils::GetMassFromPDG(pdg);
-          dunendgarmcFitting[i_event].rw_ePi0 = std::sqrt(p2+mass*mass);
+          dunendgarmcPlotting[i_event].rw_ePi0 = std::sqrt(p2+mass*mass);
         }
       }
     }
@@ -794,7 +794,7 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
     case kTrueQ3:
       return &dunendgarmcFitting[iEvent].rw_Q3;
     case kEPi0:
-      return &dunendgarmcFitting[iEvent].rw_ePi0;
+      return &dunendgarmcPlotting[iEvent].rw_ePi0;
     default:
       MACH3LOG_ERROR("Did not recognise Kinematic Parameter {}", static_cast<int>(KinematicParameter));
       throw MaCh3Exception(__FILE__, __LINE__);

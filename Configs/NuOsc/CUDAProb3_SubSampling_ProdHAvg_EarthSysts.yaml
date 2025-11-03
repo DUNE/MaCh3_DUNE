@@ -18,8 +18,8 @@ Binned:
   CosineZAxisHistName: "FineCosZ"
 #  FileName: "./Inputs/Atmospherics/ExampleAtmosphericBinning.root"
 #  EnergyAxisHistName: "EnergyAxisBinning"
-#  CosineZAxisHistName: "CosineZAxisBinning"  
-  
+#  CosineZAxisHistName: "CosineZAxisBinning"
+
 OscProbCalcerSetup:
   ImplementationName: "CUDAProb3"
   EarthModelFileName: "./Inputs/Atmospherics/PREM_4layer.dat"
