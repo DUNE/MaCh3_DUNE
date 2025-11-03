@@ -11,7 +11,7 @@ SampleHandlerBeamFD::~SampleHandlerBeamFD() {
 }
 
 void SampleHandlerBeamFD::Init() {
-  dunemcSamples.resize(nSamples,dunemc_base());
+  dunemcSamples.resize(nSamples,dunemc_beamfd());
   
   if (CheckNodeExists(SampleManager->raw(), "DUNESampleBools", "iselike" )) {
     iselike = SampleManager->raw()["DUNESampleBools"]["iselike"].as<bool>();
@@ -465,61 +465,6 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   _data->SetBranchStatus("vtx_z", 1);
   _data->SetBranchAddress("vtx_z", &_vtx_z);  
 
-  // now fill the actual variables
-  /*
-  duneobj->nEvents = static_cast<int>(_data->GetEntries());
-
-  // allocate memory for dunemc variables
-  duneobj->rw_cvnnumu = new double[duneobj->nEvents];
-  duneobj->rw_cvnnue = new double[duneobj->nEvents];
-  duneobj->rw_cvnnumu_shifted = new double[duneobj->nEvents];
-  duneobj->rw_cvnnue_shifted = new double[duneobj->nEvents];
-  duneobj->rw_etru = new double[duneobj->nEvents];
-  duneobj->rw_erec = new double[duneobj->nEvents];
-  duneobj->rw_erec_shifted = new double[duneobj->nEvents];
-  duneobj->rw_erec_had = new double[duneobj->nEvents];
-  duneobj->rw_erec_lep = new double[duneobj->nEvents];
-
-  duneobj->rw_eRecoP = new double[duneobj->nEvents];
-  duneobj->rw_eRecoPip = new double[duneobj->nEvents];
-  duneobj->rw_eRecoPim = new double[duneobj->nEvents];
-  duneobj->rw_eRecoPi0 = new double[duneobj->nEvents];
-  duneobj->rw_eRecoN = new double[duneobj->nEvents];
-
-  duneobj->rw_LepE = new double[duneobj->nEvents];
-  duneobj->rw_eP = new double[duneobj->nEvents];
-  duneobj->rw_ePip = new double[duneobj->nEvents];
-  duneobj->rw_ePim = new double[duneobj->nEvents];
-  duneobj->rw_ePi0 = new double[duneobj->nEvents];
-  duneobj->rw_eN = new double[duneobj->nEvents];
-
-  duneobj->rw_erec_had_sqrt = new double[duneobj->nEvents];
-  duneobj->rw_erec_lep_sqrt = new double[duneobj->nEvents];
-  duneobj->rw_eRecoN_sqrt = new double[duneobj->nEvents];
-  duneobj->rw_eRecoPi0_sqrt = new double[duneobj->nEvents];
-
-  duneobj->rw_sum_ehad = new double[duneobj->nEvents];
-  duneobj->rw_sum_ehad_sqrt = new double[duneobj->nEvents];
-
-  duneobj->rw_trueccnue = new double[duneobj->nEvents];
-  duneobj->rw_trueccnumu = new double[duneobj->nEvents];
-
-
-  duneobj->rw_theta = new double[duneobj->nEvents];
-  duneobj->flux_w = new double[duneobj->nEvents];
-  duneobj->rw_isCC = new int[duneobj->nEvents];
-  duneobj->rw_nuPDGunosc = new int[duneobj->nEvents];
-  duneobj->rw_nuPDG = new int[duneobj->nEvents];
-  duneobj->rw_berpaacvwgt = new double[duneobj->nEvents]; 
-  duneobj->rw_vtx_x = new double[duneobj->nEvents];
-  duneobj->rw_vtx_y = new double[duneobj->nEvents];
-  duneobj->rw_vtx_z = new double[duneobj->nEvents];
-
-  duneobj->nupdgUnosc = new int[duneobj->nEvents];
-  duneobj->nupdg = new int[duneobj->nEvents];
-  duneobj->mode = new double[duneobj->nEvents];
-  duneobj->Target = new int[duneobj->nEvents];
-  */
   size_t nEntries = static_cast<size_t>(_data->GetEntries());
   dunemcSamples.resize(nEntries);
   _data->GetEntry(0);

@@ -17,7 +17,7 @@ SampleHandlerAtm::~SampleHandlerAtm() {
 }
 
 void SampleHandlerAtm::Init() {
-  dunemcSamples.resize(nSamples,dunemc_base());
+  dunemcSamples.resize(nSamples,dunemc_atm());
   
   IsELike = Get<bool>(SampleManager->raw()["SampleOptions"]["IsELike"],__FILE__,__LINE__);
   ExposureScaling = Get<double>(SampleManager->raw()["SampleOptions"]["ExposureScaling"],__FILE__,__LINE__);

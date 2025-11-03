@@ -49,7 +49,7 @@ protected:
   std::vector<double> ReturnKinematicVector(int KinematicVector, int iEvent) override;
   std::vector<double> ReturnKinematicVector(std::string KinematicVector, int iEvent) override;
 
-  std::vector<dunemc_base> dunendgarmcFitting;
+  std::vector<dunemc_beamndgar> dunendgarmcFitting;
   std::vector<dunemc_plotting> dunendgarmcPlotting;
 
   //NDGAr-specific functions

@@ -141,7 +141,7 @@ protected:
 
   // dunemc
   /// DUNE MC sampels
-  std::vector<struct dunemc_base> dunemcSamples;
+  std::vector<struct dunemc_beamfd> dunemcSamples;
 
   /// Value of POT used for sample
   double pot;

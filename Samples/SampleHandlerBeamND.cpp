@@ -19,7 +19,7 @@ SampleHandlerBeamND::~SampleHandlerBeamND() {
 }
 
 void SampleHandlerBeamND::Init() {
-  dunendmcSamples.resize(nSamples,dunemc_base());
+  dunendmcSamples.resize(nSamples,dunemc_beamnd());
   
   IsFHC = SampleManager->raw()["DUNESampleBools"]["isFHC"].as<double>();
   iselike = SampleManager->raw()["DUNESampleBools"]["iselike"].as<bool>();
@@ -108,66 +108,6 @@ int SampleHandlerBeamND::SetupExperimentMC() {
   _data->SetBranchStatus("BeRPA_A_cvwgt", 1);
   _data->SetBranchAddress("BeRPA_A_cvwgt", &_BeRPA_cvwgt);
 
-  _data->SetBranchStatus("eRecoP", 1);
-  _data->SetBranchAddress("eRecoP", &_eRecoP);
-  _data->SetBranchStatus("eRecoPip", 1);
-  _data->SetBranchAddress("eRecoPip", &_eRecoPip);
-  _data->SetBranchStatus("eRecoPim", 1);
-  _data->SetBranchAddress("eRecoPim", &_eRecoPim);
-  _data->SetBranchStatus("eRecoPi0", 1);
-  _data->SetBranchAddress("eRecoPi0", &_eRecoPi0);
-  _data->SetBranchStatus("eRecoN", 1);
-  _data->SetBranchAddress("eRecoN", &_eRecoN);
-
-  _data->SetBranchStatus("LepE", 1);
-  _data->SetBranchAddress("LepE", &_LepE);
-  _data->SetBranchStatus("eP", 1);
-  _data->SetBranchAddress("eP", &_eP);
-  _data->SetBranchStatus("ePip", 1);
-  _data->SetBranchAddress("ePip", &_ePip);
-  _data->SetBranchStatus("ePim", 1);
-  _data->SetBranchAddress("ePim", &_ePim);
-  _data->SetBranchStatus("ePi0", 1);
-  _data->SetBranchAddress("ePi0", &_ePi0);
-  _data->SetBranchStatus("eN", 1);
-  _data->SetBranchAddress("eN", &_eN);
-
-  /*
-  duneobj->nEvents = static_cast<int>(_data->GetEntries());
-
-  duneobj->rw_yrec = new double[duneobj->nEvents];
-  duneobj->rw_erec_lep = new double[duneobj->nEvents];
-  duneobj->rw_erec_had = new double[duneobj->nEvents];
-  duneobj->rw_etru = new double[duneobj->nEvents];
-  duneobj->rw_erec = new double[duneobj->nEvents];
-  duneobj->rw_erec_shifted = new double[duneobj->nEvents];
-  duneobj->rw_theta = new double[duneobj->nEvents];
-  duneobj->flux_w = new double[duneobj->nEvents];
-  duneobj->rw_isCC = new int[duneobj->nEvents];
-  duneobj->rw_reco_q = new double[duneobj->nEvents];
-  duneobj->rw_nuPDGunosc = new int[duneobj->nEvents];
-  duneobj->rw_nuPDG = new int[duneobj->nEvents];
-  duneobj->rw_berpaacvwgt = new double[duneobj->nEvents]; 
-
-  duneobj->rw_eRecoP = new double[duneobj->nEvents];
-  duneobj->rw_eRecoPip = new double[duneobj->nEvents];
-  duneobj->rw_eRecoPim = new double[duneobj->nEvents];
-  duneobj->rw_eRecoPi0 = new double[duneobj->nEvents];
-  duneobj->rw_eRecoN = new double[duneobj->nEvents];
-
-  duneobj->rw_LepE = new double[duneobj->nEvents];
-  duneobj->rw_eP = new double[duneobj->nEvents];
-  duneobj->rw_ePip = new double[duneobj->nEvents];
-  duneobj->rw_ePim = new double[duneobj->nEvents];
-  duneobj->rw_ePi0 = new double[duneobj->nEvents];
-  duneobj->rw_eN = new double[duneobj->nEvents];
-
-  duneobj->nupdg = new int[duneobj->nEvents];
-  duneobj->nupdgUnosc = new int[duneobj->nEvents];
-  duneobj->mode = new double[duneobj->nEvents];
-  duneobj->Target = new int[duneobj->nEvents];
-  */
-
   size_t nEntries = static_cast<size_t>(_data->GetEntries());
   dunendmcSamples.resize(nEntries);
   _data->GetEntry(0);
@@ -197,22 +137,7 @@ int SampleHandlerBeamND::SetupExperimentMC() {
     dunendmcSamples[i].rw_theta = _LepNuAngle;
     dunendmcSamples[i].rw_isCC = _isCC;
     dunendmcSamples[i].rw_reco_q = _reco_q;
-    // dunendmcSamples[i].rw_nuPDGunosc = _nuPDGunosc;
-    // dunendmcSamples[i].rw_nuPDG = _nuPDG;
     dunendmcSamples[i].rw_berpaacvwgt = _BeRPA_cvwgt;
-    
-    dunendmcSamples[i].rw_eRecoP = _eRecoP; 
-    dunendmcSamples[i].rw_eRecoPip = _eRecoPip; 
-    dunendmcSamples[i].rw_eRecoPim = _eRecoPim; 
-    dunendmcSamples[i].rw_eRecoPi0 = _eRecoPi0; 
-    dunendmcSamples[i].rw_eRecoN = _eRecoN; 
-    
-    dunendmcSamples[i].rw_LepE = _LepE; 
-    dunendmcSamples[i].rw_eP = _eP; 
-    dunendmcSamples[i].rw_ePip = _ePip; 
-    dunendmcSamples[i].rw_ePim = _ePim; 
-    dunendmcSamples[i].rw_ePi0 = _ePi0; 
-    dunendmcSamples[i].rw_eN = _eN; 
     
     //Assume everything is on Argon for now....
     dunendmcSamples[i].Target = 40;
