@@ -5,6 +5,7 @@
 #include "covariance/covarianceBase.h"
 
 
+
 int main(int argc, char* argv[]) {
   /////////// 1. Setup
   if (argc == 1) {
@@ -294,7 +295,7 @@ fOut->cd();
 
 for (int i = 0; i < no_times_sampling_posterior; ++i) {
     if (i % (no_times_sampling_posterior / 10) == 0) {
-        MaCh3Utils::PrintProgressBar(i, no_times_sampling_posterior);
+        //MaCh3Utils::PrintProgressBar(i, no_times_sampling_posterior);
     }
 
     // --- Draw a random MCMC entry
@@ -304,34 +305,20 @@ for (int i = 0; i < no_times_sampling_posterior; ++i) {
         mcmc->GetEntry(entry);   // fills xsec_tmp and mcmc_step
     } while ((unsigned int)mcmc_step < burn_in);
 
-    /*
-    // --- Update working xsec_draw array from ROOT branch values
-    for (size_t j = 0; j < xsec_draw.size(); ++j) {
-        xsec_draw[j] = xsec_tmp[j];
-    }*/
 
     //test to see if making the parameter variations bigger gives a noticable sized error band
-    double inflateFactor = 100.0; 
+    double inflateFactor = 1.0; 
     for (size_t j = 0; j < xsec_draw.size(); ++j) {
         double nominal = xsec_nominal[j];
         double delta = xsec_tmp[j] - nominal;
         xsec_draw[j] = nominal + inflateFactor * delta;
     }
     xsec->setParameters(xsec_draw);
-
+    // --- Apply sample parameters to xsec object
+    //xsec->setParameters(xsec_draw);
+    //osc->setParameters(OscPars);
 
     
-    /*std::cout << "[DEBUG] Sample " << i << " from entry " << entry
-              << " | Step: " << mcmc_step
-              << " | xsec[0..4]: "
-              << xsec_draw[0] << " " << xsec_draw[1] << " "
-              << xsec_draw[2] << " " << xsec_draw[3] << " "
-              << xsec_draw[4] << "\n";*/
-
-    // --- Apply sample parameters to xsec object
-    xsec->setParameters(xsec_draw);
-    osc->setParameters(OscPars);
-
     std::cout << "[DEBUG] First few active xsecs before reweight: ";
     for (int k = 0; k < 5; ++k)
         std::cout << xsec_tmp[active_xsecs[k]] << " ";
@@ -346,7 +333,7 @@ for (int i = 0; i < no_times_sampling_posterior; ++i) {
         DUNEPdfs[j]->reweight();
 
         // Get 1D projection
-        TH1D* h = DUNEPdfs[j]->get1DHist();
+        TH1D* h = DUNEPdfs[j]->get1DHist();  //add more histograms here for different histograms /projections
         if (!h) continue;
 
         TString histName = Form("%s_posterior_sample_%04d", 
@@ -357,11 +344,9 @@ for (int i = 0; i < no_times_sampling_posterior; ++i) {
         delete writeHist;
 
         
-        std::cout << "[DEBUG] PDF " << j 
-                  << " after reweight, integral: " << h->Integral() << "\n";
+        //std::cout << "[DEBUG] PDF " << j << " after reweight, integral: " << h->Integral() << "\n";
     }
 }
-
 
     // inside the sample loop after xsec->setParameters(xsec_draw) and DUNEPdfs[j]->reweight()
     const std::vector<KinematicCut> emptySelectionVec;

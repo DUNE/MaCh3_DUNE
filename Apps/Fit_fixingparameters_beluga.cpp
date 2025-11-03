@@ -73,7 +73,7 @@ struct BinningResult {
     std::vector<double> q3_edges;
 };
 
-
+/*
 BinningResult extract_2D_bins_from_yaml(const std::string& yaml_file, const std::string& xsecvar1, const std::string& xsecvar2) {
     BinningResult result;
     std::set<double> q0_set;
@@ -133,65 +133,174 @@ BinningResult extract_2D_bins_from_yaml(const std::string& yaml_file, const std:
     }
 
     return result;
+}*/
+
+BinningResult extract_bins_from_yaml(const std::string& yaml_file,
+                                     const std::string& xsecvar1,
+                                     const std::string& xsecvar2) {
+    BinningResult result;
+    std::set<double> var1_edges;
+    std::set<double> var2_edges;
+
+    bool has_var1 = false;
+    bool has_var2 = false;
+
+    try {
+        YAML::Node config = YAML::LoadFile(yaml_file);
+        const auto& systs = config["Systematics"];
+        int index = 0;
+
+        for (const auto& systematic : systs) {
+            const auto& sys = systematic["Systematic"];
+            const auto& cuts = sys["KinematicCuts"];
+
+            double v1_min = 0, v1_max = 0;
+            double v2_min = 0, v2_max = 0;
+            bool found_v1 = false, found_v2 = false;
+
+            for (const auto& cut : cuts) {
+                if (cut[xsecvar1]) {
+                    const auto& v1 = cut[xsecvar1];
+                    if (v1.IsSequence() && v1.size() == 2) {
+                        v1_min = v1[0].as<double>();
+                        v1_max = v1[1].as<double>();
+                        found_v1 = true;
+                        has_var1 = true;
+                    }
+                }
+                if (cut[xsecvar2]) {
+                    const auto& v2 = cut[xsecvar2];
+                    if (v2.IsSequence() && v2.size() == 2) {
+                        v2_min = v2[0].as<double>();
+                        v2_max = v2[1].as<double>();
+                        found_v2 = true;
+                        has_var2 = true;
+                    }
+                }
+            }
+
+            if (found_v1 && found_v2) {
+                // 2D bin
+                var1_edges.insert(v1_min);
+                var1_edges.insert(v1_max);
+                var2_edges.insert(v2_min);
+                var2_edges.insert(v2_max);
+                result.binDefs.push_back({index++, v1_min, v1_max, v2_min, v2_max});
+            } else if (found_v1 && !found_v2) {
+                // 1D bin (var1 only)
+                var1_edges.insert(v1_min);
+                var1_edges.insert(v1_max);
+                result.binDefs.push_back({index++, v1_min, v1_max, 0.0, 0.0});
+            } else if (found_v2 && !found_v1) {
+                // 1D bin (var2 only)
+                var2_edges.insert(v2_min);
+                var2_edges.insert(v2_max);
+                result.binDefs.push_back({index++, v2_min, v2_max, 0.0, 0.0});
+            }
+        }
+
+        // Assign edges based on what we found
+        if (has_var1) result.q0_edges.assign(var1_edges.begin(), var1_edges.end());
+        if (has_var2) result.q3_edges.assign(var2_edges.begin(), var2_edges.end());
+
+        // Logging
+        if (has_var1 && has_var2) {
+            std::cout << "Parsed " << result.binDefs.size() << " 2D bins\n";
+            std::cout << "   " << xsecvar1 << " edges: " 
+                      << (result.q0_edges.empty() ? 0 : result.q0_edges.size() - 1) << "\n";
+            std::cout << "   " << xsecvar2 << " edges: "
+                      << (result.q3_edges.empty() ? 0 : result.q3_edges.size() - 1) << "\n";
+        } else if (has_var1) {
+            std::cout << "Parsed " << result.binDefs.size() << " 1D bins (variable: " 
+                      << xsecvar1 << ")\n";
+            std::cout << "   " << xsecvar1 << " edges: "
+                      << (result.q0_edges.empty() ? 0 : result.q0_edges.size() - 1) << "\n";
+        } else if (has_var2) {
+            std::cout << "Parsed " << result.binDefs.size() << " 1D bins (variable: " 
+                      << xsecvar2 << ")\n";
+            std::cout << "   " << xsecvar2 << " edges: "
+                      << (result.q3_edges.empty() ? 0 : result.q3_edges.size() - 1) << "\n";
+        } else {
+            std::cerr << "No valid binning variables (" << xsecvar1 << ", " << xsecvar2
+                      << ") found in YAML.\n";
+        }
+
+    } catch (const std::exception& e) {
+        std::cerr << "YAML parsing failed: " << e.what() << "\n";
+    }
+
+    return result;
 }
 
 
-void FixLowStatParams(covarianceXsec* xsec, TH2D* h_q0q3, double total_events, double frac_threshold,
-                      std::vector<std::string>& fixed_names_out, const std::vector<BinDef>& binDefs) {
-    int nbins_q0 = h_q0q3->GetNbinsY();
-    int nbins_q3 = h_q0q3->GetNbinsX();
+
+void FixLowStatParams(
+    covarianceXsec* xsec,
+    TH1* h_1d,             // can be TH1D or nullptr
+    TH2D* h_2d,            // can be nullptr
+    double total_events,
+    double frac_threshold,
+    std::vector<std::string>& fixed_names_out,
+    const std::vector<BinDef>& binDefs
+) {
     double threshold = frac_threshold * total_events;
 
-    std::cout << "Fixing low-stat parameters...\n";
-    std::cout << " - frac_threshold (YAML) = " << frac_threshold << std::endl;
-    std::cout << " - total events in histogram = " << total_events << std::endl;
-    std::cout << " - Fixing threshold = " << threshold << " events\n";
+    std::cout << "\n[FixLowStatParams] Starting low-stat parameter fixing...\n";
+    std::cout << " - frac_threshold = " << frac_threshold << "\n";
+    std::cout << " - total events = " << total_events << "\n";
+    std::cout << " - event threshold = " << threshold << "\n";
+
+    bool is2D = (h_2d != nullptr);
+    bool is1D = (h_1d != nullptr);
+
+    if (!is1D && !is2D) {
+        std::cerr << "[ERROR] Both h_1d and h_2d are null — nothing to do.\n";
+        return;
+    }
 
     for (const auto& bin : binDefs) {
-        double q0 = 0.5 * (bin.q0_min + bin.q0_max);
-        double q3 = 0.5 * (bin.q3_min + bin.q3_max);
+        double val = 0.0;
+        int binx = -1, biny = -1;
 
-       int bin_q0 = h_q0q3->GetXaxis()->FindBin(q0);  // q0 is X
-        int bin_q3 = h_q0q3->GetYaxis()->FindBin(q3);  // q3 is Y
-        double val = h_q0q3->GetBinContent(bin_q0, bin_q3);  // order: X, Y
+        if (is2D) {
+            double q0 = 0.5 * (bin.q0_min + bin.q0_max);
+            double q3 = 0.5 * (bin.q3_min + bin.q3_max);
 
+            binx = h_2d->GetXaxis()->FindBin(q0);
+            biny = h_2d->GetYaxis()->FindBin(q3);
+            val = h_2d->GetBinContent(binx, biny);
 
-        std::cout << "  bin.q0_min = " << bin.q0_min << ", bin.q0_max = " << bin.q0_max << std::endl;
-        std::cout << "  bin center q0 = " << q0 << ", q3 = " << q3 << std::endl;
-        std::cout << "  BinX = " << bin_q0 << ", BinY = " << bin_q3 << std::endl;
+            std::cout << "Bin idx=" << bin.index
+                      << " (q0=" << q0 << ", q3=" << q3
+                      << ") → content=" << val << "\n";
+        }
+        else if (is1D) {
+            // Pick the valid variable from the binDef
+            double q = (bin.q0_max > bin.q0_min) ? 0.5 * (bin.q0_min + bin.q0_max)
+                                                 : 0.5 * (bin.q3_min + bin.q3_max);
+            binx = h_1d->GetXaxis()->FindBin(q);
+            val = h_1d->GetBinContent(binx);
 
-        std::cout << "  Using bin center from histogram: q0 = " 
-          << h_q0q3->GetXaxis()->GetBinCenter(bin_q0)
-          << ", q3 = " 
-          << h_q0q3->GetYaxis()->GetBinCenter(bin_q3)
-          << std::endl;
-
-
-        
-        if (bin_q0 < 1 || bin_q0 > nbins_q0 || bin_q3 < 1 || bin_q3 > nbins_q3) {
-            std::cerr << "Warning: bin center out of range (q0=" << q0 << ", q3=" << q3 << ")\n";
-            continue;
+            std::cout << "Bin idx=" << bin.index
+                      << " (center=" << q << ") → content=" << val << "\n";
         }
 
-   
-        std::cout << " - Bin idx=" << bin.index << ", content=" << val << " at (q0=" << q0 << ", q3=" << q3 << ")\n";
-
+        // Out-of-range protection
+        if (val < 0) val = 0.0;
         if (val < threshold) {
             std::cout << std::fixed << std::setprecision(2)
-          << "Checking bin index " << bin.index
-          << ": (q0=" << q0 << ", q3=" << q3 << "), val=" << val
-          << ", threshold=" << threshold
-          << (val < threshold ? " → FIXING" : " → keeping")
-          << std::endl;
+                      << "  → FIXING param " << bin.index
+                      << " (val=" << val << " < threshold=" << threshold << ")\n";
 
             xsec->setSingleParameter(bin.index, 0.0);
-            xsec->toggleFixParameter(bin.index); // If needed, guard with IsParameterFixed()
+            xsec->toggleFixParameter(bin.index);
             fixed_names_out.push_back(xsec->GetParFancyName(bin.index));
         }
     }
 
     std::cout << "Total fixed parameters: " << fixed_names_out.size() << "\n";
 }
+
 
 
 
@@ -226,24 +335,44 @@ int main(int argc, char* argv[]) {
   }
   OutputFile->cd();
 
-  std::string xsec_param_yaml = "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_fullgrid_smallerbins.yaml";
+  
   auto xsec_var1 = FitManager->raw()["General"]["Systematics"]["xsec_var1"].as<std::string>();
   auto xsec_var2 = FitManager->raw()["General"]["Systematics"]["xsec_var2"].as<std::string>();
   auto xsec_yaml = FitManager->raw()["General"]["Systematics"]["XsecCovFile"][0].as<std::string>();
   auto fixing_threshold = FitManager->raw()["General"]["Systematics"]["Parameter_fixing_threshold"].as<double>();
 
-  /*
-  std::ifstream test("/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_fullgrid_smallerbins.yaml");
-    if (!test.is_open()) {
-    std::cerr << "File not found: /scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_fullgrid_smallerbins.yaml" << std::endl;
-    return 1;
-  }*/
+  
   //extract_2D_bins_from_yaml(xsec_yaml, binDefs, q0_edges, q3_edges, xsec_var1, xsec_var2);
-  BinningResult binning = extract_2D_bins_from_yaml(xsec_yaml, xsec_var1, xsec_var2);
+  BinningResult binning = extract_bins_from_yaml(xsec_yaml, xsec_var1, xsec_var2);
 
-  TAxis* axisX = new TAxis(binning.q0_edges.size() - 1, binning.q0_edges.data());
-  TAxis* axisY = new TAxis(binning.q3_edges.size() - 1, binning.q3_edges.data());
+  //TAxis* axisX = new TAxis(binning.q0_edges.size() - 1, binning.q0_edges.data());
+  //TAxis* axisY = new TAxis(binning.q3_edges.size() - 1, binning.q3_edges.data());
+  // Determine dimensionality
+bool is2D = (!binning.q0_edges.empty() && !binning.q3_edges.empty());
+bool is1D_q0 = (!binning.q0_edges.empty() && binning.q3_edges.empty());
+bool is1D_q3 = (!binning.q3_edges.empty() && binning.q0_edges.empty());
 
+TAxis* axisX = nullptr;
+TAxis* axisY = nullptr;
+
+if (is2D) {
+    axisX = new TAxis(binning.q0_edges.size() - 1, binning.q0_edges.data());
+    axisY = new TAxis(binning.q3_edges.size() - 1, binning.q3_edges.data());
+    std::cout << "Created 2D binning axes for " << xsec_var1 << " and " << xsec_var2 << "\n";
+} 
+else if (is1D_q0) {
+    axisX = new TAxis(binning.q0_edges.size() - 1, binning.q0_edges.data());
+    std::cout << "Created 1D binning axis for " << xsec_var1 << "\n";
+}
+else if (is1D_q3) {
+    axisY = new TAxis(binning.q3_edges.size() - 1, binning.q3_edges.data());
+    std::cout << "Created 1D binning axis for " << xsec_var2 << "\n";
+}
+else {
+    std::cerr << "Error: No valid binning edges found in YAML for "
+              << xsec_var1 << " or " << xsec_var2 << "\n";
+    return 1;
+}
    
   //////////////////MaCh3 stuff
   covarianceXsec* xsec = nullptr;
@@ -325,91 +454,129 @@ int main(int argc, char* argv[]) {
     
   }
 
-  TH2D* h_q0q3_combined = nullptr;
-  std::cout << "DUNEPdfs size: " << DUNEPdfs.size() << std::endl;
- TFile* f = new TFile("debug_hist.root", "RECREATE");
-  for (auto& pdf : DUNEPdfs) {
+  // === Create output file ===
+TFile* f = new TFile("debug_hist.root", "RECREATE");
+if (!f || f->IsZombie()) {
+    std::cerr << "Failed to open debug_hist.root for writing.\n";
+    return 1;
+}
+
+
+std::cout << "Detected binning mode: " 
+          << (is2D ? "2D" : (is1D_q0 ? "1D (xsec_var1)" : "1D (xsec_var2)")) 
+          << std::endl;
+
+// Combined histograms (dimension-specific)
+TH1* h_combined_1D = nullptr;
+TH2D* h_combined_2D = nullptr;
+
+std::cout << "DUNEPdfs size: " << DUNEPdfs.size() << std::endl;
+
+for (auto& pdf : DUNEPdfs) {
     auto* dunePdf = dynamic_cast<samplePDFDUNEBeamFD*>(pdf);
     if (!dunePdf) continue;
     std::vector<KinematicCut> SelectionVector;
 
-    std::cout << "Calling get2DVarHist with vars: " << xsec_var1 << ", " << xsec_var2 << std::endl;
-    std::cout << "AxisX bins: " << axisX->GetNbins()
-          << ", AxisY bins: " << axisY->GetNbins() << std::endl;
+    // ---------------------
+    // 2D binning case
+    // ---------------------
+      
+    if (is2D) {
+        TH2* h2 = dunePdf->get2DVarHist(xsec_var1, xsec_var2,
+                                        SelectionVector, /*WeightStyle=*/0,
+                                        axisX, axisY);
+        if (!h2) {
+            std::cerr << "[WARN] get2DVarHist returned null.\n";
+            continue;
+        }
 
-    
+        h2->GetXaxis()->SetTitle(xsec_var1.c_str());
+        h2->GetYaxis()->SetTitle(xsec_var2.c_str());
+        h2->Write("", TObject::kOverwrite);
 
+        if (!h_combined_2D) {
+            h_combined_2D = (TH2D*)h2->Clone("h_q0q3_combined");
+            h_combined_2D->SetDirectory(nullptr);
+        } else {
+            h_combined_2D->Add(h2);
+        }
 
-    TH2* h = dunePdf->get2DVarHist(xsec_var1, xsec_var2, SelectionVector , /*WeightStyle=*/0, axisX, axisY);
-    if (!h) {
-        std::cerr << "Warning: get2DVarHist returned null.\n";
-        continue;
+        std::cout << "[DEBUG] Added 2D hist integral: " << h2->Integral() << std::endl;
     }
-    std::cout << "Hist nbinsX = " << h->GetNbinsX() << ", axisX = " << axisX->GetNbins() << std::endl;
 
-    //std::cout << "Hist get2DVarHist integral: " << h->Integral() << std::endl;
-    h->GetXaxis()->SetTitle("xsec_var1");
-    h->GetYaxis()->SetTitle("xsec_var2");
-    //h->Write();
-    h->Write("", TObject::kOverwrite);
-    if (!h_q0q3_combined) {
-        h_q0q3_combined = (TH2D*)h->Clone("h_q0q3_combined");
-        std::cout << "[DEBUG] Cloned histogram integral: " << h_q0q3_combined->Integral() << std::endl;
+    // ---------------------
+    // 1D binning case
+    // ---------------------
+    else if (is1D_q0 || is1D_q3) {
+        std::string var = is1D_q0 ? xsec_var1 : xsec_var2;
+        TAxis* axis = is1D_q0 ? axisX : axisY;
 
-        h_q0q3_combined->SetDirectory(nullptr); // optional: detach from file
-    } else {
-        h_q0q3_combined->Add(h);
+        TH1* h1 = dunePdf->get1DVarHist(var, SelectionVector, /*WeightStyle=*/0, axis);
+        if (!h1) {
+            std::cerr << "[WARN] get1DVarHist returned null.\n";
+            continue;
+        }
+
+        h1->GetXaxis()->SetTitle(var.c_str());
+        h1->Write("", TObject::kOverwrite);
+
+        if (!h_combined_1D) {
+            h_combined_1D = (TH1*)h1->Clone("h_combined_1D");
+            h_combined_1D->SetDirectory(nullptr);
+        } else {
+            h_combined_1D->Add(h1);
+        }
+
+        std::cout << "[DEBUG] Added 1D hist integral: " << h1->Integral() << std::endl;
     }
 }
+
 f->Close();
+std::cout << "Output file closed: debug_hist.root\n";
 
-  //  Print final integral
-  if (h_q0q3_combined) {
-      double h_q0q3_combined_int = h_q0q3_combined->Integral();
-      std::cout << "Integral of h_q0q3_combined = " << h_q0q3_combined_int << std::endl;
-  } else {
-      std::cerr << "ERROR: No histograms were combined.\n";
-  }
+// ---------------------
+// Final integral summary
+// ---------------------
+if (is2D && h_combined_2D) {
+    double total = h_combined_2D->Integral();
+    std::cout << "Final 2D combined histogram integral = " << total << std::endl;
 
-  //std::vector<std::string> fixed_names;
+    // Optional: print nonzero bins
+    for (int ix = 1; ix <= h_combined_2D->GetNbinsX(); ++ix) {
+        for (int iy = 1; iy <= h_combined_2D->GetNbinsY(); ++iy) {
+            double content = h_combined_2D->GetBinContent(ix, iy);
+            if (content > 0)
+                std::cout << "Bin (" << ix << ", " << iy << ") = " << content << std::endl;
+        }
+    }
+}
+else if (!is2D && h_combined_1D) {
+    double total = h_combined_1D->Integral();
+    std::cout << "Final 1D combined histogram integral = " << total << std::endl;
 
-  //if (!StartFromPreviousChain) xsec->throwParameters(); -------------get rid for now
-  /*
-  std::cout << "Fixed parameters due to low statistics:\n";
-  for (const auto& name : fixed_names) {
-      std::cout << "  - " << name << std::endl;
-  }*/
-  //FixLowStatParams(xsec, h_q0q3, total, 0.0001, fixed_names, binDefs);
-  std::cout << "[DEBUG] Final combined hist integral: " << h_q0q3_combined->Integral() << std::endl;
-for (int ix = 1; ix <= h_q0q3_combined->GetNbinsX(); ++ix) {
-  for (int iy = 1; iy <= h_q0q3_combined->GetNbinsY(); ++iy) {
-    double content = h_q0q3_combined->GetBinContent(ix, iy);
-    if (content > 0)
-      std::cout << "Bin (" << ix << ", " << iy << ") = " << content << std::endl;
-  }
+    // Optional: print nonzero bins
+    for (int ix = 1; ix <= h_combined_1D->GetNbinsX(); ++ix) {
+        double content = h_combined_1D->GetBinContent(ix);
+        if (content > 0)
+            std::cout << "Bin " << ix << " = " << content << std::endl;
+    }
+}
+else {
+    std::cerr << "ERROR: No histograms were combined.\n";
 }
 
- std::vector<std::string> fixed_param_names;
- FixLowStatParams(xsec, h_q0q3_combined, h_q0q3_combined->Integral(), fixing_threshold, fixed_param_names, binning.binDefs);
+ std::vector<std::string> fixed_names;
 
-  /*
-  std::cout << "Fixed " << fixed_names.size() << " low-stat parameters." << std::endl;
-
-  // === Record frozen parameters ===
-  std::ofstream fixedOut("fixed_parameters.txt");
-  for (const auto& name : fixed_names) fixedOut << name << "\n";
-  fixedOut.close();
-
-
-
-  // Re-freeze after throw
-  for (int i = 0; i < xsec->GetNumParams(); ++i) {
-    if (std::find(fixed_names.begin(), fixed_names.end(), xsec->GetParFancyName(i)) != fixed_names.end()) {
-      xsec->setSingleParameter(i, 1.0);
-      if (!xsec->isParameterFixed(i)) xsec->toggleFixParameter(i);
-    }
-  }
-    */
+if (is2D && h_combined_2D) {
+    FixLowStatParams(xsec, nullptr, h_combined_2D, 
+                     h_combined_2D->Integral(), fixing_threshold, 
+                     fixed_names, binning.binDefs);
+}
+else if (!is2D && h_combined_1D) {
+    FixLowStatParams(xsec, h_combined_1D, nullptr, 
+                     h_combined_1D->Integral(), fixing_threshold, 
+                     fixed_names, binning.binDefs);
+}
 
   if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false))
     MaCh3Fitter->addSystObj(xsec);
@@ -419,148 +586,7 @@ for (int ix = 1; ix <= h_q0q3_combined->GetNbinsX(); ++ix) {
     MaCh3Fitter->StartFromPreviousFit(FitManager->raw()["General"]["PosFileName"].as<std::string>());
 
   
-  // === Prepare Histograms ===
-  TH1D* h_event_rate = (TH1D*)h_q0q3_combined->Clone("h_event_rate");
-  TH1D* h_param_init  = (TH1D*)h_q0q3_combined->Clone("h_param_init");
-  TH1D* h_param_frozen = (TH1D*)h_q0q3_combined->Clone("h_param_frozen");
-  TH1D* h_param_mean   = (TH1D*)h_q0q3_combined->Clone("h_param_mean");
-  TH1D* h_param_stddev = (TH1D*)h_q0q3_combined->Clone("h_param_stddev");
-
-  h_param_init->Reset("ICES"); //remove the bin contents and stats error from histograms so I can refill them
-  h_param_frozen->Reset("ICES");
-  h_param_mean->Reset("ICES");
-  h_param_stddev->Reset("ICES");
-
-  h_event_rate->SetDirectory(nullptr);
-  h_param_init->SetDirectory(nullptr);
-  h_param_frozen->SetDirectory(nullptr);
-  h_param_mean->SetDirectory(nullptr);
-  h_param_stddev->SetDirectory(nullptr);
-
-  std::cout << "[DEBUG] h_q0q3->IsOnHeap(): " << h_q0q3_combined->IsOnHeap() << std::endl;
-  std::cout << "[DEBUG] gDirectory: " << gDirectory->GetName() << std::endl;
-  
   
   MaCh3Fitter->runMCMC();
 
-
-  /*
-  std::cout << "[DEBUG] h_q0q3->IsOnHeap(): " << h_q0q3_combined->IsOnHeap() << std::endl;
-  std::cout << "[DEBUG] gDirectory: " << gDirectory->GetName() << std::endl;
-
-  std::cout << "done run MCMC" << std::endl;
-  // === Load Posterior ===
-  TFile* f_chain = new TFile(OutputFileName.c_str());
-  TTree* post = (TTree*)f_chain->Get("posteriors");
-  if (!post) {
-    std::cerr << "Could not find 'posteriors' TTree in " << OutputFileName << std::endl;
-    return 1;
-  }
-  if (!h_q0q3_combined) {
-    std::cerr << "h_q0q3 is null before cloning!" << std::endl;
-    return 1;
-  }
-  if (q0_edges.empty()) {
-    std::cerr << " Error: q0 or q3 edges are empty. Histogram cannot be created." << std::endl;
-    return 1;
-  }
-  //std::cout << "[DEBUG] About to clone h_q0q3: " << h_q0q3 << ", title: " << h_q0q3->GetTitle() << std::endl;
-
-
-  // === Fill init/frozen state ===
-  for (const auto& bin : binDefs) {
-    double q0 = 0.5 * (bin.q0_min + bin.q0_max);
-    
-    int bin_q0 = h_q0q3_combined ->GetXaxis()->FindBin(q0);
-    
-
-    if (bin_q0 <= 0 || bin_q0 > h_q0q3_combined ->GetNbinsX()) continue;
-
-    h_param_init->SetBinContent( bin_q0, 1.0);
-    double frozen_val = xsec->isParameterFixed(bin.index) ? 0.0 : 1.0;
-    h_param_frozen->SetBinContent( bin_q0, frozen_val);
-  }
-
-  // === Posterior mean/stddev ===
-  int nParams = xsec->GetNumParams();
-  std::vector<double> xsec_vals(nParams, 0.0);
-  std::vector<double> sum(nParams, 0.0), sq_sum(nParams, 0.0);
-
-  for (const auto& bin : binDefs) {
-    post->SetBranchAddress(("xsec_" + std::to_string(bin.index)).c_str(), &xsec_vals[bin.index]);
-  }
-
-  int nEntries = post->GetEntries();
-  for (int entry = 0; entry < nEntries; ++entry) {
-    post->GetEntry(entry);
-    for (const auto& bin : binDefs) {
-      double val = xsec_vals[bin.index];
-      sum[bin.index] += val;
-      sq_sum[bin.index] += val * val;
-    }
-  }
-  
-  for (const auto& bin : binDefs) {
-    double q0 = 0.5 * (bin.q0_min + bin.q0_max);
-    int bin_q0 = h_q0q3_combined->GetXaxis()->FindBin(q0);
-
-    double mean = sum[bin.index] / nEntries;
-    double var  = std::max(0.0, (sq_sum[bin.index] / nEntries) - mean * mean);
-    double stddev = std::sqrt(var);
-
-    h_param_mean->SetBinContent(bin_q0, mean);
-    h_param_stddev->SetBinContent(bin_q0, stddev);
-
-    // Write to file
-    outfile << bin.index << "\t" << q0 << "\t" << mean << "\t" << stddev << "\n";
-  }
-
-  // Close file
-  outfile.close();
-
-  // === Output diagnostics ===
-  std::cout << "[CHECK] h_param_frozen integral: " << h_param_frozen->Integral() << std::endl;
-  std::cout << "[CHECK] h_param_init integral: " << h_param_init->Integral() << std::endl;
-
-  // === Save plots ===
-  gStyle->SetPalette(kRainBow);
-  TCanvas* c = new TCanvas("c", "", 900, 700);
-  std::string pdfOutName = AddTimestampToFilename("param_summary_q0q3_someparamsfrozen1D.pdf");
-  c->Print((pdfOutName + "[").c_str());  // Open multi-page PDF
-
-  c->Clear(); h_event_rate->Draw("COLZ");     c->Print(pdfOutName.c_str());
-  c->Clear(); h_param_init->Draw("COLZ");     c->Print(pdfOutName.c_str());
-  c->Clear(); h_param_frozen->Draw("COLZ");   c->Print(pdfOutName.c_str());
-  c->Clear(); h_param_mean->Draw("COLZ");     c->Print(pdfOutName.c_str());
-  c->Clear(); h_param_stddev->Draw("COLZ");   c->Print(pdfOutName.c_str());
-
-  c->Print((pdfOutName + "]").c_str());  // Close multi-page PDF
-
-
-  //TFile* fOut = new TFile("param_summary_q0q3_someparamsfrozen.root", "RECREATE");
-  std::string rootOutName = AddTimestampToFilename("param_summary_q0q3_someparamsfrozen1D.root");
-  TFile* fOut = new TFile(rootOutName.c_str(), "RECREATE");
-
-  h_q0q3_combined ->Write("h_q0q3_input");
-
-  h_event_rate->Write();
-  h_param_init->Write();
-  h_param_frozen->Write();
-  h_param_mean->Write();
-  h_param_stddev->Write();
-  fOut->Close();
-
-  h_event_rate->Reset();
-  h_param_init->Reset();
-  h_param_frozen->Reset();
-  h_param_mean->Reset();
-  h_param_stddev->Reset();
-  h_q0q3_combined ->Reset();
-
-
-  std::cout << "\n✅ Saved:\n - param_summary_q0q3_someparamsfrozen.pdf\n - param_summary_q0q3_someparamsfrozen.root\n" << std::endl;
-  std::cout << "Output ROOT file: " << rootOutName << std::endl;
-  std::cout << "Output PDF file: " << pdfOutName << std::endl;
-  
-  */
 }

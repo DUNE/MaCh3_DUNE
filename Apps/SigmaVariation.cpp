@@ -60,6 +60,7 @@ int main(int argc, char * argv[]) {
   std::string OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
   TFile* File = TFile::Open(OutputFileName.c_str(),"RECREATE");
   
+  /*
   for (covarianceBase* CovObj: CovObjs) {
     MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",CovObj->getName());
     
@@ -108,7 +109,82 @@ int main(int argc, char * argv[]) {
     }
 
     MACH3LOG_INFO("=======================================================");
-  }
+  }*/
+  std::string pdfFileName = "SigmaVariations.pdf";
+bool firstCanvas = true;
+
+for (covarianceBase* CovObj: CovObjs) {
+    int nPars = CovObj->getNpars();
+    for (int iPar = 0; iPar < nPars; iPar++) {
+        std::string ParName = CovObj->GetParFancyName(iPar);
+        double VarInit = CovObj->getParInit(iPar);
+        double VarSigma = CovObj->getDiagonalError(iPar);
+
+        File->cd();
+        File->mkdir(ParName.c_str());
+        File->cd(ParName.c_str());
+
+        // Canvas per parameter
+        TCanvas* cPar = new TCanvas(Form("c_%s", ParName.c_str()), Form("Parameter: %s", ParName.c_str()), 1000, 700);
+        cPar->cd();
+
+        TLegend* legend = new TLegend(0.7,0.7,0.9,0.9);
+        THStack* hsAll = new THStack("hsAll", Form("Parameter: %s", ParName.c_str()));
+
+        int colorIndex = 2;
+
+        for (size_t iSample = 0; iSample < DUNEPdfs.size(); iSample++) {
+            std::string SampleName = DUNEPdfs[iSample]->GetTitle();
+            File->cd((ParName + "/" + SampleName).c_str());
+
+            for (size_t iSigVar = 0; iSigVar < sigmaVariations.size(); iSigVar++) {
+                double VarVal = VarInit + sigmaVariations[iSigVar] * VarSigma;
+                if (VarVal < CovObj->GetLowerBound(iPar)) VarVal = CovObj->GetLowerBound(iPar);
+                if (VarVal > CovObj->GetUpperBound(iPar)) VarVal = CovObj->GetUpperBound(iPar);
+                CovObj->setParProp(iPar, VarVal);
+
+                DUNEPdfs[iSample]->reweight();
+                if (DUNEPdfs[iSample]->GetNDim() != 1) continue;
+
+                TH1* Hist = (TH1*)DUNEPdfs[iSample]->get1DHist()->Clone(Form("Hist_%s_%i", SampleName.c_str(), (int)iSigVar));
+                Hist->SetLineColor(colorIndex + iSigVar);
+                Hist->SetLineWidth(2);
+
+                // Label axes
+                Hist->GetXaxis()->SetTitle("Reco Neutrino ENERGY (GeV)"); // Replace with actual variable if known
+                Hist->GetYaxis()->SetTitle("Event Rate");
+              
+                hsAll->Add(Hist);
+                legend->AddEntry(Hist, Form("%s %+g #sigma", SampleName.c_str(), sigmaVariations[iSigVar]), "l");
+
+                Hist->Write(Form("Variation_%i", (int)iSigVar));
+            }
+        }
+
+        hsAll->Draw("NOSTACK HIST");
+        legend->Draw();
+
+        // Save to single PDF
+        if (firstCanvas)
+            cPar->SaveAs(Form("%s(", pdfFileName.c_str())); // Open PDF
+        else
+            cPar->SaveAs(pdfFileName.c_str());              // Append page
+        firstCanvas = false;
+
+        cPar->Write();
+        delete cPar;
+
+        CovObj->setParProp(iPar, VarInit);
+    }
+}
+
+// Close the PDF
+TCanvas* cEnd = new TCanvas();
+cEnd->SaveAs(Form("%s)", pdfFileName.c_str()));
+delete cEnd;
+
+
+
 
   File->Close();
   

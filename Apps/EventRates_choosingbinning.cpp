@@ -11,105 +11,35 @@
 #include <TMath.h>
 #include <TRint.h>
 #include <TStyle.h>
-#include <vector>
-#include <utility>
-#include <set>
-#include <iostream>
-#include <iomanip>
+
 #include "samplePDF/GenericBinningTools.h"
 
 #include "samplePDFDUNE/MaCh3DUNEFactory.h"
 #include "mcmc/mcmc.h"
 
+void WriteHistogramsToFile(const std::string &OutFileName,
+                           const std::vector<TH1 *> &Histograms) {
 
-struct SparseBin {
-    int binX;
-    int binY;
-    double content;
-    double xlow;
-    double xhigh;
-    double ylow;
-    double yhigh;
-};
+  std::cout << "[INFO] Writing " << Histograms.size()
+            << " histograms to ROOT file: " << OutFileName << std::endl;
 
+  TFile OutputFile(OutFileName.c_str(), "RECREATE");
+  if (!OutputFile.IsOpen()) {
+    std::cerr << "[ERROR] Could not open " << OutFileName << " for writing.\n";
+    return;
+  }
 
-
-struct BinBlock {
-    int xStart, xEnd;
-    int yStart, yEnd;
-};
-
-std::vector<SparseBin> sparseBins;
-
-TH2D* MergeSparseBins2D_Debug(const TH2D* hist, double minEvents) {
-    int nx = hist->GetNbinsX();
-    int ny = hist->GetNbinsY();
-
-    std::vector<double> xEdges;
-    std::vector<double> yEdges;
-
-    xEdges.push_back(hist->GetXaxis()->GetBinLowEdge(1));
-    for (int i = 1; i <= nx; ++i) {
-        double binContent = 0.0;
-        for (int j = 1; j <= ny; ++j) {
-            binContent += hist->GetBinContent(i, j);
-        }
-        if (binContent >= minEvents || i == nx) {
-            xEdges.push_back(hist->GetXaxis()->GetBinUpEdge(i));
-        }
-    }
-
-    yEdges.push_back(hist->GetYaxis()->GetBinLowEdge(1));
-    for (int j = 1; j <= ny; ++j) {
-        double binContent = 0.0;
-        for (int i = 1; i <= nx; ++i) {
-            binContent += hist->GetBinContent(i, j);
-        }
-        if (binContent >= minEvents || j == ny) {
-            yEdges.push_back(hist->GetYaxis()->GetBinUpEdge(j));
-        }
-    }
-
-    // Print the new edges
-    std::cout << "New X bin edges: ";
-    for (double e : xEdges) std::cout << e << " ";
-    std::cout << "\nNew Y bin edges: ";
-    for (double e : yEdges) std::cout << e << " ";
-    std::cout << "\n";
-
-    TH2D* newHist = new TH2D("mergedHist", hist->GetTitle(),
-                             xEdges.size()-1, &xEdges[0],
-                             yEdges.size()-1, &yEdges[0]);
-
-    // Fill new histogram
-    for (int i = 1; i <= nx; ++i) {
-        for (int j = 1; j <= ny; ++j) {
-            double content = hist->GetBinContent(i, j);
-            double x = hist->GetXaxis()->GetBinCenter(i);
-            double y = hist->GetYaxis()->GetBinCenter(j);
-            newHist->Fill(x, y, content);
-        }
-    }
-
-    return newHist;
-}
-
-
-
-void Write1DHistogramsToFile(std::string OutFileName,
-                             std::vector<TH1D *> Histograms) {
-
-  // Now write out the saved hsitograms to file
-  auto OutputFile =
-      std::unique_ptr<TFile>(new TFile(OutFileName.c_str(), "RECREATE"));
-  OutputFile->cd();
-  for (auto Hist : Histograms) {
+  for (auto *Hist : Histograms) {
+    if (!Hist) continue;
+    std::cout << "  -> Writing " << Hist->GetName() << " (" << Hist->ClassName() << ")\n";
     Hist->Write();
   }
-  OutputFile->Close();
 
-  return;
+  OutputFile.Write();
+  OutputFile.Close();
+  std::cout << "[INFO] Finished writing histograms.\n";
 }
+
 
 void Write1DHistogramsToPdf(std::string OutFileName,
                             std::vector<TH1D *> Histograms) {
@@ -124,7 +54,7 @@ void Write1DHistogramsToPdf(std::string OutFileName,
   c1->cd();
   c1->Print(std::string(OutFileName + "[").c_str());
   for (auto Hist : Histograms) {
-    Hist->Draw("HIST");
+    Hist->Draw("HIST E1");
     c1->Print(OutFileName.c_str());
   }
   c1->Print(std::string(OutFileName + "]").c_str());
@@ -154,8 +84,15 @@ int main(int argc, char *argv[]) {
 
 
   covarianceXsec *xsec = nullptr;
-  covarianceOsc *osc = nullptr;
+  //covarianceOsc *osc = nullptr;
+  auto OscCovFile = GetFromManager<std::vector<std::string>>(fitMan->raw()["General"]["Systematics"]["OscCovFile"], {});
+  auto OscCovName = GetFromManager<std::string>(fitMan->raw()["General"]["Systematics"]["OscCovName"], "osc_cov");
 
+  covarianceOsc* osc = new covarianceOsc(OscCovFile, OscCovName);
+
+  auto OscPars = GetFromManager<std::vector<double>>(fitMan->raw()["General"]["OscillationParameters"], {});
+  osc->setParameters(OscPars);
+  
  // std::string hists_file (OutFileName + "event_histograms").c_str();
   // ####################################################################################
   // Create samplePDFFD objects
@@ -163,122 +100,85 @@ int main(int argc, char *argv[]) {
   std::vector<samplePDFFDBase *> DUNEPdfs;
   MakeMaCh3DuneInstance(fitMan.get(), DUNEPdfs, xsec, osc);
 
+      // Create canvas
   auto gc1 = std::unique_ptr<TCanvas>(new TCanvas("gc1", "gc1", 800, 600));
   gStyle->SetOptStat(false);
-  gc1->Print((PrismFileName + "[").c_str());  // Open multi-page PDF
-  gc1->Print("GenericBinTest.pdf[");
-  
 
-  /*
-  if (Sample -> GetNDim() == 1) {
-      TH1D *Asimov_1D = (TH1D*)Sample->get1DHist()->Clone(NameTString+"_asimov");
-      std::cout << name.c_str() << ": " << Asimov_1D->Integral() << std::endl;
-      Sample -> addData(Asimov_1D); 
-	}*/
+  // Use only one multipage PDF for now
+  std::string PdfFileName = "GenericBinTest.pdf";
+  gc1->Print((PdfFileName + "[").c_str());  // open multipage PDF
 
-  std::vector<TH1D *> DUNEHists;
-  for (auto Sample : DUNEPdfs) {
-    TH1D *Asimov_1D = (TH1D*)Sample->get1DHist()->Clone((Sample->GetTitle()+"_asimov").c_str());
-    //Sample->addData(Sample->get1DHist()->Clone((Sample->GetTitle() + "_asimovdata").c_str()));
-    Sample -> addData(Asimov_1D); 
-    Sample->reweight();
-    xsec->setParameters();
-    double nominal =xsec->getNominal(0); //get central value of parameter
-    double error = xsec->getDiagonalError(0);
-    std::cout<<"nominal  = " << nominal << std::endl; 
-    std::cout<<"error  = " << error << std::endl; 
-    xsec->setParCurrProp(0, nominal);////////// set //+(2*error)
-    std::cout<< "nominal value = " << nominal <<std::endl;;
-    double current_value = xsec->getParProp(0);
-    std::cout<<"current value  = " << current_value << std::endl; 
+  std::vector<TH1D*> DUNEHists;       // for PDFs
+std::vector<TH1*> DUNEHistsall;     // for ROOT file
+
+for (auto Sample : DUNEPdfs) {
+    osc->setParameters(OscPars);
+
+    // --- 1D histogram ---
+    TH1D *nominalHist = (TH1D*)Sample->get1DHist()->Clone((Sample->GetTitle() + "_nominal").c_str());
+    nominalHist->Sumw2();
+    nominalHist->SetEntries(nominalHist->Integral());
+    Sample->addData(nominalHist);
     Sample->reweight();
 
-
-    if (Sample->generic_binning.GetNDimensions()) {
-
-      auto myhist = GetGenericBinningTH1(*Sample, "myhist");
-      myhist->Scale(1, "WIDTH");
-      myhist->Draw();
-      gc1->Print("GenericBinTest.pdf");
-      gc1->Print(PrismFileName.c_str());
-
-      if (Sample->generic_binning.GetNDimensions() == 2) {
-        auto myhist2 = GetGenericBinningTH2(*Sample, "myhist2");
-        myhist2->Draw("COLZ");
-        gc1->Print("GenericBinTest.pdf");
-        gc1->Print(PrismFileName.c_str());
-
-        int nbinsX = myhist2->GetNbinsX();
-        int nbinsY = myhist2->GetNbinsY();
-
-       
-        auto myhist2_ptr = GetGenericBinningTH2(*Sample, "myhist2");
-        TH2D* mergedHist2D = MergeSparseBins2D_Debug(dynamic_cast<TH2D*>(myhist2_ptr.get()), 1000000.0);
-
-      //Merge sparse bins and print debug info
-      
-    
-
-        for (int i = 1; i <= nbinsX; ++i) {
-            for (int j = 1; j <= nbinsY; ++j) {
-                double content = myhist2->GetBinContent(i,j);
-                if (content > 0 && content < 10000000) {
-                    SparseBin bin;
-                    bin.binX = i;
-                    bin.binY = j;
-                    bin.content = content;
-                    bin.xlow = myhist2->GetXaxis()->GetBinLowEdge(i);
-                    bin.xhigh = myhist2->GetXaxis()->GetBinUpEdge(i);
-                    bin.ylow = myhist2->GetYaxis()->GetBinLowEdge(j);
-                    bin.yhigh = myhist2->GetYaxis()->GetBinUpEdge(j);
-                    sparseBins.push_back(bin);
-
-                    std::cout << "Bin (" << i << "," << j << ") with content "
-                            << content << " -- X:[" << bin.xlow << "," << bin.xhigh
-                            << "] Y:[" << bin.ylow << "," << bin.yhigh << "]" << std::endl;
-                }
-            }
-        }
-
-        mergedHist2D->Draw("COLZ");
-        gc1->Print("GenericBinTest.pdf");
-        gc1->Print(PrismFileName.c_str());
-
-
-        for (auto &slice :
-             GetGenericBinningTH1Slices(*Sample, 0, "myslicehist")) {
-          slice->Draw("colz");
-          gc1->Print("GenericBinTest.pdf");
-          gc1->Print(PrismFileName.c_str());
-        }
-      }
-      if (Sample->generic_binning.GetNDimensions() == 3) {
-        for (auto &slice :
-             GetGenericBinningTH2Slices(*Sample, {0, 1}, "myslicehist")) {
-          slice->Draw("colz ");
-          gc1->Print("GenericBinTest.pdf");
-          gc1->Print(PrismFileName.c_str());
-        }
-      }
+    if (xsec) {
+        double nominal = xsec->getNominal(0);
+        xsec->setParCurrProp(0, nominal);
+        Sample->reweight();
     }
 
-    DUNEHists.push_back(Sample->get1DHist());
+    TH1D *plotHist = (TH1D*)Sample->get1DHist()->Clone((Sample->GetTitle() + "_draw").c_str());
+    plotHist->Sumw2();
+    for (int i = 1; i <= plotHist->GetNbinsX(); i++)
+        plotHist->SetBinError(i, std::sqrt(plotHist->GetBinContent(i)));
+    plotHist->Scale(1, "WIDTH");
 
-    std::string EventRateString =
-        fmt::format("{:.2f}", Sample->get1DHist()->Integral());
-    MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetTitle(),
-                  EventRateString);
+    DUNEHists.push_back(plotHist);     // for PDF
+    DUNEHistsall.push_back(plotHist);  // for ROOT
 
-    std::string LLHString =
-        fmt::format("{:.10f}", Sample-> GetLikelihood());
-    MACH3LOG_INFO("LLH for {} : {:<5}", Sample->GetTitle(),
-                  LLHString);
-  }
+    // Draw 1D histograms
+    if (Sample->GetNDim() == 1) {
+        plotHist->Draw("HIST E1");
+        gc1->Print(PdfFileName.c_str());
+    }
 
-  gc1->Print("GenericBinTest.root]");
-  gc1->Print("GenericBinTest.pdf]");
-  gc1->Print((PrismFileName + "]").c_str());
+    // --- Generic binning ---
+    if (Sample->generic_binning.GetNDimensions() > 0) {
+        auto myhist = GetGenericBinningTH1(*Sample, Sample->GetTitle() + "_generic1D");
+        myhist->Scale(1, "WIDTH");
+        myhist->Draw();
+        gc1->Print(PdfFileName.c_str());
+        DUNEHistsall.push_back(myhist.release());  // transfer ownership
 
-  Write1DHistogramsToFile(OutFileName, DUNEHists);
+        if (Sample->generic_binning.GetNDimensions() == 2) {
+            auto myhist2 = GetGenericBinningTH2(*Sample, Sample->GetTitle() + "_generic2D");
+            myhist2->Draw("COLZ");
+            gc1->Print(PdfFileName.c_str());
+            DUNEHistsall.push_back(myhist2.release());
+        }
+
+        if (Sample->generic_binning.GetNDimensions() == 3) {
+            auto slices2D = GetGenericBinningTH2Slices(*Sample, {0,1}, Sample->GetTitle() + "_slice2D");
+            int sliceIdx = 0;
+            for (auto &slice : slices2D) {
+                slice->SetName((Sample->GetTitle() + "_slice2D_" + std::to_string(sliceIdx++)).c_str());
+                slice->Draw("COLZ");
+                gc1->Print(PdfFileName.c_str());
+                DUNEHistsall.push_back(slice.release());
+            }
+        }
+    }
+
+    MACH3LOG_INFO("Event rate for {} : {:.2f}", Sample->GetTitle(), Sample->get1DHist()->Integral());
+    MACH3LOG_INFO("LLH for {} : {:.10f}", Sample->GetTitle(), Sample->GetLikelihood());
+}
+
+
+  // Close the PDF properly
+  gc1->Print((PdfFileName + "]").c_str());
+
+  // Now write histograms
+  WriteHistogramsToFile(OutFileName, DUNEHistsall);
   Write1DHistogramsToPdf(OutFileName, DUNEHists);
+
 }
