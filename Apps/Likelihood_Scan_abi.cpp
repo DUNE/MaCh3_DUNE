@@ -95,10 +95,10 @@ int main(int argc, char * argv[]) {
   unsigned int nPoints = fitMan->raw()["LLHScans"]["ParPoints"].as<int>();
   double nSigma = 3.0;
 
-  double xMin = 0;//xsec->getNominal(parX) - nSigma * xsec->GetError(parX);
-  double xMax = 2;//xsec->getNominal(parX) + nSigma * xsec->GetError(parX);
-  double yMin = 0;//xsec->getNominal(parY) - nSigma * xsec->GetError(parY);
-  double yMax = 2;//xsec->getNominal(parY) + nSigma * xsec->GetError(parY);
+  double xMin = xsec->getNominal(parX) - nSigma * xsec->GetError(parX);
+  double xMax = xsec->getNominal(parX) + nSigma * xsec->GetError(parX);
+  double yMin = xsec->getNominal(parY) - nSigma * xsec->GetError(parY);
+  double yMax = xsec->getNominal(parY) + nSigma * xsec->GetError(parY);
 
   TH2D* h2DScan = new TH2D("h2DScan", "2D LLH Scan",
                            nPoints, xMin, xMax,

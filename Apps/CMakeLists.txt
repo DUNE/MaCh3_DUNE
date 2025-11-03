@@ -25,6 +25,9 @@ foreach(app
 	Compare_onaxis_vs_offaxis
 	Compare_runplans
 	Compare_onaxis_vs_offaxis_new
+	Posteriorpreditctive_fd
+	Plot_xsec_from_yaml
+	Post_xsec_diagnostics_withcorr_fd
       )
       
     add_executable(${app} ${app}.cpp)

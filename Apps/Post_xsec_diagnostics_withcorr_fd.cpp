@@ -97,22 +97,7 @@ std::string AddTimestampToROOTFilename(const std::string& baseName) {
 
 std::string title;
 
-void setRedWhiteBluePalette()
-{
-    const Int_t nRGBs = 3;
-    Double_t stops[nRGBs] = {0.00, 0.50, 1.00};
-
-    // Blue (low) → White (mid) → Red (high)
-    Double_t red[nRGBs]   = {0.00, 1.00, 1.00};
-    Double_t green[nRGBs] = {0.00, 1.00, 0.00};
-    Double_t blue[nRGBs]  = {1.00, 1.00, 0.00};
-
-    const Int_t nColors = 255;
-    TColor::CreateGradientColorTable(nRGBs, stops, red, green, blue, nColors);
-    gStyle->SetNumberContours(nColors);
-}
-
-
+// Forward declaration of your PDF type
 class samplePDFFDBase;
 struct PosteriorSample {
     std::vector<double> xsec_draw; // vector of xsec parameters for this posterior sample
@@ -246,8 +231,7 @@ BinningResult extract_2D_bins_from_yaml(const std::string& yaml_file, const std:
     if (var == "ENuProxy_minus_Enutrue") return "E^{True}_{#nu} -E^{Proxy}_{#nu} [GeV]";
     if (var == "yRec") return "y_{Rec}";
     if (var == "RecoNeutrinoEnergy") return "E^{Reco.}_{#nu} [GeV]";
-    if (var == "isRelativeEnubias") return "E^{Bias}_{#nu}/E^_{#nu} [GeV]";
-    if (var == "Enubias") return "E^{Bias}_{#nu} [GeV]";
+    if (var == "isRelativeEnubias") return "E^{Bias}_{#nu}/E^_{#nu}  [GeV]";
     // Add more mappings as needed
 
     // Fallback: just return var unchanged if no match found
@@ -522,25 +506,6 @@ std::vector<int> GetSliceIndices(const std::vector<BinDef>& binDefs,
 
 }
 
-/*
-std::vector<int> GetSliceIndicesSafe(const std::vector<BinDef>& binDefs,
-                                     int sliceBin,
-                                     bool sliceAlongQ3,
-                                     TH2D* h_mean,
-                                     int nParams)
-{
-    std::vector<int> indices;
-    for (const auto& bin : binDefs) {
-        if (sliceAlongQ3) {
-            if (bin.q3_bin == sliceBin) indices.push_back(bin.index);
-        } else {
-            if (bin.q0_bin == sliceBin) indices.push_back(bin.index);
-        }
-    }
-    return indices; // never default to all nParams
-}*/
-
-
 
 TH2D* PlotSliceCorrelation(const TMatrixD& sliceCorr,
                            const std::vector<std::string>& paramNames,
@@ -680,426 +645,6 @@ TH2D* PlotSliceCorrelation_threshold(const TMatrixD& sliceCorr,
 }
 
 
-void redWhiteBluePalette() {
-    // Define the color stops
-    const Int_t nRGBs = 3;
-    Double_t stops[nRGBs] = {0.00, 0.50, 1.00};
-
-    // RGB values at each stop:
-    //  Blue (low) → White (mid) → Red (high)
-    Double_t red[nRGBs]   = {0.00, 1.00, 1.00};
-    Double_t green[nRGBs] = {0.00, 1.00, 0.00};
-    Double_t blue[nRGBs]  = {1.00, 1.00, 0.00};
-
-    // Create the gradient
-    const Int_t nColors = 255;
-    TColor::CreateGradientColorTable(nRGBs, stops, red, green, blue, nColors);
-    gStyle->SetNumberContours(nColors);
-
-    // Example histogram
-    TH2D *h2 = new TH2D("h2", "Red-White-Blue Palette;X;Y", 50, -4, 4, 50, -4, 4);
-    h2->FillRandom("gaus", 10000);
-    h2->Draw("COLZ");
-}
-
-/*
-void Save1DSlicesWithEventRateAndCorr(
-    TH2D* h_event, TH2D* h_event_err,
-    TH2D* h_post,  TH2D* h_post_err,
-    const TMatrixD& corr,
-    const std::vector<BinDef>& binDefs,
-    const std::vector<std::string>& param_names,
-    TCanvas* c,
-    const std::string& pdfOut,
-    bool sliceAlongQ3,
-    const std::string& xvar1,
-    const std::string& xvar2,
-    TFile* fOut)
-{
-    if (!h_post || !h_event || !h_post_err || !h_event_err) {
-        std::cerr << "[Error] One or more input histograms are nullptr. Exiting.\n";
-        return;
-    }
-
-    fOut->cd();
-
-    int nSlices = sliceAlongQ3 ? h_post->GetNbinsY() : h_post->GetNbinsX();
-    int nBinsX  = h_post->GetNbinsX();
-    int nBinsY  = h_post->GetNbinsY();
-
-    std::cerr << "[Debug] Entering Save1DSlicesWithEventRateAndCorr: corr dims="
-              << corr.GetNrows() << "x" << corr.GetNcols()
-              << " param_names.size()=" << param_names.size() << std::endl;
-
-    if (corr.GetNrows() == 0) {
-        std::cerr << "[Error] corr is empty. Nothing to do.\n";
-        return;
-    }
-
-    for (int i = 1; i <= nSlices; ++i) {
-        c->Clear();
-
-        std::vector<int> sliceInds = GetSliceIndices(binDefs, i, sliceAlongQ3, h_post, corr.GetNrows());
-        if (sliceInds.empty()) continue;
-
-        // prepare 2-column layout
-        c->Divide(2,1);
-        TPad* padLeft  = (TPad*)c->cd(1);
-        TPad* padRight = (TPad*)c->cd(2);
-
-        
-
-        // --- Event rate slice ---
-        TH1D* h_event_slice = sliceAlongQ3
-            ? h_event->ProjectionX(Form("h_event_slice_%d", i), i, i)
-            : h_event->ProjectionY(Form("h_event_slice_%d", i), i, i);
-
-        TH1D* h_event_err_slice = sliceAlongQ3
-            ? h_event_err->ProjectionX(Form("h_event_err_slice_%d", i), i, i)
-            : h_event_err->ProjectionY(Form("h_event_err_slice_%d", i), i, i);
-
-        h_event_slice->SetLineColor(kBlue+1);
-        h_event_slice->SetMarkerStyle(20);
-
-        // --- Posterior slice ---
-        TH1D* h_post_slice = nullptr;
-        TH1D* h_err_slice  = nullptr;
-        if (sliceAlongQ3) {
-            h_post_slice = new TH1D(Form("h_post_slice_%d", i), "", nBinsX, h_post->GetXaxis()->GetXbins()->GetArray());
-            h_err_slice  = new TH1D(Form("h_err_slice_%d", i), "", nBinsX, h_post->GetXaxis()->GetXbins()->GetArray());
-            for (int x = 1; x <= nBinsX; ++x) {
-                h_post_slice->SetBinContent(x, h_post->GetBinContent(x, i));
-                h_err_slice->SetBinContent(x, h_post_err->GetBinContent(x, i));
-                h_post_slice->SetBinError(x, h_err_slice->GetBinContent(x));
-            }
-        } else {
-            h_post_slice = new TH1D(Form("h_post_slice_%d", i), "", nBinsY, h_post->GetYaxis()->GetXbins()->GetArray());
-            h_err_slice  = new TH1D(Form("h_err_slice_%d", i), "", nBinsY, h_post->GetYaxis()->GetXbins()->GetArray());
-            for (int y = 1; y <= nBinsY; ++y) {
-                h_post_slice->SetBinContent(y, h_post->GetBinContent(i, y));
-                h_err_slice->SetBinContent(y, h_post_err->GetBinContent(i, y));
-                h_post_slice->SetBinError(y, h_err_slice->GetBinContent(y));
-            }
-        }
-        h_post_slice->SetLineColor(kBlack);
-        h_post_slice->SetMarkerStyle(21);
-
-        // --- Left pad: draw event & posterior stacked ---
-        padLeft->Divide(1,2,0,0);
-        padLeft->cd(1);
-        h_event_slice->Draw("E1 HIST");
-        padLeft->cd(2);
-        h_post_slice->Draw("E1 HIST");
-
-        h_event_slice->Write();
-        h_post_slice->Write();
-
-        // --- Right pad: correlation matrix ---
-    TMatrixD sliceCorr = GetSliceCorrelation(corr, sliceInds);
-
-    std::cerr << "[Debug] slice " << i
-          << " → sliceInds.size()=" << sliceInds.size()
-          << ", sliceCorr dims=" << sliceCorr.GetNrows() << "x" << sliceCorr.GetNcols()
-          << std::endl;
-
-    if (sliceCorr.GetNrows() > 0) {
-        TH2D* h_corr_slice = PlotSliceCorrelation_threshold(sliceCorr, param_names, sliceInds, i, 0.3);
-        if (!h_corr_slice) {
-            std::cerr << "[Warning] PlotSliceCorrelation_threshold returned nullptr for slice " << i << std::endl;
-        }
-
-        if (h_corr_slice) {
-            // Label axes with bin ranges
-            for (size_t idx = 0; idx < sliceInds.size(); ++idx) {
-                int binIdx = sliceInds[idx];
-                const BinDef& bin = binDefs[binIdx];
-
-                std::string label;
-                if (sliceAlongQ3) {
-                    // Label using q0 range if slicing along q3
-                    label = Form("[%.2f, %.2f] GeV", bin.q0_min, bin.q0_max);
-                } else {
-                    // Label using q3 range if slicing along q0
-                    label = Form("[%.2f, %.2f] GeV", bin.q3_min, bin.q3_max);
-                }
-
-                h_corr_slice->GetXaxis()->SetBinLabel(idx+1, label.c_str());
-                h_corr_slice->GetYaxis()->SetBinLabel(idx+1, label.c_str());
-            }
-
-            h_corr_slice->GetXaxis()->LabelsOption("v");  // vertical X labels
-            h_corr_slice->SetLabelSize(0.015, "X");
-            h_corr_slice->SetLabelSize(0.015, "Y");
-            h_corr_slice->SetTitle(Form("Correlation matrix (slice %d)", i));
-            h_corr_slice->SetMinimum(-1.0);
-            h_corr_slice->SetMaximum(1.0);
-
-            // Draw to right pad
-            padRight->cd();
-            padRight->cd();
-            padRight->SetRightMargin(0.15);  // leave room for colorbar
-            padRight->SetLeftMargin(0.20);   // leave room for Y labels
-            padRight->SetBottomMargin(0.25); // leave room for X labels
-            h_corr_slice->Draw("COLZ TEXT");
-            gPad->Modified();
-            gPad->Update();
-
-            //h_corr_slice->Draw("COLZ TEXT");
-            //c_master->Print(pdfOut.c_str());
-            h_corr_slice->Write();
-            delete h_corr_slice;
-        }
-    }
-
-
-        // --- Save this page ---
-        c->Update();
-        c->Print(pdfOut.c_str());
-
-        delete h_event_slice;
-        delete h_event_err_slice;
-        delete h_post_slice;
-        delete h_err_slice;
-    }
-
-}*/
-
-
-#include <limits> // for quiet_NaN
-/*
-void Save1DSlicesWithEventRateAndCorr(
-    TH2D* h_event, TH2D* h_event_err,
-    TH2D* h_post,  TH2D* h_post_err,
-    const TMatrixD& corr,
-    const std::vector<BinDef>& binDefs,
-    const std::vector<std::string>& param_names,
-    TCanvas* c,
-    const std::string& pdfOut,
-    bool sliceAlongQ3,
-    const std::string& xvar1,
-    const std::string& xvar2,
-    TFile* fOut)
-{
-    if (!h_post || !h_event || !h_post_err || !h_event_err) {
-        std::cerr << "[Error] One or more input histograms are nullptr. Exiting.\n";
-        return;
-    }
-
-    fOut->cd();
-
-    int nSlices = sliceAlongQ3 ? h_post->GetNbinsY() : h_post->GetNbinsX();
-    int nBinsX  = h_post->GetNbinsX();
-    int nBinsY  = h_post->GetNbinsY();
-
-    // --- Red-white-blue palette (once) ---
-    const Int_t nRGBs = 3;
-    Double_t stops[nRGBs] = {0.0, 0.5, 1.0};
-    Double_t red[nRGBs]   = {0.0, 1.0, 1.0};
-    Double_t green[nRGBs] = {0.0, 1.0, 0.0};
-    Double_t blue[nRGBs]  = {1.0, 1.0, 0.0};
-    const Int_t nColors = 255;
-    TColor::CreateGradientColorTable(nRGBs, stops, red, green, blue, nColors);
-    gStyle->SetNumberContours(nColors);
-    gStyle->SetPaintTextFormat("4.2f");
-
-    const int contextBins = 3;
-    const double fillThreshold = 1e-12;
-    const double corrMaskThreshold = 0.3;
-
-    for (int i = 1; i <= nSlices; ++i) {
-        c->Clear();
-
-        std::vector<int> sliceInds = GetSliceIndices(binDefs, i, sliceAlongQ3, h_post, corr.GetNrows());
-        if (sliceInds.empty()) continue;
-
-        // Page title with slice energy range
-        const BinDef& firstBin = binDefs[sliceInds.front()];
-        const BinDef& lastBin  = binDefs[sliceInds.back()];
-
-
-        auto formatEdge = [](double val) {
-        // If value is very close to an integer, print as int
-            if (fabs(val - round(val)) < 1e-6)
-                return Form("%.0f", val);
-            // If value has 1 decimal place (like 0.5), print 1 decimal
-            else if (fabs(val * 10 - round(val * 10)) < 1e-6)
-                return Form("%.1f", val);
-            // Else fall back to 3 decimal places
-            else
-                return Form("%.3f", val);
-        };
-        std::string pageTitle;
-        if (sliceAlongQ3)
-            pageTitle = Form("Slice %d: %s #leq q3 < %s GeV",
-                            i, formatEdge(firstBin.q3_min), formatEdge(lastBin.q3_max));
-        else
-            pageTitle = Form("Slice %d: %s #leq q0 < %s GeV",
-                            i, formatEdge(firstBin.q0_min), formatEdge(lastBin.q0_max));
-
-        // Make pads
-        c->Divide(2,1);
-        TPad* padLeft  = (TPad*) c->cd(1);
-        TPad* padRight = (TPad*) c->cd(2);
-
-        // Event slice + error slice
-        TH1D* h_event_slice = sliceAlongQ3
-            ? h_event->ProjectionX(Form("h_event_slice_%d", i), i, i)
-            : h_event->ProjectionY(Form("h_event_slice_%d", i), i, i);
-        TH1D* h_event_err_slice = sliceAlongQ3
-            ? h_event_err->ProjectionX(Form("h_event_err_slice_%d", i), i, i)
-            : h_event_err->ProjectionY(Form("h_event_err_slice_%d", i), i, i);
-
-        h_event_slice->SetLineColor(kBlue+1);
-        h_event_slice->SetMarkerStyle(20);
-
-        // Posterior slice with errors
-        TH1D* h_post_slice = nullptr;
-        TH1D* h_post_err_slice = nullptr;
-        if (sliceAlongQ3) {
-            h_post_slice = new TH1D(Form("h_post_slice_%d", i), "", nBinsX, h_post->GetXaxis()->GetXbins()->GetArray());
-            h_post_err_slice = new TH1D(Form("h_post_err_slice_%d", i), "", nBinsX, h_post_err->GetXaxis()->GetXbins()->GetArray());
-            for (int x = 1; x <= nBinsX; ++x) {
-                double content = h_post->GetBinContent(x, i);
-                double err     = h_post_err->GetBinContent(x, i);
-                h_post_slice->SetBinContent(x, content);
-                h_post_slice->SetBinError(x, err);
-                h_post_err_slice->SetBinContent(x, err); // keep if you want to write it
-            }
-        } else {
-            h_post_slice = new TH1D(Form("h_post_slice_%d", i), "", nBinsY, h_post->GetYaxis()->GetXbins()->GetArray());
-            h_post_err_slice = new TH1D(Form("h_post_err_slice_%d", i), "", nBinsY, h_post_err->GetYaxis()->GetXbins()->GetArray());
-            for (int y = 1; y <= nBinsY; ++y) {
-                double content = h_post->GetBinContent(i, y);
-                double err     = h_post_err->GetBinContent(i, y);
-                h_post_slice->SetBinContent(y, content);
-                h_post_slice->SetBinError(y, err);
-                h_post_err_slice->SetBinContent(y, err);
-            }
-        }
-        h_post_slice->SetLineColor(kBlack);
-        h_post_slice->SetMarkerStyle(21);
-
-        // Find last filled bin and scale x-axis correctly (use xlow -> xhigh)
-        int nbins = h_post_slice->GetNbinsX();
-        int lastFilled = 0;
-        for (int b = nbins; b >= 1; --b) {
-            double vpost = h_post_slice->GetBinContent(b);
-            double vev = (b <= h_event_slice->GetNbinsX()) ? h_event_slice->GetBinContent(b) : 0.0;
-            if ((std::isfinite(vpost) && vpost > fillThreshold) || (std::isfinite(vev) && vev > fillThreshold)) {
-                lastFilled = b;
-                break;
-            }
-        }
-
-        double xlow = h_post_slice->GetXaxis()->GetBinLowEdge(1);
-        double xhigh = h_post_slice->GetXaxis()->GetBinUpEdge(nbins);
-        if (lastFilled > 0) {
-            int firstToDraw = std::max(1, lastFilled - (contextBins - 1));
-            xlow  = h_post_slice->GetXaxis()->GetBinLowEdge(firstToDraw);
-            xhigh = h_post_slice->GetXaxis()->GetBinUpEdge(lastFilled);
-        }
-        // apply coordinate range (use SetRangeUser with actual coordinates)
-        h_event_slice->GetXaxis()->SetRangeUser(0.0, xhigh);
-        h_post_slice->GetXaxis()->SetRangeUser(0.0, xhigh);
-
-        // Draw left pads
-        padLeft->Divide(1,2,0,0);
-        padLeft->cd(1);
-        gPad->SetBottomMargin(0.12);
-        h_event_slice->GetXaxis()->SetTitle(xvar1.c_str());
-        h_event_slice->Draw("E1 HIST");
-
-        padLeft->cd(2);
-        gPad->SetBottomMargin(0.12);
-        h_post_slice->GetXaxis()->SetTitle(xvar1.c_str());
-        h_post_slice->GetYaxis()->SetTitle("Posterior value");
-        h_post_slice->Draw("E1 HIST");
-
-        h_event_slice->Write();
-        h_post_slice->Write();
-
-        // --- Correlation matrix sub-extraction ---
-        TMatrixD sliceCorr = GetSliceCorrelation(corr, sliceInds);
-
-        // mask small correlations to NaN so they appear blank but matrix still draws
-        int nonMaskedCount = 0;
-        for (int r = 0; r < sliceCorr.GetNrows(); ++r) {
-            for (int cc = 0; cc < sliceCorr.GetNcols(); ++cc) {
-                double v = sliceCorr(r, cc);
-                if (!std::isfinite(v)) { sliceCorr(r, cc) = std::numeric_limits<double>::quiet_NaN(); continue; }
-                if (std::fabs(v) < corrMaskThreshold) {
-                    sliceCorr(r, cc) = std::numeric_limits<double>::quiet_NaN();
-                } else {
-                    ++nonMaskedCount;
-                }
-            }
-        }
-
-        std::cerr << "[Debug] slice " << i << ": sliceInds.size()=" << sliceInds.size()
-                  << ", non-masked correlations=" << nonMaskedCount << std::endl;
-
-        if (sliceCorr.GetNrows() > 0) {
-            // create histogram from sliceCorr (use PlotSliceCorrelation if you prefer, but ensure it respects NaN)
-            TH2D* h_corr_slice = PlotSliceCorrelation(sliceCorr, param_names, sliceInds, i);
-            if (h_corr_slice) {
-                // adjust labels size depending on m
-                int m = h_corr_slice->GetNbinsX();
-                double labsz = std::max(0.006, 0.02 - 0.0005 * m);
-                h_corr_slice->SetLabelSize(labsz, "X");
-                h_corr_slice->SetLabelSize(labsz, "Y");
-                h_corr_slice->GetXaxis()->LabelsOption("v");
-
-                padRight->cd();
-                padRight->SetRightMargin(0.15);
-                padRight->SetLeftMargin(0.20);
-                padRight->SetBottomMargin(0.30);
-
-                h_corr_slice->SetMinimum(-1.0);
-                h_corr_slice->SetMaximum(1.0);
-
-                // draw and force update
-                h_corr_slice->Draw("COLZ TEXT");
-                gPad->Modified();
-                gPad->Update();
-
-                h_corr_slice->Write();
-
-                // print the page (after both left & right drawn)
-                c->Modified();
-                c->Update();
-                c->Print(pdfOut.c_str());
-
-                delete h_corr_slice;
-            } else {
-                // As a fallback, still print page (left plots)
-                std::cerr << "[Warning] PlotSliceCorrelation returned nullptr for slice " << i << std::endl;
-                c->Modified();
-                c->Update();
-                c->Print(pdfOut.c_str());
-            }
-        } else {
-            // nothing to draw: still print the left plots
-            c->Modified();
-            c->Update();
-            c->Print(pdfOut.c_str());
-        }
-
-        // Page title (drawn last so it's on top)
-        c->cd();
-        TLatex latex;
-        latex.SetNDC(true);
-        latex.SetTextAlign(22);
-        latex.SetTextSize(0.045);
-        latex.DrawLatex(0.5, 0.94, pageTitle.c_str());
-
-            // cleanup
-        delete h_post_slice;
-        delete h_post_err_slice;
-        delete h_event_slice;
-        delete h_event_err_slice;
-    } // end slices
-}*/
-
 void Save1DSlicesWithEventRateAndCorr(
     TH2D* h_event, TH2D* h_event_err,
     TH2D* h_post,  TH2D* h_post_err,
@@ -1150,38 +695,9 @@ void Save1DSlicesWithEventRateAndCorr(
             else return Form("%.3f", val);
         };
 
-        // std::string pageTitle = sliceAlongQ3
-        //     ? Form("Slice %d: %s #leq q3 < %s GeV", i, formatEdge(firstBin.q3_min), formatEdge(lastBin.q3_max))
-        //     : Form("Slice %d: %s #leq q0 < %s GeV", i, formatEdge(firstBin.q0_min), formatEdge(lastBin.q0_max));
-        std::string sliceAxisLabel, orthogonalAxisLabel;
-        double minEdge, maxEdge;
-
-        if (sliceAlongQ3) {
-            sliceAxisLabel = xvar2;              // y-axis variable for slicing
-            orthogonalAxisLabel = xvar1;         // x-axis variable along histogram
-            minEdge = firstBin.q3_min;
-            maxEdge = lastBin.q3_max;
-        } else {
-            sliceAxisLabel = xvar1;              // x-axis variable for slicing
-            orthogonalAxisLabel = xvar2;         // y-axis variable along histogram
-            minEdge = firstBin.q0_min;
-            maxEdge = lastBin.q0_max;
-        }
-
-        // std::string pageTitle = Form("Slice %d: %s #leq %s < %s",
-        //                             i,
-        //                             formatEdge(minEdge),
-        //                             sliceAxisLabel.c_str(),
-        //                             formatEdge(maxEdge));
-
-        std::string pageTitle = Form("Slice %d: %s #leq %s < %s (%s vs %s)",
-                             i,
-                             formatEdge(minEdge),
-                             sliceAxisLabel.c_str(),
-                             formatEdge(maxEdge),
-                             orthogonalAxisLabel.c_str(),
-                             sliceAxisLabel.c_str());
-
+        std::string pageTitle = sliceAlongQ3
+            ? Form("Slice %d: %s #leq q3 < %s GeV", i, formatEdge(firstBin.q3_min), formatEdge(lastBin.q3_max))
+            : Form("Slice %d: %s #leq q0 < %s GeV", i, formatEdge(firstBin.q0_min), formatEdge(lastBin.q0_max));
 
         // Left/right pads
         c->Divide(2,1);
@@ -1244,7 +760,7 @@ void Save1DSlicesWithEventRateAndCorr(
         }
 
         
-        h_post_slice->GetYaxis()->SetRangeUser(0.2, 1.8);
+        h_post_slice->GetYaxis()->SetRangeUser(0.9, 1.1);
 
         padLeft->cd(1); gPad->SetBottomMargin(0.12); h_event_slice->GetXaxis()->SetTitle(xvar1.c_str()); h_event_slice->Draw("E1 HIST");
         padLeft->cd(2); gPad->SetBottomMargin(0.12); h_post_slice->GetXaxis()->SetTitle(xvar1.c_str()); h_post_slice->SetYTitle("Posterior value"); h_post_slice->Draw("E1 HIST");
@@ -1321,7 +837,7 @@ void Save1DSlicesWithEventRateAndCorr(
 int main(int argc, char* argv[]) {
 
     // --- Setup ROOT canvas ---
-    // = AddTimestampToFilename("mcmc_summary_plots.pdf");
+    std::string pdfOut = AddTimestampToFilename("mcmc_summary_plots.pdf");
     std::string rootOut = AddTimestampToROOTFilename("mcmc_diagnostics.root");
     
     // --- Setup ROOT canvas ---
@@ -1432,8 +948,9 @@ int main(int argc, char* argv[]) {
     TAxis* axisX = new TAxis(q0_edges.size() - 1, q0_edges.data());
     TAxis* axisY = new TAxis(q3_edges.size() - 1, q3_edges.data());
 
-    setRedWhiteBluePalette();
-    // Posterior mean/stddev histo
+    // -------------------------
+    // Posterior mean/stddev histograms
+    // -------------------------
     TH2D* h_mean = new TH2D("h_param_mean", "Posterior Mean;q0 [GeV];q3 [GeV]",
                             q0_edges.size()-1, &q0_edges[0],
                             q3_edges.size()-1, &q3_edges[0]);
@@ -1441,9 +958,11 @@ int main(int argc, char* argv[]) {
                               q0_edges.size()-1, &q0_edges[0],
                               q3_edges.size()-1, &q3_edges[0]);
 
-    
+    // -------------------------
+    // Slice example
+    // -------------------------
     int sliceBin = 1;          // pick first slice bin
-    bool sliceAlongQ3 = true;  // slice along y axis (xvar_2)
+    bool sliceAlongQ3 = true;  // slice along q3 direction
 
     auto sliceIndices = GetSliceIndices(binDefs, sliceBin, sliceAlongQ3,
                                             h_mean, corrMatrix->GetNrows());
@@ -1462,23 +981,33 @@ int main(int argc, char* argv[]) {
     
 
 
-    // OUTPUT FILE NAMES
+    // -------------------------
+    // Derive output filenames
+    // -------------------------
     std::string outputRootFile = mcmc_file.substr(0, mcmc_file.find_last_of('.')) + "_diagnostics.root";
-    std::string pdfOut  = mcmc_file.substr(0, mcmc_file.find_last_of('.')) + "_diagnostics.pdf";
+    std::string outputPdfFile  = mcmc_file.substr(0, mcmc_file.find_last_of('.')) + "_diagnostics.pdf";
 
-    auto OutputFile = std::unique_ptr<TFile>(TFile::Open(rootOut.c_str(), "RECREATE"));
+    auto OutputFile = std::unique_ptr<TFile>(TFile::Open(outputRootFile.c_str(), "RECREATE"));
     if (!OutputFile || OutputFile->IsZombie()) {
-        std::cerr << "Error creating output file " << rootOut << std::endl;
+        std::cerr << "Error creating output file " << outputRootFile << std::endl;
         return 1;
     }
     OutputFile->cd();
 
-    
+ 
     // -------------------------
     // MaCh3 setup
     // -------------------------
     covarianceXsec* xsec = nullptr;
-    covarianceOsc* osc = nullptr;
+    //covarianceOsc* osc = nullptr;
+
+    auto OscCovFile =GetFromManager<std::vector<std::string>>(FitManager->raw()["General"]["Systematics"]["OscCovFile"], {});
+    auto OscCovName =GetFromManager<std::string>(FitManager->raw()["General"]["Systematics"]["OscCovName"], "osc_cov");
+    auto OscPars = GetFromManager<std::vector<double>>(FitManager->raw()["General"]["OscillationParameters"], {});
+
+    covarianceOsc* osc = new covarianceOsc(OscCovFile, OscCovName);
+    osc->setParameters(OscPars);
+
     std::vector<samplePDFFDBase*> DUNEPdfs;
     MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec, osc);
     std::unique_ptr<mcmc> MaCh3Fitter = std::make_unique<mcmc>(FitManager);
@@ -1515,11 +1044,14 @@ int main(int argc, char* argv[]) {
     h_q0q3_combined->GetYaxis()->SetTitle(xsec_var2.c_str());
     h_q0q3_combined->Write("xsec_eventrate_histo");
 
-    
+    // --- Event rate histogram with adaptive label colors ---
     TH2D* h_eventrate_labels = (TH2D*)h_q0q3_combined->Clone("h_eventrate_labels");
     h_eventrate_labels->SetTitle("");
 
+    //TCanvas* c_eventrate_labels = new TCanvas("c_eventrate_labels", "", 900, 700);
+    //c_eventrate_labels->SetRightMargin(0.15);
     gStyle->SetOptStat(0);
+    gStyle->SetPalette(kPastel);
     h_eventrate_labels->GetXaxis()->SetTitle(xsec_var1.c_str());
     h_eventrate_labels->GetYaxis()->SetTitle(xsec_var2.c_str());
     
@@ -1614,8 +1146,8 @@ int main(int argc, char* argv[]) {
     }
     h_mean->Write("xsec_param_mean");
     h_stddev->Write("xsec_param_stddev");
-    h_mean->GetZaxis()->SetRangeUser(0.5,1.5);
-    h_stddev->GetZaxis()->SetRangeUser(0.0, 0.5);
+    h_mean->GetZaxis()->SetRangeUser(0.95,1.05);
+    h_stddev->GetZaxis()->SetRangeUser(0, 0.1);
     
 
     // -------------------------
@@ -1625,14 +1157,7 @@ int main(int argc, char* argv[]) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<Long64_t> dis(0, nEntries-1);
-    //int burnIn = 0.1 * nEntries;
-    int burnIn = FitManager->raw()["General"]["MCMC"]["BurnInSteps"].as<int>();
-
-    if(burnIn < 1000){
-        std::cout << "BurnInSteps not set in config or looks to small..." << std::endl;
-       int burnIn = 0.1 * nEntries; 
-    }
-
+    int burnIn = 0.1 * nEntries;
 
     std::vector<PosteriorSample> posteriorSamples;
     posteriorSamples.reserve(nSamples);
@@ -1716,18 +1241,18 @@ int main(int argc, char* argv[]) {
 
         // --- Open multipage PDF ---
     //c_master->Print((outputFileName + "[").c_str()); 
-    c_master->Print((pdfOut + "[").c_str());  // open PDF
+    c_master->Print((outputPdfFile + "[").c_str());  // open PDF
 
 
-    
+    // 1️⃣ Event rate with labels
     c_master->Clear();
     h_eventrate_labels->Draw("COLZ TEXT");
     h_eventrate_labels->Write();
-    c_master->Print(pdfOut.c_str());          // add a page
+    c_master->Print(outputPdfFile.c_str());          // add a page
 
     h_eventrate_labels->Write(); // save to ROOT
 
-   
+    // 2️⃣ Event rate heatmap without labels
     c_master->Clear();
     h_q0q3_combined->GetXaxis()->SetTitle(xsec_var1.c_str());
     h_q0q3_combined->GetYaxis()->SetTitle(xsec_var2.c_str());
@@ -1736,10 +1261,10 @@ int main(int argc, char* argv[]) {
     h_q0q3_combined->Write();
     c_master->Update();
     //c_master->Print(outputFileName.c_str());
-    c_master->Print(pdfOut.c_str());          // add a page
+    c_master->Print(outputPdfFile.c_str());          // add a page
 
 
-    
+    // 3️⃣ Posterior mean 2D
     c_master->Clear();
     
     h_mean->GetXaxis()->SetTitle(xsec_var1.c_str());
@@ -1749,10 +1274,10 @@ int main(int argc, char* argv[]) {
     h_mean->Write();
     c_master->Update();
     //c_master->Print(outputFileName.c_str());
-    c_master->Print(pdfOut.c_str());          // add a page
+    c_master->Print(outputPdfFile.c_str());          // add a page
 
 
-    
+    // 4️⃣ Posterior stddev 2D
     c_master->Clear();
     h_stddev->GetXaxis()->SetTitle(xsec_var1.c_str());
     h_stddev->GetYaxis()->SetTitle(xsec_var2.c_str());
@@ -1763,7 +1288,7 @@ int main(int argc, char* argv[]) {
     h_stddev->Write();
     c_master->Update();
     //c_master->Print(outputFileName.c_str());
-    c_master->Print(pdfOut.c_str());          // add a page
+    c_master->Print(outputPdfFile.c_str());          // add a page
 
     std::cout << "xsec_var1  = " << xsec_var1 << std::endl;
     std::cout << "xsec_var2  = " << xsec_var2 << std::endl;
@@ -1776,7 +1301,7 @@ int main(int argc, char* argv[]) {
         binDefs,                                 // bin definitions
         paramNames,                             // parameter names
         c_master,                                // canvas
-        pdfOut,                                  // output PDF
+        outputPdfFile,                                  // output PDF
         true,                                    // slice along q3
         xsec_var2,                               // x-axis variable for 1D slices
         xsec_var1 ,
@@ -1792,14 +1317,14 @@ int main(int argc, char* argv[]) {
         binDefs,                                 // bin definitions
         paramNames,                             // parameter names
         c_master,                                // canvas
-        pdfOut,                                  // output PDF
+        outputPdfFile,                                  // output PDF
         false,                                    // slice along q3
         xsec_var1,                               // x-axis variable for 1D slices
         xsec_var2  ,
         OutputFile.get()                              // y-axis variable for correlation/2D
     );
 
-    c_master->Print((pdfOut + "]").c_str());  // close PDF
+    c_master->Print((outputPdfFile + "]").c_str());  // close PDF
 
     // -------------------------
     // Clean up
@@ -1810,6 +1335,7 @@ int main(int argc, char* argv[]) {
     delete axisX;
     delete axisY;
     delete FitManager;
+    delete osc;
     delete f_post;
     fCorr->Close();
     delete fCorr;
@@ -1817,6 +1343,6 @@ int main(int argc, char* argv[]) {
     OutputFile->Write();
     OutputFile->Close();
     std::cout << "Saved diagnostics to: " << rootOut << std::endl;
-    std::cout << "Finished diagnostics. Output written to: " << pdfOut << std::endl;
+    std::cout << "Finished diagnostics. Output written to: " << outputPdfFile << std::endl;
     return 0;
 }

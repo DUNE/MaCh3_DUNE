@@ -26,7 +26,7 @@ int main(int argc, char * argv[]) {
 
   //###############################################################################################################################
   //Create samplePDFFD objects
-  
+
   ParameterHandlerGeneric* xsec = nullptr;
 
   std::vector<SampleHandlerFD*> DUNEPdfs;
@@ -40,12 +40,12 @@ int main(int argc, char * argv[]) {
     Sample->Reweight();
     MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetTitle(), Sample->GetMCHist(Sample->GetNDim())->Integral());
   }
-  
+
   //###############################################################################################################################
   //DB Can't use the core sigma variations as it's entirely set up around the concept of multiple selections per samplePDF object
   //   Thats not the case in the FD code, which has one selection per samplePDF object
   //   Consequently have to write out own code
-  
+
   std::vector<ParameterHandlerBase*> CovObjs;
   CovObjs.emplace_back(xsec);
 
@@ -53,43 +53,43 @@ int main(int argc, char * argv[]) {
 
   std::string OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
   TFile* File = TFile::Open(OutputFileName.c_str(),"RECREATE");
-  
+
   for (ParameterHandlerBase* CovObj: CovObjs) {
     MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",CovObj->GetName());
-    
+
     int nPars = CovObj->GetNumParams();
     for (int iPar=0;iPar<nPars;iPar++) {
       std::string ParName = CovObj->GetParFancyName(iPar);
       double VarInit = CovObj->GetParInit(iPar);
       double VarSigma = CovObj->GetDiagonalError(iPar);
-      
+
       MACH3LOG_INFO("\tParameter : {:<30} - Variations around value : {:<10.7f} , in units of 1 Sigma : {:<10.7f}",ParName,VarInit,VarSigma);
 
       File->cd();
       File->mkdir(ParName.c_str());
       File->cd(ParName.c_str());
-      
+
       for (size_t iSigVar=0;iSigVar<sigmaVariations.size();iSigVar++) {
 	double VarVal = VarInit + sigmaVariations[iSigVar]*VarSigma;
 	if (VarVal < CovObj->GetLowerBound(iPar)) VarVal = CovObj->GetLowerBound(iPar);
 	if (VarVal > CovObj->GetUpperBound(iPar)) VarVal = CovObj->GetUpperBound(iPar);
-	
+
 	MACH3LOG_INFO("\t\tVariation {:<5.3f} - Parameter Value : {:<10.7f}",sigmaVariations[iSigVar],VarVal);
 	CovObj->SetParProp(iPar,VarVal);
 
 	for (size_t iSample=0;iSample<DUNEPdfs.size();iSample++) {
 	  std::string SampleName = DUNEPdfs[iSample]->GetTitle();
-	  
+
 	  File->cd(ParName.c_str());
 	  if (iSigVar == 0) {
 	    File->mkdir((ParName+"/"+SampleName).c_str());
 	  }
 	  File->cd((ParName+"/"+SampleName).c_str());
-	  
+
 	  DUNEPdfs[iSample]->Reweight();
 	  TH1* Hist = DUNEPdfs[iSample]->GetMCHist(DUNEPdfs[iSample]->GetNDim());
 	  MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}",SampleName,Hist->Integral());
-	  
+
 	  Hist->Write(Form("Variation_%i",(int)iSigVar));
 	}
       }
@@ -99,7 +99,82 @@ int main(int argc, char * argv[]) {
 
     MACH3LOG_INFO("=======================================================");
   }
+  std::string pdfFileName = "SigmaVariations.pdf";
+bool firstCanvas = true;
+
+for (covarianceBase* CovObj: CovObjs) {
+    int nPars = CovObj->getNpars();
+    for (int iPar = 0; iPar < nPars; iPar++) {
+        std::string ParName = CovObj->GetParFancyName(iPar);
+        double VarInit = CovObj->getParInit(iPar);
+        double VarSigma = CovObj->getDiagonalError(iPar);
+
+        File->cd();
+        File->mkdir(ParName.c_str());
+        File->cd(ParName.c_str());
+
+        // Canvas per parameter
+        TCanvas* cPar = new TCanvas(Form("c_%s", ParName.c_str()), Form("Parameter: %s", ParName.c_str()), 1000, 700);
+        cPar->cd();
+
+        TLegend* legend = new TLegend(0.7,0.7,0.9,0.9);
+        THStack* hsAll = new THStack("hsAll", Form("Parameter: %s", ParName.c_str()));
+
+        int colorIndex = 2;
+
+        for (size_t iSample = 0; iSample < DUNEPdfs.size(); iSample++) {
+            std::string SampleName = DUNEPdfs[iSample]->GetTitle();
+            File->cd((ParName + "/" + SampleName).c_str());
+
+            for (size_t iSigVar = 0; iSigVar < sigmaVariations.size(); iSigVar++) {
+                double VarVal = VarInit + sigmaVariations[iSigVar] * VarSigma;
+                if (VarVal < CovObj->GetLowerBound(iPar)) VarVal = CovObj->GetLowerBound(iPar);
+                if (VarVal > CovObj->GetUpperBound(iPar)) VarVal = CovObj->GetUpperBound(iPar);
+                CovObj->setParProp(iPar, VarVal);
+
+                DUNEPdfs[iSample]->reweight();
+                if (DUNEPdfs[iSample]->GetNDim() != 1) continue;
+
+                TH1* Hist = (TH1*)DUNEPdfs[iSample]->get1DHist()->Clone(Form("Hist_%s_%i", SampleName.c_str(), (int)iSigVar));
+                Hist->SetLineColor(colorIndex + iSigVar);
+                Hist->SetLineWidth(2);
+
+                // Label axes
+                Hist->GetXaxis()->SetTitle("Reco Neutrino ENERGY (GeV)"); // Replace with actual variable if known
+                Hist->GetYaxis()->SetTitle("Event Rate");
+
+                hsAll->Add(Hist);
+                legend->AddEntry(Hist, Form("%s %+g #sigma", SampleName.c_str(), sigmaVariations[iSigVar]), "l");
+
+                Hist->Write(Form("Variation_%i", (int)iSigVar));
+            }
+        }
+
+        hsAll->Draw("NOSTACK HIST");
+        legend->Draw();
+
+        // Save to single PDF
+        if (firstCanvas)
+            cPar->SaveAs(Form("%s(", pdfFileName.c_str())); // Open PDF
+        else
+            cPar->SaveAs(pdfFileName.c_str());              // Append page
+        firstCanvas = false;
+
+        cPar->Write();
+        delete cPar;
+
+        CovObj->setParProp(iPar, VarInit);
+    }
+}
+
+// Close the PDF
+TCanvas* cEnd = new TCanvas();
+cEnd->SaveAs(Form("%s)", pdfFileName.c_str()));
+delete cEnd;
+
+
+
 
   File->Close();
-  
+
 }
