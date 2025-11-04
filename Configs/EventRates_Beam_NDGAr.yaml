@@ -9,8 +9,7 @@ General:
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.1
     XsecAtGen: false
-    OscCovName: "osc_cov"
-    OscFix: ["baseline"]
+    XsecFix: ["baseline"]
 
   Fitter:
     FitTestLikelihood: false

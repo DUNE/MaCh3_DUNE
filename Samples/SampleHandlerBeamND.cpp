@@ -220,57 +220,6 @@ void SampleHandlerBeamND::SetupFDMC() {
   }
 }
 
-/*
-std::vector<double> SampleHandlerBeamND::ReturnKinematicParameterBinning(std::string KinematicParameterStr) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameterStr));
-  std::vector<double> ReturnVec;
-
-  switch (KinPar) {
-
-  case kIsFHC:
-    ReturnVec.resize(3);
-    ReturnVec[0] = -0.5;
-    ReturnVec[1] = 0.5;
-    ReturnVec[2] = 1.5;
-    break;
-    
-  case kTrueNeutrinoEnergy:
-    for (int i=0;i<20;i++) {
-      ReturnVec.emplace_back(i);
-    }
-    ReturnVec.emplace_back(100.);
-    ReturnVec.emplace_back(1000.);
-    break;
-
-  case kRecoNeutrinoEnergy:
-    ReturnVec.resize(XBinEdges.size());
-    for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
-    break;
-
-  case kyRec:
-    ReturnVec.resize(YBinEdges.size());
-    for (unsigned int bin_i=0;bin_i<YBinEdges.size();bin_i++) {ReturnVec[bin_i] = YBinEdges[bin_i];}
-    break;
-
-  case kOscChannel:
-    ReturnVec.resize(GetNsamples());
-    for (int bin_i=0;bin_i<GetNsamples();bin_i++) {ReturnVec[bin_i] = bin_i;}
-    break;
-
-  case kMode:
-    ReturnVec.resize(Modes->GetNModes());
-    for (int bin_i=0;bin_i<Modes->GetNModes();bin_i++) {ReturnVec[bin_i] = bin_i;}
-    break;
-
-  default:
-    MACH3LOG_ERROR("Unknown KinPar: {}",static_cast<int>(KinPar));
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-
-  return ReturnVec;
-}
-*/
-
 // Set the covariance matrix for this class
 void SampleHandlerBeamND::setNDCovMatrix() {
   if (NDCovMatrix == NULL) {

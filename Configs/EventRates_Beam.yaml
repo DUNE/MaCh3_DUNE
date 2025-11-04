@@ -28,8 +28,7 @@ General:
     XsecStepScale: 0.05
     XsecAtGen: false
     NDCovFile: "Configs/CovObjs/tdr_covs/det_sys_cov.root"
-    OscCovName: "osc_cov"
-    OscFix: ["baseline", "density"]
+    XsecFix: ["baseline", "density"]
 
   Fitter:
     FitTestLikelihood: false
