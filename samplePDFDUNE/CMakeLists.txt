@@ -14,12 +14,14 @@ else()
 		samplePDFDUNEAtm.h
   	samplePDFDUNEBeamFD.h
    	samplePDFDUNEBeamND.h
+	samplePDFDUNEBeamFD_actuallyFD.h
 		MaCh3DUNEFactory.h
 	)
 	set(SOURCE_FILES
 		samplePDFDUNEAtm.cpp
     samplePDFDUNEBeamFD.cpp
     samplePDFDUNEBeamND.cpp
+	samplePDFDUNEBeamFD_actuallyFD.cpp
     MaCh3DUNEFactory.cpp
 	)
 endif()

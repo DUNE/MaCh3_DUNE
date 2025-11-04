@@ -1239,6 +1239,9 @@ std::vector<double> samplePDFDUNEBeamFD_actuallyFD::ReturnKinematicParameterBinn
     case kp_lep:
     case ktheta_lep:
     case kELepRec:
+      ReturnVec.resize(XBinEdges.size());
+      for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
+      break;
     case kEHadRec:
     case kERec_minus_Etrue:
     case kERecQE:
@@ -1248,6 +1251,10 @@ std::vector<double> samplePDFDUNEBeamFD_actuallyFD::ReturnKinematicParameterBinn
     case kisCC:
     case kisRelativeEnubias:
     case kEnubias:
+      ReturnVec.resize(XBinEdges.size());
+      for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
+      break;
+
     default:
         MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", static_cast<int>(KinematicParameter));
         throw MaCh3Exception(__FILE__, __LINE__);

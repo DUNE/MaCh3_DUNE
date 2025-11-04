@@ -33,7 +33,8 @@ struct dunemc_base {
   double *rw_mom;
   double *rw_theta;
   double *rw_Q2;
-
+  double *rw_trueccnumu;
+  double *rw_trueccnue;
   double *rw_cvnnumu;
   double *rw_cvnnue;
   double *rw_cvnnumu_shifted;
@@ -100,6 +101,14 @@ struct dunemc_base {
   double *rw_elep_reco;
   double *rw_elep_true;
 
+  double *rw_erec_had_sqrt;
+  double *rw_erec_lep_sqrt;
+  double *rw_eRecoPi0_sqrt;
+  double *rw_eRecoN_sqrt;
+  double *rw_sum_ehad;
+  double *rw_sum_ehad_sqrt;
+  
+
   int *nrecoparticles;
   bool *in_fdv;
   bool *is_accepted;
@@ -109,6 +118,7 @@ struct dunemc_base {
   double *p_lep;
   double *enurec_minus_enutrue;
   double *relative_enu_bias;
+  double *enu_bias;
   double *erec_proxy;
   double *erec_proxy_minus_enu;
   double *eHad_av;
@@ -118,6 +128,8 @@ struct dunemc_base {
   bool* muon_tracker;
   float* Ehad_veto;
 
+  std::vector<int> nupdgUnosc_vector;
+  std::vector<int> rw_nuPDGunosc_vector;
 
   //Particle-level kinematic parameters (JM for NDGAr)
   std::vector<double> *particle_ecaldepositfraction;
