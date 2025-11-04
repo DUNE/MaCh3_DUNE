@@ -17,71 +17,322 @@ samplePDFDUNEBeamFD::samplePDFDUNEBeamFD(std::string mc_version_, covarianceXsec
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
   OscCov = nullptr;
   
-  
+  SetupFunctionalParameters();
   Initialise();
 }
 
 samplePDFDUNEBeamFD::~samplePDFDUNEBeamFD() {
 }
 
-
 void samplePDFDUNEBeamFD::Init() {
 
-  dunemcSamples.resize(nSamples,dunemc_base());
-  
-  if (CheckNodeExists(SampleManager->raw(), "DUNESampleBools", "iselike" )) {
-    iselike = SampleManager->raw()["DUNESampleBools"]["iselike"].as<bool>();
-  } else{
-    MACH3LOG_ERROR("Did not find DUNESampleBools:iselike in {}, please add this", SampleManager->GetFileName());
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
+    dunemcSamples.resize(nSamples, dunemc_base());
 
-  if (CheckNodeExists(SampleManager->raw(), "DUNESampleBools", "isFHC" )) {
-    isFHC = SampleManager->raw()["DUNESampleBools"]["isFHC"].as<double>();
-  } else{
-    MACH3LOG_ERROR("Did not find DUNESampleBools:isFHC in {}, please add this", SampleManager->GetFileName());
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-  
-  if (CheckNodeExists(SampleManager->raw(), "POT")) {
-    pot = SampleManager->raw()["POT"].as<double>();
-  } else{
-    MACH3LOG_ERROR("POT not defined in {}, please add this!", SampleManager->GetFileName());
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-  
-  tot_escale_fd_pos = -999;
-  tot_escale_sqrt_fd_pos = -999;
-  tot_escale_invsqrt_fd_pos = -999;
-  had_escale_fd_pos = -999;
-  had_escale_sqrt_fd_pos = -999;
-  had_escale_invsqrt_fd_pos = -999;
-  mu_escale_fd_pos = -999;
-  mu_escale_sqrt_fd_pos = -999;
-  mu_escale_invsqrt_fd_pos = -999;
-  n_escale_fd_pos = -999;
-  n_escale_sqrt_fd_pos = -999;
-  n_escale_invsqrt_fd_pos = -999;
-  em_escale_fd_pos = -999;
-  em_escale_sqrt_fd_pos = -999;
-  em_escale_invsqrt_fd_pos = -999;
-  had_res_fd_pos = -999;
-  mu_res_fd_pos = -999;
-  n_res_fd_pos = -999;
-  em_res_fd_pos = -999;
-  cvn_numu_fd_pos = -999;
-  cvn_nue_fd_pos = -999;
-  
-  MACH3LOG_INFO("-------------------------------------------------------------------");
+    // Initialize basic flags
+    if (CheckNodeExists(SampleManager->raw(), "DUNESampleBools", "iselike")) {
+        iselike = SampleManager->raw()["DUNESampleBools"]["iselike"].as<bool>();
+    } else {
+        MACH3LOG_ERROR("Did not find DUNESampleBools:iselike in {}, please add this", SampleManager->GetFileName());
+        throw MaCh3Exception(__FILE__, __LINE__);
+    }
+
+    if (CheckNodeExists(SampleManager->raw(), "DUNESampleBools", "isFHC")) {
+        isFHC = SampleManager->raw()["DUNESampleBools"]["isFHC"].as<double>();
+    } else {
+        MACH3LOG_ERROR("Did not find DUNESampleBools:isFHC in {}, please add this", SampleManager->GetFileName());
+        throw MaCh3Exception(__FILE__, __LINE__);
+    }
+
+    if (CheckNodeExists(SampleManager->raw(), "POT")) {
+        pot = SampleManager->raw()["POT"].as<double>();
+    } else {
+        MACH3LOG_ERROR("POT not defined in {}, please add this!", SampleManager->GetFileName());
+        throw MaCh3Exception(__FILE__, __LINE__);
+    }
+
+    // Reset ND positions
+    tot_escale_nd_pos = -999;
+    tot_escale_sqrt_nd_pos = -999;
+    tot_escale_invsqrt_nd_pos = -999;
+    had_escale_nd_pos = -999;
+    had_escale_sqrt_nd_pos = -999;
+    had_escale_invsqrt_nd_pos = -999;
+    mu_escale_nd_pos = -999;
+    mu_escale_sqrt_nd_pos = -999;
+    mu_escale_invsqrt_nd_pos = -999;
+    n_escale_nd_pos = -999;
+    n_escale_sqrt_nd_pos = -999;
+    n_escale_invsqrt_nd_pos = -999;
+    em_escale_nd_pos = -999;
+    em_escale_sqrt_nd_pos = -999;
+    em_escale_invsqrt_nd_pos = -999;
+    had_res_nd_pos = -999;
+    mu_res_nd_pos = -999;
+    n_res_nd_pos = -999;
+    em_res_nd_pos = -999;
+    cvn_numu_nd_pos = -999;
+    cvn_nue_nd_pos = -999;
+
+    nFDDetectorSystPointers = static_cast<int>(funcParsVec.size());
+    FDDetectorSystPointers.resize(nFDDetectorSystPointers);
+
+    
+
+    for (size_t i = 0; i < funcParsVec.size(); ++i) {
+
+    // funcParsNamesMap maps string -> int
+    // We need the string name corresponding to this index
+    // Iterate over funcParsNamesMap to find the matching int
+    std::string name;
+    bool found = false;
+    for (const auto &kv : funcParsNamesMap) {
+        if (kv.second == static_cast<int>(i)) {
+            name = kv.first;
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        std::cerr << "[samplePDFDUNEBeamFD] Could not find name for funcPar index " << i << std::endl;
+        throw MaCh3Exception(__FILE__, __LINE__);
+    }
+
+    // Save pointer to XsecCov
+    FDDetectorSystPointers[i] = XsecCov->retPointer(i);
+    std::cout << "[Init] funcParsVec size: " << funcParsVec.size() << std::endl;
+    std::cout << "[Init] funcParsNamesMap size: " << funcParsNamesMap.size() << std::endl;
+
+    // Set ND positions
+    if (name == "TotalEScaleND") tot_escale_nd_pos = i;
+    else if (name == "TotalEScaleSqrtND") tot_escale_sqrt_nd_pos = i;
+    else if (name == "TotalEScaleInvSqrtND") tot_escale_invsqrt_nd_pos = i;
+    else if (name == "HadEScaleND") had_escale_nd_pos = i;
+    else if (name == "HadEScaleSqrtND") had_escale_sqrt_nd_pos = i;
+    else if (name == "HadEScaleInvSqrtND") had_escale_invsqrt_nd_pos = i;
+    else if (name == "MuEScaleND") mu_escale_nd_pos = i;
+    else if (name == "MuEScaleSqrtND") mu_escale_sqrt_nd_pos = i;
+    else if (name == "MuEScaleInvSqrtND") mu_escale_invsqrt_nd_pos = i;
+    else if (name == "NEScaleND") n_escale_nd_pos = i;
+    else if (name == "NEScaleSqrtND") n_escale_sqrt_nd_pos = i;
+    else if (name == "NEScaleInvSqrtND") n_escale_invsqrt_nd_pos = i;
+    else if (name == "EMEScaleND") em_escale_nd_pos = i;
+    else if (name == "EMEScaleSqrtND") em_escale_sqrt_nd_pos = i;
+    else if (name == "EMEScaleInvSqrtND") em_escale_invsqrt_nd_pos = i;
+    else if (name == "HadResND") had_res_nd_pos = i;
+    else if (name == "MuResND") mu_res_nd_pos = i;
+    else if (name == "NResND") n_res_nd_pos = i;
+    else if (name == "EMResND") em_res_nd_pos = i;
+    else {
+        std::cerr << "[samplePDFDUNEBeamFD] Unknown functional parameter: " << name << std::endl;
+        throw MaCh3Exception(__FILE__, __LINE__);
+    }
+}
+    MACH3LOG_INFO("-------------------------------------------------------------------");
 }
 
+
+
+/*
+void samplePDFDUNEBeamFD::Init() {
+
+    dunemcSamples.resize(nSamples, dunemc_base());
+
+    if (CheckNodeExists(SampleManager->raw(), "DUNESampleBools", "iselike")) {
+        iselike = SampleManager->raw()["DUNESampleBools"]["iselike"].as<bool>();
+    } else {
+        MACH3LOG_ERROR("Did not find DUNESampleBools:iselike in {}, please add this", SampleManager->GetFileName());
+        throw MaCh3Exception(__FILE__, __LINE__);
+    }
+
+    if (CheckNodeExists(SampleManager->raw(), "DUNESampleBools", "isFHC")) {
+        isFHC = SampleManager->raw()["DUNESampleBools"]["isFHC"].as<double>();
+    } else {
+        MACH3LOG_ERROR("Did not find DUNESampleBools:isFHC in {}, please add this", SampleManager->GetFileName());
+        throw MaCh3Exception(__FILE__, __LINE__);
+    }
+
+    if (CheckNodeExists(SampleManager->raw(), "POT")) {
+        pot = SampleManager->raw()["POT"].as<double>();
+    } else {
+        MACH3LOG_ERROR("POT not defined in {}, please add this!", SampleManager->GetFileName());
+        throw MaCh3Exception(__FILE__, __LINE__);
+    }
+
+    // Initialize ND systematics positions
+    tot_escale_nd_pos = tot_escale_sqrt_nd_pos = tot_escale_invsqrt_nd_pos = -999;
+    had_escale_nd_pos = had_escale_sqrt_nd_pos = had_escale_invsqrt_nd_pos = -999;
+    mu_escale_nd_pos = mu_escale_sqrt_nd_pos = mu_escale_invsqrt_nd_pos = -999;
+    n_escale_nd_pos = n_escale_sqrt_nd_pos = n_escale_invsqrt_nd_pos = -999;
+    em_escale_nd_pos = em_escale_sqrt_nd_pos = em_escale_invsqrt_nd_pos = -999;
+    had_res_nd_pos = mu_res_nd_pos = n_res_nd_pos = em_res_nd_pos = -999;
+    cvn_numu_nd_pos = cvn_nue_nd_pos = -999;
+
+    // Number of FD detector systematics
+    nFDDetectorSystPointers = static_cast<int>(funcParsVec.size());
+    FDDetectorSystPointers.resize(nFDDetectorSystPointers);
+
+    
+
+    // Build reverse map enum -> name
+    std::unordered_map<int, std::string> funcParsEnumToName;
+    for (const auto& kv : funcParsNamesMap)
+        funcParsEnumToName[kv.second] = kv.first;
+
+    // Fill FDDetectorSystPointers
+    for (size_t i = 0; i < funcParsVec.size(); ++i) {
+        //int enumID = static_cast<int>(funcParsVec[i]);
+        int enumID = static_cast<int>(i);  // use the vector index as ID
+
+
+        const std::string& name = funcParsEnumToName.at(enumID);
+        const double* ptr = XsecCov->retPointer(enumID);
+        FDDetectorSystPointers[i] = ptr;
+
+        // Set ND positions
+        if (name == "TotalEScaleND") tot_escale_nd_pos = enumID;
+        else if (name == "TotalEScaleSqrtND") tot_escale_sqrt_nd_pos = enumID;
+        else if (name == "TotalEScaleInvSqrtND") tot_escale_invsqrt_nd_pos = enumID;
+        else if (name == "HadEScaleND") had_escale_nd_pos = enumID;
+        else if (name == "HadEScaleSqrtND") had_escale_sqrt_nd_pos = enumID;
+        else if (name == "HadEScaleInvSqrtND") had_escale_invsqrt_nd_pos = enumID;
+        else if (name == "MuEScaleND") mu_escale_nd_pos = enumID;
+        else if (name == "MuEScaleSqrtND") mu_escale_sqrt_nd_pos = enumID;
+        else if (name == "MuEScaleInvSqrtND") mu_escale_invsqrt_nd_pos = enumID;
+        else if (name == "NEScaleND") n_escale_nd_pos = enumID;
+        else if (name == "NEScaleSqrtND") n_escale_sqrt_nd_pos = enumID;
+        else if (name == "NEScaleInvSqrtND") n_escale_invsqrt_nd_pos = enumID;
+        else if (name == "EMEScaleND") em_escale_nd_pos = enumID;
+        else if (name == "EMEScaleSqrtND") em_escale_sqrt_nd_pos = enumID;
+        else if (name == "EMEScaleInvSqrtND") em_escale_invsqrt_nd_pos = enumID;
+        else if (name == "HadResND") had_res_nd_pos = enumID;
+        else if (name == "MuResND") mu_res_nd_pos = enumID;
+        else if (name == "NResND") n_res_nd_pos = enumID;
+        else if (name == "EMResND") em_res_nd_pos = enumID;
+        else {
+            std::cerr << "Found a functional parameter which wasn't specified in the xml: " << name << std::endl;
+            throw MaCh3Exception(__FILE__, __LINE__);
+        }
+    }
+
+    MACH3LOG_INFO("-------------------------------------------------------------------");
+}*/
+
+
 // === HH: Functional parameters ===
-void samplePDFDUNEBeamFD::TotalEScaleND(const double * par, std::size_t iSample, std::size_t iEvent) {
+void samplePDFDUNEBeamFD::TotalEScale(const double * par, std::size_t iSample, std::size_t iEvent) {
   // Total energy scale uncertainties for anything but CC Numu, see:
   // https://github.com/DUNE/lblpwgtools/blob/3d475f50a998fbfa6266df9a0c4eb3056c0cdfe5/CAFAna/Systs/EnergySysts.h#L39
 
   dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_had[iEvent];
 }
+
+/*
+
+void samplePDFDUNEBeamFD::TotalEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_had[iEvent] * dunemcSamples[iSample].rw_erec_had_sqrt[iEvent];
+}
+
+
+
+void samplePDFDUNEBeamFD::TotalEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // Erec/sqrt(Erec) = sqrt(Erec)
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_had_sqrt[iEvent];
+}
+
+
+void samplePDFDUNEBeamFD::HadEScale(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_sum_ehad[iEvent];
+}
+
+void samplePDFDUNEBeamFD::HadEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_sum_ehad[iEvent] * dunemcSamples[iSample].rw_sum_ehad_sqrt[iEvent];
+}
+
+void samplePDFDUNEBeamFD::HadEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_sum_ehad_sqrt[iEvent];
+}
+
+void samplePDFDUNEBeamFD::MuEScale(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // HH TODO: Functionally this is the same as TotalEScaleNotCCNumu, not sure if this function is even needed
+  //TotalEScaleNotCCNumu(par, iSample, iEvent);
+}
+
+void samplePDFDUNEBeamFD::MuEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // See comments in MuEScale
+  //TotalEScaleSqrtNotCCNumu(par, iSample, iEvent);
+}
+
+void samplePDFDUNEBeamFD::MuEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // See comments in MuEScale
+  //TotalEScaleInvSqrtNotCCNumu(par, iSample, iEvent);
+}
+
+void samplePDFDUNEBeamFD::NEScale(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_eRecoN[iEvent];
+}
+
+void samplePDFDUNEBeamFD::NEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_eRecoN[iEvent] * dunemcSamples[iSample].rw_eRecoN_sqrt[iEvent];
+}
+
+void samplePDFDUNEBeamFD::NEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_eRecoN_sqrt[iEvent];
+}
+
+void samplePDFDUNEBeamFD::EMEScale(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_eRecoPi0[iEvent];
+}
+
+/*
+void samplePDFDUNEBeamFD::EMEScaleCCNue(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // Again this is the same as TotalEScaleNotCCNumu, not sure if this function is needed
+  TotalEScaleNotCCNumu(par, iSample, iEvent);
+}*/
+/*
+void samplePDFDUNEBeamFD::EMEScaleSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_eRecoPi0[iEvent] * dunemcSamples[iSample].rw_eRecoPi0_sqrt[iEvent];
+}
+
+
+void samplePDFDUNEBeamFD::EMEScaleInvSqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_eRecoPi0_sqrt[iEvent];
+}
+
+
+void samplePDFDUNEBeamFD::HadRes(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // True sum - reco sum
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * (dunemcSamples[iSample].rw_eP[iEvent]
+    + dunemcSamples[iSample].rw_ePip[iEvent]
+    + dunemcSamples[iSample].rw_ePim[iEvent]
+    - dunemcSamples[iSample].rw_sum_ehad[iEvent]);
+}
+
+void samplePDFDUNEBeamFD::MuRes(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // True muon energy - reco muon energy
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * (dunemcSamples[iSample].rw_LepE[iEvent] - dunemcSamples[iSample].rw_erec_lep[iEvent]);
+}
+
+void samplePDFDUNEBeamFD::NRes(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // True neutron energy - reco neutron energy
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * (dunemcSamples[iSample].rw_eN[iEvent] - dunemcSamples[iSample].rw_eRecoN[iEvent]);
+}
+
+void samplePDFDUNEBeamFD::EMRes(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // True pi0 energy - reco pi0 energy
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * (dunemcSamples[iSample].rw_ePi0[iEvent] - dunemcSamples[iSample].rw_eRecoPi0[iEvent]);
+}
+
+
+void samplePDFDUNEBeamFD::RegisterIndividualFunctionalParameter(
+    const std::string& fpName,
+    int fpEnum,
+    FuncParFuncType fpFunc)
+{
+    functionalParameterRegistry[fpName] = std::make_pair(fpEnum, fpFunc);
+}
+
+
+
 
 void samplePDFDUNEBeamFD::RegisterFunctionalParameters() {
   MACH3LOG_INFO("Registering functional parameters");
@@ -90,12 +341,95 @@ void samplePDFDUNEBeamFD::RegisterFunctionalParameters() {
 
   // This is the part where we manually enter things
   // A lambda function has to be used so we can refer to a non-static member function
-  RegisterIndividualFuncPar("TotalEScaleND",
-                            kTotalEScaleND,
-                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleND(par, iSample, iEvent); });
+  RegisterIndividualFunctionalParameter("TotalEScaleND",
+                            kTotalEScale,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScale(par, iSample, iEvent); });
+
+  /*
+  RegisterIndividualFunctionalParameter("TotalEScaleSqrtND",
+                            kTotalEScaleSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleSqrt(par, iSample, iEvent); });
+
   
+  RegisterIndividualFunctionalParameter("TotalEScaleInvSqrtND",
+                            kTotalEScaleInvSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleInvSqrt(par, iSample, iEvent); });
+
+  
+  RegisterIndividualFunctionalParameter("HadEScaleND",
+                            kHadEScale,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->HadEScale(par, iSample, iEvent); });
+
+  RegisterIndividualFunctionalParameter("HadEScaleSqrtND",
+                            kHadEScaleSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->HadEScaleSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFunctionalParameter("HadEScaleInvSqrtND",
+                            kHadEScaleInvSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->HadEScaleInvSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFunctionalParameter("MuEScaleND",
+                            kMuEScale,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->MuEScale(par, iSample, iEvent); });
+
+  RegisterIndividualFunctionalParameter("MuEScaleSqrtND",
+                            kMuEScaleSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->MuEScaleSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFunctionalParameter("MuEScaleInvSqrtND",
+                            kMuEScaleInvSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->MuEScaleInvSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFunctionalParameter("NEScaleND",
+                            kNEScale,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->NEScale(par, iSample, iEvent); });
+
+  RegisterIndividualFunctionalParameter("NEScaleSqrtND",
+                            kNEScaleSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->NEScaleSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFunctionalParameter("NEScaleInvSqrtND",
+                            kNEScaleInvSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->NEScaleInvSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFunctionalParameter("EMEScaleND",
+                            kEMEScale,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->EMEScale(par, iSample, iEvent); });
+
+
+  RegisterIndividualFunctionalParameter("EMEScaleSqrtND",
+                            kEMEScaleSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->EMEScaleSqrt(par, iSample, iEvent); });
+
+  
+  RegisterIndividualFunctionalParameter("EMEScaleInvSqrtND",
+                            kEMEScaleInvSqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->EMEScaleInvSqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFunctionalParameter("HadResND",
+                            kHadRes,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->HadRes(par, iSample, iEvent); });
+
+  RegisterIndividualFunctionalParameter("MuResND",
+                            kMuRes,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->MuRes(par, iSample, iEvent); });
+
+  RegisterIndividualFunctionalParameter("NResND",
+                            kNRes,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->NRes(par, iSample, iEvent); });
+
+  RegisterIndividualFunctionalParameter("EMResND",
+                            kEMRes,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->EMRes(par, iSample, iEvent); });
+
+  std::cout << "funcParsVec size: " << funcParsVec.size() << std::endl;
+    */
   MACH3LOG_INFO("Finished registering functional parameters");
 }
+
+
+
+////////////////////////
 
 void samplePDFDUNEBeamFD::SetupSplines() {
 
@@ -233,6 +567,8 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
 
   double _eOther;
   Int_t _nipi0;
+
+  int _isFD;
   
   double _production_pot = 0.0;  // Explicitly initialize
   double gen_pot = 0.0; //set the sum of the pot from each file to be 0,befor any are read in
@@ -279,7 +615,8 @@ Double_t _Ehad_veto;
   _data->SetBranchAddress("Ev_reco", &_erec);
   _data->SetBranchStatus("Elep_reco", 1);
   _data->SetBranchAddress("Elep_reco", &_Elep_reco);
-
+  _data->SetBranchStatus("isFD", 1);
+  _data->SetBranchAddress("isFD", &_isFD);
 
   _data->SetBranchStatus("RecoHadEnNumu", 1);
   _data->SetBranchAddress("RecoHadEnNumu", &_erec_had);
@@ -409,6 +746,8 @@ Double_t _Ehad_veto;
   duneobj->rw_erec = new double[duneobj->nEvents];
   duneobj->rw_erec_shifted = new double[duneobj->nEvents];
   duneobj->rw_erec_had = new double[duneobj->nEvents];
+  duneobj->rw_erec_had_sqrt = new double[duneobj->nEvents];
+  duneobj->rw_erec_lep_sqrt = new double[duneobj->nEvents];
   duneobj->rw_erec_lep = new double[duneobj->nEvents];
 
   duneobj->rw_eRecoP = new double[duneobj->nEvents];
@@ -462,7 +801,11 @@ Double_t _Ehad_veto;
   duneobj->isNC = new bool[duneobj->nEvents];
   duneobj->enurec_minus_enutrue = new double[duneobj->nEvents];
   duneobj->relative_enu_bias = new double[duneobj->nEvents];
-  duneobj->enu_bias = new double[duneobj->nEvents];
+
+  duneobj->rw_sum_ehad = new double[duneobj->nEvents];
+  duneobj->rw_sum_ehad_sqrt = new double[duneobj->nEvents];
+
+
 
   _data->GetEntry(0);
   bool need_global_bin_numbers = (XVarStr == "global_bin_number");
@@ -492,26 +835,18 @@ Double_t _Ehad_veto;
     duneobj->rw_erec_shifted[i] = (_erec_nue); 
     duneobj->rw_yrec[i] = ((_erec -_Elep_reco)/_erec);
 
-    //std::cout<< " rw_yrec"  << ((_erec -_Elep_reco)/_erec) << std::endl;
-    //std::cout<< " erec  = " <<_erec << std::endl;
-    //std::cout<< " elep_reco  = " << _Elep_reco << std::endl;
+  
     duneobj->enurec_minus_enutrue[i] = (_erec) - (_ev);
     //if (iselike) {
       //duneobj->rw_erec[i] = (_erec);
       //duneobj->rw_erec_shifted[i] = (_erec_nue); 
       //duneobj->rw_erec_had[i] = (_erec -_Elep_reco);
-      
       //duneobj->rw_erec_lep[i] = (_Elep_reco);
       //duneobj->enurec_minus_enutrue[i] = (_erec) - (_ev);
       //el = (_erec_lep_nue);
 
       //duneobj->erec_proxy[i] = (_erec_lep_nue) + (_erec_had_nue);
       //duneobj->erec_proxy_minus_enu[i] = (_erec_lep_nue) + (_erec_had_nue) - (_ev);
-      //std::cout << "erec_proxy_minus_enu = " <<   _Elep_reco  - (_ev) << std::endl;
-      //std::cout << "erec_proxy_minus_enu = " <<  (_erec_lep) + (_erec_had) - (_ev) << std::endl;
-      //std::cout << "erec_lep = " << _Elep_reco << std::endl;
-      //std::cout << "erec_had = " <<   (_erec -_Elep_reco) << std::endl;
-
     //} else {
       //duneobj->rw_erec[i] = (_erec); 
       //duneobj->rw_erec_shifted[i] = (_erec); 
@@ -528,54 +863,21 @@ Double_t _Ehad_veto;
     ///////////EHadAv = eP + ePip + ePim +ePi0 + eOther + (nipi0*0.1349)
     double eHad_truth =  _eP + _ePip + _ePim + _ePi0 + _eOther + (_nipi0 *0.1349); 
     duneobj->eHad_av[i]= eHad_truth;
-    //std::cout << "eHad_truth = " << eHad_truth << std::endl;
-    //std::cout << "eHad_av = " << _eP + _ePip + _ePim + _ePi0 + _eOther + (_nipi0 *0.1349) << std::endl;
-    //duneobj->rw_erec[i] = _Elep_reco + eHad_truth;//////////////////////new test for stephen and laura :)
-
-    
-
-    //std::cout << "Original Enu rec = rw_erec = " <<  (_erec) << std::endl;
-    //std::cout << "Enu rec = _Elep_reco + _erec_had = " << _Elep_reco << " + " << eHad_truth << " = " << (_Elep_reco + eHad_truth) << std::endl;
-
-    
-
-
-   
     duneobj->rw_erec_had[i] = (_erec - _Elep_reco);
+    duneobj->rw_erec_had_sqrt[i] = sqrt((_erec - _Elep_reco));
     duneobj->enu_proxy_minus_enutrue[i] = (_LepE) + eHad_truth - _ev;
-    //std::cout << "         _LepE  =  "  << _LepE << std::endl;
-    //std::cout<< "_Elep_rec = " << (_Elep_reco) << std::endl;
-    //std::cout<< "rw_erec_had[i] = " <<  (_erec -_Elep_reco) << std::endl;
-    //std::cout<< "enu true[i] = " << ( _ev) << std::endl;
-    //std::cout<< "yrec[i] = " << ((_erec -_Elep_reco)/_erec) << std::endl;
-    //std::cout<< "erec_proxy_minus_enu[i] = " <<  (_Elep_reco) + eHad_truth - _ev << std::endl;
     duneobj->isNC[i] = _isNC;
    
-    /*
-    if(_Elep_reco > 1.0 * _erec ){
-      //conditionCounter++;
-      std::cout << "condition _Elep_reco > 1.0 * _erec is satisfied..." << std::endl; 
-      std::cout<< "Original Enu. rec = " << _erec << std::endl;
-      std::cout<< "Erec lep.  = " << _Elep_reco << std::endl;
-      std::cout<< "Ehad av (truth Ehad = )  = " << eHad_truth << std::endl;
-    }
-    */
     if(_Elep_reco != 0.0 ){
        duneobj->rw_erec_lep[i] = (_Elep_reco);
+      duneobj->rw_erec_lep_sqrt[i] = sqrt((_Elep_reco));
     }
-    
-
-
-    
-
-    //std::cout<< "Erec lep.  = " << _Elep_reco << std::endl;
-    
+  
     duneobj->rw_eRecoP[i] = (_eRecoP); 
     duneobj->rw_eRecoPip[i] = (_eRecoPip); 
     duneobj->rw_eRecoPim[i] = (_eRecoPim); 
     duneobj->rw_eRecoPi0[i] = (_eRecoPi0); 
     duneobj->rw_eRecoN[i] = (_eRecoN); 
-    
     duneobj->rw_LepE[i] =(_LepE); 
     duneobj->rw_eP[i] = (_eP); 
     duneobj->rw_ePip[i] = (_ePip); 
@@ -606,7 +908,9 @@ Double_t _Ehad_veto;
     duneobj->p_lep[i] =(TVector3{_LepMomX, _LepMomY, _LepMomZ}).Mag();
 
     duneobj->relative_enu_bias[i] = ((_LepE) + eHad_truth - _ev)/(_ev);
-    duneobj->enu_bias[i] = ((_LepE) + eHad_truth - _ev);
+
+    duneobj->rw_sum_ehad[i] = duneobj->rw_eRecoP[i] + duneobj->rw_eRecoPip[i] + duneobj->rw_eRecoPim[i];
+    duneobj->rw_sum_ehad_sqrt[i] = sqrt(duneobj->rw_sum_ehad[i]);
     
 
     //Longer calculation for ERecQE-------------------------------------------------------------------------------
@@ -660,7 +964,7 @@ Double_t _Ehad_veto;
     } 
   }
 
-  std::cout << "Condition was satisfied " << conditionCounter << " times." << std::endl;
+  //std::cout << "Condition was satisfied " << conditionCounter << " times." << std::endl;
 
   
   _sampleFile->Close();
@@ -749,9 +1053,6 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(int KinematicVariable, int 
     break;
   case kisRelativeEnubias:
     KinematicValue = (dunemcSamples[iSample].relative_enu_bias[iEvent]);
-    break;
-  case kEnubias:
-    KinematicValue = (dunemcSamples[iSample].enu_bias[iEvent]);
     break;
   default:
   MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", static_cast<int>(KinPar));
@@ -843,9 +1144,6 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(std::string KinematicParame
     break;
   case kisRelativeEnubias:
     KinematicValue = (dunemcSamples[iSample].relative_enu_bias[iEvent]);
-    break;
-  case kEnubias:
-    KinematicValue = (dunemcSamples[iSample].enu_bias[iEvent]);
     break;
   default:
    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type {}", KinematicParameter);
@@ -939,9 +1237,6 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(std::string Ki
   case kisRelativeEnubias:
     KinematicValue = &(dunemcSamples[iSample].relative_enu_bias[iEvent]);
     break;
-  case kEnubias:
-    KinematicValue = &(dunemcSamples[iSample].enu_bias[iEvent]);
-    break;
  default:
    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", KinematicParameter);
    throw MaCh3Exception(__FILE__, __LINE__);
@@ -1033,9 +1328,6 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(double Kinemat
   case kisRelativeEnubias:
     KinematicValue = &(dunemcSamples[iSample].relative_enu_bias[iEvent]);
     break;
-  case kEnubias:
-    KinematicValue = &(dunemcSamples[iSample].enu_bias[iEvent]);
-    break;
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", KinematicVariable);
     throw MaCh3Exception(__FILE__, __LINE__);
@@ -1064,6 +1356,7 @@ void samplePDFDUNEBeamFD::setupFDMC(int iSample) {
   
 }
  
+
 
 std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::string KinematicParameterStr) {
   KinematicTypes KinematicParameter = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameterStr));
@@ -1107,9 +1400,6 @@ std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::st
     case kp_lep:
     case ktheta_lep:
     case kELepRec:
-      ReturnVec.resize(XBinEdges.size());
-        for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
-        break;
     case kEHadRec:
     case kERec_minus_Etrue:
     case kERecQE:
@@ -1118,10 +1408,6 @@ std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::st
     case keHad_av:
     case kisCC:
     case kisRelativeEnubias:
-    case kEnubias:
-      ReturnVec.resize(XBinEdges.size());
-      for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
-      break;
     default:
         MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", static_cast<int>(KinematicParameter));
         throw MaCh3Exception(__FILE__, __LINE__);
@@ -1131,3 +1417,23 @@ std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::st
 
 }
 
+
+/*
+std::pair<std::vector<double>, std::vector<double>> samplePDFDUNEBeamFD::Return2DKinematicParameterBinning(std::string KinematicParameterStr) {
+    KinematicTypes KinematicParameter = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameterStr));
+
+    switch (KinematicParameter) {
+        case k_2Dxsec:{
+            return ExtractQ0Q3BinningFromYAML(
+                "/scratch/abipeake/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_fullgrid_smallerbins.yaml"
+            );
+          }
+        default:
+          MACH3LOG_ERROR("2D binning not defined for: {}", static_cast<int>(KinematicParameter));
+          throw MaCh3Exception(__FILE__, __LINE__);
+        
+        default:
+            MACH3LOG_ERROR("2D binning requested for non-2D Kinematic Parameter: {}", static_cast<int>(KinematicParameter));
+            throw MaCh3Exception(__FILE__, __LINE__);
+    }
+}*/
