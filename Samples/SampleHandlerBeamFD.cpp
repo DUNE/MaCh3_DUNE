@@ -1,6 +1,6 @@
 #include "SampleHandlerBeamFD.h"
 
-SampleHandlerBeamFD::SampleHandlerBeamFD(std::string mc_version_, ParameterHandlerGeneric* ParHandler_) : SampleHandlerFD(mc_version_, ParHandler_) {
+SampleHandlerBeamFD::SampleHandlerBeamFD(std::string mc_version_, ParameterHandlerGeneric* ParHandler_,const std::shared_ptr<OscillationHandler>&  Oscillator_) : SampleHandlerFD(mc_version_, ParHandler_, Oscillator_) {
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
   

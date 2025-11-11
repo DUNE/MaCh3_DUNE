@@ -15,7 +15,8 @@ public:
   /// @param mc_version Config Name
   /// @param xsec_cov Cross-section covariance matrix
   /// @param osc_cov Oscillation covariance matrix
-  SampleHandlerBeamFD(std::string mc_version, ParameterHandlerGeneric* xsec_cov);
+  /// @param Oscillator_ Shared Oscillation Handler object
+  SampleHandlerBeamFD(std::string mc_version, ParameterHandlerGeneric* xsec_cov, const std::shared_ptr<OscillationHandler>&  Oscillator_);
 
   /// @brief destructor
   ~SampleHandlerBeamFD();

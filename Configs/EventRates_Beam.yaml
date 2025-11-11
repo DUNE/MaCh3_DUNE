@@ -30,6 +30,10 @@ General:
     NDCovFile: "Configs/CovObjs/tdr_covs/det_sys_cov.root"
     XsecFix: ["baseline", "density"]
 
+  # Shared nuosc objects for all BeamFD samples to reduce binned calculations
+  # SharedNuOscillatorObject:
+  #   Beam: "Configs/NuOsc/CUDAProb3Linear_binned.yaml"
+
   Fitter:
     FitTestLikelihood: false
   MCMC:
