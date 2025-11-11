@@ -12,7 +12,7 @@
 #include <TColor.h>
 #include <TMath.h>
 
-#include "Fitters/mcmc.h"
+#include "Fitters/MR2T2.h"
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/StructsDUNE.h"
 
@@ -55,7 +55,7 @@ int main(int argc, char * argv[]) {
       Sample->AddData((TH2D*)DUNEHists.back());
     }
   }
-  std::unique_ptr<FitterBase> MaCh3Fitter = std::make_unique<mcmc>(FitManager);
+  std::unique_ptr<FitterBase> MaCh3Fitter = std::make_unique<MR2T2>(FitManager);
 
   //###############################################################################################################################
   //Lets benefit from the core code utilities 

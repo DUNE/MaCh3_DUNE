@@ -12,7 +12,7 @@
 #include <TColor.h>
 #include <TMath.h>
 
-#include "Fitters//mcmc.h"
+#include "Fitters/MR2T2.h"
 #include "Samples/MaCh3DUNEFactory.h"
 
 int main(int argc, char * argv[]) {
@@ -74,7 +74,7 @@ int main(int argc, char * argv[]) {
   //###########################################################################################################
   //MCMC
 
-  std::unique_ptr<mcmc> MaCh3Fitter = std::make_unique<mcmc>(FitManager);
+  std::unique_ptr<MR2T2> MaCh3Fitter = std::make_unique<MR2T2>(FitManager);
 
   bool StartFromPreviousChain = GetFromManager(FitManager->raw()["General"]["StartFromPos"], false);
   //Start chain from random position unless continuing a chain

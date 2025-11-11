@@ -12,7 +12,6 @@
 #include <TColor.h>
 #include <TMath.h>
 
-#include "Fitters/mcmc.h"
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/StructsDUNE.h"
 
