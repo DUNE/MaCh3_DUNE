@@ -483,8 +483,8 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
     _data->GetEntry(i);
 
     std::string CurrFileName = _data->GetCurrentFile()->GetName();
-    dunemcSamples[i].nupdgUnosc = GetInitPDGFromFileName(CurrFileName);
-    dunemcSamples[i].nupdg = GetFinalPDGFromFileName(CurrFileName);
+    dunemcSamples[i].nupdgUnosc = _nuPDGunosc;
+    dunemcSamples[i].nupdg = _nuPDG;
     dunemcSamples[i].OscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, dunemcSamples[i].nupdgUnosc, dunemcSamples[i].nupdg));
 
     // POT stuff

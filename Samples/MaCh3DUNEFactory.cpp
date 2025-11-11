@@ -50,7 +50,7 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
   return Sample;
 }
 
-void MakeMaCh3DuneInstance(manager *FitManager, std::vector<SampleHandlerFD*> &DUNEPdfs, ParameterHandlerGeneric *&xsec){
+void MakeMaCh3DuneInstance(std::unique_ptr<manager>& FitManager, std::vector<SampleHandlerFD*> &DUNEPdfs, ParameterHandlerGeneric *&xsec){
 
   // there's a check inside the manager class that does this; left here for demonstrative purposes
   if (FitManager == nullptr) {

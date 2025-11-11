@@ -14,13 +14,10 @@
 
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/StructsDUNE.h"
+#include "Fitters/MaCh3Factory.h"
 
 int main(int argc, char * argv[]) {
-  if(argc == 1){
-    MACH3LOG_ERROR("Usage: bin/EventRatesDUNEBeam config.cfg");
-    return 1;
-  }
-  manager* FitManager = new manager(argv[1]);
+  auto FitManager = MaCh3ManagerFactory(argc, argv);
 
   //###############################################################################################################################
 

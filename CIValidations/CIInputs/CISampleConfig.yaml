@@ -6,7 +6,6 @@ SampleType: "BeamFD"
 
 POT: 3.85e24
 MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
-DetID: "FD"
 
 BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
 

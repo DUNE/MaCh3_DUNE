@@ -12,16 +12,12 @@
 #include <TColor.h>
 #include <TMath.h>
 
-#include "Fitters/MR2T2.h"
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/StructsDUNE.h"
+#include "Fitters/MaCh3Factory.h"
 
 int main(int argc, char * argv[]) {
-  if(argc == 1){
-    MACH3LOG_ERROR("Usage: bin/EventRatesDUNEBeam config.cfg");
-    return 1;
-  }
-  manager* FitManager = new manager(argv[1]);
+  auto FitManager = MaCh3ManagerFactory(argc, argv);
 
   // 1D scan on by default, and 2D off
   const bool do_1d_llhscan = GetFromManager(FitManager->raw()["General"]["1DLLHScan"], true);
@@ -55,7 +51,7 @@ int main(int argc, char * argv[]) {
       Sample->AddData((TH2D*)DUNEHists.back());
     }
   }
-  std::unique_ptr<FitterBase> MaCh3Fitter = std::make_unique<MR2T2>(FitManager);
+  auto MaCh3Fitter = MaCh3FitterFactory(FitManager.get());
 
   //###############################################################################################################################
   //Lets benefit from the core code utilities 
