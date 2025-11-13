@@ -4,6 +4,7 @@
 #pragma GCC diagnostic ignored "-Wfloat-conversion"
 //Standard Record includes
 #include "duneanaobj/StandardRecord/StandardRecord.h"
+#include "duneanaobj/StandardRecord/Proxy/SRProxy.h"
 #pragma GCC diagnostic pop
 
 SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGeneric* xsec_cov_, const std::shared_ptr<OscillationHandler>&  Oscillator_) : SampleHandlerFD(mc_version_, xsec_cov_, Oscillator_) {
@@ -41,12 +42,11 @@ int SampleHandlerAtm::SetupExperimentMC() {
   int CurrErrorLevel = gErrorIgnoreLevel;
   gErrorIgnoreLevel = kFatal;
   
-  caf::StandardRecord* sr = new caf::StandardRecord();
-
   TChain* Chain = new TChain("cafTree");
   for (size_t iSample=0;iSample<mc_files.size();iSample++) {
     Chain->Add(mc_files[iSample].c_str());
   }
+  caf::StandardRecordProxy* sr = new caf::StandardRecordProxy(Chain, "rec");
   
   Chain->SetBranchStatus("*", 1);
   Chain->SetBranchAddress("rec", &sr);
@@ -70,10 +70,10 @@ int SampleHandlerAtm::SetupExperimentMC() {
     double RecoENu;
     if (IsELike) {
       RecoENu = sr->common.ixn.pandora[0].Enu.e_calo;
-      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.heshw.X(),sr->common.ixn.pandora[0].dir.heshw.Y(),sr->common.ixn.pandora[0].dir.heshw.Z())).Unit();
+      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.heshw.x,sr->common.ixn.pandora[0].dir.heshw.y,sr->common.ixn.pandora[0].dir.heshw.z)).Unit();
     } else {
       RecoENu = sr->common.ixn.pandora[0].Enu.lep_calo;
-      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.X(),sr->common.ixn.pandora[0].dir.lngtrk.Y(),sr->common.ixn.pandora[0].dir.lngtrk.Z())).Unit();      
+      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.x,sr->common.ixn.pandora[0].dir.lngtrk.y,sr->common.ixn.pandora[0].dir.lngtrk.z)).Unit();      
     }
     double RecoCZ = -RecoNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
     if (std::isnan(RecoCZ)) {
@@ -102,7 +102,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
     
     dunemcSamples[iEvent].rw_etru = static_cast<double>(sr->mc.nu[0].E);
 
-    TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.X(),sr->mc.nu[0].momentum.Y(),sr->mc.nu[0].momentum.Z())).Unit();
+    TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.x,sr->mc.nu[0].momentum.y,sr->mc.nu[0].momentum.z)).Unit();
     dunemcSamples[iEvent].rw_truecz = -TrueNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
 
     dunemcSamples[iEvent].flux_w = sr->mc.nu[0].genweight;
