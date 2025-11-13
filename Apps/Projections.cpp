@@ -9,6 +9,7 @@
 #include "Samples/MaCh3DUNEFactory.h"
 
 bool IncludeKinematicCutsInTitle = true;
+bool Scale1DHistsByBinWidth = false;
 
 struct ProjectionKinematicCut {
   std::string Name;
@@ -320,7 +321,7 @@ int main(int argc, char *argv[]) {
       if (histdim==1) {
         Hist = (TH1*)Sample->Get1DVarHist(ProjectionVar_Str[0],EventSelectionVector,WeightStyle,&AxisX,SubEventSelectionVector);
         outputname = Sample->GetTitle()+"_"+Projections[iProj].Name;
-        Hist->Scale(1.0,"Width");
+        if (Scale1DHistsByBinWidth) Hist->Scale(1.0,"Width");
       } 
       else {
         Hist = (TH1*)Sample->Get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],EventSelectionVector,WeightStyle,&AxisX,&AxisY,SubEventSelectionVector);
@@ -362,7 +363,7 @@ int main(int argc, char *argv[]) {
 
             if (histdim==1) {
               Hist = Sample->Get1DVarHist(ProjectionVar_Str[0],EventSelectionVector_IncCategory,WeightStyle,&AxisX,SubEventSelectionVector_IncCategory);
-              Hist->Scale(1.0,"Width");
+              if (Scale1DHistsByBinWidth) Hist->Scale(1.0,"Width");
             }	else {
               Hist = (TH1*)Sample->Get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],EventSelectionVector_IncCategory,WeightStyle,&AxisX,&AxisY,SubEventSelectionVector_IncCategory);
             }

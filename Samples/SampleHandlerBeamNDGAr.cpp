@@ -423,7 +423,7 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
   double sigmax_frac = sigmax/(std::abs(length_track_x)/100);
   double sigmayz = (spatial_resolution/(1000)); //needs to be in m
   double momres_yz = transverse_mom*(std::sqrt(720/(nhits+4)) * (sigmayz*transverse_mom/(0.3*B_field*(L_yz/100)*(L_yz/100)))
-    * std::sqrt(1.-(1./21)*(L_yz/rad_curvature)*(L_yz/rad_curvature)));
+    * std::sqrt(1.-(1./21.)*(L_yz/rad_curvature)*(L_yz/rad_curvature)));
   double momres_ms = transverse_mom*(0.016/(0.3*B_field*(L_yz/100)*cos(theta_xT)*beta))*std::sqrt(L_yz/X0);
   double momres_tottransverse = std::sqrt(momres_yz*momres_yz + momres_ms*momres_ms)/transverse_mom;
   double sigma_theta = (cos(theta_xT)*cos(theta_xT) * (pitch/(2*M_PI*rad_curvature)) *
@@ -613,7 +613,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     double muon_p2 = 0.;
     double pi0_p2 = 0.;
     bool isEventAccepted = true;
-    int crit_layers = 1; // Number of outer layers of the calorimeter forming the 'critical' region
+    int crit_layers = 2; // Number of outer layers of the calorimeter forming the 'critical' region
 
     // Resize vectors for particle-level parameters
     size_t n_prim_in_event = mother_to_daughter_ID[0].size();
@@ -673,7 +673,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       double EDepCrit = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers, crit_layers);
       // Check for containment
       bool isContained = true;
-      if (EDepCrit > 0.001) {
+      if (EDepCrit > 0.002) {
         isContained = false;
       }
 
