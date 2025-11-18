@@ -13,9 +13,9 @@
 #include <TColor.h>
 #include <TMath.h>
 
-#include "Fitters/mcmc.h"
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/StructsDUNE.h"
+#include "Fitters/MaCh3Factory.h"
 
 //CS YAML "Variations" node expects to be given each parameter to vary with :
 // - "Name": name of the parameter as written in the CovObjs YAML file 
@@ -27,31 +27,26 @@
 //TODO: Consider merging with SigmaVariations app at some point
 
 int main(int argc, char * argv[]) {
-  if(argc == 1){
-    MACH3LOG_ERROR("Usage: bin/EventRatesDUNEBeam config.cfg");
-    return 1;
-  }
-  manager* FitManager = new manager(argv[1]);
+  auto FitManager = MaCh3ManagerFactory(argc, argv);
 
   
   //###############################################################################################################################
   //Create samplePDFFD objects
   
   ParameterHandlerGeneric* xsec = nullptr;
-  ParameterHandlerOsc* osc = nullptr;
 
   std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec, osc);
+  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
 
   std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
-
+  
   //###############################################################################################################################
   //Perform reweight and print total integral
 
   MACH3LOG_INFO("=======================================================");
   for(SampleHandlerFD* Sample: DUNEPdfs){
     Sample->Reweight();
-    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetTitle(), Sample->Get1DHist()->Integral());
+    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetTitle(), Sample->GetMCHist(Sample->GetNDim())->Integral());
   }
   
   //###############################################################################################################################
@@ -61,14 +56,12 @@ int main(int argc, char * argv[]) {
   
   std::vector<ParameterHandlerBase*> CovObjs;
   CovObjs.emplace_back(xsec);
-  CovObjs.emplace_back(osc);
 
   MACH3LOG_INFO("=======================================================");
 
   std::string OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
   TFile* File = TFile::Open(OutputFileName.c_str(),"RECREATE");
 
-  
   for (ParameterHandlerBase* CovObj: CovObjs) {
     MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",CovObj->GetName());
     
@@ -114,15 +107,8 @@ int main(int argc, char * argv[]) {
 	      File->cd((ParName+"/"+SampleName).c_str());
 	      
 	      DUNEPdfs[iSample]->Reweight();
-              TH1* Hist;
-              if(DUNEPdfs[iSample]->GetNDim() == 1) {
-		Hist = DUNEPdfs[iSample]->Get1DHist();
-	      } else if(DUNEPdfs[iSample]->GetNDim() == 2) {
-                Hist = DUNEPdfs[iSample]->Get2DHist();
-	      }
-	      
+              TH1* Hist = DUNEPdfs[iSample]->GetMCHist(DUNEPdfs[iSample]->GetNDim());
 	      MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}",SampleName,Hist->Integral());
-	      
 	      Hist->Write(Form("Variation_%.2e",VarVal));
 	    }
           }

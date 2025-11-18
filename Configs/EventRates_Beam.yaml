@@ -20,16 +20,19 @@ General:
 
   Systematics:
     XsecCovFile:
-      - "Configs/CovObjs/tdr_covs/Xsec_ND+FD.yaml"
       - "Configs/CovObjs/tdr_covs/Flux_ND+FD.yaml"
+      - "Configs/CovObjs/tdr_covs/Xsec_ND+FD.yaml"
       - "Configs/CovObjs/tdr_covs/DetSysts_FD.yaml"
+      - "Configs/CovObjs/OscCov_PDG2021_v2.yaml"
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.05
     XsecAtGen: false
     NDCovFile: "Configs/CovObjs/tdr_covs/det_sys_cov.root"
-    OscCovFile: ["Configs/CovObjs/OscCov_PDG2021_v2.yaml"]
-    OscCovName: "osc_cov"
-    OscFix: ["baseline", "density"]
+    XsecFix: ["baseline", "density"]
+
+  # Shared nuosc objects for all BeamFD samples to reduce binned calculations
+  # SharedNuOscillatorObject:
+  #   Beam: "Configs/NuOsc/CUDAProb3Linear_binned.yaml"
 
   Fitter:
     FitTestLikelihood: false

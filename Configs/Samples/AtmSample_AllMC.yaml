@@ -19,7 +19,7 @@ InputFiles:
   splinesuffix: ""
 
 NuOsc:
-  NuOscConfigFile: "Configs/NuOsc/CUDAProb3.yaml"
+  NuOscConfigFile: "Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml"
   EqualBinningPerOscChannel: true
 
 SubSamples:

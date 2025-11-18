@@ -9,37 +9,37 @@
 class SampleHandlerBeamND : virtual public SampleHandlerFD
 {
 public:
-  SampleHandlerBeamND(std::string mc_version, ParameterHandlerGeneric* xsec_cov, TMatrixD* nd_cov, ParameterHandlerOsc* osc_cov) ;
+  SampleHandlerBeamND(std::string mc_version, ParameterHandlerGeneric* xsec_cov, TMatrixD* nd_cov) ;
   ~SampleHandlerBeamND();
 
   enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kyRec,kOscChannel,kMode,kIsFHC};
   
  protected:
   void Init();
-  int SetupExperimentMC(int iSample);
-  void SetupFDMC(int iSample);
+  int SetupExperimentMC();
+  void SetupFDMC();
 
   void SetupWeightPointers();
   void SetupSplines();
 
   void RegisterFunctionalParameters() override {};
   
-  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent);
-  const double* GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent);
-  const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
+  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent);
+  const double* GetPointerToKinematicParameter(double KinematicVariable, int iEvent);
+  const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent);
 
-  double ReturnKinematicParameter(int KinematicVariable, int iSample, int iEvent);
-  double ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent);
+  double ReturnKinematicParameter(int KinematicVariable, int iEvent);
+  double ReturnKinematicParameter(std::string KinematicParameter, int iEvent);
 
   std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameter);
   
   //DB functions which could be initialised to do something which is non-trivial
-  double CalcXsecWeightFunc(int iSample, int iEvent) {return 1.; (void)iSample; (void)iEvent;}
+  double CalcXsecWeightFunc(int iEvent) {return 1.; (void)iEvent;}
 
   void setNDCovMatrix();
   double GetLikelihood() override;
 
-  std::vector<struct dunemc_base> dunendmcSamples;
+  std::vector<struct dunemc_beamnd> dunendmcSamples;
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
@@ -63,6 +63,8 @@ public:
   int _mode;
 
   double pot;
+  double pot_s;
+  double norm_s;
 
   // dunendmc Variables
   double _ev;
@@ -113,6 +115,10 @@ public:
 
   std::vector<const double*> NDDetectorSystPointers;
   int nNDDetectorSystPointers;
+  std::unordered_map<std::string, std::vector<double>> norm_map;
+
+  /// @brief Cleanup memory
+  void CleanMemoryBeforeFit() override {};
 };
 
 #endif

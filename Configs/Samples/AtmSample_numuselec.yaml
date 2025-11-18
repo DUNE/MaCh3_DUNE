@@ -3,6 +3,7 @@ SampleTitle: "numuselec"
 SampleType: "Atm"
 MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
 SampleName: "ATM"
+BinningFile: "Configs/Samples/AtmosphericParameterBinning.yaml"
 
 Binning:
   XVarStr: "RecoCosineZ"
@@ -21,7 +22,7 @@ InputFiles:
   splinesuffix: ""
 
 NuOsc:
-  NuOscConfigFile: "Configs/NuOsc/CUDAProb3.yaml"
+  NuOscConfigFile: "Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml"
   EqualBinningPerOscChannel: true
 
 SubSamples:

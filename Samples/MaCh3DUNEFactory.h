@@ -11,4 +11,4 @@
 /// @param sample_vec Vector of SampleHandler objects
 /// @param xsec Cross-section covariance matrix
 /// @param osc Oscillation covariance matrix
-void MakeMaCh3DuneInstance(manager *fitMan, std::vector<SampleHandlerFD*> &sample_vec,  ParameterHandlerGeneric *&xsec, ParameterHandlerOsc *&osc);
+void MakeMaCh3DuneInstance(std::unique_ptr<manager>& fitMan, std::vector<SampleHandlerFD*> &sample_vec,  ParameterHandlerGeneric *&xsec);
