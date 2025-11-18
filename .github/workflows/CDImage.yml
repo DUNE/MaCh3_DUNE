@@ -22,10 +22,10 @@ jobs:
       matrix:
         include:
           - os: alma9
-            file: doc/MaCh3DockerFiles/Alma9/Dockerfile
+            file: Docs/MaCh3DockerFiles/Alma9/Dockerfile
             tag_latest: alma9latest
           - os: Ubuntu22.04
-            file: doc/MaCh3DockerFiles/Ubuntu22.04/Dockerfile
+            file: Docs/MaCh3DockerFiles/Ubuntu22.04/Dockerfile
             tag_latest: ubuntulatest
 
     name: Image CD ${{ matrix.os }}

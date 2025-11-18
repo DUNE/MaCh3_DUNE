@@ -9,6 +9,6 @@ logs/
 jupyter_env
 .history
 Doc
-inputs/Atmospherics/CAFs
+Inputs/Atmospherics/CAFs
 nohup.out
 output*.txt
