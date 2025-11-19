@@ -123,6 +123,8 @@ protected:
   double adc_sampling_frequency;
   double drift_velocity;
   double downsampling;
+  int crit_layers;
+  double edepcrit_threshold;
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},

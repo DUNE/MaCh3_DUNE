@@ -22,6 +22,8 @@ void SampleHandlerBeamNDGAr::Init() {
   adc_sampling_frequency = SampleManager->raw()["DetectorVariables"]["adc_sampling_frequency"].as<double>(); //NK sampling frequency for ADC - needed to find timing resolution and spatial resolution in x dir in MHz
   drift_velocity = SampleManager->raw()["DetectorVariables"]["drift_velocity"].as<double>(); //NK drift velocity of electrons in gas - needed to find timing resolution and spatial resolution in x dir in cm/microsecond
   downsampling = SampleManager->raw()["DetectorVariables"]["downsampling"].as<double>(); //JM downsampling fraction
+  edepcrit_threshold = SampleManager->raw()["DetectorVariables"]["EDepCrit"].as<double>(); //JM max energy for a contained shower to deposit in the outer crit_layers of calorimeter 
+  crit_layers = SampleManager->raw()["DetectorVariables"]["CritLayers"].as<int>(); // JM number of layers defining this outer region
   TPCFidLength = SampleManager->raw()["DetectorVariables"]["TPCFidLength"].as<double>();
   TPCFidRadius = SampleManager->raw()["DetectorVariables"]["TPCFidRadius"].as<double>();
   TPCInstrumentedLength = SampleManager->raw()["DetectorVariables"]["TPCInstrumentedLength"].as<double>();
@@ -613,7 +615,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     double muon_p2 = 0.;
     double pi0_p2 = 0.;
     bool isEventAccepted = true;
-    int crit_layers = 2; // Number of outer layers of the calorimeter forming the 'critical' region
 
     // Resize vectors for particle-level parameters
     size_t n_prim_in_event = mother_to_daughter_ID[0].size();
@@ -673,7 +674,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       double EDepCrit = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers, crit_layers);
       // Check for containment
       bool isContained = true;
-      if (EDepCrit > 0.002) {
+      if (EDepCrit > edepcrit_threshold) {
         isContained = false;
       }
 
