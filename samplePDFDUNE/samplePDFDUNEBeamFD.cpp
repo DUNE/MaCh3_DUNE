@@ -3,10 +3,15 @@
 #include <cstdlib>
 #include <iostream>
 #include <cassert>
+#include <TH2.h>
 
 #include <yaml-cpp/yaml.h>
 #include <set>
 #include <iostream>
+
+#include <fstream>
+
+
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wfloat-conversion"
@@ -76,26 +81,20 @@ void samplePDFDUNEBeamFD::Init() {
 }
 
 // === HH: Functional parameters ===
-void samplePDFDUNEBeamFD::TotalEScaleND(const double * par, std::size_t iSample, std::size_t iEvent) {
-  // Total energy scale uncertainties for anything but CC Numu, see:
-  // https://github.com/DUNE/lblpwgtools/blob/3d475f50a998fbfa6266df9a0c4eb3056c0cdfe5/CAFAna/Systs/EnergySysts.h#L39
+// void samplePDFDUNEBeamFD::TotalEScaleND(const double * par, std::size_t iSample, std::size_t iEvent) {
+//   // Total energy scale uncertainties for anything but CC Numu, see:
+//   // https://github.com/DUNE/lblpwgtools/blob/3d475f50a998fbfa6266df9a0c4eb3056c0cdfe5/CAFAna/Systs/EnergySysts.h#L39
+//   //MACH3LOG_INFO("TotalEScaleND par = %g, shift = %g", *par, (*par) * dunemcSamples[iSample].rw_erec_had[iEvent]);
+//   std::stringstream ss;
+//   ss << "TotalEScaleND par = " << *par
+//    << ", shift = " << ((*par) * dunemcSamples[iSample].rw_erec_had[iEvent]);
 
-  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_had[iEvent];
-}
+//   MACH3LOG_INFO(ss.str());
 
-void samplePDFDUNEBeamFD::RegisterFunctionalParameters() {
-  MACH3LOG_INFO("Registering functional parameters");
-  // This function manually populates the map of functional parameters
-  // Maps the name of the functional parameter to the pointer of the function
+//   std::cout<< "TotalEScaleND =  "  << " dunemcSamples[iSample].rw_erec_had[iEvent] =. " <<  dunemcSamples[iSample].rw_erec_had[iEvent] <<std::endl;
+//   dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_had[iEvent];
+// }
 
-  // This is the part where we manually enter things
-  // A lambda function has to be used so we can refer to a non-static member function
-  RegisterIndividualFuncPar("TotalEScaleND",
-                            kTotalEScaleND,
-                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleND(par, iSample, iEvent); });
-  
-  MACH3LOG_INFO("Finished registering functional parameters");
-}
 
 void samplePDFDUNEBeamFD::SetupSplines() {
 
@@ -157,7 +156,7 @@ void samplePDFDUNEBeamFD::SetupWeightPointers() {
 }
 
 
-int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
+int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {         
 
 
   dunemc_base *duneobj = &(dunemcSamples[iSample]);
@@ -261,10 +260,10 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   std::cout << " final gen_pot  = " << gen_pot << std::endl;
 
 
-Int_t _reco_numu;
-Int_t _muon_contained;
-Int_t _muon_tracker;
-Double_t _Ehad_veto;
+  Int_t _reco_numu;
+  Int_t _muon_contained;
+  Int_t _muon_tracker;
+  Double_t _Ehad_veto;
 
 
   
@@ -445,6 +444,7 @@ Double_t _Ehad_veto;
   duneobj->rw_pz = new double[duneobj->nEvents];
 
   duneobj->global_bin_number = new double[duneobj->nEvents];
+  duneobj->template_global_bin_number = new double[duneobj->nEvents];
   duneobj->p_lep = new double[duneobj->nEvents];
   duneobj->theta_lep = new double[duneobj->nEvents];
   duneobj->rw_yrec = new double[duneobj->nEvents];
@@ -466,6 +466,20 @@ Double_t _Ehad_veto;
 
   _data->GetEntry(0);
   bool need_global_bin_numbers = (XVarStr == "global_bin_number");
+
+
+  TH2D* globalMap = new TH2D("global_bin_map",
+                           "Global vs Template Global;Global bin;Template bin",
+                           576, 0.5, 576.5,
+                           480, 0.5, 480.5);
+
+  // Open file at the start of your program
+  std::ofstream outfile("bin_numbers.txt");
+  if(!outfile.is_open()){
+      std::cerr << "Cannot open output file!" << std::endl;
+  }
+
+
   //FILL DUNE STRUCT
 
   int conditionCounter = 0;
@@ -489,7 +503,10 @@ Double_t _Ehad_veto;
 
     duneobj->rw_erec[i] = (_erec); //------------------------------------original version!!
     
-    duneobj->rw_erec_shifted[i] = (_erec_nue); 
+    duneobj->rw_erec_shifted[i] = (_erec); 
+    //std::cout << "rw_erec_shifted[i]  = " << (_erec) << std::endl;
+    //std::cout << "rw_erec_had[i] = " <<   (_erec - _Elep_reco) << std::endl;
+    
     duneobj->rw_yrec[i] = ((_erec -_Elep_reco)/_erec);
 
     //std::cout<< " rw_yrec"  << ((_erec -_Elep_reco)/_erec) << std::endl;
@@ -564,11 +581,6 @@ Double_t _Ehad_veto;
        duneobj->rw_erec_lep[i] = (_Elep_reco);
     }
     
-
-
-    
-
-    //std::cout<< "Erec lep.  = " << _Elep_reco << std::endl;
     
     duneobj->rw_eRecoP[i] = (_eRecoP); 
     duneobj->rw_eRecoPip[i] = (_eRecoPip); 
@@ -655,15 +667,58 @@ Double_t _Ehad_veto;
     
     duneobj->flux_w[i] = 1.0;
 
-    if(need_global_bin_numbers){
-      duneobj->global_bin_number[i] = GetGenericBinningGlobalBinNumber(iSample, i);
-    } 
+      if(need_global_bin_numbers){
+        //Observable binning
+        std::vector<double> global_enu_bins = {0.0000, 0.1364, 0.2727, 0.4091, 0.5455, 0.6818, 0.8182, 0.9545, 1.0909, 1.2273, 1.3636, 1.5000, 1.6364, 1.7727, 1.9091, 2.0455, 2.1818, 2.3182,2.4545, 2.5909, 2.7273, 2.8636, 3.0000, 5, 6};
+        std::vector<double> global_elep_bins = {0.0000, 0.1364, 0.2727, 0.4091, 0.5455, 0.6818, 0.8182, 0.9545, 1.0909, 1.2273, 1.3636, 1.5000, 1.6364, 1.7727, 1.9091, 2.0455, 2.1818, 2.3182,2.4545, 2.5909, 2.7273, 2.8636, 3.0000, 5, 6};
+        
+        //Template parameter binning
+        std::vector<double> tmplt_enu_bins = {0.0, 1.0, 1.25, 1.5,1.75, 2.0, 2.25, 2.5, 2.75, 3.0, 3.25, 3.5, 3.75, 4.0, 5.0, 6.0 ,10.0};
+        std::vector<double> tmplt_enubias_bins = {-2.0, -0.6, -0.581, -0.5595, -0.538, -0.5165, -0.495, -0.4735, -0.452, -0.4305, -0.409, -0.3875, -0.366, -0.3445, -0.323, -0.3015, -0.28, -0.2585, -0.237, -0.2155, -0.194, -0.1725, -0.151, -0.1295, -0.108, -0.0865, -0.065, -0.0435, -0.022, 0.0, 0.1};
+        
+        static TH2D *tmplt_hist_observables = nullptr;
+        static TH2D *tmplt_hist = nullptr;
+
+        static TH1D *tmplt_1D_xsec = nullptr;
+        static TH1D *tmplt_1D_observables = nullptr;
+        std::vector<double> template1D_enu_bins ={0.0, 0.14492753623188406, 0.2898550724637681, 0.43478260869565216, 0.5797101449275363, 0.7246376811594203, 0.8695652173913044, 1.0144927536231884, 1.1594202898550723, 1.3043478260869565, 1.4492753623188405, 1.5942028985507247, 1.739130434782609, 1.8840579710144927, 2.028985507246377, 2.1739130434782608, 2.318840579710145, 2.463768115942029, 2.608695652173913, 2.753623188405797, 2.898550724637681, 3.0434782608695654, 3.188405797101449, 3.333333333333333, 3.4782608695652173, 3.6231884057971016, 3.7681159420289856, 3.9130434782608696, 4.057971014492754, 4.202898550724638, 4.347826086956522, 4.492753623188406, 4.63768115942029, 4.782608695652174, 4.927536231884058, 5.072463768115942, 5.217391304347826, 5.3623188405797105, 5.507246376811594, 5.652173913043478, 5.797101449275362, 5.9420289855072465, 6.086956521739131, 6.2318840579710145, 6.376811594202899, 6.521739130434783, 6.666666666666667, 6.811594202898551, 6.956521739130435, 7.101449275362319, 7.246376811594203, 7.391304347826087, 7.536231884057971, 7.681159420289856, 7.82608695652174, 7.971014492753624, 8.115942028985508, 8.260869565217392, 8.405797101449276, 8.55072463768116, 8.695652173913045, 8.840579710144928, 8.985507246376812, 9.130434782608696, 9.27536231884058, 9.420289855072464, 9.565217391304348, 9.710144927536232, 9.855072463768116, 10.0};
+        std::vector<double> observables1D_enu_bins = {0.0, 0.20408163265306123, 0.40816326530612246, 0.6122448979591837, 0.8163265306122449, 1.0204081632653061, 1.2244897959183674, 1.4285714285714286, 1.6326530612244898, 1.836734693877551, 2.0408163265306123, 2.2448979591836737, 2.4489795918367347, 2.653061224489796, 2.857142857142857, 3.061224489795918, 3.2653061224489797, 3.469387755102041, 3.673469387755102, 3.8775510204081633, 4.081632653061225, 4.285714285714286, 4.4897959183673475, 4.693877551020408, 4.8979591836734695, 5.1020408163265305, 5.306122448979592, 5.510204081632653, 5.714285714285714, 5.918367346938776, 6.122448979591837, 6.326530612244898, 6.530612244897959, 6.7346938775510205, 6.938775510204081, 7.142857142857143, 7.346938775510204, 7.551020408163265, 7.755102040816327, 7.959183673469388, 8.16326530612245, 8.36734693877551, 8.571428571428571, 8.775510204081632, 8.979591836734694, 9.183673469387755, 9.387755102040817, 9.591836734693878, 9.795918367346939, 10.0};
+
+        if(!tmplt_hist_observables){
+          tmplt_hist_observables = new TH2D("tmplt_hist_obs", "", global_enu_bins.size()-1,global_enu_bins.data(), global_elep_bins.size()-1,global_elep_bins.data());
+        }
+        if(!tmplt_hist){
+          tmplt_hist = new TH2D("tmplt_hist", "", tmplt_enu_bins.size()-1,tmplt_enu_bins.data(), tmplt_enubias_bins.size()-1,tmplt_enubias_bins.data());
+        }
+        if(!tmplt_1D_xsec){
+          tmplt_1D_xsec = new TH1D("tmplt_hist_obs", "", template1D_enu_bins.size()-1,template1D_enu_bins.data());
+        }
+        if(!tmplt_1D_observables){
+          tmplt_1D_observables = new TH1D("tmplt_hist_obs", "", observables1D_enu_bins.size()-1,observables1D_enu_bins.data());
+        }
+        
+        //duneobj->template_global_bin_number[i] = tmplt_hist->FindFixBin(duneobj->rw_etru[i], duneobj->enu_bias[i]);
+        duneobj->global_bin_number[i] = GetGenericBinningGlobalBinNumber(iSample, i); //--original version, will need this again
+        
+        //duneobj->global_bin_number[i] = tmplt_hist_observables->FindFixBin(duneobj->rw_erec[i], duneobj->rw_erec_lep[i]);         
+        //duneobj->template_global_bin_number[i] = tmplt_hist->FindFixBin(duneobj->rw_etru[i], duneobj->enu_bias[i]);
+
+        //duneobj->global_bin_number[i] = tmplt_1D_observables->FindFixBin(duneobj->rw_erec[i]);         
+        //duneobj->template_global_bin_number[i] = tmplt_1D_xsec->FindFixBin(duneobj->rw_etru[i]);
+
+        //std::cout << "global_bin_number " << duneobj->global_bin_number[i] << std::endl;
+        //std::cout << "template_global_bin_number[i] " << duneobj->template_global_bin_number[i] << std::endl;
+
+        //outfile << duneobj->global_bin_number[i] << " "<< duneobj->template_global_bin_number[i] << std::endl;
+
+  }
   }
 
   std::cout << "Condition was satisfied " << conditionCounter << " times." << std::endl;
 
   
   _sampleFile->Close();
+  outfile.close();
   return duneobj->nEvents;
 }
 
@@ -677,6 +732,9 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(int KinematicVariable, int 
     break;
   case kRecoNeutrinoEnergy:
     KinematicValue = dunemcSamples[iSample].rw_erec[iEvent];
+    break;
+  case kRecoNeutrinoEnergy_shifted:
+    KinematicValue = dunemcSamples[iSample].rw_erec_shifted[iEvent];
     break;
   case kTrueXPos:
     KinematicValue = dunemcSamples[iSample].rw_vtx_x[iEvent];
@@ -716,6 +774,9 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(int KinematicVariable, int 
     break;
   case k_global_bin_number:
     KinematicValue = dunemcSamples[iSample].global_bin_number[iEvent];
+    break;
+  case k_template_global_bin_number:
+    KinematicValue = dunemcSamples[iSample].template_global_bin_number[iEvent];
     break;
   case kp_lep:
     KinematicValue = dunemcSamples[iSample].p_lep[iEvent];
@@ -772,6 +833,9 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(std::string KinematicParame
  case kRecoNeutrinoEnergy:
    KinematicValue = dunemcSamples[iSample].rw_erec[iEvent];
    break;
+ case kRecoNeutrinoEnergy_shifted:
+    KinematicValue = dunemcSamples[iSample].rw_erec_shifted[iEvent];
+    break;
  case kTrueXPos:
    KinematicValue = dunemcSamples[iSample].rw_vtx_x[iEvent];
    break;
@@ -810,6 +874,9 @@ double samplePDFDUNEBeamFD::ReturnKinematicParameter(std::string KinematicParame
     break;
  case k_global_bin_number:
     KinematicValue = dunemcSamples[iSample].global_bin_number[iEvent];
+    break;
+  case k_template_global_bin_number:
+    KinematicValue = dunemcSamples[iSample].template_global_bin_number[iEvent];
     break;
  case kp_lep:
     KinematicValue = dunemcSamples[iSample].p_lep[iEvent];
@@ -867,6 +934,9 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(std::string Ki
  case kRecoNeutrinoEnergy:
    KinematicValue = &dunemcSamples[iSample].rw_erec[iEvent];
    break;
+  case kRecoNeutrinoEnergy_shifted:
+    KinematicValue = &dunemcSamples[iSample].rw_erec_shifted[iEvent];
+    break;
  case kTrueXPos:
    KinematicValue = &dunemcSamples[iSample].rw_vtx_x[iEvent];
    break;
@@ -905,6 +975,9 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(std::string Ki
    break;
  case k_global_bin_number:
    KinematicValue = &(dunemcSamples[iSample].global_bin_number[iEvent]);
+   break;
+ case k_template_global_bin_number:
+   KinematicValue = &(dunemcSamples[iSample].template_global_bin_number[iEvent]);
    break;
  case kp_lep:
    KinematicValue = &(dunemcSamples[iSample].p_lep[iEvent]);
@@ -961,6 +1034,9 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(double Kinemat
   case kRecoNeutrinoEnergy:
     KinematicValue = &dunemcSamples[iSample].rw_erec[iEvent];
     break;
+  case kRecoNeutrinoEnergy_shifted:
+    KinematicValue = &dunemcSamples[iSample].rw_erec_shifted[iEvent];
+    break;
   case kTrueXPos:
     KinematicValue = &dunemcSamples[iSample].rw_vtx_x[iEvent];
     break;
@@ -999,6 +1075,9 @@ const double* samplePDFDUNEBeamFD::GetPointerToKinematicParameter(double Kinemat
   break;
   case k_global_bin_number:
     KinematicValue = &(dunemcSamples[iSample].global_bin_number[iEvent]);
+  break;
+  case k_template_global_bin_number:
+    KinematicValue = &(dunemcSamples[iSample].template_global_bin_number[iEvent]);
   break;
   case kp_lep:
     KinematicValue = &(dunemcSamples[iSample].p_lep[iEvent]);
@@ -1082,6 +1161,10 @@ std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::st
       ReturnVec.resize(XBinEdges.size());
       for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
       break;
+    case kRecoNeutrinoEnergy_shifted:
+      ReturnVec.resize(XBinEdges.size());
+      for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
+      break;
 
     case kOscChannel:
       ReturnVec.resize(GetNsamples());
@@ -1104,12 +1187,13 @@ std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::st
     case k_pT:
     case k_pz:
     case k_global_bin_number:
+    case k_template_global_bin_number:
     case kp_lep:
     case ktheta_lep:
     case kELepRec:
-      ReturnVec.resize(XBinEdges.size());
-        for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
-        break;
+      // ReturnVec.resize(XBinEdges.size());
+      //   for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
+      //   break;
     case kEHadRec:
     case kERec_minus_Etrue:
     case kERecQE:
@@ -1119,9 +1203,9 @@ std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::st
     case kisCC:
     case kisRelativeEnubias:
     case kEnubias:
-      ReturnVec.resize(XBinEdges.size());
-      for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
-      break;
+      // ReturnVec.resize(XBinEdges.size());
+      // for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
+      // break;
     default:
         MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", static_cast<int>(KinematicParameter));
         throw MaCh3Exception(__FILE__, __LINE__);
@@ -1130,4 +1214,50 @@ std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::st
     return ReturnVec;
 
 }
+
+void samplePDFDUNEBeamFD::TotalEScaleND(const double * par,
+                                        std::size_t iSample,
+                                        std::size_t iEvent) {
+  // MACH3LOG_INFO("iSample = %zu, sysActive = %d", 
+  //             iSample, 
+  //             ParHandler->IsParameterUsedInSample(kTotalEScaleND, iSample));
+
+  //double shift = (*par) * dunemcSamples[iSample].rw_erec_had[iEvent];
+  //dunemcSamples[iSample].rw_erec_shifted[iEvent] += shift;
+// MACH3LOG_INFO("TotalEScaleND par = {}, shift = {}", *par, shift);
+//  std::cout << "COUT TEST: par=" << *par
+//           << " rw_erec_had=" << dunemcSamples[iSample].rw_erec_had[iEvent]
+//           << " shift=" << ((*par) * dunemcSamples[iSample].rw_erec_had[iEvent])
+//           << std::endl;
+//   std::cout << "tot_escale_fd_pos = " << tot_escale_fd_pos << std::endl;
+// dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_had[iEvent];
+// if (*par != 0)
+//     std::cout << "Non-zero par: " << *par << std::endl;
+
+if (dunemcSamples[iSample].rw_erec_shifted[iEvent] < 2.0 && *par != 0) {
+    dunemcSamples[iSample].rw_erec_shifted[iEvent] = 4;
+  }
+
+}
+
+
+void samplePDFDUNEBeamFD::RegisterFunctionalParameters() {
+  MACH3LOG_INFO("Registering functional parameters");
+  // This function manually populates the map of functional parameters
+  // Maps the name of the functional parameter to the pointer of the function
+
+  // This is the part where we manually enter things
+  // A lambda function has to be used so we can refer to a non-static member function
+  RegisterIndividualFuncPar("TotalEScaleND",
+                            kTotalEScaleND,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleND(par, iSample, iEvent); });
+  
+  MACH3LOG_INFO("Finished registering functional parameters");
+}
+
+
+// void samplePDFDUNEBeamFD::resetShifts(int iEvent) {
+//   // Reset the shifts to the original values
+//   dunemcSamples[iSample].rw_erec_shifted[iEvent] = dunemcSamples[iSample].rw_erec[iEvent];
+// }
 

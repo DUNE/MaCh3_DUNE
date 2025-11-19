@@ -73,6 +73,7 @@ struct dunemc_base {
   double *rw_truecz;
 
   double *global_bin_number;
+  double *template_global_bin_number;
   double *ERec_QE;
 
   int *nproton; ///< number of (post-FSI) primary protons
