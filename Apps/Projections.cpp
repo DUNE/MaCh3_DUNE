@@ -7,6 +7,7 @@
 #include <TLegend.h>
 
 #include "Samples/MaCh3DUNEFactory.h"
+#include "Fitters/MaCh3Factory.h"
 
 bool IncludeKinematicCutsInTitle = true;
 bool Scale1DHistsByBinWidth = false;
@@ -111,12 +112,7 @@ void WriteTHStackHistogram(THStack *Hist, std::string Name, TDirectory *Dir = nu
 }
 
 int main(int argc, char *argv[]) {
-  if (argc == 1) {
-    MACH3LOG_ERROR("Usage: bin/EventRatesDUNEBeam config.cfg");
-    return 1;
-  }
-
-  auto fitMan = std::unique_ptr<manager>(new manager(argv[1]));
+  auto fitMan = MaCh3ManagerFactory(argc, argv);
 
   int WeightStyle = 0;
   gStyle->SetPalette(1);
@@ -126,7 +122,7 @@ int main(int argc, char *argv[]) {
   ParameterHandlerGeneric *xsec = nullptr;
 
   std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(fitMan.get(), DUNEPdfs, xsec);
+  MakeMaCh3DuneInstance(fitMan, DUNEPdfs, xsec);
 
   // ###############################################################################################################################
   // Perform reweight and print total integral for sanity check

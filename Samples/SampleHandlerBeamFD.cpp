@@ -1,6 +1,6 @@
 #include "SampleHandlerBeamFD.h"
 
-SampleHandlerBeamFD::SampleHandlerBeamFD(std::string mc_version_, ParameterHandlerGeneric* ParHandler_) : SampleHandlerFD(mc_version_, ParHandler_) {
+SampleHandlerBeamFD::SampleHandlerBeamFD(std::string mc_version_, ParameterHandlerGeneric* ParHandler_,const std::shared_ptr<OscillationHandler>&  Oscillator_) : SampleHandlerFD(mc_version_, ParHandler_, Oscillator_) {
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
   
@@ -483,8 +483,8 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
     _data->GetEntry(i);
 
     std::string CurrFileName = _data->GetCurrentFile()->GetName();
-    dunemcSamples[i].nupdgUnosc = GetInitPDGFromFileName(CurrFileName);
-    dunemcSamples[i].nupdg = GetFinalPDGFromFileName(CurrFileName);
+    dunemcSamples[i].nupdgUnosc = _nuPDGunosc;
+    dunemcSamples[i].nupdg = _nuPDG;
     dunemcSamples[i].OscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, dunemcSamples[i].nupdgUnosc, dunemcSamples[i].nupdg));
 
     // POT stuff
@@ -665,53 +665,3 @@ void SampleHandlerBeamFD::SetupFDMC() {
   
 }
  
-/*
-std::vector<double> SampleHandlerBeamFD::ReturnKinematicParameterBinning(std::string KinematicParameterStr) {
-  KinematicTypes KinematicParameter = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameterStr));
-  std::vector<double> ReturnVec;
-  
-  switch(KinematicParameter){
-  case kIsFHC:
-    ReturnVec.resize(3);
-    ReturnVec[0] = -0.5;
-    ReturnVec[1] = 0.5;
-    ReturnVec[2] = 1.5;
-    break;
-    
-  case kTrueNeutrinoEnergy:
-  case kRecoNeutrinoEnergy:
-    ReturnVec.resize(XBinEdges.size());
-    for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
-    break;
-
-  case kOscChannel:
-    ReturnVec.resize(GetNsamples());
-    for (int bin_i=0;bin_i<GetNsamples();bin_i++) {ReturnVec[bin_i] = bin_i;}
-    break;
-
-  case kM3Mode:
-    ReturnVec.resize(Modes->GetNModes());
-    for (int bin_i=0;bin_i<Modes->GetNModes();bin_i++) {ReturnVec[bin_i] = bin_i;}
-    break;
-
-  case kTrueXPos:
-  case kTrueYPos:
-  case kTrueZPos:
-  case kTrueCCnue:
-  case kTrueCCnumu:
-  case kCVNNue:
-  case kCVNNumu:
-    ReturnVec.resize(2);
-    ReturnVec[0] = 1e-8;
-    ReturnVec[1] = 1e8;
-    break;
-
-  default:
-    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", static_cast<int>(KinematicParameter));
-    throw MaCh3Exception(__FILE__, __LINE__);
-
-  }      
-  
-  return ReturnVec;
-}
-*/
