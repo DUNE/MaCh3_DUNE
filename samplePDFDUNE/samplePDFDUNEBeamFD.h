@@ -23,7 +23,7 @@ public:
   ~samplePDFDUNEBeamFD();
 
   /// @brief Enum to identify kinematics
-  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC, kq0, kq3, k_pT, k_pz, k_global_bin_number, kp_lep, ktheta_lep, kELepRec, kEHadRec, kERec_minus_Etrue, kERecQE, kENuProxy_minus_Enutrue, kyRec, keHad_av, kisCC, kisRelativeEnubias, kEnubias};
+  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kRecoNeutrinoEnergy_shifted,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC, kq0, kq3, k_pT, k_pz, k_global_bin_number, k_template_global_bin_number, kp_lep, ktheta_lep, kELepRec, kEHadRec, kERec_minus_Etrue, kERecQE, kENuProxy_minus_Enutrue, kyRec, keHad_av, kisCC, kisRelativeEnubias, kEnubias};
   std::pair<std::vector<double>, std::vector<double>> Return2DKinematicParameterBinning(std::string KinematicParameterStr);
   std::vector<double> f1DEdges;
   TH1D* f1DHist = nullptr;
@@ -52,6 +52,7 @@ protected:
   double CalculatePOT();
 
   void TotalEScaleND(const double * par, std::size_t iSample, std::size_t iEvent);
+  //void resetShifts(int iEvent) override;
   
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter ID as int
@@ -137,6 +138,7 @@ protected:
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
     {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},
+     {"RecoNeutrinoEnergy_shifted",kRecoNeutrinoEnergy_shifted},
     {"TrueXPos",kTrueXPos},
     {"TrueYPos",kTrueYPos},
     {"TrueZPos",kTrueZPos},
@@ -150,6 +152,7 @@ protected:
     {"pT",k_pT},
     {"pz",k_pz},
     {"global_bin_number",k_global_bin_number},
+    {"template_global_bin_number",k_template_global_bin_number},
     {"p_lep",kp_lep},
     {"theta_lep",ktheta_lep},
     {"ELepRec",kELepRec},
@@ -167,6 +170,7 @@ protected:
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
     {kTrueNeutrinoEnergy,"TrueNeutrinoEnergy"},
     {kRecoNeutrinoEnergy,"RecoNeutrinoEnergy"},
+    {kRecoNeutrinoEnergy_shifted,"RecoNeutrinoEnergy_shifted"},
     {kTrueXPos,"TrueXPos"},
     {kTrueYPos,"TrueYPos"},
     {kTrueZPos,"TrueZPos"},
@@ -180,6 +184,7 @@ protected:
     {k_pT, "pT"},
     {k_pz, "pz"},
     {k_global_bin_number, "global_bin_number"},
+    {k_template_global_bin_number, "template_global_bin_number"},
     {kp_lep, "p_lep"},
     {ktheta_lep, "theta_lep"},
     {kELepRec, "ELepRec"},
