@@ -56,7 +56,7 @@ protected:
   bool IsResolvedFromCurvature(dunemc_plotting& plotting_vars, size_t i_anapart, double pixel_spacing_cm);
   double GetCalDepth(double x, double y, double z);
   double DepthToLayer(double depth, double r);
-  double CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers, const int crit_layers);
+  double CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers);
   bool CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, dunemc_plotting& plotting_vars, double pixel_spacing_cm);
   void EraseDescendants(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID);
   bool IsParticleSelected(const int iSample, const int iEvent, const int iParticle);

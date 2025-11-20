@@ -27,7 +27,7 @@ DetectorVariables:
   ECALOuterRadius: 322.252
   ECALEndCapStart: 329.25
   ECALEndCapEnd: 374.4
-  downsampling: 1. 
+  downsampling: 0.01 
   EDepCrit: 0.002 # Max energy for a contained shower to deposit in the outer crit_layers (GeV)
   CritLayers: 2 # Number of layers defining this outer region
   

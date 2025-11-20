@@ -1,5 +1,5 @@
 General:
-  OutputFile: "Outputs/projections_outputs/Projections_BField0.5_FidRad160_FidLen209_InstRad260_InstLen250_CC_Enu0to5_containedif_2layers2MeV.root"
+  OutputFile: "Outputs/projections_outputs/Projections_BField0.5_FidRad160_FidLen209_InstRad260_InstLen250_CC_Enu0to5_containedif_2layers2MeV_DS.root"
   DUNESamples: ["Configs/Samples/SamplePDFDune_NDGAr_FHC_numuselec.yaml"]
   OscillationParameters: []
   OscillatorConfigName: "Configs/OscillatorObj.yaml"

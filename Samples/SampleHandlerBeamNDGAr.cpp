@@ -252,7 +252,7 @@ double SampleHandlerBeamNDGAr::DepthToLayer(double depth, double r) {
   return layer;
 }
 
-double SampleHandlerBeamNDGAr::CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers, const int crit_layers) {
+double SampleHandlerBeamNDGAr::CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers) {
   auto it = mother_to_daughter_ID.find(motherID);
   double EDepCrit = 0.;
   if (it != mother_to_daughter_ID.end()) {
@@ -260,7 +260,7 @@ double SampleHandlerBeamNDGAr::CalcEDepCal(int motherID, std::unordered_map<int,
       EDepCrit += ID_to_ECalDep.at(motherID)[static_cast<size_t>(i_layer)];
     }
     for (int daughterID : it->second) {
-      EDepCrit += CalcEDepCal(daughterID, mother_to_daughter_ID, ID_to_ECalDep, tot_layers, crit_layers);
+      EDepCrit += CalcEDepCal(daughterID, mother_to_daughter_ID, ID_to_ECalDep, tot_layers);
     }
   }
   return EDepCrit;
@@ -659,7 +659,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       int pdg = _PDG->at(i_anaprim);
       if (pdg == 2112 || std::abs(pdg) == 12 || std::abs(pdg) == 14 || std::abs(pdg) == 16) continue;
 
-      dunendgarmcPlotting[i_event].particle_edepcrit[i_anaprim] = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers, crit_layers);
+      dunendgarmcPlotting[i_event].particle_edepcrit[i_anaprim] = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers);
       dunendgarmcPlotting[i_event].particle_pdg[i_anaprim] = pdg; 
 
       // Check if primary is resolved from curvature
@@ -671,7 +671,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       dunendgarmcPlotting[i_event].particle_iscurvatureresolved[i_anaprim] = isCurvatureResolved;
 
       // Find energy deposited by by primary and non-curvature-resolved descendants in critical region of calorimeter
-      double EDepCrit = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers, crit_layers);
+      double EDepCrit = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers);
       // Check for containment
       bool isContained = true;
       if (EDepCrit > edepcrit_threshold) {
