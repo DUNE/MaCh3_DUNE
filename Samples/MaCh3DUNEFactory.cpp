@@ -1,12 +1,9 @@
 #include "Samples/MaCh3DUNEFactory.h"
 
-#ifdef BUILD_NDGAR
-#include "Samples/SampleHandlerBeamNDGAr.h"
-#else
 #include "Samples/SampleHandlerBeamFD.h"
 #include "Samples/SampleHandlerBeamND.h"
+#include "Samples/SampleHandlerBeamNDGAr.h"
 #include "Samples/SampleHandlerAtm.h"
-#endif
 
 SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, ParameterHandlerGeneric* &xsec, const std::shared_ptr<OscillationHandler>&  BeamOscillator_, const std::shared_ptr<OscillationHandler>&  AtmOscillator_, TMatrixD* NDCov_FHC, TMatrixD* NDCov_RHC) {
   SampleHandlerFD *Sample;
@@ -14,15 +11,6 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
   (void)NDCov_FHC;
   (void)NDCov_RHC;
   
-  #ifdef BUILD_NDGAR
-  if (SampleType == "BeamNDGAr") {
-    (void)Oscillator_;
-    Sample = new SampleHandlerBeamNDGAr(SampleConfig, xsec);
-  } else {
-    MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-  #else
   if (SampleType == "BeamFD") {
     Sample = new SampleHandlerBeamFD(SampleConfig, xsec, BeamOscillator_);
   } else if (SampleType == "BeamND") {
@@ -41,11 +29,13 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
     Sample = new SampleHandlerBeamND(SampleConfig, xsec, NDCov);
   } else if (SampleType == "Atm") {
     Sample = new SampleHandlerAtm(SampleConfig, xsec, AtmOscillator_);
-  } else {
+  } else if (SampleType == "BeamNDGAr") {
+    Sample = new SampleHandlerBeamNDGAr(SampleConfig, xsec);
+  }
+  else {
     MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
     throw MaCh3Exception(__FILE__, __LINE__);
   }
-#endif
   
   return Sample;
 }
