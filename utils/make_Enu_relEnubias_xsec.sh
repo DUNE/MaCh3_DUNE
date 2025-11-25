@@ -31,14 +31,14 @@ for ((i=0; i<$ENE_BINS; i++)); do
 
         cat <<EOL >> $OUTPUT_FILE
 - Systematic:
-    Sample_Name: ["ND"]
+    SampleNames: ["ND*", "FD*]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - $ENE_LOW
       - $ENE_HIGH
-    - isRelativeEnubias:
+    - Enubias:
       - $EREC_MINUS_ENE_LOW
       - $EREC_MINUS_ENE_HIGH
     Names:

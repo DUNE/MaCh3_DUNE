@@ -26,7 +26,7 @@ int main(int argc, char * argv[]) {
   //###############################################################################################################################
 
   //DB Sigma variations in units of each parameters Sigma
-  std::vector<double> sigmaVariations = {-3, -1, 0, 1, 3};
+  std::vector<double> sigmaVariations = {-3,-2, -1, 0, 1,2, 3};
 
   //###############################################################################################################################
   //Create samplePDFFD objects
@@ -53,7 +53,7 @@ int main(int argc, char * argv[]) {
   
   std::vector<covarianceBase*> CovObjs;
   CovObjs.emplace_back(xsec);
-  CovObjs.emplace_back(osc);
+  //CovObjs.emplace_back(osc);
 
   MACH3LOG_INFO("=======================================================");
 
@@ -125,13 +125,25 @@ for (covarianceBase* CovObj: CovObjs) {
         File->cd(ParName.c_str());
 
         // Canvas per parameter
-        TCanvas* cPar = new TCanvas(Form("c_%s", ParName.c_str()), Form("Parameter: %s", ParName.c_str()), 1000, 700);
+        TCanvas* cPar = new TCanvas(Form("c_%s", ParName.c_str()), Form("Systematic :  %s", ParName.c_str()), 1000, 700);
         cPar->cd();
 
         TLegend* legend = new TLegend(0.7,0.7,0.9,0.9);
-        THStack* hsAll = new THStack("hsAll", Form("Parameter: %s", ParName.c_str()));
+        THStack* hsAll = new THStack("hsAll", Form("Systematic :  %s", ParName.c_str()));
 
-        int colorIndex = 2;
+       
+      std::vector<int> lineColors = {
+          kBlue+4, // -3, lightest
+          kBlue+2, 
+          kBlue,   
+          kBlack,  // 0σ (nominal)
+          kBlue,   
+          kBlue+2, 
+          kBlue+4  // +3, lightest
+      };
+
+      int colorIndex = 0;
+
 
         for (size_t iSample = 0; iSample < DUNEPdfs.size(); iSample++) {
             std::string SampleName = DUNEPdfs[iSample]->GetTitle();
@@ -146,16 +158,40 @@ for (covarianceBase* CovObj: CovObjs) {
                 DUNEPdfs[iSample]->reweight();
                 if (DUNEPdfs[iSample]->GetNDim() != 1) continue;
 
-                TH1* Hist = (TH1*)DUNEPdfs[iSample]->get1DHist()->Clone(Form("Hist_%s_%i", SampleName.c_str(), (int)iSigVar));
-                Hist->SetLineColor(colorIndex + iSigVar);
-                Hist->SetLineWidth(2);
+                //double w = DUNEPdfs[iSample]->reweight();
+                //std::cout << "Weight for " << sigmaVariations[iSigVar] << " sigma = " << w << std::endl;
 
-                // Label axes
-                Hist->GetXaxis()->SetTitle("Reco Neutrino ENERGY (GeV)"); // Replace with actual variable if known
+                TH1* Hist = (TH1*)DUNEPdfs[iSample]->get1DHist()->Clone(Form("Hist_%s_%i", SampleName.c_str(), (int)iSigVar));
+                int colorIndex = static_cast<int>(iSigVar); // iSigVar = 0..6 if you redefine sigmaVariations as {-3,-2,-1,0,1,2,3}
+
+                // Set line color
+                Hist->SetLineColor(lineColors[colorIndex]);
+                Hist->SetLineWidth(2);
+                  
+            
+                std::cout << "sigmaVariations[iSigVar] = " << sigmaVariations[iSigVar] << "  VarVal =  " <<  VarVal << std::endl;               // Label axes
+                Hist->GetXaxis()->SetTitle("E^{Reco.}_{#nu} [GeV]");
                 Hist->GetYaxis()->SetTitle("Event Rate");
-              
+                // Compute color index
+           
                 hsAll->Add(Hist);
                 legend->AddEntry(Hist, Form("%s %+g #sigma", SampleName.c_str(), sigmaVariations[iSigVar]), "l");
+
+                // --- Print bin contents for debugging ---
+                std::cout << "=== " << ParName 
+                          << " | Sample: " << SampleName 
+                          << " | Variation: " << sigmaVariations[iSigVar] 
+                          << " sigma (VarVal=" << VarVal << ") ===" 
+                          << std::endl;
+
+                for (int b = 1; b <= Hist->GetNbinsX(); b++) {
+                    std::cout << "  Bin " << b 
+                              << "  x=" << Hist->GetBinCenter(b)
+                              << "  content=" << Hist->GetBinContent(b)
+                              << std::endl;
+                }
+                std::cout << std::endl;
+
 
                 Hist->Write(Form("Variation_%i", (int)iSigVar));
             }
@@ -175,6 +211,10 @@ for (covarianceBase* CovObj: CovObjs) {
         delete cPar;
 
         CovObj->setParProp(iPar, VarInit);
+        std::cout << "DEBUG param " << ParName 
+          << " internal = " << CovObj->getParProp(iPar) 
+          << std::endl;
+
     }
 }
 

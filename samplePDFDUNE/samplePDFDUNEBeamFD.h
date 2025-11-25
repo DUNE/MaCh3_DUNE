@@ -48,12 +48,37 @@ protected:
   void SetupWeightPointers();
   void SetupSplines();
 
+  void RegisterFunctionalParameters_flux();
   void RegisterFunctionalParameters();
   double CalculatePOT();
 
   void TotalEScaleND(const double * par, std::size_t iSample, std::size_t iEvent);
-  //void resetShifts(int iEvent) override;
+  void TotalEScaleND_invsqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  void TotalEScaleND_sqrt(const double * par, std::size_t iSample, std::size_t iEvent);
   
+  void TotalEScaleND_mu(const double * par, std::size_t iSample, std::size_t iEvent);
+  void TotalEScaleND_muinvsqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  void TotalEScaleND_musqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+
+  void TotalEScaleND_had(const double * par, std::size_t iSample, std::size_t iEvent);
+  void TotalEScaleND_hadinvsqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  void TotalEScaleND_hadsqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+
+  void TotalEScaleND_NE(const double * par, std::size_t iSample, std::size_t iEvent);
+  void TotalEScaleND_NEinvsqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  void TotalEScaleND_NEsqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  
+  void TotalEScaleND_EM(const double * par, std::size_t iSample, std::size_t iEvent);
+  void TotalEScaleND_EMinvsqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  void TotalEScaleND_EMsqrt(const double * par, std::size_t iSample, std::size_t iEvent);
+  
+  void MuonRes_ND(const double * par, std::size_t iSample, std::size_t iEvent);
+  void NRes_ND(const double * par, std::size_t iSample, std::size_t iEvent);
+  void HadRes_ND(const double * par, std::size_t iSample, std::size_t iEvent);
+
+  
+  
+  void resetShifts(int iSample, int iEvent) override;
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter ID as int
   /// @param iSample Sample ID
@@ -133,12 +158,19 @@ protected:
   int nFDDetectorSystPointers;
   //void RegisterIndividualFunctionalParameter(const std::string& fpName, int fpEnum, FuncParFuncType fpFunc);
 
-  enum FuncParEnum {kTotalEScaleND};
+  enum FuncParEnum {kTotalEScaleND=0, kTotalEScaleND_invsqrt, kTotalEScaleND_sqrt, 
+                    kTotalEScaleND_mu, kTotalEScaleND_musqrt,kTotalEScaleND_muinvsqrt, 
+                    kTotalEScaleND_had, kTotalEScaleND_hadsqrt, kTotalEScaleND_hadinvsqrt,
+                    kTotalEScaleND_EM, kTotalEScaleND_EMinvsqrt, kTotalEScaleND_EMsqrt,
+                    kMuonRes_ND, kNRes_ND, kHadRes_ND, kNFuncPars};
+
+
+  
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
     {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},
-     {"RecoNeutrinoEnergy_shifted",kRecoNeutrinoEnergy_shifted},
+    {"RecoNeutrinoEnergy_shifted",kRecoNeutrinoEnergy_shifted},
     {"TrueXPos",kTrueXPos},
     {"TrueYPos",kTrueYPos},
     {"TrueZPos",kTrueZPos},

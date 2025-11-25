@@ -56,6 +56,7 @@ struct dunemc_base {
   double *rw_Q0;
   double *rw_Q3;
 
+
   double pot_s;
   double norm_s;
   double osc_channel;
@@ -128,6 +129,11 @@ struct dunemc_base {
   bool* muon_contained;
   bool* muon_tracker;
   float* Ehad_veto;
+
+  std::vector<float> off_axis_pos_m;
+  std::vector<int> flux_focussing_syst_bin;
+  std::vector<int> flux_hadprod_syst_bin;
+  std::vector<int> flux_syst_nu_config;
 
   std::vector<int> nupdgUnosc_vector;
   std::vector<int> rw_nuPDGunosc_vector;

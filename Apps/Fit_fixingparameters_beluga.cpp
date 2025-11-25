@@ -292,7 +292,7 @@ void FixLowStatParams(
                       << "  → FIXING param " << bin.index
                       << " (val=" << val << " < threshold=" << threshold << ")\n";
 
-            xsec->setSingleParameter(bin.index, 0.0);
+            xsec->setSingleParameter(bin.index, 1.0);
             xsec->toggleFixParameter(bin.index);
             fixed_names_out.push_back(xsec->GetParFancyName(bin.index));
         }

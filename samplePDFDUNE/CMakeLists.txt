@@ -22,6 +22,7 @@ else()
     samplePDFDUNEBeamFD.cpp
     samplePDFDUNEBeamND.cpp
 	samplePDFDUNEBeamFD_actuallyFD.cpp
+	../utils/flux_systs/OffAxisFluxUncertaintyHelper.cxx
     MaCh3DUNEFactory.cpp
 	)
 endif()
@@ -49,5 +50,9 @@ install(TARGETS SamplePDFDUNE
         EXPORT mach3dune-targets
         LIBRARY DESTINATION lib/
         PUBLIC_HEADER DESTINATION include/samplePDF)
+
+install(FILES ../utils/flux_systs/flux_variations_FD_and_PRISM_2023.root
+        DESTINATION utils/flux_systs/)
+
 
 add_library(MACH3DUNE::SamplePDFDUNE ALIAS SamplePDFDUNE)

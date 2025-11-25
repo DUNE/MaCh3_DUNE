@@ -152,7 +152,9 @@ for (auto Sample : DUNEPdfs) {
 
         if (Sample->generic_binning.GetNDimensions() == 2) {
             auto myhist2 = GetGenericBinningTH2(*Sample, Sample->GetTitle() + "_generic2D");
+            //gc1->SetLogz(1);
             myhist2->Draw("COLZ");
+            
             gc1->Print(PdfFileName.c_str());
             DUNEHistsall.push_back(myhist2.release());
 
@@ -181,7 +183,7 @@ for (auto Sample : DUNEPdfs) {
     MACH3LOG_INFO("Event rate for {} : {:.2f}", Sample->GetTitle(), Sample->get1DHist()->Integral());
     MACH3LOG_INFO("LLH for {} : {:.10f}", Sample->GetTitle(), Sample->GetLikelihood());
 }
-
+  
 
   // Close the PDF properly
   gc1->Print((PdfFileName + "]").c_str());
