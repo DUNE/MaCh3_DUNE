@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=MCMCWorkflow
-#SBATCH --account=def-nilic
+#SBATCH --account=rpp-nilic
 #SBATCH --output=MCMCWorkflow_%j.out
 #SBATCH --error=MCMCWorkflow_%j.err
 #SBATCH --time=08:00:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=1        # adjust if your code is multithreaded
-#SBATCH --mem=80G
+#SBATCH --cpus-per-task=8     # adjust if your code is multithreaded
+#SBATCH --mem=400G
 
 # ---------------- Modules ---------------- #
 module purge
@@ -24,27 +24,38 @@ source /scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/build/bin/setup.MaCh3DUNE.
 # Path to your binaries
 BIN_DIR=/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/build/bin
 
-# Input ROOT file and YAML config
-INPUT_ROOT=/scratch/abipeake/newChains_August/EventRates_Elep_erec_afteradaptive_total/EventRates_Elep_erec_afteradaptive_total_chain_0_job_0.root         #scratch/abipeake/August_tesing/tuesday_newconfig_adaptive_enubias_ptpzenurec/tuesday_newconfig_adaptive_enubias_ptpzenurec_chain_0_job_0.root
-CONFIG_YAML=/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/TutorialConfigs/TutorialDiagConfig.yaml
+# # Input ROOT file and YAML config
+INPUT_ROOT=/scratch/abipeake/October_chains/Tuesday_041125_enubuas_postadaptivetestnew/Tuesday_041125_enubuas_postadaptivetestnew_chain_4_job_0.root #/scratch/abipeake/November/Tuesday_041125_enubuas_postadaptivetestnew_chain_1_job_0.root #/scratch/abipeake/October_chains/Tuesday_041125_enubuas_postadaptivetestnew/combined.root #/scratch/abipeake/October_chains/November12_postadaptive_tuning/hadd.root #/scratch/abipeake/October_chains/November_11_RM_postadaptivenew/hadd.root #/scratch/abipeake/November/Henryschain/AbiChain_10MStepAdapt_20251106.root #/scratch/abipeake/October_chains/Tuesday_041125_enubuas_postadaptivetestnew/combined.root #/scratch/abipeake/October_chains/Tuesday_041125_enubias_newattempt_withinitialproposal/Tuesday_041125_enubias_newattempt_withinitialproposal_chain_0_job_0.root #/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/TestingnoRM/Tuesday_041125_enubias_newattempt_withinitialproposal_chain_0_job_0copy_recovered.root
+#/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/TestingnoRM/Tuesday_041125_enubias_newattempt_withinitialproposal_chain_0_job_0copy_recovered.root #/scratch/abipeake/October_chains/Tuesday_041125_enubias_newattempt_adaptingfor4millionseteps_robbinsmonroe/Tuesday_041125_enubias_newattempt_adaptingfor4millionseteps_robbinsmonroe_chain_0_job_0.root #Saturday_enubiasenu_newchain_chain_0_job_0backup1_part1.root	#/scratch/abipeake/October_chains/Saturday_EnubiasEnu_with12moffaxis/Saturday_EnubiasEnu_with12moffaxis_chain_0_job_0.root #/scratch/abipeake/October_chains/Saturday_enubiasenu_enubinstwiceassmall/Saturday_enubiasenu_enubinstwiceassmall_chain_0_job_0.root #/scratch/abipeake/October_chains/Saturday_enubiasenu_enubiasbinstwiceassmall/Saturday_enubiasenu_enubiasbinstwiceassmall_chain_0_job_0.root #/scratch/abipeake/October_chains/Saturday_enubiasenu_newchain/Saturday_enubiasenu_newchain_chain_0_job_0.root #/scratch/abipeake/October_chains/Saturday_enubiasenu_newchain/Saturday_enubiasenu_newchain_chain_0_job_0.root #/scratch/abipeake/October_chains/Saturday_enubiasenu_enubiasbinstwiceassmall/Saturday_enubiasenu_enubiasbinstwiceassmall_chain_0_job_0.root 
+#/scratch/abipeake/October_chains/Saturday_enubiasenu_enubinstwiceassmall/Saturday_enubiasenu_enubinstwiceassmall_chain_0_job_0.root #/scratch/abipeake/October_chains/Saturday_enubiasenu_newchain/Saturday_enubiasenu_newchain_chain_0_job_0.root #/scratch/abipeake/October_chains/THURS_newadaptive_enubias/THURS_newadaptive_enubias_chain_0_job_0.root #/scratch/abipeake/October_chains/Wed_EnuWnubias_adaptivefit/Wed_EnuWnubias_adaptivefit_chain_0_job_0.root #/scratch/abipeake/October_chains/nowwithcorrectxsecconfig_enuenubias_adaptive_lessharshfreezing/nowwithcorrectxsecconfig_enuenubias_adaptive_lessharshfreezing_chain_0_job_0.root #/scratch/abipeake/October_chains/Henrysadapative_part2/Henrysadapative_part2_chain_0_job_0.root #/scratch/abipeake/October_chains/Henrysadapative_part2/  #/scratch/abipeake/October_chains/EventRates_EnuEnubias_adapting_biggerstepscale/EventRates_EnuEnubias_adapting_biggerstepscale_chain_0_job_0.root #/scratch/abipeake/October_chains/EventRates_1D_adapted_30templateparaams_25erecobins/EventRates_1D_adapted_30templateparaams_25erecobins_chain_0_job_0.root #/scratch/abipeake/October_chains/EventRates_1D_adapted_50templateparams_25erecobins/EventRates_1D_adapted_50templateparams_25erecobins_chain_0_job_0.root  #/scratch/abipeake/October_chains/EventRates_1D_adapted_70templateparams_25erecobins/EventRates_1D_adapted_70templateparams_25erecobins_chain_0_job_0.root #/scratch/abipeake/October_chains/EventRates_1D_30bins_adapted_new2/EventRates_1D_30bins_adapted_new2_chain_0_job_0.root #/scratch/abipeake/October_chains/EventRates_1D_30bins_adapted_new2/EventRates_1D_30bins_adapted_new2_chain_0_job_0.root #/scratch/abipeake/October_chains/EventRates_1D_50bins_afteradapted_postadap2/EventRates_1D_50bins_afteradapted_postadap2_chain_1_job_0.root #/scratch/abipeake/October_chains/EventRates_1D_70bins_afteradapted_wed/EventRates_1D_70bins_afteradapted_wed_chain_1_job_0.root  #/scratch/abipeake/Off_axis_chains_new/THURSDAY_part2_pTpzEnu_EnuEnubias_adaptive/THURSDAY_part2_pTpzEnu_EnuEnubias_adaptive_chain_0_job_0.root #/scratch/abipeake/Off_axis_chains_new/THURSDAY_pTpZEnu_EnuEnibias_afteradaptive_chain2/THURSDAY_pTpZEnu_EnuEnibias_afteradaptive_chain2_chain_0_job_0_test1.root #/scratch/abipeake/Off_axis_chains_new/seotember_offaxislongq0q3chain/seotember_offaxislongq0q3chain_chain_0_job_0_backup.root #/scratch/abipeake/Off_axis_chains_new/RunPlan_25_75_afteradapted_new/RunPlan_25_75_afteradapted_new_chain_0_job_0.root #/scratch/abipeake/Off_axis_chains_new/ACTUALLYIS_ENUBIAS_ELEPEREC_adaptednew_postadaptive/ACTUALLYIS_ENUBIAS_ELEPEREC_adaptednew_postadaptive_chain_0_job_0.root  #/scratch/abipeake/Off_axis_chains_new/ORIGINAL_q0q3_afteradaptive_moresteps/ORIGINAL_q0q3_afteradaptive_moresteps_chain_4_job_0.root
+#/scratch/abipeake/Off_axis_chains_new/LONGERWALLTIME2_q0q3_pTpzEnu_afteradaptive/LONGERWALLTIME2_q0q3_pTpzEnu_afteradaptive_chain_0_job_0.root #/scratch/abipeake/Off_axis_chains_new/Saturday_Elep_Erec_offaxis_postadaptive_newchain/Saturday_Elep_Erec_offaxis_postadaptive_newchain_chain_1_job_0.root #/scratch/abipeake/Off_axis_chains_new/ORIGINAL_q0q3_afteradaptive_moresteps/ORIGINAL_q0q3_afteradaptive_moresteps_chain_4_job_0.root #/scratch/abipeake/Off_axis_chains_new/RunPlan_75_25_afteradapted/RunPlan_75_25_afteradapted_chain_0_job_0.root #/scratch/abipeake/Off_axis_chains_new/RunPlan_25_75_afteradapted/RunPlan_25_75_afteradapted_chain_0_job_0.root #/scratch/abipeake/Off_axis_chains_new/RunPlan_10_90_afteradapted/RunPlan_10_90_afteradapted_chain_0_job_0.root #/scratch/abipeake/Off_axis_chains_new/RunPlan_25_75_aadapted_part2/RunPlan_25_75_aadapted_part2_chain_0_job_0.root #/scratch/abipeake/Off_axis_chains_new/RunPlan_75_25_aadapted_part2/RunPlan_75_25_aadapted_part2_chain_0_job_0.root #/scratch/abipeake/Off_axis_chains_new/RunPlan_90_10_aadapted_part2/RunPlan_90_10_aadapted_part2_chain_0_job_0.root #/scratch/abipeake/Off_axis_chains_new/THURSDAY_pTpZEnu_EnuEnibias_afteradaptive/THURSDAY_pTpZEnu_EnuEnibias_afteradaptive_chain_0_job_0.root  #/scratch/abipeake/Off_axis_chains_new/afteradaptive_q0q3_ptpzenu/afteradaptive_q0q3_ptpzenu_chain_0_job_0.root         #/scratch/abipeake/Off_axis_chains_new/afteradaptive_q0q3_ptpzenu/afteradaptive_q0q3_ptpzenu_chain_0_job_0.root
+#/scratch/abipeake/Off_axis_chains_new/ORIGINAL_adapted_q0q3_pTpzEnu_afteradaptive/ORIGINAL_adapted_q0q3_pTpzEnu_afteradaptive_chain_0_job_0.root #/scratch/abipeake/Off_axis_chains_new/afteradaptive_q0q3_ptpzenu/afteradaptive_q0q3_ptpzenu_chain_0_job_0.root #/scratch/abipeake/Off_axis_chains_new/ORIGINAL_adapted_q0q3_pTpzEnu_afteradaptive/ORIGINAL_adapted_q0q3_pTpzEnu_afteradaptive_chain_0_job_0.root #/scratch/abipeake/Off_axis_chains_new/afteradaptive_q0q3_ptpzenu/afteradaptive_q0q3_ptpzenu_chain_0_job_0.root         #/scratch/abipeake/Off_axis_chains_new/afteradaptive_q0q3_ptpzenu/afteradaptive_q0q3_ptpzenu_chain_0_job_0.root
+CONFIG_YAML=/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/TutorialConfigs/TutorialDiagConfig.yaml 
 
-# Directory where the input ROOT file lives (outputs go here)
+# # Directory where the input ROOT file lives (outputs go here)
 WORKDIR=$(dirname "$INPUT_ROOT")
 cd "$WORKDIR" || { echo "Failed to cd to $WORKDIR"; exit 1; }
 
-# DiagMCMC output ROOT file
+# # DiagMCMC output ROOT file
 OUTPUT_DIAG=${INPUT_ROOT%.root}_MCMC_Diag.root
 
-# ---------------- Step 1: DiagMCMC ---------------- #
+# # # ---------------- Step 1: DiagMCMC ---------------- #
 echo "Running DiagMCMC..."
 srun "$BIN_DIR/DiagMCMC" "$INPUT_ROOT" "$CONFIG_YAML"
 
-# ---------------- Step 2: PlotMCMCDiag ---------------- #
-echo "Running PlotMCMCDiag on $OUTPUT_DIAG..."
-srun "$BIN_DIR/PlotMCMCDiag" "$OUTPUT_DIAG"
+# # # ---------------- Step 2: PlotMCMCDiag ---------------- #
+# echo "Running PlotMCMCDiag on $OUTPUT_DIAG..."
+# srun "$BIN_DIR/PlotMCMCDiag" "$OUTPUT_DIAG"
 
-# ---------------- Step 3: ProcessMCMC ---------------- #
-echo "Running ProcessMCMC..."
-srun "$BIN_DIR/ProcessMCMC" "$CONFIG_YAML" "$INPUT_ROOT"
+# # # ---------------- Step 3: ProcessMCMC ---------------- #
+# echo "Running ProcessMCMC..."
+# srun "$BIN_DIR/ProcessMCMC" "$CONFIG_YAML" "$INPUT_ROOT"
 
-echo "Workflow completed. All outputs are in $WORKDIR"
+# #----------Draw Correlation Matrix
+# #echo "Running MatrixPlotter..."
+# #srun "$BIN_DIR/MatrixPlotter" "$CONFIG_YAML"
+
+# echo "Workflow completed. All outputs are in $WORKDIR"
+
+
+#./build/Apps/LikelihoodScan /scratch/abipeake/October_chains/Saturday_enubiasenu_newchain/cfg/Saturday_enubiasenu_newchain_chain_0_job_0.yaml

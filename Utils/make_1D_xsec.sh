@@ -2,10 +2,10 @@
 
 # User-defined variables
 RECO_MIN=0.0
-RECO_MAX=6.0
-RECO_BINS=60
-OUTPUT_FILE="RecoNeutrinoEnergy_1Dbinning.yaml"
-PARAM_LIST_FILE="RecoNeutrinoEnergy_1Dbinning_param_list.txt"
+RECO_MAX=10.0
+RECO_BINS=15
+OUTPUT_FILE="TrueNeutrinoEnergy_1Dbinning_15parameters.yaml"
+PARAM_LIST_FILE="TrueNeutrinoEnergy_1Dbinning_param_list_15parameters.txt"
 
 # Calculate bin width
 RECO_STEP=$(echo "($RECO_MAX - $RECO_MIN) / $RECO_BINS" | bc -l)
@@ -23,11 +23,11 @@ for ((i=0; i<$RECO_BINS; i++)); do
 
     cat <<EOL >> $OUTPUT_FILE
 - Systematic:
-    Sample_Name: ["ND"]
+    SampleNames: ["FD*", "ND*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
-    - RecoNeutrinoEnergy:
+    - TrueNeutrinoEnergy:
       - $RECO_LOW
       - $RECO_HIGH
     Names:

@@ -4,17 +4,20 @@
 #include <iostream>
 #include <cassert>
 #include <TH2.h>
-
+#include "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/samplePDFDUNE/StructsDUNE.h"
 #include <yaml-cpp/yaml.h>
 #include <set>
 #include <iostream>
-
+#include "utils/flux_systs/OffAxisFluxUncertaintyHelper.h"
 #include <fstream>
 
 
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wfloat-conversion"
+#pragma GCC diagnostic ignored "-Wconversion"
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#pragma GCC diagnostic ignored "-Wpedantic"
 #pragma GCC diagnostic pop
 
 samplePDFDUNEBeamFD::samplePDFDUNEBeamFD(std::string mc_version_, covarianceXsec* xsec_cov_, covarianceOsc* osc_cov_) : samplePDFFDBase(mc_version_, xsec_cov_, osc_cov_) {
@@ -205,6 +208,7 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   double _vtx_x;
   double _vtx_y;
   double _vtx_z;
+  double _det_x;
 
   //Truth Variables
   int _mode;  
@@ -377,6 +381,9 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
 
   _data->SetBranchStatus("isNC", 1);
   _data->SetBranchAddress("isNC", &_isNC);
+  _data->SetBranchStatus("det_x", 1);
+  _data->SetBranchAddress("det_x", &_det_x);  
+
 
   
 
@@ -408,7 +415,9 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   duneobj->rw_erec = new double[duneobj->nEvents];
   duneobj->rw_erec_shifted = new double[duneobj->nEvents];
   duneobj->rw_erec_had = new double[duneobj->nEvents];
+  duneobj->rw_erec_had_sqrt = new double[duneobj->nEvents];
   duneobj->rw_erec_lep = new double[duneobj->nEvents];
+  duneobj->rw_erec_lep_sqrt = new double[duneobj->nEvents];
 
   duneobj->rw_eRecoP = new double[duneobj->nEvents];
   duneobj->rw_eRecoPip = new double[duneobj->nEvents];
@@ -463,21 +472,23 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   duneobj->enurec_minus_enutrue = new double[duneobj->nEvents];
   duneobj->relative_enu_bias = new double[duneobj->nEvents];
   duneobj->enu_bias = new double[duneobj->nEvents];
+  duneobj->rw_sum_ehad = new double[duneobj->nEvents];
+  duneobj->rw_sum_ehad_sqrt = new double[duneobj->nEvents];
+
 
   _data->GetEntry(0);
   bool need_global_bin_numbers = (XVarStr == "global_bin_number");
-
-
-  TH2D* globalMap = new TH2D("global_bin_map",
-                           "Global vs Template Global;Global bin;Template bin",
-                           576, 0.5, 576.5,
-                           480, 0.5, 480.5);
 
   // Open file at the start of your program
   std::ofstream outfile("bin_numbers.txt");
   if(!outfile.is_open()){
       std::cerr << "Cannot open output file!" << std::endl;
   }
+
+  // bad bad bad, but stops the singleton check happening for every event, 
+  //  all this is reading, so should be thread safe, myabe use eigen vectors 
+  //  rather than TH1Ds eventually.
+  auto flux_helper = &OffAxisFluxUncertaintyHelper::Get();
 
 
   //FILL DUNE STRUCT
@@ -492,7 +503,7 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
     duneobj->muon_tracker[i] = _muon_tracker;
     duneobj->Ehad_veto[i] = static_cast<float>(_Ehad_veto);
 
-    duneobj->nupdg[i] = sample_nupdg[iSample];
+    duneobj->nupdg[i] = _nuPDG; //sample_nupdg[iSample];
     duneobj->nupdgUnosc[i] = sample_nupdgunosc[iSample];    
     
     duneobj->rw_cvnnumu[i] = (_cvnnumu);
@@ -559,6 +570,8 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
 
    
     duneobj->rw_erec_had[i] = (_erec - _Elep_reco);
+    duneobj->rw_erec_had_sqrt[i] =  sqrt((_erec - _Elep_reco));
+    
     duneobj->enu_proxy_minus_enutrue[i] = (_LepE) + eHad_truth - _ev;
     //std::cout << "         _LepE  =  "  << _LepE << std::endl;
     //std::cout<< "_Elep_rec = " << (_Elep_reco) << std::endl;
@@ -579,13 +592,14 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
     */
     if(_Elep_reco != 0.0 ){
        duneobj->rw_erec_lep[i] = (_Elep_reco);
+       duneobj->rw_erec_lep_sqrt[i] = sqrt((_Elep_reco));
     }
     
     
     duneobj->rw_eRecoP[i] = (_eRecoP); 
     duneobj->rw_eRecoPip[i] = (_eRecoPip); 
     duneobj->rw_eRecoPim[i] = (_eRecoPim); 
-    duneobj->rw_eRecoPi0[i] = (_eRecoPi0); 
+    duneobj->rw_eRecoPi0[i] = (_eRecoPi0);
     duneobj->rw_eRecoN[i] = (_eRecoN); 
     
     duneobj->rw_LepE[i] =(_LepE); 
@@ -619,7 +633,8 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
 
     duneobj->relative_enu_bias[i] = ((_LepE) + eHad_truth - _ev)/(_ev);
     duneobj->enu_bias[i] = ((_LepE) + eHad_truth - _ev);
-    
+    duneobj->rw_sum_ehad[i] = (_eRecoP) + (_eRecoPip) + (_eRecoPim); 
+    duneobj->rw_sum_ehad_sqrt[i] = sqrt((_eRecoP) + (_eRecoPip) + (_eRecoPim)); 
 
     //Longer calculation for ERecQE-------------------------------------------------------------------------------
     constexpr double V = 0;        // 0 binding energy for now
@@ -714,7 +729,45 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   }
   }
 
-  std::cout << "Condition was satisfied " << conditionCounter << " times." << std::endl;
+
+
+    // duneobj->off_axis_pos_m.push_back(_det_x * 100 + _vtx_x);
+    // duneobj->flux_focussing_syst_bin.push_back(flux_helper->GetFocussingBin(
+    //     sample_nupdg, _ev, off_axis_pos_m.back(), 0, true, isFHC, false));
+    // duneobj->flux_hadprod_syst_bin.push_back(flux_helper->GetHadProdBin(
+    //     sample_nupdg, _ev, off_axis_pos_m.back(), 0, true, isFHC, false));
+    // duneobj->flux_syst_nu_config.push_back(
+    //     flux_helper->GetNuConfig(sample_nupdg, true, isFHC, false));
+
+      // Store off-axis position (your CAF definition with det_x is fine)
+  duneobj->off_axis_pos_m.push_back(_det_x * 100 + _vtx_x);
+
+  // Nu configuration syst bin
+  duneobj->flux_syst_nu_config.push_back(
+      flux_helper->GetNuConfig(
+          _nuPDG,
+          true,
+          isFHC,
+          false)
+  );
+
+  // Focussing syst bin
+  duneobj->flux_focussing_syst_bin.push_back(
+      flux_helper->GetFocussingBin(
+          _nuPDG,
+          _ev,
+          duneobj->off_axis_pos_m.back(),
+          duneobj->flux_syst_nu_config.back()  )
+      );
+
+  // Hadron production syst bin
+  duneobj->flux_hadprod_syst_bin.push_back(
+      flux_helper->GetHadProdBin(
+          _nuPDG,
+          _ev,
+          duneobj->off_axis_pos_m.back(),
+          duneobj->flux_syst_nu_config.back())
+  );
 
   
   _sampleFile->Close();
@@ -1215,30 +1268,73 @@ std::vector<double> samplePDFDUNEBeamFD::ReturnKinematicParameterBinning(std::st
 
 }
 
+/////////////Energy scale Detector Systematics
 void samplePDFDUNEBeamFD::TotalEScaleND(const double * par,
                                         std::size_t iSample,
                                         std::size_t iEvent) {
-  // MACH3LOG_INFO("iSample = %zu, sysActive = %d", 
-  //             iSample, 
-  //             ParHandler->IsParameterUsedInSample(kTotalEScaleND, iSample));
-
-  //double shift = (*par) * dunemcSamples[iSample].rw_erec_had[iEvent];
-  //dunemcSamples[iSample].rw_erec_shifted[iEvent] += shift;
-// MACH3LOG_INFO("TotalEScaleND par = {}, shift = {}", *par, shift);
-//  std::cout << "COUT TEST: par=" << *par
-//           << " rw_erec_had=" << dunemcSamples[iSample].rw_erec_had[iEvent]
-//           << " shift=" << ((*par) * dunemcSamples[iSample].rw_erec_had[iEvent])
-//           << std::endl;
-//   std::cout << "tot_escale_fd_pos = " << tot_escale_fd_pos << std::endl;
-// dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_had[iEvent];
-// if (*par != 0)
-//     std::cout << "Non-zero par: " << *par << std::endl;
-
-if (dunemcSamples[iSample].rw_erec_shifted[iEvent] < 2.0 && *par != 0) {
-    dunemcSamples[iSample].rw_erec_shifted[iEvent] = 4;
-  }
+  
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_had[iEvent];
 
 }
+
+void samplePDFDUNEBeamFD::TotalEScaleND_sqrt(const double * par,
+                                        std::size_t iSample,
+                                        std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_had[iEvent] *  dunemcSamples[iSample].rw_erec_had_sqrt[iEvent];
+}
+
+
+void samplePDFDUNEBeamFD::TotalEScaleND_invsqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  // Erec/sqrt(Erec) = sqrt(Erec)
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_had_sqrt[iEvent];
+}
+
+/////////////Energy scale Detector Systematics for muons
+void samplePDFDUNEBeamFD::TotalEScaleND_mu(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_lep[iEvent];
+}
+  
+void samplePDFDUNEBeamFD::TotalEScaleND_musqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+    dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_lep[iEvent] * dunemcSamples[iSample].rw_erec_lep_sqrt[iEvent];
+
+}
+void samplePDFDUNEBeamFD::TotalEScaleND_muinvsqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+   dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_erec_lep_sqrt[iEvent];
+
+}
+/////////////Energy scale Detector Systematics for hadrons
+void samplePDFDUNEBeamFD::TotalEScaleND_had(const double * par, std::size_t iSample, std::size_t iEvent) {
+   dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_sum_ehad[iEvent];
+
+}
+void samplePDFDUNEBeamFD::TotalEScaleND_hadsqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * dunemcSamples[iSample].rw_sum_ehad[iEvent] * dunemcSamples[iSample].rw_sum_ehad_sqrt[iEvent] ;
+}
+void samplePDFDUNEBeamFD::TotalEScaleND_hadinvsqrt(const double * par, std::size_t iSample, std::size_t iEvent) {
+   dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) *  dunemcSamples[iSample].rw_sum_ehad_sqrt[iEvent];
+}
+
+/////////////Energy scale Detector Systematics for resonant interactions
+void samplePDFDUNEBeamFD::TotalEScaleND_EM(const double * par, std::size_t iSample, std::size_t iEvent){
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] +=  (*par) *  (dunemcSamples[iSample].rw_eRecoPi0[iEvent] - dunemcSamples[iSample].rw_ePi0[iEvent]);
+};
+void samplePDFDUNEBeamFD::TotalEScaleND_EMinvsqrt(const double * par, std::size_t iSample, std::size_t iEvent){
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) *  (dunemcSamples[iSample].rw_eRecoPi0[iEvent] - dunemcSamples[iSample].rw_ePi0[iEvent]) * sqrt((dunemcSamples[iSample].rw_eRecoPi0[iEvent] - dunemcSamples[iSample].rw_ePi0[iEvent]));
+};
+void samplePDFDUNEBeamFD::TotalEScaleND_EMsqrt(const double * par, std::size_t iSample, std::size_t iEvent){
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * sqrt((dunemcSamples[iSample].rw_eRecoPi0[iEvent] - dunemcSamples[iSample].rw_ePi0[iEvent]));
+};
+  
+void samplePDFDUNEBeamFD::MuonRes_ND(const double * par, std::size_t iSample, std::size_t iEvent){
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * (dunemcSamples[iSample].rw_LepE[iEvent] - dunemcSamples[iSample].rw_erec_lep[iEvent]);
+};
+void samplePDFDUNEBeamFD::NRes_ND(const double * par, std::size_t iSample, std::size_t iEvent){
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) * (dunemcSamples[iSample].rw_eN[iEvent] - dunemcSamples[iSample].rw_eRecoN[iEvent]);
+};
+void samplePDFDUNEBeamFD::HadRes_ND(const double * par, std::size_t iSample, std::size_t iEvent){
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] += (*par) *  ((dunemcSamples[iSample].rw_ePim[iEvent] - dunemcSamples[iSample].rw_eRecoPim[iEvent]) + ((dunemcSamples[iSample].rw_ePip[iEvent] - dunemcSamples[iSample].rw_eRecoPip[iEvent])) + ((dunemcSamples[iSample].rw_eP[iEvent] - dunemcSamples[iSample].rw_eRecoP[iEvent])));
+};
+
 
 
 void samplePDFDUNEBeamFD::RegisterFunctionalParameters() {
@@ -1252,12 +1348,113 @@ void samplePDFDUNEBeamFD::RegisterFunctionalParameters() {
                             kTotalEScaleND,
                             [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleND(par, iSample, iEvent); });
   
+  RegisterIndividualFuncPar("TotalEScaleND_sqrt",
+                            kTotalEScaleND_sqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleND_sqrt(par, iSample, iEvent); });
+  
+  RegisterIndividualFuncPar("TotalEScaleND_invsqrt",
+                            kTotalEScaleND_invsqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleND_invsqrt(par, iSample, iEvent); });
+  
+  RegisterIndividualFuncPar("TotalEScaleND_mu",
+                             kTotalEScaleND_mu,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleND_mu(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("TotalEScaleND_musqrt",
+                             kTotalEScaleND_musqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleND_musqrt(par, iSample, iEvent); });
+  
+  RegisterIndividualFuncPar("TotalEScaleND_muinvsqrt",
+                             kTotalEScaleND_muinvsqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleND_muinvsqrt(par, iSample, iEvent); });
+                           
+  RegisterIndividualFuncPar("TotalEScaleND_had",
+                             kTotalEScaleND_had,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleND_had(par, iSample, iEvent); });
+  
+  RegisterIndividualFuncPar("TotalEScaleND_hadsqrt",
+                            kTotalEScaleND_hadsqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleND_hadsqrt(par, iSample, iEvent); });
+  
+  RegisterIndividualFuncPar("TotalEScaleND_hadinvsqrt",
+                            kTotalEScaleND_hadinvsqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleND_hadinvsqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("TotalEScaleND_EM",
+                            kTotalEScaleND_EM,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleND_EM(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("TotalEScaleND_EM_invsqrt",
+                            kTotalEScaleND_EMinvsqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleND_EMinvsqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("TotalEScaleND_EM_sqrt",
+                            kTotalEScaleND_EMsqrt,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->TotalEScaleND_EMsqrt(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("MuonRes_ND",
+                            kMuonRes_ND,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->MuonRes_ND(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("NRes_ND",
+                            kNRes_ND,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->NRes_ND(par, iSample, iEvent); });
+
+  RegisterIndividualFuncPar("HadRes_ND",
+                             kHadRes_ND,
+                            [this](const double * par, std::size_t iSample, std::size_t iEvent) { this->HadRes_ND(par, iSample, iEvent); });
+  
   MACH3LOG_INFO("Finished registering functional parameters");
+
+  RegisterFunctionalParameters_flux();
 }
 
 
-// void samplePDFDUNEBeamFD::resetShifts(int iEvent) {
-//   // Reset the shifts to the original values
-//   dunemcSamples[iSample].rw_erec_shifted[iEvent] = dunemcSamples[iSample].rw_erec[iEvent];
-// }
 
+void samplePDFDUNEBeamFD::RegisterFunctionalParameters_flux() {
+  MACH3LOG_INFO("Registering functional parameters");
+  // This function manually populates the map of functional parameters
+  // Maps the name of the functional parameter to the pointer of the function
+
+  // This is the part where we manually enter things
+  // A lambda function has to be used so we can refer to a non-static member
+  // function
+
+  // bad bad bad, but stops the singleton check happening for every event, 
+  //  all this is reading, so should be thread safe, myabe use eigen vectors 
+  //  rather than TH1Ds eventually.
+  auto flux_helper = &OffAxisFluxUncertaintyHelper::Get();
+
+  for (size_t i = 0; i < flux_helper->GetNFocussingParams(); i++) {
+    RegisterIndividualFuncPar(
+        flux_helper->GetFocussingParamName(i), kNFuncPars+i,
+        [this, i, flux_helper](const double *par, std::size_t iSample, std::size_t iEvent) {
+          dunemcSamples[iSample].flux_w[iEvent] *=
+              flux_helper->GetFluxFocussingWeight(
+                  i, *par,
+                  dunemcSamples[iSample].flux_focussing_syst_bin[iEvent],
+                  dunemcSamples[iSample].flux_syst_nu_config[iEvent]);
+        });
+  }
+
+  for (size_t i = 0; i < flux_helper->GetNHadProdPCAComponents(); i++) {
+    RegisterIndividualFuncPar(
+        "Flux_HadProd_Param_" + std::to_string(i), kNFuncPars+flux_helper->GetNFocussingParams()+i,
+        [this, i, flux_helper](const double *par, std::size_t iSample, std::size_t iEvent) {
+          dunemcSamples[iSample].flux_w[iEvent] *=
+              flux_helper->GetFluxHadProdWeight(
+                  i, *par,
+                  dunemcSamples[iSample].flux_hadprod_syst_bin[iEvent],
+                  dunemcSamples[iSample].flux_syst_nu_config[iEvent]);
+        });
+  }
+}
+
+// HH: Reset the shifted values to the original values
+void samplePDFDUNEBeamFD::resetShifts(int iSample, int iEvent) {
+  dunemcSamples[iSample].rw_erec_shifted[iEvent] = dunemcSamples[iSample].rw_erec[iEvent];
+  dunemcSamples[iSample].flux_w[iEvent] = 1.0;
+  //dunemcSamples[iSample].rw_cvnnumu_shifted[iEvent] = dunemcSamples[iSample].rw_cvnnumu[iEvent];
+  //dunemcSamples[iSample].rw_cvnnue_shifted[iEvent] = dunemcSamples[iSample].rw_cvnnue[iEvent];
+}
+// =================================

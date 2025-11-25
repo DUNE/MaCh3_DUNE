@@ -6,7 +6,7 @@ from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedMap, CommentedSeq
 
 # --- CONFIG ---
-yaml_dir = "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/Samples/OA_samples_subsamples/AlltheMC/pTpzEnu/"
+yaml_dir = "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/Samples/OA_samples_subsamples/AlltheMC/Enurec_ELep"
 data_dir = "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"   # where the CAFv7_*.root files live
 output_dir = "/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/updated_yamls/"
 
@@ -40,12 +40,9 @@ if not yaml_files:
 # build a SAFE textual Binning block exactly as you want it to appear
 DESIRED_BINNING_TEXT = """Binning:
   Axes:
-    - VarStr: pT
-      Uniform: [200,0,10]
-      Title: "p_{T} [GeV]"
-    - VarStr: pz
-      Uniform: [25,-0.5,2.5]
-      Title: "p_{z} [GeV]"
+    - VarStr: ELep
+      Uniform: [25,0,2.5]
+      Title: "E^{Lep} [GeV]"
     - VarStr: RecoNeutrinoEnergy
       VarBins: [0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
       Title: "E^{Reco.}_{#nu} [GeV]"

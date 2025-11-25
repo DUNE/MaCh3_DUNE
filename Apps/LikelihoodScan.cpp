@@ -21,8 +21,8 @@ int main(int argc, char * argv[]) {
   auto FitManager = MaCh3ManagerFactory(argc, argv);
 
   // 1D scan on by default, and 2D off
-  const bool do_1d_llhscan = false;  //GetFromManager(FitManager->raw()["General"]["1DLLHScan"], true);
-  const bool do_2d_llhscan =  true; //GetFromManager(FitManager->raw()["General"]["2DLLHScan"], false);
+  const bool do_1d_llhscan = true;  //GetFromManager(FitManager->raw()["General"]["1DLLHScan"], true);
+  const bool do_2d_llhscan =  false; //GetFromManager(FitManager->raw()["General"]["2DLLHScan"], false);
 
   if (!do_1d_llhscan && !do_2d_llhscan) {
     MACH3LOG_ERROR("Neither 1D or 2D llhscan enabled");

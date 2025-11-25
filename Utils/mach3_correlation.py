@@ -13,7 +13,8 @@ def save_cov_corr_as_tmatrix_sym(file_path: Path,
                                  branch_patterns: List[str],
                                  output_file: Path,
                                  step: int = 1,
-                                 tree_name="posteriors"):
+                                 tree_name="posteriors",
+                                 start: int = 0):
     print("[DEBUG] Starting covariance/correlation generation...")
 
     if output_file.exists():
@@ -52,7 +53,8 @@ def save_cov_corr_as_tmatrix_sym(file_path: Path,
     step_size = 10000
     print(f"[DEBUG] Reading data in chunks of {step_size} entries and taking every {step} step")
     for batch in tree.iterate(to_read, library="np", step_size=step_size):
-        batch_sub = {k: v[::step] for k, v in batch.items()}
+        #batch_sub = {k: v[::step] for k, v in batch.items()}
+        batch_sub = {k: v[start::step] for k, v in batch.items()}
         chunks.append(batch_sub)
 
     # Concatenate all chunks
@@ -111,6 +113,8 @@ if __name__ == "__main__":
     parser.add_argument("branches", nargs='+', help="Branch names (supports wildcards)")
     parser.add_argument("-o", "--output", type=Path, default=Path("cov_corr_tmatrix.root"), help="Output ROOT file")
     parser.add_argument("--step", type=int, default=1, help="Subsample every Nth entry")
+    parser.add_argument("--start", type=int, default=0, help="Index to start reading from each branch")
+
     args = parser.parse_args()
 
     save_cov_corr_as_tmatrix_sym(args.file, args.branches, args.output, step=args.step)
