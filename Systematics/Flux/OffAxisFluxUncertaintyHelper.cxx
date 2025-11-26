@@ -496,10 +496,9 @@ int OffAxisFluxUncertaintyHelper::GetHadProdBin(int nu_pdg, double enu_GeV,
   }
 }
 
-double OffAxisFluxUncertaintyHelper::GetFluxFocussingWeight(size_t param_id,
-                                                            double param_val,
-                                                            int bin,
-                                                            int nucfg) const {
+double OffAxisFluxUncertaintyHelper::GetFluxFocussingRatio(size_t param_id,
+                                                           int bin,
+                                                           int nucfg) const {
 
   if (nucfg == kUnhandled) {
     return 1;
@@ -512,14 +511,40 @@ double OffAxisFluxUncertaintyHelper::GetFluxFocussingWeight(size_t param_id,
   if (nucfg < kFD_numu_numode) {
     int bin_oa = bin / 1000;
     int bin_e = bin % 1000;
-    return 1 + param_val * focussing.NDuncerts.at(param_id)
-                               .at(nucfg)
-                               .at(bin_oa)
-                               ->GetBinContent(bin_e);
+    return focussing.NDuncerts.at(param_id).at(nucfg).at(bin_oa)->GetBinContent(
+        bin_e);
   } else {
-    return 1 +
-           param_val *
-               focussing.FDuncerts.at(param_id).at(nucfg)->GetBinContent(bin);
+    return focussing.FDuncerts.at(param_id).at(nucfg)->GetBinContent(bin);
+  }
+}
+
+double OffAxisFluxUncertaintyHelper::GetFluxFocussingWeight(size_t param_id,
+                                                            double param_val,
+                                                            int bin,
+                                                            int nucfg) const {
+
+  return 1 + param_val * GetFluxFocussingRatio(param_id, bin, nucfg);
+}
+
+double OffAxisFluxUncertaintyHelper::GetFluxHadProdRatio(size_t param_id,
+                                                         int bin,
+                                                         int nucfg) const {
+
+  if (nucfg == kUnhandled) {
+    return 1;
+  }
+
+  if (bin == kInvalidBin) {
+    return 1;
+  }
+
+  if (nucfg < kFD_numu_numode) {
+    int bin_oa = bin / 1000;
+    int bin_e = bin % 1000;
+    return hadprod.NDuncerts.at(param_id).at(nucfg).at(bin_oa)->GetBinContent(
+        bin_e);
+  } else {
+    return hadprod.FDuncerts.at(param_id).at(nucfg)->GetBinContent(bin);
   }
 }
 
@@ -528,23 +553,5 @@ double OffAxisFluxUncertaintyHelper::GetFluxHadProdWeight(size_t param_id,
                                                           int bin,
                                                           int nucfg) const {
 
-  if (nucfg == kUnhandled) {
-    return 1;
-  }
-
-  if (bin == kInvalidBin) {
-    return 1;
-  }
-
-  if (nucfg < kFD_numu_numode) {
-    int bin_oa = bin / 1000;
-    int bin_e = bin % 1000;
-    return 1 + param_val * hadprod.NDuncerts.at(param_id)
-                               .at(nucfg)
-                               .at(bin_oa)
-                               ->GetBinContent(bin_e);
-  } else {
-    return 1 + param_val *
-                   hadprod.FDuncerts.at(param_id).at(nucfg)->GetBinContent(bin);
-  }
+  return 1 + param_val * GetFluxHadProdRatio(param_id, bin, nucfg);
 }

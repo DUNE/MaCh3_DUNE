@@ -7,29 +7,8 @@ foreach(app
 	SigmaVariation
 	LikelihoodScan
 	Variations
-	EventRates_New
-	Fit_Abi
-	Fit_fixingparameters
-	Fit_fixingparameters_beluga
-	Fit_fixingparameters_beluga_withthrows
-	Abi_Posteriorpredicitive
-	Abi_Posteriorpredicitiveold
-	Abi_Posteriorpredictive_fardetector
-	EventRates_choosingbinning
-	Abi_Posteriorpredictive_withosc
-	Postfit_xsec_diagnostics
-	Likelihood_Scan_abi
-	Post_xsec_diagnostics_withcorr
-	Postfit_xsec_diagnostics_withcorr_comparisons
-	Extract_xsec_fromyaml
-	Compare_onaxis_vs_offaxis
-	Compare_runplans
-	Compare_onaxis_vs_offaxis_new
-	Posteriorpreditctive_fd
-	Plot_xsec_from_yaml
-	Post_xsec_diagnostics_withcorr_fd
       )
-      
+
     add_executable(${app} ${app}.cpp)
     target_link_libraries(${app} SamplesDUNE MaCh3DUNE::All Minuit)
 
@@ -37,3 +16,5 @@ foreach(app
 
     install(TARGETS ${app} DESTINATION ${CMAKE_BINARY_DIR}/bin)
 endforeach(app)
+
+add_subdirectory(AbiP/Plotting)

@@ -5,14 +5,14 @@ struct dunemc_base { // Store variables used in fitting
 
   double pot_s;
   double norm_s;
-  
-  int Target; //Target the interaction was on
-  
+
+  int Target; // Target the interaction was on
+
   int nupdg;
   int nupdgUnosc;
   int rw_isCC;
   double OscChannelIndex;
-  
+
   double rw_erec;
   double rw_etru;
 
@@ -20,12 +20,14 @@ struct dunemc_base { // Store variables used in fitting
   double mode;
 };
 
-struct dunemc_atm : public dunemc_base { // Store variables used by SampleHandlerAtm
+struct dunemc_atm
+    : public dunemc_base { // Store variables used by SampleHandlerAtm
   double rw_theta;
   double rw_truecz;
 };
 
-struct dunemc_beamfd : public dunemc_base { // Store variables used by SampleHandlerBeamFD
+struct dunemc_beamfd
+    : public dunemc_base { // Store variables used by SampleHandlerBeamFD
   double rw_erec_shifted;
   double rw_erec_had;
   double rw_erec_lep;
@@ -62,7 +64,8 @@ struct dunemc_beamfd : public dunemc_base { // Store variables used by SampleHan
   double rw_trueccnumu;
 };
 
-struct dunemc_beamnd : public dunemc_base { // Store variables used by SampleHandlerBeamND
+struct dunemc_beamnd
+    : public dunemc_base { // Store variables used by SampleHandlerBeamND
   double rw_erec_shifted;
   double rw_erec_had;
   double rw_erec_lep;
@@ -72,7 +75,60 @@ struct dunemc_beamnd : public dunemc_base { // Store variables used by SampleHan
   double rw_reco_q;
 };
 
-struct dunemc_beamndgar : public dunemc_base { // Store variables used by SampleHandlerBeamNDGAr
+struct dunemc_beamoffaxis
+    : public dunemc_beamnd { // Store variables used by SampleHandlerBeamND
+  struct {
+    double LepE;
+    double LepNuAngle;
+    double eP;
+    double ePip;
+    double ePim;
+    double ePi0;
+    double eN;
+    double eHad_av;
+
+    double enu_bias;
+
+    double ERec_QE;
+
+    double det_x;
+    double vtx_x;
+    double vtx_y;
+    double vtx_z;
+    double off_axis_pos_m;
+  } truth;
+
+  struct {
+    int numu;
+    int muon_contained;
+    int muon_tracker;
+    double ELep;
+    double y;
+    double EHad;
+    double sum_ehad;
+
+    double eP;
+    double ePip;
+    double ePim;
+    double ePi0;
+    double eN;
+  } reco;
+
+  struct {
+    double EHad_sqrt;
+    double sum_ehad_sqrt;
+    double ELep_sqrt;
+    std::vector<double> flux_focussing_ratio;
+    std::vector<double> flux_hadprod_ratio;
+  } syst;
+
+  struct {
+    double erec;
+  } shift;
+};
+
+struct dunemc_beamndgar
+    : public dunemc_base { // Store variables used by SampleHandlerBeamNDGAr
   double rw_LepE;
   double rw_berpaacvwgt;
   double rw_vtx_x;
@@ -80,14 +136,15 @@ struct dunemc_beamndgar : public dunemc_base { // Store variables used by Sample
   double rw_vtx_z;
   double rw_Q0;
   double rw_Q3;
-  double rw_lep_pT;  //transverse lepton momentum
+  double rw_lep_pT; // transverse lepton momentum
   double rw_lep_pX;
   double rw_lep_pY;
-  double rw_lep_pZ; //parallel lepton momentum
+  double rw_lep_pZ; // parallel lepton momentum
   double rw_rad;
 };
 
-struct dunemc_plotting { // Store variables just used in plotting (cleared from memory before a fit)
+struct dunemc_plotting { // Store variables just used in plotting (cleared from
+                         // memory before a fit)
 
   bool in_fdv;
   bool is_accepted;
@@ -99,7 +156,7 @@ struct dunemc_plotting { // Store variables just used in plotting (cleared from 
   double lep_tracklengthyz;
   int npi0;
   double rw_ePi0;
- 
+
   std::vector<int> particle_event = {};
   std::vector<int> particle_trkid = {};
   std::vector<int> particle_pdg = {};

@@ -74,9 +74,12 @@ public:
   int GetHadProdBin(int nu_pdg, double enu_GeV, double off_axis_pos_m,
                     int nu_config) const;
 
+  double GetFluxFocussingRatio(size_t param_id, int bin, int nucfg) const;
+
   double GetFluxFocussingWeight(size_t param_id, double param_val, int bin,
                                 int nu_config) const;
 
+  double GetFluxHadProdRatio(size_t param_id, int bin, int nucfg) const;
   double GetFluxHadProdWeight(size_t param_id, double param_val, int bin,
                               int nu_config) const;
 

@@ -5,6 +5,7 @@
 #else
 #include "Samples/SampleHandlerBeamFD.h"
 #include "Samples/SampleHandlerBeamND.h"
+#include "Samples/SampleHandlerBeamOffAxis.h"
 #include "Samples/SampleHandlerAtm.h"
 #endif
 
@@ -174,7 +175,7 @@ void MakeMaCh3DuneInstance(std::unique_ptr<manager>& FitManager, std::vector<Sam
   // Adaptive MCMC stuff
 
   if (FitManager->raw()["AdaptionOptions"]){
-    xsec->initialiseAdaption(FitManager->raw());
+    xsec->InitialiseAdaption(FitManager->raw());
   }
 
 

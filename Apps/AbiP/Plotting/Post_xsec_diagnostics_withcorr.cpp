@@ -1,35 +1,34 @@
-#include <iostream>
-#include <chrono>
+#include "Samples/MaCh3DUNEFactory.h"
+#include "Samples/SampleHandlerFD.h"
+#include "Fitters/MaCh3Factory.h"
+#include "Manager/Manager.h"
+#include "Parameters/ParameterHandlerGeneric.h"
+
+#include "yaml-cpp/yaml.h"
+
 #include "TLatex.h"
-#include <TH1D.h>
-#include <THStack.h>
-#include <TStyle.h>
-#include <TCanvas.h>
-#include <TRint.h>
-#include <TLegend.h>
+#include "TH1D.h"
+#include "THStack.h"
+#include "TStyle.h"
+#include "TCanvas.h"
+#include "TRint.h"
+#include "TLegend.h"
 #include "TPaveText.h"
-#include <TColor.h>
-#include <TMath.h>
-#include <cmath> 
+#include "TColor.h"
+#include "TMath.h"
+
+#include <vector>
+#include <ctime>
+#include <vector>
+#include <string>
+#include <random>
+#include <cmath>
 #include <fstream>
 #include <sstream>
 #include <set>
 #include <string>
-#include <yaml-cpp/yaml.h>
-#include <vector>
-#include <ctime>
-#include "samplePDFDUNE/MaCh3DUNEFactory.h"
-#include "samplePDFDUNE/StructsDUNE.h"
-#include "mcmc/mcmc.h"
-#include "manager/manager.h"
-#include "covariance/covarianceBase.h"
-#include <vector>
-#include <string>
-#include <TString.h>
-#include <random>
-#include "samplePDFDUNE/MaCh3DUNEFactory.h"
-#include "mcmc/mcmc.h"
-
+#include <iostream>
+#include <chrono>
 
 struct BinDef {
   int index;
@@ -79,7 +78,7 @@ void SetPaletteRainbow() {
 }
 
 
-class samplePDFFDBase;
+class SampleHandlerFD;
 struct PosteriorSample {
     std::vector<double> xsec_draw; // vector of xsec parameters for this posterior sample
 };
@@ -227,7 +226,7 @@ void SavePosterior1D(const std::vector<PosteriorSample>& posteriorSamples,
                      int paramIndex,
                      const std::string& name,
                      TCanvas* c,
-                     const std::string& pdfOut) 
+                     const std::string& pdfOut)
 {
     TH1D* h_post = new TH1D(Form("posterior_%s_%d", name.c_str(), paramIndex),
                             Form("Posterior %s (param %d)", name.c_str(), paramIndex),
@@ -240,7 +239,7 @@ void SavePosterior1D(const std::vector<PosteriorSample>& posteriorSamples,
     h_post->SetLineWidth(2);
     h_post->Draw("HIST");
     h_post->Write();
-    
+
     c->Print(pdfOut.c_str());
     delete h_post;
 }
@@ -418,22 +417,22 @@ void Save1DSlicePair(TH2D* h_event_mean, TH2D* h_event_stddev,
 
 
 TH1D* MakePosteriorPredictiveHist(
-    samplePDFFDBase* pdf,                     // your PDF object
-    const std::vector<double>& xsec_draw,  
-    covarianceXsec* xsec, // pointer to your cross-section object         // cross-section parameters for this posterior sample
+    SampleHandlerFD* pdf,                     // your PDF object
+    const std::vector<double>& xsec_draw,
+    ParameterHandlerGeneric* xsec, // pointer to your cross-section object         // cross-section parameters for this posterior sample
     const std::vector<std::string>& xsec_vars,// names of xsec parameters
     const HistAxis& axis                       // histogram axis info
 ) {
     if (!pdf) return nullptr;
 
     // Apply xsec parameters to the reweighter
-    if (xsec) xsec->setParameters(xsec_draw);
+    if (xsec) xsec->SetParameters(xsec_draw);
     // Update PDF with new weights
-    pdf->reweight();
+    pdf->Reweight();
     // Create a new histogram for this posterior predictive
     TString histName = Form("posterior_predictive_%s", pdf->GetTitle());
     // Get the PDF histogram
-    TH1D* h_pdf = pdf->get1DHist();
+    TH1* h_pdf = pdf->GetMCHist(1);
     if (!h_pdf) {
         std::cerr << "PDF has no 1D histogram!" << std::endl;
         return nullptr;
@@ -468,7 +467,7 @@ std::vector<int> GetSliceIndices(const std::vector<BinDef>& binDefs,
                         : h_mean->GetXaxis()->FindBin(0.5*(bin.q0_min + bin.q0_max)) - 1;
 
         if (bin_index == sliceBin - 1) {
-            std::cout << "[Debug] Slice " << sliceBin 
+            std::cout << "[Debug] Slice " << sliceBin
                       << " matched bin.index " << bin.index
                       << " (bin_index=" << bin_index << ")\n";
 
@@ -599,7 +598,7 @@ TH2D* PlotSliceCorrelation_threshold(const TMatrixD& sliceCorr,
 
             // Optional: blank label for small correlations
             if (std::fabs(value) < threshold_correlation) {
-                h_corr->SetBinContent(a+1, b+1, value); 
+                h_corr->SetBinContent(a+1, b+1, value);
             }
         }
     }
@@ -764,7 +763,7 @@ void Save1DSlicesWithEventRateAndCorr(
         for (int b = 1; b <= nbins; ++b) {
             double vpost = h_post_slice->GetBinContent(b);
             double vev = (b <= h_event_slice->GetNbinsX()) ? h_event_slice->GetBinContent(b) : 0.0;
-            if ((std::isfinite(vpost) && vpost > fillThreshold) || 
+            if ((std::isfinite(vpost) && vpost > fillThreshold) ||
                 (std::isfinite(vev) && vev > fillThreshold)) {
                 firstFilled = b;
                 break;
@@ -775,7 +774,7 @@ void Save1DSlicesWithEventRateAndCorr(
         for (int b = nbins; b >= 1; --b) {
             double vpost = h_post_slice->GetBinContent(b);
             double vev = (b <= h_event_slice->GetNbinsX()) ? h_event_slice->GetBinContent(b) : 0.0;
-            if ((std::isfinite(vpost) && vpost > fillThreshold) || 
+            if ((std::isfinite(vpost) && vpost > fillThreshold) ||
                 (std::isfinite(vev) && vev > fillThreshold)) {
                 lastFilled = b;
                 break;
@@ -790,7 +789,7 @@ void Save1DSlicesWithEventRateAndCorr(
             h_post_slice->GetXaxis()->SetRangeUser(xlow, xhigh);
         }
 
-        
+
         h_post_slice->GetYaxis()->SetRangeUser(0.2, 1.8);
 
         padLeft->cd(1); gPad->SetBottomMargin(0.12); h_event_slice->GetXaxis()->SetTitle(xvar1.c_str()); h_event_slice->Draw("E1 HIST");
@@ -802,12 +801,12 @@ void Save1DSlicesWithEventRateAndCorr(
         c->cd(); // go to canvas (not a child pad)
         // ensure there is room at the top for the title
         c->SetTopMargin(0.08); // enlarge top margin if necessary
-        TLatex latex; 
-        latex.SetNDC(kTRUE); 
-        latex.SetTextAlign(22); 
-        latex.SetTextSize(0.045); 
+        TLatex latex;
+        latex.SetNDC(kTRUE);
+        latex.SetTextAlign(22);
+        latex.SetTextSize(0.045);
         latex.DrawLatex(0.5, 0.96, pageTitle.c_str()); // centered title near top
-        c->Update(); 
+        c->Update();
 
         // --- Correlation slice ---
         TMatrixD sliceCorr = GetSliceCorrelation(corr, sliceInds);
@@ -891,7 +890,7 @@ void Save1DSlicesWithEventRateAndCorr(
             }
         }
 
-        
+
         delete h_post_slice;
         delete h_event_slice;
     }
@@ -901,7 +900,7 @@ void Save1DSlicesWithEventRateAndCorr(
 
 int main(int argc, char* argv[]) {
 
-   
+
     std::string rootOut = AddTimestampToROOTFilename("mcmc_diagnostics.root");
     TCanvas* c_master = new TCanvas("c", "c", 1200, 800);
 
@@ -914,7 +913,7 @@ int main(int argc, char* argv[]) {
     std::string config_file = argv[2];
     std::string corr_file  = argv[3];
 
-    
+
     // Open original posterior file
     TFile* f_post = TFile::Open(mcmc_file.c_str(), "READ");
     if (!f_post || f_post->IsZombie()) {
@@ -928,16 +927,12 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    
+
     // Load YAML config
     YAML::Node config = YAML::LoadFile(config_file);
-    manager* FitManager = new manager(config_file);
-    if (!FitManager) {
-        std::cerr << "Error: Failed to create FitManager from YAML config." << std::endl;
-        return 1;
-    }
+    auto FitManager = std::make_unique<manager>(config_file);
 
-    std::cout << "Using " << post->GetName() 
+    std::cout << "Using " << post->GetName()
               << " with " << post->GetEntries() << " entries." << std::endl;
 
     TFile* fCorr = TFile::Open(corr_file.c_str(), "READ");
@@ -946,7 +941,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    auto corrMatrix = LoadCorrMatrix(fCorr); 
+    auto corrMatrix = LoadCorrMatrix(fCorr);
     if (!corrMatrix) return 1;
 
     // --- Load parameter names ---
@@ -980,7 +975,7 @@ int main(int argc, char* argv[]) {
         for (int i = 0; i < (int)paramNames.size(); ++i) paramNames[i] = Form("param_%d", i);
     }
 
-    
+
     // Setup binning from YAML
     auto xsec_var1 = FitManager->raw()["General"]["Systematics"]["xsec_var1"].as<std::string>();
     auto xsec_var2 = FitManager->raw()["General"]["Systematics"]["xsec_var2"].as<std::string>();
@@ -1012,7 +1007,7 @@ int main(int argc, char* argv[]) {
                               q0_edges.size()-1, &q0_edges[0],
                               q3_edges.size()-1, &q3_edges[0]);
 
-    
+
     int sliceBin = 1;          // pick first slice bin
     bool sliceAlong_xvar_2 = true;  // slice along y axis (xvar_2)
 
@@ -1030,7 +1025,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    
+
     std::string outputRootFile = mcmc_file.substr(0, mcmc_file.find_last_of('.')) + "_diagnostics.root";
     std::string pdfOut  = mcmc_file.substr(0, mcmc_file.find_last_of('.')) + "_diagnostics.pdf";
 
@@ -1041,24 +1036,21 @@ int main(int argc, char* argv[]) {
     }
     OutputFile->cd();
 
-    
-    
-    // MaCh3
-    covarianceXsec* xsec = nullptr;
-    covarianceOsc* osc = nullptr;
-    std::vector<samplePDFFDBase*> DUNEPdfs;
-    MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec, osc);
-    std::unique_ptr<mcmc> MaCh3Fitter = std::make_unique<mcmc>(FitManager);
 
-    
+
+    // MaCh3
+    ParameterHandlerGeneric* xsec = nullptr;
+    std::vector<SampleHandlerFD*> DUNEPdfs;
+    MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
+    auto MaCh3Fitter = MaCh3FitterFactory(FitManager.get());
+
+
     // Build combined 2D histogram
     TH2D* h_xsecvar_eventratehist = nullptr;
     for (auto& pdf : DUNEPdfs) {
-        auto* dunePdf = dynamic_cast<samplePDFDUNEBeamFD*>(pdf);
-        if (!dunePdf) continue;
 
         std::vector<KinematicCut> SelectionVector;
-        TH2* h = dunePdf->get2DVarHist(xsec_var1, xsec_var2, SelectionVector, 0, axisX, axisY);
+        TH2* h = pdf->Get2DVarHist(xsec_var1, xsec_var2, SelectionVector, 0, axisX, axisY);
         if (!h) {
             std::cerr << "Warning: get2DVarHist returned null.\n";
             continue;
@@ -1080,13 +1072,13 @@ int main(int argc, char* argv[]) {
     h_xsecvar_eventratehist->GetYaxis()->SetTitle(xsec_var2.c_str());
     h_xsecvar_eventratehist->Write("xsec_eventrate_histo");
 
-    
+
     TH2D* h_eventrate_labels = (TH2D*)h_xsecvar_eventratehist->Clone("h_eventrate_labels");
     h_eventrate_labels->SetTitle("");
     gStyle->SetOptStat(0);
     h_eventrate_labels->GetXaxis()->SetTitle(xsec_var1.c_str());
     h_eventrate_labels->GetYaxis()->SetTitle(xsec_var2.c_str());
-    
+
     h_eventrate_labels->Draw("COLZ");
     h_eventrate_labels->Write();
 
@@ -1176,10 +1168,10 @@ int main(int argc, char* argv[]) {
     h_stddev->Write("xsec_param_stddev");
     h_mean->GetZaxis()->SetRangeUser(0.75,1.25);
     h_stddev->GetZaxis()->SetRangeUser(0.0, 0.25);
-    
+
 
     // Samlple Posterior
-   
+
     int nSamples = 1000; // how many random samples
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -1189,7 +1181,7 @@ int main(int argc, char* argv[]) {
 
     if(burnIn < 1000){
         std::cout << "BurnInSteps not set in config or looks to small..." << std::endl;
-       int burnIn = 0.1 * nEntries; 
+       int burnIn = 0.1 * nEntries;
     }
     std::vector<PosteriorSample> posteriorSamples;
     posteriorSamples.reserve(nSamples);
@@ -1211,7 +1203,7 @@ int main(int argc, char* argv[]) {
     // Define your histogram axis
     HistAxis fineAxis(1000, 0, 10); // 0–5 GeV, 500 bins
 
-   
+
     std::vector<std::string> xsec_vars = {xsec_var1, xsec_var2};
     // --- Initialize histograms for event rates ---
     TH2D* h_eventrate_sum    = (TH2D*) h_xsecvar_eventratehist->Clone("h_eventrate_sum");
@@ -1227,14 +1219,14 @@ int main(int argc, char* argv[]) {
     // --- Loop over posterior samples ---
     for (size_t i = 0; i < posteriorSamples.size(); ++i) {
         for (size_t j = 0; j < DUNEPdfs.size(); ++j) {
-            auto* dunePdf = dynamic_cast<samplePDFFDBase*>(DUNEPdfs[j]);
+            auto* dunePdf = dynamic_cast<SampleHandlerFD*>(DUNEPdfs[j]);
             if (!dunePdf) continue;
 
             // Posterior predictive histogram (1D)
-            TH1D* h_pred = MakePosteriorPredictiveHist(dunePdf, 
+            TH1D* h_pred = MakePosteriorPredictiveHist(dunePdf,
                                                     posteriorSamples[i].xsec_draw,
-                                                    xsec, 
-                                                    xsec_vars, 
+                                                    xsec,
+                                                    xsec_vars,
                                                     fineAxis);
             if (!h_pred) continue;
 
@@ -1251,12 +1243,12 @@ int main(int argc, char* argv[]) {
                     h_eventrate_sum2->SetBinContent(bx, by, sum2 + val*val);
                 }
             }
-            delete h_pred; 
+            delete h_pred;
         }
     }
 
     // --- 2D mean & stddev ---
-   
+
     for (int bx = 1; bx <= h_eventrate_sum->GetNbinsX(); ++bx) {
         for (int by = 1; by <= h_eventrate_sum->GetNbinsY(); ++by) {
             double sum   = h_eventrate_sum->GetBinContent(bx, by);
@@ -1275,7 +1267,7 @@ int main(int argc, char* argv[]) {
     c_master->Clear();
     h_eventrate_labels->Draw("COLZ TEXT");
     h_eventrate_labels->Write();
-    c_master->Print(pdfOut.c_str());       
+    c_master->Print(pdfOut.c_str());
     h_eventrate_labels->Write();
     c_master->Clear();
     h_xsecvar_eventratehist->GetXaxis()->SetTitle(xsec_var1.c_str());
@@ -1292,7 +1284,7 @@ int main(int argc, char* argv[]) {
     h_mean->Draw("COLZ");
     h_mean->Write();
     c_master->Update();
-    c_master->Print(pdfOut.c_str());          // add a page   
+    c_master->Print(pdfOut.c_str());          // add a page
     c_master->Clear();
     SetPaletteRainbow();
     h_stddev->GetXaxis()->SetTitle(xsec_var1.c_str());
@@ -1339,14 +1331,13 @@ int main(int argc, char* argv[]) {
 
     c_master->Print((pdfOut + "]").c_str());  // close PDF
 
-    
+
     // Clean up
     delete h_xsecvar_eventratehist;
     delete h_mean;
     delete h_stddev;
     delete axisX;
     delete axisY;
-    delete FitManager;
     delete f_post;
     fCorr->Close();
     delete fCorr;

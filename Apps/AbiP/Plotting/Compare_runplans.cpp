@@ -21,7 +21,7 @@
 #include "TPaveText.h"
 #include <TColor.h>
 #include <TMath.h>
-#include <cmath> 
+#include <cmath>
 #include <fstream>
 #include <sstream>
 #include <set>
@@ -30,14 +30,13 @@
 #include <vector>
 #include <ctime>
 #include <TLine.h>
-#include "samplePDFDUNE/MaCh3DUNEFactory.h"
-#include "samplePDFDUNE/StructsDUNE.h"
 
-#include "samplePDFDUNE/MaCh3DUNEFactory.h"
-#include "samplePDFDUNE/StructsDUNE.h"
-#include "mcmc/mcmc.h"
-#include "manager/manager.h"
-#include "covariance/covarianceBase.h"
+
+#include "Samples/MaCh3DUNEFactory.h"
+#include "Samples/StructsDUNE.h"
+#include "Fitters/FitterBase.h"
+#include "Manager/Manager.h"
+#include "Parameters/ParameterHandlerBase.h"
 #include <vector>
 #include <string>
 #include <TH1D.h>
@@ -171,7 +170,7 @@ while ((key = (TKey*)nextkey())) {
 
     std::string sliceLabel = h_event_A_vec[0]->GetTitle();
     double xmin = h_event_A_vec[0]->GetBinLowEdge(1);
-    double xmax = h_event_A_vec[0]->GetBinLowEdge(h_event_A_vec[0]->GetNbinsX()) + 
+    double xmax = h_event_A_vec[0]->GetBinLowEdge(h_event_A_vec[0]->GetNbinsX()) +
                   h_event_A_vec[0]->GetBinWidth(h_event_A_vec[0]->GetNbinsX());
 
     c->Clear();
@@ -183,7 +182,7 @@ while ((key = (TKey*)nextkey())) {
     // Pad 1: Event Rates
     // -----------------------
     c->cd(1);
-    
+
     TLegend* leg1 = new TLegend(0.55,0.7,0.88,0.88);
 
     for (size_t i = 0; i < nSets; ++i) {
@@ -208,7 +207,7 @@ while ((key = (TKey*)nextkey())) {
     // -----------------------
     // Pad 2: Posterior uncertainties
     // -----------------------
-    
+
     c->cd(2);
     TLegend* leg2 = new TLegend(0.15,0.7,0.45,0.88);
 
