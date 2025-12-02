@@ -221,7 +221,7 @@ target_compile_options(DUNEMaCh3Warnings INTERFACE
   -Wredundant-decls       # Warn about multiple declarations of the same entity. Useful for code cleanup.
   -Wstrict-aliasing=2     # Helps detect potential aliasing issues that could lead to undefined behavior.
   -Wuseless-cast          # Warn if you perform a cast to the same type (only in GCC >= 4.8)
-  -Wnull-dereference      # Warn if a null dereference is detected (only in GCC >= 6.0)
+  #-Wnull-dereference      # Warn if a null dereference is detected (only in GCC >= 6.0)
   -Wold-style-cast        # Warn for c-style casts
   -Wconversion            # Warn on type conversions that may lose data
   -Wformat-security       # Warn on functions that are potentially insecure for formatting
