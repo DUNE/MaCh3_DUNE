@@ -76,7 +76,7 @@
 #include <set>
 #include <string>
 #include <yaml-cpp/yaml.h>
-#include "manager/manager.h"
+
 
 /*
 std::vector<std::string> files_A = {
