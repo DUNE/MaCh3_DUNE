@@ -1,8 +1,5 @@
 Systematics:
 
-
-
-
 #V2 initial commit
 #WARNING !!!
 #osc covariance require particular order of osc parameters, do not change order of dials here
@@ -10,10 +7,6 @@ Systematics:
     Names:
       FancyName: sin2th_12
       ParameterName: sin2th_12
-
-
-
-
     DetID: 984
     Error: 0.0129961532770277840
     FlatPrior: false
@@ -26,17 +19,10 @@ Systematics:
       MCMC: 1.0
     Type: Osc
 
-
-
-
 - Systematic:
     Names:
       FancyName: sin2th_23
       ParameterName: sin2th_23
-
-
-
-
     DetID: 984
     Error: 0.021
     FlatPrior: true
@@ -49,17 +35,10 @@ Systematics:
       MCMC: 1.0
     Type: Osc
 
-
-
-
 - Systematic:
     Names:
       FancyName: sin2th_13
       ParameterName: sin2th_13
-
-
-
-
     DetID: 984
     Error: 0.0007
     FlatPrior: true
@@ -69,20 +48,13 @@ Systematics:
       Generated: 0.0220
       PreFitValue: 0.0220
     StepScale:
-      MCMC: 5.0
+      MCMC: 1.0
     Type: Osc
-
-
-
 
 - Systematic:
     Names:
       FancyName: delm2_12
       ParameterName: delm2_12
-
-
-
-
     DetID: 984
     Error: 0.0000018
     FlatPrior: false
@@ -95,17 +67,10 @@ Systematics:
       MCMC: 1.0
     Type: Osc
 
-
-
-
 - Systematic:
     Names:
       FancyName: delm2_23
       ParameterName: delm2_23
-
-
-
-
     DetID: 984
     Error: 0.000034
     FlatPrior: true
@@ -118,17 +83,10 @@ Systematics:
       MCMC: 1.0
     Type: Osc
 
-
-
-
 - Systematic:
     Names:
       FancyName: delta_cp
       ParameterName: delta_cp
-
-
-
-
     DetID: 984
     Error: 6.28331122896200340
     FlatPrior: true
@@ -142,17 +100,10 @@ Systematics:
       MCMC: 1.0
     Type: Osc
 
-
-
-
 - Systematic:
     Names:
       FancyName: baseline
       ParameterName: baseline
-
-
-
-
     DetID: 984
     Error: 0.01
     FlatPrior: true
@@ -165,17 +116,10 @@ Systematics:
       MCMC: 1.0
     Type: Osc
 
-
-
-
 - Systematic:
     Names:
       FancyName: density
       ParameterName: density
-
-
-
-
     DetID: 984
     Error: 0.01
     FlatPrior: true
@@ -188,15 +132,10 @@ Systematics:
       MCMC: 1.0
     Type: Osc
 
-
 - Systematic:
     Names:
       FancyName: elec_density
       ParameterName: elec_density
-
-
-
-
     DetID: 984
     Error: 0.01
     FlatPrior: true
@@ -209,36 +148,26 @@ Systematics:
       MCMC: 1.0
     Type: Osc
 
-
 - Systematic:
     Names:
       FancyName: decoherence_strength
       ParameterName: decoherence_strength
-
-
-
-
     DetID: 984
-    Error: 0.01e-18
+    Error: 0.01e-15
     FlatPrior: true
     ParameterBounds: [0, 999]
     ParameterGroup: Osc
     ParameterValues:
-      Generated: 9.48e-18 # 9.48e-18
-      PreFitValue: 9.48e-18
+      Generated: 9.48e-15 # 9.48e-18
+      PreFitValue: 9.48e-15
     StepScale:
-      MCMC: 1.0
+      MCMC: 25.0
     Type: Osc
-
 
 - Systematic:
     Names:
       FancyName: energy_scale
       ParameterName: energy_scale
-
-
-
-
     DetID: 984
     Error: 1.0
     FlatPrior: true
@@ -251,15 +180,10 @@ Systematics:
       MCMC: 1.0
     Type: Osc
 
-
 - Systematic:
     Names:
       FancyName: reference_energy
       ParameterName: reference_energy
-
-
-
-
     DetID: 984
     Error: 0.01
     FlatPrior: true

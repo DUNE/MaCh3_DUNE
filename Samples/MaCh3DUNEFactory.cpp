@@ -105,6 +105,7 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<SampleHandlerFD*> &D
   osc = new ParameterHandlerOsc(OscMatrixFile,OscMatrixName.c_str());
   osc->SetName("osc_cov");
   osc->SetParameters(oscpars);
+  osc->SetStepScale(FitManager->raw()["General"]["Systematics"]["OscStepScale"].as<double>());
 
   std::vector<std::string> OscFixParams = GetFromManager<std::vector<std::string>>(FitManager->raw()["General"]["Systematics"]["OscFix"], {});
   if (OscFixParams.size() == 1 && OscFixParams.at(0) == "All") {

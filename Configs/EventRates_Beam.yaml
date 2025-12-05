@@ -1,13 +1,13 @@
 ---
 General:
-  OutputFile: "DuneEventRates.root"
+  OutputFile: "DuneFit.root"
   DUNESamples:
    - "Configs/Samples/SamplePDFDune_FHC_numuselec.yaml"
    - "Configs/Samples/SamplePDFDune_FHC_nueselec.yaml"
    - "Configs/Samples/SamplePDFDune_RHC_numuselec.yaml"
    - "Configs/Samples/SamplePDFDune_RHC_nueselec.yaml"
    
-  OscillationParameters: [0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848, 0.5, 9.48e-18, 2.0, 1.] # 9.48e-18
+  OscillationParameters: [0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848, 0.5, 1.0e-15, 0.0, 1.] # 9.48e-18
 
   # Nu-FIT
   #OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 1284.9, 2.848] #CUDAProb3
@@ -30,12 +30,14 @@ General:
     NDCovFile: "Configs/CovObjs/tdr_covs/det_sys_cov.root"
     OscCovFile: ["Configs/CovObjs/OscCov_PDG2021_v2.yaml"]
     OscCovName: "osc_cov"
-    OscFix: ["baseline", "density"]
+    OscStepScale: 0.05
+    OscFix: ["baseline", "density", "elec_density" , "energy_scale", "reference_energy"]
+    XsecFix: ["All"]
 
   Fitter:
     FitTestLikelihood: false
   MCMC:
-    NSteps: 2000
+    NSteps: 1000
     AutoSave: 10000
   Output:
     FileName: "TestEventRates.root"
@@ -43,6 +45,13 @@ General:
   ProcessMCMC: No
   Seed: 0
   Debug: No
+
+DiagMCMC:
+  ExcludedTypes: []
+  ExcludedNames: []
+  nBatches: 20
+  nLags: 10000
+  PlotRelativeToPrior: "false"
 
 # LLH Scan settings
 LLHScan:
@@ -54,6 +63,8 @@ LLHScan:
   #LLHScanPoints: 50
   # Number of points for 2D scan in each direction
   #2DLLHScanPoints: 20
+  # Do you want to get LLH scan of oscillation parameters?
+  RunOscLLH: true
   # Add physical ranges for special params whose priors/errors may not be well well-defined
   ScanRanges:
     #delta_cp: [-3.14,3.14]
@@ -62,3 +73,121 @@ LLHScan:
 Tests:
   SkipChecks: False
   TestResultsFile: tests/test_results/EventRatesV2TDR.txt
+
+ProcessMCMC:
+  #Select which parameter names to remove, for example all flux, look for starting string
+  ExcludedNames: []
+  #ExcludedNames: ["Norm_"]
+  #Select which parameter to remove based on to whcih group they belong, like Xsec, Flux or Osc
+  ExcludedGroups: []
+  #ExcludedNames: ["Osc"]
+  #Select which parameters blocks to reject for example ND and FD detector, look for starting string
+  # WARNING this is used only for Legacy pramtaers i.e. one which do not use parameterHandlerGeneric
+  ExcludedTypes: []
+  # Allow to decrease number of entries if chain is HUUGE
+  #MaxEntries = 10000
+
+  #AdditionalCuts
+  Posterior1DCut: ""
+  #Posterior1DCut: "delm2_23 > 0"
+
+  #Basic settings
+  PlotRelativeToPrior: false
+  PrintToPDF: true
+  #if false it will not plot error band for parameters with flat prior
+  PlotErrorForFlatPrior: true
+  FancyNames: true
+  PlotBinValue: false
+
+  #Correlation related
+  Smoothing: true
+
+  #Functionality 1D
+  MakeCredibleIntervals: true
+  CalcBayesFactor: true
+  CalcSavageDickey: false
+  CalcBipolarPlot: false
+  CalcParameterEvolution: false
+
+  #Functionality 2D
+  PlotCorr: true
+  MakeSubOptimality: ["false", 100]
+  MakeViolin: true
+  MakeCredibleRegions: false
+  GetTrianglePlot: true
+  #Perform some covariance stability test
+  DiagnoseCovarianceMatrix: false
+  # Assign weight to each mcmc step according to new prior
+  ReweightPrior: false
+  #Perform Kolmogorov Smirnov test, only works when at least two files are being processed
+  PerformKStest: true
+
+  #KS: Credible Intervals/Regions Cosmetic, code has default values so even if you don't pass anything still code will produce fancy plots :)
+  CredibleIntervals: [0.99, 0.90, 0.68]
+  #In case of sigma, please set CredibleInSigmas to true first
+  #CredibleIntervals: [3, 2, 1]
+  #kCyan+4, kCyan-2, kCyan-10
+  CredibleIntervalsColours: [436, 430, 422]
+
+  #If true Credible intervals should be in percentage
+  CredibleInSigmas: false
+  CredibleRegions: [0.99, 0.90, 0.68]
+  #In case of sigma, please set CredibleInSigmas to true first
+  #CredibleRegions: [3, 2, 1]
+  # kDashed, kSolid, kDotted
+  CredibleRegionStyle: [2, 1, 3]
+  #kGreen-3, kGreen-10, kGreen
+  CredibleRegionColor: [413, 406, 416]
+
+  #KS: Plot only 2D posteriors with correlations greater than 0.2
+  Post2DPlotThreshold: 0.2
+
+  # Used for diagnostic covariance matrix
+  NIntervals: 5
+
+  BayesFactor:
+    # Goes as follows: ParamName Name[Model 1, Model 2], Model1[lower, upper ], Model2[lower, upper ]
+    - ["delm2_23", ["IH", "NH"], [-0.01, 0], [0, 0.01]]
+    - ["sin2th_23", ["LO", "UO"], [0, 0.5], [0.5, 1]]
+
+  #SavageDickey:
+  #  - ["BinnedSplineParam1", 1.0, [0, 2]]  # Last array doesn't matter as parameter has Gaussian
+
+  #BipolarPlot:
+  #  - ["BinnedSplineParam1", [0, 1]]
+
+    #KS: Feel free to pass whatever combination you like
+  #TrianglePlot:
+  #  - ["Test", ["Norm_Param_0", "Norm_Param_1", "BinnedSplineParam1", "BinnedSplineParam2"]]
+
+  #First is paramter name and second number of intervals
+  #ParameterEvolution:
+  #  - ["Norm_Param_0", 20]
+
+  Thinning: [false, 100]
+
+  #First param name, then new prior and new prior error
+  # apply reactor constraints [vector of param names] [vector of new central value] [vector of new prior errors]
+  PriorReweighting: [ ["sin2th_13"], [0.0220], [0.0007] ]
+  #Fancy example, not physics motivated but to show functionality
+  #PriorReweighting: [ ["MAQE", "Pauli_Blocking_C_nu"], [1.05, 0.1], [ 0.04, 0.5] ]
+
+  # This allows to specify custom bin edges for usual 1D plotting
+  CustomBinEdges:
+    delta_cp: [-3.141592, 3.141592]
+
+  BurnInSteps: 200000
+
+#########################################
+#GetPenaltyTerm:
+  #PenaltySets: ["Norm", "Spline"]
+
+  #KS: Goes as vector with names based on which we select, true or false whether we want to be inclusive or exclusive and fancy name
+  #Norm:
+  #  - ["Norm_Param"]
+  #  - false
+  #  - "-logL_{Norm}"
+  #Spline:
+  #  - ["BinnedSplineParam"]
+  #  - false
+  #  - "-logL_{Spline}"

@@ -10,14 +10,14 @@ Binned:
 
 OscProbCalcerSetup:
  ImplementationName: "NuSQUIDSLinear"
-  #PrecisionLimit: 1e-3
+ PrecisionLimit: 1e-5
  NumNeutrinoFlavours: 3
  OscModel: "Decoherence" # SM, Decoherence, LIV, NSI
   #NSIMuTauCoupling: 1.0e-2
  DecoherenceModel: "RandomizeState" # RandomizePhase, RandomizeState, NeutrinoLoss
  IntegrationStep: "500.0"
- RelativeError: "1.0e-5"
- AbsoluteError: "1.0e-5"
+ RelativeError: "1.0e-6"
+ AbsoluteError: "1.0e-4"
  OscChannelMapping:
   - Entry: "Electron:Electron"
   - Entry: "Electron:Muon"

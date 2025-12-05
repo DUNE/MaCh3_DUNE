@@ -86,8 +86,10 @@ int main(int argc, char * argv[]) {
     if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false)) {
       xsec->ThrowParameters();
     }
-    osc->SetParameters();
-    osc->ThrowParameters();
+    osc->SetParameters(FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>());
+    //osc->SetParameters();
+    //osc->ThrowParameters();
+    osc->AcceptStep();
   }
   
 
