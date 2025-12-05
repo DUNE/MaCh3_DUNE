@@ -27,7 +27,9 @@ DetectorVariables:
   ECALOuterRadius: 322.252
   ECALEndCapStart: 329.25
   ECALEndCapEnd: 374.4
-  downsampling: 1.
+  downsampling: 1
+  EDepCrit: 0.002 # Max energy for a contained shower to deposit in the outer crit_layers (GeV)
+  CritLayers: 2 # Number of layers defining this outer region
 
 InputFiles:
   mtupleprefix: "Inputs/DUNE_NDGAr_AnaTrees/NDGAr_FHC_ger_"
@@ -43,7 +45,7 @@ SubSamples:
   - Name: "FHC_numu_x_numu"
     LatexName: "FHC_numu_x_numu"
     mtuplefile: "numu_x_numu"
-    # splinefile: "numu_x_numu"
+      # splinefile: "numu_x_numu"
     splinefile: ""
     nutype: 14
     oscnutype: 14

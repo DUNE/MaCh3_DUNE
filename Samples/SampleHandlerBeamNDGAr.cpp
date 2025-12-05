@@ -22,6 +22,8 @@ void SampleHandlerBeamNDGAr::Init() {
   adc_sampling_frequency = SampleManager->raw()["DetectorVariables"]["adc_sampling_frequency"].as<double>(); //NK sampling frequency for ADC - needed to find timing resolution and spatial resolution in x dir in MHz
   drift_velocity = SampleManager->raw()["DetectorVariables"]["drift_velocity"].as<double>(); //NK drift velocity of electrons in gas - needed to find timing resolution and spatial resolution in x dir in cm/microsecond
   downsampling = SampleManager->raw()["DetectorVariables"]["downsampling"].as<double>(); //JM downsampling fraction
+  edepcrit_threshold = SampleManager->raw()["DetectorVariables"]["EDepCrit"].as<double>(); //JM max energy for a contained shower to deposit in the outer crit_layers of calorimeter 
+  crit_layers = SampleManager->raw()["DetectorVariables"]["CritLayers"].as<int>(); // JM number of layers defining this outer region
   TPCFidLength = SampleManager->raw()["DetectorVariables"]["TPCFidLength"].as<double>();
   TPCFidRadius = SampleManager->raw()["DetectorVariables"]["TPCFidRadius"].as<double>();
   TPCInstrumentedLength = SampleManager->raw()["DetectorVariables"]["TPCInstrumentedLength"].as<double>();
@@ -250,7 +252,7 @@ double SampleHandlerBeamNDGAr::DepthToLayer(double depth, double r) {
   return layer;
 }
 
-double SampleHandlerBeamNDGAr::CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers, const int crit_layers) {
+double SampleHandlerBeamNDGAr::CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers) {
   auto it = mother_to_daughter_ID.find(motherID);
   double EDepCrit = 0.;
   if (it != mother_to_daughter_ID.end()) {
@@ -258,7 +260,7 @@ double SampleHandlerBeamNDGAr::CalcEDepCal(int motherID, std::unordered_map<int,
       EDepCrit += ID_to_ECalDep.at(motherID)[static_cast<size_t>(i_layer)];
     }
     for (int daughterID : it->second) {
-      EDepCrit += CalcEDepCal(daughterID, mother_to_daughter_ID, ID_to_ECalDep, tot_layers, crit_layers);
+      EDepCrit += CalcEDepCal(daughterID, mother_to_daughter_ID, ID_to_ECalDep, tot_layers);
     }
   }
   return EDepCrit;
@@ -423,7 +425,7 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
   double sigmax_frac = sigmax/(std::abs(length_track_x)/100);
   double sigmayz = (spatial_resolution/(1000)); //needs to be in m
   double momres_yz = transverse_mom*(std::sqrt(720/(nhits+4)) * (sigmayz*transverse_mom/(0.3*B_field*(L_yz/100)*(L_yz/100)))
-    * std::sqrt(1.-(1./21)*(L_yz/rad_curvature)*(L_yz/rad_curvature)));
+    * std::sqrt(1.-(1./21.)*(L_yz/rad_curvature)*(L_yz/rad_curvature)));
   double momres_ms = transverse_mom*(0.016/(0.3*B_field*(L_yz/100)*cos(theta_xT)*beta))*std::sqrt(L_yz/X0);
   double momres_tottransverse = std::sqrt(momres_yz*momres_yz + momres_ms*momres_ms)/transverse_mom;
   double sigma_theta = (cos(theta_xT)*cos(theta_xT) * (pitch/(2*M_PI*rad_curvature)) *
@@ -613,7 +615,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     double muon_p2 = 0.;
     double pi0_p2 = 0.;
     bool isEventAccepted = true;
-    int crit_layers = 1; // Number of outer layers of the calorimeter forming the 'critical' region
 
     // Resize vectors for particle-level parameters
     size_t n_prim_in_event = mother_to_daughter_ID[0].size();
@@ -658,7 +659,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       int pdg = _PDG->at(i_anaprim);
       if (pdg == 2112 || std::abs(pdg) == 12 || std::abs(pdg) == 14 || std::abs(pdg) == 16) continue;
 
-      dunendgarmcPlotting[i_event].particle_edepcrit[i_anaprim] = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers, crit_layers);
+      dunendgarmcPlotting[i_event].particle_edepcrit[i_anaprim] = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers);
       dunendgarmcPlotting[i_event].particle_pdg[i_anaprim] = pdg; 
 
       // Check if primary is resolved from curvature
@@ -670,10 +671,10 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       dunendgarmcPlotting[i_event].particle_iscurvatureresolved[i_anaprim] = isCurvatureResolved;
 
       // Find energy deposited by by primary and non-curvature-resolved descendants in critical region of calorimeter
-      double EDepCrit = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers, crit_layers);
+      double EDepCrit = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers);
       // Check for containment
       bool isContained = true;
-      if (EDepCrit > 0.001) {
+      if (EDepCrit > edepcrit_threshold) {
         isContained = false;
       }
 

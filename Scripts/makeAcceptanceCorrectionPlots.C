@@ -36,7 +36,11 @@ TH1* rebinHist(TH1* hist) {
   }
   else if (std::string(hist->GetTitle()).find("LeptonBAngle_EPi0") != std::string::npos) {
     TH2D* hist2D = dynamic_cast<TH2D*>(hist);
-    if (hist2D) return (TH1*)hist2D->Rebin2D(2, 2);
+    if (hist2D) return (TH1*)hist2D->Rebin2D(3, 2);
+  }
+  else if (std::string(hist->GetTitle()).find("LepBAngle_vs_EPi0") != std::string::npos) {
+    TH2D* hist2D = dynamic_cast<TH2D*>(hist);
+    if (hist2D) return (TH1*)hist2D->Rebin2D(3, 2);
   }
   return hist;
 }
@@ -55,6 +59,8 @@ void changeAxisTitle(TAxis* axis) {
   else if (title == "Particle_TrackLengthYZ") axis->SetTitle("Track Length in YZ Plane (cm)");
   else if (title == "Particle_EndX") axis->SetTitle("Track End X (cm)");
   else if (title == "Particle_EndR") axis->SetTitle("Track End Radius (cm)");
+  else if (title == "EPi0") axis->SetTitle("Highest Pi0 Energy (GeV)");
+  else if (title == "LepBAngle") axis->SetTitle("Lepton Angle to B-Field [  #circ ]");
 }
 
 void makeAcceptanceCorrectionPlots(const char* inputfilename) {
@@ -112,6 +118,7 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename) {
       totEntries += rawHist->GetBinContent(rawHist->GetNbinsX()+1);
     }
     else {
+      if (std::string(rawHist->GetTitle()).find("LeptonBAngle_EPi0") != std::string::npos) gPad->SetLogz();
       rawHist->Draw("COLZ");
       totEntries = rawHist->Integral(0, rawHist->GetNbinsX()+1);
     }
@@ -123,6 +130,7 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename) {
 
     rawHist->GetXaxis()->SetTitleOffset(1.3);
     canvas->Print(outputfile);
+    gPad->SetLogz(0);
     std::cout << "Drawn histogram: " << key->GetName() << std::endl;
 
     if (histtitle.size()>9 && histtitle.substr(0,9) == "Accepted_") {
