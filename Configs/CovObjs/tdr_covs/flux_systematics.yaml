@@ -1,0 +1,1189 @@
+Systematics:
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: TargetUpstreamDegredation
+      ParameterName: TargetUpstreamDegredation
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: TargetTiltTransverseY
+      ParameterName: TargetTiltTransverseY
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: TargetTiltTransverseX
+      ParameterName: TargetTiltTransverseX
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: TargetLength
+      ParameterName: TargetLength
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: TargetDisplaceTransverseY
+      ParameterName: TargetDisplaceTransverseY
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: TargetDisplaceTransverseX
+      ParameterName: TargetDisplaceTransverseX
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: TargetDensity
+      ParameterName: TargetDensity
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: ProtonBeamTransverseY
+      ParameterName: ProtonBeamTransverseY
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: ProtonBeamTransverseX
+      ParameterName: ProtonBeamTransverseX
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: ProtonBeamRadius
+      ParameterName: ProtonBeamRadius
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: ProtonBeamAngleY
+      ParameterName: ProtonBeamAngleY
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: ProtonBeamAngleX
+      ParameterName: ProtonBeamAngleX
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornWaterLayerThickness
+      ParameterName: HornWaterLayerThickness
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornCurrent
+      ParameterName: HornCurrent
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornCTiltTransverseY
+      ParameterName: HornCTiltTransverseY
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornCTiltTransverseX
+      ParameterName: HornCTiltTransverseX
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornCEllipticityXInducedBField
+      ParameterName: HornCEllipticityXInducedBField
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornCEccentricityXInducedBField
+      ParameterName: HornCEccentricityXInducedBField
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornCDisplaceLongitudinalZ
+      ParameterName: HornCDisplaceLongitudinalZ
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornBTiltTransverseY
+      ParameterName: HornBTiltTransverseY
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornBTiltTransverseX
+      ParameterName: HornBTiltTransverseX
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornBEllipticityXInducedBField
+      ParameterName: HornBEllipticityXInducedBField
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornBDisplaceLongitudinalZ
+      ParameterName: HornBDisplaceLongitudinalZ
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornATiltTransverseY
+      ParameterName: HornATiltTransverseY
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornATiltTransverseX
+      ParameterName: HornATiltTransverseX
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornAEllipticityXInducedBField
+      ParameterName: HornAEllipticityXInducedBField
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornAEccentricityXInducedBField
+      ParameterName: HornAEccentricityXInducedBField
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornADisplaceLongitudinalZ
+      ParameterName: HornADisplaceLongitudinalZ
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: DecayPipeTiltY
+      ParameterName: DecayPipeTiltY
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: DecayPipeTiltX
+      ParameterName: DecayPipeTiltX
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: DecayPipeRadius
+      ParameterName: DecayPipeRadius
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: DecayPipeLength
+      ParameterName: DecayPipeLength
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: DecayPipeGeoBField
+      ParameterName: DecayPipeGeoBField
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: DecayPipeEllipticalCrossSectionYB
+      ParameterName: DecayPipeEllipticalCrossSectionYB
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: DecayPipeEllipticalCrossSectionXA
+      ParameterName: DecayPipeEllipticalCrossSectionXA
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: DecayPipeDisplaceTransverseY
+      ParameterName: DecayPipeDisplaceTransverseY
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: DecayPipeDisplaceTransverseX
+      ParameterName: DecayPipeDisplaceTransverseX
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: DecayPipe3SegmentBowingY
+      ParameterName: DecayPipe3SegmentBowingY
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: DecayPipe3SegmentBowingX
+      ParameterName: DecayPipe3SegmentBowingX
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornCDisplaceTransverseY
+      ParameterName: HornCDisplaceTransverseY
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornBDisplaceTransverseY
+      ParameterName: HornBDisplaceTransverseY
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornADisplaceTransverseY
+      ParameterName: HornADisplaceTransverseY
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornCDisplaceTransverseX
+      ParameterName: HornCDisplaceTransverseX
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornBDisplaceTransverseX
+      ParameterName: HornBDisplaceTransverseX
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: HornADisplaceTransverseX
+      ParameterName: HornADisplaceTransverseX
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_0
+      ParameterName: Flux_HadProd_Param_0
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_1
+      ParameterName: Flux_HadProd_Param_1
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_2
+      ParameterName: Flux_HadProd_Param_2
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_3
+      ParameterName: Flux_HadProd_Param_3
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_4
+      ParameterName: Flux_HadProd_Param_4
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_5
+      ParameterName: Flux_HadProd_Param_5
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_6
+      ParameterName: Flux_HadProd_Param_6
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_7
+      ParameterName: Flux_HadProd_Param_7
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_8
+      ParameterName: Flux_HadProd_Param_8
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_9
+      ParameterName: Flux_HadProd_Param_9
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_10
+      ParameterName: Flux_HadProd_Param_10
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_11
+      ParameterName: Flux_HadProd_Param_11
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_12
+      ParameterName: Flux_HadProd_Param_12
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_13
+      ParameterName: Flux_HadProd_Param_13
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_14
+      ParameterName: Flux_HadProd_Param_14
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_15
+      ParameterName: Flux_HadProd_Param_15
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_16
+      ParameterName: Flux_HadProd_Param_16
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_17
+      ParameterName: Flux_HadProd_Param_17
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_18
+      ParameterName: Flux_HadProd_Param_18
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_19
+      ParameterName: Flux_HadProd_Param_19
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional
+- Systematic:
+    Sample_Name:
+    - ND*
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: Flux_HadProd_Param_20
+      ParameterName: Flux_HadProd_Param_20
+    ParameterBounds:
+    - -5.0
+    - 5.0
+    ParameterGroup: FluxSys
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 0.05
+    Type: Functional

@@ -79,6 +79,8 @@ struct dunemc_beamoffaxis
     : public dunemc_beamnd { // Store variables used by SampleHandlerBeamND
   struct {
     double LepE;
+    double LepE_sqrt;
+    double LepE_invsqrt;
     double LepNuAngle;
     double eP;
     double ePip;

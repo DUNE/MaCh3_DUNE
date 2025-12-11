@@ -106,6 +106,7 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
       [this](const double *par, std::size_t iEvent) {
         dunemcSamples[iEvent].shift.erec +=
             (*par) * dunemcSamples[iEvent].syst.EHad_sqrt;
+        
       });
 
   RegisterIndividualFunctionalParameter(
@@ -119,7 +120,7 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
       "TotalEScaleND_mu", kTotalEScaleND_mu,
       [this](const double *par, std::size_t iEvent) {
         dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].reco.ELep;
+            (*par) * (dunemcSamples[iEvent].reco.ELep);
       });
 
   RegisterIndividualFunctionalParameter(
@@ -501,6 +502,8 @@ if (CAFMetaChain.GetEntries() == 0) {
 
     // fill dunemc_beamoffaxis
     dunemcSamples[iEvent].truth.LepE = *LepE;
+    dunemcSamples[iEvent].truth.LepE_sqrt= sqrt(*LepE);
+    dunemcSamples[iEvent].truth.LepE_invsqrt= 1.0/sqrt(*LepE);
     dunemcSamples[iEvent].truth.LepNuAngle = *LepNuAngle;
     dunemcSamples[iEvent].truth.eP = *eP;
     dunemcSamples[iEvent].truth.ePip = *ePip;
