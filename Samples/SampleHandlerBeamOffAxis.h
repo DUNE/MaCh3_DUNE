@@ -29,11 +29,12 @@ public:
   X(TrueXPos)                                                                  \
   X(TrueYPos)                                                                  \
   X(TrueZPos)                                                                  \
-  X(M3Mode)                                                                      \
+  X(Mode)                                                                    \
   X(IsFHC)                                                                     \
   X(ELepRec)                                                                   \
-  X(Enubias)
-
+  X(Enubias)                                                                   \
+  X(isCC)                                                                      \
+  X(OscillationChannel)                                                                                                                                                                                   
 #define X(a) k##a,
 
   /// @brief Enum to identify kinematics
@@ -77,6 +78,8 @@ protected:
 
   void RegisterFunctionalParameters() override;
   void resetShifts(int iEvent) override;
+
+  double CalculatePOT();
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter Type

@@ -4,6 +4,7 @@
 
 #include "TTreeReader.h"
 #include "TTreeReaderValue.h"
+#include <iostream>
 
 SampleHandlerBeamOffAxis::SampleHandlerBeamOffAxis(
     std::string mc_version_, ParameterHandlerGeneric *ParHandler_,
@@ -13,6 +14,42 @@ SampleHandlerBeamOffAxis::SampleHandlerBeamOffAxis(
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
 
   Initialise();
+}
+
+double SampleHandlerBeamOffAxis::CalculatePOT() {
+  TChain calc_pot_chain("meta");  // Use correct tree name
+
+  std::string pot_branch = "pot";  // Use the correct branch name
+
+  for (size_t i = 0; i < mc_files.size(); ++i) {
+    calc_pot_chain.AddFile(mc_files[i].c_str());
+}
+
+std::cout << "Added " << calc_pot_chain.GetListOfFiles()->GetEntries()
+          << " files to POT chain" << std::endl;
+
+std::cout << "calc_pot_chain.GetEntries() = "
+          << calc_pot_chain.GetEntries() << std::endl;
+
+
+  // Check if the branch exists before proceeding
+  if (!calc_pot_chain.GetBranch(pot_branch.c_str())) {
+      std::cerr << "Error: Branch " << pot_branch << " not found in the tree!" << std::endl;
+      return 0.0;
+  }
+
+  double pot_value = 0.0;
+  calc_pot_chain.SetBranchAddress(pot_branch.c_str(), &pot_value);
+
+  double sum_pot = 0.0;
+  Long64_t nEntries = calc_pot_chain.GetEntries();
+  for (Long64_t i = 0; i < nEntries; i++) {
+      calc_pot_chain.GetEntry(i);
+      sum_pot += pot_value;
+  }
+
+  std::cout << "Summed POT: " << sum_pot << std::endl;
+  return sum_pot;
 }
 
 SampleHandlerBeamOffAxis::~SampleHandlerBeamOffAxis() {}
@@ -25,6 +62,13 @@ void SampleHandlerBeamOffAxis::Init() {
                    SampleManager->GetFileName());
     throw MaCh3Exception(__FILE__, __LINE__);
   }
+  if (CheckNodeExists(SampleManager->raw(), "POT")) {
+        pot = SampleManager->raw()["POT"].as<double>();
+    } else {
+        MACH3LOG_ERROR("POT not defined in {}, please add this!", SampleManager->GetFileName());
+        throw MaCh3Exception(__FILE__, __LINE__);
+    }
+
 }
 
 void SampleHandlerBeamOffAxis::SetupSplines() {
@@ -61,15 +105,14 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
       "TotalEScaleND_sqrt", kTotalEScaleND_sqrt,
       [this](const double *par, std::size_t iEvent) {
         dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].reco.EHad *
-            dunemcSamples[iEvent].syst.EHad_sqrt;
+            (*par) * dunemcSamples[iEvent].syst.EHad_sqrt;
       });
 
   RegisterIndividualFunctionalParameter(
       "TotalEScaleND_invsqrt", kTotalEScaleND_invsqrt,
       [this](const double *par, std::size_t iEvent) {
         dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].syst.EHad_sqrt;
+            (*par) * dunemcSamples[iEvent].syst.EHad_sqrt / dunemcSamples[iEvent].reco.EHad;
       });
 
   RegisterIndividualFunctionalParameter(
@@ -83,15 +126,14 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
       "TotalEScaleND_musqrt", kTotalEScaleND_musqrt,
       [this](const double *par, std::size_t iEvent) {
         dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].reco.ELep *
-            dunemcSamples[iEvent].syst.ELep_sqrt;
+            (*par) * dunemcSamples[iEvent].syst.ELep_sqrt;
       });
 
   RegisterIndividualFunctionalParameter(
       "TotalEScaleND_muinvsqrt", kTotalEScaleND_muinvsqrt,
       [this](const double *par, std::size_t iEvent) {
         dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].syst.ELep_sqrt;
+            (*par) * dunemcSamples[iEvent].syst.ELep_sqrt/ dunemcSamples[iEvent].reco.ELep  ;
       });
 
   RegisterIndividualFunctionalParameter(
@@ -105,15 +147,14 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
       "TotalEScaleND_hadsqrt", kTotalEScaleND_hadsqrt,
       [this](const double *par, std::size_t iEvent) {
         dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].reco.sum_ehad *
-            dunemcSamples[iEvent].syst.sum_ehad_sqrt;
+            (*par) * dunemcSamples[iEvent].syst.sum_ehad_sqrt;
       });
 
   RegisterIndividualFunctionalParameter(
       "TotalEScaleND_hadinvsqrt", kTotalEScaleND_hadinvsqrt,
       [this](const double *par, std::size_t iEvent) {
         dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].syst.sum_ehad_sqrt;
+            (*par) * dunemcSamples[iEvent].syst.sum_ehad_sqrt / dunemcSamples[iEvent].reco.sum_ehad ;
       });
 
   RegisterIndividualFunctionalParameter(
@@ -129,10 +170,9 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
       [this](const double *par, std::size_t iEvent) {
         dunemcSamples[iEvent].shift.erec +=
             (*par) *
-            (dunemcSamples[iEvent].reco.ePi0 -
-             dunemcSamples[iEvent].truth.ePi0) *
             sqrt((dunemcSamples[iEvent].reco.ePi0 -
-                  dunemcSamples[iEvent].truth.ePi0));
+                  dunemcSamples[iEvent].truth.ePi0))/((dunemcSamples[iEvent].reco.ePi0 -
+             dunemcSamples[iEvent].truth.ePi0));
       });
 
   RegisterIndividualFunctionalParameter(
@@ -198,6 +238,21 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
   MACH3LOG_INFO("Finished registering functional parameters");
 }
 
+void PrintFluxParameterNames() {
+  auto& helper = OffAxisFluxUncertaintyHelper::Get();
+
+  std::cout << "=== Focusing Flux Params ===\n";
+  for (size_t i = 0; i < helper.GetNFocussingParams(); i++) {
+    std::cout << helper.GetFocussingParamName(i) << "\n";
+  }
+
+  std::cout << "=== Hadron-Production PCA Params ===\n";
+  for (size_t i = 0; i < helper.GetNHadProdPCAComponents(); i++) {
+    std::cout << "Flux_HadProd_Param_" << i << "\n";
+  }
+}
+
+
 // HH: Reset the shifted values to the original values
 void SampleHandlerBeamOffAxis::resetShifts(int iEvent) {
   dunemcSamples[iEvent].shift.erec = dunemcSamples[iEvent].rw_erec;
@@ -206,14 +261,17 @@ void SampleHandlerBeamOffAxis::resetShifts(int iEvent) {
 // =================================
 
 void SampleHandlerBeamOffAxis::SetupWeightPointers() {
+  //std::cout<< "WEIGHT POINTERS = " << std::endl;
   for (size_t i = 0; i < dunemcSamples.size(); ++i) {
-    MCSamples[i].total_weight_pointers.push_back(&(dunemcSamples[i].pot_s));
-    MCSamples[i].total_weight_pointers.push_back(&(dunemcSamples[i].norm_s));
-    MCSamples[i].total_weight_pointers.push_back(MCSamples[i].osc_w_pointer);
-    MCSamples[i].total_weight_pointers.push_back(
-        &(dunemcSamples[i].rw_berpaacvwgt));
+     MCSamples[i].total_weight_pointers.push_back(&(dunemcSamples[i].pot_s));
+     MCSamples[i].total_weight_pointers.push_back(&(dunemcSamples[i].norm_s));
+    // MCSamples[i].total_weight_pointers.push_back(MCSamples[i].osc_w_pointer);
+    // MCSamples[i].total_weight_pointers.push_back(
+    //     &(dunemcSamples[i].rw_berpaacvwgt));
     MCSamples[i].total_weight_pointers.push_back(&(dunemcSamples[i].flux_w));
-    MCSamples[i].total_weight_pointers.push_back(&(MCSamples[i].xsec_w));
+
+    //std::cout<< "dunemcSamples[i].pot_s = " << dunemcSamples[i].pot_s << "&(dunemcSamples[i].norm_s)" << (dunemcSamples[i].norm_s) << (dunemcSamples[i].flux_w) << std::endl;
+   // MCSamples[i].total_weight_pointers.push_back(&(MCSamples[i].xsec_w));
   }
 }
 
@@ -257,9 +315,11 @@ double ERecQE(int nupdg, bool isCC, double el, double leptheta) {
 
 int SampleHandlerBeamOffAxis::SetupExperimentMC() {
 
+  
+
   MACH3LOG_INFO(
       "-------------------------------------------------------------------");
-  TChain CAFChain("caf");
+  TChain CAFChain("cafTree");
   TChain CAFMetaChain("meta");
   for (size_t iSample = 0; iSample < mc_files.size(); iSample++) {
     MACH3LOG_INFO("Adding file to TChains: {}", mc_files[iSample]);
@@ -279,9 +339,72 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
   MACH3LOG_INFO("Number of entries in CAF TChain: {}", CAFChain.GetEntries());
 
   TTreeReader chrdr(&CAFChain);
+  TTreeReader chrdr_meta(&CAFMetaChain);
+
+  double _production_pot = 0.0;
+  double gen_pot = 0.0;
+
+// -------------------------------------------------------------------
+// Read META POT from chain
+// -------------------------------------------------------------------
+
+if (CAFMetaChain.GetEntries() == 0) {
+
+    MACH3LOG_WARN("META chain is empty — setting POT = 1.0");
+    gen_pot = 1.0;
+
+} else if (!CAFMetaChain.GetBranch("pot")) {
+
+    MACH3LOG_WARN("META chain has no 'pot' branch — setting POT = 1.0");
+    gen_pot = 1.0;
+
+} else {
+
+    std::cout << "Found 'pot' branch in meta chain" << std::endl;
+
+    CAFMetaChain.SetBranchStatus("*", 0);
+    CAFMetaChain.SetBranchStatus("pot", 1);
+    CAFMetaChain.SetBranchAddress("pot", &_production_pot);
+
+    for (Long64_t i = 0; i < CAFMetaChain.GetEntries(); i++) {
+        CAFMetaChain.GetEntry(i);
+        gen_pot += _production_pot;
+    }
+}
+
+  // --- Calculate generated POT and sum POT from CAF files ---
+  if (gen_pot <= 0) {
+      MACH3LOG_ERROR("gen_pot is zero or negative. Aborting.");
+      throw MaCh3Exception(__FILE__, __LINE__);
+  }
+
+  // Calculate POT from the CAF files
+  double newpot = CalculatePOT();  // sums the 'pot' branch in 'meta' tree
+
+  if (newpot <= 0) {
+      MACH3LOG_WARN("CalculatePOT() returned <= 0. Forcing newpot = 1.");
+      newpot = 1.0;  // avoid division by zero
+  }
+
+  // Assign the nominal generated POT
+  //pot = gen_pot;
+
+  // Compute POT scaling factor to normalize event weights
+  double pot_scaling = pot / newpot;
+
+  std::cout<< "POT in yaml file =  " << pot
+                  << ", Summed CAF POT: " << newpot
+                  << ", Scaling factor = pot/newpot: " << pot_scaling << std::endl;
+
+
+//fDUNEObj->norm_s = 1.0;
+//fDUNEObj->pot_s = pot / newpot;
+
+//std::cout << "Computed POT scaling = " << fDUNEObj->pot_s << std::endl;
+
 
   // Reco Variables
-  TTreeReaderValue<double> erec(chrdr, "erec");
+  TTreeReaderValue<double> Ev_reco(chrdr, "Ev_reco"); // Ev_reco 
   TTreeReaderValue<double> Elep_reco(chrdr, "Elep_reco");
 
   TTreeReaderValue<int> reco_numu(chrdr, "reco_numu");
@@ -301,7 +424,7 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
 
   // Truth Variables
   TTreeReaderValue<int> mode(chrdr, "mode");
-  TTreeReaderValue<double> ev(chrdr, "ev");
+  TTreeReaderValue<double> Ev(chrdr, "Ev");
 
   TTreeReaderValue<double> LepE(chrdr, "LepE");
   TTreeReaderValue<double> LepNuAngle(chrdr, "LepNuAngle");
@@ -335,9 +458,18 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
   negative_counts["rw_eRecoPi0"] = 0;
   negative_counts["rw_sum_ehad"] = 0;
 
+
+  /////////////////////////////////////
+
+
   size_t iEvent = 0;
+  //std::cout<< "just before while..." << std::endl;
   while (chrdr.Next()) {
 
+    dunemcSamples[iEvent].norm_s = 1.0;
+    dunemcSamples[iEvent].pot_s  = pot_scaling;
+    //std::cout << "Computed POT scaling = " << pot_scaling << std::endl;
+    //std::cout<< "just TTreeReaderValue<double> Erec(reader, "RecoNeutrinoEnergy"); while..." << std::endl;
     // fill dunemc_base
     dunemcSamples[iEvent].Target = kTarget_Ar;
 
@@ -346,13 +478,17 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
 
     dunemcSamples[iEvent].rw_isCC = *isCC;
 
-    dunemcSamples[iEvent].OscChannelIndex = static_cast<double>(
-        GetOscChannel(OscChannels, dunemcSamples[iEvent].nupdgUnosc,
-                      dunemcSamples[iEvent].nupdg));
+    dunemcSamples[iEvent].OscChannelIndex = 0; 
+    // static_cast<double>(
+    //     GetOscChannel(OscChannels, dunemcSamples[iEvent].nupdgUnosc,
+    //                   dunemcSamples[iEvent].nupdg));
 
-    dunemcSamples[iEvent].rw_erec = *erec;
-    dunemcSamples[iEvent].rw_etru = *ev;
+    dunemcSamples[iEvent].rw_erec = *Ev_reco;
+    dunemcSamples[iEvent].rw_etru = *Ev;
     dunemcSamples[iEvent].flux_w = 1.0;
+
+    //std::cout << "rw_erec = " << *Ev_reco << std::endl;
+    //std::cout << "OscChannelIndec = " << static_cast<double>(GetOscChannel(OscChannels, dunemcSamples[iEvent].nupdgUnosc,dunemcSamples[iEvent].nupdg)) << std::endl;
 
     int M3Mode = Modes->GetModeFromGenerator(std::abs(*mode));
     if (!*isCC) {
@@ -413,7 +549,7 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
                dunemcSamples[iEvent].truth.LepE,
                dunemcSamples[iEvent].truth.LepNuAngle);
 
-    dunemcSamples[iEvent].truth.off_axis_pos_m = *det_x * 100 + *vtx_x;
+    dunemcSamples[iEvent].truth.off_axis_pos_m = (*det_x + *vtx_x)/100.0;
 
     auto nucfg = OffAxisFluxUncertaintyHelper::Get().GetNuConfig(
         dunemcSamples[iEvent].nupdg, true, isFHC, false);
@@ -441,6 +577,14 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
               i, flux_hadprod_systbin, nucfg));
     }
 
+    std::cout << "Event " << iEvent
+          << "  nupdg=" << dunemcSamples[iEvent].nupdg
+          << "  Etrue=" << dunemcSamples[iEvent].rw_etru
+          << "  offaxis=" << dunemcSamples[iEvent].truth.off_axis_pos_m
+          << "  FocBin=" << flux_focussing_systbin
+          << "  HadBin=" << flux_hadprod_systbin
+          << std::endl;
+
     // HH: Give a warning if any negative energies were found
     for (const auto &[key, count] : negative_counts) {
       if (count > 0) {
@@ -448,7 +592,14 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
                       key, GetSampleName());
       }
     }
+
+    ++iEvent; //for pot?
   }
+
+  PrintFluxParameterNames();
+
+
+
 
   return int(dunemcSamples.size());
 }
@@ -467,7 +618,7 @@ SampleHandlerBeamOffAxis::GetPointerToKinematicParameter(KinematicTypes KinPar,
     return &dunemcSamples[iEvent].truth.vtx_y;
   case kTrueZPos:
     return &dunemcSamples[iEvent].truth.vtx_z;
-  case kM3Mode:
+  case kMode:
     return &dunemcSamples[iEvent].mode;
   case kIsFHC:
     return &isFHC;
@@ -475,6 +626,10 @@ SampleHandlerBeamOffAxis::GetPointerToKinematicParameter(KinematicTypes KinPar,
     return &dunemcSamples[iEvent].reco.ELep;
   case kEnubias:
     return &dunemcSamples[iEvent].truth.enu_bias;
+  case kisCC:
+    return &dunemcSamples[iEvent].rw_isCC;
+  case kOscillationChannel:
+    return &dunemcSamples[iEvent].OscChannelIndex;
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
     throw MaCh3Exception(__FILE__, __LINE__);
@@ -515,3 +670,7 @@ void SampleHandlerBeamOffAxis::SetupFDMC() {
     MCSamples[iEvent].nupdgUnosc = &(dunemcSamples[iEvent].nupdgUnosc);
   }
 }
+
+
+
+

@@ -10,9 +10,9 @@ struct dunemc_base { // Store variables used in fitting
 
   int nupdg;
   int nupdgUnosc;
-  int rw_isCC;
+  double rw_isCC;
   double OscChannelIndex;
-
+  int _isCC;
   double rw_erec;
   double rw_etru;
 
