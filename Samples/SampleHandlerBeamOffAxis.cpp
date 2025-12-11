@@ -674,6 +674,114 @@ void SampleHandlerBeamOffAxis::SetupFDMC() {
   }
 }
 
+std::vector<std::vector<std::vector<std::vector<TH2D*>>>> SampleHandlerBeamOffAxis::GetBinnedWeights(std::vector <std::string> ParamNames, std::vector<std::vector<int>> ParamModes, std::vector<double> TrueEBins) {
 
 
+  //Vector Structure:
+  //Parameter<Knot<ETrue<InteractionMode<TH2D>>>
 
+  std::vector<std::vector<std::vector<std::vector<TH2D*>>>> histVec;
+  std::vector<std::vector<std::vector<std::vector<TH2D*>>>> NomVec;
+  int nshifts = 7;
+
+  //True Energy Binning
+  int NTrueEBins = static_cast<int>(TrueEBins.size()) - 1;
+  TH1D* TrueEbinning = new TH1D("Template True E binning", "", NTrueEBins, TrueEBins.data());
+
+  //Sample Binning
+  std::vector<double> BinEdgesX = ReturnKinematicParameterBinning(GetXBinVarName());
+  int NBinsX =  static_cast<int>(BinEdgesX.size()) - 1;
+
+  std::vector<double> BinEdgesY = ReturnKinematicParameterBinning(GetYBinVarName()); 
+  int NBinsY =  static_cast<int>(BinEdgesY.size()) - 1;
+
+  //Setup Histograms
+  for (size_t iParam = 0; iParam < ParamNames.size(); iParam++) {
+    for (int shift; shift < nshifts; shift++) {
+      for(size_t mode = 0; mode < ParamModes[iParam].size(); mode++) {
+        for (int b_etrue = 0; b_etrue < NTrueEBins; b_etrue++) {
+
+          histVec[iParam][shift][mode][b_etrue] = new TH2D(Form("shift_p:%zu_shift:%d_mode:%zu_b_etrue:%d", iParam, shift, mode, b_etrue), "", NBinsX, BinEdgesX.data(), NBinsY, BinEdgesY.data());
+          
+	  NomVec[iParam][shift][mode][b_etrue] = new TH2D(Form("nom_p:%zu_shift:%d_mode:%zu_b_etrue:%d", iParam, shift, mode, b_etrue), "", NBinsX, BinEdgesX.data(), NBinsY, BinEdgesY.data());
+
+	}
+      }
+    }
+  }
+  
+
+  //TChain to store MC which contains weight information
+  TChain* MCData = new TChain("caf");
+
+  //Read all files into TChain 	
+  for (size_t iSample = 0; iSample < mc_files.size(); iSample++) {
+    MACH3LOG_INFO("Adding file to TChains: {}", mc_files[iSample]);
+
+    // HH: Check whether the file exists, see
+    // https://root.cern/doc/master/classTChain.html#a78a896924ac6c7d3691b7e013bcbfb1c
+    if (!MCData->Add(mc_files[iSample].c_str(), -1)) {
+      MACH3LOG_ERROR("Could not add file {} to TChain, please check the file "
+                     "exists and is readable",
+                     mc_files[iSample]);
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+
+    MCData->Add(mc_files[iSample].c_str(), -1);
+  }
+    
+  MCData->SetBranchStatus("*", 0);
+  int NEvents = static_cast<int>(MCData->GetEntries());
+
+  for (int iEvent = 0; iEvent < NEvents; iEvent++) {
+    double x_var = ReturnKinematicParameter(GetXBinVarName(), iEvent);
+    double y_var = ReturnKinematicParameter(GetYBinVarName(), iEvent);
+
+    //skip if event does not pass selections
+    if(!IsEventSelected(iEvent)) {continue;}
+
+    int TrueEbin = TrueEbinning->FindBin(dunemcSamples[iEvent].rw_etru) - 1;
+
+    for (size_t iParam = 0; iParam < ParamNames.size(); iParam++) {
+    
+      std::string FancyName = ParamNames[iParam];
+      std::string WeightBranchName = "wgt_" + FancyName;
+      std::string CVBranchName = FancyName + "_cvwgt";
+
+      for (int mode : ParamModes[iParam]) {
+      
+        if (mode == dunemcSamples[iEvent].mode)
+        {		
+
+          double weightArr[1000];
+          double cvweight;
+
+
+          MCData->SetBranchAddress(WeightBranchName.c_str(), &weightArr);
+          MCData->SetBranchAddress(CVBranchName.c_str(), &cvweight);
+          MCData->GetEntry(iEvent);
+        
+          for (int shift = 0; shift < nshifts; shift++) {
+            histVec[iParam][shift][mode][TrueEbin]->Fill(x_var, y_var, weightArr[shift]);
+            NomVec[iParam][shift][mode][TrueEbin]->Fill(x_var, y_var, 1.0);
+          }
+        }
+      }
+    }
+  }
+
+  // Take the ratio
+  for (size_t iParam = 0; iParam < ParamNames.size(); iParam++) {
+    for (int shift; shift < nshifts; shift++) {
+      for(size_t mode = 0; mode < ParamModes[iParam].size(); mode++) {
+        for (int b_etrue = 0; b_etrue < NTrueEBins; b_etrue++) {
+          histVec[iParam][shift][mode][b_etrue]->Divide(NomVec[iParam][shift][mode][b_etrue]);
+	}
+      }
+    }
+  }
+
+  // return final vector of response histograms
+  return histVec;
+
+}
