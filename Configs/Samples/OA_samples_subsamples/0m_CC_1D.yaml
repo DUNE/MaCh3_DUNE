@@ -8,14 +8,15 @@
 # isfitqun = true for fitqun variable samples false otherwise #default to true
 #Add samples to the sample list as shown below
 SampleTitle: "ND_FHC_CCnumu"
-SampleType: "BeamFD"
+#SampleType: "Beam"
 SampleName: "ND"
-MaCh3ModeConfig: "configs/CovObjs/MaCh3Modes_GENIE.yaml"
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
 SelectionCuts:
 POT: 9.99328e+16 #9.99328e+18 #9.99328e+21 #9.99328e+6 #7.24e+21
 DUNESampleBools:
   isFHC: 1
   iselike: no
+BinningFile: "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/TutorialConfigs/TutorialBinning.yaml"
 SelectionCuts:
   - KinematicStr: "TrueXPos"
     Bounds: [ -310.0, 310.0 ]
@@ -30,15 +31,16 @@ SelectionCuts:
   - KinematicStr: "RecoNeutrinoEnergy"
     Bounds: [ 0.1, 9999 ]
 Binning:
-   Axes:
-    - VarStr: RecoNeutrinoEnergy
-      Uniform: [60, 0.0, 6.0]
-      Title: E_{#nu}^{Rec} [GeV]
+   #XVarStr: RecoNeutrinoEnergy
+   #XVarBins: [60, 0.0, 6.0]
+   XVarStr: "TrueNeutrinoEnergy"
+   XVarBins: [0., 0.25, 0.5, 0.75, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 4.25, 4.5, 4.75, 5., 5.25, 5.5, 5.75, 6., 6.25, 6.5, 6.75, 7., 7.25, 7.5, 7.75, 8., 8.25, 8.5, 8.75, 9., 9.25, 9.5, 9.75, 10., 1000.]
+
 ForceGeneric: True
 DUNESampleBools:
   iselike: no
 NuOsc:
-  NuOscConfigFile: "configs/NuOsc/NuFASTLinear.yaml"
+  NuOscConfigFile: "Configs/NuOsc/NuFASTLinear.yaml"
   EqualBinningPerOscChannel: false
 InputFiles:
   mtupleprefix: "inputs/"

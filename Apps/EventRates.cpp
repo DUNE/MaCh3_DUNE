@@ -44,7 +44,7 @@ int main(int argc, char * argv[]) {
   MaCh3Utils::MaCh3Usage(argc, argv);
   auto fitMan = MaCh3ManagerFactory(argc, argv);
 
-  //###############################################################################################################################
+  //############################################################################################################################
   //Create SampleHandlerFD objects
   
   ParameterHandlerGeneric* xsec = nullptr;
@@ -77,25 +77,25 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("Oscillation Mode Breakdown:");
   
-  for(auto Sample : DUNEPdfs) {
-    MACH3LOG_INFO("======================");
-    int nOscChannels = Sample->GetNOscChannels();
-    for (int iOscChan=0;iOscChan<nOscChannels;iOscChan++) {
-      std::vector< KinematicCut > SelectionVec;
+  // for(auto Sample : DUNEPdfs) {
+  //   MACH3LOG_INFO("======================");
+  //   int nOscChannels = Sample->GetNOscChannels();
+  //   for (int iOscChan=0;iOscChan<nOscChannels;iOscChan++) {
+  //     std::vector< KinematicCut > SelectionVec;
 
-      KinematicCut SelecChannel;
-      SelecChannel.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString("OscillationChannel");
-      SelecChannel.LowerBound = iOscChan;
-      SelecChannel.UpperBound = iOscChan+1;
-      SelectionVec.push_back(SelecChannel);
+  //     KinematicCut SelecChannel;
+  //     SelecChannel.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString("OscillationChannel");
+  //     SelecChannel.LowerBound = iOscChan;
+  //     SelecChannel.UpperBound = iOscChan+1;
+  //     SelectionVec.push_back(SelecChannel);
       
-      TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName(),SelectionVec);
-      MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetTitle(),Sample->GetFlavourName(iOscChan),Hist->Integral());
-    }
+  //     TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName(),SelectionVec);
+  //     MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetTitle(),Sample->GetFlavourName(iOscChan),Hist->Integral());
+  //   }
 
-    TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName());
-    MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetTitle(),Hist->Integral());
-  }
+  //   TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName());
+  //   MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetTitle(),Hist->Integral());
+  // }
 
   //###############################################################################################################################
   //Make interaction channel breakdown

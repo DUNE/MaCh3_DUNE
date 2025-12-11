@@ -22,7 +22,7 @@ int main(int argc, char * argv[]) {
   //###############################################################################################################################
 
   //DB Sigma variations in units of each parameters Sigma
-  std::vector<double> sigmaVariations = {-3, -1, 0, 1, 3};
+  std::vector<double> sigmaVariations = {-3, -2, -1, 0, 1, 2, 3};
 
   //###############################################################################################################################
   //Create samplePDFFD objects

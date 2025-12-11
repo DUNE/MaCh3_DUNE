@@ -16,7 +16,7 @@ OffAxisFluxUncertaintyHelper const &OffAxisFluxUncertaintyHelper::Get() {
     globalFluxHelper = new OffAxisFluxUncertaintyHelper();
     globalFluxHelper->Initialize(
         std::string(std::getenv("MACH3")) +
-        "/utils/flux_systs/flux_variations_FD_and_PRISM_2023.root");
+        "/Systematics/Flux/flux_variations_FD_and_PRISM_2023.root");
   }
   return *globalFluxHelper;
 }

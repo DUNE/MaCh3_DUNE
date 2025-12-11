@@ -1,0 +1,565 @@
+Systematics:
+  - Systematic:
+      Sample_Name: ["ND"]
+      Error: 0.02           # Width of Gaussian prior
+      FlatPrior: false        # Can also set true if you want fully unbounded
+      Names:
+        FancyName: TotalEScaleND
+        ParameterName: TotalEScaleND
+      ParameterBounds:
+      - -1.0                
+      - 1.0                 
+      ParameterGroup: DetSys
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.05            # Optional: adjust scan step size
+      Type: Functional
+  - Systematic:
+      Sample_Name: ["ND"]
+      Error: 0.02              # Width of Gaussian prior
+      FlatPrior: false        # Can also set true if you want fully unbounded
+      Names:
+        FancyName: TotalEScaleND_invsqrt
+        ParameterName: TotalEScaleND_invsqrt
+      ParameterBounds:
+      - -1.0                
+      - 1.0                 
+      ParameterGroup: DetSys
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.05            # Optional: adjust scan step size
+      Type: Functional
+  - Systematic:
+      Sample_Name: ["ND"]
+      Error: 0.02              # Width of Gaussian prior
+      FlatPrior: false        # Can also set true if you want fully unbounded
+      Names:
+        FancyName: TotalEScaleND_sqrt
+        ParameterName: TotalEScaleND_sqrt
+      ParameterBounds:
+      - -1.0                
+      - 1.0                 
+      ParameterGroup: DetSys
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.05            # Optional: adjust scan step size
+      Type: Functional
+  - Systematic:
+      Sample_Name: ["ND"]
+      Error: 0.02              # Width of Gaussian prior
+      FlatPrior: false        # Can also set true if you want fully unbounded
+      Names:
+        FancyName: TotalEScaleND_mu
+        ParameterName: TotalEScaleND_mu
+      ParameterBounds:
+      - -1.0                
+      - 1.0                 
+      ParameterGroup: DetSys
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.05            # Optional: adjust scan step size
+      Type: Functional
+  - Systematic:
+      Sample_Name: ["ND"]
+      Error: 0.02              # Width of Gaussian prior
+      FlatPrior: false        # Can also set true if you want fully unbounded
+      Names:
+        FancyName: TotalEScaleND_musqrt
+        ParameterName: TotalEScaleND_musqrt
+      ParameterBounds:
+      - -1.0                
+      - 1.0                 
+      ParameterGroup: DetSys
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.05            # Optional: adjust scan step size
+      Type: Functional
+  - Systematic:
+      Sample_Name: ["ND"]
+      Error: 0.02              # Width of Gaussian prior
+      FlatPrior: false        # Can also set true if you want fully unbounded
+      Names:
+        FancyName: TotalEScaleND_muinvsqrt
+        ParameterName: TotalEScaleND_muinvsqrt
+      ParameterBounds:
+      - -1.0                
+      - 1.0                 
+      ParameterGroup: DetSys
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.05            # Optional: adjust scan step size
+      Type: Functional
+  - Systematic:
+      Sample_Name: ["ND"]
+      Error: 0.02              # Width of Gaussian prior
+      FlatPrior: false        # Can also set true if you want fully unbounded
+      Names:
+        FancyName: TotalEScaleND_had
+        ParameterName: TotalEScaleND_had
+      ParameterBounds:
+      - -1.0                
+      - 1.0                 
+      ParameterGroup: DetSys
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.05            # Optional: adjust scan step size
+      Type: Functional
+  - Systematic:
+      Sample_Name: ["ND"]
+      Error: 0.02              # Width of Gaussian prior
+      FlatPrior: false        # Can also set true if you want fully unbounded
+      Names:
+        FancyName: TotalEScaleND_hadsqrt
+        ParameterName: TotalEScaleND_hadsqrt
+      ParameterBounds:
+      - -1.0                
+      - 1.0                 
+      ParameterGroup: DetSys
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.05            # Optional: adjust scan step size
+      Type: Functional
+  - Systematic:
+      Sample_Name: ["ND"]
+      Error: 0.02              # Width of Gaussian prior
+      FlatPrior: false        # Can also set true if you want fully unbounded
+      Names:
+        FancyName: TotalEScaleND_hadinvsqrt
+        ParameterName: TotalEScaleND_hadinvsqrt
+      ParameterBounds:
+      - -1.0                
+      - 1.0                 
+      ParameterGroup: DetSys
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.05            # Optional: adjust scan step size
+      Type: Functional
+  - Systematic:
+      Sample_Name: ["ND"]
+      Error: 0.02              # Width of Gaussian prior
+      FlatPrior: false        # Can also set true if you want fully unbounded
+      Names:
+        FancyName: TotalEScaleND_EM
+        ParameterName: TotalEScaleND_EM
+      ParameterBounds:
+      - -1.0                
+      - 1.0                 
+      ParameterGroup: DetSys
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.05            # Optional: adjust scan step size
+      Type: Functional
+  - Systematic:
+      Sample_Name: ["ND"]
+      Error: 0.02              # Width of Gaussian prior
+      FlatPrior: false        # Can also set true if you want fully unbounded
+      Names:
+        FancyName: TotalEScaleND_EMinvsqrt
+        ParameterName: TotalEScaleND_EMinvsqrt
+      ParameterBounds:
+      - -1.0                
+      - 1.0                 
+      ParameterGroup: DetSys
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.05            # Optional: adjust scan step size
+      Type: Functional
+  - Systematic:
+      Sample_Name: ["ND"]
+      Error: 0.02              # Width of Gaussian prior
+      FlatPrior: false        # Can also set true if you want fully unbounded
+      Names:
+        FancyName: TotalEScaleND_EMsqrt
+        ParameterName: TotalEScaleND_EMsqrt
+      ParameterBounds:
+      - -1.0                
+      - 1.0                 
+      ParameterGroup: DetSys
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.05            # Optional: adjust scan step size
+      Type: Functional
+  - Systematic:
+      Sample_Name: ["ND"]
+      Error: 0.02              # Width of Gaussian prior
+      FlatPrior: false        # Can also set true if you want fully unbounded
+      Names:
+        FancyName: MuonRes_ND
+        ParameterName: MuonRes_ND
+      ParameterBounds:
+      - -1.0                
+      - 1.0                 
+      ParameterGroup: DetSys
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.05            # Optional: adjust scan step size
+      Type: Functional
+  - Systematic:
+      Sample_Name: ["ND"]
+      Error: 0.1            # Width of Gaussian prior
+      FlatPrior: false        # Can also set true if you want fully unbounded
+      Names:
+        FancyName: NRes_ND
+        ParameterName: NRes_ND
+      ParameterBounds:
+      - -1.0                
+      - 1.0                 
+      ParameterGroup: DetSys
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.05            # Optional: adjust scan step size
+      Type: Functional
+  - Systematic:
+      Sample_Name: ["ND"]
+      Error: 0.02            # Width of Gaussian prior
+      FlatPrior: false        # Can also set true if you want fully unbounded
+      Names:
+        FancyName: HadRes_ND
+        ParameterName: HadRes_ND
+      ParameterBounds:
+      - -1.0                
+      - 1.0                 
+      ParameterGroup: DetSys
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.05            # Optional: adjust scan step size
+      Type: Functional
+
+
+
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.01
+#     FlatPrior: false
+#     Names:
+#       FancyName: TotalEScaleSqrtND
+#       ParameterName: TotalEScaleSqrtND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 16.0
+#     Type: Functional
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.02
+#     FlatPrior: false
+#     Names:
+#       FancyName: TotalEScaleInvSqrtND
+#       ParameterName: TotalEScaleInvSqrtND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 18.0
+#     Type: Functional
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.05
+#     FlatPrior: false
+#     Names:
+#       FancyName: HadEScaleND
+#       ParameterName: HadEScaleND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 18.0
+#     Type: Functional
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.05
+#     FlatPrior: false
+#     Names:
+#       FancyName: HadEScaleSqrtND
+#       ParameterName: HadEScaleSqrtND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 20.0
+#     Type: Functional
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.05
+#     FlatPrior: false
+#     Names:
+#       FancyName: HadEScaleInvSqrtND
+#       ParameterName: HadEScaleInvSqrtND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 7.0
+#     Type: Functional
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.02
+#     FlatPrior: false
+#     Names:
+#       FancyName: MuEScaleND
+#       ParameterName: MuEScaleND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 15.0
+#     Type: Functional
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.005
+#     FlatPrior: false
+#     Names:
+#       FancyName: MuEScaleSqrtND
+#       ParameterName: MuEScaleSqrtND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 20.0
+#     Type: Functional
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.02
+#     FlatPrior: false
+#     Names:
+#       FancyName: MuEScaleInvSqrtND
+#       ParameterName: MuEScaleInvSqrtND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 20.0
+#     Type: Functional
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.2
+#     FlatPrior: false
+#     Names:
+#       FancyName: NEScaleND
+#       ParameterName: NEScaleND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 6.0
+#     Type: Functional
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.3
+#     FlatPrior: false
+#     Names:
+#       FancyName: NEScaleSqrtND
+#       ParameterName: NEScaleSqrtND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 12.0
+#     Type: Functional
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.3
+#     FlatPrior: false
+#     Names:
+#       FancyName: NEScaleInvSqrtND
+#       ParameterName: NEScaleInvSqrtND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 1.0
+#     Type: Functional
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.025
+#     FlatPrior: false
+#     Names:
+#       FancyName: EMEScaleND
+#       ParameterName: EMEScaleND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 30.0
+#     Type: Functional
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.025
+#     FlatPrior: false
+#     Names:
+#       FancyName: EMEScaleSqrtND
+#       ParameterName: EMEScaleSqrtND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 20.0
+#     Type: Functional
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.025
+#     FlatPrior: false
+#     Names:
+#       FancyName: EMEScaleInvSqrtND
+#       ParameterName: EMEScaleInvSqrtND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 20.0
+#     Type: Functional
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.02
+#     FlatPrior: false
+#     Names:
+#       FancyName: HadResND
+#       ParameterName: HadResND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 20.0
+#     Type: Functional
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.02
+#     FlatPrior: false
+#     Names:
+#       FancyName: MuResND
+#       ParameterName: MuResND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 9.0
+#     Type: Functional
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.1
+#     FlatPrior: false
+#     Names:
+#       FancyName: NResND
+#       ParameterName: NResND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 17.0
+#     Type: Functional
+# - Systematic:
+#     SampleNames: ["ND"]
+#     Error: 0.02
+#     FlatPrior: false
+#     Names:
+#       FancyName: EMResND
+#       ParameterName: EMResND
+#     ParameterBounds:
+#     - -9999.0
+#     - 9999.0
+#     ParameterGroup: DetSys
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     StepScale:
+#       MCMC: 22.0
+#     Type: Functional
