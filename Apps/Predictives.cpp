@@ -11,6 +11,7 @@ void RunPredictive(std::vector<SampleHandlerFD*> DUNEPdfs, ParameterHandlerGener
   }
   
   MaCh3Fitter->ProduceToys();
+  MaCh3Fitter->RunPredictiveAnalysis();
 }
 
 int main(int argc, char * argv[]) {

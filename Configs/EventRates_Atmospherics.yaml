@@ -168,6 +168,6 @@ Predictive:
   FullLLH: false
   PosteriorFile: ""
   PriorPredictive: true
-  Ntoy: 100
+  Ntoy: 1000
   ThrowSinlgeParams: ["delta_cp"]
-  LoopOverParameterSets: [["delta_cp"], ["sin2th_23"]]
+  LoopOverParameterSets: [["delta_cp"], ["sin2th_23"], ["delm2_23"]]
