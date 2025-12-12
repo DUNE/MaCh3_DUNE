@@ -25,7 +25,7 @@ if(NOT CPU_ONLY)
   set_target_properties(SamplesDUNE PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 endif()
 
-target_link_libraries(SamplesDUNE PUBLIC SplinesDUNE duneanaobj::all MaCh3::All MaCh3DUNECompilerOptions)
+target_link_libraries(SamplesDUNE PUBLIC SplinesDUNE duneanaobj::all MaCh3::All Eigen MaCh3DUNECompilerOptions)
 target_link_libraries(SamplesDUNE PRIVATE DUNEMaCh3Warnings)
 
 target_include_directories(SamplesDUNE PUBLIC

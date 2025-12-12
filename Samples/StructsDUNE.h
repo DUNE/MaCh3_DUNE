@@ -3,9 +3,6 @@
 
 struct dunemc_base { // Store variables used in fitting
 
-  double pot_s;
-  double norm_s;
-  
   int Target; //Target the interaction was on
   
   int nupdg;
@@ -26,6 +23,9 @@ struct dunemc_atm : public dunemc_base { // Store variables used by SampleHandle
 };
 
 struct dunemc_beamfd : public dunemc_base { // Store variables used by SampleHandlerBeamFD
+  double pot_s;
+  double norm_s;
+  
   double rw_erec_shifted;
   double rw_erec_had;
   double rw_erec_lep;
@@ -63,6 +63,9 @@ struct dunemc_beamfd : public dunemc_base { // Store variables used by SampleHan
 };
 
 struct dunemc_beamnd : public dunemc_base { // Store variables used by SampleHandlerBeamND
+  double pot_s;
+  double norm_s;
+  
   double rw_erec_shifted;
   double rw_erec_had;
   double rw_erec_lep;
@@ -73,6 +76,9 @@ struct dunemc_beamnd : public dunemc_base { // Store variables used by SampleHan
 };
 
 struct dunemc_beamndgar : public dunemc_base { // Store variables used by SampleHandlerBeamNDGAr
+  double pot_s;
+  double norm_s;
+  
   double rw_LepE;
   double rw_berpaacvwgt;
   double rw_vtx_x;

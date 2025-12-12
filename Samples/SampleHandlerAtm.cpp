@@ -6,6 +6,8 @@
 #include "duneanaobj/StandardRecord/StandardRecord.h"
 #pragma GCC diagnostic pop
 
+#include <Eigen/Dense>
+
 SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGeneric* xsec_cov_, const std::shared_ptr<OscillationHandler>&  Oscillator_) : SampleHandlerFD(mc_version_, xsec_cov_, Oscillator_) {
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
@@ -17,10 +19,14 @@ SampleHandlerAtm::~SampleHandlerAtm() {
 }
 
 void SampleHandlerAtm::Init() {
-  dunemcSamples.resize(nSamples,dunemc_atm());
-  
   IsELike = Get<bool>(SampleManager->raw()["SampleOptions"]["IsELike"],__FILE__,__LINE__);
   ExposureScaling = Get<double>(SampleManager->raw()["SampleOptions"]["ExposureScaling"],__FILE__,__LINE__);
+
+  if (SampleManager->raw()["SampleOptions"]["EigenFile"]) {
+    EigenInputFile = Get<std::string>(SampleManager->raw()["SampleOptions"]["EigenFile"],__FILE__,__LINE__);
+  } else {
+    EigenInputFile = "";
+  }
 }
 
 void SampleHandlerAtm::SetupSplines() {
@@ -33,11 +39,95 @@ void SampleHandlerAtm::SetupWeightPointers() {
     MCSamples[i].total_weight_pointers.push_back(MCSamples[i].osc_w_pointer);
     MCSamples[i].total_weight_pointers.push_back(&(MCSamples[i].xsec_w));
     MCSamples[i].total_weight_pointers.push_back(&(ExposureScaling));
+  }  
+}
+
+template<class Matrix>
+inline void WriteBinaryToFile(const std::string& filename, const Matrix& matrix){
+    std::ofstream out(filename, std::ios::out | std::ios::binary | std::ios::trunc);
+    if(out.is_open()) {
+        typename Matrix::Index rows=matrix.rows(), cols=matrix.cols();
+        out.write(reinterpret_cast<char*>(&rows), sizeof(typename Matrix::Index));
+        out.write(reinterpret_cast<char*>(&cols), sizeof(typename Matrix::Index));
+        out.write(reinterpret_cast<const char*>(matrix.data()), rows*cols*static_cast<typename Matrix::Index>(sizeof(typename Matrix::Scalar)) );
+        out.close();
+    }
+    else {
+      MACH3LOG_ERROR("Can not write to file:{}",filename);
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+}
+
+template<class Matrix>
+inline void ReadBinaryFromFile(const std::string& filename, Matrix& matrix){
+    std::ifstream in(filename, std::ios::in | std::ios::binary);
+    if (in.is_open()) {
+        typename Matrix::Index rows=0, cols=0;
+        in.read(reinterpret_cast<char*>(&rows),sizeof(typename Matrix::Index));
+        in.read(reinterpret_cast<char*>(&cols),sizeof(typename Matrix::Index));
+        matrix.resize(rows, cols);
+        in.read(reinterpret_cast<char*>(matrix.data()), rows*cols*static_cast<typename Matrix::Index>(sizeof(typename Matrix::Scalar)) );
+        in.close();
+    }
+    else {
+      MACH3LOG_ERROR("Can not open binary matrix file:{}",filename);
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+}
+
+int SampleHandlerAtm::ReadFromEigen() {
+  Eigen::MatrixXd Matrix;
+
+  MACH3LOG_INFO("Reading Eigen matrix from:{}",EigenInputFile);
+  ReadBinaryFromFile(EigenInputFile.c_str(),Matrix);
+
+  int nEntries = static_cast<int>(Matrix.rows());
+  dunemcSamples.resize(nEntries);
+
+  for (size_t iEvent=0;iEvent<dunemcSamples.size();++iEvent) {
+    dunemcSamples[iEvent].Target = static_cast<int>(Matrix(iEvent,Variables::Target));
+    dunemcSamples[iEvent].nupdg = static_cast<int>(Matrix(iEvent,Variables::nupdg));
+    dunemcSamples[iEvent].nupdgUnosc = static_cast<int>(Matrix(iEvent,Variables::nupdgUnosc));
+    dunemcSamples[iEvent].rw_isCC = static_cast<int>(Matrix(iEvent,Variables::rw_isCC));
+    dunemcSamples[iEvent].OscChannelIndex = Matrix(iEvent,Variables::OscChannelIndex);
+    dunemcSamples[iEvent].rw_erec = Matrix(iEvent,Variables::rw_erec);
+    dunemcSamples[iEvent].rw_etru = Matrix(iEvent,Variables::rw_etru);
+    dunemcSamples[iEvent].flux_w = Matrix(iEvent,Variables::flux_w);
+    dunemcSamples[iEvent].mode = Matrix(iEvent,Variables::mode);
+    dunemcSamples[iEvent].rw_theta = Matrix(iEvent,Variables::rw_theta);
+    dunemcSamples[iEvent].rw_truecz = Matrix(iEvent,Variables::rw_truecz);
   }
-  
+
+  return nEntries;
+}
+
+void SampleHandlerAtm::TransferToEigen(std::string FileName) {
+  Eigen::MatrixXd Matrix = Eigen::MatrixXd(dunemcSamples.size(),Variables::nVariables);
+
+  for (size_t iEvent=0;iEvent<dunemcSamples.size();++iEvent) {
+    Matrix(iEvent,Variables::Target) = dunemcSamples[iEvent].Target;
+    Matrix(iEvent,Variables::nupdg) = dunemcSamples[iEvent].nupdg;
+    Matrix(iEvent,Variables::nupdgUnosc) = dunemcSamples[iEvent].nupdgUnosc;
+    Matrix(iEvent,Variables::rw_isCC) = dunemcSamples[iEvent].rw_isCC;
+    Matrix(iEvent,Variables::OscChannelIndex) = dunemcSamples[iEvent].OscChannelIndex;
+    Matrix(iEvent,Variables::rw_erec) = dunemcSamples[iEvent].rw_erec;
+    Matrix(iEvent,Variables::rw_etru) = dunemcSamples[iEvent].rw_etru;
+    Matrix(iEvent,Variables::flux_w) = dunemcSamples[iEvent].flux_w;
+    Matrix(iEvent,Variables::mode) = dunemcSamples[iEvent].mode;
+    Matrix(iEvent,Variables::rw_theta) = dunemcSamples[iEvent].rw_theta;
+    Matrix(iEvent,Variables::rw_truecz) = dunemcSamples[iEvent].rw_truecz;
+  }
+
+  MACH3LOG_INFO("Writing Eigen matrix to:{}",FileName);
+  WriteBinaryToFile(FileName.c_str(),Matrix);
 }
 
 int SampleHandlerAtm::SetupExperimentMC() {
+  if (EigenInputFile != "") {
+    int nEntries = ReadFromEigen();
+    return nEntries;
+  }
+  
   int CurrErrorLevel = gErrorIgnoreLevel;
   gErrorIgnoreLevel = kFatal;
   
@@ -174,15 +264,4 @@ double SampleHandlerAtm::ReturnKinematicParameter(int KinematicVariable, int iEv
 
 double SampleHandlerAtm::ReturnKinematicParameter(std::string KinematicParameter, int iEvent) {
   return *GetPointerToKinematicParameter(KinematicParameter, iEvent);
-}
-
-std::vector<double> SampleHandlerAtm::ReturnKinematicParameterBinning(std::string KinematicParameterStr) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameterStr));
-  return ReturnKinematicParameterBinning(KinPar);
-}
-
-std::vector<double> SampleHandlerAtm::ReturnKinematicParameterBinning(KinematicTypes KinPar)  {
-  (void)KinPar;
-  std::vector<double> ReturnVec;
-  return ReturnVec;
 }

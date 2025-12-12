@@ -14,6 +14,7 @@ Binning:
 SampleOptions:
   IsELike: yes
   ExposureScaling: 1.0
+  EigenFile: "Inputs/Atmospherics/AtmSample_nueselec.eig"
 
 InputFiles:
   mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"
