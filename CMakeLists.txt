@@ -60,6 +60,10 @@ endif()
 
 #=================== EIGEN
 
+find_package(OpenSSL REQUIRED)
+
+#=================== EIGEN
+
 CPMAddPackage(
   NAME Eigen
   VERSION 3.4.0
