@@ -16,7 +16,10 @@ int main(int argc, char * argv[]) {
 
   for (size_t iSample=0;iSample<DUNEPdfs.size();iSample++) {
     SampleHandlerAtm* Sample = dynamic_cast<SampleHandlerAtm*>(DUNEPdfs[iSample]);
-    if (!Sample) throw;
+    if (!Sample) {
+      MACH3LOG_ERROR("Can only convert SampleHandlerAtm CAFs to Eigen matrix binary input file");
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
 
     std::string FileName = "AtmSample_"+Sample->GetTitle()+".eig";
     Sample->TransferToEigen(FileName);
