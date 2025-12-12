@@ -6,6 +6,9 @@
 #include "duneanaobj/StandardRecord/StandardRecord.h"
 #pragma GCC diagnostic pop
 
+#include <Eigen/Dense>
+#include "DUNEUtils.h"
+
 SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGeneric* xsec_cov_, const std::shared_ptr<OscillationHandler>&  Oscillator_) : SampleHandlerFD(mc_version_, xsec_cov_, Oscillator_) {
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
@@ -17,10 +20,15 @@ SampleHandlerAtm::~SampleHandlerAtm() {
 }
 
 void SampleHandlerAtm::Init() {
-  dunemcSamples.resize(nSamples,dunemc_atm());
-  
   IsELike = Get<bool>(SampleManager->raw()["SampleOptions"]["IsELike"],__FILE__,__LINE__);
   ExposureScaling = Get<double>(SampleManager->raw()["SampleOptions"]["ExposureScaling"],__FILE__,__LINE__);
+
+  if (SampleManager->raw()["SampleOptions"]["EigenFile"]) {
+    EigenInputFile = Get<std::string>(SampleManager->raw()["SampleOptions"]["EigenFile"],__FILE__,__LINE__);
+    EigenInputFileMD5Sum = Get<std::string>(SampleManager->raw()["SampleOptions"]["EigenFileMD5Sum"],__FILE__,__LINE__);
+  } else {
+    EigenInputFile = "";
+  }
 }
 
 void SampleHandlerAtm::SetupSplines() {
@@ -33,11 +41,64 @@ void SampleHandlerAtm::SetupWeightPointers() {
     MCSamples[i].total_weight_pointers.push_back(MCSamples[i].osc_w_pointer);
     MCSamples[i].total_weight_pointers.push_back(&(MCSamples[i].xsec_w));
     MCSamples[i].total_weight_pointers.push_back(&(ExposureScaling));
+  }  
+}
+
+int SampleHandlerAtm::ReadFromEigen() {
+  Eigen::MatrixXd Matrix;
+
+  MACH3LOG_INFO("Reading Eigen matrix from:{}",EigenInputFile);
+  CompareMD5Sum(EigenInputFileMD5Sum,EigenInputFile);
+  ReadEigenMatrixFromFile(EigenInputFile.c_str(),Matrix);
+
+  int nEntries = static_cast<int>(Matrix.rows());
+  dunemcSamples.resize(nEntries);
+
+  for (size_t iEvent=0;iEvent<dunemcSamples.size();++iEvent) {
+    dunemcSamples[iEvent].Target = static_cast<int>(Matrix(iEvent,Variables::Target));
+    dunemcSamples[iEvent].nupdg = static_cast<int>(Matrix(iEvent,Variables::nupdg));
+    dunemcSamples[iEvent].nupdgUnosc = static_cast<int>(Matrix(iEvent,Variables::nupdgUnosc));
+    dunemcSamples[iEvent].rw_isCC = static_cast<int>(Matrix(iEvent,Variables::rw_isCC));
+    dunemcSamples[iEvent].OscChannelIndex = Matrix(iEvent,Variables::OscChannelIndex);
+    dunemcSamples[iEvent].rw_erec = Matrix(iEvent,Variables::rw_erec);
+    dunemcSamples[iEvent].rw_etru = Matrix(iEvent,Variables::rw_etru);
+    dunemcSamples[iEvent].flux_w = Matrix(iEvent,Variables::flux_w);
+    dunemcSamples[iEvent].mode = Matrix(iEvent,Variables::mode);
+    dunemcSamples[iEvent].rw_theta = Matrix(iEvent,Variables::rw_theta);
+    dunemcSamples[iEvent].rw_truecz = Matrix(iEvent,Variables::rw_truecz);
   }
-  
+
+  return nEntries;
+}
+
+void SampleHandlerAtm::TransferToEigen(std::string FileName) {
+  Eigen::MatrixXd Matrix = Eigen::MatrixXd(dunemcSamples.size(),Variables::nVariables);
+
+  for (size_t iEvent=0;iEvent<dunemcSamples.size();++iEvent) {
+    Matrix(iEvent,Variables::Target) = dunemcSamples[iEvent].Target;
+    Matrix(iEvent,Variables::nupdg) = dunemcSamples[iEvent].nupdg;
+    Matrix(iEvent,Variables::nupdgUnosc) = dunemcSamples[iEvent].nupdgUnosc;
+    Matrix(iEvent,Variables::rw_isCC) = dunemcSamples[iEvent].rw_isCC;
+    Matrix(iEvent,Variables::OscChannelIndex) = dunemcSamples[iEvent].OscChannelIndex;
+    Matrix(iEvent,Variables::rw_erec) = dunemcSamples[iEvent].rw_erec;
+    Matrix(iEvent,Variables::rw_etru) = dunemcSamples[iEvent].rw_etru;
+    Matrix(iEvent,Variables::flux_w) = dunemcSamples[iEvent].flux_w;
+    Matrix(iEvent,Variables::mode) = dunemcSamples[iEvent].mode;
+    Matrix(iEvent,Variables::rw_theta) = dunemcSamples[iEvent].rw_theta;
+    Matrix(iEvent,Variables::rw_truecz) = dunemcSamples[iEvent].rw_truecz;
+  }
+
+  MACH3LOG_INFO("Writing Eigen matrix to:{}",FileName);
+  WriteEigenMatrixToFile(FileName.c_str(),Matrix);
 }
 
 int SampleHandlerAtm::SetupExperimentMC() {
+  // If the Eigen input file is define, read from that. Otherwise read from CAF file
+  if (EigenInputFile != "") {
+    int nEntries = ReadFromEigen();
+    return nEntries;
+  }
+  
   int CurrErrorLevel = gErrorIgnoreLevel;
   gErrorIgnoreLevel = kFatal;
   
@@ -174,15 +235,4 @@ double SampleHandlerAtm::ReturnKinematicParameter(int KinematicVariable, int iEv
 
 double SampleHandlerAtm::ReturnKinematicParameter(std::string KinematicParameter, int iEvent) {
   return *GetPointerToKinematicParameter(KinematicParameter, iEvent);
-}
-
-std::vector<double> SampleHandlerAtm::ReturnKinematicParameterBinning(std::string KinematicParameterStr) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameterStr));
-  return ReturnKinematicParameterBinning(KinPar);
-}
-
-std::vector<double> SampleHandlerAtm::ReturnKinematicParameterBinning(KinematicTypes KinPar)  {
-  (void)KinPar;
-  std::vector<double> ReturnVec;
-  return ReturnVec;
 }

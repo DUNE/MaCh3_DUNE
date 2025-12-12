@@ -14,6 +14,8 @@ Binning:
 SampleOptions:
   IsELike: no
   ExposureScaling: 1.0
+  EigenFile: "" #"Inputs/Atmospherics/AtmSample_numuselec.eig"
+  EigenFileMD5Sum: "" #"da5e519c5565ee315230ce5f71df377d"
 
 InputFiles:
   mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"

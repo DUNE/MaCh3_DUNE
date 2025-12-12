@@ -19,6 +19,9 @@ public:
 
   /// @brief Enum to identify kinematics
   enum KinematicTypes{kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueCosZ,kRecoCosZ,kOscChannel,kMode};
+
+  /// @brief Convert dunemc_atm struct object to Eigen::MatrixXd and write to binary file
+  void TransferToEigen(std::string FileName);
   
 protected:
   /// @brief Initialises object
@@ -42,7 +45,11 @@ protected:
   /// @brief Cleanup memory
   void CleanMemoryBeforeFit() override {};
 
+  /// @brief Define functional parameters
   void RegisterFunctionalParameters() override {};
+
+  /// @brief Read binary file into Eigen::MatrixXd and transfer into dunemc_atm struct
+  int ReadFromEigen();
   
   //DB functions which could be initialised to do something which is non-trivial
   
@@ -90,16 +97,6 @@ protected:
   /// @param iEvent Event ID
   /// @return Value of kinematic parameter corresponding for a given event
   double ReturnKinematicParameter(std::string KinematicParameter, int iEvent);
-
-  /// @brief Gets binning for a given parameter
-  /// @param KinematicParameterStr Parameter name
-  /// @return Vector containing parameter bins
-  std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameterStr);
-
-  /// @brief Gets binning for a given parameter
-  /// @param KinPar Parameter ID
-  /// @return Vector containing parameter bins
-  std::vector<double> ReturnKinematicParameterBinning(KinematicTypes KinPar);
   
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
@@ -118,6 +115,9 @@ protected:
     {kOscChannel,"OscillationChannel"},
     {kMode,"Mode"}
   };
+
+  /// Enum defining CAF->Eigen transformation
+  enum Variables{Target, nupdg, nupdgUnosc, rw_isCC, OscChannelIndex, rw_erec, rw_etru, flux_w, mode, rw_theta, rw_truecz, nVariables};
   
   /// Array filled with MC samples for each oscillation channel
   std::vector<dunemc_atm> dunemcSamples;
@@ -127,6 +127,11 @@ protected:
 
   /// Multiplicative scaling to scale from the assumed 400ktyr value in the CAF files
   double ExposureScaling;
+
+  /// File path to binary file which contains Eigen::MatrixXd
+  std::string EigenInputFile;
+  /// Known MD5 Checksum of the binary file
+  std::string EigenInputFileMD5Sum;
 };
 
 #endif

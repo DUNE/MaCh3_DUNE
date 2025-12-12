@@ -58,6 +58,24 @@ if(DEFINED ROOT_CXX_STANDARD AND ROOT_CXX_STANDARD GREATER CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD ${ROOT_CXX_STANDARD})
 endif()
 
+#=================== EIGEN
+
+find_package(OpenSSL REQUIRED)
+
+#=================== EIGEN
+
+CPMAddPackage(
+  NAME Eigen
+  VERSION 3.4.0
+  URL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz
+  DOWNLOAD_ONLY YES
+)
+
+if(Eigen_ADDED)
+  add_library(Eigen INTERFACE IMPORTED)
+  target_include_directories(Eigen INTERFACE ${Eigen_SOURCE_DIR})
+endif()
+
 #=================== DUNEAnaObj
 if(NOT DEFINED DUNE_ANAOBJ_BRANCH)
   set(DUNE_ANAOBJ_BRANCH v03_06_00)
@@ -125,7 +143,7 @@ endif()
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
 find_package(MaCh3 2.2.3 EXACT QUIET)
-set(MaCh3_CORE_BRANCH v2.2.3 CACHE STRING "Specify the MaCh3 core branch to use")
+set(MaCh3_CORE_BRANCH v2.2.3_patches CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 option(MaCh3DUNE_Atmos "Whether working with atmospherics or beam oscillations" OFF)
 
