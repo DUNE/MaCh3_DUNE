@@ -4,6 +4,7 @@ set(HEADERS
   SampleHandlerBeamND.h
   SampleHandlerBeamNDGAr.h
   MaCh3DUNEFactory.h
+  DUNEUtils.h
 )
 set(SOURCE_FILES
   SampleHandlerAtm.cpp
