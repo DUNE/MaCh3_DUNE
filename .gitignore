@@ -11,6 +11,8 @@ jupyter_env
 .history
 Doc
 Inputs/Atmospherics/CAFs
+Inputs/DUNE_CAF_files
+Inputs/DUNE_spline_files
 nohup.out
 *.txt
 *.log

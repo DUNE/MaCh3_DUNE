@@ -93,6 +93,7 @@ void SampleHandlerAtm::TransferToEigen(std::string FileName) {
 }
 
 int SampleHandlerAtm::SetupExperimentMC() {
+  // If the Eigen input file is define, read from that. Otherwise read from CAF file
   if (EigenInputFile != "") {
     int nEntries = ReadFromEigen();
     return nEntries;

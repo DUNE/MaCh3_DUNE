@@ -20,8 +20,8 @@ public:
   /// @brief Enum to identify kinematics
   enum KinematicTypes{kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueCosZ,kRecoCosZ,kOscChannel,kMode};
 
+  /// @brief Convert dunemc_atm struct object to Eigen::MatrixXd and write to binary file
   void TransferToEigen(std::string FileName);
-  int ReadFromEigen();
   
 protected:
   /// @brief Initialises object
@@ -45,7 +45,11 @@ protected:
   /// @brief Cleanup memory
   void CleanMemoryBeforeFit() override {};
 
+  /// @brief Define functional parameters
   void RegisterFunctionalParameters() override {};
+
+  /// @brief Read binary file into Eigen::MatrixXd and transfer into dunemc_atm struct
+  int ReadFromEigen();
   
   //DB functions which could be initialised to do something which is non-trivial
   
@@ -124,8 +128,9 @@ protected:
   /// Multiplicative scaling to scale from the assumed 400ktyr value in the CAF files
   double ExposureScaling;
 
-  ///
+  /// File path to binary file which contains Eigen::MatrixXd
   std::string EigenInputFile;
+  /// Known MD5 Checksum of the binary file
   std::string EigenInputFileMD5Sum;
 };
 
