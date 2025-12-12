@@ -126,6 +126,7 @@ protected:
 
   ///
   std::string EigenInputFile;
+  std::string EigenInputFileMD5Sum;
 };
 
 #endif

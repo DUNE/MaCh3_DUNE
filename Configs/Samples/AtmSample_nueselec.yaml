@@ -15,6 +15,7 @@ SampleOptions:
   IsELike: yes
   ExposureScaling: 1.0
   EigenFile: "Inputs/Atmospherics/AtmSample_nueselec.eig"
+  EigenFileMD5Sum: "964c4c23a6dc52523896c7dc0e264850"
 
 InputFiles:
   mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"

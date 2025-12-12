@@ -7,6 +7,8 @@
 #pragma GCC diagnostic pop
 
 #include <Eigen/Dense>
+#include <iomanip>
+#include <openssl/evp.h>
 
 SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGeneric* xsec_cov_, const std::shared_ptr<OscillationHandler>&  Oscillator_) : SampleHandlerFD(mc_version_, xsec_cov_, Oscillator_) {
   KinematicParameters = &KinematicParametersDUNE;
@@ -24,6 +26,7 @@ void SampleHandlerAtm::Init() {
 
   if (SampleManager->raw()["SampleOptions"]["EigenFile"]) {
     EigenInputFile = Get<std::string>(SampleManager->raw()["SampleOptions"]["EigenFile"],__FILE__,__LINE__);
+    EigenInputFileMD5Sum = Get<std::string>(SampleManager->raw()["SampleOptions"]["EigenFileMD5Sum"],__FILE__,__LINE__);
   } else {
     EigenInputFile = "";
   }
@@ -75,10 +78,89 @@ inline void ReadBinaryFromFile(const std::string& filename, Matrix& matrix){
     }
 }
 
+// Compute MD5 digest of buffer 'data'. Returns true on success and fills 'digest' (16 bytes).
+bool compute_md5(const unsigned char* data, size_t len, unsigned char digest[EVP_MAX_MD_SIZE], unsigned int &digest_len) {
+    EVP_MD_CTX *ctx = nullptr;
+    bool ok = false;
+
+    ctx = EVP_MD_CTX_new();
+    if (!ctx) {
+        std::cerr << "EVP_MD_CTX_new failed\n";
+        return false;
+    }
+
+    // Use EVP_md5() — still available under OpenSSL 3.0's default provider.
+    if (1 != EVP_DigestInit_ex(ctx, EVP_md5(), nullptr)) {
+        std::cerr << "EVP_DigestInit_ex failed\n";
+	throw;
+        goto done;
+    }
+
+    if (len > 0) {
+        if (1 != EVP_DigestUpdate(ctx, data, len)) {
+            std::cerr << "EVP_DigestUpdate failed\n";
+	    throw;
+            goto done;
+        }
+    }
+
+    if (1 != EVP_DigestFinal_ex(ctx, digest, &digest_len)) {
+        std::cerr << "EVP_DigestFinal_ex failed\n";
+        throw;
+        goto done;
+    }
+
+    ok = true;
+done:
+    EVP_MD_CTX_free(ctx);
+    return ok;
+}
+
+// Read entire file into vector<char>, returns false on error
+bool read_file(const std::string &path, std::vector<unsigned char> &out) {
+    std::ifstream ifs(path, std::ios::binary | std::ios::ate);
+    if (!ifs) return false;
+    std::streamsize size = ifs.tellg();
+    ifs.seekg(0, std::ios::beg);
+    out.resize(static_cast<size_t>(size));
+    if (!ifs.read(reinterpret_cast<char*>(out.data()), size)) return false;
+    return true;
+}
+
+// Convert binary digest to lowercase hex string
+std::string to_hex(const unsigned char* data, size_t len) {
+    std::ostringstream oss;
+    oss << std::hex << std::setfill('0');
+    for (size_t i = 0; i < len; ++i) {
+        oss << std::setw(2) << static_cast<int>(data[i]);
+    }
+    return oss.str();
+}
+
+bool CompareMD5Sum(std::string KnownSum, std::string FilePathToCheck) {
+  std::vector<unsigned char> data;
+  read_file(FilePathToCheck,data);
+  
+  unsigned char digest[EVP_MAX_MD_SIZE];
+  unsigned int digest_len = 0;
+  compute_md5(data.data(), data.size(), digest, digest_len);
+  std::string CalculatedMD5Sum = to_hex(digest, digest_len);
+  
+  if (KnownSum != CalculatedMD5Sum) {
+    std::cout << "MD5 Sums are different!" << std::endl;
+    throw;
+  } else {
+    std::cout << "MD5 Sums are identical!" << std::endl;
+  }
+
+  return true; 
+}
+
 int SampleHandlerAtm::ReadFromEigen() {
   Eigen::MatrixXd Matrix;
 
   MACH3LOG_INFO("Reading Eigen matrix from:{}",EigenInputFile);
+  CompareMD5Sum(EigenInputFileMD5Sum,EigenInputFile);
   ReadBinaryFromFile(EigenInputFile.c_str(),Matrix);
 
   int nEntries = static_cast<int>(Matrix.rows());
