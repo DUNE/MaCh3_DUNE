@@ -145,7 +145,6 @@ struct dunemc_beamoffaxis
 
   struct {
     double erec;
-    double etrue;
   } shift;
 };
 
@@ -157,7 +156,7 @@ struct dunemc_beamndgar
   double rw_vtx_y;
   double rw_vtx_z;
   double rw_Q0;
- 
+
 
   double rw_Q3;
   double rw_lep_pT; // transverse lepton momentum

@@ -108,28 +108,13 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
 
         if (abs(dunemcSamples[iEvent].LepPDG == 11)) {
           dunemcSamples[iEvent].shift.erec *= (1.0 + (*par));
-          dunemcSamples[iEvent].shift.etrue *= (1.0 + (*par));
           dunemcSamples[iEvent].reco.ELep *= (1.0 + (*par));
         }
+
         dunemcSamples[iEvent].shift.erec +=
             (*par) * dunemcSamples[iEvent].reco.EHad;
         // dunemcSamples[iEvent].reco.ELep += (*par) *
         // dunemcSamples[iEvent].reco.EHad;
-      });
-
-  RegisterIndividualFunctionalParameter(
-      "TotalEScaleND_sqrt", kTotalEScaleND_sqrt,
-      [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].syst.EHad_sqrt;
-      });
-
-  RegisterIndividualFunctionalParameter(
-      "TotalEScaleND_invsqrt", kTotalEScaleND_invsqrt,
-      [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].syst.EHad_sqrt /
-            dunemcSamples[iEvent].reco.EHad;
       });
 
   RegisterIndividualFunctionalParameter(
@@ -140,8 +125,6 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
              dunemcSamples[iEvent].reco.muon_tracker == 1)) {
           dunemcSamples[iEvent].shift.erec +=
               (*par) * (dunemcSamples[iEvent].reco.ELep);
-          // dunemcSamples[iEvent].shift.etrue += (*par) *
-          // (dunemcSamples[iEvent].reco.ELep);
           dunemcSamples[iEvent].reco.ELep *= (1.0 + (*par));
         }
       });
@@ -281,6 +264,7 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
        par_it < OffAxisFluxUncertaintyHelper::Get().GetNFocussingParams();
        par_it++) {
     RegisterIndividualFunctionalParameter(
+
         OffAxisFluxUncertaintyHelper::Get().GetFocussingParamName(par_it),
         int(kNFuncPars + par_it),
         [this, par_it](const double *par, std::size_t iEvent) {
@@ -324,7 +308,6 @@ void PrintFluxParameterNames() {
 // HH: Reset the shifted values to the original values
 void SampleHandlerBeamOffAxis::resetShifts(int iEvent) {
   dunemcSamples[iEvent].shift.erec = dunemcSamples[iEvent].rw_erec;
-  // dunemcSamples[iEvent].shift.etrue = dunemcSamples[iEvent].rw_etru;
   dunemcSamples[iEvent].reco.ELep = dunemcSamples[iEvent].reco.ELep;
   dunemcSamples[iEvent].flux_w = 1.0;
 }
@@ -335,7 +318,7 @@ void SampleHandlerBeamOffAxis::SetupWeightPointers() {
   for (size_t i = 0; i < dunemcSamples.size(); ++i) {
     MCSamples[i].total_weight_pointers.push_back(&(dunemcSamples[i].pot_s));
     MCSamples[i].total_weight_pointers.push_back(&(dunemcSamples[i].norm_s));
-    // MCSamples[i].total_weight_pointers.push_back(MCSamples[i].osc_w_pointer);
+    MCSamples[i].total_weight_pointers.push_back(MCSamples[i].osc_w_pointer);
     MCSamples[i].total_weight_pointers.push_back(&(dunemcSamples[i].flux_w));
     MCSamples[i].total_weight_pointers.push_back(&(MCSamples[i].xsec_w));
   }
