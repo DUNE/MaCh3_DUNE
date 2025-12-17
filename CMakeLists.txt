@@ -269,6 +269,7 @@ install(TARGETS MaCh3DUNECompilerOptions
 
 add_subdirectory(Splines)
 add_subdirectory(Systematics)
+add_subdirectory(Utils/Fake_datastudy/Fake_DATA/FDTDRFDS)
 add_subdirectory(Samples)
 add_subdirectory(Apps)
 

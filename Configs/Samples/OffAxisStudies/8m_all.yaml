@@ -7,31 +7,31 @@ SampleName: "OffAxisND"
 # Downsample: 0.01
 
 Binning:
-  #XVarStr: TrueNeutrinoEnergy #"RecoNeutrinoEnergy"
-  #XVarBins: [0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
-  XVarStr:  OffAxisPosition #"RecoNeutrinoEnergy"
-XVarBins:
+  XVarStr: TrueNeutrinoEnergy #"RecoNeutrinoEnergy"
+  XVarBins: [0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
+  YVarStr:  OffAxisPosition #"RecoNeutrinoEnergy"
+  YVarBins:
   [
-    -28.625,
-    -28.375,
-    -28.125,
-    -27.125,
-    -26.0,
-    -24.875,
-    -22.875,
-    -20.875,
-    -18.875,
-    -16.875,
-    -14.875,
-    -12.875,
-    -10.875,
-    -8.875,
-    -6.875,
-    -4.875,
-    -3.0,
-    -1.875,
-    -0.875,
-     0.0
+     0.0,
+     0.875,
+     1.875,
+     3.0,
+     4.875,
+     6.875,
+     8.875,
+     10.875,
+     12.875,
+     14.875,
+     16.875,
+     18.875,
+     20.875,
+     22.875,
+     24.875,
+     26.0,
+     27.125,
+     28.125,
+     28.375,
+     28.625
   ]
 
 
@@ -62,10 +62,11 @@ BinningFile: "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/TutorialCo
 
 
 SubSamples:
-  - Name: "CAFv7_0m_130_FHC"
-    LatexName: "CAFv7_0m_130_FHC"
-    mtuplefile: "CAFv7_0m_130_FHC"
+  - Name: "CAFv7_8m_subset10"
+    LatexName: "CAFv7_8m_subset10"
+    mtuplefile: "CAFv7_8m_subset10"
     splinefile: ""
     samplevecno: 0
     nutype: 14
     oscnutype: 14
+    signal: false

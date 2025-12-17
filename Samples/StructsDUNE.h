@@ -10,6 +10,7 @@ struct dunemc_base { // Store variables used in fitting
 
   int nupdg;
   int nupdgUnosc;
+  int LepPDG;
   double rw_isCC;
   double OscChannelIndex;
   int _isCC;
@@ -54,6 +55,11 @@ struct dunemc_beamfd
   double rw_vtx_y;
   double rw_vtx_z;
 
+  double rw_Q2;
+  double true_W;
+  double true_X;
+  double true_Y;
+
   double rw_erec_had_sqrt;
   double rw_erec_lep_sqrt;
   double rw_eRecoPi0_sqrt;
@@ -89,6 +95,13 @@ struct dunemc_beamoffaxis
     double eN;
     double eHad_av;
 
+    int nP;
+    int nN;
+    int nPip;
+    int nPi0;
+    int nPim;
+    int niem;
+
     double enu_bias;
 
     double ERec_QE;
@@ -98,6 +111,11 @@ struct dunemc_beamoffaxis
     double vtx_y;
     double vtx_z;
     double off_axis_pos_m;
+
+    double Q2;
+    double W;
+    double X;
+    double Y;
   } truth;
 
   struct {
@@ -126,6 +144,7 @@ struct dunemc_beamoffaxis
 
   struct {
     double erec;
+    double etrue;
   } shift;
 };
 
@@ -137,12 +156,17 @@ struct dunemc_beamndgar
   double rw_vtx_y;
   double rw_vtx_z;
   double rw_Q0;
+ 
+
   double rw_Q3;
   double rw_lep_pT; // transverse lepton momentum
   double rw_lep_pX;
   double rw_lep_pY;
   double rw_lep_pZ; // parallel lepton momentum
   double rw_rad;
+
+  int proton_number;
+  int neutron_number;
 };
 
 struct dunemc_plotting { // Store variables just used in plotting (cleared from

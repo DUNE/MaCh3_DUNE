@@ -1,0 +1,110 @@
+SampleTitle: "OffAxisND"
+SampleType: "OffAxisND"
+
+POT: 9.99328e+18
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
+SampleName: "OffAxisND"
+# Downsample: 0.01
+
+Binning:
+  XVarStr: TrueNeutrinoEnergy #"RecoNeutrinoEnergy"
+  XVarBins: [0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
+  YVarStr:  OffAxisPosition #"RecoNeutrinoEnergy"
+  YVarBins:
+  [
+     0.0,
+     0.875,
+     1.875,
+     3.0,
+     4.875,
+     6.875,
+     8.875,
+     10.875,
+     12.875,
+     14.875,
+     16.875,
+     18.875,
+     20.875,
+     22.875,
+     24.875,
+     26.0,
+     27.125,
+     28.125,
+     28.375,
+     28.625
+  ]
+  # [
+  #   -28.625,
+  #   -28.375,
+  #   -28.125,
+  #   -27.125,
+  #   -26.0,
+  #   -24.875,
+  #   -22.875,
+  #   -20.875,
+  #   -18.875,
+  #   -16.875,
+  #   -14.875,
+  #   -12.875,
+  #   -10.875,
+  #   -8.875,
+  #   -6.875,
+  #   -4.875,
+  #   -3.0,
+  #   -1.875,
+  #   -0.875,
+  #    0.0
+  # ]
+
+
+  
+
+DUNESampleBools:
+  isFHC: 1
+  iselike: no
+
+#SelectionCuts:
+    #- KinematicStr: "isCC"
+     # Bounds: [0.8, 1.4]
+    #- KinematicStr: "RecoNeutrinoEnergy"
+     # Bounds: [0.1, 9999]
+    
+
+InputFiles:
+  PrepSplineFile: false
+  mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+  mtuplesuffix: ".root"
+  splineprefix: ""
+  splinesuffix: ""
+
+#NuOsc:
+ # NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
+  #EqualBinningPerOscChannel: false
+BinningFile: "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/TutorialConfigs/TutorialBinning.yaml"
+
+
+SubSamples:
+  - Name: "CAFv7_26.25m_03_FHC"
+    LatexName: "CAFv7_26.25m_03_FHC"
+    mtuplefile: "CAFv7_26.25m_03_FHC"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_26.25m_04_FHC"
+    LatexName: "CAFv7_26.25m_04_FHC"
+    mtuplefile: "CAFv7_26.25m_04_FHC"
+    splinefile: ""
+    samplevecno: 1
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_26.25m_05_FHC"
+    LatexName: "CAFv7_26.25m_05_FHC"
+    mtuplefile: "CAFv7_26.25m_05_FHC"
+    splinefile: ""
+    samplevecno: 2
+    nutype: 14
+    oscnutype: 14
+    signal: false

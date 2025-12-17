@@ -1,0 +1,18 @@
+Systematics:
+  - Systematic:
+      Sample_Name: ["ND"]        
+      Error: 1.0                 
+      FlatPrior: false
+      Names:
+        FancyName: NuWro_missingprotonfakedata
+        ParameterName: NuWro_missingprotonfakedata
+      ParameterBounds:
+      - 0.0
+      - 1.0
+      ParameterGroup: DetSys
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.05
+      Type: Functional

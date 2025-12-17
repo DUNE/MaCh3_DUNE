@@ -39,7 +39,7 @@ if(NOT CPU_ONLY)
 endif()
 
 target_link_libraries(SamplesDUNE PUBLIC SplinesDUNE SystematicsDUNE duneanaobj::all MaCh3::All MaCh3DUNECompilerOptions)
-target_link_libraries(SamplesDUNE PRIVATE DUNEMaCh3Warnings ROOT::TreePlayer)
+target_link_libraries(SamplesDUNE PRIVATE FakeDataStudies DUNEMaCh3Warnings ROOT::TreePlayer)
 
 target_include_directories(SamplesDUNE PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../>

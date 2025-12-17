@@ -2,9 +2,13 @@
 
 #include "Systematics/Flux/OffAxisFluxUncertaintyHelper.h"
 
+#include "WeightToNuWro.h"
+
 #include "TTreeReader.h"
 #include "TTreeReaderValue.h"
 #include <iostream>
+
+#include <fstream>
 
 SampleHandlerBeamOffAxis::SampleHandlerBeamOffAxis(
     std::string mc_version_, ParameterHandlerGeneric *ParHandler_,
@@ -97,105 +101,87 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
   RegisterIndividualFunctionalParameter(
       "TotalEScaleND", kTotalEScaleND,
       [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].reco.EHad;
+
+      if ( dunemcSamples[iEvent].shift.erec < 0.)  dunemcSamples[iEvent].shift.erec = 0.;
+      if (dunemcSamples[iEvent].reco.ELep < 0.) dunemcSamples[iEvent].reco.ELep = 0.;
+
+      if(abs(dunemcSamples[iEvent].LepPDG == 11)){
+        dunemcSamples[iEvent].shift.erec *= (1.0 + (*par)); 
+        dunemcSamples[iEvent].shift.etrue *= (1.0 + (*par)); 
+        dunemcSamples[iEvent].reco.ELep *= (1.0 + (*par));
+      }
+        dunemcSamples[iEvent].shift.etrue += (*par) * dunemcSamples[iEvent].reco.EHad;
+        dunemcSamples[iEvent].shift.erec += (*par) * dunemcSamples[iEvent].reco.EHad;
+        dunemcSamples[iEvent].reco.ELep += (*par) * dunemcSamples[iEvent].reco.EHad;
+
+
       });
 
-  RegisterIndividualFunctionalParameter(
-      "TotalEScaleND_sqrt", kTotalEScaleND_sqrt,
-      [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].syst.EHad_sqrt;
-        
-      });
 
-  RegisterIndividualFunctionalParameter(
-      "TotalEScaleND_invsqrt", kTotalEScaleND_invsqrt,
-      [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].syst.EHad_sqrt / dunemcSamples[iEvent].reco.EHad;
-      });
 
+  
   RegisterIndividualFunctionalParameter(
       "TotalEScaleND_mu", kTotalEScaleND_mu,
       [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * (dunemcSamples[iEvent].reco.ELep);
+
+        if(abs(dunemcSamples[iEvent].LepPDG == 13) && (dunemcSamples[iEvent].reco.muon_contained == 1 ||dunemcSamples[iEvent].reco.muon_tracker==1) ){
+          dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].reco.ELep);
+           dunemcSamples[iEvent].shift.etrue += (*par) * (dunemcSamples[iEvent].reco.ELep);
+          dunemcSamples[iEvent].reco.ELep *= 1.0 + (*par);
+        }
+        
       });
 
-  RegisterIndividualFunctionalParameter(
-      "TotalEScaleND_musqrt", kTotalEScaleND_musqrt,
+    RegisterIndividualFunctionalParameter(
+      "EMResND", kEMResND,
       [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].syst.ELep_sqrt;
-      });
+        if(dunemcSamples[iEvent].reco.ePi0 < 0.0) dunemcSamples[iEvent].reco.ePi0 = 0.0;
+        dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].truth.ePi0 - dunemcSamples[iEvent].reco.ePi0);
+        dunemcSamples[iEvent].shift.etrue += (*par) * (dunemcSamples[iEvent].truth.ePi0 - dunemcSamples[iEvent].reco.ePi0);
+        dunemcSamples[iEvent].reco.ePi0 += (*par) * (dunemcSamples[iEvent].truth.ePi0 - dunemcSamples[iEvent].reco.ePi0);
+        if(abs(dunemcSamples[iEvent].LepPDG == 11)){
+          dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
+          dunemcSamples[iEvent].reco.ELep += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
+          dunemcSamples[iEvent].shift.etrue += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
+          
+        }
+      }
+    );
 
-  RegisterIndividualFunctionalParameter(
-      "TotalEScaleND_muinvsqrt", kTotalEScaleND_muinvsqrt,
+ 
+
+    RegisterIndividualFunctionalParameter(
+      "EScaleMuSpectND", kEScaleMuSpectND,
       [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].syst.ELep_sqrt/ dunemcSamples[iEvent].reco.ELep  ;
-      });
+        if(abs(dunemcSamples[iEvent].LepPDG == 13) && dunemcSamples[iEvent].reco.muon_tracker==1){
+          dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].reco.ELep);
+          dunemcSamples[iEvent].shift.etrue += (*par) * (dunemcSamples[iEvent].reco.ELep);
+           dunemcSamples[iEvent].reco.ELep += (*par) + 1.0;
+           dunemcSamples[iEvent].rw_etru += (*par) * (dunemcSamples[iEvent].reco.ELep);
 
-  RegisterIndividualFunctionalParameter(
-      "TotalEScaleND_had", kTotalEScaleND_had,
-      [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].reco.sum_ehad;
-      });
+        }
+    });
 
-  RegisterIndividualFunctionalParameter(
-      "TotalEScaleND_hadsqrt", kTotalEScaleND_hadsqrt,
-      [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].syst.sum_ehad_sqrt;
-      });
 
-  RegisterIndividualFunctionalParameter(
-      "TotalEScaleND_hadinvsqrt", kTotalEScaleND_hadinvsqrt,
-      [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].syst.sum_ehad_sqrt / dunemcSamples[iEvent].reco.sum_ehad ;
-      });
 
-  RegisterIndividualFunctionalParameter(
-      "TotalEScaleND_EM", kTotalEScaleND_EM,
-      [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * (dunemcSamples[iEvent].reco.ePi0 -
-                      dunemcSamples[iEvent].truth.ePi0);
-      });
 
-  RegisterIndividualFunctionalParameter(
-      "TotalEScaleND_EM_invsqrt", kTotalEScaleND_EMinvsqrt,
-      [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) *
-            sqrt((dunemcSamples[iEvent].reco.ePi0 -
-                  dunemcSamples[iEvent].truth.ePi0))/((dunemcSamples[iEvent].reco.ePi0 -
-             dunemcSamples[iEvent].truth.ePi0));
-      });
 
-  RegisterIndividualFunctionalParameter(
-      "TotalEScaleND_EM_sqrt", kTotalEScaleND_EMsqrt,
-      [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * sqrt((dunemcSamples[iEvent].reco.ePi0 -
-                           dunemcSamples[iEvent].truth.ePi0));
-      });
-
+ 
   RegisterIndividualFunctionalParameter(
       "MuonRes_ND", kMuonRes_ND, [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * (dunemcSamples[iEvent].truth.LepE -
-                      dunemcSamples[iEvent].reco.ELep);
+        if(abs(dunemcSamples[iEvent].LepPDG == 13)){
+        dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
+        dunemcSamples[iEvent].shift.etrue += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
+        dunemcSamples[iEvent].reco.ELep += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
+        }
       });
 
   RegisterIndividualFunctionalParameter(
       "NRes_ND", kNRes_ND, [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) *
-            (dunemcSamples[iEvent].truth.eN - dunemcSamples[iEvent].reco.eN);
+        if(dunemcSamples[iEvent].reco.eN < 0.0) dunemcSamples[iEvent].reco.eN = 0.0;
+        dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].truth.eN - dunemcSamples[iEvent].reco.eN);
+        dunemcSamples[iEvent].shift.etrue += (*par) * (dunemcSamples[iEvent].truth.eN - dunemcSamples[iEvent].reco.eN);
+       // dunemcSamples[iEvent].reco.eN = += (*par) * (dunemcSamples[iEvent].truth.eN - dunemcSamples[iEvent].reco.eN);
       });
 
   RegisterIndividualFunctionalParameter(
@@ -207,7 +193,25 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
                         dunemcSamples[iEvent].reco.ePip)) +
                       ((dunemcSamples[iEvent].truth.eP -
                         dunemcSamples[iEvent].reco.eP)));
+        
+        dunemcSamples[iEvent].shift.etrue +=
+            (*par) * ((dunemcSamples[iEvent].truth.ePim -
+                       dunemcSamples[iEvent].reco.ePim) +
+                      ((dunemcSamples[iEvent].truth.ePip -
+                        dunemcSamples[iEvent].reco.ePip)) +
+                      ((dunemcSamples[iEvent].truth.eP -
+                        dunemcSamples[iEvent].reco.eP)));
+          
       });
+
+    
+    ///Fake Data Syst
+  RegisterIndividualFunctionalParameter(
+    "NuWro_missingprotonfakedata", kNuWro_missingprotonfakedata, [this](const double * par, std::size_t iEvent) {
+     dunemcSamples[iEvent].flux_w *= (((*par) * (this->NuWro_missingproton(iEvent) - 1.0))+1); 
+    });
+
+
 
   for (size_t par_it = 0;
        par_it < OffAxisFluxUncertaintyHelper::Get().GetNFocussingParams();
@@ -257,6 +261,8 @@ void PrintFluxParameterNames() {
 // HH: Reset the shifted values to the original values
 void SampleHandlerBeamOffAxis::resetShifts(int iEvent) {
   dunemcSamples[iEvent].shift.erec = dunemcSamples[iEvent].rw_erec;
+  dunemcSamples[iEvent].shift.etrue = dunemcSamples[iEvent].rw_etru;
+  dunemcSamples[iEvent].reco.ELep = dunemcSamples[iEvent].reco.ELep;
   dunemcSamples[iEvent].flux_w = 1.0;
 }
 // =================================
@@ -442,11 +448,25 @@ if (CAFMetaChain.GetEntries() == 0) {
   TTreeReaderValue<double> eN(chrdr, "eN");
   TTreeReaderValue<double> eOther(chrdr, "eOther");
 
+  TTreeReaderValue<double> Q2(chrdr, "Q2");
+  TTreeReaderValue<double> W(chrdr, "W");
+  TTreeReaderValue<double> X(chrdr, "X");
+  TTreeReaderValue<double> Y(chrdr, "Y");
+
   TTreeReaderValue<int> nipi0(chrdr, "nipi0");
 
   TTreeReaderValue<int> isCC(chrdr, "isCC");
+
+  TTreeReaderValue<int> nP(chrdr, "nP");
+  TTreeReaderValue<int> nN(chrdr, "nN");
+  TTreeReaderValue<int> nPi0(chrdr, "nipi0");
+  TTreeReaderValue<int> nPim(chrdr, "nipim");
+  TTreeReaderValue<int> nPip(chrdr, "nipip");
+  TTreeReaderValue<int> niem(chrdr, "niem");
+
   TTreeReaderValue<int> nuPDG(chrdr, "nuPDG");
   TTreeReaderValue<int> nuPDGunosc(chrdr, "nuPDGunosc");
+  TTreeReaderValue<int> LepPDG(chrdr, "LepPDG");
 
   dunemcSamples.resize(CAFChain.GetEntries());
 
@@ -476,6 +496,7 @@ if (CAFMetaChain.GetEntries() == 0) {
 
     dunemcSamples[iEvent].nupdg = *nuPDG;
     dunemcSamples[iEvent].nupdgUnosc = *nuPDGunosc;
+    dunemcSamples[iEvent].LepPDG = *LepPDG;
 
     dunemcSamples[iEvent].rw_isCC = *isCC;
 
@@ -487,6 +508,8 @@ if (CAFMetaChain.GetEntries() == 0) {
     dunemcSamples[iEvent].rw_erec = *Ev_reco;
     dunemcSamples[iEvent].rw_etru = *Ev;
     dunemcSamples[iEvent].flux_w = 1.0;
+
+    
 
     //std::cout << "rw_erec = " << *Ev_reco << std::endl;
     //std::cout << "OscChannelIndec = " << static_cast<double>(GetOscChannel(OscChannels, dunemcSamples[iEvent].nupdgUnosc,dunemcSamples[iEvent].nupdg)) << std::endl;
@@ -521,6 +544,17 @@ if (CAFMetaChain.GetEntries() == 0) {
     dunemcSamples[iEvent].truth.vtx_y = *vtx_y;
     dunemcSamples[iEvent].truth.vtx_z = *vtx_z;
 
+    dunemcSamples[iEvent].truth.Q2 = *Q2;
+    dunemcSamples[iEvent].truth.W = *W;
+    dunemcSamples[iEvent].truth.X = *X;
+    dunemcSamples[iEvent].truth.Y = *Y;
+
+    dunemcSamples[iEvent].truth.nP = *nP;
+    dunemcSamples[iEvent].truth.nN = *nN;
+    dunemcSamples[iEvent].truth.nPip = *nPip;
+    dunemcSamples[iEvent].truth.nPim = *nPim;
+    dunemcSamples[iEvent].truth.nPi0 = *nPi0;
+
     dunemcSamples[iEvent].reco.numu = *reco_numu;
     dunemcSamples[iEvent].reco.muon_contained = *muon_contained;
     dunemcSamples[iEvent].reco.muon_tracker = *muon_tracker;
@@ -539,6 +573,7 @@ if (CAFMetaChain.GetEntries() == 0) {
     dunemcSamples[iEvent].reco.eN = *eRecoN;
 
     dunemcSamples[iEvent].shift.erec = dunemcSamples[iEvent].rw_erec;
+    dunemcSamples[iEvent].shift.etrue = dunemcSamples[iEvent].rw_etru;
 
     dunemcSamples[iEvent].syst.EHad_sqrt =
         std::sqrt(dunemcSamples[iEvent].reco.EHad);
@@ -580,13 +615,13 @@ if (CAFMetaChain.GetEntries() == 0) {
               i, flux_hadprod_systbin, nucfg));
     }
 
-    std::cout << "Event " << iEvent
-          << "  nupdg=" << dunemcSamples[iEvent].nupdg
-          << "  Etrue=" << dunemcSamples[iEvent].rw_etru
-          << "  offaxis=" << dunemcSamples[iEvent].truth.off_axis_pos_m
-          << "  FocBin=" << flux_focussing_systbin
-          << "  HadBin=" << flux_hadprod_systbin
-          << std::endl;
+    // std::cout << "Event " << iEvent
+    //       << "  nupdg=" << dunemcSamples[iEvent].nupdg
+    //       << "  Etrue=" << dunemcSamples[iEvent].rw_etru
+    //       << "  offaxis=" << dunemcSamples[iEvent].truth.off_axis_pos_m
+    //       << "  FocBin=" << flux_focussing_systbin
+    //       << "  HadBin=" << flux_hadprod_systbin
+    //       << std::endl;
 
     // HH: Give a warning if any negative energies were found
     for (const auto &[key, count] : negative_counts) {
@@ -600,12 +635,40 @@ if (CAFMetaChain.GetEntries() == 0) {
   }
 
   PrintFluxParameterNames();
-
-
-
-
   return int(dunemcSamples.size());
 }
+
+#pragma GCC diagnostic ignored "-Wfloat-conversion"
+//Fake Data Studies
+float SampleHandlerBeamOffAxis::NuWro_missingproton( std::size_t iEvent){
+  auto ev = dunemcSamples[iEvent];
+
+   return WeightToNuWro(
+      ev.rw_isCC,
+      ev.rw_etru,
+      ev.truth.LepE,
+      ev.truth.LepNuAngle,
+      ev.truth.Q2,
+      ev.truth.W,
+      ev.truth.X,
+      ev.truth.Y,
+      ev.truth.nP,
+      ev.truth.nN,
+      ev.truth.nPip,
+      ev.truth.nPim,
+      ev.truth.nPi0,
+      ev.truth.niem,
+      ev.truth.eP,
+      ev.truth.eN,
+      ev.truth.ePip,
+      ev.truth.ePim,
+      ev.truth.ePi0,
+      0,
+      isFHC,
+      ev.nupdg
+  );
+}
+
 
 const double *
 SampleHandlerBeamOffAxis::GetPointerToKinematicParameter(KinematicTypes KinPar,
@@ -633,6 +696,8 @@ SampleHandlerBeamOffAxis::GetPointerToKinematicParameter(KinematicTypes KinPar,
     return &dunemcSamples[iEvent].rw_isCC;
   case kOscillationChannel:
     return &dunemcSamples[iEvent].OscChannelIndex;
+  case kOffAxisPosition:
+    return &dunemcSamples[iEvent].truth.off_axis_pos_m;
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
     throw MaCh3Exception(__FILE__, __LINE__);
@@ -712,7 +777,7 @@ std::vector<std::vector<std::vector<std::vector<TH2D*>>>> SampleHandlerBeamOffAx
   
 
   //TChain to store MC which contains weight information
-  TChain* MCData = new TChain("caf");
+  TChain* MCData = new TChain("cafTree");
 
   //Read all files into TChain 	
   for (size_t iSample = 0; iSample < mc_files.size(); iSample++) {

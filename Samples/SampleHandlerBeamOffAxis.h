@@ -34,7 +34,8 @@ public:
   X(ELepRec)                                                                   \
   X(Enubias)                                                                   \
   X(isCC)                                                                      \
-  X(OscillationChannel)                                                                                                                                                                                   
+  X(OscillationChannel)                                                        \
+  X(OffAxisPosition)                                                                                                                                                                              
 #define X(a) k##a,
 
   /// @brief Enum to identify kinematics
@@ -59,23 +60,31 @@ protected:
 
   enum FuncParEnum {
     kTotalEScaleND = 0,
-    kTotalEScaleND_invsqrt,
-    kTotalEScaleND_sqrt,
+    //kTotalEScaleND_invsqrt,
+    //kTotalEScaleND_sqrt,
     kTotalEScaleND_mu,
-    kTotalEScaleND_musqrt,
-    kTotalEScaleND_muinvsqrt,
-    kTotalEScaleND_had,
-    kTotalEScaleND_hadsqrt,
-    kTotalEScaleND_hadinvsqrt,
-    kTotalEScaleND_EM,
-    kTotalEScaleND_EMinvsqrt,
-    kTotalEScaleND_EMsqrt,
+    kEMResND,
+    kEScaleMuSpectND,
     kMuonRes_ND,
     kNRes_ND,
     kHadRes_ND,
+    kNuWro_missingprotonfakedata,
+    //kTotalEScaleND_musqrt,
+   // kTotalEScaleND_muinvsqrt,
+    //kTotalEScaleND_had,
+    //kTotalEScaleND_hadsqrt,
+    //kTotalEScaleND_hadinvsqrt,
+    //kTotalEScaleND_EM,
+    //kTotalEScaleND_EMinvsqrt,
+    //kTotalEScaleND_EMsqrt,
+    //kMuonRes_ND,
+    //kNRes_ND,
+    //kHadRes_ND,
+
     kNFuncPars
   };
 
+  float NuWro_missingproton(std::size_t iEvent);
   void RegisterFunctionalParameters() override;
   void resetShifts(int iEvent) override;
 
