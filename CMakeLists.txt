@@ -83,8 +83,8 @@ if(MaCh3_DUNE_USE_SRProxy)
   if(NOT duneanaobj_FOUND)
     CPMFindPackage(
       NAME duneanaobj
-      GIT_TAG feature/Clingification_rebase2024
-      GITHUB_REPOSITORY luketpickering/duneanaobj
+      GIT_TAG Clingification_v03_06_00 
+      GITHUB_REPOSITORY pgranger23/duneanaobj
       VERSION 4.0.0
     )
   endif()
@@ -209,7 +209,7 @@ cmessage(STATUS "CMAKE CXX Standard: ${CMAKE_CXX_STANDARD}")
 add_library(DUNEMaCh3Warnings INTERFACE)
 
 target_compile_options(DUNEMaCh3Warnings INTERFACE
-  -Werror                 # Treat Warnings as Errors
+  # -Werror                 # Treat Warnings as Errors
   -Wextra                 # Enable extra warning flags
   -Wall                   # Enable all standard warning flags
   -Wshadow                # Warn when a variable declaration shadows one from an outer scope

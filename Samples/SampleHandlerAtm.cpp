@@ -44,18 +44,42 @@ int SampleHandlerAtm::SetupExperimentMC() {
   
   TChain* Chain = new TChain("cafTree");
   for (size_t iSample=0;iSample<mc_files.size();iSample++) {
+    std::cout << "Adding MC file: " << mc_files[iSample] << std::endl;
     Chain->Add(mc_files[iSample].c_str());
   }
   caf::StandardRecordProxy* sr = new caf::StandardRecordProxy(Chain, "rec");
   
-  Chain->SetBranchStatus("*", 1);
-  Chain->SetBranchAddress("rec", &sr);
+  // Chain->SetBranchStatus("*", 1);
+  // Chain->SetBranchAddress("rec", &sr);
 
   int nEntries = static_cast<int>(Chain->GetEntries());
+  
+  //Need to know the offsets to deal with the manual file changing within the chain
+  int currentTreeNumber = 0;
+  Long64_t *treeOffsets = Chain->GetTreeOffset();
+  int nbTrees = Chain->GetTreeOffsetLen();
   dunemcSamples.resize(nEntries);
+
+  //Define Oscillation Channels here for the first file to avoid multiple lookups
+  std::string CurrFileName = Chain->GetCurrentFile()->GetName();
+  int currentNuPdgUnosc = GetInitPDGFromFileName(CurrFileName);
+  int currentNuPdg = GetFinalPDGFromFileName(CurrFileName);
+  int currentOscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, currentNuPdgUnosc, currentNuPdg));
  
   for (int iEvent=0;iEvent<nEntries;iEvent++) {
-    Chain->GetEntry(iEvent);
+    
+    Chain->LoadTree(iEvent); //Only loads the tree without reading the entire entry
+
+    if (currentTreeNumber < nbTrees - 1 && iEvent == treeOffsets[currentTreeNumber+1]) {
+      //We are changing tree and due to the inability of SRProxy to handle it correctly, we do it manually
+      currentTreeNumber++;
+      delete sr;
+      sr = new caf::StandardRecordProxy(Chain->GetTree(), "rec");
+      CurrFileName = Chain->GetCurrentFile()->GetName();
+      currentNuPdgUnosc = GetInitPDGFromFileName(CurrFileName);
+      currentNuPdg = GetFinalPDGFromFileName(CurrFileName);
+      currentOscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, currentNuPdgUnosc, currentNuPdg));
+    }
 
     if ((iEvent % (nEntries/10))==0) {
       MACH3LOG_INFO("\tProcessing event: {}/{}",iEvent,nEntries);
@@ -87,10 +111,10 @@ int SampleHandlerAtm::SetupExperimentMC() {
     dunemcSamples[iEvent].rw_erec = RecoENu;
     dunemcSamples[iEvent].rw_theta = RecoCZ;
     
-    std::string CurrFileName = Chain->GetCurrentFile()->GetName();
-    dunemcSamples[iEvent].nupdgUnosc = GetInitPDGFromFileName(CurrFileName);
-    dunemcSamples[iEvent].nupdg = GetFinalPDGFromFileName(CurrFileName);
-    dunemcSamples[iEvent].OscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, dunemcSamples[iEvent].nupdgUnosc, dunemcSamples[iEvent].nupdg));
+    
+    dunemcSamples[iEvent].nupdgUnosc = currentNuPdgUnosc;
+    dunemcSamples[iEvent].nupdg = currentNuPdg;
+    dunemcSamples[iEvent].OscChannelIndex = currentOscChannelIndex;
     
     int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
     if (!sr->mc.nu[0].iscc) M3Mode += 14; //Account for no ability to distinguish CC/NC
@@ -109,6 +133,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
   }
 
   delete Chain;
+  delete sr;
   gErrorIgnoreLevel = CurrErrorLevel;
 
   return nEntries;
