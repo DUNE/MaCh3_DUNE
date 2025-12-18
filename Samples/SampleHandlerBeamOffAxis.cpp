@@ -261,7 +261,7 @@ void PrintFluxParameterNames() {
 // HH: Reset the shifted values to the original values
 void SampleHandlerBeamOffAxis::resetShifts(int iEvent) {
   dunemcSamples[iEvent].shift.erec = dunemcSamples[iEvent].rw_erec;
-  dunemcSamples[iEvent].shift.etrue = dunemcSamples[iEvent].rw_etru;
+  //dunemcSamples[iEvent].shift.etrue = dunemcSamples[iEvent].rw_etru;
   dunemcSamples[iEvent].reco.ELep = dunemcSamples[iEvent].reco.ELep;
   dunemcSamples[iEvent].flux_w = 1.0;
 }
