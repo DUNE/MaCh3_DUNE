@@ -2,7 +2,7 @@
 General:
   OutputFile: "DuneEventRates.root"
   DUNESamples:
-   - "Configs/Samples/SampleHandler_BeamFD.yaml"
+   - "Configs/Samples/SampleHandler_FD_Beam.yaml"
   #  - "Configs/Samples/SamplePDFDuneND_FHC_CCnumuselec.yaml"
   #  - "Configs/Samples/SamplePDFDuneND_RHC_CCnumuselec.yaml"
   # Nu-FIT
