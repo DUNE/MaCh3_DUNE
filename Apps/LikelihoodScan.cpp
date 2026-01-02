@@ -40,15 +40,17 @@ int main(int argc, char * argv[]) {
   //Perform reweight, print total integral, and set data
 
   std::vector<TH1*> DUNEHists;
-  for(auto Sample : DUNEPdfs){
-    Sample->Reweight();
-    DUNEHists.push_back(Sample->GetMCHist(Sample->GetNDim()));
-    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetTitle(), Sample->GetMCHist(Sample->GetNDim())->Integral());
+  for(auto handler : DUNEPdfs){
+    for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
+      handler->Reweight();
+      DUNEHists.push_back(handler->GetMCHist(iSample, handler->GetNDim(iSample)));
+      MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample, handler->GetNDim(iSample))->Integral());
 
-    if (Sample->GetNDim() == 1) {
-      Sample->AddData((TH1D*)DUNEHists.back());
-    } else if (Sample->GetNDim() == 2) {
-      Sample->AddData((TH2D*)DUNEHists.back());
+      if (handler->GetNDim(iSample) == 1) {
+        handler->AddData(iSample, (TH1D*)DUNEHists.back());
+      } else if (handler->GetNDim(iSample) == 2) {
+        handler->AddData(iSample, (TH2D*)DUNEHists.back());
+      }
     }
   }
   auto MaCh3Fitter = MaCh3FitterFactory(FitManager.get());

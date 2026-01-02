@@ -1,15 +1,15 @@
 set(HEADERS
-  SampleHandlerAtm.h
+  #SampleHandlerAtm.h
   SampleHandlerBeamFD.h
-  SampleHandlerBeamND.h
-  SampleHandlerBeamNDGAr.h
+  #SampleHandlerBeamND.h
+  #SampleHandlerBeamNDGAr.h
   MaCh3DUNEFactory.h
 )
 set(SOURCE_FILES
-  SampleHandlerAtm.cpp
+  #SampleHandlerAtm.cpp
   SampleHandlerBeamFD.cpp
-  SampleHandlerBeamND.cpp
-  SampleHandlerBeamNDGAr.cpp
+  #SampleHandlerBeamND.cpp
+  #SampleHandlerBeamNDGAr.cpp
   MaCh3DUNEFactory.cpp
 )
 

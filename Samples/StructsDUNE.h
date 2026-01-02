@@ -1,6 +1,12 @@
 #ifndef _StructsDUNE_h_
 #define _StructsDUNE_h_
 
+struct BeamSampleInfo {
+  bool iselike;
+  double isFHC;
+  double pot;
+};
+
 struct dunemc_base { // Store variables used in fitting
 
   double pot_s;
@@ -18,6 +24,9 @@ struct dunemc_base { // Store variables used in fitting
 
   double flux_w;
   double mode;
+
+  // Analysis sample
+  unsigned int sample_index = M3::_BAD_INT_;
 };
 
 struct dunemc_atm : public dunemc_base { // Store variables used by SampleHandlerAtm

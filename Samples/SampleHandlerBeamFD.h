@@ -36,7 +36,7 @@ protected:
   void SetupFDMC();
 
   /// @brief Sets up pointers weights for each event (oscillation/xsec/etc.)
-  void SetupWeightPointers();
+  void AddAdditionalWeightPointers();
   void SetupSplines();
 	
 	// === HH: Functional parameters ===
@@ -143,11 +143,7 @@ protected:
   // dunemc
   /// DUNE MC sampels
   std::vector<struct dunemc_beamfd> dunemcSamples;
-
-  /// Value of POT used for sample
-  double pot;
-  bool iselike;
-  double isFHC;
+  std::vector<BeamSampleInfo> beamFDSampleDetails;
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
