@@ -5,6 +5,7 @@ struct dunemc_base { // Store variables used in fitting
 
   double pot_s;
   double norm_s;
+  double xsec_w;
 
   int Target; // Target the interaction was on
 

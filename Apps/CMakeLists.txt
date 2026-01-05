@@ -7,6 +7,7 @@ foreach(app
 	SigmaVariation
 	LikelihoodScan
 	Variations
+	GetHessianMatrix
       )
 
     add_executable(${app} ${app}.cpp)
