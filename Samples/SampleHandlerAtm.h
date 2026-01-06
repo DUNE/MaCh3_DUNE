@@ -1,7 +1,7 @@
 #ifndef _SampleHandlerAtm_h_
 #define _SampleHandlerAtm_h_
 
-#include "Splines/BinnedSplineHandlerDUNE.h"
+#include "Splines/GenericSplineHandlerDUNE.h"
 #include "Samples/SampleHandlerFD.h"
 
 #include "StructsDUNE.h"
