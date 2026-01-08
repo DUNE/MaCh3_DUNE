@@ -125,7 +125,7 @@ endif()
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
 find_package(MaCh3 2.2.3 EXACT QUIET)
-set(MaCh3_CORE_BRANCH v2.2.3 CACHE STRING "Specify the MaCh3 core branch to use")
+set(MaCh3_CORE_BRANCH v2.2.3_patches CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 option(MaCh3DUNE_Atmos "Whether working with atmospherics or beam oscillations" OFF)
 
