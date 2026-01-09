@@ -11,18 +11,23 @@
 #include <TLegend.h>
 #include <TColor.h>
 #include <TMath.h>
+#include "TError.h"
 
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/StructsDUNE.h"
 #include "Fitters/MaCh3Factory.h"
 
+
+
+
 int main(int argc, char * argv[]) {
+  gErrorIgnoreLevel = kFatal;
   auto FitManager = MaCh3ManagerFactory(argc, argv);
 
   //###############################################################################################################################
 
   //DB Sigma variations in units of each parameters Sigma
-  std::vector<double> sigmaVariations = {-3, -2, -1, 0, 1, 2, 3};
+  std::vector<double> sigmaVariations = {-3,-2,-1,0, 1,2,3};
 
   //###############################################################################################################################
   //Create samplePDFFD objects

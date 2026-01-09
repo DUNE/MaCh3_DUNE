@@ -72,11 +72,26 @@ int main(int argc, char * argv[]) {
 
   bool StartFromPreviousChain = GetFromManager(FitManager->raw()["General"]["StartFromPos"], false);
   //Start chain from random position unless continuing a chain
-  if(!StartFromPreviousChain){
-    if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false)) {
-      xsec->ThrowParameters();
+  // if(!StartFromPreviousChain){
+  //   if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false)) {
+  //     xsec->ThrowParameters();
+  //   }
+  // }
+  if (!StartFromPreviousChain) {
+  if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false)) {
+
+    const int nPars = xsec->GetNParameters();
+    std::vector<double> startPars(nPars);
+
+    for (int i = 0; i < nPars; ++i) {
+      startPars[i] = xsec->GetParInit(i);  // this is 1.0
     }
+
+    xsec->SetParameters(startPars);
+    MACH3LOG_INFO("Initialized xsec parameters to prior values");
   }
+}
+
 
   //Add systematic objects
   MaCh3Fitter->AddSystObj(xsec);
@@ -92,6 +107,79 @@ int main(int argc, char * argv[]) {
     MaCh3Fitter->AddSampleHandler(Sample);
   }
 
+    //stuff added from Liban
+
+  std::string throwmatrixfilename = GetFromManager<std::string>(FitManager->raw()["General"]["ThrowMatrixFile"], "");
+  std::string throwmatrixname = GetFromManager<std::string>(FitManager->raw()["General"]["ThrowMatrixName"], "");
+  if (throwmatrixfilename == "") {
+    MACH3LOG_INFO("No throw matrix file specified, will throw from covariance matrix.");
+  }
+  else {
+    TFile *throwmatrixfile = new TFile(throwmatrixfilename.c_str());
+    if (throwmatrixfile->IsZombie()) {
+      MACH3LOG_ERROR("Couldn't find {}", throwmatrixfilename);
+      throw MaCh3Exception(__FILE__ , __LINE__ );
+    }
+    // MACH3LOG_INFO("Found throw matrix file {}.", throwmatrixfilename);
+    // TMatrixDSym *throwmatrix = throwmatrixfile->Get<TMatrixDSym>(throwmatrixname.c_str());
+    // if (!throwmatrix) {
+    //   MACH3LOG_ERROR("Couldn't find throw matrix {} in file {}", throwmatrixname, throwmatrixfilename);
+    //   throw MaCh3Exception(__FILE__ , __LINE__ );
+    // }
+    // Reset individual step scales to 1.0
+    xsec->ResetIndivStepScale();
+    // Keep global step scale flexible, but it should be 1
+    double globalStepScale = FitManager->raw()["General"]["Systematics"]["XsecStepScale"].as<double>();
+    if (globalStepScale != 1.0) {
+      MACH3LOG_WARN("Global step scale is not 1.0, it is set to {}. This may cause issues when using adapted throw matrix.", globalStepScale);
+    }
+    xsec->SetStepScale(globalStepScale);
+    MACH3LOG_WARN("I have set all the individual step scales to 1.0 since we are using an external throw matrix");
+    //xsec->SetThrowMatrix(throwmatrix);
+    TMatrixTSym<double>* throwmatrix =
+    dynamic_cast<TMatrixTSym<double>*>(
+        throwmatrixfile->Get(throwmatrixname.c_str())
+    );
+
+    if (!throwmatrix) {
+      MACH3LOG_ERROR("Throw matrix is not TMatrixTSym<double>");
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+    xsec->SetThrowMatrix(throwmatrix);
+    MACH3LOG_INFO("Set throw matrix from file {} with name {}",
+                  throwmatrixfilename, throwmatrixname);
+    // Print the throw matrix diagonals
+    for (int i = 0; i < throwmatrix->GetNrows(); i++) {
+      std::cout << (*throwmatrix)(i, i) << " ";
+    }
+    std::cout << std::endl;
+
+    TVectorD eig;
+    throwmatrix->EigenVectors(eig);
+
+    double min = 1e30, max = 0;
+    for (int i = 0; i < eig.GetNrows(); ++i) {
+      min = std::min(min, eig[i]);
+      max = std::max(max, eig[i]);
+    }
+
+    std::cout << "Eigenvalues: min=" << min
+              << " max=" << max << std::endl;
+
+
+
+
+
+
+
+
+  }
+
+  
+
+  //
+  //bool StartFromPreviousChain = GetFromManager(FitManager->raw()["General"]["StartFromPos"], false);
+  
   
   //Run fit
   MaCh3Fitter->RunMCMC();

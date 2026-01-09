@@ -8,6 +8,7 @@ foreach(app
 	LikelihoodScan
 	Variations
 	SplineMaker
+	GetHessianMatrix
       )
 
     add_executable(${app} ${app}.cpp)
