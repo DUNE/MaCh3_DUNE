@@ -7,6 +7,7 @@ foreach(app
 	SigmaVariation
 	LikelihoodScan
 	Variations
+	SplineMaker
       )
 
     add_executable(${app} ${app}.cpp)
