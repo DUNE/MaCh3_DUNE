@@ -20,6 +20,8 @@ public:
   /// @brief destructor
   ~SampleHandlerBeamOffAxis();
 
+  std::vector<std::vector<std::vector<std::vector<TH2D*>>>> GetBinnedWeights(std::vector<std::string> ParamNames, std::vector<std::vector<int>> ParamModes, std::vector<double> TrueEBins);  
+
   // below is ugly, but lets us define it only once and get the enum and both
   // maps https://en.wikipedia.org/wiki/X_macro
 
@@ -145,8 +147,6 @@ protected:
     (void)iEvent;
     return 1.;
   }
-
-  std::vector<std::vector<std::vector<std::vector<TH2D*>>>> GetBinnedWeights(std::vector<std::string> ParamNames, std::vector<std::vector<int>> ParamModes, std::vector<double> TrueEBins);  
 
   std::vector<dunemc_beamoffaxis> dunemcSamples;
 

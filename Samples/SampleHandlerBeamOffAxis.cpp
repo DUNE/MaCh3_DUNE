@@ -2,7 +2,7 @@
 
 #include "Systematics/Flux/OffAxisFluxUncertaintyHelper.h"
 
-#include "WeightToNuWro.h"
+#include "Utils/Fake_datastudy/Fake_DATA/FDTDRFDS/WeightToNuWro.h"
 
 #include "TTreeReader.h"
 #include "TTreeReaderValue.h"
@@ -204,7 +204,7 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
           
       });
 
-    
+ 
     ///Fake Data Syst
   RegisterIndividualFunctionalParameter(
     "NuWro_missingprotonfakedata", kNuWro_missingprotonfakedata, [this](const double * par, std::size_t iEvent) {
@@ -741,9 +741,9 @@ void SampleHandlerBeamOffAxis::SetupFDMC() {
 
 std::vector<std::vector<std::vector<std::vector<TH2D*>>>> SampleHandlerBeamOffAxis::GetBinnedWeights(std::vector <std::string> ParamNames, std::vector<std::vector<int>> ParamModes, std::vector<double> TrueEBins) {
 
-
+  std::cout << "Making Binned Weights" << std::endl;
   //Vector Structure:
-  //Parameter<Knot<ETrue<InteractionMode<TH2D>>>
+  //Parameter<Knot<Mode<TrueE<TH2D>>>
 
   std::vector<std::vector<std::vector<std::vector<TH2D*>>>> histVec;
   std::vector<std::vector<std::vector<std::vector<TH2D*>>>> NomVec;
@@ -761,14 +761,22 @@ std::vector<std::vector<std::vector<std::vector<TH2D*>>>> SampleHandlerBeamOffAx
   int NBinsY =  static_cast<int>(BinEdgesY.size()) - 1;
 
   //Setup Histograms
+  histVec.resize(ParamNames.size());
+  NomVec.resize(ParamNames.size());
   for (size_t iParam = 0; iParam < ParamNames.size(); iParam++) {
-    for (int shift; shift < nshifts; shift++) {
+    histVec[iParam].resize(nshifts);
+    NomVec[iParam].resize(nshifts);
+    for (int shift = 0; shift < nshifts; shift++) {
+      histVec[iParam][shift].resize(ParamModes[iParam].size());
+      NomVec[iParam][shift].resize(ParamModes[iParam].size());
       for(size_t mode = 0; mode < ParamModes[iParam].size(); mode++) {
+        histVec[iParam][shift][mode].resize(NTrueEBins);
+        NomVec[iParam][shift][mode].resize(NTrueEBins);
         for (int b_etrue = 0; b_etrue < NTrueEBins; b_etrue++) {
 
-          histVec[iParam][shift][mode][b_etrue] = new TH2D(Form("shift_p:%zu_shift:%d_mode:%zu_b_etrue:%d", iParam, shift, mode, b_etrue), "", NBinsX, BinEdgesX.data(), NBinsY, BinEdgesY.data());
+          histVec[iParam][shift][mode][b_etrue] = new TH2D(Form("bn_p:%zu_s:%d_m:%zu_e:%d", iParam, shift, mode, b_etrue), "", NBinsX, BinEdgesX.data(), NBinsY, BinEdgesY.data());
           
-	  NomVec[iParam][shift][mode][b_etrue] = new TH2D(Form("nom_p:%zu_shift:%d_mode:%zu_b_etrue:%d", iParam, shift, mode, b_etrue), "", NBinsX, BinEdgesX.data(), NBinsY, BinEdgesY.data());
+	  NomVec[iParam][shift][mode][b_etrue] = new TH2D(Form("nom_p:%zu_s:%d_m:%zu_e:%d", iParam, shift, mode, b_etrue), "", NBinsX, BinEdgesX.data(), NBinsY, BinEdgesY.data());
 
 	}
       }
@@ -792,8 +800,10 @@ std::vector<std::vector<std::vector<std::vector<TH2D*>>>> SampleHandlerBeamOffAx
       throw MaCh3Exception(__FILE__, __LINE__);
     }
 
-    MCData->Add(mc_files[iSample].c_str(), -1);
+    //MCData->Add(mc_files[iSample].c_str(), -1);
   }
+  
+  MACH3LOG_INFO("Number of entries in CAF TChain: {}", MCData->GetEntries());
     
   MCData->SetBranchStatus("*", 0);
   int NEvents = static_cast<int>(MCData->GetEntries());
@@ -846,6 +856,7 @@ std::vector<std::vector<std::vector<std::vector<TH2D*>>>> SampleHandlerBeamOffAx
     }
   }
 
+  std::cout << "finished making binned weights" << std::endl;
   // return final vector of response histograms
   return histVec;
 
