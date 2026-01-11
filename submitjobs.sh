@@ -228,7 +228,7 @@ WALLTIME=$(echo "${SEC_PER_STEP} * ${NSTEPS} + 1800" | bc)  # 1800 = 30 min setu
 
 # Optional: Cap max walltime to 8 hours (28800 sec) for better scheduling
 #MAX_WALLTIME=28800  #86400 #28800 #86400 #28800
-MAX_WALLTIME=432000 #172800  # 24 hours
+MAX_WALLTIME=86400 #432000 #172800  # 24 hours
 if (( $(echo "$WALLTIME > $MAX_WALLTIME" | bc -l) )); then
   echo "⚠️  Walltime capped at 8 hours to improve queue time"
  WALLTIME=$MAX_WALLTIME

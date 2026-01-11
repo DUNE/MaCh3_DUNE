@@ -1,120 +1,138 @@
 Systematics:
   - Systematic:
-      Sample_Name: ["ND"]
+      SampleNames: ["ND*" ]
       Error: 0.02           # Width of Gaussian prior
       FlatPrior: false        # Can also set true if you want fully unbounded
       Names:
         FancyName: TotalEScaleND
         ParameterName: TotalEScaleND
       ParameterBounds:
-      - -1.0                
-      - 1.0                 
+      - -2.0                
+      - 2.0                 
       ParameterGroup: DetSys
       ParameterValues:
         Generated: 0.0
         PreFitValue: 0.0
       StepScale:
-        MCMC: 0.05            # Optional: adjust scan step size
+        MCMC: 0.1    # Optional: adjust scan step size
       Type: Functional
   - Systematic:
-      Sample_Name: ["ND"]
+      ParameterBounds:
+      - -2.0                
+      - 2.0    
+      SampleNames: ["ND*" ]
       Error: 0.02             # Width of Gaussian prior
       FlatPrior: false        # Can also set true if you want fully unbounded
       Names:
         FancyName: TotalEScaleND_mu
         ParameterName: TotalEScaleND_mu
       ParameterBounds:
-      - -1.0                
-      - 1.0                 
+      - -2.0                
+      - 2.0                 
       ParameterGroup: DetSys
       ParameterValues:
         Generated: 0.0
         PreFitValue: 0.0
       StepScale:
-        MCMC: 0.05            # Optional: adjust scan step size
+        MCMC: 0.1    # Optional: adjust scan step size
       Type: Functional
   - Systematic:
-      Sample_Name: ["ND"]
+      ParameterBounds:
+      - -2.0                
+      - 2.0   
+      SampleNames: ["ND*" ]
       Error: 0.02              # Width of Gaussian prior
       FlatPrior: false        # Can also set true if you want fully unbounded
       Names:
         FancyName: EMResND
         ParameterName: EMResND
       ParameterBounds:
-      - -1.0                
-      - 1.0                 
+      - -2.0                
+      - 2.0                 
       ParameterGroup: DetSys
       ParameterValues:
         Generated: 0.0
         PreFitValue: 0.0
       StepScale:
-        MCMC: 0.05            # Optional: adjust scan step size
+        MCMC: 0.1    # Optional: adjust scan step size
       Type: Functional
   - Systematic:
-      Sample_Name: ["ND"]
+      ParameterBounds:
+      - -2.0                
+      - 2.0   
+      SampleNames: ["ND*" ]
       Error: 0.02              # Width of Gaussian prior
       FlatPrior: false        # Can also set true if you want fully unbounded
       Names:
         FancyName: EScaleMuSpectND
         ParameterName: EScaleMuSpectND
       ParameterBounds:
-      - -1.0                
-      - 1.0                 
+      - -2.0                
+      - 2.0                 
       ParameterGroup: DetSys
       ParameterValues:
         Generated: 0.0
         PreFitValue: 0.0
       StepScale:
-        MCMC: 0.05            # Optional: adjust scan step size
+        MCMC: 0.1    # Optional: adjust scan step size
       Type: Functional
   - Systematic:
-      Sample_Name: ["ND"]
+      ParameterBounds:
+      - -2.0                
+      - 2.0    
+      SampleNames: ["ND*" ]
       Error: 0.02              # Width of Gaussian prior
       FlatPrior: false        # Can also set true if you want fully unbounded
       Names:
         FancyName: MuonRes_ND
         ParameterName: MuonRes_ND
       ParameterBounds:
-      - -1.0                
-      - 1.0                 
+      - -2.0                
+      - 2.0                 
       ParameterGroup: DetSys
       ParameterValues:
         Generated: 0.0
         PreFitValue: 0.0
       StepScale:
-        MCMC: 0.05            # Optional: adjust scan step size
+        MCMC: 0.1    # Optional: adjust scan step size
       Type: Functional
   - Systematic:
-      Sample_Name: ["ND"]
+      ParameterBounds:
+      - -2.0                
+      - 2.0    
+      SampleNames: ["ND*" ]
       Error: 0.02              # Width of Gaussian prior
       FlatPrior: false        # Can also set true if you want fully unbounded
       Names:
         FancyName: NRes_ND
         ParameterName: NRes_ND
       ParameterBounds:
-      - -1.0                
-      - 1.0                 
+      - -2.0                
+      - 2.0                 
       ParameterGroup: DetSys
       ParameterValues:
         Generated: 0.0
         PreFitValue: 0.0
       StepScale:
-        MCMC: 0.05            # Optional: adjust scan step size
+        MCMC: 0.1    # Optional: adjust scan step size
       Type: Functional
   - Systematic:
-      Sample_Name: ["ND"]
+      ParameterBounds:
+      - -2.0                
+      - 2.0    
+      SampleNames: ["ND*" ]
       Error: 0.02              # Width of Gaussian prior
       FlatPrior: false        # Can also set true if you want fully unbounded
       Names:
         FancyName: HadRes_ND
         ParameterName: HadRes_ND
       ParameterBounds:
-      - -1.0                
-      - 1.0                 
+      - -2.0                
+      - 2.0                 
       ParameterGroup: DetSys
       ParameterValues:
         Generated: 0.0
         PreFitValue: 0.0
       StepScale:
-        MCMC: 0.05            # Optional: adjust scan step size
+        MCMC: 0.1    # Optional: adjust scan step size
       Type: Functional

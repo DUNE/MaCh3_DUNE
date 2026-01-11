@@ -1,0 +1,385 @@
+Systematics:
+# - Systematic:
+#     SampleNames: ["ND*" , "FD*"]
+#     Error: 0.5
+#     FlatPrior: false
+#     KinematicCuts:
+#     - TrueNeutrinoEnergy:
+#       - 0.0
+#       - 1.0
+#     - Enubias:
+#       - -0.0435
+#       - -0.022
+#     Names:
+#       FancyName: enu_enubias_28
+#       ParameterName: enu_enubias_28
+#     ParameterBounds:
+#     - 0.0
+#     - 4.0
+#     ParameterValues:
+#       Generated: 1.0
+#       PreFitValue: 1.0
+#     StepScale:
+#       MCMC: 1.0
+#     Type: Norm
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: ["ND*" , "FD*"]
+#     Error: 0.5
+#     FlatPrior: false
+#     KinematicCuts:
+#     - TrueNeutrinoEnergy:
+#       - 1.0
+#       - 1.25
+#     - Enubias:
+#       - -0.0435
+#       - -0.022
+#     Names:
+#       FancyName: enu_enubias_58
+#       ParameterName: enu_enubias_58
+#     ParameterBounds:
+#     - 0.0
+#     - 4.0
+#     ParameterValues:
+#       Generated: 1.0
+#       PreFitValue: 1.0
+#     StepScale:
+#       MCMC: 1.0
+#     Type: Norm
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: ["ND*" , "FD*"]
+#     Error: 0.5
+#     FlatPrior: false
+#     KinematicCuts:
+#     - TrueNeutrinoEnergy:
+#       - 1.25
+#       - 1.5
+#     - Enubias:
+#       - -0.0435
+#       - -0.022
+#     Names:
+#       FancyName: enu_enubias_88
+#       ParameterName: enu_enubias_88
+#     ParameterBounds:
+#     - 0.0
+#     - 4.0
+#     ParameterValues:
+#       Generated: 1.0
+#       PreFitValue: 1.0
+#     StepScale:
+#       MCMC: 1.0
+#     Type: Norm
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: ["ND*" , "FD*"]
+#     Error: 0.5
+#     FlatPrior: false
+#     KinematicCuts:
+#     - TrueNeutrinoEnergy:
+#       - 2.25
+#       - 2.5
+#     - Enubias:
+#       - -0.4735
+#       - -0.452
+#     Names:
+#       FancyName: enu_enubias_118
+#       ParameterName: enu_enubias_118
+#     ParameterBounds:
+#     - 0.0
+#     - 4.0
+#     ParameterValues:
+#       Generated: 1.0
+#       PreFitValue: 1.0
+#     StepScale:
+#       MCMC: 1.0
+#     Type: Norm
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: ["ND*" , "FD*"]
+#     Error: 0.5
+#     FlatPrior: false
+#     KinematicCuts:
+#     - TrueNeutrinoEnergy:
+#       - 1.75
+#       - 2.0
+#     - Enubias:
+#       - -0.0435
+#       - -0.022
+#     Names:
+#       FancyName: enu_enubias_148
+#       ParameterName: enu_enubias_148
+#     ParameterBounds:
+#     - 0.0
+#     - 4.0
+#     ParameterValues:
+#       Generated: 1.0
+#       PreFitValue: 1.0
+#     StepScale:
+#       MCMC: 1.0
+#     Type: Norm
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: ["ND*" , "FD*"]
+#     Error: 0.5
+#     FlatPrior: false
+#     KinematicCuts:
+#     - TrueNeutrinoEnergy:
+#       - 2.0
+#       - 2.25
+#     - Enubias:
+#       - -0.0435
+#       - -0.022
+#     Names:
+#       FancyName: enu_enubias_178
+#       ParameterName: enu_enubias_178
+#     ParameterBounds:
+#     - 0.0
+#     - 4.0
+#     ParameterValues:
+#       Generated: 1.0
+#       PreFitValue: 1.0
+#     StepScale:
+#       MCMC: 1.0
+#     Type: Norm
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: ["ND*" , "FD*"]
+#     Error: 0.5
+#     FlatPrior: false
+#     KinematicCuts:
+#     - TrueNeutrinoEnergy:
+#       - 2.25
+#       - 2.5
+#     - Enubias:
+#       - -0.0435
+#       - -0.022
+#     Names:
+#       FancyName: enu_enubias_208
+#       ParameterName: enu_enubias_208
+#     ParameterBounds:
+#     - 0.0
+#     - 4.0
+#     ParameterValues:
+#       Generated: 1.0
+#       PreFitValue: 1.0
+#     StepScale:
+#       MCMC: 1.0
+#     Type: Norm
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: ["ND*" , "FD*"]
+#     Error: 0.5
+#     FlatPrior: false
+#     KinematicCuts:
+#     - TrueNeutrinoEnergy:
+#       - 2.5
+#       - 2.75
+#     - Enubias:
+#       - -0.0435
+#       - -0.022
+#     Names:
+#       FancyName: enu_enubias_238
+#       ParameterName: enu_enubias_238
+#     ParameterBounds:
+#     - 0.0
+#     - 4.0
+#     ParameterValues:
+#       Generated: 1.0
+#       PreFitValue: 1.0
+#     StepScale:
+#       MCMC: 1.0
+#     Type: Norm
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: ["ND*" , "FD*"]
+#     Error: 0.5
+#     FlatPrior: false
+#     KinematicCuts:
+#     - TrueNeutrinoEnergy:
+#       - 2.75
+#       - 3.0
+#     - Enubias:
+#       - -0.0435
+#       - -0.022
+#     Names:
+#       FancyName: enu_enubias_268
+#       ParameterName: enu_enubias_268
+#     ParameterBounds:
+#     - 0.0
+#     - 4.0
+#     ParameterValues:
+#       Generated: 1.0
+#       PreFitValue: 1.0
+#     StepScale:
+#       MCMC: 1.0
+#     Type: Norm
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: ["ND*" , "FD*"]
+#     Error: 0.5
+#     FlatPrior: false
+#     KinematicCuts:
+#     - TrueNeutrinoEnergy:
+#       - 3.0
+#       - 3.25
+#     - Enubias:
+#       - -0.0435
+#       - -0.022
+#     Names:
+#       FancyName: enu_enubias_298
+#       ParameterName: enu_enubias_298
+#     ParameterBounds:
+#     - 0.0
+#     - 4.0
+#     ParameterValues:
+#       Generated: 1.0
+#       PreFitValue: 1.0
+#     StepScale:
+#       MCMC: 1.0
+#     Type: Norm
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: ["ND*" , "FD*"]
+#     Error: 0.5
+#     FlatPrior: false
+#     KinematicCuts:
+#     - TrueNeutrinoEnergy:
+#       - 3.25
+#       - 3.5
+#     - Enubias:
+#       - -0.0435
+#       - -0.022
+#     Names:
+#       FancyName: enu_enubias_328
+#       ParameterName: enu_enubias_328
+#     ParameterBounds:
+#     - 0.0
+#     - 4.0
+#     ParameterValues:
+#       Generated: 1.0
+#       PreFitValue: 1.0
+#     StepScale:
+#       MCMC: 1.0
+#     Type: Norm
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: ["ND*" , "FD*"]
+#     Error: 0.5
+#     FlatPrior: false
+#     KinematicCuts:
+#     - TrueNeutrinoEnergy:
+#       - 3.5
+#       - 3.75
+#     - Enubias:
+#       - -0.0435
+#       - -0.022
+#     Names:
+#       FancyName: enu_enubias_358
+#       ParameterName: enu_enubias_358
+#     ParameterBounds:
+#     - 0.0
+#     - 4.0
+#     ParameterValues:
+#       Generated: 1.0
+#       PreFitValue: 1.0
+#     StepScale:
+#       MCMC: 1.0
+#     Type: Norm
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: ["ND*" , "FD*"]
+#     Error: 0.5
+#     FlatPrior: false
+#     KinematicCuts:
+#     - TrueNeutrinoEnergy:
+#       - 3.75
+#       - 4.0
+#     - Enubias:
+#       - -0.0435
+#       - -0.022
+#     Names:
+#       FancyName: enu_enubias_388
+#       ParameterName: enu_enubias_388
+#     ParameterBounds:
+#     - 0.0
+#     - 4.0
+#     ParameterValues:
+#       Generated: 1.0
+#       PreFitValue: 1.0
+#     StepScale:
+#       MCMC: 1.0
+#     Type: Norm
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: ["ND*" , "FD*"]
+#     Error: 0.5
+#     FlatPrior: false
+#     KinematicCuts:
+#     - TrueNeutrinoEnergy:
+#       - 4.0
+#       - 5.0
+#     - Enubias:
+#       - -0.0435
+#       - -0.022
+#     Names:
+#       FancyName: enu_enubias_418
+#       ParameterName: enu_enubias_418
+#     ParameterBounds:
+#     - 0.0
+#     - 4.0
+#     ParameterValues:
+#       Generated: 1.0
+#       PreFitValue: 1.0
+#     StepScale:
+#       MCMC: 1.0
+#     Type: Norm
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: ["ND*" , "FD*"]
+#     Error: 0.5
+#     FlatPrior: false
+#     KinematicCuts:
+#     - TrueNeutrinoEnergy:
+#       - 5.0
+#       - 6.0
+#     - Enubias:
+#       - -0.0435
+#       - -0.022
+#     Names:
+#       FancyName: enu_enubias_448
+#       ParameterName: enu_enubias_448
+#     ParameterBounds:
+#     - 0.0
+#     - 4.0
+#     ParameterValues:
+#       Generated: 1.0
+#       PreFitValue: 1.0
+#     StepScale:
+#       MCMC: 1.0
+#     Type: Norm
+#     ParameterGroup: Xsec
+- Systematic:
+    SampleNames: ["ND*" , "FD*"]
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - TrueNeutrinoEnergy:
+      - 6.0
+      - 10.0
+    - Enubias:
+      - -0.0435
+      - -0.022
+    Names:
+      FancyName: enu_enubias_478
+      ParameterName: enu_enubias_478
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec

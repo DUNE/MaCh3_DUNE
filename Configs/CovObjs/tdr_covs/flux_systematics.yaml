@@ -1,15 +1,15 @@
 Systematics:
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
       FancyName: TargetUpstreamDegredation
       ParameterName: TargetUpstreamDegredation
     ParameterBounds:
-    - -3.0
-    - 3.0
+    - -3
+    - 3
     ParameterGroup: FluxSys
     ParameterValues:
       Generated: 0.0
@@ -18,8 +18,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -36,8 +36,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -54,8 +54,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -72,8 +72,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -90,8 +90,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -108,8 +108,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -126,8 +126,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -144,8 +144,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - OffAxisND
     Error: 1.0
     FlatPrior: false
     Names:
@@ -162,8 +162,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -180,8 +180,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -198,8 +198,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -216,8 +216,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -234,8 +234,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -252,8 +252,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -270,8 +270,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -288,8 +288,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -306,8 +306,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -324,8 +324,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -342,8 +342,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -360,8 +360,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -378,8 +378,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -396,8 +396,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -414,8 +414,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -432,8 +432,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -450,8 +450,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -468,8 +468,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -486,8 +486,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -504,8 +504,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -522,8 +522,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -540,8 +540,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -558,8 +558,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -576,8 +576,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -594,8 +594,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -612,8 +612,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -630,8 +630,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -648,8 +648,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -666,8 +666,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -684,8 +684,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -702,8 +702,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -720,8 +720,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -738,8 +738,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -756,8 +756,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -774,8 +774,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -792,8 +792,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -810,8 +810,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -828,8 +828,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -846,8 +846,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -864,8 +864,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -882,8 +882,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -900,8 +900,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -918,8 +918,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -936,8 +936,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -954,8 +954,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -972,8 +972,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -990,8 +990,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1008,8 +1008,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1026,8 +1026,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1044,8 +1044,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1062,8 +1062,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1080,8 +1080,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1098,8 +1098,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1116,8 +1116,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1134,8 +1134,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1152,8 +1152,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1170,8 +1170,8 @@ Systematics:
       MCMC: 0.05
     Type: Functional
 - Systematic:
-    Sample_Name:
-    - ND*
+    SampleNames:
+    - "*"
     Error: 1.0
     FlatPrior: false
     Names:

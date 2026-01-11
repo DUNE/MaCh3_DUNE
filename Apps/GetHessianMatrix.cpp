@@ -47,14 +47,14 @@ struct MyChi2Blob {
         }
 
 
-        static int call = 0;
-        if (call < 5) {
-          std::cout << "Minuit call " << call << "\n";
-          for (int i = 0; i < 5; ++i) {
-            std::cout << "x[" << i << "] = " << x[i] << "\n";
-          }
-        }
-        call++;
+        // static int call = 0;
+        // if (call < 50) {
+        //   std::cout << "Minuit call " << call << "\n";
+        //   for (int i = 0; i < 50; ++i) {
+        //     std::cout << "x[" << i << "] = " << x[i] << "\n";
+        //   }
+        // }
+        // call++;
 
         
         systematics->SetParameters(pars);
@@ -193,7 +193,7 @@ int main(int argc, char * argv[]) {
   minuit->SetPrintLevel(4);
   
   minuit->SetMaxFunctionCalls(FitManager->raw()["General"]["Minuit2"]["NSteps"].as<unsigned>());
-  minuit->SetMaxIterations(100000);
+  minuit->SetMaxIterations(10000);
   double tolerance = FitManager->raw()["General"]["Minuit2"]["ToleranceLevel"].as<double>();
   minuit->SetTolerance(tolerance);
   MACH3LOG_INFO("Preparing Minuit");
@@ -213,7 +213,7 @@ int main(int argc, char * argv[]) {
       for(int i = 0; i < xsec->GetNumParams(); ++i, ++ParCounter)
       {
         //KS: Index, name, prior, step scale [different to MCMC],
-        minuit->SetVariable(ParCounter, (xsec->GetParName(i)), xsec->GetParInit(i), xsec->GetDiagonalError(i)/100);
+        minuit->SetVariable(ParCounter, (xsec->GetParName(i)), xsec->GetParInit(i), xsec->GetDiagonalError(i)/10);
         minuit->SetVariableValue(ParCounter, xsec->GetParInit(i));
         //KS: lower bound, upper bound, if Mirroring enabled then ignore
         minuit->SetVariableLimits(ParCounter, xsec->GetLowerBound(i), xsec->GetUpperBound(i));
@@ -224,7 +224,7 @@ int main(int argc, char * argv[]) {
       }
     
     MACH3LOG_INFO("Starting MIGRAD");
-    minuit->Minimize(); //nuwro
+    //minuit->Minimize(); //nuwro
 
     MACH3LOG_INFO("Starting HESSE");
     minuit->Hesse();
@@ -249,7 +249,7 @@ int main(int argc, char * argv[]) {
       }
     }
     // Open a ROOT file
-    TFile* outFile = new TFile("CovMatrix.root", "RECREATE");
+    TFile* outFile = new TFile("CovMatrixall2.root", "RECREATE");
     //Postmatrix->GetName("CovarianceMatrix");
     Postmatrix->Write();  // Write the matrix to the file
     outFile->Close();
