@@ -22,7 +22,7 @@ void SampleHandlerBeamNDGAr::Init() {
   adc_sampling_frequency = SampleManager->raw()["DetectorVariables"]["adc_sampling_frequency"].as<double>(); //NK sampling frequency for ADC - needed to find timing resolution and spatial resolution in x dir in MHz
   drift_velocity = SampleManager->raw()["DetectorVariables"]["drift_velocity"].as<double>(); //NK drift velocity of electrons in gas - needed to find timing resolution and spatial resolution in x dir in cm/microsecond
   downsampling = SampleManager->raw()["DetectorVariables"]["downsampling"].as<double>(); //JM downsampling fraction
-  edepcrit_threshold = SampleManager->raw()["DetectorVariables"]["EDepCrit"].as<double>(); //JM max energy for a contained shower to deposit in the outer crit_layers of calorimeter 
+  edepcrit_threshold = SampleManager->raw()["DetectorVariables"]["EDepCrit"].as<double>()/1000.; //JM max energy for a contained shower to deposit in the outer crit_layers of calorimeter in GeV 
   crit_layers = SampleManager->raw()["DetectorVariables"]["CritLayers"].as<int>(); // JM number of layers defining this outer region
   TPCFidLength = SampleManager->raw()["DetectorVariables"]["TPCFidLength"].as<double>();
   TPCFidRadius = SampleManager->raw()["DetectorVariables"]["TPCFidRadius"].as<double>();
