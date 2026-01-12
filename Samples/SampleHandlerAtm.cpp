@@ -84,7 +84,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
   }
 
   uint sample_id;
-  float xsec_w, flux_nue_w, flux_numu_w;
+  double xsec_w, flux_nue_w, flux_numu_w;
   weightsTree->SetBranchAddress("sample_id",&sample_id);
   weightsTree->SetBranchAddress("xsec",&xsec_w);
   weightsTree->SetBranchAddress("flux_nue",&flux_nue_w);
@@ -159,8 +159,18 @@ int SampleHandlerAtm::SetupExperimentMC() {
 
     struct dunemc_base currentEventFromNuE = currentEventFromNuMu;;
     currentEventFromNuE.nupdgUnosc = (currentEventFromNuE.nupdg > 0) ? 12 : -12;
+    currentEventFromNuE.flux_w = xsec_w*flux_nue_w;
     currentEventFromNuE.OscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, currentEventFromNuE.nupdgUnosc, currentEventFromNuE.nupdg));
-
+    //Debug flux printout
+    // std::cout << "Event " << iEvent 
+    //           << ": nupdg = " << currentEventFromNuE.nupdg 
+    //           << ", nupdgUnosc = " << currentEventFromNuE.nupdgUnosc 
+    //           << ", flux_nue_w = " << flux_nue_w 
+    //           << ", flux_numu_w = " << flux_numu_w 
+    //           << ", xsec_w = " << xsec_w 
+    //           << ", total flux weight nue = " << currentEventFromNuE.flux_w
+    //           << ", total flux weight numu = " << currentEventFromNuMu.flux_w
+    //           << std::endl;
     dunemcSamples.emplace_back(std::move(currentEventFromNuMu));
     dunemcSamples.emplace_back(std::move(currentEventFromNuE));
   }
