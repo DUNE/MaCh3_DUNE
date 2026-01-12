@@ -1,7 +1,7 @@
 #ifndef _SampleHandlerAtm_h_
 #define _SampleHandlerAtm_h_
 
-#include "Splines/GenericSplineHandlerDUNE.h"
+#include "Splines/SplineHandlerFactoryDUNE.h"
 #include "Samples/SampleHandlerFD.h"
 
 #include "StructsDUNE.h"
@@ -127,6 +127,8 @@ protected:
 
   /// Multiplicative scaling to scale from the assumed 400ktyr value in the CAF files
   double ExposureScaling;
+  std::string fInputFile, fInputSplines;
+  uint fSampleId;
 };
 
 #endif

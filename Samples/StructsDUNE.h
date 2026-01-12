@@ -11,6 +11,7 @@ struct dunemc_base {
   */
   
   int Target; //Target the interaction was on
+  uint eid; //Event ID
   
   int nupdg;
   int nupdgUnosc;

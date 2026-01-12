@@ -18,14 +18,37 @@ SampleHandlerAtm::~SampleHandlerAtm() {
 }
 
 void SampleHandlerAtm::Init() {
-  dunemcSamples.resize(nSamples,dunemc_base());
+  // dunemcSamples.resize(nSamples,dunemc_base());
   
   IsELike = Get<bool>(SampleManager->raw()["SampleOptions"]["IsELike"],__FILE__,__LINE__);
   ExposureScaling = Get<double>(SampleManager->raw()["SampleOptions"]["ExposureScaling"],__FILE__,__LINE__);
+  fInputFile = Get<std::string>(SampleManager->raw()["SampleOptions"]["InputFile"],__FILE__,__LINE__);
+
+  if (SampleManager->raw()["SampleOptions"]["InputSplines"]) {
+    fInputSplines = Get<std::string>(SampleManager->raw()["SampleOptions"]["InputSplines"],__FILE__,__LINE__);
+  } else {
+    fInputSplines = "";
+  }
+  fSampleId = Get<uint>(SampleManager->raw()["SampleOptions"]["SampleId"],__FILE__,__LINE__);
 }
 
 void SampleHandlerAtm::SetupSplines() {
-  SplineHandler = nullptr;
+  ///@todo move all of the spline setup into core
+  if(ParHandler->GetNumParamsFromSampleName(SampleName, kSpline) > 0){
+    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", ParHandler->GetNumParamsFromSampleName(SampleName, kSpline));
+    auto SplineFactory = SplineHandlerFactoryDUNE(ParHandler,Modes.get(), dunemcSamples, fInputSplines, SampleName);
+
+    SplineHandler = std::move(SplineFactory.GetSplineHandler());
+    if (SplineFactory.GetSplineType() == kBinned){
+      InitialiseSplineObject(); //Running the "normal" initialisation for binned splines
+    }
+  }
+  else{
+    MACH3LOG_INFO("Found no spline for this sample so I will not load or evaluate splines");
+    SplineHandler = nullptr;
+  }
+  
+  return;
 }
 
 void SampleHandlerAtm::SetupWeightPointers() {
@@ -39,54 +62,54 @@ void SampleHandlerAtm::SetupWeightPointers() {
 }
 
 int SampleHandlerAtm::SetupExperimentMC() {
-  int CurrErrorLevel = gErrorIgnoreLevel;
+  int CurrErrorLevel = gErrorIgnoreLevel; 
   gErrorIgnoreLevel = kFatal;
   
-  TChain* Chain = new TChain("cafTree");
-  for (size_t iSample=0;iSample<mc_files.size();iSample++) {
-    std::cout << "Adding MC file: " << mc_files[iSample] << std::endl;
-    Chain->Add(mc_files[iSample].c_str());
+  TFile *f = TFile::Open(fInputFile.c_str(),"READ");
+  if (!f || f->IsZombie()) {
+    MACH3LOG_ERROR("Could not open input CAF file: {}",fInputFile);
+    throw MaCh3Exception(__FILE__, __LINE__);
   }
-  caf::StandardRecordProxy* sr = new caf::StandardRecordProxy(Chain, "rec");
-  
-  // Chain->SetBranchStatus("*", 1);
-  // Chain->SetBranchAddress("rec", &sr);
+  TTree *cafTree, *weightsTree;
+  f->GetObject("cafTree",cafTree);
+  if (!cafTree) {
+    MACH3LOG_ERROR("Could not find cafTree in input CAF file: {}",fInputFile);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
 
-  int nEntries = static_cast<int>(Chain->GetEntries());
-  
-  //Need to know the offsets to deal with the manual file changing within the chain
-  int currentTreeNumber = 0;
-  Long64_t *treeOffsets = Chain->GetTreeOffset();
-  int nbTrees = Chain->GetTreeOffsetLen();
-  dunemcSamples.resize(nEntries);
+  f->GetObject("weights",weightsTree);
+  if (!weightsTree) {
+    MACH3LOG_ERROR("Could not find weights tree in input CAF file: {}",fInputFile);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+
+  uint sample_id;
+  float xsec_w, flux_nue_w, flux_numu_w;
+  weightsTree->SetBranchAddress("sample_id",&sample_id);
+  weightsTree->SetBranchAddress("xsec",&xsec_w);
+  weightsTree->SetBranchAddress("flux_nue",&flux_nue_w);
+  weightsTree->SetBranchAddress("flux_numu",&flux_numu_w);
+
+
+  caf::StandardRecordProxy* sr = new caf::StandardRecordProxy(cafTree, "rec");
+
+  int nEntries = static_cast<int>(cafTree->GetEntries());
 
   //Define Oscillation Channels here for the first file to avoid multiple lookups
-  std::string CurrFileName = Chain->GetCurrentFile()->GetName();
-  int currentNuPdgUnosc = GetInitPDGFromFileName(CurrFileName);
-  int currentNuPdg = GetFinalPDGFromFileName(CurrFileName);
-  int currentOscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, currentNuPdgUnosc, currentNuPdg));
  
   for (int iEvent=0;iEvent<nEntries;iEvent++) {
-    
-    Chain->LoadTree(iEvent); //Only loads the tree without reading the entire entry
 
-    if (currentTreeNumber < nbTrees - 1 && iEvent == treeOffsets[currentTreeNumber+1]) {
-      //We are changing tree and due to the inability of SRProxy to handle it correctly, we do it manually
-      currentTreeNumber++;
-      delete sr;
-      sr = new caf::StandardRecordProxy(Chain->GetTree(), "rec");
-      CurrFileName = Chain->GetCurrentFile()->GetName();
-      currentNuPdgUnosc = GetInitPDGFromFileName(CurrFileName);
-      currentNuPdg = GetFinalPDGFromFileName(CurrFileName);
-      currentOscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, currentNuPdgUnosc, currentNuPdg));
-    }
+    weightsTree->GetEntry(iEvent);
+    if (sample_id != fSampleId) continue;
+    
+    cafTree->LoadTree(iEvent); //Only loads the tree without reading the entire entry
 
     if ((iEvent % (nEntries/10))==0) {
       MACH3LOG_INFO("\tProcessing event: {}/{}",iEvent,nEntries);
     }
     
     if(sr->common.ixn.pandora.size() != 1) {
-      MACH3LOG_WARN("Skipping event {}/{} -> Number of neutrino slices found in event: {}",iEvent,nEntries,sr->common.ixn.pandora.size());
+      // MACH3LOG_WARN("Skipping event {}/{} -> Number of neutrino slices found in event: {}",iEvent,nEntries,sr->common.ixn.pandora.size());
       continue;
     }
     
@@ -101,42 +124,54 @@ int SampleHandlerAtm::SetupExperimentMC() {
     }
     double RecoCZ = -RecoNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
     if (std::isnan(RecoCZ)) {
-      MACH3LOG_WARN("Skipping event {}/{} -> Reconstructed Cosine Z is NAN",iEvent,nEntries);
+      // MACH3LOG_WARN("Skipping event {}/{} -> Reconstructed Cosine Z is NAN",iEvent,nEntries);
       continue;
     }
     if (std::isnan(RecoENu)) {
-      MACH3LOG_WARN("Skipping event {}/{} -> Reconstructed Neutrino Energy is NAN",iEvent,nEntries);
+      // MACH3LOG_WARN("Skipping event {}/{} -> Reconstructed Neutrino Energy is NAN",iEvent,nEntries);
       continue;
     }
-    dunemcSamples[iEvent].rw_erec = RecoENu;
-    dunemcSamples[iEvent].rw_theta = RecoCZ;
-    
-    
-    dunemcSamples[iEvent].nupdgUnosc = currentNuPdgUnosc;
-    dunemcSamples[iEvent].nupdg = currentNuPdg;
-    dunemcSamples[iEvent].OscChannelIndex = currentOscChannelIndex;
+
+    struct dunemc_base currentEventFromNuMu;
+
+    currentEventFromNuMu.rw_erec = RecoENu;
+    currentEventFromNuMu.rw_theta = RecoCZ;
     
     int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
     if (!sr->mc.nu[0].iscc) M3Mode += 14; //Account for no ability to distinguish CC/NC
     if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
-    dunemcSamples[iEvent].mode = M3Mode;
+    currentEventFromNuMu.mode = M3Mode;
     
-    dunemcSamples[iEvent].rw_isCC = sr->mc.nu[0].iscc;
-    dunemcSamples[iEvent].Target = kTarget_Ar;
+    currentEventFromNuMu.rw_isCC = sr->mc.nu[0].iscc;
+    currentEventFromNuMu.Target = kTarget_Ar;
     
-    dunemcSamples[iEvent].rw_etru = static_cast<double>(sr->mc.nu[0].E);
+    currentEventFromNuMu.rw_etru = static_cast<double>(sr->mc.nu[0].E);
 
     TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.x,sr->mc.nu[0].momentum.y,sr->mc.nu[0].momentum.z)).Unit();
-    dunemcSamples[iEvent].rw_truecz = -TrueNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
+    currentEventFromNuMu.rw_truecz = -TrueNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
 
-    dunemcSamples[iEvent].flux_w = sr->mc.nu[0].genweight;
+    currentEventFromNuMu.nupdg = sr->mc.nu[0].pdg;
+
+    currentEventFromNuMu.flux_w = xsec_w*flux_numu_w;
+    currentEventFromNuMu.nupdgUnosc = (currentEventFromNuMu.nupdg > 0) ? 14 : -14;
+    currentEventFromNuMu.OscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, currentEventFromNuMu.nupdgUnosc, currentEventFromNuMu.nupdg));
+    currentEventFromNuMu.eid = iEvent;
+
+    struct dunemc_base currentEventFromNuE = currentEventFromNuMu;;
+    currentEventFromNuE.nupdgUnosc = (currentEventFromNuE.nupdg > 0) ? 12 : -12;
+    currentEventFromNuE.OscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, currentEventFromNuE.nupdgUnosc, currentEventFromNuE.nupdg));
+
+    dunemcSamples.emplace_back(std::move(currentEventFromNuMu));
+    dunemcSamples.emplace_back(std::move(currentEventFromNuE));
   }
 
-  delete Chain;
+  delete cafTree;
+  delete weightsTree;
+  delete f;
   delete sr;
   gErrorIgnoreLevel = CurrErrorLevel;
 
-  return nEntries;
+  return dunemcSamples.size();
 }
 
 void SampleHandlerAtm::SetupFDMC() {
