@@ -1,4 +1,3 @@
----
 SampleTitle: "FHC_numu_NDGAr"
 SampleType: "BeamNDGAr"
 
@@ -33,8 +32,10 @@ DetectorVariables:
   downsampling: 1.
 
 InputFiles:
-  mtupleprefix: "Inputs/DUNE_NDGAr_FastGarSim/fastgarsim_cdr_"
-  mtuplesuffix: "_hadded_000.root"
+  mtupleprefix: "Inputs/"
+  # mtupleprefix: "Inputs/DUNE_NDGAr_FastGarSim/fastgarsim_cdr_"
+  mtuplesuffix: ".root"
+  # mtuplesuffix: "_hadded_000.root"
   splineprefix: ""
   splinesuffix: ""
 
@@ -43,9 +44,15 @@ NuOsc:
   EqualBinningPerOscChannel: true
 
 SubSamples:
-  - Name: "hA"
-    LatexName: "hA"
-    mtuplefile: "hA"
+  # - Name: "hA"
+  #   LatexName: "hA"
+  #   mtuplefile: "hA"
+  #   splinefile: ""
+  #   nutype: 14
+  #   oscnutype: 14
+  - Name: "test"
+    LatexName: "test"
+    mtuplefile: "test"
     splinefile: ""
     nutype: 14
     oscnutype: 14

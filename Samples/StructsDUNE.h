@@ -93,7 +93,7 @@ struct dunemc_plotting { // Store variables just used in plotting (cleared from 
   std::vector<int> particle_event = {};
   std::vector<int> particle_trkid = {};
   std::vector<int> particle_pdg = {};
-  std::vector<double> particle_energy = {};
+  std::vector<double> particle_evis = {};
   std::vector<double> particle_theta = {};
   std::vector<double> particle_bangle = {};
   std::vector<double> particle_beamangle = {};
@@ -126,6 +126,7 @@ struct dunemc_plotting { // Store variables just used in plotting (cleared from 
   std::vector<double> particle_momresyz = {};
   std::vector<double> particle_momresx = {};
   std::vector<double> particle_edepcrit = {};
+  std::vector<double> particle_isbarrelpart = {};
 };
 
 #endif

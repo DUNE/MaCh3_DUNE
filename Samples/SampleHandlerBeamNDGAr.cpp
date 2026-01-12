@@ -300,7 +300,8 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
 
   //Fill particle-level kinematic variables with default or actual (if possible at this stage) values
   if (_MCPMotherTrkID->at(i_particle) == 0) {
-    plotting_vars.particle_energy[i_particle] = energy;
+    double invis_mass = (pdg == 2212 || pdg == 2112) ? mass : 0.; 
+    plotting_vars.particle_evis[i_particle] = std::sqrt(energy*energy - invis_mass*invis_mass); // don't include rest mass energy for p/n
     plotting_vars.particle_momentum[i_particle] = mom_tot;
     plotting_vars.particle_endmomentum[i_particle] = end_mom;
     plotting_vars.particle_transversemomentum[i_particle] = transverse_mom; //momentum transverse to B-field
@@ -472,6 +473,30 @@ void SampleHandlerBeamNDGAr::clearBranchVectors() {
   _MuIDHitZ->clear();
 }
 
+void SampleHandlerBeamNDGAr::fixCoordinates() {
+  auto switchCoords = [&](float& xcoord, float& zcoord) {
+    float tmp = xcoord;
+    xcoord = -zcoord;
+    zcoord = tmp;
+  };
+
+  for (size_t i = 0; i < _MCPStartX->size(); i++) {
+    switchCoords(_MCPStartX->at(i), _MCPStartZ->at(i));
+    switchCoords(_MCPEndX->at(i), _MCPEndZ->at(i));
+    switchCoords(_MCPStartPX->at(i), _MCPStartPZ->at(i));
+    switchCoords(_MCPEndPX->at(i), _MCPEndPZ->at(i));
+  }
+  for (size_t i = 0; i < _TPCHitX->size(); i++) {
+    switchCoords(_TPCHitX->at(i), _TPCHitZ->at(i));
+  }
+  for (size_t i = 0; i < _CalHitX->size(); i++) {
+    switchCoords(_CalHitX->at(i), _CalHitZ->at(i));
+  }
+  for (size_t i = 0; i < _MuIDHitX->size(); i++) {
+    switchCoords(_MuIDHitX->at(i), _MuIDHitZ->at(i));
+  }
+}
+
 int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
   MACH3LOG_INFO("-------------------------------------------------------------------");
@@ -499,6 +524,10 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   std::string genieFileStr = "";
   if (simFileStr.find("hA") != std::string::npos) genieFileStr = "Inputs/DUNE_NDGAr_FastGarSim/GenieTrees/numu_argon_G18_10a_gst.root";
   else if (simFileStr.find("hN") != std::string::npos) genieFileStr = "Inputs/DUNE_NDGAr_FastGarSim/GenieTrees/numu_argon_G18_10b_gst.root";
+  else {
+    genieFileStr = "Inputs/DUNE_NDGAr_FastGarSim/GenieTrees/numu_argon_G18_10a_gst.root";
+    MACH3LOG_INFO("Could not find interaction model in file name. Using GENIE file {}", genieFileStr);
+  }
 
   TFile* genieFile = TFile::Open(genieFileStr.c_str(), "READ");
   TTree* genieTree = static_cast<TTree*>(genieFile->Get("gst"));
@@ -520,38 +549,37 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     tree->SetBranchAddress(name, addr);
   };
 
-  // Switching of z and x to ensure x is B-field and z is beam
   readBranch(simTree, "eventID", &_EventID);
-  readBranch(simTree, "startZ", &_MCPStartX);
+  readBranch(simTree, "startX", &_MCPStartX);
   readBranch(simTree, "startY", &_MCPStartY);
-  readBranch(simTree, "startX", &_MCPStartZ);
-  readBranch(simTree, "endZ", &_MCPEndX);
+  readBranch(simTree, "startZ", &_MCPStartZ);
+  readBranch(simTree, "endX", &_MCPEndX);
   readBranch(simTree, "endY", &_MCPEndY);
-  readBranch(simTree, "endX", &_MCPEndZ);
-  readBranch(simTree, "startPZ", &_MCPStartPX);
+  readBranch(simTree, "endZ", &_MCPEndZ);
+  readBranch(simTree, "startPX", &_MCPStartPX);
   readBranch(simTree, "startPY", &_MCPStartPY);
-  readBranch(simTree, "startPX", &_MCPStartPZ);
-  readBranch(simTree, "endPZ", &_MCPEndPX);
+  readBranch(simTree, "startPZ", &_MCPStartPZ);
+  readBranch(simTree, "endPX", &_MCPEndPX);
   readBranch(simTree, "endPY", &_MCPEndPY);
-  readBranch(simTree, "endPX", &_MCPEndPZ);
+  readBranch(simTree, "endPZ", &_MCPEndPZ);
   readBranch(simTree, "pdgCode", &_MCPPDG);
   readBranch(simTree, "trackID", &_MCPTrkID);
   readBranch(simTree, "motherID", &_MCPMotherTrkID);
   readBranch(simTree, "tpcHitTrackID", &_TPCHitTrkID);
   readBranch(simTree, "tpcHitEdep", &_TPCHitEnergy);
-  readBranch(simTree, "tpcHitZ", &_TPCHitX);
+  readBranch(simTree, "tpcHitX", &_TPCHitX);
   readBranch(simTree, "tpcHitY", &_TPCHitY);
-  readBranch(simTree, "tpcHitX", &_TPCHitZ);
+  readBranch(simTree, "tpcHitZ", &_TPCHitZ);
   readBranch(simTree, "ecalHitTrackID", &_CalHitTrkID);
   readBranch(simTree, "ecalHitEdep", &_CalHitEnergy);
-  readBranch(simTree, "ecalHitZ", &_CalHitX);
+  readBranch(simTree, "ecalHitX", &_CalHitX);
   readBranch(simTree, "ecalHitY", &_CalHitY);
-  readBranch(simTree, "ecalHitX", &_CalHitZ);
+  readBranch(simTree, "ecalHitZ", &_CalHitZ);
   readBranch(simTree, "muidHitTrackID", &_MuIDHitTrkID);
   readBranch(simTree, "muidHitEdep", &_MuIDHitEnergy);
-  readBranch(simTree, "muidHitZ", &_MuIDHitX);
+  readBranch(simTree, "muidHitX", &_MuIDHitX);
   readBranch(simTree, "muidHitY", &_MuIDHitY);
-  readBranch(simTree, "muidHitX", &_MuIDHitZ);
+  readBranch(simTree, "muidHitZ", &_MuIDHitZ);
 
   readBranch(genieTree, "Ev", &_Enu);
   readBranch(genieTree, "pxv", &_PXnu);
@@ -582,6 +610,9 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     if (i_event != 0) clearBranchVectors();
     simTree->GetEntry(static_cast<Long64_t>(i_event));
     genieTree->GetEntry(_EventID);
+    
+    // Note that the FastGArSim output has a different coordinate system to the genie file and this code. This is fixed here.
+    fixCoordinates();
 
     if (i_event % (nEntries/100) == 0) {
       MACH3LOG_INFO("\tNow processing event: {}/{}",i_event,nEntries);
@@ -644,7 +675,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     // Resize vectors for particle-level parameters
     size_t n_prim_in_event = mother_to_daughter_ID[0].size();
     dunendgarmcPlotting[i_event].particle_pdg.resize(n_prim_in_event, M3::_BAD_INT_);
-    dunendgarmcPlotting[i_event].particle_energy.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_evis.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
     dunendgarmcPlotting[i_event].particle_momentum.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
     dunendgarmcPlotting[i_event].particle_endmomentum.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
     dunendgarmcPlotting[i_event].particle_transversemomentum.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
@@ -675,6 +706,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     dunendgarmcPlotting[i_event].particle_momresyz.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
     dunendgarmcPlotting[i_event].particle_momresx.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
     dunendgarmcPlotting[i_event].particle_edepcrit.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].particle_isbarrelpart.resize(n_prim_in_event, M3::_BAD_INT_); 
 
     // Loop through primaries
     for (int& primID : mother_to_daughter_ID[0]) {
@@ -694,6 +726,9 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
         isCurvatureResolved = true;
       }
       dunendgarmcPlotting[i_event].particle_iscurvatureresolved[prim_index] = isCurvatureResolved;
+
+      dunendgarmcPlotting[i_event].particle_isbarrelpart[prim_index] = (dunendgarmcPlotting[i_event].particle_bangle[prim_index] > atan(ECALInnerRadius/ECALEndCapStart)*180/M_PI
+        && dunendgarmcPlotting[i_event].particle_bangle[prim_index] < 180. - atan(ECALInnerRadius/ECALEndCapStart)*180/M_PI);
 
       // Find energy deposited by by primary and non-curvature-resolved descendants in critical region of calorimeter
       double EDepCrit = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, crit_reg);
@@ -807,13 +842,13 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
     case kLepPZ:
       return &dunendgarmcFitting[iEvent].rw_lep_pZ;
     case kLepTheta:
-      return &dunendgarmcFitting[iEvent].rw_lep_theta;
+      return &dunendgarmcPlotting[iEvent].rw_lep_theta;
     case kLepPhi:
-      return &dunendgarmcFitting[iEvent].rw_lep_phi;
+      return &dunendgarmcPlotting[iEvent].rw_lep_phi;
     case kLepBAngle:
-      return &dunendgarmcFitting[iEvent].rw_lep_bangle;
+      return &dunendgarmcPlotting[iEvent].rw_lep_bangle;
     case kLepP:
-      return &dunendgarmcFitting[iEvent].rw_lep_p;
+      return &dunendgarmcPlotting[iEvent].rw_lep_p;
     case kTrueQ0:
       return &dunendgarmcFitting[iEvent].rw_Q0;
     case kTrueQ3:
@@ -913,8 +948,12 @@ std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(KinematicVecs 
       return std::vector<double>(
         dunendgarmcPlotting[iEvent].particle_isescaped.begin(),
         dunendgarmcPlotting[iEvent].particle_isescaped.end());
-    case kParticle_Energy:
-      return dunendgarmcPlotting[iEvent].particle_energy;
+    case kParticle_IsBarrelPart:
+      return std::vector<double>(
+        dunendgarmcPlotting[iEvent].particle_isbarrelpart.begin(),
+        dunendgarmcPlotting[iEvent].particle_isbarrelpart.end());
+    case kParticle_EVis:
+      return dunendgarmcPlotting[iEvent].particle_evis;
     case kParticle_Momentum:
       return dunendgarmcPlotting[iEvent].particle_momentum;
     case kParticle_EndMomentum:

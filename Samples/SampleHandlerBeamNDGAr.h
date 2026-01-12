@@ -14,12 +14,12 @@ public:
   enum KinematicTypes {kTrueNeutrinoEnergy, kMode, kOscChannel, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kTrueLepEnergy,
     kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted,  kInFDV, kIsCC};
   
-  enum KinematicVecs {kParticle_Energy, kParticle_Momentum, kParticle_EndMomentum, kParticle_TransverseMomentum, 
+  enum KinematicVecs {kParticle_EVis, kParticle_Momentum, kParticle_EndMomentum, kParticle_TransverseMomentum, 
     kParticle_BAngle, kParticle_BeamAngle, kParticle_IsAccepted, kParticle_IsCurvatureResolved, kParticle_IsDecayed, kParticle_PDG,
     kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInBarrel, kParticle_IsStoppedInEndCap, kParticle_IsStoppedInGap, 
     kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_IsEscaped, kParticle_NTurns, kParticle_NHits,
     kParticle_TrackLengthYZ, kParticle_MomResMS, kParticle_MomResYZ, kParticle_MomResX, kParticle_StartR2, kParticle_EndR, 
-    kParticle_EndDepth, kParticle_EndX, kParticle_EndY, kParticle_EndZ, kParticle_StartX, kParticle_EDepCrit};
+    kParticle_EndDepth, kParticle_EndX, kParticle_EndY, kParticle_EndZ, kParticle_StartX, kParticle_EDepCrit, kParticle_IsBarrelPart};
 
 protected:
   //Functions required by core
@@ -66,6 +66,7 @@ protected:
   // FastGArSim inputs
   int _EventID;
   void clearBranchVectors();
+  void fixCoordinates();
   std::vector<float> *_MCPStartX=nullptr;
   std::vector<float> *_MCPStartY=nullptr;
   std::vector<float> *_MCPStartZ=nullptr;
@@ -183,7 +184,7 @@ protected:
   };
     
   const std::unordered_map<std::string, int> KinematicVectorsDUNE = {
-    {"Particle_Energy",kParticle_Energy},
+    {"Particle_EVis",kParticle_EVis},
     {"Particle_Momentum",kParticle_Momentum},
     {"Particle_EndMomentum",kParticle_EndMomentum},
     {"Particle_TransverseMomentum",kParticle_TransverseMomentum},
@@ -215,10 +216,11 @@ protected:
     {"Particle_EndZ",kParticle_EndZ},
     {"Particle_StartX",kParticle_StartX},
     {"Particle_EDepCrit",kParticle_EDepCrit},
+    {"Particle_IsBarrelPart",kParticle_IsBarrelPart},
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicVectorsDUNE = {
-    {kParticle_Energy,"Particle_Energy"},
+    {kParticle_EVis,"Particle_EVis"},
     {kParticle_Momentum,"Particle_Momentum"},
     {kParticle_EndMomentum,"Particle_EndMomentum"},
     {kParticle_TransverseMomentum,"Particle_TransverseMomentum"},
@@ -249,6 +251,7 @@ protected:
     {kParticle_EndZ,"Particle_EndZ"},
     {kParticle_StartX,"Particle_StartX"},
     {kParticle_EDepCrit,"Particle_EDepCrit"},
+    {kParticle_IsBarrelPart,"Particle_IsBarrelPart"},
   };
     
 };
