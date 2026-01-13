@@ -42,6 +42,13 @@ void SampleHandlerAtm::SetupSplines() {
     if (SplineFactory.GetSplineType() == kBinned){
       InitialiseSplineObject(); //Running the "normal" initialisation for binned splines
     }
+    else if (SplineFactory.GetSplineType() == kMonolith){
+      InitialiseSplineObjectPerEvent(); //Running the per-event initialisation
+    }
+    else{
+      MACH3LOG_ERROR("Unknown spline type found when setting up splines for sample {}", SampleName);
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
   }
   else{
     MACH3LOG_INFO("Found no spline for this sample so I will not load or evaluate splines");
@@ -49,6 +56,19 @@ void SampleHandlerAtm::SetupSplines() {
   }
   
   return;
+}
+
+void SampleHandlerAtm::InitialiseSplineObjectPerEvent(){
+  auto SplineHandlerDUNE = dynamic_cast<MonolithSplineHandlerDUNE*>(SplineHandler.get());
+  if (!SplineHandlerDUNE){
+    MACH3LOG_ERROR("SplineHandler is not of type MonolithSplineHandlerDUNE for sample {}. Cannot call InitialiseSplineObjectPerEvent.", SampleName);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  for (size_t i = 0; i < dunemcSamples.size(); ++i) {
+    //REQUIRES THE USE OF LOW MEMORY STRUCTS FLAG...
+    MCSamples[i].total_weight_pointers.push_back(SplineHandlerDUNE->retPointer(i));
+  }
+
 }
 
 void SampleHandlerAtm::SetupWeightPointers() {
@@ -175,10 +195,13 @@ int SampleHandlerAtm::SetupExperimentMC() {
     dunemcSamples.emplace_back(std::move(currentEventFromNuE));
   }
 
+  //Need to clear that static vector to avoid double free errors when exiting the program
+  caf::SRBranchRegistry::clear();
+  delete sr;
   delete cafTree;
   delete weightsTree;
   delete f;
-  delete sr;
+  
   gErrorIgnoreLevel = CurrErrorLevel;
 
   return dunemcSamples.size();

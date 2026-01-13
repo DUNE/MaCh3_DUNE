@@ -67,7 +67,7 @@ struct dunemc_base {
   */
 
   //double beam_w;
-  double flux_w;
+  M3::float_t flux_w;
 
   double mode;
   //int isbound;

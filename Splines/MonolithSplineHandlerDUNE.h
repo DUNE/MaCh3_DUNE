@@ -68,12 +68,20 @@ public:
 class ReusableSpline : public TSpline3 {
 public:
     // Inherit standard constructors
-    ReusableSpline(const std::vector<double>& knots) : TSpline3() {
+    ReusableSpline(const std::vector<double>& knots) : TSpline3(){
+        fValBeg = 0;
+        fValEnd = 0;
+        fBegCond = 0;
+        fEndCond = 0;
         fNp = knots.size();
         fPoly = new TSplinePoly3[fNp];
         for (int i = 0; i < fNp; ++i) {
             fPoly[i].X() = knots[i];
+            fPoly[i].Y() = 1.0;  // Initialize Y to 1.0 (neutral weight)
         }
+        fXmin = fPoly[0].X();
+        fXmax = fPoly[fNp-1].X();
+        fName = "ReusableSpline";
     }
 
     // Expose the protected BuildCoeff method
@@ -93,7 +101,9 @@ public:
 
     void PrintPoly() const {
         for (int i = 0; i < fNp; ++i) {
-            MACH3LOG_INFO("Knot {}: X = {}, Y = {}", i, fPoly[i].X(), fPoly[i].Y());
+            double x = 0, y = 0, b = 0, c = 0, d = 0;
+            this->GetCoeff(i, x, y, b, c, d);
+            MACH3LOG_INFO("Knot {}: X = {:.2f}, Y = {:.2f}, b = {:.2f}, c = {:.2f}, d = {:.2f}", i, x, y, b, c, d);
         }
     }
 

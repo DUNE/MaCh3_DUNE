@@ -118,6 +118,8 @@ protected:
     {kOscChannel,"OscillationChannel"},
     {kMode,"Mode"}
   };
+
+  void InitialiseSplineObjectPerEvent();
   
   /// Array filled with MC samples for each oscillation channel
   std::vector<dunemc_base> dunemcSamples;
@@ -126,7 +128,7 @@ protected:
   bool IsELike;
 
   /// Multiplicative scaling to scale from the assumed 400ktyr value in the CAF files
-  double ExposureScaling;
+  M3::float_t ExposureScaling;
   std::string fInputFile, fInputSplines;
   uint fSampleId;
 };
