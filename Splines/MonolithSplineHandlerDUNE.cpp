@@ -2,6 +2,7 @@
 #include "TFile.h"
 #include "TTreeReader.h"
 #include "TTreeReaderArray.h"
+#include "Manager/Monitor.h"
 
 MonolithSplineHandlerDUNE::MonolithSplineHandlerDUNE(std::pair<std::vector<std::vector<TResponseFunction_red*> >, std::vector<RespFuncType>> initParams) :
     SMonolith(initParams.first, initParams.second)
@@ -80,6 +81,10 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
     std::vector<std::vector<TSpline3_redDUNE*> > splinesReduced;
     std::vector<RespFuncType> splineTypes;
 
+    MACH3LOG_INFO("Loading splines for {} events...", eventIndices.size());
+    const size_t totalEvents = eventIndices.size();
+    size_t lastPrintPercent = 0;
+
     while (reader.Next()) {
         if (nextEventToFindIdx >= eventIndices.size()) {
             break;
@@ -114,16 +119,29 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
                 splineTypes.push_back(RespFuncType::kTSpline3_red);
                 ++nextEventToFindIdx;
             }
+
+            // Print progress bar every 5%
+            size_t currentPercent = (nextEventToFindIdx * 100) / totalEvents;
+            if (currentPercent >= lastPrintPercent + 5 || nextEventToFindIdx == totalEvents) {
+                MaCh3Utils::PrintProgressBar(nextEventToFindIdx, totalEvents);
+                lastPrintPercent = currentPercent;
+            }
         }
         ++currentEventIdx;
     }
-
+    
+    std::cout << std::endl; // New line after progress bar
     MACH3LOG_INFO("Total number of events processed for splines: {}", splinesReduced.size());
     
     std::vector<std::vector<TResponseFunction_red*> > splinesReducedGeneric;
     for (const auto& eventSplines : splinesReduced) {
         std::vector<TResponseFunction_red*> genericEventSplines;
         for (const auto& spline : eventSplines) {
+            if(spline->IsFlat()) { //Filtering out flat splines for better performance
+                delete spline;
+                genericEventSplines.push_back(nullptr);
+                continue;
+            }
             genericEventSplines.push_back(static_cast<TResponseFunction_red*>(spline));
         }
         splinesReducedGeneric.push_back(std::move(genericEventSplines));

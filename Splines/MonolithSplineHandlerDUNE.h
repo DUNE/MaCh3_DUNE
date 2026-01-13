@@ -63,6 +63,15 @@ public:
             Par[i][2] = other.Par[i][2];
         }
     }
+
+    bool IsFlat() const {
+        for (int i = 0; i < nPoints; ++i) {
+            if (std::abs(YResp[i] - 1.0) > 1e-9) {
+                return false;
+            }
+        }
+        return true;
+    }
 };
 
 class ReusableSpline : public TSpline3 {

@@ -14,8 +14,8 @@ Binning:
 SampleOptions:
   IsELike: no
   ExposureScaling: 1.0
-  InputFile: "/pnfs/dune/persistent/users/pgranger/caf_new_sum_2.6M_wsampleid.root"
-  InputSplines: "/pnfs/dune/persistent/users/pgranger/merged_new_systs_wheader.root"
+  InputFile: "/exp/dune/data/users/pgranger/caf_new_sum_2.6M_wsampleid.root"
+  InputSplines: "/exp/dune/data/users/pgranger/merged_new_systs_wheader.root"
   SampleId: 0
 
 InputFiles:
