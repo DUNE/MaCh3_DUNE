@@ -41,6 +41,14 @@ int main(int argc, char * argv[]) {
   MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
 
   //###############################################################################################################################
+  // Set all systematics to their nominal (prior central) values for Asimov generation
+  
+  if (xsec != nullptr) {
+    MACH3LOG_INFO("Setting all systematic parameters to their prior central values for Asimov generation");
+    xsec->SetParameters();  // Empty argument sets all params to prior central values
+  }
+
+  //###############################################################################################################################
   //Perform reweight, print total integral, and set data
 
   std::vector<TH1*> DUNEHists;
