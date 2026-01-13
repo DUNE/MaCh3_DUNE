@@ -39,7 +39,7 @@ public:
   void setNDCovMatrix();
   double GetLikelihood() override;
 
-  std::vector<struct dunemc_base> dunendmcSamples;
+  std::vector<struct dunemc_beamnd> dunendmcSamples;
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},

@@ -1,6 +1,6 @@
 #include "SampleHandlerBeamFD.h"
 
-SampleHandlerBeamFD::SampleHandlerBeamFD(std::string mc_version_, ParameterHandlerGeneric* ParHandler_) : SampleHandlerFD(mc_version_, ParHandler_) {
+SampleHandlerBeamFD::SampleHandlerBeamFD(std::string mc_version_, ParameterHandlerGeneric* ParHandler_,const std::shared_ptr<OscillationHandler>&  Oscillator_) : SampleHandlerFD(mc_version_, ParHandler_, Oscillator_) {
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
   
@@ -11,7 +11,7 @@ SampleHandlerBeamFD::~SampleHandlerBeamFD() {
 }
 
 void SampleHandlerBeamFD::Init() {
-  dunemcSamples.resize(nSamples,dunemc_base());
+  dunemcSamples.resize(nSamples,dunemc_beamfd());
   
   if (CheckNodeExists(SampleManager->raw(), "DUNESampleBools", "iselike" )) {
     iselike = SampleManager->raw()["DUNESampleBools"]["iselike"].as<bool>();
@@ -465,61 +465,6 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   _data->SetBranchStatus("vtx_z", 1);
   _data->SetBranchAddress("vtx_z", &_vtx_z);  
 
-  // now fill the actual variables
-  /*
-  duneobj->nEvents = static_cast<int>(_data->GetEntries());
-
-  // allocate memory for dunemc variables
-  duneobj->rw_cvnnumu = new double[duneobj->nEvents];
-  duneobj->rw_cvnnue = new double[duneobj->nEvents];
-  duneobj->rw_cvnnumu_shifted = new double[duneobj->nEvents];
-  duneobj->rw_cvnnue_shifted = new double[duneobj->nEvents];
-  duneobj->rw_etru = new double[duneobj->nEvents];
-  duneobj->rw_erec = new double[duneobj->nEvents];
-  duneobj->rw_erec_shifted = new double[duneobj->nEvents];
-  duneobj->rw_erec_had = new double[duneobj->nEvents];
-  duneobj->rw_erec_lep = new double[duneobj->nEvents];
-
-  duneobj->rw_eRecoP = new double[duneobj->nEvents];
-  duneobj->rw_eRecoPip = new double[duneobj->nEvents];
-  duneobj->rw_eRecoPim = new double[duneobj->nEvents];
-  duneobj->rw_eRecoPi0 = new double[duneobj->nEvents];
-  duneobj->rw_eRecoN = new double[duneobj->nEvents];
-
-  duneobj->rw_LepE = new double[duneobj->nEvents];
-  duneobj->rw_eP = new double[duneobj->nEvents];
-  duneobj->rw_ePip = new double[duneobj->nEvents];
-  duneobj->rw_ePim = new double[duneobj->nEvents];
-  duneobj->rw_ePi0 = new double[duneobj->nEvents];
-  duneobj->rw_eN = new double[duneobj->nEvents];
-
-  duneobj->rw_erec_had_sqrt = new double[duneobj->nEvents];
-  duneobj->rw_erec_lep_sqrt = new double[duneobj->nEvents];
-  duneobj->rw_eRecoN_sqrt = new double[duneobj->nEvents];
-  duneobj->rw_eRecoPi0_sqrt = new double[duneobj->nEvents];
-
-  duneobj->rw_sum_ehad = new double[duneobj->nEvents];
-  duneobj->rw_sum_ehad_sqrt = new double[duneobj->nEvents];
-
-  duneobj->rw_trueccnue = new double[duneobj->nEvents];
-  duneobj->rw_trueccnumu = new double[duneobj->nEvents];
-
-
-  duneobj->rw_theta = new double[duneobj->nEvents];
-  duneobj->flux_w = new double[duneobj->nEvents];
-  duneobj->rw_isCC = new int[duneobj->nEvents];
-  duneobj->rw_nuPDGunosc = new int[duneobj->nEvents];
-  duneobj->rw_nuPDG = new int[duneobj->nEvents];
-  duneobj->rw_berpaacvwgt = new double[duneobj->nEvents]; 
-  duneobj->rw_vtx_x = new double[duneobj->nEvents];
-  duneobj->rw_vtx_y = new double[duneobj->nEvents];
-  duneobj->rw_vtx_z = new double[duneobj->nEvents];
-
-  duneobj->nupdgUnosc = new int[duneobj->nEvents];
-  duneobj->nupdg = new int[duneobj->nEvents];
-  duneobj->mode = new double[duneobj->nEvents];
-  duneobj->Target = new int[duneobj->nEvents];
-  */
   size_t nEntries = static_cast<size_t>(_data->GetEntries());
   dunemcSamples.resize(nEntries);
   _data->GetEntry(0);
@@ -538,8 +483,8 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
     _data->GetEntry(i);
 
     std::string CurrFileName = _data->GetCurrentFile()->GetName();
-    dunemcSamples[i].nupdgUnosc = GetInitPDGFromFileName(CurrFileName);
-    dunemcSamples[i].nupdg = GetFinalPDGFromFileName(CurrFileName);
+    dunemcSamples[i].nupdgUnosc = _nuPDGunosc;
+    dunemcSamples[i].nupdg = _nuPDG;
     dunemcSamples[i].OscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, dunemcSamples[i].nupdgUnosc, dunemcSamples[i].nupdg));
 
     // POT stuff
@@ -720,53 +665,3 @@ void SampleHandlerBeamFD::SetupFDMC() {
   
 }
  
-/*
-std::vector<double> SampleHandlerBeamFD::ReturnKinematicParameterBinning(std::string KinematicParameterStr) {
-  KinematicTypes KinematicParameter = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameterStr));
-  std::vector<double> ReturnVec;
-  
-  switch(KinematicParameter){
-  case kIsFHC:
-    ReturnVec.resize(3);
-    ReturnVec[0] = -0.5;
-    ReturnVec[1] = 0.5;
-    ReturnVec[2] = 1.5;
-    break;
-    
-  case kTrueNeutrinoEnergy:
-  case kRecoNeutrinoEnergy:
-    ReturnVec.resize(XBinEdges.size());
-    for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
-    break;
-
-  case kOscChannel:
-    ReturnVec.resize(GetNsamples());
-    for (int bin_i=0;bin_i<GetNsamples();bin_i++) {ReturnVec[bin_i] = bin_i;}
-    break;
-
-  case kM3Mode:
-    ReturnVec.resize(Modes->GetNModes());
-    for (int bin_i=0;bin_i<Modes->GetNModes();bin_i++) {ReturnVec[bin_i] = bin_i;}
-    break;
-
-  case kTrueXPos:
-  case kTrueYPos:
-  case kTrueZPos:
-  case kTrueCCnue:
-  case kTrueCCnumu:
-  case kCVNNue:
-  case kCVNNumu:
-    ReturnVec.resize(2);
-    ReturnVec[0] = 1e-8;
-    ReturnVec[1] = 1e8;
-    break;
-
-  default:
-    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type: {}", static_cast<int>(KinematicParameter));
-    throw MaCh3Exception(__FILE__, __LINE__);
-
-  }      
-  
-  return ReturnVec;
-}
-*/

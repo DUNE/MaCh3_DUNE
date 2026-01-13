@@ -120,7 +120,7 @@ protected:
   };
   
   /// Array filled with MC samples for each oscillation channel
-  std::vector<dunemc_base> dunemcSamples;
+  std::vector<dunemc_atm> dunemcSamples;
 
   /// Is the sample e-like
   bool IsELike;

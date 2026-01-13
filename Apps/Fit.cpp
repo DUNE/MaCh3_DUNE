@@ -12,18 +12,12 @@
 #include <TColor.h>
 #include <TMath.h>
 
-#include "Fitters//mcmc.h"
+#include "Fitters/MaCh3Factory.h"
 #include "Samples/MaCh3DUNEFactory.h"
 
 int main(int argc, char * argv[]) {
 
-  // ----------------------- OPTIONS ---------------------------------------- //
-  if(argc == 1){
-    MACH3LOG_INFO("Usage: bin/jointFitDUNEBeam Configs/config.yaml");
-    return 1;
-  }
-
-  manager *FitManager = new manager(argv[1]);
+  auto FitManager = MaCh3ManagerFactory(argc, argv);
   auto OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
 
   ParameterHandlerGeneric* xsec = nullptr;
@@ -74,7 +68,7 @@ int main(int argc, char * argv[]) {
   //###########################################################################################################
   //MCMC
 
-  std::unique_ptr<mcmc> MaCh3Fitter = std::make_unique<mcmc>(FitManager);
+  auto MaCh3Fitter = MaCh3FitterFactory(FitManager.get());
 
   bool StartFromPreviousChain = GetFromManager(FitManager->raw()["General"]["StartFromPos"], false);
   //Start chain from random position unless continuing a chain

@@ -9,7 +9,7 @@ BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
 
 Binning:
   XVarStr: "TrueNeutrinoEnergy"
-  XVarBins: [0., 0.25, 0.5, 0.75, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 4.25, 4.5, 4.75, 5., 5.25, 5.5, 5.75, 6., 6.25, 6.5, 6.75, 7., 7.25, 7.5, 7.75, 8., 8.25, 8.5, 8.75, 9., 9.25, 9.5, 9.75, 10.]
+  XVarBins: [0., 0.25, 0.5, 0.75, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 4.25, 4.5, 4.75, 5., 5.25, 5.5, 5.75, 6., 6.25, 6.5, 6.75, 7., 7.25, 7.5, 7.75, 8., 8.25, 8.5, 8.75, 9., 9.25, 9.5, 9.75, 10., 1000.]
 
 DetectorVariables:
   B_field: 0.5
@@ -18,21 +18,24 @@ DetectorVariables:
   spatial_resolution: 2.5
   adc_sampling_frequency: 20.
   drift_velocity: 3.011
-  TPCFidLength: 200.
-  TPCFidRadius: 170.0
-  TPCInstrumentedLength: 250.
-  TPCInstrumentedRadius: 260.
-  ECALInnerRadius: 289.88 # Shortest distance from TPC centre to ECal inner boundary
-  ECALOuterRadius: 352.88 # Shortest distance from TPC centre to ECal outer boundary
-  ECALEndCapStart: 275.
-  ECALEndCapEnd: 338.
-  MuIDInnerRadius: 407.44
-  MuIDOuterRadius: 438.33
-  MuIDLength: 338.
-  downsampling: 1.
+  TPCFidLength: 210
+  TPCFidRadius: 160
+  TPCInstrumentedLength: 250
+  TPCInstrumentedRadius: 260
+  ECALInnerRadius: 278.04
+  ECALOuterRadius: 322.252
+  # TPCInstrumentedLength: 250
+  # TPCInstrumentedRadius: 210
+  # ECALInnerRadius: 228.04
+  # ECALOuterRadius: 272.252
+  ECALEndCapStart: 329.25
+  ECALEndCapEnd: 374.4
+  downsampling: 0.01
+  EDepCrit: 2 # Max energy for a contained shower to deposit in the outer crit_layers (MeV)
+  CritLayers: 2 # Number of layers defining this outer region
 
 InputFiles:
-  mtupleprefix: "Inputs/"
+  mtupleprefix: "Inputs/DUNE_NDGAr_FastGarSim/"
   # mtupleprefix: "Inputs/DUNE_NDGAr_FastGarSim/fastgarsim_cdr_"
   mtuplesuffix: ".root"
   # mtuplesuffix: "_hadded_000.root"
@@ -50,9 +53,9 @@ SubSamples:
   #   splinefile: ""
   #   nutype: 14
   #   oscnutype: 14
-  - Name: "test"
-    LatexName: "test"
-    mtuplefile: "test"
+  - Name: "100k_pilot"
+    LatexName: "100k_pilot"
+    mtuplefile: "100k_pilot"
     splinefile: ""
     nutype: 14
     oscnutype: 14

@@ -4,13 +4,13 @@ General:
 
   DUNESamples:
     - "Configs/Samples/AtmSample_numuselec.yaml"
-    - "Configs/Samples/AtmSample_nueselec.yaml"    
+    - "Configs/Samples/AtmSample_nueselec.yaml"
 
   # Nu-FIT
   # OscillationParameters: [0.310, 0.582, 0.224, 7.39E-5, 2.5254E-3, -2.498, 25]
 
   # Nu-FIT 5.2 w. SK atm
-  OscillationParameters: [0.303, 0.452, 0.0223, 7.41E-5, 2.51E-3, -2.233, 25,  1221.5, 3480., 5701., 6371., 1., 1., 1., 1., 0.468, 0.468, 0.496, 0.496]
+  OscillationParameters: [0.303, 0.452, 0.0223, 7.41E-5, 2.51E-3, -2.233, 25, 1221.5, 3480., 5701., 6371., 1., 1., 1., 1., 0.468, 0.468, 0.496, 0.496]
   #OscillationParameters: [0.303, 0.452, 0.0223, 7.41E-5, 2.51E-3, -2.233, 25]
 
   # T2K-like best-fit
@@ -75,10 +75,11 @@ ProcessMCMC:
   CredibleInSigmas: false
 
   MakeCredibleRegions: true
-  CredibleRegions: [0.99, 0.90, 0.68]
+  # HH: commented out to make the yaml linter happy, same as defined above
+  # CredibleRegions: [0.99, 0.90, 0.68]
   CredibleRegionStyle: [2, 1, 3]
   CredibleRegionColor: [413, 406, 416]
-  CredibleInSigmas: false
+  # CredibleInSigmas: false
   Draw2DPosterior: false
   DrawBestFit: true
 
@@ -96,7 +97,7 @@ ProcessMCMC:
     - ["OscPars", ["delm2_23", "sin2th_23", "sin2th_13", "delta_cp"]]
 
   ReweightPrior: true
-  PriorReweighting: [ ["sin2th_13"], [0.0220], [0.0007] ]
+  PriorReweighting: [["sin2th_13"], [0.0220], [0.0007]]
 
   JarlskogAnalysis: true
 

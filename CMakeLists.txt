@@ -59,20 +59,9 @@ if(DEFINED ROOT_CXX_STANDARD AND ROOT_CXX_STANDARD GREATER CMAKE_CXX_STANDARD)
 endif()
 
 #=================== DUNEAnaObj
-option(Build_NDGAr "Whether to build ndgar SampleHandler class or all others" OFF)
-
 if(NOT DEFINED DUNE_ANAOBJ_BRANCH)
-  if (Build_NDGAr)
-    set(DUNE_ANAOBJ_BRANCH tag/legacy_ndgar_cafs_2024)
-  else()
-    set(DUNE_ANAOBJ_BRANCH v03_06_00)
-  endif()
-
+  set(DUNE_ANAOBJ_BRANCH v03_06_00)
   set(DUNE_ANAOBJ_BRANCH ${DUNE_ANAOBJ_BRANCH} CACHE STRING "Specify which duneanaobj branch to use")
-endif()
-
-if (Build_NDGAr)
-  add_compile_definitions(BUILD_NDGAR)
 endif()
 
 option(MaCh3_DUNE_USE_SRProxy "Whether to build proxy classes for Standard Record objects" OFF)
@@ -135,8 +124,8 @@ endif()
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
-find_package(MaCh3 2.2.2 EXACT QUIET)
-set(MaCh3_CORE_BRANCH v2.2.2 CACHE STRING "Specify the MaCh3 core branch to use")
+find_package(MaCh3 2.2.3 EXACT QUIET)
+set(MaCh3_CORE_BRANCH v2.2.3 CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 option(MaCh3DUNE_Atmos "Whether working with atmospherics or beam oscillations" OFF)
 

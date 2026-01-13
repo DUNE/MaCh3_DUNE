@@ -13,7 +13,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     SplineInformation:
@@ -33,7 +33,7 @@ Systematics:
     ParameterValues:
       Generated: 0.5
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     SplineInformation:
@@ -53,7 +53,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -70,7 +70,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -87,7 +87,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -104,7 +104,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -121,7 +121,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -138,7 +138,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -155,7 +155,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -172,7 +172,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -189,7 +189,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -206,7 +206,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -223,7 +223,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -240,7 +240,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -257,7 +257,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -274,7 +274,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -291,7 +291,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -308,7 +308,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -325,7 +325,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -342,7 +342,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -359,7 +359,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -376,7 +376,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -393,7 +393,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -410,7 +410,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -427,7 +427,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -444,7 +444,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -461,7 +461,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -478,7 +478,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm
@@ -495,7 +495,7 @@ Systematics:
     ParameterValues:
       Generated: 1.
       PreFitValue: 1.
-    DetID: ["ND", "FD", "ATM"]
+    SampleNames: ["ND", "FD_*", "ATM"]
     StepScale:
       MCMC: 0.2
     Type: Norm

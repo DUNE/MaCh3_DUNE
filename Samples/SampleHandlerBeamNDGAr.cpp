@@ -22,6 +22,8 @@ void SampleHandlerBeamNDGAr::Init() {
   adc_sampling_frequency = SampleManager->raw()["DetectorVariables"]["adc_sampling_frequency"].as<double>(); //NK sampling frequency for ADC - needed to find timing resolution and spatial resolution in x dir in MHz
   drift_velocity = SampleManager->raw()["DetectorVariables"]["drift_velocity"].as<double>(); //NK drift velocity of electrons in gas - needed to find timing resolution and spatial resolution in x dir in cm/microsecond
   downsampling = SampleManager->raw()["DetectorVariables"]["downsampling"].as<double>(); //JM downsampling fraction
+  edepcrit_threshold = SampleManager->raw()["DetectorVariables"]["EDepCrit"].as<double>()/1000.; //JM max energy for a contained shower to deposit in the outer crit_layers of calorimeter in GeV 
+  crit_layers = SampleManager->raw()["DetectorVariables"]["CritLayers"].as<int>(); // JM number of layers defining this outer region
   TPCFidLength = SampleManager->raw()["DetectorVariables"]["TPCFidLength"].as<double>();
   TPCFidRadius = SampleManager->raw()["DetectorVariables"]["TPCFidRadius"].as<double>();
   TPCInstrumentedLength = SampleManager->raw()["DetectorVariables"]["TPCInstrumentedLength"].as<double>();
@@ -246,17 +248,31 @@ double SampleHandlerBeamNDGAr::GetCalDepth(double x, double y, double z) {
   else return -999.; // before ecal
 }
 
-double SampleHandlerBeamNDGAr::CalcEDepCal(int trkID, const std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<std::vector<double>>>& ID_to_ECalDep, double crit_reg) {
+// Calculate the layer from the depth. Barrel: 8x0.673cm, 34x1.142cm. Endcap: 6x0.673cm, 36x1.142cm.
+double SampleHandlerBeamNDGAr::DepthToLayer(double depth, double r) {
+  int n_thin_layers;
+  if (r < ECALInnerRadius) n_thin_layers = 6;
+  else n_thin_layers = 8;
+
+  double layer;
+  if (depth < static_cast<double>(n_thin_layers)*0.673) {
+    layer = static_cast<int>(depth/0.673) + 1;
+  } else {
+    layer = static_cast<int>((depth-static_cast<double>(n_thin_layers)*0.673)/1.142) + 1 + n_thin_layers;
+  }
+
+  return layer;
+}
+
+double SampleHandlerBeamNDGAr::CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers) {
+  auto it = mother_to_daughter_ID.find(motherID);
   double EDepCrit = 0.;
-  auto it = mother_to_daughter_ID.find(trkID);
   if (it != mother_to_daughter_ID.end()) {
-    if(ID_to_ECalDep.find(trkID) != ID_to_ECalDep.end()) {
-      for (const auto& calhit : ID_to_ECalDep.at(trkID)) {
-        if (ECALOuterRadius - ECALInnerRadius - calhit[1] < crit_reg) EDepCrit += calhit[0];
-      }
+    for (int i_layer=tot_layers-crit_layers; i_layer<tot_layers; i_layer++) {
+      EDepCrit += ID_to_ECalDep.at(motherID)[static_cast<size_t>(i_layer)];
     }
     for (int daughterID : it->second) {
-      EDepCrit += CalcEDepCal(daughterID, mother_to_daughter_ID, ID_to_ECalDep, crit_reg);
+      EDepCrit += CalcEDepCal(daughterID, mother_to_daughter_ID, ID_to_ECalDep, tot_layers);
     }
   }
   return EDepCrit;
@@ -329,7 +345,7 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
   if (charge == 0) return false;
 
   double rad_curvature = 100*transverse_mom/(0.3*B_field); //p = 0.3*B*r where p in GeV/c, B in T, r in m (*100 to convert to cm)
-  double theta_xT = atan2(p_x,transverse_mom); //helix pitch angle
+  double theta_xT = atan2(p_x, transverse_mom); //helix pitch angle
   double pitch = std::abs(2*M_PI*rad_curvature*tan(theta_xT)); //distance between two turns of a helix in cm
   double tan_theta = tan(theta_xT);
 
@@ -420,7 +436,7 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
   double sigmax_frac = sigmax/(std::abs(length_track_x)/100);
   double sigmayz = (spatial_resolution/(1000)); //needs to be in m
   double momres_yz = transverse_mom*(std::sqrt(720/(nhits+4)) * (sigmayz*transverse_mom/(0.3*B_field*(L_yz/100)*(L_yz/100)))
-    * std::sqrt(1-(1./21)*(L_yz/rad_curvature)*(L_yz/rad_curvature)));
+    * std::sqrt(1.-(1./21.)*(L_yz/rad_curvature)*(L_yz/rad_curvature)));
   double momres_ms = transverse_mom*(0.016/(0.3*B_field*(L_yz/100)*cos(theta_xT)*beta))*std::sqrt(L_yz/X0);
   double momres_tottransverse = std::sqrt(momres_yz*momres_yz + momres_ms*momres_ms)/transverse_mom;
   double sigma_theta = (cos(theta_xT)*cos(theta_xT) * (pitch/(2*M_PI*rad_curvature)) *
@@ -462,6 +478,7 @@ void SampleHandlerBeamNDGAr::clearBranchVectors() {
   _TPCHitY->clear();
   _TPCHitZ->clear();
   _CalHitTrkID->clear();
+  _CalHitLayer->clear();
   _CalHitEnergy->clear();
   _CalHitX->clear();
   _CalHitY->clear();
@@ -571,6 +588,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   readBranch(simTree, "tpcHitY", &_TPCHitY);
   readBranch(simTree, "tpcHitZ", &_TPCHitZ);
   readBranch(simTree, "ecalHitTrackID", &_CalHitTrkID);
+  readBranch(simTree, "ecalHitTrackID", &_CalHitLayer);
   readBranch(simTree, "ecalHitEdep", &_CalHitEnergy);
   readBranch(simTree, "ecalHitX", &_CalHitX);
   readBranch(simTree, "ecalHitY", &_CalHitY);
@@ -606,7 +624,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   bool do_geometric_correction = false;
 
   for (size_t i_event = 0; i_event < nEntries; ++i_event) { 
-
     if (i_event != 0) clearBranchVectors();
     simTree->GetEntry(static_cast<Long64_t>(i_event));
     genieTree->GetEntry(_EventID);
@@ -629,15 +646,20 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
     std::unordered_map<int, std::vector<int>> mother_to_daughter_ID;
     std::unordered_map<int, size_t> ID_to_index;
-    std::unordered_map<int, std::vector<std::vector<double>>> ID_to_ECalDep; // Each deposition is vector of size 3: [energy, depth, x]
+    std::unordered_map<int, std::vector<double>> ID_to_ECalDep; // particle track ID -> total energy deposited in each ecal layer
     std::unordered_map<int, double> ID_to_TPCDep;
     std::unordered_map<int, double> ID_to_MuIDDep;
     size_t n_particles = _MCPTrkID->size();
+    dunendgarmcPlotting[i_event].rw_ePi0 = 0.; 
+    dunendgarmcPlotting[i_event].npi0 = 0; 
+
+    const int tot_ecal_layers = 42;
 
     // Fill maps
     for (size_t i_particle=0; i_particle<n_particles; i_particle++) {
       int trkID = _MCPTrkID->at(i_particle);
       int motherID = _MCPMotherTrkID->at(i_particle);
+      ID_to_ECalDep[trkID] = std::vector<double>(tot_ecal_layers,0.);
       ID_to_index[trkID] = i_particle;
       mother_to_daughter_ID[motherID].push_back(trkID);
       mother_to_daughter_ID[trkID]; //Ensure all particles are added to the map (even if no secondaries)
@@ -645,12 +667,12 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
     // Fill map from particle ID to ECal deposited energy
     for (size_t i_calhit=0; i_calhit<_CalHitTrkID->size(); i_calhit++) {
-      int trkid = _CalHitTrkID->at(i_calhit);
-      if (trkid <= 0) continue;
+      int dep_trkid = _CalHitTrkID->at(i_calhit);
+      if (dep_trkid <= 0) continue;
+      int dep_layer = _CalHitLayer->at(i_calhit); 
       double dep_energy = _CalHitEnergy->at(i_calhit)/1000.;
-      double dep_depth = GetCalDepth(_CalHitX->at(i_calhit), _CalHitY->at(i_calhit), _CalHitZ->at(i_calhit));
-      if (std::abs(dep_depth) == 999.) MACH3LOG_ERROR("Recorded calorimeter hit outside the calorimeter: depth {}, [{}, {}, {}].", dep_depth, _CalHitX->at(i_calhit), _CalHitY->at(i_calhit), _CalHitZ->at(i_calhit));
-      ID_to_ECalDep[trkid].push_back({dep_energy, dep_depth});
+      // double dep_depth = GetCalDepth(_CalHitX->at(i_calhit), _CalHitY->at(i_calhit), _CalHitZ->at(i_calhit));
+      ID_to_ECalDep[dep_trkid][static_cast<size_t>(dep_layer-1)] += dep_energy;
     }
 
     // Fill map from particle ID to TPC deposited energy
@@ -658,7 +680,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       int trkid = _TPCHitTrkID->at(i_tpchit);
       if (trkid <= 0) continue;
       double dep_energy = _TPCHitEnergy->at(i_tpchit)/1000.;
-      ID_to_TPCDep[trkid] = dep_energy;
+      ID_to_TPCDep[trkid] += dep_energy;
     }
 
     // Fill map from particle ID to MuID deposited energy
@@ -666,11 +688,12 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       int trkid = _MuIDHitTrkID->at(i_muidhit);
       if (trkid <= 0) continue;
       double dep_energy = _MuIDHitEnergy->at(i_muidhit)/1000.;
-      ID_to_MuIDDep[trkid] = dep_energy;
+      ID_to_MuIDDep[trkid] += dep_energy;
     }
 
     bool isEventAccepted = true;
-    double crit_reg = 3.; // Outer number of cm defining the calorimeter's 'critical region'
+    double pi0_p2 = 0.;
+    double mu_p2 = 0.;
 
     // Resize vectors for particle-level parameters
     size_t n_prim_in_event = mother_to_daughter_ID[0].size();
@@ -716,8 +739,8 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       int pdg = _MCPPDG->at(prim_index);
       if (pdg == 2112 || std::abs(pdg) == 12 || std::abs(pdg) == 14 || std::abs(pdg) == 16) continue;
 
-      dunendgarmcPlotting[i_event].particle_edepcrit[prim_index] = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, crit_reg);
       dunendgarmcPlotting[i_event].particle_pdg[prim_index] = pdg; 
+      dunendgarmcPlotting[i_event].particle_edepcrit[prim_index] = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers);
 
       // Check if primary is resolved from curvature
       bool isCurvatureResolved = false;
@@ -730,13 +753,11 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       dunendgarmcPlotting[i_event].particle_isbarrelpart[prim_index] = (dunendgarmcPlotting[i_event].particle_bangle[prim_index] > atan(ECALInnerRadius/ECALEndCapStart)*180/M_PI
         && dunendgarmcPlotting[i_event].particle_bangle[prim_index] < 180. - atan(ECALInnerRadius/ECALEndCapStart)*180/M_PI);
 
-      // Find energy deposited by by primary and non-curvature-resolved descendants in critical region of calorimeter
-      double EDepCrit = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, crit_reg);
-      // double EDepTot = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, ECALOuterRadius);
-
+      // Find energy deposited by primary and non-curvature-resolved descendants in critical region of calorimeter
+      double EDepCrit = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers);
       // Check for containment
       bool isContained = true;
-      if (EDepCrit > 0.002) {
+      if (EDepCrit > edepcrit_threshold) {
         isContained = false;
       }
 
@@ -748,14 +769,31 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       }
       dunendgarmcPlotting[i_event].particle_isaccepted[prim_index] = isParticleAccepted;
 
+      double p_x = _MCPStartPX->at(prim_index)/1000.;
+      double p_y = _MCPStartPY->at(prim_index)/1000.;
+      double p_z = _MCPStartPZ->at(prim_index)/1000.;
+      double p2 = p_x*p_x + p_y*p_y + p_z*p_z;
+
       // Get vertex from primary muon start position
-      if (pdg == 13 && std::abs((_MCPStartPX->at(prim_index)/1000.-_PXlep)/_PXlep) < 0.0001
-        && std::abs((_MCPStartPY->at(prim_index)/1000.-_PYlep)/_PYlep) < 0.0001
-        && std::abs((_MCPStartPZ->at(prim_index)/1000.-_PZlep)/_PZlep) < 0.0001) {
+      // if (pdg == 13 && std::abs((p_x-_PXlep)/_PXlep) < 0.01 && std::abs((p_y-_PYlep)/_PYlep) < 0.01 && std::abs((p_z-_PZlep)/_PZlep) < 0.01) {
+      std::cout << pdg << std::endl;
+      if (pdg == 13 && p2 > mu_p2) {
+        mu_p2 = p2;
         vertex = {_MCPStartX->at(prim_index), _MCPStartY->at(prim_index), _MCPStartZ->at(prim_index)};
+        dunendgarmcPlotting[i_event].lep_tracklengthyz = dunendgarmcPlotting[i_event].particle_tracklengthyz[prim_index];
+      }
+      // Get pi0 information 
+      if(pdg == 111) {
+        dunendgarmcPlotting[i_event].npi0 ++;
+        if (p2 > pi0_p2) {
+          pi0_p2 = p2;
+          double mass = MaCh3Utils::GetMassFromPDG(pdg);
+          dunendgarmcPlotting[i_event].rw_ePi0 = std::sqrt(p2+mass*mass);
+        }
       }
     }
     if (vertex[0] == M3::_BAD_DOUBLE_) MACH3LOG_ERROR("No vertex found for event {}.", i_event);
+    else MACH3LOG_INFO("fastgarsim Elep = {}, genie Elep = {}", std::sqrt(mu_p2*mu_p2 + MaCh3Utils::GetMassFromPDG(13)*MaCh3Utils::GetMassFromPDG(13)), _Elep);
 
     dunendgarmcFitting[i_event].rw_lep_pX = _PXlep;
     dunendgarmcFitting[i_event].rw_lep_pY = _PYlep;
@@ -849,10 +887,14 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
       return &dunendgarmcPlotting[iEvent].rw_lep_bangle;
     case kLepP:
       return &dunendgarmcPlotting[iEvent].rw_lep_p;
+    case kLepTrackLengthYZ:
+      return &dunendgarmcPlotting[iEvent].lep_tracklengthyz;
     case kTrueQ0:
       return &dunendgarmcFitting[iEvent].rw_Q0;
     case kTrueQ3:
       return &dunendgarmcFitting[iEvent].rw_Q3;
+    case kEPi0:
+      return &dunendgarmcPlotting[iEvent].rw_ePi0;
     default:
       MACH3LOG_ERROR("Did not recognise Kinematic Parameter {}", static_cast<int>(KinematicParameter));
       throw MaCh3Exception(__FILE__, __LINE__);
@@ -871,6 +913,16 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(std::string
   return GetPointerToKinematicParameter(KinPar,static_cast<size_t>(iEvent));
 }
 
+double SampleHandlerBeamNDGAr::ReturnKinematicParameter(int KinematicVariable, int iEvent) {
+  KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
+  return ReturnKinematicParameter(KinPar,static_cast<size_t>(iEvent));
+}
+
+double SampleHandlerBeamNDGAr::ReturnKinematicParameter(std::string KinematicParameter, int iEvent) {
+  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
+  return ReturnKinematicParameter(KinPar,static_cast<size_t>(iEvent));
+}
+
 #pragma GCC diagnostic push 
 #pragma GCC diagnostic ignored "-Wswitch-enum"
 double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, size_t iEvent) {
@@ -882,21 +934,13 @@ double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, s
       return static_cast<double>(dunendgarmcFitting[iEvent].rw_isCC);
     case kInFDV:
       return static_cast<double>(dunendgarmcPlotting[iEvent].in_fdv);
+    case kNPi0:
+      return static_cast<double>(dunendgarmcPlotting[iEvent].npi0);
     default:
       return *GetPointerToKinematicParameter(KinPar, iEvent);
   }
 }
 #pragma GCC diagnostic pop
-
-double SampleHandlerBeamNDGAr::ReturnKinematicParameter(int KinematicVariable, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
-  return ReturnKinematicParameter(KinPar,static_cast<size_t>(iEvent));
-}
-
-double SampleHandlerBeamNDGAr::ReturnKinematicParameter(std::string KinematicParameter, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
-  return ReturnKinematicParameter(KinPar,static_cast<size_t>(iEvent));
-}
 
 std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(KinematicVecs KinVec, size_t iEvent) {
   switch(KinVec) {

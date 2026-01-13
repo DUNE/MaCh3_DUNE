@@ -1,9 +1,9 @@
 #ifndef _SampleHandlerBeamNDGAr_h_
 #define _SampleHandlerBeamNDGAr_h_
 
-#include "Splines/BinnedSplineHandlerDUNE.h"
 #include "Samples/SampleHandlerFD.h"
 #include "Samples/StructsDUNE.h"
+#include "Splines/BinnedSplineHandlerDUNE.h"
 
 class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
 {
@@ -12,7 +12,8 @@ public:
   ~SampleHandlerBeamNDGAr();
 
   enum KinematicTypes {kTrueNeutrinoEnergy, kMode, kOscChannel, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kTrueLepEnergy,
-    kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted,  kInFDV, kIsCC};
+    kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted,  kInFDV, kIsCC, kEPi0, kNPi0,
+    kLepTrackLengthYZ};
   
   enum KinematicVecs {kParticle_EVis, kParticle_Momentum, kParticle_EndMomentum, kParticle_TransverseMomentum, 
     kParticle_BAngle, kParticle_BeamAngle, kParticle_IsAccepted, kParticle_IsCurvatureResolved, kParticle_IsDecayed, kParticle_PDG,
@@ -44,7 +45,7 @@ protected:
   std::vector<double> ReturnKinematicVector(int KinematicVector, int iEvent) override;
   std::vector<double> ReturnKinematicVector(std::string KinematicVector, int iEvent) override;
 
-  std::vector<dunemc_base> dunendgarmcFitting;
+  std::vector<dunemc_beamndgar> dunendgarmcFitting;
   std::vector<dunemc_plotting> dunendgarmcPlotting;
 
   //NDGAr-specific functions
@@ -55,7 +56,7 @@ protected:
   bool IsResolvedFromCurvature(dunemc_plotting& plotting_vars, size_t i_anapart, double pixel_spacing_cm);
   double GetCalDepth(double x, double y, double z);
   double DepthToLayer(double depth, double r);
-  double CalcEDepCal(int motherID, const std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<std::vector<double>>>& ID_to_ECalDep, double crit_reg);
+  double CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers);
   bool CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, dunemc_plotting& plotting_vars, double pixel_spacing_cm);
   void EraseDescendants(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID);
   bool IsParticleSelected(const int iSample, const int iEvent, const int iParticle);
@@ -88,6 +89,7 @@ protected:
   std::vector<float> *_TPCHitY=nullptr;
   std::vector<float> *_TPCHitZ=nullptr;
   std::vector<int> *_CalHitTrkID=nullptr;
+  std::vector<int> *_CalHitLayer=nullptr;
   std::vector<float> *_CalHitEnergy=nullptr;
   std::vector<float> *_CalHitX=nullptr;
   std::vector<float> *_CalHitY=nullptr;
@@ -138,6 +140,8 @@ protected:
   double adc_sampling_frequency;
   double drift_velocity;
   double downsampling;
+  int crit_layers;
+  double edepcrit_threshold;
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
@@ -153,12 +157,15 @@ protected:
     {"LepTheta",kLepTheta},
     {"LepPhi",kLepPhi},
     {"LepP",kLepP},
+    {"LepTrackLengthYZ",kLepTrackLengthYZ},
     {"LepBAngle",kLepBAngle},
     {"TrueQ0",kTrueQ0},
     {"TrueQ3",kTrueQ3},
     {"Event_IsAccepted",kEvent_IsAccepted},
     {"InFDV",kInFDV},
     {"IsCC",kIsCC},
+    {"EPi0",kEPi0},
+    {"NPi0",kNPi0},
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -176,11 +183,14 @@ protected:
     {kLepPhi,"LepPhi"},
     {kLepBAngle,"LepBAngle"},
     {kLepP,"LepP"},
+    {kLepTrackLengthYZ,"LepTrackLengthYZ"},
     {kTrueQ0,"TrueQ0"},
     {kTrueQ3,"TrueQ3"},
     {kEvent_IsAccepted,"Event_IsAccepted"},
     {kInFDV,"InFDV"},
     {kIsCC,"IsCC"},
+    {kEPi0,"EPi0"},
+    {kNPi0,"NPi0"},
   };
     
   const std::unordered_map<std::string, int> KinematicVectorsDUNE = {

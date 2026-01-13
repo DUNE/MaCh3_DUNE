@@ -14,6 +14,7 @@
 
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/StructsDUNE.h"
+#include "Fitters/MaCh3Factory.h"
 
 void Write1DHistogramsToFile(std::string OutFileName, std::vector<TH1*> Histograms) {
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutFileName.c_str(), "RECREATE"));
@@ -41,7 +42,7 @@ void Write1DHistogramsToPdf(std::string OutFileName, std::vector<TH1*> Histogram
 
 int main(int argc, char * argv[]) {
   MaCh3Utils::MaCh3Usage(argc, argv);
-  auto fitMan = std::unique_ptr<manager>(new manager(argv[1]));
+  auto fitMan = MaCh3ManagerFactory(argc, argv);
 
   //###############################################################################################################################
   //Create SampleHandlerFD objects
@@ -49,7 +50,7 @@ int main(int argc, char * argv[]) {
   ParameterHandlerGeneric* xsec = nullptr;
   
   std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(fitMan.get(), DUNEPdfs, xsec);
+  MakeMaCh3DuneInstance(fitMan, DUNEPdfs, xsec);
 
   //###############################################################################################################################
   //Perform reweight and print total integral

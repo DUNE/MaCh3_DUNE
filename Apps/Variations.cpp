@@ -13,9 +13,9 @@
 #include <TColor.h>
 #include <TMath.h>
 
-#include "Fitters/mcmc.h"
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/StructsDUNE.h"
+#include "Fitters/MaCh3Factory.h"
 
 //CS YAML "Variations" node expects to be given each parameter to vary with :
 // - "Name": name of the parameter as written in the CovObjs YAML file 
@@ -27,11 +27,7 @@
 //TODO: Consider merging with SigmaVariations app at some point
 
 int main(int argc, char * argv[]) {
-  if(argc == 1){
-    MACH3LOG_ERROR("Usage: bin/EventRatesDUNEBeam config.cfg");
-    return 1;
-  }
-  manager* FitManager = new manager(argv[1]);
+  auto FitManager = MaCh3ManagerFactory(argc, argv);
 
   
   //###############################################################################################################################

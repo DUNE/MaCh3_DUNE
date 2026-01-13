@@ -7,9 +7,10 @@
 #include <TLegend.h>
 
 #include "Samples/MaCh3DUNEFactory.h"
-#include "Samples/StructsDUNE.h"
+#include "Fitters/MaCh3Factory.h"
 
 bool IncludeKinematicCutsInTitle = true;
+bool Scale1DHistsByBinWidth = false;
 
 struct ProjectionKinematicCut {
   std::string Name;
@@ -111,12 +112,7 @@ void WriteTHStackHistogram(THStack *Hist, std::string Name, TDirectory *Dir = nu
 }
 
 int main(int argc, char *argv[]) {
-  if (argc == 1) {
-    MACH3LOG_ERROR("Usage: bin/EventRatesDUNEBeam config.cfg");
-    return 1;
-  }
-
-  auto fitMan = std::unique_ptr<manager>(new manager(argv[1]));
+  auto fitMan = MaCh3ManagerFactory(argc, argv);
 
   int WeightStyle = 0;
   gStyle->SetPalette(1);
@@ -126,7 +122,7 @@ int main(int argc, char *argv[]) {
   ParameterHandlerGeneric *xsec = nullptr;
 
   std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(fitMan.get(), DUNEPdfs, xsec);
+  MakeMaCh3DuneInstance(fitMan, DUNEPdfs, xsec);
 
   // ###############################################################################################################################
   // Perform reweight and print total integral for sanity check
@@ -321,7 +317,7 @@ int main(int argc, char *argv[]) {
       if (histdim==1) {
         Hist = (TH1*)Sample->Get1DVarHist(ProjectionVar_Str[0],EventSelectionVector,WeightStyle,&AxisX,SubEventSelectionVector);
         outputname = Sample->GetTitle()+"_"+Projections[iProj].Name;
-        Hist->Scale(1.0,"Width");
+        if (Scale1DHistsByBinWidth) Hist->Scale(1.0,"Width");
       } 
       else {
         Hist = (TH1*)Sample->Get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],EventSelectionVector,WeightStyle,&AxisX,&AxisY,SubEventSelectionVector);
@@ -363,7 +359,7 @@ int main(int argc, char *argv[]) {
 
             if (histdim==1) {
               Hist = Sample->Get1DVarHist(ProjectionVar_Str[0],EventSelectionVector_IncCategory,WeightStyle,&AxisX,SubEventSelectionVector_IncCategory);
-              Hist->Scale(1.0,"Width");
+              if (Scale1DHistsByBinWidth) Hist->Scale(1.0,"Width");
             }	else {
               Hist = (TH1*)Sample->Get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],EventSelectionVector_IncCategory,WeightStyle,&AxisX,&AxisY,SubEventSelectionVector_IncCategory);
             }
