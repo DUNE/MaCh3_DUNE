@@ -12,9 +12,8 @@ SplineHandlerFactoryDUNE::SplineHandlerFactoryDUNE(ParameterHandlerGeneric* xsec
         YAML::Node systDetails = systNode["Systematic"];
         if (systDetails && systDetails["Names"]) {
             std::string systName = systDetails["Names"]["ParameterName"].as<std::string>();
-            std::cout << "Systematic: " << systName << std::endl;
         }
-        std::cout << systDetails << std::endl;
+ 
         if (systDetails["SplineInformation"] && systDetails["SplineInformation"]["Type"]) {
             std::string splineTypeCurrent = systDetails["SplineInformation"]["Type"].as<std::string>();
             if (splineTypeCurrent == "Binned") {
