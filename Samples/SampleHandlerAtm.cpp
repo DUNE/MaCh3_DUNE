@@ -115,7 +115,10 @@ int SampleHandlerAtm::SetupExperimentMC() {
 
   int nEntries = static_cast<int>(cafTree->GetEntries());
 
+
   //Define Oscillation Channels here for the first file to avoid multiple lookups
+  MACH3LOG_INFO("Loading events from CAF file: {}",fInputFile);
+  size_t lastPrintPercent = 0;
  
   for (int iEvent=0;iEvent<nEntries;iEvent++) {
 
@@ -124,8 +127,11 @@ int SampleHandlerAtm::SetupExperimentMC() {
     
     cafTree->LoadTree(iEvent); //Only loads the tree without reading the entire entry
 
-    if ((iEvent % (nEntries/10))==0) {
-      MACH3LOG_INFO("\tProcessing event: {}/{}",iEvent,nEntries);
+    // Print progress bar every 5%
+    size_t currentPercent = (iEvent * 100) / nEntries;
+    if (currentPercent >= lastPrintPercent + 5 || iEvent == nEntries - 1) {
+        MaCh3Utils::PrintProgressBar(iEvent, nEntries);
+        lastPrintPercent = currentPercent;
     }
     
     if(sr->common.ixn.pandora.size() != 1) {
