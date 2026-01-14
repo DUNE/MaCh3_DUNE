@@ -141,10 +141,10 @@ int main(int argc, char * argv[]) {
         throwmatrixfile->Get(throwmatrixname.c_str())
     );
 
-    if (!throwmatrix) {
-      MACH3LOG_ERROR("Throw matrix is not TMatrixTSym<double>");
-      throw MaCh3Exception(__FILE__, __LINE__);
-    }
+    // if (!throwmatrix) {
+    //   MACH3LOG_ERROR("Throw matrix is not TMatrixTSym<double>");
+    //   throw MaCh3Exception(__FILE__, __LINE__);
+    // }
     xsec->SetThrowMatrix(throwmatrix);
     MACH3LOG_INFO("Set throw matrix from file {} with name {}",
                   throwmatrixfilename, throwmatrixname);

@@ -251,7 +251,8 @@ int main(int argc, char * argv[]) {
     // Open a ROOT file
     TFile* outFile = new TFile("CovMatrixall2.root", "RECREATE");
     //Postmatrix->GetName("CovarianceMatrix");
-    Postmatrix->Write();  // Write the matrix to the file
+    Postmatrix->Write("xsec_cov");
+  // Write the matrix to the file
     outFile->Close();
 
     delete Postmatrix;

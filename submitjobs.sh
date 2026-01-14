@@ -436,8 +436,8 @@ for ((i = 0 ; i < $NCHAINS ; i++)); do
   echo "cat ${cfgFileName}" >> $ScriptFileName
   echo "cd \${MACH3}" >> $ScriptFileName
   # Load up cluster defaults
-  echo "source setup.sh" >> $ScriptFileName
-  echo "source setup_dune_cedar_env.sh" >> $ScriptFileName
+  #echo "source setup.sh" >> $ScriptFileName
+  #echo "source setup_dune_cedar_env.sh" >> $ScriptFileName
   echo "source build/bin/setup.MaCh3.sh" >> $ScriptFileName
   echo "source build/bin/setup.MaCh3DUNE.sh" >> $ScriptFileName
   echo "PATH=../build/src:$PATH" >> $ScriptFileName

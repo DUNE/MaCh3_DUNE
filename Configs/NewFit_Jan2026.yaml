@@ -130,14 +130,14 @@ General:
   Systematics:
     XsecCovFile:
       - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/Enu_Enubias_templateparams.yaml"
-      - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/tdr_covs/flux_systematics.yaml"
-      - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/tdr_covs/DetSys_ND.yaml"
+      #- "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/tdr_covs/flux_systematics.yaml"
+      #- "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/tdr_covs/DetSys_ND.yaml"
       #- "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/tdr_covs/DetSys_ND.yaml"
      # - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/Enu_Enubias_templateparams_subset.yaml"
     XsecCovName: "xsec_cov"
 
     
-    XsecStepScale: 0.1
+    XsecStepScale: 1.0
 
     XsecAtGen: false
     xsec_var1: "TrueNeutrinoEnergy"
@@ -149,15 +149,15 @@ General:
 
   
   MCMC:
-    NSteps: 15000000
+    NSteps: 40000
     AutoSave: 5000
     BurnInSteps: 0
 
   ProcessMCMC: No
   Seed: 0
   Debug: Yes  
-  ThrowMatrixFile: "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/CovMatrixall2.root"  #"/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/CovMatrix_templateparameters_floored.root"
-  ThrowMatrixName: "TMatrixTSym<double>"
+  ThrowMatrixFile: "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/CovMatrix_13thJan2026_alltemplateparameters.root" #"/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/HessianMatrices/CovMatrixtemplateparameters.root" #"/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/CovMatrixall2.root"  #"/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/CovMatrix_templateparameters_floored.root"
+  ThrowMatrixName: "xsec_cov"
 
 LLHScan:
   ParPoints: 50
@@ -171,9 +171,9 @@ AdaptionOptions:
   Settings:
     StartThrow: 5000
     StartUpdate: 1000
-    UpdateStep: 5000
-    EndUpdate: 15000000
-    SaveNIterations: 50000
+    UpdateStep: 10000
+    EndUpdate: 50000
+    SaveNIterations: 1
     OutputFileName: "stage1_adaptive.root"
 
   Covariance:
