@@ -96,7 +96,7 @@ int main(int argc, char * argv[]) {
 	        WeightGraph->SetPoint(knot, SigmaKnots[knot], BinnedWeights[iParam][knot][mode][TrueEbin]->GetBinContent(xbin+1, ybin+1));
 	      }
 	      char SplineName[1000];
-	      sprintf(SplineName, "dev_%s_%s_sp_%d_%d_%d", SplineNames[iParam].c_str(), Modes->GetSplineSuffixFromMaCh3Mode(mode).c_str(), TrueEbin, xbin, ybin);
+	      sprintf(SplineName, "dev_%s_%s_sp_%d_%d_%d", SplineNames[iParam].c_str(), Modes->GetSplineSuffixFromMaCh3Mode(SplineModes[iParam][mode]).c_str(), TrueEbin, xbin, ybin);
 	      TSpline3* Spline = new TSpline3(SplineName, WeightGraph);
 	      delete WeightGraph;
 	      Spline->Write(SplineName);

@@ -816,9 +816,9 @@ std::vector<std::vector<std::vector<std::vector<TH2D*>>>> SampleHandlerBeamOffAx
       std::string WeightBranchName = "wgt_" + FancyName;
       std::string CVBranchName = FancyName + "_cvwgt";
 
-      for (int mode : ParamModes[iParam]) {
+      for(size_t mode = 0; mode < ParamModes[iParam].size(); mode++) {
       
-        if (mode == dunemcSamples[iEvent].mode)
+        if (ParamModes[iParam][mode] == dunemcSamples[iEvent].mode)
         {		
 
           double weightArr[1000];
