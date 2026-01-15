@@ -1,11 +1,6 @@
+#include "CAFIncludes.h"
 #include "SampleHandlerAtm.h"
-
-#pragma GCC diagnostic push 
-#pragma GCC diagnostic ignored "-Wfloat-conversion"
-//Standard Record includes
-#include "duneanaobj/StandardRecord/StandardRecord.h"
-#include "duneanaobj/StandardRecord/Proxy/SRProxy.h"
-#pragma GCC diagnostic pop
+#include "Cuts.h"
 
 SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGeneric* xsec_cov_, const std::shared_ptr<OscillationHandler>&  Oscillator_) : SampleHandlerFD(mc_version_, xsec_cov_, Oscillator_) {
   KinematicParameters = &KinematicParametersDUNE;
@@ -29,7 +24,34 @@ void SampleHandlerAtm::Init() {
   } else {
     fInputSplines = "";
   }
-  fSampleId = Get<uint>(SampleManager->raw()["SampleOptions"]["SampleId"],__FILE__,__LINE__);
+  
+  // Get selection cut from config
+  if (SampleManager->raw()["SampleOptions"]["SelectionCut"]) {
+    std::string cutExpr = Get<std::string>(SampleManager->raw()["SampleOptions"]["SelectionCut"],__FILE__,__LINE__);
+    MACH3LOG_INFO("Using selection cut: {}", cutExpr);
+    fSelectionCut = dune::ParseCut(cutExpr);
+  } else {
+    MACH3LOG_INFO("No selection cut specified, accepting all events");
+    fSelectionCut = dune::kNoCut;
+  }
+  
+  // Check if binning uses custom variable expressions
+  fUseCustomXVar = false;
+  fUseCustomYVar = false;
+  
+  if (SampleManager->raw()["Binning"]["XVarExpr"]) {
+    std::string xVarExpr = Get<std::string>(SampleManager->raw()["Binning"]["XVarExpr"],__FILE__,__LINE__);
+    MACH3LOG_INFO("Using custom X binning variable: {}", xVarExpr);
+    fXBinningVar = dune::ParseVar(xVarExpr);
+    fUseCustomXVar = true;
+  }
+  
+  if (SampleManager->raw()["Binning"]["YVarExpr"]) {
+    std::string yVarExpr = Get<std::string>(SampleManager->raw()["Binning"]["YVarExpr"],__FILE__,__LINE__);
+    MACH3LOG_INFO("Using custom Y binning variable: {}", yVarExpr);
+    fYBinningVar = dune::ParseVar(yVarExpr);
+    fUseCustomYVar = true;
+  }
 }
 
 void SampleHandlerAtm::SetupSplines() {
@@ -123,9 +145,10 @@ int SampleHandlerAtm::SetupExperimentMC() {
   for (int iEvent=0;iEvent<nEntries;iEvent++) {
 
     weightsTree->GetEntry(iEvent);
-    if (sample_id != fSampleId) continue;
-    
     cafTree->LoadTree(iEvent); //Only loads the tree without reading the entire entry
+
+    // Apply selection cut
+    if (!fSelectionCut(sr)) continue;
 
     // Print progress bar every 5%
     size_t currentPercent = (iEvent * 100) / nEntries;
@@ -139,16 +162,34 @@ int SampleHandlerAtm::SetupExperimentMC() {
       continue;
     }
     
-    TVector3 RecoNuMomentumVector;
-    double RecoENu;
-    if (IsELike) {
-      RecoENu = sr->common.ixn.pandora[0].Enu.e_calo;
-      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.heshw.x,sr->common.ixn.pandora[0].dir.heshw.y,sr->common.ixn.pandora[0].dir.heshw.z)).Unit();
+    // Calculate binning variables - use custom expressions if specified, otherwise use standard calculation
+    double RecoENu, RecoCZ;
+    
+    if (fUseCustomYVar) {
+      RecoENu = fYBinningVar(sr);
     } else {
-      RecoENu = sr->common.ixn.pandora[0].Enu.lep_calo;
-      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.x,sr->common.ixn.pandora[0].dir.lngtrk.y,sr->common.ixn.pandora[0].dir.lngtrk.z)).Unit();      
+      // Standard RecoENu calculation
+      if (IsELike) {
+        RecoENu = sr->common.ixn.pandora[0].Enu.e_calo;
+      } else {
+        RecoENu = sr->common.ixn.pandora[0].Enu.lep_calo;
+      }
     }
-    double RecoCZ = -RecoNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
+    
+    if (fUseCustomXVar) {
+      RecoCZ = fXBinningVar(sr);
+    } else {
+      // Standard RecoCZ calculation
+      TVector3 RecoNuMomentumVector;
+      if (IsELike) {
+        RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.heshw.x,sr->common.ixn.pandora[0].dir.heshw.y,sr->common.ixn.pandora[0].dir.heshw.z)).Unit();
+      } else {
+        RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.x,sr->common.ixn.pandora[0].dir.lngtrk.y,sr->common.ixn.pandora[0].dir.lngtrk.z)).Unit();      
+      }
+      RecoCZ = -RecoNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
+    }
+    
+    // Skip events with NaN values (only for non-custom variables, custom expressions should handle this)
     if (std::isnan(RecoCZ)) {
       // MACH3LOG_WARN("Skipping event {}/{} -> Reconstructed Cosine Z is NAN",iEvent,nEntries);
       continue;

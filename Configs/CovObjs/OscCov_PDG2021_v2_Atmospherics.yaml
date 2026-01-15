@@ -879,310 +879,234 @@ Systematics:
       MCMC: 0.4
     Type: Spline
     ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: Theta_Delta2Npi
-      ParameterName: Theta_Delta2Npi
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 1
-      PreFitValue: 1
-    SplineInformation:
-      Mode: *id003
-      SplineName: Theta_Delta2Npi
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: VecFFCCQEshape
-      ParameterName: VecFFCCQEshape
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 1
-      PreFitValue: 1
-    SplineInformation:
-      Mode: *id003
-      SplineName: VecFFCCQEshape
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: ZExpA1CCQE
-      ParameterName: ZExpA1CCQE
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 0.0
-      PreFitValue: 0.0
-    SplineInformation:
-      Mode: *id003
-      SplineName: ZExpA1CCQE
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: ZExpA2CCQE
-      ParameterName: ZExpA2CCQE
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 0.0
-      PreFitValue: 0.0
-    SplineInformation:
-      Mode: *id003
-      SplineName: ZExpA2CCQE
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: ZExpA3CCQE
-      ParameterName: ZExpA3CCQE
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 0.0
-      PreFitValue: 0.0
-    SplineInformation:
-      Mode: *id003
-      SplineName: ZExpA3CCQE
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: ZExpA4CCQE
-      ParameterName: ZExpA4CCQE
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 0.0
-      PreFitValue: 0.0
-    SplineInformation:
-      Mode: *id003
-      SplineName: ZExpA4CCQE
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: DecayAng2MEC
-      ParameterName: DecayAng2MEC
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 0.0
-      PreFitValue: 0.0
-    SplineInformation:
-      Mode: *id003
-      SplineName: DecayAng2MEC
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: DecayAngMEC
-      ParameterName: DecayAngMEC
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 0.0
-      PreFitValue: 0.0
-    SplineInformation:
-      Mode: *id003
-      SplineName: DecayAngMEC
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: DecayAngMECVariationResponse
-      ParameterName: DecayAngMECVariationResponse
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 0.0
-      PreFitValue: 0.0
-    SplineInformation:
-      Mode: *id003
-      SplineName: DecayAngMECVariationResponse
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: EnergyDependence_CCMEC
-      ParameterName: EnergyDependence_CCMEC
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 0.0
-      PreFitValue: 0.0
-    SplineInformation:
-      Mode: *id003
-      SplineName: EnergyDependence_CCMEC
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: FracDelta_CCMEC
-      ParameterName: FracDelta_CCMEC
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 0.0
-      PreFitValue: 0.0
-    SplineInformation:
-      Mode: *id003
-      SplineName: FracDelta_CCMEC
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: FracPN_CCMEC
-      ParameterName: FracPN_CCMEC
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 0.0
-      PreFitValue: 0.0
-    SplineInformation:
-      Mode: *id003
-      SplineName: FracPN_CCMEC
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: XSecShape_CCMEC
-      ParameterName: XSecShape_CCMEC
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 0.0
-      PreFitValue: 0.0
-    SplineInformation:
-      Mode: *id003
-      SplineName: XSecShape_CCMEC
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: XSecShape_CCMEC_Empirical
-      ParameterName: XSecShape_CCMEC_Empirical
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 0.0
-      PreFitValue: 0.0
-    SplineInformation:
-      Mode: *id003
-      SplineName: XSecShape_CCMEC_Empirical
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: XSecShape_CCMEC_Martini
-      ParameterName: XSecShape_CCMEC_Martini
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 0.0
-      PreFitValue: 0.0
-    SplineInformation:
-      Mode: *id003
-      SplineName: XSecShape_CCMEC_Martini
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: Fakedial
-      ParameterName: Fakedial
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 0.0
-      PreFitValue: 0.0
-    SplineInformation:
-      Mode: *id003
-      SplineName: Fakedial
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: *id001
+#     Error: 1.0
+#     FlatPrior: false
+#     Names:
+#       FancyName: ZExpA1CCQE
+#       ParameterName: ZExpA1CCQE
+#     ParameterBounds: *id002
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     SplineInformation:
+#       Mode: *id003
+#       SplineName: ZExpA1CCQE
+#       Type: PerEvent
+#     StepScale:
+#       MCMC: 0.4
+#     Type: Spline
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: *id001
+#     Error: 1.0
+#     FlatPrior: false
+#     Names:
+#       FancyName: ZExpA2CCQE
+#       ParameterName: ZExpA2CCQE
+#     ParameterBounds: *id002
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     SplineInformation:
+#       Mode: *id003
+#       SplineName: ZExpA2CCQE
+#       Type: PerEvent
+#     StepScale:
+#       MCMC: 0.4
+#     Type: Spline
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: *id001
+#     Error: 1.0
+#     FlatPrior: false
+#     Names:
+#       FancyName: ZExpA3CCQE
+#       ParameterName: ZExpA3CCQE
+#     ParameterBounds: *id002
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     SplineInformation:
+#       Mode: *id003
+#       SplineName: ZExpA3CCQE
+#       Type: PerEvent
+#     StepScale:
+#       MCMC: 0.4
+#     Type: Spline
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: *id001
+#     Error: 1.0
+#     FlatPrior: false
+#     Names:
+#       FancyName: ZExpA4CCQE
+#       ParameterName: ZExpA4CCQE
+#     ParameterBounds: *id002
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     SplineInformation:
+#       Mode: *id003
+#       SplineName: ZExpA4CCQE
+#       Type: PerEvent
+#     StepScale:
+#       MCMC: 0.4
+#     Type: Spline
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: *id001
+#     Error: 1.0
+#     FlatPrior: false
+#     Names:
+#       FancyName: DecayAngMECVariationResponse
+#       ParameterName: DecayAngMECVariationResponse
+#     ParameterBounds: *id002
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     SplineInformation:
+#       Mode: *id003
+#       SplineName: DecayAngMECVariationResponse
+#       Type: PerEvent
+#     StepScale:
+#       MCMC: 0.4
+#     Type: Spline
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: *id001
+#     Error: 1.0
+#     FlatPrior: false
+#     Names:
+#       FancyName: EnergyDependence_CCMEC
+#       ParameterName: EnergyDependence_CCMEC
+#     ParameterBounds: *id002
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     SplineInformation:
+#       Mode: *id003
+#       SplineName: EnergyDependence_CCMEC
+#       Type: PerEvent
+#     StepScale:
+#       MCMC: 0.4
+#     Type: Spline
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: *id001
+#     Error: 1.0
+#     FlatPrior: false
+#     Names:
+#       FancyName: FracDelta_CCMEC
+#       ParameterName: FracDelta_CCMEC
+#     ParameterBounds: *id002
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     SplineInformation:
+#       Mode: *id003
+#       SplineName: FracDelta_CCMEC
+#       Type: PerEvent
+#     StepScale:
+#       MCMC: 0.4
+#     Type: Spline
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: *id001
+#     Error: 1.0
+#     FlatPrior: false
+#     Names:
+#       FancyName: FracPN_CCMEC
+#       ParameterName: FracPN_CCMEC
+#     ParameterBounds: *id002
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     SplineInformation:
+#       Mode: *id003
+#       SplineName: FracPN_CCMEC
+#       Type: PerEvent
+#     StepScale:
+#       MCMC: 0.4
+#     Type: Spline
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: *id001
+#     Error: 1.0
+#     FlatPrior: false
+#     Names:
+#       FancyName: XSecShape_CCMEC
+#       ParameterName: XSecShape_CCMEC
+#     ParameterBounds: *id002
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     SplineInformation:
+#       Mode: *id003
+#       SplineName: XSecShape_CCMEC
+#       Type: PerEvent
+#     StepScale:
+#       MCMC: 0.4
+#     Type: Spline
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: *id001
+#     Error: 1.0
+#     FlatPrior: false
+#     Names:
+#       FancyName: XSecShape_CCMEC_Empirical
+#       ParameterName: XSecShape_CCMEC_Empirical
+#     ParameterBounds: *id002
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     SplineInformation:
+#       Mode: *id003
+#       SplineName: XSecShape_CCMEC_Empirical
+#       Type: PerEvent
+#     StepScale:
+#       MCMC: 0.4
+#     Type: Spline
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: *id001
+#     Error: 1.0
+#     FlatPrior: false
+#     Names:
+#       FancyName: XSecShape_CCMEC_Martini
+#       ParameterName: XSecShape_CCMEC_Martini
+#     ParameterBounds: *id002
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     SplineInformation:
+#       Mode: *id003
+#       SplineName: XSecShape_CCMEC_Martini
+#       Type: PerEvent
+#     StepScale:
+#       MCMC: 0.4
+#     Type: Spline
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: *id001
+#     Error: 1.0
+#     FlatPrior: false
+#     Names:
+#       FancyName: Fakedial
+#       ParameterName: Fakedial
+#     ParameterBounds: *id002
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     SplineInformation:
+#       Mode: *id003
+#       SplineName: Fakedial
+#       Type: PerEvent
+#     StepScale:
+#       MCMC: 0.4
+#     Type: Spline
+#     ParameterGroup: Xsec
 - Systematic:
     SampleNames: *id001
     Error: 1.0
@@ -1411,47 +1335,47 @@ Systematics:
       MCMC: 0.4
     Type: Spline
     ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: nucleus_radius
-      ParameterName: nucleus_radius
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 0.0
-      PreFitValue: 0.0
-    SplineInformation:
-      Mode: *id003
-      SplineName: nucleus_radius
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
-- Systematic:
-    SampleNames: *id001
-    Error: 1.0
-    FlatPrior: false
-    Names:
-      FancyName: surface_thickness
-      ParameterName: surface_thickness
-    ParameterBounds: *id002
-    ParameterValues:
-      Generated: 0.0
-      PreFitValue: 0.0
-    SplineInformation:
-      Mode: *id003
-      SplineName: surface_thickness
-      Type: PerEvent
-    StepScale:
-      MCMC: 0.4
-    Type: Spline
-    ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: *id001
+#     Error: 1.0
+#     FlatPrior: false
+#     Names:
+#       FancyName: nucleus_radius
+#       ParameterName: nucleus_radius
+#     ParameterBounds: *id002
+#     ParameterValues:
+#       Generated: 3.53
+#       PreFitValue: 3.53
+#     SplineInformation:
+#       Mode: *id003
+#       SplineName: nucleus_radius
+#       Type: PerEvent
+#     StepScale:
+#       MCMC: 0.4
+#     Type: Spline
+#     ParameterGroup: Xsec
+# - Systematic:
+#     SampleNames: *id001
+#     Error: 1.0
+#     FlatPrior: false
+#     Names:
+#       FancyName: surface_thickness
+#       ParameterName: surface_thickness
+#     ParameterBounds: *id002
+#     ParameterValues:
+#       Generated: 0.0
+#       PreFitValue: 0.0
+#     SplineInformation:
+#       Mode: *id003
+#       SplineName: surface_thickness
+#       Type: PerEvent
+#     StepScale:
+#       MCMC: 0.4
+#     Type: Spline
+#     ParameterGroup: Xsec
 
 
-############# Earth Model Systematics #############
+############ Earth Model Systematics #############
 # These are ripped from: /exp/dune/app/users/ismerio/M3_250317/MaCh3_DUNE/configs/CovObjs/OscCov_PDG2021_v2_Atmospherics_EarthSys_v2.yaml
 # Need to confirm with Marcelo that these are the correct ones to use
 

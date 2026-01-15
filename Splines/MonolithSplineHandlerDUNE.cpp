@@ -129,6 +129,11 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
         }
         ++currentEventIdx;
     }
+
+    //Clean up reusable splines
+    for (auto& splinePtr : splines) {
+        delete splinePtr;
+    }
     
     std::cout << std::endl; // New line after progress bar
     MACH3LOG_INFO("Total number of events processed for splines: {}", splinesReduced.size());
@@ -147,6 +152,7 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
         splinesReducedGeneric.push_back(std::move(genericEventSplines));
     }
 
+    //SMonolith will take care of freeing the splines later on in theory
     return std::make_pair(splinesReducedGeneric, splineTypes);
 
 }

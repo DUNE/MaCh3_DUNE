@@ -100,7 +100,7 @@ public:
 
     void SetVariationWeights(const std::vector<double>& weights) {
         if(weights.size() != fNp) {
-            MACH3LOG_ERROR("Size of weights does not match number of nodes in spline.");
+            MACH3LOG_ERROR("Size of weights ({}) does not match number of nodes in spline ({}).", weights.size(), fNp);
             throw MaCh3Exception(__FILE__, __LINE__);
         }
         for (int i = 0; i < fNp; ++i) {

@@ -15,6 +15,10 @@ else()
     #SampleHandlerBeamFD.h
     #SampleHandlerBeamND.h
     MaCh3DUNEFactory.h
+    Var.h
+    Cut.h
+    Vars.h
+    Cuts.h
   )
   set(SOURCE_FILES
     SampleHandlerAtm.cpp

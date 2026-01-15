@@ -16,7 +16,8 @@ SampleOptions:
   ExposureScaling: 1.0
   InputFile: "/exp/dune/data/users/pgranger/caf_new_sum_2.6M_wsampleid.root"
   InputSplines: "/exp/dune/data/users/pgranger/merged_new_systs_wmec_wheader.root"
-  SampleId: 1
+  # SampleId: 1
+  SelectionCut: "StandardQuality_ELike && IsELike"
 
 InputFiles:
   mtupleprefix: ""

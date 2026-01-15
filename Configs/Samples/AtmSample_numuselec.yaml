@@ -8,15 +8,18 @@ BinningFile: "Configs/Samples/AtmosphericParameterBinning.yaml"
 Binning:
   XVarStr: "RecoCosineZ"
   XVarBins: [-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1]
+  # Or use custom expression: XVarExpr: "RecoCosZ_MuLike"
   YVarStr: "RecoNeutrinoEnergy"
   YVarBins: [0, 0.23, 0.31, 0.47, 0.81, 1.28, 1.99, 3.17, 5.38, 11.54, 1e8]
+  # Or use custom expression: YVarExpr: "RecoEnu_MuLike / 1000.0"
 
 SampleOptions:
   IsELike: no
   ExposureScaling: 1.0
   InputFile: "/exp/dune/data/users/pgranger/caf_new_sum_2.6M_wsampleid.root"
   InputSplines: "/exp/dune/data/users/pgranger/merged_new_systs_wmec_wheader.root"
-  SampleId: 0
+  # SampleId: 0
+  SelectionCut: "StandardQuality_MuLike && IsMuLike"
 
 InputFiles:
   mtupleprefix: ""

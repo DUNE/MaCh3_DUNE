@@ -3,6 +3,8 @@
 
 #include "Splines/SplineHandlerFactoryDUNE.h"
 #include "Samples/SampleHandlerFD.h"
+#include "Samples/Cut.h"
+#include "Samples/Var.h"
 
 #include "StructsDUNE.h"
 /// @brief Base class for handling atmospheric samples
@@ -130,7 +132,15 @@ protected:
   /// Multiplicative scaling to scale from the assumed 400ktyr value in the CAF files
   M3::float_t ExposureScaling;
   std::string fInputFile, fInputSplines;
-  uint fSampleId;
+  
+  /// Selection cut to apply to events
+  dune::Cut fSelectionCut;
+  
+  /// Binning variables (for flexible variable expressions)
+  dune::Var fXBinningVar;
+  dune::Var fYBinningVar;
+  bool fUseCustomXVar;
+  bool fUseCustomYVar;
 };
 
 #endif
