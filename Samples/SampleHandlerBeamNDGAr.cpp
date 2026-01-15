@@ -225,7 +225,7 @@ double SampleHandlerBeamNDGAr::GetCalDepth(double x, double y, double z) {
   y = y - TPC_centre_y;
   z = z - TPC_centre_z;
   double r = std::sqrt(y*y + z*z);
-  if (x > ECALEndCapEnd) return 999.;
+  if (std::abs(x) > ECALEndCapEnd) return 999.;
   if (r < ECALInnerRadius) return std::abs(x) - ECALEndCapStart; // give depth relative to end cap
 
   double theta = atan2(y, z);
