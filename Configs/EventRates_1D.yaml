@@ -1,25 +1,12 @@
 General:
-  OutputFile: "eventratetest_nuwro0m.root"
+  OutputFile: "eventratetest.root"
   DUNESamples:
-   #- "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/Samples/OffAxisStudies/allsamples.yaml"
-    # - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/NewConfigs_December2025/TestConfig_0m.yaml"
-    # - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/NewConfigs_December2025/TestConfig_0m.yaml"
-    - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/Samples/OffAxisStudies/0m_all.yaml"
-    
-    #- "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/Samples/OffAxisStudies/26.25m_all.yaml"
-    #- "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/Samples/OffAxisStudies/28m_all.yaml"
-    #- "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/Samples/OffAxisStudies/28.25m_all.yaml"
-    #- "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/Samples/OffAxisStudies/28.5m_all.yaml"
-
+    #- "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/NewConfigs_December2025/TestConfig_0m.yaml"
+    - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/NewConfigs_December2025/TestConfig_0m.yaml"
   OscillationParameters: [] #[0.0, 0.0, 0.0, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848, 0.5] #[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848]#[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848] #[0.0, 0.0, 0.0, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848] #[0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848]
   #OscillatorConfigName: "/Configs/OscillatorObj.yaml"
   Systematics:
-    XsecCovFile: 
-      - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/1D_Reconeutrinoenergy.yaml"
-      - "Configs/CovObjs/NuWro_missingproton.yaml"
-      #-  "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/tdr_covs/DetSys_ND.yaml"
-      #- "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/tdr_covs/flux_systematics.yaml"
-     # -  "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/flux_systematics.yaml" #, "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/tdr_covs/DetSys_ND.yaml"]  #["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_test.yaml"] #["configs/CovObjs/1D_Reconeutrinoenergy.yaml"] #["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_fullgrid_wider.yaml"]   #["configs/CovObjs/1D_Reconeutrinoenergy.yaml"]
+    XsecCovFile: ["/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/1D_Reconeutrinoenergy.yaml", "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/tdr_covs/DetSys_ND.yaml"]  #["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_test.yaml"] #["configs/CovObjs/1D_Reconeutrinoenergy.yaml"] #["/scratch/abipeake/MaCh3_DUNE_merged/MaCh3_DUNE/configs/CovObjs/TrueNeutrinoEnergy_ERecProxy_minus_Enu_0.0_10.0GeV_fullgrid_wider.yaml"]   #["configs/CovObjs/1D_Reconeutrinoenergy.yaml"]
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.01
     XsecAtGen: false 
@@ -55,9 +42,9 @@ AdaptionOptions:
 
   Covariance:
     xsec_cov:
-      DoAdaption: True
+      DoAdaption: False 
       MatrixBlocks: []
-      UseExternalMatrix: False
+      UseExternalMatrix: True
       PrincipalComponentThreshold: 0.99 
 
 Predictive:

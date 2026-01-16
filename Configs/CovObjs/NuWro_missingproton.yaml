@@ -1,6 +1,6 @@
 Systematics:
   - Systematic:
-      Sample_Name: ["ND"]        
+      Sample_Name: ["*"]        
       Error: 1.0                 
       FlatPrior: false
       Names:

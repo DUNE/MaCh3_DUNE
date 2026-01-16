@@ -1,8 +1,9 @@
 Systematics:
 - Systematic:
-    SampleNames: ["*"]
+    SampleNames: 
+      - "*"
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0
@@ -23,7 +24,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - .10000000000000000000
@@ -44,7 +45,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - .20000000000000000000
@@ -65,7 +66,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - .30000000000000000000
@@ -86,7 +87,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - .40000000000000000000
@@ -107,7 +108,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - .50000000000000000000
@@ -128,7 +129,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - .60000000000000000000
@@ -149,7 +150,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - .70000000000000000000
@@ -170,7 +171,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - .80000000000000000000
@@ -191,7 +192,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - .90000000000000000000
@@ -212,7 +213,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.00000000000000000000
@@ -233,7 +234,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.10000000000000000000
@@ -254,7 +255,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.20000000000000000000
@@ -275,7 +276,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.30000000000000000000
@@ -296,7 +297,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.40000000000000000000
@@ -317,7 +318,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.50000000000000000000
@@ -338,7 +339,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.60000000000000000000
@@ -359,7 +360,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.70000000000000000000
@@ -380,7 +381,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.80000000000000000000
@@ -401,7 +402,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.90000000000000000000
@@ -422,7 +423,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.00000000000000000000
@@ -443,7 +444,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.10000000000000000000
@@ -464,7 +465,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.20000000000000000000
@@ -485,7 +486,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.30000000000000000000
@@ -506,7 +507,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.40000000000000000000
@@ -527,7 +528,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.50000000000000000000
@@ -548,7 +549,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.60000000000000000000
@@ -569,7 +570,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.70000000000000000000
@@ -590,7 +591,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.80000000000000000000
@@ -611,7 +612,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.90000000000000000000
@@ -632,7 +633,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.00000000000000000000
@@ -653,7 +654,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.10000000000000000000
@@ -674,7 +675,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.20000000000000000000
@@ -695,7 +696,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.30000000000000000000
@@ -716,7 +717,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.40000000000000000000
@@ -737,7 +738,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.50000000000000000000
@@ -758,7 +759,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.60000000000000000000
@@ -779,7 +780,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.70000000000000000000
@@ -800,7 +801,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.80000000000000000000
@@ -821,7 +822,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.90000000000000000000
@@ -842,7 +843,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.00000000000000000000
@@ -863,7 +864,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.10000000000000000000
@@ -884,7 +885,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.20000000000000000000
@@ -905,7 +906,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.30000000000000000000
@@ -926,7 +927,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.40000000000000000000
@@ -947,7 +948,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.50000000000000000000
@@ -968,7 +969,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.60000000000000000000
@@ -989,7 +990,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.70000000000000000000
@@ -1010,7 +1011,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.80000000000000000000
@@ -1031,7 +1032,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.90000000000000000000
@@ -1052,7 +1053,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.00000000000000000000
@@ -1073,7 +1074,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.10000000000000000000
@@ -1094,7 +1095,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.20000000000000000000
@@ -1115,7 +1116,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.30000000000000000000
@@ -1136,7 +1137,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.40000000000000000000
@@ -1157,7 +1158,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.50000000000000000000
@@ -1178,7 +1179,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.60000000000000000000
@@ -1199,7 +1200,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.70000000000000000000
@@ -1220,7 +1221,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.80000000000000000000
@@ -1241,7 +1242,7 @@ Systematics:
 - Systematic:
     SampleNames: ["*"]
     Error: 0.5
-    FlatPrior: true
+    FlatPrior: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.90000000000000000000

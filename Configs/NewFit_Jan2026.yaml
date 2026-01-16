@@ -1,0 +1,203 @@
+# General:
+#   Minuit2:
+#     NSteps: 1000
+#     ToleranceLevel: 0.02
+
+#   OutputFile: "out.root"
+
+#   DUNESamples:
+#     - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/Samples/OffAxisStudies/0m_all.yaml"
+
+#   OscillationParameters: []
+
+#   Systematics:
+#     XsecCovFile:
+#       - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/Enu_Enubias_templateparams.yaml"
+#       - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/tdr_covs/flux_systematics.yaml"
+#       - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/tdr_covs/DetSys_ND.yaml"
+#     XsecCovName: "xsec_cov"
+#     XsecStepScale: 1.0
+#     XsecAtGen: false
+#     xsec_var1: "TrueNeutrinoEnergy"
+#     xsec_var2: "EnuBias"
+#     Parameter_fixing_threshold: 1e-50
+
+#   Fitter:
+#     FitTestLikelihood: false
+
+#   MCMC:
+#     NSteps: 10000000
+#     AutoSave: 10000
+#     BurnInSteps: 1000
+
+#   ProcessMCMC: No
+#   Seed: 0
+#   Debug: No
+
+#   # Seed proposal
+#   ThrowMatrixFile: "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/CovMatrix_templateparameters_floored.root"
+#   ThrowMatrixName: "TMatrixTSym<double>"
+#   ThrowMatrixMeans: "xsec_cov_means"
+
+
+# AdaptionOptions:
+#   Settings:
+#     StartThrow: 5000
+#     StartUpdate: 0        # 🔑 REQUIRED
+#     UpdateStep: 10000
+#     EndUpdate: 10000000
+#     SaveNIterations: 100000
+#     OutputFileName: "/scratch/abipeake/DecemberChains/Christmasday_adaptive_templateparams_031226/Christmasday_adaptive_templateparams_031226_adaptive_chain_0_job_0.root"
+
+#   Covariance:
+#     xsec_cov:
+#       DoAdaption: True
+#       UseExternalMatrix: False
+#       PrincipalComponentThreshold: 0.95   # 🔑 DROP bad modes
+
+
+# General:
+#   Minuit2:
+#     NSteps: 10000000
+#     ToleranceLevel: 0.02
+
+#   OutputFile: "/scratch/abipeake/DecemberChains/Christmasday_adaptive_templateparams_041226_new/Christmasday_adaptive_templateparams_041226_new_chain_0_job_0.root"
+
+#   DUNESamples:
+#     - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/Samples/OffAxisStudies/0m_all.yaml"
+
+#   OscillationParameters: []
+
+#   Systematics:
+#     XsecCovFile:
+#       - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/Enu_Enubias_templateparams.yaml"
+#     XsecCovName: "xsec_cov"
+#     XsecStepScale: 0.33
+#     XsecAtGen: false
+#     xsec_var1: "TrueNeutrinoEnergy"
+#     xsec_var2: "EnuBias"
+#     Parameter_fixing_threshold: 1e-50
+
+#   Fitter:
+#     FitTestLikelihood: false
+
+#   MCMC:
+#     NSteps: 10000000
+#     AutoSave: 10000
+#     BurnInSteps: 1000
+
+#   ProcessMCMC: No
+#   Seed: 0
+#   Debug: No
+
+#   # Seed proposal
+#   ThrowMatrixFile: "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/CovMatrix_templateparameters_floored.root"
+#   ThrowMatrixName: "TMatrixTSym<double>"
+#   ThrowMatrixMeans: "xsec_cov_means"
+
+
+# AdaptionOptions:
+#   Settings:
+#     StartThrow: 10000
+#     StartUpdate: 20000
+#     UpdateStep: 10000
+#     EndUpdate: 10000000
+#     SaveNIterations: 10000   # 🔑 must be small enough
+#     OutputFileName: "/scratch/abipeake/DecemberChains/Christmasday_adaptive_templateparams_041226_new/Christmasday_adaptive_templateparams_041226_new_adaptive_chain_0_job_0.root"
+
+#   Covariance:
+#     xsec_cov:
+#       DoAdaption: True
+#       UseExternalMatrix: False
+#       PrincipalComponentThreshold: 0.995
+
+
+
+
+General:
+  Minuit2:
+    NSteps: 3000
+    ToleranceLevel: 5e-5
+
+  OutputFile: "test_llh.root"
+
+  DUNESamples:
+    - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/Samples/OffAxisStudies/0m_all.yaml"
+    
+
+  OscillationParameters: []
+
+  Systematics:
+    XsecCovFile:
+      - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/Enu_Enubias_templateparams.yaml"
+      #- "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/tdr_covs/flux_systematics.yaml"
+      #- "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/tdr_covs/DetSys_ND.yaml"
+      #- "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/tdr_covs/DetSys_ND.yaml"
+     # - "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/CovObjs/Enu_Enubias_templateparams_subset.yaml"
+    XsecCovName: "xsec_cov"
+
+    
+    XsecStepScale: 1.0
+
+    XsecAtGen: false
+    xsec_var1: "TrueNeutrinoEnergy"
+    xsec_var2: "EnuBias"
+    Parameter_fixing_threshold: 1e-50
+
+  Fitter:
+    FitTestLikelihood: false
+
+  
+  MCMC:
+    NSteps: 40000
+    AutoSave: 5000
+    BurnInSteps: 0
+
+  ProcessMCMC: No
+  Seed: 0
+  Debug: Yes  
+  ThrowMatrixFile: "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/CovMatrix_13thJan2026_alltemplateparameters.root" #"/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/HessianMatrices/CovMatrixtemplateparameters.root" #"/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/CovMatrixall2.root"  #"/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/CovMatrix_templateparameters_floored.root"
+  ThrowMatrixName: "xsec_cov"
+
+LLHScan:
+  ParPoints: 50
+
+  # Seed proposal
+
+  #ThrowMatrixMeans: "xsec_cov_means"
+
+
+AdaptionOptions:
+  Settings:
+    StartThrow: 5000
+    StartUpdate: 1000
+    UpdateStep: 10000
+    EndUpdate: 50000
+    SaveNIterations: 1
+    OutputFileName: "stage1_adaptive.root"
+
+  Covariance:
+    xsec_cov:
+      DoAdaption: True
+      UseExternalMatrix: False
+      PrincipalComponentThreshold: 0.999
+# MCMC:
+#   NSteps: 300000
+#   BurnInSteps: 5000
+
+# AdaptionOptions:
+#   Settings:
+#     StartThrow: 5000
+#     StartUpdate: 10000
+#     UpdateStep: 5000
+#     EndUpdate: 300000
+#     SaveNIterations: 5000
+#     OutputFileName: "stage1_adaptive.root"
+
+#   Covariance:
+#     xsec_cov:
+#       DoAdaption: True
+#       UseExternalMatrix: False
+#       PrincipalComponentThreshold: 0.999
+
+      
