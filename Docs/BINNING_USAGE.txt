@@ -1,0 +1,463 @@
+===============================================================================
+                    CUSTOM BINNING SYSTEM DOCUMENTATION
+===============================================================================
+
+MaCh3-DUNE supports flexible custom binning using variable expressions. This
+allows you to change binning at runtime via YAML configuration without
+recompiling code.
+
+
+===============================================================================
+1. OVERVIEW
+===============================================================================
+
+There are two approaches to binning in MaCh3-DUNE:
+
+
+TRADITIONAL APPROACH
+--------------------
+
+Uses fixed binning variables specified by XVarStr and YVarStr. This is simple
+and sufficient for most standard analyses, but changing the binning requires
+code modification and recompilation.
+
+When to use: Standard analyses with well-defined, fixed binning schemes.
+
+
+CUSTOM APPROACH
+---------------
+
+Uses expression-based binning with XVarExpr and YVarExpr. This allows you to
+specify arbitrary mathematical expressions combining variables, evaluated at
+runtime based on your YAML configuration.
+
+When to use: Systematic studies, resolution studies, calibration variations,
+or any analysis requiring flexible binning axes.
+
+
+===============================================================================
+2. CONFIGURATION FIELDS
+===============================================================================
+
+Four fields control binning behavior:
+
+
+XVarStr (required)
+    Type: string
+    Purpose: Backward compatibility and spline systematic lookups
+    Values: Any predefined variable name (e.g., "RecoCosZ_ELike", "RecoEnu_ELike")
+    
+    Example: XVarStr: "RecoCosZ_ELike"
+    
+    Note: This field is always required, even when using custom expressions,
+          because spline systematics use it to look up parameter values.
+
+
+YVarStr (required)
+    Type: string
+    Purpose: Backward compatibility and spline systematic lookups
+    Values: Any predefined variable name
+    
+    Example: YVarStr: "RecoEnu_ELike"
+
+
+XVarExpr (optional)
+    Type: string
+    Purpose: Custom X-axis binning expression
+    Default: Uses the value of XVarStr if not specified
+    
+    Example: XVarExpr: "RecoCosZ_ELike * 0.5"
+    
+    This field allows mathematical expressions combining variables,
+    constants, and operators.
+
+
+YVarExpr (optional)
+    Type: string
+    Purpose: Custom Y-axis binning expression
+    Default: Uses the value of YVarStr if not specified
+    
+    Example: YVarExpr: "RecoEnu_ELike / TrueNuE"
+
+
+===============================================================================
+3. USAGE EXAMPLES
+===============================================================================
+
+
+STANDARD BINNING
+----------------
+
+For traditional fixed binning, only specify XVarStr and YVarStr:
+
+    SampleOptions:
+      XVarStr: "RecoCosZ_ELike"
+      YVarStr: "RecoEnu_ELike"
+
+No need to set XVarExpr or YVarExpr - they will default to XVarStr/YVarStr.
+
+
+ENERGY CALIBRATION STUDY
+-------------------------
+
+Apply an energy scale factor to study calibration uncertainties:
+
+    SampleOptions:
+      XVarStr: "RecoCosZ_ELike"        # Used for splines
+      YVarStr: "RecoEnu_ELike"         # Used for splines
+      XVarExpr: "RecoCosZ_ELike"       # No change to direction
+      YVarExpr: "RecoEnu_ELike * 1.05" # 5% energy scale increase
+
+This allows you to quickly test different energy scales by just changing
+the factor in YVarExpr.
+
+
+RESOLUTION BINNING
+------------------
+
+Create a resolution variable by dividing reconstructed by true energy:
+
+    SampleOptions:
+      XVarStr: "RecoCosZ_ELike"
+      YVarStr: "RecoEnu_ELike"
+      XVarExpr: "RecoCosZ_ELike"
+      YVarExpr: "RecoEnu_ELike / TrueNuE"   # Resolution variable
+
+Now your Y-axis bins in resolution instead of absolute energy.
+
+
+AVERAGED DIRECTION
+------------------
+
+Average two direction reconstructions:
+
+    SampleOptions:
+      XVarStr: "RecoCosZ_ELike"
+      YVarStr: "RecoEnu_ELike"
+      XVarExpr: "(RecoCosZ_ELike + RecoCosZ_MuLike) / 2.0"
+      YVarExpr: "RecoEnu_ELike"
+
+
+COORDINATE TRANSFORMATION
+-------------------------
+
+Transform coordinates to a different range:
+
+    SampleOptions:
+      XVarStr: "RecoCosZ_ELike"
+      YVarStr: "RecoEnu_ELike"
+      XVarExpr: "RecoCosZ_ELike * 0.5 + 0.5"  # Map [-1,1] to [0,1]
+      YVarExpr: "RecoEnu_ELike + 0.1"          # Add energy offset
+
+
+===============================================================================
+4. COMPLETE CONFIGURATION EXAMPLE
+===============================================================================
+
+Here's a complete sample configuration showing all fields:
+
+    SampleOptions:
+      # Event selection
+      SelectionCut: "StandardQuality_ELike && IsCC > 0.5"
+      
+      # Traditional binning variables (required for splines)
+      XVarStr: "RecoCosZ_ELike"
+      YVarStr: "RecoEnu_ELike"
+      
+      # Custom binning expressions (optional)
+      XVarExpr: "RecoCosZ_ELike"              # Could use any expression here
+      YVarExpr: "RecoEnu_ELike * 1.02"        # 2% energy calibration factor
+      
+      # Binning details (unchanged from standard usage)
+      NBinsX: 20
+      XBinEdges: [-1.0, -0.8, -0.6, ..., 1.0]
+      NBinsY: 15
+      YBinEdges: [0.0, 0.5, 1.0, ..., 5.0]
+
+
+===============================================================================
+5. HOW IT WORKS INTERNALLY
+===============================================================================
+
+
+STORAGE
+-------
+
+Custom expressions are evaluated once per event and stored in existing
+struct fields:
+    - X expression result stored in: rw_theta
+    - Y expression result stored in: rw_erec
+
+This design avoids adding new struct members and keeps the code simple.
+
+
+EVALUATION TIMING
+-----------------
+
+When: Once per event during initial file loading
+Cost: Approximately 20-50 nanoseconds per expression (negligible)
+Caching: Results are cached in the struct for fast access during fitting
+
+The key insight is that expressions are evaluated only once when loading
+events, not repeatedly during MCMC fitting.
+
+
+SPLINE HANDLING
+---------------
+
+The traditional XVarStr and YVarStr fields are still used for looking up
+spline systematic parameters. The custom XVarExpr and YVarExpr are used
+only for histogram binning. Both systems work together seamlessly.
+
+
+===============================================================================
+6. SUPPORTED EXPRESSION SYNTAX
+===============================================================================
+
+
+VARIABLES
+---------
+
+You can use any predefined variable from the variable system. See
+VARS_USAGE.txt for the complete list.
+
+
+OPERATORS
+---------
+
+    +   Addition
+    -   Subtraction
+    *   Multiplication
+    /   Division
+    ()  Parentheses for grouping
+
+
+CONSTANTS
+---------
+
+Any numeric literal:
+    Integers:     1, 42, 1000
+    Decimals:     1.5, 2.0, 0.001
+    Negative:     -0.3, -2.5
+    Scientific:   1e-3, 2.5e2
+
+
+EXPRESSION EXAMPLES
+-------------------
+
+    Simple:       RecoEnu_ELike
+    Scaled:       RecoEnu_ELike * 1.1
+    Offset:       RecoCosZ_ELike + 0.05
+    Ratio:        RecoEnu_ELike / TrueNuE
+    Complex:      (RecoEnu_ELike * 1.05 + 0.02) / TrueNuE
+
+
+===============================================================================
+7. USE CASES
+===============================================================================
+
+
+SYSTEMATIC STUDIES
+------------------
+
+Energy scale systematics - Test different scale factors:
+
+    Nominal:       YVarExpr: "RecoEnu_ELike"
+    +1 sigma:      YVarExpr: "RecoEnu_ELike * 1.02"
+    -1 sigma:      YVarExpr: "RecoEnu_ELike * 0.98"
+
+You can quickly generate all three configurations without recompiling.
+
+
+Direction scale systematics:
+
+    Nominal:       XVarExpr: "RecoCosZ_ELike"
+    Smeared:       XVarExpr: "RecoCosZ_ELike * 0.95"
+
+
+PHYSICS STUDIES
+---------------
+
+Resolution analysis - Study how resolution varies with direction:
+
+    XVarExpr: "TrueCosZ"
+    YVarExpr: "RecoEnu_ELike / TrueNuE"
+
+
+Bias study - Study reconstruction bias vs true energy:
+
+    XVarExpr: "TrueNuE"
+    YVarExpr: "RecoEnu_ELike - TrueNuE"
+
+
+Reconstruction comparison - Compare two methods:
+
+    XVarExpr: "RecoEnu_ELike"
+    YVarExpr: "RecoEnu_MuLike"
+
+
+===============================================================================
+8. BEST PRACTICES
+===============================================================================
+
+
+ALWAYS SET XVarStr AND YVarStr
+-------------------------------
+
+Even when using custom expressions, always set XVarStr and YVarStr. They're
+needed for spline systematics. Set them to the base variable before any
+transformations.
+
+
+TEST EXPRESSIONS CAREFULLY
+---------------------------
+
+    1. Start with simple expressions
+    2. Verify the output makes physical sense
+    3. Check that histogram ranges match your bin edges
+    4. Look at a few events to confirm values are reasonable
+
+
+DOCUMENT TRANSFORMATIONS
+-------------------------
+
+Add comments in your YAML explaining:
+    - What transformation you're applying
+    - The physics motivation
+    - Any systematic variations being explored
+
+Example:
+    YVarExpr: "RecoEnu_ELike * 1.05"  # +5% energy scale for systematic study
+
+
+DON'T WORRY ABOUT PERFORMANCE
+------------------------------
+
+Expressions are evaluated once per event during loading, which takes
+microseconds. The dominant time is file I/O (milliseconds). Expression
+complexity has no impact on fitting performance.
+
+
+===============================================================================
+9. COMMON PITFALLS
+===============================================================================
+
+
+PITFALL: Forgetting to set XVarStr
+-----------------------------------
+
+Problem: Setting XVarExpr but not XVarStr
+Symptom: Spline systematics won't work correctly
+Solution: Always set both XVarStr and XVarExpr
+
+
+PITFALL: Incompatible histogram ranges
+---------------------------------------
+
+Problem: Expression output doesn't match bin edges
+Symptom: Many events fall outside the histogram range
+Solution: Adjust bin edges to match the output range of your expression,
+          or adjust the expression to match existing bin edges
+
+
+PITFALL: Division by zero
+-------------------------
+
+Problem: Expression divides by a variable that can be zero
+Symptom: NaN or Inf values appear in histograms
+Solution: Add protection in your SelectionCut to require the denominator
+          is non-zero, or check the variable range before dividing
+
+
+===============================================================================
+10. MIGRATION GUIDE
+===============================================================================
+
+If you're migrating from fixed binning to custom expressions:
+
+
+STEP 1: Identify current XVarStr and YVarStr
+---------------------------------------------
+
+Look at your existing configuration and note the variable names.
+
+
+STEP 2: Keep them as-is
+-----------------------
+
+Don't change XVarStr and YVarStr - they're needed for splines.
+
+
+STEP 3: Add XVarExpr and YVarExpr
+----------------------------------
+
+Add these fields with your desired expressions.
+
+
+STEP 4: Test with a small dataset
+----------------------------------
+
+Run on a small sample first to verify the transformation works as expected.
+
+
+STEP 5: Verify histograms
+--------------------------
+
+Check that your output histograms look reasonable and events fall within
+the expected ranges.
+
+
+EXAMPLE MIGRATION
+-----------------
+
+Before (fixed binning):
+    XVarStr: "RecoCosZ_ELike"
+    YVarStr: "RecoEnu_ELike"
+
+After (with energy calibration):
+    XVarStr: "RecoCosZ_ELike"         # Kept for splines
+    YVarStr: "RecoEnu_ELike"          # Kept for splines
+    XVarExpr: "RecoCosZ_ELike"        # Added for custom binning
+    YVarExpr: "RecoEnu_ELike * 1.05"  # Added with transformation
+
+
+===============================================================================
+11. ADVANCED EXAMPLES
+===============================================================================
+
+
+MULTI-DETECTOR STUDY
+--------------------
+
+Compare near detector (ND) and far detector (FD) with different energy scales:
+
+Near Detector configuration:
+    XVarExpr: "RecoCosZ_ELike"
+    YVarExpr: "RecoEnu_ELike * 0.98"    # ND energy scale
+
+Far Detector configuration:
+    XVarExpr: "RecoCosZ_ELike"
+    YVarExpr: "RecoEnu_ELike * 1.02"    # FD energy scale
+
+
+OSCILLATION ANALYSIS
+--------------------
+
+Bin by L/E (baseline over energy) for oscillation studies:
+
+    SampleOptions:
+      XVarStr: "TrueCosZ"             # For splines
+      YVarStr: "TrueNuE"              # For splines
+      XVarExpr: "TrueCosZ"            # Standard direction
+      YVarExpr: "295 / TrueNuE"       # L/E with 295 km baseline
+
+This creates a custom Y-axis showing oscillation wavelength instead of energy.
+
+
+===============================================================================
+RELATED DOCUMENTATION
+===============================================================================
+
+  VARS_USAGE.txt      - Complete list of available variables
+  CUTS_USAGE.txt      - Selection cut documentation
+  COMPLETE_GUIDE.txt  - Comprehensive system overview

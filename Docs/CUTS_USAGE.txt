@@ -1,0 +1,360 @@
+===============================================================================
+                      SELECTION CUT SYSTEM DOCUMENTATION
+===============================================================================
+
+The MaCh3-DUNE framework provides a flexible cut system for event selection.
+Cuts can be composed using logical and comparison operators to create complex
+selection criteria that are applied to CAF events.
+
+
+===============================================================================
+1. PREDEFINED CUTS
+===============================================================================
+
+Several standard cuts are predefined for common use cases:
+
+
+NoCut
+    Accepts all events (always returns true). This is the default if no
+    SelectionCut is specified in your configuration.
+    
+    Usage: SelectionCut: "NoCut"
+
+
+OnePandoraSlice
+    Requires exactly one Pandora reconstruction slice in the event.
+    Most analyses require this to ensure a well-reconstructed event.
+    
+    Expression: NPandoraSlices == 1
+    Usage: SelectionCut: "OnePandoraSlice"
+
+
+StandardQuality_ELike
+    Standard quality cuts for electron-like event selection. Requires one
+    Pandora slice and valid electron-like reconstruction quantities.
+    
+    Composition: OnePandoraSlice && RecoEnu_ELike > 0 && RecoCosZ_ELike > -999
+    Usage: SelectionCut: "StandardQuality_ELike"
+
+
+StandardQuality_MuLike
+    Standard quality cuts for muon-like event selection. Requires one
+    Pandora slice and valid muon-like reconstruction quantities.
+    
+    Composition: OnePandoraSlice && RecoEnu_MuLike > 0 && RecoCosZ_MuLike > -999
+    Usage: SelectionCut: "StandardQuality_MuLike"
+
+
+===============================================================================
+2. LOGICAL OPERATORS
+===============================================================================
+
+Cuts can be combined using logical operators:
+
+
+AND operator (&&)
+    Both cuts must pass for the event to be selected.
+    
+    Example: "NPandoraSlices == 1 && IsCC > 0.5"
+    This selects events with one slice AND a charged-current interaction.
+
+
+OR operator (||)
+    At least one of the cuts must pass for the event to be selected.
+    
+    Example: "Mode == 0 || Mode == 1"
+    This selects events that are either QE (mode 0) OR RES (mode 1).
+
+
+NOT operator (!)
+    Inverts the result of a cut (true becomes false, false becomes true).
+    
+    Example: "!(NPandoraSlices == 0)"
+    This rejects events with zero slices.
+
+
+Parentheses ()
+    Used to group expressions and control evaluation order.
+    
+    Example: "(IsCC > 0.5 && Mode == 0) || Mode == 1"
+    This selects CC QE events OR any RES events.
+
+
+===============================================================================
+3. COMPARISON OPERATORS
+===============================================================================
+
+The following comparison operators can be used with variables:
+
+    <   Less than               Example: "TrueNuE < 2.0"
+    >   Greater than            Example: "RecoCosZ_ELike > -0.5"
+    <=  Less than or equal      Example: "TrueNuE <= 5.0"
+    >=  Greater than or equal   Example: "RecoEnu_ELike >= 0.2"
+    ==  Equal to                Example: "NPandoraSlices == 1"
+    !=  Not equal to            Example: "Mode != 2"
+
+Note: Be careful using == with floating-point variables due to precision issues.
+      For boolean-like variables (IsCC, etc.), use "IsCC > 0.5" instead of "IsCC == 1".
+
+
+===============================================================================
+4. USAGE EXAMPLES
+===============================================================================
+
+
+SIMPLE CUT - Single condition
+------------------------------
+    SelectionCut: "NPandoraSlices == 1"
+
+Selects only events with exactly one reconstructed slice.
+
+
+COMPOUND CUT - Multiple AND conditions
+---------------------------------------
+    SelectionCut: "NPandoraSlices == 1 && IsCC > 0.5"
+
+Selects events with one slice that are also charged-current interactions.
+
+
+COMPLEX CUT - Mixed logical operations
+---------------------------------------
+    SelectionCut: "(NPandoraSlices == 1 && IsCC > 0.5) || TrueNuE > 5.0"
+
+Selects events that are either (well-reconstructed CC) or (high true energy).
+
+
+ENERGY RANGE - Lower and upper bounds
+--------------------------------------
+    SelectionCut: "RecoEnu_ELike > 0.2 && RecoEnu_ELike < 5.0"
+
+Selects events with reconstructed energy between 0.2 and 5.0 GeV.
+
+
+DIRECTION CUT - Angular selection
+----------------------------------
+    SelectionCut: "NPandoraSlices == 1 && RecoCosZ_ELike > 0.0"
+
+Selects well-reconstructed forward-going events (downward-going in detector).
+
+
+MODE SELECTION - Interaction topology
+--------------------------------------
+    SelectionCut: "(Mode == 0 || Mode == 1) && IsCC > 0.5"
+
+Selects charged-current events that are either QE or RES interactions.
+
+
+EXCLUSION CUT - Rejecting specific events
+------------------------------------------
+    SelectionCut: "!(NPandoraSlices == 0)"
+
+Rejects events with no reconstruction (equivalent to "NPandoraSlices > 0").
+
+
+===============================================================================
+5. ADVANCED COMPOSITION
+===============================================================================
+
+
+FIDUCIAL VOLUME - Combining predefined and custom cuts
+-------------------------------------------------------
+    SelectionCut: "StandardQuality_ELike && TrueNuE > 0.2 && TrueCosZ > -0.8"
+
+Uses a predefined quality cut and adds energy and direction requirements.
+
+
+SIGNAL DEFINITION - Complex multi-condition selection
+------------------------------------------------------
+    SelectionCut: |
+      NPandoraSlices == 1 && 
+      IsCC > 0.5 && 
+      Mode == 0 && 
+      RecoEnu_ELike > 0.5 && 
+      RecoEnu_ELike < 3.0 &&
+      RecoCosZ_ELike > -0.5
+
+This defines a specific signal: well-reconstructed CC QE events in a specific
+energy and direction range. The pipe symbol (|) in YAML allows multi-line text.
+
+
+BACKGROUND REJECTION - Excluding unwanted event types
+------------------------------------------------------
+    SelectionCut: |
+      NPandoraSlices == 1 && 
+      !(Mode == 2) && 
+      !(TrueNuPDG == 16)
+
+Selects well-reconstructed events while rejecting DIS interactions and
+tau neutrinos.
+
+
+===============================================================================
+6. COMMON SELECTION PATTERNS
+===============================================================================
+
+Here are some frequently used selection patterns:
+
+
+Electron neutrino selection:
+    SelectionCut: "StandardQuality_ELike && IsCC > 0.5 && TrueNuPDG == 12"
+
+
+Muon neutrino selection:
+    SelectionCut: "StandardQuality_MuLike && IsCC > 0.5 && TrueNuPDG == 14"
+
+
+QE-only events:
+    SelectionCut: "NPandoraSlices == 1 && Mode == 0"
+
+
+Upgoing (atmospheric) events:
+    SelectionCut: "NPandoraSlices == 1 && RecoCosZ_ELike < 0.0"
+
+
+High-energy events:
+    SelectionCut: "NPandoraSlices == 1 && RecoEnu_ELike > 2.0"
+
+
+===============================================================================
+7. BEST PRACTICES
+===============================================================================
+
+
+For readability:
+    - Use parentheses generously to make precedence clear
+    - Break long cuts across multiple lines in YAML (use the | symbol)
+    - Consider defining frequently-used cuts in Cuts.h with descriptive names
+    - Add comments in your YAML to explain the physics motivation
+
+
+For performance:
+    - Cuts are evaluated once per event during loading, not during fitting
+    - Order of conditions doesn't affect performance (all are fast)
+    - Complex cuts have no runtime overhead - use them freely
+    - The dominant time is file I/O, not cut evaluation
+
+
+For physics:
+    - Always check NPandoraSlices first before using reconstruction variables
+    - Use "IsCC > 0.5" for boolean-like variables instead of "IsCC == 1"
+    - Be cautious with == for floating-point comparisons
+    - Document your selection criteria in comments or a companion analysis note
+
+
+===============================================================================
+8. EXPRESSION PARSING RULES
+===============================================================================
+
+Operator precedence (highest to lowest):
+    1. Parentheses: ()
+    2. NOT: !
+    3. Comparisons: <, >, <=, >=, ==, !=
+    4. AND: &&
+    5. OR: ||
+
+When in doubt, use parentheses to make your intention explicit!
+
+Whitespace is ignored and can be used freely for readability.
+
+Variable names are case-sensitive and must exactly match those defined
+in the variable system (see VARS_USAGE.txt).
+
+Error handling:
+    - Unknown variables throw a MaCh3Exception at parse time (build fails)
+    - Invalid syntax throws an exception with a descriptive error message
+    - Mismatched parentheses are detected and reported clearly
+
+
+===============================================================================
+9. ADDING CUSTOM CUTS
+===============================================================================
+
+To add a new named cut to the system:
+
+    1. Edit Samples/Cuts.h
+    2. Define a const Cut using existing cuts and/or variables
+    3. Add your cut to the GetCutRegistry() map
+    4. Document it in this file
+
+Example:
+
+    // In Cuts.h
+    const Cut kMyCustomCut = 
+        kOnePandoraSlice && 
+        (kTrueNuE > 0.5) && 
+        (kRecoCosZ_ELike > 0.0);
+    
+    // In GetCutRegistry()
+    {"MyCustomCut", kMyCustomCut},
+
+Then use it in your configuration:
+    SelectionCut: "MyCustomCut"
+
+
+===============================================================================
+10. DEBUGGING CUTS
+===============================================================================
+
+
+Check syntax errors:
+    The build will fail if your cut syntax is invalid. The error message
+    will show the problematic expression.
+
+
+Check selection efficiency:
+    Look at the event counts in your output. Compare to a baseline with
+    NoCut to see how many events pass your selection.
+
+
+Test incrementally:
+    Start with simple cuts, then add conditions one at a time. After each
+    addition, verify the event counts and distributions make sense.
+
+
+Use looser cuts first:
+    Begin with broad selections, then gradually tighten them. This helps
+    identify which cuts are removing events unexpectedly.
+
+
+===============================================================================
+11. YAML CONFIGURATION EXAMPLES
+===============================================================================
+
+
+Minimal configuration:
+    SampleOptions:
+      SelectionCut: "NPandoraSlices == 1"
+      XVarStr: "RecoCosZ_ELike"
+      YVarStr: "RecoEnu_ELike"
+
+
+Typical analysis configuration:
+    SampleOptions:
+      SelectionCut: "StandardQuality_ELike && IsCC > 0.5"
+      XVarStr: "RecoCosZ_ELike"
+      YVarStr: "RecoEnu_ELike"
+      NBinsX: 20
+      NBinsY: 15
+
+
+Advanced configuration with complex cut:
+    SampleOptions:
+      SelectionCut: |
+        NPandoraSlices == 1 && 
+        IsCC > 0.5 && 
+        RecoEnu_ELike > 0.2 && 
+        RecoEnu_ELike < 5.0 && 
+        RecoCosZ_ELike > -0.8
+      XVarStr: "RecoCosZ_ELike"
+      YVarStr: "RecoEnu_ELike"
+      NBinsX: 20
+      NBinsY: 15
+
+
+===============================================================================
+RELATED DOCUMENTATION
+===============================================================================
+
+  VARS_USAGE.txt      - Variable definitions and arithmetic expressions
+  BINNING_USAGE.txt   - Custom binning configuration
+  COMPLETE_GUIDE.txt  - Comprehensive system overview

@@ -1,0 +1,231 @@
+===============================================================================
+                        VARIABLE SYSTEM DOCUMENTATION
+===============================================================================
+
+The MaCh3-DUNE framework provides a flexible variable system for accessing
+event properties from CAF (Common Analysis Format) files. Variables can be
+used in custom binning expressions and selection cuts.
+
+
+===============================================================================
+1. PREDEFINED VARIABLES
+===============================================================================
+
+The following variables are available in all configurations:
+
+
+TRUTH-LEVEL VARIABLES
+---------------------
+
+TrueNuE - True neutrino energy in GeV
+    Returns the true neutrino energy from Monte Carlo truth information.
+    Source: sr->mc.nu[0].E
+    Usage example: "TrueNuE > 0.5"
+
+TrueNuPDG - True neutrino PDG code
+    Returns the PDG code identifying the neutrino flavor.
+    Common values: 12 (electron neutrino), 14 (muon neutrino), 16 (tau neutrino)
+    Source: sr->mc.nu[0].pdg
+    Usage example: "TrueNuPDG == 14"
+
+IsCC - Charged current interaction flag
+    Returns 1 for charged current (CC) interactions, 0 for neutral current (NC).
+    Source: sr->mc.nu[0].iscc
+    Usage example: "IsCC > 0.5"
+
+Mode - Interaction mode (GENIE code)
+    Returns the GENIE interaction mode code.
+    Common values: 0 (QE), 1 (RES), 2 (DIS)
+    Source: sr->mc.nu[0].mode
+    Usage example: "Mode == 0"
+
+TrueCosZ - True neutrino direction cosine
+    Returns the cosine of the zenith angle of the true neutrino direction.
+    Range: [-1, 1] where 1 is downward-going and -1 is upward-going
+    Calculation: cos(theta) from true neutrino direction vector
+    Usage example: "TrueCosZ > 0.0"
+
+
+RECONSTRUCTION VARIABLES
+------------------------
+
+NPandoraSlices - Number of Pandora slices
+    Returns the number of reconstructed interaction candidates in the event.
+    Most analyses require exactly one slice for a well-reconstructed event.
+    Source: sr->common.ixn.pandora.size()
+    Usage example: "NPandoraSlices == 1"
+
+RecoEnu_ELike - Reconstructed energy (electron-like)
+    Returns the reconstructed neutrino energy in GeV using the electron-like
+    (shower) hypothesis. Returns -999 if NPandoraSlices != 1.
+    Source: sr->common.ixn.pandora[0].Enu.e_calo
+    Usage example: "RecoEnu_ELike > 0.2"
+
+RecoEnu_MuLike - Reconstructed energy (muon-like)
+    Returns the reconstructed neutrino energy in GeV using the muon-like
+    (track) hypothesis. Returns -999 if NPandoraSlices != 1.
+    Source: sr->common.ixn.pandora[0].Enu.lep_calo
+    Usage example: "RecoEnu_MuLike > 0.5"
+
+RecoCosZ_ELike - Reconstructed direction (electron-like)
+    Returns the cosine of the zenith angle for the electron-like shower.
+    Range: [-1, 1]. Returns -999 if NPandoraSlices != 1.
+    Source: sr->common.ixn.pandora[0].dir.heshw
+    Usage example: "RecoCosZ_ELike > -0.5"
+
+RecoCosZ_MuLike - Reconstructed direction (muon-like)
+    Returns the cosine of the zenith angle for the muon-like track.
+    Range: [-1, 1]. Returns -999 if NPandoraSlices != 1.
+    Source: sr->common.ixn.pandora[0].dir.lngtrk
+    Usage example: "RecoCosZ_MuLike > 0.0"
+
+===============================================================================
+2. VARIABLE EXPRESSIONS
+===============================================================================
+
+Variables can be combined using arithmetic operations to create custom
+expressions for binning and analysis.
+
+
+ARITHMETIC OPERATORS
+--------------------
+
+You can use standard arithmetic operators to combine variables:
+
+  +  Addition             Example: Var1 + Var2
+  -  Subtraction          Example: Var1 - Var2
+  *  Multiplication       Example: Var1 * Var2
+  /  Division             Example: Var1 / Var2
+  () Parentheses          Example: (Var1 + Var2) * Var3
+
+
+COMMON EXPRESSION PATTERNS
+--------------------------
+
+Scaling with constants:
+    TrueNuE + 0.5                    (add offset)
+    RecoEnu_ELike * 1.2              (scale by factor)
+    TrueNuE / 2.0                    (divide)
+
+Physics-motivated expressions:
+    RecoEnu_ELike / TrueNuE          (energy resolution)
+    (RecoEnu_ELike + RecoEnu_MuLike) / 2.0    (average of two reconstructions)
+    (RecoEnu_ELike * 1.05) + 0.02    (energy calibration with scale and offset)
+
+===============================================================================
+3. USAGE IN YAML CONFIGURATION FILES
+===============================================================================
+
+Variables are specified in your YAML configuration files under SampleOptions.
+
+
+BASIC USAGE
+-----------
+
+For standard analyses with traditional binning:
+
+    SampleOptions:
+      SelectionCut: "NPandoraSlices == 1 && IsCC > 0.5"
+      XVarStr: "RecoCosZ_ELike"
+      YVarStr: "RecoEnu_ELike"
+
+
+CUSTOM EXPRESSION USAGE
+-----------------------
+
+For custom binning with variable transformations:
+
+    SampleOptions:
+      SelectionCut: "NPandoraSlices == 1 && TrueNuE > 0.2"
+      XVarExpr: "RecoCosZ_ELike"
+      YVarExpr: "RecoEnu_ELike * 1.1"      # Apply 10% energy scale factor
+      XVarStr: "RecoCosZ_ELike"            # Still needed for splines
+      YVarStr: "RecoEnu_ELike"
+
+
+ADVANCED USAGE
+--------------
+
+For complex expressions combining multiple variables:
+
+    SampleOptions:
+      SelectionCut: "NPandoraSlices == 1 && IsCC > 0.5 && TrueCosZ > -0.5"
+      XVarExpr: "(RecoCosZ_ELike + RecoCosZ_MuLike) / 2.0"  # Average direction
+      YVarExpr: "RecoEnu_ELike / TrueNuE"                    # Energy resolution
+      XVarStr: "RecoCosZ_ELike"
+      YVarStr: "RecoEnu_ELike"
+
+===============================================================================
+4. EXPRESSION PARSING RULES
+===============================================================================
+
+Operator precedence (highest to lowest):
+    1. Parentheses: ()
+    2. Multiplication and Division: * /
+    3. Addition and Subtraction: + -
+
+Number formats:
+    Integers:       123
+    Decimals:       1.5
+    Scientific:     1.5e-3
+    Negative:       -2.5
+
+Variable names are case-sensitive and must match exactly the names listed
+in the predefined variables section above.
+
+Whitespace is ignored throughout expressions.
+
+Error handling:
+    - Unknown variable names throw a MaCh3Exception at parse time
+    - Division by zero returns NaN
+    - Invalid syntax throws an exception with a descriptive message
+
+
+===============================================================================
+5. PERFORMANCE NOTES
+===============================================================================
+
+Variable evaluation is highly optimized:
+
+    - Overhead per evaluation: ~10-20 nanoseconds
+    - Variables are evaluated once during event loading
+    - Results are cached in struct fields for fast access during fitting
+    - Total impact is negligible compared to CAF file I/O
+
+Best practices:
+
+    - Use XVarExpr/YVarExpr for custom binning expressions
+    - Keep XVarStr/YVarStr set for backward compatibility with splines
+    - Don't worry about expression complexity - they're only evaluated once
+    - Choose clear, meaningful names over deeply nested expressions
+
+
+===============================================================================
+6. ADDING NEW VARIABLES
+===============================================================================
+
+To add a new variable to the system:
+
+    1. Edit Samples/Vars.h
+    2. Add a const Var definition using a lambda function
+    3. Add the variable to the GetVarRegistry() map
+    4. Document it in this file
+
+Example code:
+
+    // In Vars.h
+    const Var kMyNewVar([](const caf::StandardRecordProxy* sr) {
+        return static_cast<double>(sr->my.new.field);
+    });
+    
+    // In GetVarRegistry()
+    {"MyNewVar", kMyNewVar},
+
+
+===============================================================================
+RELATED DOCUMENTATION
+===============================================================================
+
+  CUTS_USAGE.txt      - Selection cut composition and logical operators
+  BINNING_USAGE.txt   - Custom binning configuration guide
+  COMPLETE_GUIDE.txt  - Comprehensive system overview
