@@ -14,6 +14,7 @@
 #include <filesystem>
 #include <map>
 
+
 void MakeSpectaVariations(SampleHandlerFD* pdf, const std::string& var,
                           TFile* fout, const std::string& ND_or_FD,
                           const std::string& pdfTitle, int p) {
@@ -111,7 +112,8 @@ int main(int argc, char* argv[]) {
     }
 
     // Bind xsec branches
-    std::vector<double> xsec_nominal = xsec->GetPreFitValues();
+    //std::vector<double> xsec_nominal = xsec->GetPreFitValues();
+    std::vector<double> xsec_nominal( xsec->GetNumParFromGroup("Xsec"));
     std::vector<Double_t> xsec_tmp(xsec_nominal.size(), 0.0);
     for (size_t i = 0; i < xsec_nominal.size(); ++i) {
         TString bname = Form("xsec_%zu", i);
@@ -119,12 +121,12 @@ int main(int argc, char* argv[]) {
             mcmc->SetBranchAddress(bname, &xsec_tmp[i]);
     }
 
-    int mcmc_step = -1;
+    UInt_t mcmc_step = -1;
     mcmc->SetBranchAddress("step", &mcmc_step);
 
     // --- Generate Asimov spectra
     xsec->SetGroupOnlyParameters("Xsec", xsec_nominal);
-    xsec->SetGroupOnlyParameters("Osc", OscPars);
+    //xsec->SetGroupOnlyParameters("Osc", OscPars);
 
     for (auto& pdf : DUNEPdfs) {
         std::string pdfTitle = pdf->GetTitle();
@@ -155,55 +157,56 @@ int main(int argc, char* argv[]) {
     }
 
 
-    // --- ±shift systematic variations
-    std::vector<double> error(xsec_nominal.size(), shiftAmount);
-    std::vector<double> xsec_plus(xsec_nominal.size()), xsec_minus(xsec_nominal.size());
-    for (size_t i = 0; i < xsec_nominal.size(); ++i) {
-        xsec_plus[i] = xsec_nominal[i] + error[i];
-        xsec_minus[i] = xsec_nominal[i] - error[i];
-    }
+    // // --- ±shift systematic variations
+    // std::vector<double> error(xsec_nominal.size(), shiftAmount);
+    // std::vector<double> xsec_plus(xsec_nominal.size()), xsec_minus(xsec_nominal.size());
+    // for (size_t i = 0; i < xsec_nominal.size(); ++i) {
+    //     xsec_plus[i] = xsec_nominal[i] + error[i];
+    //     xsec_minus[i] = xsec_nominal[i] - error[i];
+    // }
 
-    xsec->SetGroupOnlyParameters("Osc", OscPars);
-    for (auto& pdf : DUNEPdfs) {
-        // +shift
-        xsec->SetParameters(xsec_plus);
-        pdf->Reweight();
-        TH1* h_plus = pdf->GetMCHist(1);
-        if (!h_plus) continue;
+    //xsec->SetGroupOnlyParameters("Osc", OscPars);
+    //  xsec->SetGroupOnlyParameters("Xsec", xsec_nominal);
+    // for (auto& pdf : DUNEPdfs) {
+    //     // +shift
+    //     xsec->SetParameters(xsec_plus);
+    //     pdf->Reweight();
+    //     TH1* h_plus = pdf->GetMCHist(1);
+    //     if (!h_plus) continue;
 
-        std::string pdfTitle = pdf->GetTitle();
-        std::string ND_or_FD =
-            (pdfTitle.find("ND") != std::string::npos) ? "ND" :
-            (pdfTitle.find("FD") != std::string::npos) ? "FD" : "Other";
+    //     std::string pdfTitle = pdf->GetTitle();
+    //     std::string ND_or_FD =
+    //         (pdfTitle.find("ND") != std::string::npos) ? "ND" :
+    //         (pdfTitle.find("FD") != std::string::npos) ? "FD" : "Other";
 
-        TDirectory* shiftDir = fOut->GetDirectory("shift_parameters");
-        if (!shiftDir) shiftDir = fOut->mkdir("shift_parameters");
-        shiftDir->cd();
+    //     TDirectory* shiftDir = fOut->GetDirectory("shift_parameters");
+    //     if (!shiftDir) shiftDir = fOut->mkdir("shift_parameters");
+    //     shiftDir->cd();
 
-        TDirectory* detDir = shiftDir->GetDirectory(ND_or_FD.c_str());
-        if (!detDir) detDir = shiftDir->mkdir(ND_or_FD.c_str());
-        detDir->cd();
+    //     TDirectory* detDir = shiftDir->GetDirectory(ND_or_FD.c_str());
+    //     if (!detDir) detDir = shiftDir->mkdir(ND_or_FD.c_str());
+    //     detDir->cd();
 
-        TH1D* cloneHplus = static_cast<TH1D*>(h_plus->Clone(
-            Form("%s_%s_plus", ND_or_FD.c_str(), pdfTitle.c_str())));
-        cloneHplus->SetDirectory(detDir);
-        cloneHplus->Write();
-        delete cloneHplus;
+    //     TH1D* cloneHplus = static_cast<TH1D*>(h_plus->Clone(
+    //         Form("%s_%s_plus", ND_or_FD.c_str(), pdfTitle.c_str())));
+    //     cloneHplus->SetDirectory(detDir);
+    //     cloneHplus->Write();
+    //     delete cloneHplus;
 
-        // -shift
-        xsec->SetParameters(xsec_minus);
-        pdf->Reweight();
-        TH1* h_minus = pdf->GetMCHist(1);
-        if (!h_minus) continue;
+    //     // -shift
+    //     xsec->SetParameters(xsec_minus);
+    //     pdf->Reweight();
+    //     TH1* h_minus = pdf->GetMCHist(1);
+    //     if (!h_minus) continue;
 
-        TH1D* cloneHminus = static_cast<TH1D*>(h_minus->Clone(
-            Form("%s_%s_minus", ND_or_FD.c_str(), pdfTitle.c_str())));
-        cloneHminus->SetDirectory(detDir);
-        cloneHminus->Write();
-        delete cloneHminus;
+    //     TH1D* cloneHminus = static_cast<TH1D*>(h_minus->Clone(
+    //         Form("%s_%s_minus", ND_or_FD.c_str(), pdfTitle.c_str())));
+    //     cloneHminus->SetDirectory(detDir);
+    //     cloneHminus->Write();
+    //     delete cloneHminus;
 
-        fOut->cd();
-    }
+    //     fOut->cd();
+    // }
 
     // --- Posterior predictive draws
     auto rnd = std::make_unique<TRandom3>(0);
