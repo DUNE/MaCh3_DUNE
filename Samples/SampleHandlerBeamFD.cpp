@@ -397,6 +397,8 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   double _eP;
   double _ePip;
   double _ePim;
+  double _eOther;
+  double _nipi0;
   double _ePi0;
   double _eN;
   double _BeRPA_cvwgt;
@@ -465,6 +467,12 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   _data->SetBranchStatus("vtx_z", 1);
   _data->SetBranchAddress("vtx_z", &_vtx_z);  
 
+  _data->SetBranchStatus("_nipi0", 1) ;
+  _data->SetBranchAddress("_nipi0", &_nipi0) ; ///
+  _data->SetBranchStatus("_eOther", 1) ;
+  _data->SetBranchAddress("_eOther", &_eOther) ; ///
+
+  //
   size_t nEntries = static_cast<size_t>(_data->GetEntries());
   dunemcSamples.resize(nEntries);
   _data->GetEntry(0);
@@ -557,6 +565,8 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
     dunemcSamples[i].rw_vtx_x = (_vtx_x);
     dunemcSamples[i].rw_vtx_y = (_vtx_y);
     dunemcSamples[i].rw_vtx_z = (_vtx_z);
+    double eHad_truth =  _eP + _ePip + _ePim + _ePi0 + _eOther + (_nipi0 *0.1349); 
+    dunemcSamples[i].enu_bias = ((_LepE) + eHad_truth - _ev); //
 
     dunemcSamples[i].rw_trueccnumu = static_cast<double>(dunemcSamples[i].rw_isCC==1 && abs(dunemcSamples[i].nupdg)==14);
     dunemcSamples[i].rw_trueccnue = static_cast<double>(dunemcSamples[i].rw_isCC==1 && abs(dunemcSamples[i].nupdg)==12);
@@ -618,11 +628,14 @@ const double* SampleHandlerBeamFD::GetPointerToKinematicParameter(KinematicTypes
     KinematicValue = &(isFHC);
     break;
   case kTrueCCnue: 
-	KinematicValue = &(dunemcSamples[iEvent].rw_trueccnue);
- 	break;
+    KinematicValue = &(dunemcSamples[iEvent].rw_trueccnue);
+    break;
   case kTrueCCnumu: 
-	KinematicValue = &(dunemcSamples[iEvent].rw_trueccnumu);
- 	break;
+    KinematicValue = &(dunemcSamples[iEvent].rw_trueccnumu);
+    break;
+  case kEnubias:
+    KinematicValue = &(dunemcSamples[iEvent].enu_bias);
+    break;
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
     throw MaCh3Exception(__FILE__, __LINE__);

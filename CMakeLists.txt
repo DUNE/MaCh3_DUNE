@@ -176,6 +176,9 @@ if(NOT MaCh3_FOUND)
     list(APPEND MaCh3_OPTIONS "CUDAProb3Linear_ENABLED TRUE")
   endif()
 
+  if(NOT DEFINED CPM_MaCh3_SOURCE)
+  message(FATAL_ERROR "IM GOING TO DOWNLOAD MACH3 THIS IS NOT WHAT YOU WANT (future Abi)")
+  endif()
   CPMAddPackage(
     NAME MaCh3
     GIT_TAG ${MaCh3_CORE_BRANCH}

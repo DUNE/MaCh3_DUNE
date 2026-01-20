@@ -148,7 +148,7 @@ protected:
     return 1.;
   }
 
-  std::vector<std::vector<std::vector<std::vector<TH2D*>>>> GetBinnedWeights(std::vector<std::string> ParamNames, std::vector<std::vector<int>> ParamModes, std::vector<double> TrueEBins);  
+  //std::vector<std::vector<std::vector<std::vector<TH2D*>>>> GetBinnedWeights(std::vector<std::string> ParamNames, std::vector<std::vector<int>> ParamModes, std::vector<double> TrueEBins);  
 
   std::vector<dunemc_beamoffaxis> dunemcSamples;
 

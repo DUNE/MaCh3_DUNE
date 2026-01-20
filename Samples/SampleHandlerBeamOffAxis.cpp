@@ -98,138 +98,235 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
   // This function manually populates the map of functional parameters
   // Maps the name of the functional parameter to the pointer of the function
 
+  // RegisterIndividualFunctionalParameter(
+  //     "TotalEScaleND", kTotalEScaleND,
+  //     [this](const double *par, std::size_t iEvent) {
+  //       if (dunemcSamples[iEvent].shift.erec < 0.)
+  //         dunemcSamples[iEvent].shift.erec = 0.;
+  //       if (dunemcSamples[iEvent].reco.ELep < 0.)
+  //         dunemcSamples[iEvent].reco.ELep = 0.;
+
+  //       if (abs(dunemcSamples[iEvent].LepPDG == 11)) {
+  //         dunemcSamples[iEvent].shift.erec *= (1.0 + (*par));
+  //         dunemcSamples[iEvent].reco.ELep *= (1.0 + (*par));
+  //       }
+
+  //       dunemcSamples[iEvent].shift.erec +=
+  //           (*par) * dunemcSamples[iEvent].reco.EHad;
+  //       // dunemcSamples[iEvent].reco.ELep += (*par) *
+  //       // dunemcSamples[iEvent].reco.EHad;
+  //     });
+
+  // RegisterIndividualFunctionalParameter(
+  //     "TotalEScaleND_mu", kTotalEScaleND_mu,
+  //     [this](const double *par, std::size_t iEvent) {
+  //       if (abs(dunemcSamples[iEvent].LepPDG == 13) &&
+  //           (dunemcSamples[iEvent].reco.muon_contained == 1 ||
+  //            dunemcSamples[iEvent].reco.muon_tracker == 1)) {
+  //         dunemcSamples[iEvent].shift.erec +=
+  //             (*par) * (dunemcSamples[iEvent].reco.ELep);
+  //         dunemcSamples[iEvent].reco.ELep *= (1.0 + (*par));
+  //       }
+  //     });
+
+  // RegisterIndividualFunctionalParameter(
+  //     "EMResND", kEMResND, [this](const double *par, std::size_t iEvent) {
+  //       if (dunemcSamples[iEvent].reco.ePi0 < 0.0)
+  //         dunemcSamples[iEvent].reco.ePi0 = 0.0;
+  //       dunemcSamples[iEvent].shift.erec +=
+  //           (*par) * (dunemcSamples[iEvent].truth.ePi0 -
+  //                     dunemcSamples[iEvent].reco.ePi0);
+  //       dunemcSamples[iEvent].shift.etrue +=
+  //           (*par) * (dunemcSamples[iEvent].truth.ePi0 -
+  //                     dunemcSamples[iEvent].reco.ePi0);
+  //       dunemcSamples[iEvent].reco.ePi0 +=
+  //           (*par) * (dunemcSamples[iEvent].truth.ePi0 -
+  //                     dunemcSamples[iEvent].reco.ePi0);
+  //       if (abs(dunemcSamples[iEvent].LepPDG == 11)) {
+  //         dunemcSamples[iEvent].shift.erec +=
+  //             (*par) * (dunemcSamples[iEvent].truth.LepE -
+  //                       dunemcSamples[iEvent].reco.ELep);
+  //         dunemcSamples[iEvent].reco.ELep +=
+  //             (*par) * (dunemcSamples[iEvent].truth.LepE -
+  //                       dunemcSamples[iEvent].reco.ELep);
+  //         dunemcSamples[iEvent].shift.etrue +=
+  //             (*par) * (dunemcSamples[iEvent].truth.LepE -
+  //                       dunemcSamples[iEvent].reco.ELep);
+  //       }
+  //     });
+
+  // RegisterIndividualFunctionalParameter(
+  //     "EScaleMuSpectND", kEScaleMuSpectND,
+  //     [this](const double *par, std::size_t iEvent) {
+  //       if (abs(dunemcSamples[iEvent].LepPDG == 13) &&
+  //           dunemcSamples[iEvent].reco.muon_tracker == 1) {
+  //         dunemcSamples[iEvent].shift.erec +=
+  //             (*par) * (dunemcSamples[iEvent].reco.ELep);
+  //         dunemcSamples[iEvent].reco.ELep *= ((*par) + 1.0);
+  //       }
+  //     });
+
+  // RegisterIndividualFunctionalParameter(
+  //     "TotalEScaleND_hadsqrt", kTotalEScaleND_hadsqrt,
+  //     [this](const double *par, std::size_t iEvent) {
+  //       dunemcSamples[iEvent].shift.erec +=
+  //           (*par) * dunemcSamples[iEvent].syst.sum_ehad_sqrt;
+  //     });
+
+  // RegisterIndividualFunctionalParameter(
+  //     "TotalEScaleND_hadinvsqrt", kTotalEScaleND_hadinvsqrt,
+  //     [this](const double *par, std::size_t iEvent) {
+  //       dunemcSamples[iEvent].shift.erec +=
+  //           (*par) * dunemcSamples[iEvent].syst.sum_ehad_sqrt /
+  //           dunemcSamples[iEvent].reco.sum_ehad;
+  //     });
+
+  // RegisterIndividualFunctionalParameter(
+  //     "TotalEScaleND_EM", kTotalEScaleND_EM,
+  //     [this](const double *par, std::size_t iEvent) {
+  //       dunemcSamples[iEvent].shift.erec +=
+  //           (*par) * (dunemcSamples[iEvent].reco.ePi0 -
+  //                     dunemcSamples[iEvent].truth.ePi0);
+  //     });
+
+  // RegisterIndividualFunctionalParameter(
+  //     "TotalEScaleND_EM_invsqrt", kTotalEScaleND_EMinvsqrt,
+  //     [this](const double *par, std::size_t iEvent) {
+  //       dunemcSamples[iEvent].shift.erec +=
+  //           (*par) *
+  //           sqrt((dunemcSamples[iEvent].reco.ePi0 -
+  //                 dunemcSamples[iEvent].truth.ePi0)) /
+  //           ((dunemcSamples[iEvent].reco.ePi0 -
+  //             dunemcSamples[iEvent].truth.ePi0));
+  //     });
+
+  // RegisterIndividualFunctionalParameter(
+  //     "TotalEScaleND_EM_sqrt", kTotalEScaleND_EMsqrt,
+  //     [this](const double *par, std::size_t iEvent) {
+  //       dunemcSamples[iEvent].shift.erec +=
+  //           (*par) * sqrt((dunemcSamples[iEvent].reco.ePi0 -
+  //                          dunemcSamples[iEvent].truth.ePi0));
+  //     });
+
+  // RegisterIndividualFunctionalParameter(
+  //     "MuonRes_ND", kMuonRes_ND, [this](const double *par, std::size_t iEvent) {
+  //       if (abs(dunemcSamples[iEvent].LepPDG == 13)) {
+  //         dunemcSamples[iEvent].shift.erec +=
+  //             (*par) * (dunemcSamples[iEvent].truth.LepE -
+  //                       dunemcSamples[iEvent].reco.ELep);
+  //         dunemcSamples[iEvent].reco.ELep +=
+  //             (*par) * (dunemcSamples[iEvent].truth.LepE -
+  //                       dunemcSamples[iEvent].reco.ELep);
+  //       }
+  //     });
+
+  // RegisterIndividualFunctionalParameter(
+  //     "NRes_ND", kNRes_ND, [this](const double *par, std::size_t iEvent) {
+  //       if (dunemcSamples[iEvent].reco.eN < 0.0)
+  //         dunemcSamples[iEvent].reco.eN = 0.0;
+  //       dunemcSamples[iEvent].shift.erec +=
+  //           (*par) *
+  //           (dunemcSamples[iEvent].truth.eN - dunemcSamples[iEvent].reco.eN);
+  //       dunemcSamples[iEvent].reco.eN +=
+  //           (*par) *
+  //           (dunemcSamples[iEvent].truth.eN - dunemcSamples[iEvent].reco.eN);
+  //     });
+
+  // RegisterIndividualFunctionalParameter(
+  //     "HadRes_ND", kHadRes_ND, [this](const double *par, std::size_t iEvent) {
+  //       dunemcSamples[iEvent].shift.erec +=
+  //           (*par) * ((dunemcSamples[iEvent].truth.ePim -
+  //                      dunemcSamples[iEvent].reco.ePim) +
+  //                     ((dunemcSamples[iEvent].truth.ePip -
+  //                       dunemcSamples[iEvent].reco.ePip)) +
+  //                     ((dunemcSamples[iEvent].truth.eP -
+  //                       dunemcSamples[iEvent].reco.eP)));
+  //       dunemcSamples[iEvent].reco.eP +=
+  //           (*par) *
+  //           (dunemcSamples[iEvent].truth.eP - dunemcSamples[iEvent].reco.eP);
+  //       dunemcSamples[iEvent].reco.ePip +=
+  //           (*par) * (dunemcSamples[iEvent].truth.ePip -
+  //                     dunemcSamples[iEvent].reco.ePip);
+  //       dunemcSamples[iEvent].reco.ePim +=
+  //           (*par) * (dunemcSamples[iEvent].truth.ePim -
+  //                     dunemcSamples[iEvent].reco.ePim);
+  //     });
   RegisterIndividualFunctionalParameter(
       "TotalEScaleND", kTotalEScaleND,
       [this](const double *par, std::size_t iEvent) {
-        if (dunemcSamples[iEvent].shift.erec < 0.)
-          dunemcSamples[iEvent].shift.erec = 0.;
-        if (dunemcSamples[iEvent].reco.ELep < 0.)
-          dunemcSamples[iEvent].reco.ELep = 0.;
 
-        if (abs(dunemcSamples[iEvent].LepPDG == 11)) {
-          dunemcSamples[iEvent].shift.erec *= (1.0 + (*par));
-          dunemcSamples[iEvent].reco.ELep *= (1.0 + (*par));
-        }
+      if ( dunemcSamples[iEvent].shift.erec < 0.)  dunemcSamples[iEvent].shift.erec = 0.;
+      if (dunemcSamples[iEvent].reco.ELep < 0.) dunemcSamples[iEvent].reco.ELep = 0.;
 
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].reco.EHad;
-        // dunemcSamples[iEvent].reco.ELep += (*par) *
-        // dunemcSamples[iEvent].reco.EHad;
+      if(abs(dunemcSamples[iEvent].LepPDG == 11)){
+        dunemcSamples[iEvent].shift.erec *= (1.0 + (*par)); 
+       
+        dunemcSamples[iEvent].reco.ELep *= (1.0 + (*par));
+      }
+        dunemcSamples[iEvent].shift.erec += (*par) * dunemcSamples[iEvent].reco.EHad;
+        //dunemcSamples[iEvent].reco.ELep += (*par) * dunemcSamples[iEvent].reco.EHad;
+
+
       });
 
+
+
+  
   RegisterIndividualFunctionalParameter(
       "TotalEScaleND_mu", kTotalEScaleND_mu,
       [this](const double *par, std::size_t iEvent) {
-        if (abs(dunemcSamples[iEvent].LepPDG == 13) &&
-            (dunemcSamples[iEvent].reco.muon_contained == 1 ||
-             dunemcSamples[iEvent].reco.muon_tracker == 1)) {
-          dunemcSamples[iEvent].shift.erec +=
-              (*par) * (dunemcSamples[iEvent].reco.ELep);
+
+        if(abs(dunemcSamples[iEvent].LepPDG == 13) && (dunemcSamples[iEvent].reco.muon_contained == 1 ||dunemcSamples[iEvent].reco.muon_tracker==1) ){
+          dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].reco.ELep);
+           //dunemcSamples[iEvent].shift.etrue += (*par) * (dunemcSamples[iEvent].reco.ELep);
           dunemcSamples[iEvent].reco.ELep *= (1.0 + (*par));
         }
+        
       });
 
-  RegisterIndividualFunctionalParameter(
-      "EMResND", kEMResND, [this](const double *par, std::size_t iEvent) {
-        if (dunemcSamples[iEvent].reco.ePi0 < 0.0)
-          dunemcSamples[iEvent].reco.ePi0 = 0.0;
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * (dunemcSamples[iEvent].truth.ePi0 -
-                      dunemcSamples[iEvent].reco.ePi0);
-        dunemcSamples[iEvent].shift.etrue +=
-            (*par) * (dunemcSamples[iEvent].truth.ePi0 -
-                      dunemcSamples[iEvent].reco.ePi0);
-        dunemcSamples[iEvent].reco.ePi0 +=
-            (*par) * (dunemcSamples[iEvent].truth.ePi0 -
-                      dunemcSamples[iEvent].reco.ePi0);
-        if (abs(dunemcSamples[iEvent].LepPDG == 11)) {
-          dunemcSamples[iEvent].shift.erec +=
-              (*par) * (dunemcSamples[iEvent].truth.LepE -
-                        dunemcSamples[iEvent].reco.ELep);
-          dunemcSamples[iEvent].reco.ELep +=
-              (*par) * (dunemcSamples[iEvent].truth.LepE -
-                        dunemcSamples[iEvent].reco.ELep);
-          dunemcSamples[iEvent].shift.etrue +=
-              (*par) * (dunemcSamples[iEvent].truth.LepE -
-                        dunemcSamples[iEvent].reco.ELep);
+    RegisterIndividualFunctionalParameter(
+      "EMResND", kEMResND,
+      [this](const double *par, std::size_t iEvent) {
+        if(dunemcSamples[iEvent].reco.ePi0 < 0.0) dunemcSamples[iEvent].reco.ePi0 = 0.0;
+        dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].truth.ePi0 - dunemcSamples[iEvent].reco.ePi0);
+        
+        dunemcSamples[iEvent].reco.ePi0 += (*par) * (dunemcSamples[iEvent].truth.ePi0 - dunemcSamples[iEvent].reco.ePi0);
+        if(abs(dunemcSamples[iEvent].LepPDG == 11)){
+          dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
+          dunemcSamples[iEvent].reco.ELep += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
+         
+          
         }
-      });
+      }
+    );
 
-  RegisterIndividualFunctionalParameter(
+ 
+
+    RegisterIndividualFunctionalParameter(
       "EScaleMuSpectND", kEScaleMuSpectND,
       [this](const double *par, std::size_t iEvent) {
-        if (abs(dunemcSamples[iEvent].LepPDG == 13) &&
-            dunemcSamples[iEvent].reco.muon_tracker == 1) {
-          dunemcSamples[iEvent].shift.erec +=
-              (*par) * (dunemcSamples[iEvent].reco.ELep);
-          dunemcSamples[iEvent].reco.ELep *= ((*par) + 1.0);
+        if(abs(dunemcSamples[iEvent].LepPDG == 13) && dunemcSamples[iEvent].reco.muon_tracker==1){
+          dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].reco.ELep);
+           dunemcSamples[iEvent].reco.ELep *= ((*par) + 1.0);
+
+
         }
-      });
+    });
 
-  RegisterIndividualFunctionalParameter(
-      "TotalEScaleND_hadsqrt", kTotalEScaleND_hadsqrt,
-      [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].syst.sum_ehad_sqrt;
-      });
-
-  RegisterIndividualFunctionalParameter(
-      "TotalEScaleND_hadinvsqrt", kTotalEScaleND_hadinvsqrt,
-      [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * dunemcSamples[iEvent].syst.sum_ehad_sqrt /
-            dunemcSamples[iEvent].reco.sum_ehad;
-      });
-
-  RegisterIndividualFunctionalParameter(
-      "TotalEScaleND_EM", kTotalEScaleND_EM,
-      [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * (dunemcSamples[iEvent].reco.ePi0 -
-                      dunemcSamples[iEvent].truth.ePi0);
-      });
-
-  RegisterIndividualFunctionalParameter(
-      "TotalEScaleND_EM_invsqrt", kTotalEScaleND_EMinvsqrt,
-      [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) *
-            sqrt((dunemcSamples[iEvent].reco.ePi0 -
-                  dunemcSamples[iEvent].truth.ePi0)) /
-            ((dunemcSamples[iEvent].reco.ePi0 -
-              dunemcSamples[iEvent].truth.ePi0));
-      });
-
-  RegisterIndividualFunctionalParameter(
-      "TotalEScaleND_EM_sqrt", kTotalEScaleND_EMsqrt,
-      [this](const double *par, std::size_t iEvent) {
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) * sqrt((dunemcSamples[iEvent].reco.ePi0 -
-                           dunemcSamples[iEvent].truth.ePi0));
-      });
-
+ 
   RegisterIndividualFunctionalParameter(
       "MuonRes_ND", kMuonRes_ND, [this](const double *par, std::size_t iEvent) {
-        if (abs(dunemcSamples[iEvent].LepPDG == 13)) {
-          dunemcSamples[iEvent].shift.erec +=
-              (*par) * (dunemcSamples[iEvent].truth.LepE -
-                        dunemcSamples[iEvent].reco.ELep);
-          dunemcSamples[iEvent].reco.ELep +=
-              (*par) * (dunemcSamples[iEvent].truth.LepE -
-                        dunemcSamples[iEvent].reco.ELep);
+        if(abs(dunemcSamples[iEvent].LepPDG == 13)){
+        dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
+        dunemcSamples[iEvent].reco.ELep += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
         }
       });
 
   RegisterIndividualFunctionalParameter(
       "NRes_ND", kNRes_ND, [this](const double *par, std::size_t iEvent) {
-        if (dunemcSamples[iEvent].reco.eN < 0.0)
-          dunemcSamples[iEvent].reco.eN = 0.0;
-        dunemcSamples[iEvent].shift.erec +=
-            (*par) *
-            (dunemcSamples[iEvent].truth.eN - dunemcSamples[iEvent].reco.eN);
-        dunemcSamples[iEvent].reco.eN +=
-            (*par) *
-            (dunemcSamples[iEvent].truth.eN - dunemcSamples[iEvent].reco.eN);
+        if(dunemcSamples[iEvent].reco.eN < 0.0) dunemcSamples[iEvent].reco.eN = 0.0;
+        dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].truth.eN - dunemcSamples[iEvent].reco.eN);
+        dunemcSamples[iEvent].reco.eN += (*par) * (dunemcSamples[iEvent].truth.eN - dunemcSamples[iEvent].reco.eN);
       });
 
   RegisterIndividualFunctionalParameter(
@@ -241,16 +338,16 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
                         dunemcSamples[iEvent].reco.ePip)) +
                       ((dunemcSamples[iEvent].truth.eP -
                         dunemcSamples[iEvent].reco.eP)));
-        dunemcSamples[iEvent].reco.eP +=
-            (*par) *
-            (dunemcSamples[iEvent].truth.eP - dunemcSamples[iEvent].reco.eP);
-        dunemcSamples[iEvent].reco.ePip +=
-            (*par) * (dunemcSamples[iEvent].truth.ePip -
-                      dunemcSamples[iEvent].reco.ePip);
-        dunemcSamples[iEvent].reco.ePim +=
-            (*par) * (dunemcSamples[iEvent].truth.ePim -
-                      dunemcSamples[iEvent].reco.ePim);
+        dunemcSamples[iEvent].reco.eP += (*par) *(dunemcSamples[iEvent].truth.eP -
+                        dunemcSamples[iEvent].reco.eP) ;
+        dunemcSamples[iEvent].reco.ePip += (*par) *(dunemcSamples[iEvent].truth.ePip -
+                        dunemcSamples[iEvent].reco.ePip) ;
+        dunemcSamples[iEvent].reco.ePim += (*par) * (dunemcSamples[iEvent].truth.ePim -
+                       dunemcSamples[iEvent].reco.ePim);
+        
+          
       });
+
 
   /// Fake Data Syst
   RegisterIndividualFunctionalParameter(
@@ -602,7 +699,7 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
     dunemcSamples[iEvent].reco.eN = *eRecoN;
 
     dunemcSamples[iEvent].shift.erec = dunemcSamples[iEvent].rw_erec;
-    dunemcSamples[iEvent].shift.etrue = dunemcSamples[iEvent].rw_etru;
+   
 
     dunemcSamples[iEvent].syst.EHad_sqrt =
         std::sqrt(dunemcSamples[iEvent].reco.EHad);

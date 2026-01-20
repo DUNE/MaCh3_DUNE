@@ -102,6 +102,8 @@ int main(int argc, char* argv[]) {
     std::vector<SampleHandlerFD*> DUNEPdfs;
     MakeMaCh3DuneInstance(fitMan, DUNEPdfs, xsec);
 
+    xsec->SetGroupOnlyParameters("Osc", OscPars);
+
     // --- Load posteriors
     TChain* mcmc = new TChain("posteriors");
     mcmc->Add(PosteriorFile.c_str());
@@ -113,8 +115,52 @@ int main(int argc, char* argv[]) {
 
     // Bind xsec branches
     //std::vector<double> xsec_nominal = xsec->GetPreFitValues();
-    std::vector<double> xsec_nominal( xsec->GetNumParFromGroup("Xsec"));
-    std::vector<Double_t> xsec_tmp(xsec_nominal.size(), 0.0);
+    // std::vector<double> xsec_nominal( xsec->GetNumParFromGroup("Xsec"));
+    // std::vector<Double_t> xsec_tmp(xsec_nominal.size(), 0.0);
+    // FIXED CODE - Use exactly 480 parameters
+    // Get the actual number of parameters from the parameter handler
+    //int nXsecPars = xsec->GetNumParFromGroup("Xsec");
+    //std::cout << "[DEBUG] Number of Xsec parameters: " << nXsecPars << std::endl;
+
+    // Initialize with correct size
+    //std::vector<double> xsec_nominal(nXsecPars);
+    //xsec_nominal = xsec->GetPreFitValues(); // Get actual pre-fit values
+    const int nXsecPars = xsec->GetNumParFromGroup("Xsec");
+
+    std::vector<double> xsec_nominal(nXsecPars);
+    xsec->SetGroupOnlyParameters("Xsec", xsec_nominal);
+
+
+    std::vector<Double_t> xsec_tmp(nXsecPars, 0.0);
+
+    // Debug: Check available branches
+std::cout << "[DEBUG] Available MCMC branches:" << std::endl;
+TObjArray* branches = mcmc->GetListOfBranches();
+for (int i = 0; i < branches->GetEntries(); ++i) {
+    TBranch* branch = static_cast<TBranch*>(branches->At(i));
+    if (std::string(branch->GetName()).find("xsec") != std::string::npos) {
+        std::cout << "  " << branch->GetName() << std::endl;
+    }
+}
+
+// Check how many xsec branches we actually have
+int nXsecBranches = 0;
+for (size_t i = 0; i < 500; ++i) { // Check up to 500
+    TString bname = Form("xsec_%zu", i);
+    if (mcmc->GetBranch(bname)) {
+        nXsecBranches++;
+    } else {
+        break;
+    }
+}
+std::cout << "[DEBUG] Found " << nXsecBranches << " xsec branches in MCMC" << std::endl;
+
+// Get pre-fit values but only take first 480
+auto prefitValues = xsec->GetPreFitValues();
+for (int i = 0; i < nXsecBranches && i < prefitValues.size(); ++i) {
+    xsec_nominal[i] = prefitValues[i];
+}
+
     for (size_t i = 0; i < xsec_nominal.size(); ++i) {
         TString bname = Form("xsec_%zu", i);
         if (mcmc->GetBranch(bname))
@@ -219,7 +265,7 @@ int main(int argc, char* argv[]) {
             mcmc->GetEntry(entry);
         } while ((unsigned int)mcmc_step < burn_in);
 
-        xsec->SetParameters(xsec_tmp);
+        xsec->SetGroupOnlyParameters("Xsec", xsec_tmp);
 
         for (auto& pdf : DUNEPdfs) {
             pdf->Reweight();

@@ -44,7 +44,9 @@ struct dunemc_beamfd
   double rw_ePim;
   double rw_ePi0;
   double rw_eN;
-
+  double enu_bias;
+  
+  
   double rw_berpaacvwgt;
 
   double rw_cvnnumu;

@@ -41,9 +41,10 @@ void Write1DHistogramsToPdf(std::string OutFileName, std::vector<TH1*> Histogram
 }
 
 int main(int argc, char * argv[]) {
+  gErrorIgnoreLevel = kFatal;
   MaCh3Utils::MaCh3Usage(argc, argv);
   auto fitMan = MaCh3ManagerFactory(argc, argv);
-
+  
   //############################################################################################################################
   //Create SampleHandlerFD objects
   

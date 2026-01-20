@@ -22,7 +22,7 @@ public:
   ~SampleHandlerBeamFD();
 
   /// @brief Enum to identify kinematics
-  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC, kTrueCCnue, kTrueCCnumu};
+  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC, kTrueCCnue, kTrueCCnumu, kEnubias};
 
 protected:
   /// @brief Initialises object
@@ -161,7 +161,8 @@ protected:
     {"OscillationChannel",kOscChannel},
     {"IsFHC",kIsFHC},
     {"IsTrueCCnue", kTrueCCnue},
-    {"IsTrueCCnumu", kTrueCCnumu}
+    {"IsTrueCCnumu", kTrueCCnumu},
+    {"Enubias", kEnubias}
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -176,7 +177,8 @@ protected:
     {kOscChannel,"OscillationChannel"},
     {kIsFHC,"IsFHC"},
     {kTrueCCnue,"IsTrueCCnue"},
-    {kTrueCCnumu,"IsTrueCCnumu"}
+    {kTrueCCnumu,"IsTrueCCnumu"},
+    {kEnubias,"Enubias"}
   };
   std::unordered_map<std::string, std::vector<double>> norm_map;
 
