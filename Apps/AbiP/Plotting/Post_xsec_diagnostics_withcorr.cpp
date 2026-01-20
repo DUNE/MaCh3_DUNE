@@ -143,7 +143,70 @@ std::string AddTimestampToFilename(const std::string& baseName) {
     return oss.str();
 }
 
-BinningResult extract_2D_bins_from_yaml(const std::string& yaml_file, const std::string& xsecvar1, const std::string& xsecvar2) {
+// BinningResult extract_2D_bins_from_yaml(const std::string& yaml_file, const std::string& xsecvar1, const std::string& xsecvar2) {
+//     BinningResult result;
+//     std::set<double> q0_set;
+//     std::set<double> q3_set;
+
+//     try {
+//         YAML::Node config = YAML::LoadFile(yaml_file);
+//         const auto& systs = config["Systematics"];
+//         int index = 0;
+
+//         for (const auto& systematic : systs) {
+//             const auto& sys = systematic["Systematic"];
+//             const auto& cuts = sys["KinematicCuts"];
+
+//             double q0_min = 0, q0_max = 0;
+//             double q3_min = 0, q3_max = 0;
+//             bool has_q0 = false, has_q3 = false;
+
+//             for (const auto& cut : cuts) {
+//                 if (cut[xsecvar1]) {
+//                     const auto& q0 = cut[xsecvar1];
+//                     if (q0.IsSequence() && q0.size() == 2) {
+//                         q0_min = q0[0].as<double>();
+//                         q0_max = q0[1].as<double>();
+//                         has_q0 = true;
+//                     }
+//                 }
+//                 if (cut[xsecvar2]) {
+//                     const auto& q3 = cut[xsecvar2];
+//                     if (q3.IsSequence() && q3.size() == 2) {
+//                         q3_min = q3[0].as<double>();
+//                         q3_max = q3[1].as<double>();
+//                         has_q3 = true;
+//                     }
+//                 }
+//             }
+
+//             if (has_q0 && has_q3) {
+//                 q0_set.insert(q0_min);
+//                 q0_set.insert(q0_max);
+//                 q3_set.insert(q3_min);
+//                 q3_set.insert(q3_max);
+
+//                 result.binDefs.push_back({index++, q0_min, q0_max, q3_min, q3_max});
+//             }
+//         }
+
+//         result.q0_edges.assign(q0_set.begin(), q0_set.end());
+//         result.q3_edges.assign(q3_set.begin(), q3_set.end());
+
+//         std::cout << "Parsed " << result.binDefs.size() << " 2D bins\n";
+//         std::cout << "   q0 edges: " << (result.q0_edges.empty() ? 0 : result.q0_edges.size() - 1) << "\n";
+//         std::cout << "   q3 edges: " << (result.q3_edges.empty() ? 0 : result.q3_edges.size() - 1) << "\n";
+
+//     } catch (const std::exception& e) {
+//         std::cerr << "YAML parsing failed: " << e.what() << "\n";
+//     }
+
+//     return result;
+// }
+
+BinningResult extract_2D_bins_from_yaml(const std::string& yaml_file, 
+                                        const std::string& xsecvar1, 
+                                        const std::string& xsecvar2) {
     BinningResult result;
     std::set<double> q0_set;
     std::set<double> q3_set;
@@ -161,31 +224,30 @@ BinningResult extract_2D_bins_from_yaml(const std::string& yaml_file, const std:
             double q3_min = 0, q3_max = 0;
             bool has_q0 = false, has_q3 = false;
 
+            // Loop through cuts and collect min/max independently
             for (const auto& cut : cuts) {
-                if (cut[xsecvar1]) {
-                    const auto& q0 = cut[xsecvar1];
-                    if (q0.IsSequence() && q0.size() == 2) {
-                        q0_min = q0[0].as<double>();
-                        q0_max = q0[1].as<double>();
-                        has_q0 = true;
-                    }
+                if (cut[xsecvar1] && cut[xsecvar1].IsSequence() && cut[xsecvar1].size() == 2) {
+                    double q0_lo = cut[xsecvar1][0].as<double>();
+                    double q0_hi = cut[xsecvar1][1].as<double>();
+                    q0_set.insert(q0_lo);
+                    q0_set.insert(q0_hi);
+                    q0_min = q0_lo;
+                    q0_max = q0_hi;
+                    has_q0 = true;
                 }
-                if (cut[xsecvar2]) {
-                    const auto& q3 = cut[xsecvar2];
-                    if (q3.IsSequence() && q3.size() == 2) {
-                        q3_min = q3[0].as<double>();
-                        q3_max = q3[1].as<double>();
-                        has_q3 = true;
-                    }
+                if (cut[xsecvar2] && cut[xsecvar2].IsSequence() && cut[xsecvar2].size() == 2) {
+                    double q3_lo = cut[xsecvar2][0].as<double>();
+                    double q3_hi = cut[xsecvar2][1].as<double>();
+                    q3_set.insert(q3_lo);
+                    q3_set.insert(q3_hi);
+                    q3_min = q3_lo;
+                    q3_max = q3_hi;
+                    has_q3 = true;
                 }
             }
 
-            if (has_q0 && has_q3) {
-                q0_set.insert(q0_min);
-                q0_set.insert(q0_max);
-                q3_set.insert(q3_min);
-                q3_set.insert(q3_max);
-
+            // Only add a bin if we found at least one edge for each variable
+            if (has_q0 || has_q3) {
                 result.binDefs.push_back({index++, q0_min, q0_max, q3_min, q3_max});
             }
         }
@@ -203,6 +265,7 @@ BinningResult extract_2D_bins_from_yaml(const std::string& yaml_file, const std:
 
     return result;
 }
+
 
   std::string formatAxisTitle(const std::string& var) {
     if (var == "q0") return "q_{0}";
@@ -1003,6 +1066,7 @@ int main(int argc, char* argv[]) {
     TH2D* h_mean = new TH2D("h_param_mean", "Posterior Mean;q0 [GeV];q3 [GeV]",
                             q0_edges.size()-1, &q0_edges[0],
                             q3_edges.size()-1, &q3_edges[0]);
+    setRedWhiteBluePalette();
     TH2D* h_stddev = new TH2D("h_param_stddev", "Posterior StdDev;",
                               q0_edges.size()-1, &q0_edges[0],
                               q3_edges.size()-1, &q3_edges[0]);
@@ -1164,10 +1228,11 @@ int main(int argc, char* argv[]) {
         h_mean->SetBinContent(bin_q0, bin_q3, mean);
         h_stddev->SetBinContent(bin_q0, bin_q3, stddev);
     }
+     setRedWhiteBluePalette();
     h_mean->Write("xsec_param_mean");
     h_stddev->Write("xsec_param_stddev");
-    h_mean->GetZaxis()->SetRangeUser(0.75,1.25);
-    h_stddev->GetZaxis()->SetRangeUser(0.0, 0.25);
+    h_mean->GetZaxis()->SetRangeUser(0.5,1.5);
+    h_stddev->GetZaxis()->SetRangeUser(0.0, 0.5);
 
 
     // Samlple Posterior
@@ -1181,7 +1246,7 @@ int main(int argc, char* argv[]) {
 
     if(burnIn < 1000){
         std::cout << "BurnInSteps not set in config or looks to small..." << std::endl;
-       int burnIn = 0.1 * nEntries;
+       int burnIn = 0.2 * nEntries;
     }
     std::vector<PosteriorSample> posteriorSamples;
     posteriorSamples.reserve(nSamples);

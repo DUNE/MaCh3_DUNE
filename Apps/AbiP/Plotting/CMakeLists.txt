@@ -5,7 +5,8 @@ cmake_minimum_required(VERSION 3.14)
 set(PLOTTING_SOURCES
 Compare_onaxis_vs_offaxis.cpp
 Compare_runplans.cpp
-PosteriorPredictive.cpp
+PosteriorPredictive_forFD.cpp
+PosteriorPredictive_forND.cpp
 Post_xsec_diagnostics_withcorr.cpp
 )
 

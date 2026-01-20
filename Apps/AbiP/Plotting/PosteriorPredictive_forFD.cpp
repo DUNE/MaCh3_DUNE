@@ -129,7 +129,7 @@ int main(int argc, char* argv[]) {
 
     std::vector<double> xsec_nominal(nXsecPars);
     xsec->SetGroupOnlyParameters("Xsec", xsec_nominal);
-
+    xsec->SetGroupOnlyParameters("Osc", OscPars);
 
     std::vector<Double_t> xsec_tmp(nXsecPars, 0.0);
 
@@ -172,7 +172,7 @@ for (int i = 0; i < nXsecBranches && i < prefitValues.size(); ++i) {
 
     // --- Generate Asimov spectra
     xsec->SetGroupOnlyParameters("Xsec", xsec_nominal);
-    //xsec->SetGroupOnlyParameters("Osc", OscPars);
+    xsec->SetGroupOnlyParameters("Osc", OscPars);
 
     for (auto& pdf : DUNEPdfs) {
         std::string pdfTitle = pdf->GetTitle();
@@ -255,6 +255,44 @@ for (int i = 0; i < nXsecBranches && i < prefitValues.size(); ++i) {
     // }
 
     // --- Posterior predictive draws
+    // auto rnd = std::make_unique<TRandom3>(0);
+    // const Long64_t maxSampleSteps = 2000000;
+
+    // for (int p = 0; p < no_times_sampling_posterior; ++p) {
+    //     int entry;
+    //     do {
+    //         entry = rnd->Integer(std::min<Long64_t>(maxSampleSteps, nEntries));
+    //         mcmc->GetEntry(entry);
+    //     } while ((unsigned int)mcmc_step < burn_in);
+
+    //     xsec->SetGroupOnlyParameters("Xsec", xsec_tmp);
+
+    //     for (auto& pdf : DUNEPdfs) {
+    //         pdf->Reweight();
+    //         TH1* h_after = pdf->GetMCHist(1);
+    //         if (!h_after) continue;
+
+    //         std::string pdfTitle = pdf->GetTitle();
+    //         std::string ND_or_FD =
+    //             (pdfTitle.find("ND") != std::string::npos) ? "ND" :
+    //             (pdfTitle.find("FD") != std::string::npos) ? "FD" : "Other";
+
+    //         TDirectory* detDir = fOut->GetDirectory(ND_or_FD.c_str());
+    //         if (!detDir) detDir = fOut->mkdir(ND_or_FD.c_str());
+    //         detDir->cd();
+
+    //         TH1D* cloneH = static_cast<TH1D*>(h_after->Clone(
+    //             Form("%s_%s_posterior_toy_%03d", ND_or_FD.c_str(), pdfTitle.c_str(), p)));
+    //         cloneH->SetDirectory(detDir);
+    //         cloneH->Write();
+    //         delete cloneH;
+
+    //         MakeSpectaVariations(pdf, "TrueNeutrinoEnergy", fOut, ND_or_FD, pdfTitle, p);
+    //         MakeSpectaVariations(pdf, "RecoNeutrinoEnergy", fOut, ND_or_FD, pdfTitle, p);
+    //     }
+    //     fOut->cd();
+    // }
+    // --- Posterior predictive draws
     auto rnd = std::make_unique<TRandom3>(0);
     const Long64_t maxSampleSteps = 2000000;
 
@@ -265,28 +303,15 @@ for (int i = 0; i < nXsecBranches && i < prefitValues.size(); ++i) {
             mcmc->GetEntry(entry);
         } while ((unsigned int)mcmc_step < burn_in);
 
-        xsec->SetGroupOnlyParameters("Xsec", xsec_tmp);
+       xsec->SetGroupOnlyParameters("Xsec", xsec_tmp);
 
         for (auto& pdf : DUNEPdfs) {
-            pdf->Reweight();
-            TH1* h_after = pdf->GetMCHist(1);
-            if (!h_after) continue;
-
             std::string pdfTitle = pdf->GetTitle();
             std::string ND_or_FD =
                 (pdfTitle.find("ND") != std::string::npos) ? "ND" :
                 (pdfTitle.find("FD") != std::string::npos) ? "FD" : "Other";
 
-            TDirectory* detDir = fOut->GetDirectory(ND_or_FD.c_str());
-            if (!detDir) detDir = fOut->mkdir(ND_or_FD.c_str());
-            detDir->cd();
-
-            TH1D* cloneH = static_cast<TH1D*>(h_after->Clone(
-                Form("%s_%s_posterior_toy_%03d", ND_or_FD.c_str(), pdfTitle.c_str(), p)));
-            cloneH->SetDirectory(detDir);
-            cloneH->Write();
-            delete cloneH;
-
+            // Generate histograms with correct binning for each variable
             MakeSpectaVariations(pdf, "TrueNeutrinoEnergy", fOut, ND_or_FD, pdfTitle, p);
             MakeSpectaVariations(pdf, "RecoNeutrinoEnergy", fOut, ND_or_FD, pdfTitle, p);
         }

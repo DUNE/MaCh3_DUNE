@@ -35,6 +35,11 @@ int main(int argc, char * argv[]) {
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
 
+
+  //For fake data study
+  xsec->ToggleFixParameter("NuWro_missingprotonfakedata", 1.0); //take fake data systematic parameters and fix them to 1.0
+  
+
   for (unsigned sample_i = 0 ; sample_i < DUNEPdfs.size() ; ++sample_i) {
     
     std::string name = DUNEPdfs[sample_i]->GetTitle();
@@ -54,10 +59,14 @@ int main(int argc, char * argv[]) {
       MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting"); 
       throw MaCh3Exception(__FILE__ , __LINE__ );
     }
-    
+  
     
   }
   
+  //Now we have made the data histograms we need to make sure that parameters are all reset to their prior values...
+  xsec->ToggleFixParameter("NuWro_missingprotonfakedata", 0.0);
+  
+
   //Now print out some event rates, we'll make a nice latex table at some point 
   for (unsigned iPDF = 0; iPDF < DUNEPdfs.size() ; ++iPDF) {
     MACH3LOG_INFO("Integrals of nominal hists: ");

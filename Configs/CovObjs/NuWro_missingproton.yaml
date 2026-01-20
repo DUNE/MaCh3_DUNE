@@ -3,13 +3,14 @@ Systematics:
       Sample_Name: ["*"]        
       Error: 1.0                 
       FlatPrior: false
+      FixParam: True
       Names:
         FancyName: NuWro_missingprotonfakedata
         ParameterName: NuWro_missingprotonfakedata
       ParameterBounds:
       - 0.0
       - 1.0
-      ParameterGroup: DetSys
+      ParameterGroup: FakeData
       ParameterValues:
         Generated: 0.0
         PreFitValue: 0.0
