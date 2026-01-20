@@ -14,6 +14,8 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
 
   (void)NDCov_FHC;
   (void)NDCov_RHC;
+  (void)BeamOscillator_;
+  (void)AtmOscillator_;
   #ifdef BUILD_NDGAR
 
   if (SampleType == "BeamNDGAr") {
@@ -86,7 +88,7 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
 //     Sample = new SampleHandlerBeamND(SampleConfig, xsec, NDCov);
 //   } else if (SampleType == "Atm") {
 //     Sample = new SampleHandlerAtm(SampleConfig, xsec, AtmOscillator_);
-//   } 
+//   }
 //   else {
 //     MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
 //     throw MaCh3Exception(__FILE__, __LINE__);

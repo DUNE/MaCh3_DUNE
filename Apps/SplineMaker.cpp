@@ -35,37 +35,37 @@ int main(int argc, char * argv[]) {
 
   //###############################################################################################################################
   //Create SampleHandlerFD objects
-  
+
   ParameterHandlerGeneric* xsec = nullptr;
-  
+
   std::vector<SampleHandlerFD*> DUNEPdfs;
   MakeMaCh3DuneInstance(fitMan, DUNEPdfs, xsec);
 
   //###############################################################################################################################
   //Perform reweight and print total integral
-  
+
   int nshifts = 7;
   std::vector<double> SigmaKnots{-3., -2., -1., 0., 1., 2., 3.};
   std::vector<double> TrueEBinning{0., 0.5, 1.0, 1.5, 2., 2.5, 3., 3.5, 4., 4.5, 5., 6., 1000.};
   size_t NTrueEbins = TrueEBinning.size() - 1;
 
-  
+
   for (auto Sample : DUNEPdfs){
 
     auto SampleOffAxis = dynamic_cast<SampleHandlerBeamOffAxis*>(Sample);
     if(!SampleOffAxis){
-      std::cout << "Casting Failed!" << std::endl; 
+      std::cout << "Casting Failed!" << std::endl;
     }
     std::vector<std::vector<std::vector<std::vector<TH2D*>>>> BinnedWeights;
     std::string SampleName = Sample->GetTitle();
     MaCh3Modes* Modes = Sample->GetMaCh3Modes();
 
     //Sample Binning
-    std::vector<double> BinEdgesX = Sample->ReturnKinematicParameterBinning(Sample->GetXBinVarName());
+    std::vector<double> BinEdgesX = SampleOffAxis->ReturnKinematicParameterBinning(Sample->GetXBinVarName());
     int NBinsX =  static_cast<int>(BinEdgesX.size()) - 1;
 
 
-    std::vector<double> BinEdgesY = Sample->ReturnKinematicParameterBinning(Sample->GetYBinVarName()); 
+    std::vector<double> BinEdgesY = SampleOffAxis->ReturnKinematicParameterBinning(Sample->GetYBinVarName());
     int NBinsY =  static_cast<int>(BinEdgesY.size()) - 1;
 
     //Make Template Binning Histogram
@@ -81,7 +81,7 @@ int main(int argc, char * argv[]) {
     BinnedWeights = SampleOffAxis->GetBinnedWeights(ParamNames, SplineModes, TrueEBinning);
 
     //Make Splines
-    
+
     std::string SplineFileName = SampleName + "_splines.root";
     auto SplineFile = std::unique_ptr<TFile>(TFile::Open(SplineFileName.c_str(), "RECREATE"));
     SplineFile->cd();

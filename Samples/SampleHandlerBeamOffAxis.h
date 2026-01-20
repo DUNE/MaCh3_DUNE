@@ -20,7 +20,10 @@ public:
   /// @brief destructor
   ~SampleHandlerBeamOffAxis();
 
-  std::vector<std::vector<std::vector<std::vector<TH2D*>>>> GetBinnedWeights(std::vector<std::string> ParamNames, std::vector<std::vector<int>> ParamModes, std::vector<double> TrueEBins);  
+  std::vector<std::vector<std::vector<std::vector<TH2D *>>>>
+  GetBinnedWeights(std::vector<std::string> ParamNames,
+                   std::vector<std::vector<int>> ParamModes,
+                   std::vector<double> TrueEBins);
 
   // below is ugly, but lets us define it only once and get the enum and both
   // maps https://en.wikipedia.org/wiki/X_macro
@@ -31,19 +34,24 @@ public:
   X(TrueXPos)                                                                  \
   X(TrueYPos)                                                                  \
   X(TrueZPos)                                                                  \
-  X(Mode)                                                                    \
+  X(Mode)                                                                      \
   X(IsFHC)                                                                     \
   X(ELepRec)                                                                   \
   X(Enubias)                                                                   \
   X(isCC)                                                                      \
   X(OscillationChannel)                                                        \
-  X(OffAxisPosition)                                                                                                                                                                              
+  X(OffAxisPosition)
 #define X(a) k##a,
 
   /// @brief Enum to identify kinematics
   enum KinematicTypes { LIST_OF_VARIABLES };
 
 #undef X
+
+  std::vector<double>
+  ReturnKinematicParameterBinning(const std::string &KinematicParameter) {
+    return SampleHandlerFD::ReturnKinematicParameterBinning(KinematicParameter);
+  }
 
 protected:
   /// @brief Initialises object
@@ -62,31 +70,31 @@ protected:
 
   enum FuncParEnum {
     kTotalEScaleND = 0,
-    //kTotalEScaleND_invsqrt,
-    //kTotalEScaleND_sqrt,
+    // kTotalEScaleND_invsqrt,
+    // kTotalEScaleND_sqrt,
     kTotalEScaleND_mu,
     kEMResND,
     kEScaleMuSpectND,
     kMuonRes_ND,
     kNRes_ND,
     kHadRes_ND,
-    kNuWro_missingprotonfakedata,
-    //kTotalEScaleND_musqrt,
-   // kTotalEScaleND_muinvsqrt,
-    //kTotalEScaleND_had,
-    //kTotalEScaleND_hadsqrt,
-    //kTotalEScaleND_hadinvsqrt,
-    //kTotalEScaleND_EM,
-    //kTotalEScaleND_EMinvsqrt,
-    //kTotalEScaleND_EMsqrt,
-    //kMuonRes_ND,
-    //kNRes_ND,
-    //kHadRes_ND,
+    kNuWroFakeDataWeight,
+    // kTotalEScaleND_musqrt,
+    // kTotalEScaleND_muinvsqrt,
+    // kTotalEScaleND_had,
+    // kTotalEScaleND_hadsqrt,
+    // kTotalEScaleND_hadinvsqrt,
+    // kTotalEScaleND_EM,
+    // kTotalEScaleND_EMinvsqrt,
+    // kTotalEScaleND_EMsqrt,
+    // kMuonRes_ND,
+    // kNRes_ND,
+    // kHadRes_ND,
 
     kNFuncPars
   };
 
-  float NuWro_missingproton(std::size_t iEvent);
+  float NuWroFakeDataWeight(std::size_t iEvent);
   void RegisterFunctionalParameters() override;
   void resetShifts(int iEvent) override;
 
@@ -148,7 +156,9 @@ protected:
     return 1.;
   }
 
-  //std::vector<std::vector<std::vector<std::vector<TH2D*>>>> GetBinnedWeights(std::vector<std::string> ParamNames, std::vector<std::vector<int>> ParamModes, std::vector<double> TrueEBins);  
+  // std::vector<std::vector<std::vector<std::vector<TH2D*>>>>
+  // GetBinnedWeights(std::vector<std::string> ParamNames,
+  // std::vector<std::vector<int>> ParamModes, std::vector<double> TrueEBins);
 
   std::vector<dunemc_beamoffaxis> dunemcSamples;
 

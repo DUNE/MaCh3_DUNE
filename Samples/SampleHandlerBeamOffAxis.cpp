@@ -2,7 +2,7 @@
 
 #include "Systematics/Flux/OffAxisFluxUncertaintyHelper.h"
 
-#include "Utils/Fake_datastudy/Fake_DATA/FDTDRFDS/WeightToNuWro.h"
+#include "Utils/FakeDataGenerators/FDTDRFDS/WeightToNuWro.h"
 
 #include "TTreeReader.h"
 #include "TTreeReaderValue.h"
@@ -259,8 +259,8 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
       if (dunemcSamples[iEvent].reco.ELep < 0.) dunemcSamples[iEvent].reco.ELep = 0.;
 
       if(abs(dunemcSamples[iEvent].LepPDG == 11)){
-        dunemcSamples[iEvent].shift.erec *= (1.0 + (*par)); 
-       
+        dunemcSamples[iEvent].shift.erec *= (1.0 + (*par));
+
         dunemcSamples[iEvent].reco.ELep *= (1.0 + (*par));
       }
         dunemcSamples[iEvent].shift.erec += (*par) * dunemcSamples[iEvent].reco.EHad;
@@ -271,7 +271,7 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
 
 
 
-  
+
   RegisterIndividualFunctionalParameter(
       "TotalEScaleND_mu", kTotalEScaleND_mu,
       [this](const double *par, std::size_t iEvent) {
@@ -281,7 +281,7 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
            //dunemcSamples[iEvent].shift.etrue += (*par) * (dunemcSamples[iEvent].reco.ELep);
           dunemcSamples[iEvent].reco.ELep *= (1.0 + (*par));
         }
-        
+
       });
 
     RegisterIndividualFunctionalParameter(
@@ -289,18 +289,18 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
       [this](const double *par, std::size_t iEvent) {
         if(dunemcSamples[iEvent].reco.ePi0 < 0.0) dunemcSamples[iEvent].reco.ePi0 = 0.0;
         dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].truth.ePi0 - dunemcSamples[iEvent].reco.ePi0);
-        
+
         dunemcSamples[iEvent].reco.ePi0 += (*par) * (dunemcSamples[iEvent].truth.ePi0 - dunemcSamples[iEvent].reco.ePi0);
         if(abs(dunemcSamples[iEvent].LepPDG == 11)){
           dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
           dunemcSamples[iEvent].reco.ELep += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
-         
-          
+
+
         }
       }
     );
 
- 
+
 
     RegisterIndividualFunctionalParameter(
       "EScaleMuSpectND", kEScaleMuSpectND,
@@ -313,7 +313,7 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
         }
     });
 
- 
+
   RegisterIndividualFunctionalParameter(
       "MuonRes_ND", kMuonRes_ND, [this](const double *par, std::size_t iEvent) {
         if(abs(dunemcSamples[iEvent].LepPDG == 13)){
@@ -344,17 +344,17 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
                         dunemcSamples[iEvent].reco.ePip) ;
         dunemcSamples[iEvent].reco.ePim += (*par) * (dunemcSamples[iEvent].truth.ePim -
                        dunemcSamples[iEvent].reco.ePim);
-        
-          
+
+
       });
 
 
   /// Fake Data Syst
   RegisterIndividualFunctionalParameter(
-      "NuWro_missingprotonfakedata", kNuWro_missingprotonfakedata,
+      "NuWroFakeDataWeight", kNuWroFakeDataWeight,
       [this](const double *par, std::size_t iEvent) {
         dunemcSamples[iEvent].flux_w *=
-            (((*par) * (this->NuWro_missingproton(iEvent) - 1.0)) + 1);
+            (((*par) * (this->NuWroFakeDataWeight(iEvent) - 1.0)) + 1);
       });
 
   for (size_t par_it = 0;
@@ -437,21 +437,21 @@ double ERecQE(int nupdg, bool isCC, double el, double leptheta) {
   // in place that grabs the lepton mass in MeV when given the neutrino PDG
   // and whether the interaction was CC or NC and then immediately calls it.
   // It's basically a generalisation of the ternary operator.
-  double ml = [=]() {
-    switch (std::abs(nupdg)) {
+  double ml = [](int _nupdg, bool _isCC) {
+    switch (std::abs(_nupdg)) {
     case 12:
-      return isCC ? 0.511 : 0;
+      return _isCC ? 0.511 : 0;
     case 14:
-      return isCC ? 105.66 : 0;
+      return _isCC ? 105.66 : 0;
     case 16:
-      return isCC ? 1777.0 : 0;
+      return _isCC ? 1777.0 : 0;
     default:
-      std::cerr << "Warning: Unexpected PDG code " << nupdg
+      std::cerr << "Warning: Unexpected PDG code " << _nupdg
                 << " passed to ml lambda.\n";
       assert(false && "Unexpected neutrino PDG code in ml lambda");
       return 0.0;
     }
-  }();
+  }(nupdg, isCC);
 
   double pl = std::sqrt(el * el - ml * ml); // momentum of lepton
 
@@ -464,7 +464,6 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
   MACH3LOG_INFO(
       "-------------------------------------------------------------------");
   TChain CAFChain("cafTree");
-  TChain CAFMetaChain("meta");
   for (size_t iSample = 0; iSample < mc_files.size(); iSample++) {
     MACH3LOG_INFO("Adding file to TChains: {}", mc_files[iSample]);
 
@@ -476,75 +475,27 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
                      mc_files[iSample]);
       throw MaCh3Exception(__FILE__, __LINE__);
     }
-
-    CAFMetaChain.Add(mc_files[iSample].c_str(), -1);
   }
 
   MACH3LOG_INFO("Number of entries in CAF TChain: {}", CAFChain.GetEntries());
 
-  TTreeReader chrdr(&CAFChain);
-  TTreeReader chrdr_meta(&CAFMetaChain);
-
-  double _production_pot = 0.0;
-  double gen_pot = 0.0;
-
-  // -------------------------------------------------------------------
-  // Read META POT from chain
-  // -------------------------------------------------------------------
-
-  if (CAFMetaChain.GetEntries() == 0) {
-
-    MACH3LOG_WARN("META chain is empty — setting POT = 1.0");
-    gen_pot = 1.0;
-
-  } else if (!CAFMetaChain.GetBranch("pot")) {
-
-    MACH3LOG_WARN("META chain has no 'pot' branch — setting POT = 1.0");
-    gen_pot = 1.0;
-
-  } else {
-
-    std::cout << "Found 'pot' branch in meta chain" << std::endl;
-
-    CAFMetaChain.SetBranchStatus("*", 0);
-    CAFMetaChain.SetBranchStatus("pot", 1);
-    CAFMetaChain.SetBranchAddress("pot", &_production_pot);
-
-    for (Long64_t i = 0; i < CAFMetaChain.GetEntries(); i++) {
-      CAFMetaChain.GetEntry(i);
-      gen_pot += _production_pot;
-    }
-  }
-
-  // --- Calculate generated POT and sum POT from CAF files ---
-  if (gen_pot <= 0) {
-    MACH3LOG_ERROR("gen_pot is zero or negative. Aborting.");
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-
   // Calculate POT from the CAF files
-  double newpot = CalculatePOT(); // sums the 'pot' branch in 'meta' tree
+  double cafpot = CalculatePOT(); // sums the 'pot' branch in 'meta' tree
 
-  if (newpot <= 0) {
-    MACH3LOG_WARN("CalculatePOT() returned <= 0. Forcing newpot = 1.");
-    newpot = 1.0; // avoid division by zero
+  if (cafpot <= 0) {
+    MACH3LOG_WARN("CalculatePOT() returned <= 0. Forcing cafpot = 1.");
+    cafpot = 1.0; // avoid division by zero
   }
-
-  // Assign the nominal generated POT
-  // pot = gen_pot;
 
   // Compute POT scaling factor to normalize event weights
-  double pot_scaling = pot / newpot;
+  double pot_scaling = pot / cafpot;
 
-  std::cout << "POT in yaml file =  " << pot << ", Summed CAF POT: " << newpot
-            << ", Scaling factor = pot/newpot: " << pot_scaling << std::endl;
-
-  // fDUNEObj->norm_s = 1.0;
-  // fDUNEObj->pot_s = pot / newpot;
-
-  // std::cout << "Computed POT scaling = " << fDUNEObj->pot_s << std::endl;
+  std::cout << "POT in yaml file =  " << pot << ", Summed CAF POT: " << cafpot
+            << ", Scaling factor = pot/cafpot: " << pot_scaling << std::endl;
 
   // Reco Variables
+  TTreeReader chrdr(&CAFChain);
+
   TTreeReaderValue<double> Ev_reco(chrdr, "Ev_reco"); // Ev_reco
   TTreeReaderValue<double> Elep_reco(chrdr, "Elep_reco");
 
@@ -699,7 +650,7 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
     dunemcSamples[iEvent].reco.eN = *eRecoN;
 
     dunemcSamples[iEvent].shift.erec = dunemcSamples[iEvent].rw_erec;
-   
+
 
     dunemcSamples[iEvent].syst.EHad_sqrt =
         std::sqrt(dunemcSamples[iEvent].reco.EHad);
@@ -741,14 +692,6 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
               i, flux_hadprod_systbin, nucfg));
     }
 
-    // std::cout << "Event " << iEvent
-    //       << "  nupdg=" << dunemcSamples[iEvent].nupdg
-    //       << "  Etrue=" << dunemcSamples[iEvent].rw_etru
-    //       << "  offaxis=" << dunemcSamples[iEvent].truth.off_axis_pos_m
-    //       << "  FocBin=" << flux_focussing_systbin
-    //       << "  HadBin=" << flux_hadprod_systbin
-    //       << std::endl;
-
     // HH: Give a warning if any negative energies were found
     for (const auto &[key, count] : negative_counts) {
       if (count > 0) {
@@ -764,17 +707,47 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
   return int(dunemcSamples.size());
 }
 
-#pragma GCC diagnostic ignored "-Wfloat-conversion"
 // Fake Data Studies
-float SampleHandlerBeamOffAxis::NuWro_missingproton(std::size_t iEvent) {
-  auto ev = dunemcSamples[iEvent];
+float SampleHandlerBeamOffAxis::NuWroFakeDataWeight(std::size_t iEvent) {
+  auto const &ev = dunemcSamples[iEvent];
 
-  return WeightToNuWro(ev.rw_isCC, ev.rw_etru, ev.truth.LepE,
-                       ev.truth.LepNuAngle, ev.truth.Q2, ev.truth.W, ev.truth.X,
-                       ev.truth.Y, ev.truth.nP, ev.truth.nN, ev.truth.nPip,
-                       ev.truth.nPim, ev.truth.nPi0, ev.truth.niem, ev.truth.eP,
-                       ev.truth.eN, ev.truth.ePip, ev.truth.ePim, ev.truth.ePi0,
-                       0, isFHC, ev.nupdg);
+  // struct features {
+  //   int isCC;
+  //   float Ev;
+  //   float LepE;
+  //   float LepNuAngle;
+  //   float Q2;
+  //   float W;
+  //   float X;
+  //   float Y;
+  //   int nP;
+  //   int nN;
+  //   int nipip;
+  //   int nipim;
+  //   int nipi0;
+  //   int niem;
+  //   float eP;
+  //   float eN;
+  //   float ePip;
+  //   float ePim;
+  //   float ePi0;
+  //   int isFD;
+  //   int isFHC;
+  //   int nuPDG;
+  // };
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnarrowing"
+#pragma GCC diagnostic ignored "-Wfloat-conversion"
+
+  return WeightToNuWro::Weight(WeightToNuWro::features{
+      ev.rw_isCC,    ev.rw_etru,    ev.truth.LepE, ev.truth.LepNuAngle,
+      ev.truth.Q2,   ev.truth.W,    ev.truth.X,    ev.truth.Y,
+      ev.truth.nP,   ev.truth.nN,   ev.truth.nPip, ev.truth.nPim,
+      ev.truth.nPi0, ev.truth.niem, ev.truth.eP,   ev.truth.eN,
+      ev.truth.ePip, ev.truth.ePim, ev.truth.ePi0, 0,
+      isFHC,         ev.nupdg});
+#pragma GCC diagnostic pop
 }
 
 const double *

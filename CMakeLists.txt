@@ -136,7 +136,7 @@ endif()
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
 #find_package(MaCh3 2.2.3 EXACT QUIET)
-set(MaCh3_CORE_BRANCH v2.2.3 CACHE STRING "Specify the MaCh3 core branch to use")
+set(MaCh3_CORE_BRANCH v2.2.3/patches/subthrowmatrix CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 option(MaCh3DUNE_Atmos "Whether working with atmospherics or beam oscillations" OFF)
 
@@ -176,9 +176,9 @@ if(NOT MaCh3_FOUND)
     list(APPEND MaCh3_OPTIONS "CUDAProb3Linear_ENABLED TRUE")
   endif()
 
-  if(NOT DEFINED CPM_MaCh3_SOURCE)
-  message(FATAL_ERROR "IM GOING TO DOWNLOAD MACH3 THIS IS NOT WHAT YOU WANT (future Abi)")
-  endif()
+  # if(NOT DEFINED CPM_MaCh3_SOURCE)
+  # message(FATAL_ERROR "IM GOING TO DOWNLOAD MACH3 THIS IS NOT WHAT YOU WANT (future Abi)")
+  # endif()
   CPMAddPackage(
     NAME MaCh3
     GIT_TAG ${MaCh3_CORE_BRANCH}
@@ -272,7 +272,7 @@ install(TARGETS MaCh3DUNECompilerOptions
 
 add_subdirectory(Splines)
 add_subdirectory(Systematics)
-add_subdirectory(Utils/Fake_datastudy/Fake_DATA/FDTDRFDS)
+add_subdirectory(Utils/FakeDataGenerators/FDTDRFDS)
 add_subdirectory(Samples)
 add_subdirectory(Apps)
 

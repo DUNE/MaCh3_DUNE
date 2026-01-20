@@ -44,12 +44,12 @@ int main(int argc, char * argv[]) {
   gErrorIgnoreLevel = kFatal;
   MaCh3Utils::MaCh3Usage(argc, argv);
   auto fitMan = MaCh3ManagerFactory(argc, argv);
-  
+
   //############################################################################################################################
   //Create SampleHandlerFD objects
-  
+
   ParameterHandlerGeneric* xsec = nullptr;
-  
+
   std::vector<SampleHandlerFD*> DUNEPdfs;
   MakeMaCh3DuneInstance(fitMan, DUNEPdfs, xsec);
 
@@ -68,7 +68,7 @@ int main(int argc, char * argv[]) {
   }
 
   std::string OutFileName = GetFromManager<std::string>(fitMan->raw()["General"]["OutputFile"], "EventRatesOutput.root");
-  Write1DHistogramsToFile(OutFileName, DUNEHists); 
+  Write1DHistogramsToFile(OutFileName, DUNEHists);
   Write1DHistogramsToPdf(OutFileName, DUNEHists);
 
   //###############################################################################################################################
@@ -77,7 +77,7 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("Oscillation Mode Breakdown:");
-  
+
   // for(auto Sample : DUNEPdfs) {
   //   MACH3LOG_INFO("======================");
   //   int nOscChannels = Sample->GetNOscChannels();
@@ -89,7 +89,7 @@ int main(int argc, char * argv[]) {
   //     SelecChannel.LowerBound = iOscChan;
   //     SelecChannel.UpperBound = iOscChan+1;
   //     SelectionVec.push_back(SelecChannel);
-      
+
   //     TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName(),SelectionVec);
   //     MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetTitle(),Sample->GetFlavourName(iOscChan),Hist->Integral());
   //   }
