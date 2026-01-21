@@ -3,6 +3,7 @@
 #include "TTreeReader.h"
 #include "TTreeReaderArray.h"
 #include "Manager/Monitor.h"
+#include <cmath>
 
 MonolithSplineHandlerDUNE::MonolithSplineHandlerDUNE(std::pair<std::vector<std::vector<TResponseFunction_red*> >, std::vector<RespFuncType>> initParams) :
     SMonolith(initParams.first, initParams.second)
@@ -96,8 +97,15 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
                 const auto& splineValues = splineValuesPtrs[i];
                 std::vector<double> values;
                 for (auto& val : splineValues) {
-                    values.push_back(val);
+                    if (std::isnan(val)) {
+                        MACH3LOG_WARN("NaN detected in spline values for parameter {} at event index {} - replacing with 1.0 (flat spline)", 
+                                      splinePars[i].name, currentEventIdx);
+                        values.push_back(1.0);
+                    } else {
+                        values.push_back(val);
+                    }
                 }
+                
                 splines[i]->SetVariationWeights(values);
 
                 splines[i]->Refresh();
