@@ -185,26 +185,8 @@ MonolithSplineHandlerDUNE::~MonolithSplineHandlerDUNE() {
 }
 
 void MonolithSplineHandlerDUNE::InitFromFile(std::string &spline_filename) {
-    // Implementation for initializing from file goes here
-    TFile* file = TFile::Open(spline_filename.c_str(), "READ");
-    if (!file || file->IsZombie()) {
-        MACH3LOG_ERROR("Failed to open spline file: {}", spline_filename);
-        throw MaCh3Exception(__FILE__, __LINE__);
-    }
-    const std::string treeName = "SystWeights";
-
-    TTree *tree;
-    file->GetObject(treeName.c_str(), tree);
-    if (!tree) {
-        MACH3LOG_ERROR("Spline tree not found in file: {}", spline_filename);
-        throw MaCh3Exception(__FILE__, __LINE__);
-    }
-
-    TObjArray* list = tree->GetListOfBranches();
-    for (int i = 0; i < list->GetEntries(); ++i) {
-        TBranch* branch = (TBranch*)list->At(i);
-        std::string splineName = branch->GetName();
-        MACH3LOG_INFO("Found spline: {}", splineName);
-        // Further processing to load the spline data can be added here
-    }
+    // TODO: Implement MonolithSplineHandlerDUNE::InitFromFile to load spline data from file.
+    // This method is currently a stub and should not be used in production code.
+    MACH3LOG_ERROR("MonolithSplineHandlerDUNE::InitFromFile is not implemented. Requested file: {}", spline_filename);
+    throw MaCh3Exception(__FILE__, __LINE__);
 }

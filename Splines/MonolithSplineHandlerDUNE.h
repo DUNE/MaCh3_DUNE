@@ -25,7 +25,7 @@ class MonolithSplineHandlerDUNE : virtual public SMonolith {
 
 };
 
-//Forced to write a new version as the M3 core one delected the splines it is passed................
+//Forced to write a new version as the M3 core one deleted the splines it is passed................
 class TSpline3_redDUNE : public TSpline3_red {
 public:
     TSpline3_redDUNE(const TSpline3* spline) : TSpline3_red() {
