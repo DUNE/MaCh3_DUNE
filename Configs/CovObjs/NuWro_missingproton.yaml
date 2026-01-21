@@ -1,12 +1,17 @@
+# ---
+# ThrowMatrixOverride:
+#   file: "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/CovMatrix_13thJan2026_alltemplateparameters.root"
+#   mat_name: "xsec_cov"
+#   check_names: false
 Systematics:
   - Systematic:
-      Sample_Name: ["*"]        
+      SampleNames: ["*"]        
       Error: 1.0                 
       FlatPrior: false
-      FixParam: True
+      FixParam: true
       Names:
-        FancyName: NuWro_missingprotonfakedata
-        ParameterName: NuWro_missingprotonfakedata
+        FancyName: NuWroFakeDataWeight
+        ParameterName: NuWroFakeDataWeight
       ParameterBounds:
       - 0.0
       - 1.0
@@ -14,6 +19,7 @@ Systematics:
       ParameterValues:
         Generated: 0.0
         PreFitValue: 0.0
+        PostND: 0.0
       StepScale:
         MCMC: 0.05
       Type: Functional
