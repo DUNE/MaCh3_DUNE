@@ -357,32 +357,37 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
             (((*par) * (this->NuWroFakeDataWeight(iEvent) - 1.0)) + 1);
       });
 
-  for (size_t par_it = 0;
-       par_it < OffAxisFluxUncertaintyHelper::Get().GetNFocussingParams();
-       par_it++) {
-    RegisterIndividualFunctionalParameter(
+  // don't register flux parameters if we're not using them.
+  if (ParHandler->GetNumParFromGroup("Flux")) {
+    for (size_t par_it = 0;
+         par_it < OffAxisFluxUncertaintyHelper::Get().GetNFocussingParams();
+         par_it++) {
+      RegisterIndividualFunctionalParameter(
+          OffAxisFluxUncertaintyHelper::Get().GetFocussingParamName(par_it),
+          int(kNFuncPars + par_it),
+          [this, par_it](const double *par, std::size_t iEvent) {
+            dunemcSamples[iEvent].flux_w *=
+                (1 +
+                 (*par) *
+                     dunemcSamples[iEvent].syst.flux_focussing_ratio[par_it]);
+          });
+    }
 
-        OffAxisFluxUncertaintyHelper::Get().GetFocussingParamName(par_it),
-        int(kNFuncPars + par_it),
-        [this, par_it](const double *par, std::size_t iEvent) {
-          dunemcSamples[iEvent].flux_w *=
-              (1 + (*par) *
-                       dunemcSamples[iEvent].syst.flux_focussing_ratio[par_it]);
-        });
-  }
-
-  for (size_t par_it = 0;
-       par_it < OffAxisFluxUncertaintyHelper::Get().GetNHadProdPCAComponents();
-       par_it++) {
-    RegisterIndividualFunctionalParameter(
-        "Flux_HadProd_Param_" + std::to_string(par_it),
-        int(kNFuncPars +
-            OffAxisFluxUncertaintyHelper::Get().GetNFocussingParams() + par_it),
-        [this, par_it](const double *par, std::size_t iEvent) {
-          dunemcSamples[iEvent].flux_w *=
-              (1 +
-               (*par) * dunemcSamples[iEvent].syst.flux_hadprod_ratio[par_it]);
-        });
+    for (size_t par_it = 0;
+         par_it <
+         OffAxisFluxUncertaintyHelper::Get().GetNHadProdPCAComponents();
+         par_it++) {
+      RegisterIndividualFunctionalParameter(
+          "Flux_HadProd_Param_" + std::to_string(par_it),
+          int(kNFuncPars +
+              OffAxisFluxUncertaintyHelper::Get().GetNFocussingParams() +
+              par_it),
+          [this, par_it](const double *par, std::size_t iEvent) {
+            dunemcSamples[iEvent].flux_w *=
+                (1 + (*par) *
+                         dunemcSamples[iEvent].syst.flux_hadprod_ratio[par_it]);
+          });
+    }
   }
 
   MACH3LOG_INFO("Finished registering functional parameters");
@@ -568,6 +573,10 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
 
   size_t iEvent = 0;
   // std::cout<< "just before while..." << std::endl;
+
+
+  bool do_flux_systs = ParHandler->GetNumParFromGroup("Flux");
+
   while (chrdr.Next()) {
 
     dunemcSamples[iEvent].norm_s = 1.0;
@@ -666,30 +675,33 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
 
     dunemcSamples[iEvent].truth.off_axis_pos_m = (*det_x + *vtx_x) / 100.0;
 
-    auto nucfg = OffAxisFluxUncertaintyHelper::Get().GetNuConfig(
-        dunemcSamples[iEvent].nupdg, true, isFHC, false);
-    auto flux_focussing_systbin =
-        OffAxisFluxUncertaintyHelper::Get().GetFocussingBin(
-            dunemcSamples[iEvent].nupdg, dunemcSamples[iEvent].rw_etru,
-            dunemcSamples[iEvent].truth.off_axis_pos_m, nucfg);
+    if (do_flux_systs) {
+      auto nucfg = OffAxisFluxUncertaintyHelper::Get().GetNuConfig(
+          dunemcSamples[iEvent].nupdg, true, isFHC, false);
 
-    auto flux_hadprod_systbin =
-        OffAxisFluxUncertaintyHelper::Get().GetFocussingBin(
-            dunemcSamples[iEvent].nupdg, dunemcSamples[iEvent].rw_etru,
-            dunemcSamples[iEvent].truth.off_axis_pos_m, nucfg);
+      auto flux_focussing_systbin =
+          OffAxisFluxUncertaintyHelper::Get().GetFocussingBin(
+              dunemcSamples[iEvent].nupdg, dunemcSamples[iEvent].rw_etru,
+              dunemcSamples[iEvent].truth.off_axis_pos_m, nucfg);
 
-    for (size_t i = 0;
-         i < OffAxisFluxUncertaintyHelper::Get().GetNFocussingParams(); i++) {
-      dunemcSamples[iEvent].syst.flux_focussing_ratio.push_back(
-          OffAxisFluxUncertaintyHelper::Get().GetFluxFocussingRatio(
-              i, flux_focussing_systbin, nucfg));
-    }
-    for (size_t i = 0;
-         i < OffAxisFluxUncertaintyHelper::Get().GetNHadProdPCAComponents();
-         i++) {
-      dunemcSamples[iEvent].syst.flux_hadprod_ratio.push_back(
-          OffAxisFluxUncertaintyHelper::Get().GetFluxHadProdRatio(
-              i, flux_hadprod_systbin, nucfg));
+      auto flux_hadprod_systbin =
+          OffAxisFluxUncertaintyHelper::Get().GetFocussingBin(
+              dunemcSamples[iEvent].nupdg, dunemcSamples[iEvent].rw_etru,
+              dunemcSamples[iEvent].truth.off_axis_pos_m, nucfg);
+
+      for (size_t i = 0;
+           i < OffAxisFluxUncertaintyHelper::Get().GetNFocussingParams(); i++) {
+        dunemcSamples[iEvent].syst.flux_focussing_ratio.push_back(
+            OffAxisFluxUncertaintyHelper::Get().GetFluxFocussingRatio(
+                i, flux_focussing_systbin, nucfg));
+      }
+      for (size_t i = 0;
+           i < OffAxisFluxUncertaintyHelper::Get().GetNHadProdPCAComponents();
+           i++) {
+        dunemcSamples[iEvent].syst.flux_hadprod_ratio.push_back(
+            OffAxisFluxUncertaintyHelper::Get().GetFluxHadProdRatio(
+                i, flux_hadprod_systbin, nucfg));
+      }
     }
 
     // HH: Give a warning if any negative energies were found
@@ -703,7 +715,9 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
     ++iEvent; // for pot?
   }
 
-  PrintFluxParameterNames();
+  if (do_flux_systs) {
+    PrintFluxParameterNames();
+  }
   return int(dunemcSamples.size());
 }
 
