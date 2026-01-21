@@ -4,9 +4,10 @@
 #pragma GCC diagnostic ignored "-Wfloat-conversion"
 //Standard Record includes
 #include "duneanaobj/StandardRecord/StandardRecord.h"
+#include "duneanaobj/StandardRecord/Proxy/SRProxy.h"
 #pragma GCC diagnostic pop
 
-SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGeneric* xsec_cov_, ParameterHandlerOsc* osc_cov_) : SampleHandlerFD(mc_version_, xsec_cov_, osc_cov_) {
+SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGeneric* xsec_cov_, const std::shared_ptr<OscillationHandler>&  Oscillator_) : SampleHandlerFD(mc_version_, xsec_cov_, Oscillator_) {
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
   
@@ -17,154 +18,235 @@ SampleHandlerAtm::~SampleHandlerAtm() {
 }
 
 void SampleHandlerAtm::Init() {
-  dunemcSamples.resize(nSamples,dunemc_base());
+  // dunemcSamples.resize(nSamples,dunemc_base());
   
   IsELike = Get<bool>(SampleManager->raw()["SampleOptions"]["IsELike"],__FILE__,__LINE__);
   ExposureScaling = Get<double>(SampleManager->raw()["SampleOptions"]["ExposureScaling"],__FILE__,__LINE__);
+  fInputFile = Get<std::string>(SampleManager->raw()["SampleOptions"]["InputFile"],__FILE__,__LINE__);
+
+  if (SampleManager->raw()["SampleOptions"]["InputSplines"]) {
+    fInputSplines = Get<std::string>(SampleManager->raw()["SampleOptions"]["InputSplines"],__FILE__,__LINE__);
+  } else {
+    fInputSplines = "";
+  }
+  fSampleId = Get<uint>(SampleManager->raw()["SampleOptions"]["SampleId"],__FILE__,__LINE__);
 }
 
 void SampleHandlerAtm::SetupSplines() {
-  SplineHandler = nullptr;
+  ///@todo move all of the spline setup into core
+  if(ParHandler->GetNumParamsFromSampleName(SampleName, kSpline) > 0){
+    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", ParHandler->GetNumParamsFromSampleName(SampleName, kSpline));
+    auto SplineFactory = SplineHandlerFactoryDUNE(ParHandler,Modes.get(), dunemcSamples, fInputSplines, SampleName);
+
+    SplineHandler = std::move(SplineFactory.GetSplineHandler());
+    if (SplineFactory.GetSplineType() == kBinned){
+      InitialiseSplineObject(); //Running the "normal" initialisation for binned splines
+    }
+    else if (SplineFactory.GetSplineType() == kMonolith){
+      InitialiseSplineObjectPerEvent(); //Running the per-event initialisation
+    }
+    else{
+      MACH3LOG_ERROR("Unknown spline type found when setting up splines for sample {}", SampleName);
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+  }
+  else{
+    MACH3LOG_INFO("Found no spline for this sample so I will not load or evaluate splines");
+    SplineHandler = nullptr;
+  }
+  
+  return;
+}
+
+void SampleHandlerAtm::InitialiseSplineObjectPerEvent(){
+  auto SplineHandlerDUNE = dynamic_cast<MonolithSplineHandlerDUNE*>(SplineHandler.get());
+  if (!SplineHandlerDUNE){
+    MACH3LOG_ERROR("SplineHandler is not of type MonolithSplineHandlerDUNE for sample {}. Cannot call InitialiseSplineObjectPerEvent.", SampleName);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  for (size_t i = 0; i < dunemcSamples.size(); ++i) {
+    //REQUIRES THE USE OF LOW MEMORY STRUCTS FLAG...
+    MCSamples[i].total_weight_pointers.push_back(SplineHandlerDUNE->retPointer(i));
+  }
+
 }
 
 void SampleHandlerAtm::SetupWeightPointers() {
   for (size_t i = 0; i < dunemcSamples.size(); ++i) {
-    for (int j = 0; j < dunemcSamples[i].nEvents; ++j) {
-      MCSamples[i].ntotal_weight_pointers[j] = 4;
-      MCSamples[i].total_weight_pointers[j].resize(MCSamples[i].ntotal_weight_pointers[j]);
-      MCSamples[i].total_weight_pointers[j][0] = &(dunemcSamples[i].flux_w[j]);
-      MCSamples[i].total_weight_pointers[j][1] = MCSamples[i].osc_w_pointer[j];
-      MCSamples[i].total_weight_pointers[j][2] = &(MCSamples[i].xsec_w[j]);
-      MCSamples[i].total_weight_pointers[j][3] = &(ExposureScaling);
-    }
+    MCSamples[i].total_weight_pointers.push_back(&(dunemcSamples[i].flux_w));
+    MCSamples[i].total_weight_pointers.push_back(MCSamples[i].osc_w_pointer);
+    MCSamples[i].total_weight_pointers.push_back(&(MCSamples[i].xsec_w));
+    MCSamples[i].total_weight_pointers.push_back(&(ExposureScaling));
   }
+  
 }
 
-int SampleHandlerAtm::SetupExperimentMC(int iSample) {
-  int CurrErrorLevel = gErrorIgnoreLevel;
+int SampleHandlerAtm::SetupExperimentMC() {
+  int CurrErrorLevel = gErrorIgnoreLevel; 
   gErrorIgnoreLevel = kFatal;
   
-  caf::StandardRecord* sr = new caf::StandardRecord();
-  dunemc_base* duneobj = &dunemcSamples[iSample];
-
-  std::string FileName = mc_files[iSample];
-  MACH3LOG_INFO("Reading File: {}",FileName);
-  TFile* File = TFile::Open(FileName.c_str());
-  if (!File || File->IsZombie()) {
-    MACH3LOG_ERROR("Did not find File: {}",FileName);
+  TFile *f = TFile::Open(fInputFile.c_str(),"READ");
+  if (!f || f->IsZombie()) {
+    MACH3LOG_ERROR("Could not open input CAF file: {}",fInputFile);
     throw MaCh3Exception(__FILE__, __LINE__);
   }
-  TTree* Tree = File->Get<TTree>("cafTree");
-  if (!Tree){
-    MACH3LOG_ERROR("Did not find Tree::cafTree in File: {}",FileName);
+  TTree *cafTree, *weightsTree;
+  f->GetObject("cafTree",cafTree);
+  if (!cafTree) {
+    MACH3LOG_ERROR("Could not find cafTree in input CAF file: {}",fInputFile);
     throw MaCh3Exception(__FILE__, __LINE__);
   }
-  
-  Tree->SetBranchStatus("*", 1);
-  Tree->SetBranchAddress("rec", &sr);
 
-  duneobj->nEvents = static_cast<int>(Tree->GetEntries());
-  duneobj->norm_s = 1;
-  duneobj->pot_s = 1;
+  f->GetObject("weights",weightsTree);
+  if (!weightsTree) {
+    MACH3LOG_ERROR("Could not find weights tree in input CAF file: {}",fInputFile);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
 
-  duneobj->nupdg = new int[duneobj->nEvents];
-  duneobj->nupdgUnosc = new int[duneobj->nEvents];
+  uint sample_id;
+  double xsec_w, flux_nue_w, flux_numu_w;
+  weightsTree->SetBranchAddress("sample_id",&sample_id);
+  weightsTree->SetBranchAddress("xsec",&xsec_w);
+  weightsTree->SetBranchAddress("flux_nue",&flux_nue_w);
+  weightsTree->SetBranchAddress("flux_numu",&flux_numu_w);
 
-  duneobj->mode = new double[duneobj->nEvents];
-  duneobj->rw_isCC = new int[duneobj->nEvents];
-  duneobj->Target = new int[duneobj->nEvents];
-  
-  duneobj->rw_etru = new double[duneobj->nEvents];
-  duneobj->rw_truecz = new double[duneobj->nEvents];
-  duneobj->flux_w = new double[duneobj->nEvents];
-  duneobj->rw_erec = new double[duneobj->nEvents];
-  duneobj->rw_theta = new double[duneobj->nEvents];
+
+  caf::StandardRecordProxy* sr = new caf::StandardRecordProxy(cafTree, "rec");
+
+  int nEntries = static_cast<int>(cafTree->GetEntries());
+
+
+  //Define Oscillation Channels here for the first file to avoid multiple lookups
+  MACH3LOG_INFO("Loading events from CAF file: {}",fInputFile);
+  size_t lastPrintPercent = 0;
  
-  for (int iEvent=0;iEvent<duneobj->nEvents;iEvent++) {
-    Tree->GetEntry(iEvent);    
+  for (int iEvent=0;iEvent<nEntries;iEvent++) {
 
-    if ((iEvent % (duneobj->nEvents/10))==0) {
-      MACH3LOG_INFO("\tProcessing event: {}/{}",iEvent,duneobj->nEvents);
+    weightsTree->GetEntry(iEvent);
+    if (sample_id != fSampleId) continue;
+    
+    cafTree->LoadTree(iEvent); //Only loads the tree without reading the entire entry
+
+    // Print progress bar every 5%
+    size_t currentPercent = (iEvent * 100) / nEntries;
+    if (currentPercent >= lastPrintPercent + 5 || iEvent == nEntries - 1) {
+        MaCh3Utils::PrintProgressBar(iEvent, nEntries);
+        lastPrintPercent = currentPercent;
+    }
+    
+    if(sr->common.ixn.pandora.size() != 1) {
+      // MACH3LOG_WARN("Skipping event {}/{} -> Number of neutrino slices found in event: {}",iEvent,nEntries,sr->common.ixn.pandora.size());
+      continue;
+    }
+    
+    TVector3 RecoNuMomentumVector;
+    double RecoENu;
+    if (IsELike) {
+      RecoENu = sr->common.ixn.pandora[0].Enu.e_calo;
+      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.heshw.x,sr->common.ixn.pandora[0].dir.heshw.y,sr->common.ixn.pandora[0].dir.heshw.z)).Unit();
+    } else {
+      RecoENu = sr->common.ixn.pandora[0].Enu.lep_calo;
+      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.x,sr->common.ixn.pandora[0].dir.lngtrk.y,sr->common.ixn.pandora[0].dir.lngtrk.z)).Unit();      
+    }
+    double RecoCZ = -RecoNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
+    if (std::isnan(RecoCZ)) {
+      // MACH3LOG_WARN("Skipping event {}/{} -> Reconstructed Cosine Z is NAN",iEvent,nEntries);
+      continue;
+    }
+    if (std::isnan(RecoENu)) {
+      // MACH3LOG_WARN("Skipping event {}/{} -> Reconstructed Neutrino Energy is NAN",iEvent,nEntries);
+      continue;
     }
 
-    duneobj->nupdg[iEvent] = sample_nupdg[iSample];
-    duneobj->nupdgUnosc[iEvent] = sample_nupdgunosc[iSample];
+    struct dunemc_base currentEventFromNuMu;
 
+    currentEventFromNuMu.rw_erec = RecoENu;
+    currentEventFromNuMu.rw_theta = RecoCZ;
+    
     int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
     if (!sr->mc.nu[0].iscc) M3Mode += 14; //Account for no ability to distinguish CC/NC
     if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
-    duneobj->mode[iEvent] = M3Mode;
+    currentEventFromNuMu.mode = M3Mode;
     
-    duneobj->rw_isCC[iEvent] = sr->mc.nu[0].iscc;
-    duneobj->Target[iEvent] = kTarget_Ar;
+    currentEventFromNuMu.rw_isCC = sr->mc.nu[0].iscc;
+    currentEventFromNuMu.Target = kTarget_Ar;
     
-    duneobj->rw_etru[iEvent] = static_cast<double>(sr->mc.nu[0].E);
+    currentEventFromNuMu.rw_etru = static_cast<double>(sr->mc.nu[0].E);
 
-    TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.X(),sr->mc.nu[0].momentum.Y(),sr->mc.nu[0].momentum.Z())).Unit();
-    duneobj->rw_truecz[iEvent] = -TrueNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
+    TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.x,sr->mc.nu[0].momentum.y,sr->mc.nu[0].momentum.z)).Unit();
+    currentEventFromNuMu.rw_truecz = -TrueNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
 
-    duneobj->flux_w[iEvent] = sr->mc.nu[0].genweight;
+    currentEventFromNuMu.nupdg = sr->mc.nu[0].pdg;
 
-    TVector3 RecoNuMomentumVector;
-    if (IsELike) {
-      duneobj->rw_erec[iEvent] = sr->common.ixn.pandora[0].Enu.e_calo;
-      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.heshw.X(),sr->common.ixn.pandora[0].dir.heshw.Y(),sr->common.ixn.pandora[0].dir.heshw.Z())).Unit();
-    } else {
-      duneobj->rw_erec[iEvent] = sr->common.ixn.pandora[0].Enu.lep_calo;
-      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.X(),sr->common.ixn.pandora[0].dir.lngtrk.Y(),sr->common.ixn.pandora[0].dir.lngtrk.Z())).Unit();      
-    }
-    duneobj->rw_theta[iEvent] = -RecoNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
-    
+    currentEventFromNuMu.flux_w = xsec_w*flux_numu_w;
+    currentEventFromNuMu.nupdgUnosc = (currentEventFromNuMu.nupdg > 0) ? 14 : -14;
+    currentEventFromNuMu.OscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, currentEventFromNuMu.nupdgUnosc, currentEventFromNuMu.nupdg));
+    currentEventFromNuMu.eid = iEvent;
+
+    struct dunemc_base currentEventFromNuE = currentEventFromNuMu;;
+    currentEventFromNuE.nupdgUnosc = (currentEventFromNuE.nupdg > 0) ? 12 : -12;
+    currentEventFromNuE.flux_w = xsec_w*flux_nue_w;
+    currentEventFromNuE.OscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, currentEventFromNuE.nupdgUnosc, currentEventFromNuE.nupdg));
+    //Debug flux printout
+    // std::cout << "Event " << iEvent 
+    //           << ": nupdg = " << currentEventFromNuE.nupdg 
+    //           << ", nupdgUnosc = " << currentEventFromNuE.nupdgUnosc 
+    //           << ", flux_nue_w = " << flux_nue_w 
+    //           << ", flux_numu_w = " << flux_numu_w 
+    //           << ", xsec_w = " << xsec_w 
+    //           << ", total flux weight nue = " << currentEventFromNuE.flux_w
+    //           << ", total flux weight numu = " << currentEventFromNuMu.flux_w
+    //           << std::endl;
+    dunemcSamples.emplace_back(std::move(currentEventFromNuMu));
+    dunemcSamples.emplace_back(std::move(currentEventFromNuE));
   }
 
-  delete Tree;
-  delete File;
-
+  //Need to clear that static vector to avoid double free errors when exiting the program
+  caf::SRBranchRegistry::clear();
+  delete sr;
+  delete cafTree;
+  delete weightsTree;
+  delete f;
+  
   gErrorIgnoreLevel = CurrErrorLevel;
-  
-  return duneobj->nEvents;
+
+  return dunemcSamples.size();
 }
 
-void SampleHandlerAtm::SetupFDMC(int iSample) {
-  dunemc_base *duneobj = &(dunemcSamples[iSample]);
-  FarDetectorCoreInfo *fdobj = &(MCSamples[iSample]);  
+void SampleHandlerAtm::SetupFDMC() {
+  for(int iEvent = 0 ;iEvent < int(GetNEvents()) ; ++iEvent) {
+    MCSamples[iEvent].rw_etru = &(dunemcSamples[iEvent].rw_etru);
+    MCSamples[iEvent].mode = &(dunemcSamples[iEvent].mode);
+    MCSamples[iEvent].Target = &(dunemcSamples[iEvent].Target);    
+    MCSamples[iEvent].isNC = !dunemcSamples[iEvent].rw_isCC;
+    MCSamples[iEvent].nupdg = &(dunemcSamples[iEvent].nupdg);
+    MCSamples[iEvent].nupdgUnosc = &(dunemcSamples[iEvent].nupdgUnosc);
 
-  //Make sure that this is only set if you're an atmoshperic object
-  fdobj->rw_truecz.resize(fdobj->nEvents);
-  
-  for(int iEvent = 0 ;iEvent < fdobj->nEvents ; ++iEvent) {
-    fdobj->rw_etru[iEvent] = &(duneobj->rw_etru[iEvent]);
-    fdobj->mode[iEvent] = &(duneobj->mode[iEvent]);
-    fdobj->Target[iEvent] = &(duneobj->Target[iEvent]);    
-    fdobj->isNC[iEvent] = !duneobj->rw_isCC[iEvent];
-    fdobj->nupdg[iEvent] = &(duneobj->nupdg[iEvent]);
-    fdobj->nupdgUnosc[iEvent] = &(duneobj->nupdgUnosc[iEvent]);
-
-    fdobj->rw_truecz[iEvent] = &(duneobj->rw_truecz[iEvent]);
+    MCSamples[iEvent].rw_truecz = &(dunemcSamples[iEvent].rw_truecz);
   }
 }
 
-const double* SampleHandlerAtm::GetPointerToKinematicParameter(KinematicTypes KinPar, int iSample, int iEvent) {
+const double* SampleHandlerAtm::GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent) {
   double* KinematicValue;
 
   switch (KinPar) {
   case kTrueNeutrinoEnergy:
-    KinematicValue = &(dunemcSamples[iSample].rw_etru[iEvent]);
+    KinematicValue = &(dunemcSamples[iEvent].rw_etru);
     break;
   case kRecoNeutrinoEnergy:
-    KinematicValue = &(dunemcSamples[iSample].rw_erec[iEvent]);
+    KinematicValue = &(dunemcSamples[iEvent].rw_erec);
     break;
   case kTrueCosZ:
-    KinematicValue = &(dunemcSamples[iSample].rw_truecz[iEvent]);
+    KinematicValue = &(dunemcSamples[iEvent].rw_truecz);
     break;
   case kRecoCosZ:
-    KinematicValue = &(dunemcSamples[iSample].rw_theta[iEvent]);
+    KinematicValue = &(dunemcSamples[iEvent].rw_theta);
     break;
   case kOscChannel:
-    KinematicValue = &(MCSamples[iSample].ChannelIndex);
+    KinematicValue = &(dunemcSamples[iEvent].OscChannelIndex);
     break;
   case kMode:
-    KinematicValue = &(dunemcSamples[iSample].mode[iEvent]);
+    KinematicValue = &(dunemcSamples[iEvent].mode);
     break;
   default:
     MACH3LOG_ERROR("Unknown KinPar: {}",static_cast<int>(KinPar));
@@ -174,23 +256,23 @@ const double* SampleHandlerAtm::GetPointerToKinematicParameter(KinematicTypes Ki
   return KinematicValue;
 }
 
-const double* SampleHandlerAtm::GetPointerToKinematicParameter(double KinematicVariable, int iSample, int iEvent) {
+const double* SampleHandlerAtm::GetPointerToKinematicParameter(double KinematicVariable, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
-  return GetPointerToKinematicParameter(KinPar,iSample,iEvent);
+  return GetPointerToKinematicParameter(KinPar,iEvent);
 }
 
-const double* SampleHandlerAtm::GetPointerToKinematicParameter(std::string KinematicParameter, int iSample, int iEvent) {
+const double* SampleHandlerAtm::GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
-  return GetPointerToKinematicParameter(KinPar,iSample,iEvent);
+  return GetPointerToKinematicParameter(KinPar,iEvent);
 }
 
-double SampleHandlerAtm::ReturnKinematicParameter(int KinematicVariable, int iSample, int iEvent) {
+double SampleHandlerAtm::ReturnKinematicParameter(int KinematicVariable, int iEvent) {
   KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
-  return *GetPointerToKinematicParameter(KinPar, iSample, iEvent);
+  return *GetPointerToKinematicParameter(KinPar, iEvent);
 }
 
-double SampleHandlerAtm::ReturnKinematicParameter(std::string KinematicParameter, int iSample, int iEvent) {
-  return *GetPointerToKinematicParameter(KinematicParameter, iSample, iEvent);
+double SampleHandlerAtm::ReturnKinematicParameter(std::string KinematicParameter, int iEvent) {
+  return *GetPointerToKinematicParameter(KinematicParameter, iEvent);
 }
 
 std::vector<double> SampleHandlerAtm::ReturnKinematicParameterBinning(std::string KinematicParameterStr) {
@@ -199,43 +281,7 @@ std::vector<double> SampleHandlerAtm::ReturnKinematicParameterBinning(std::strin
 }
 
 std::vector<double> SampleHandlerAtm::ReturnKinematicParameterBinning(KinematicTypes KinPar)  {
+  (void)KinPar;
   std::vector<double> ReturnVec;
-  
-  switch (KinPar) {
-
-  case kTrueNeutrinoEnergy:
-    for (int i=0;i<20;i++) {
-      ReturnVec.emplace_back(i);
-    }
-    ReturnVec.emplace_back(100.);
-    ReturnVec.emplace_back(1000.);
-    break;
-
-  case kTrueCosZ:
-  case kRecoCosZ:
-    ReturnVec.resize(XBinEdges.size());
-    for (unsigned int bin_i=0;bin_i<XBinEdges.size();bin_i++) {ReturnVec[bin_i] = XBinEdges[bin_i];}
-    break;
-
-  case kRecoNeutrinoEnergy:
-    ReturnVec.resize(YBinEdges.size());
-    for (unsigned int bin_i=0;bin_i<YBinEdges.size();bin_i++) {ReturnVec[bin_i] = YBinEdges[bin_i];}
-    break;
-
-  case kOscChannel:
-    ReturnVec.resize(GetNsamples());
-    for (int bin_i=0;bin_i<GetNsamples();bin_i++) {ReturnVec[bin_i] = bin_i;}
-    break;
-
-  case kMode:
-    ReturnVec.resize(Modes->GetNModes());
-    for (int bin_i=0;bin_i<Modes->GetNModes();bin_i++) {ReturnVec[bin_i] = bin_i;}
-    break;
-    
-  default:
-    MACH3LOG_ERROR("Unknown KinPar: {}",static_cast<int>(KinPar));
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-
   return ReturnVec;
 }

@@ -36,27 +36,27 @@ int main(int argc, char * argv[]) {
   //Create samplePDFFD objects
   
   ParameterHandlerGeneric* xsec = nullptr;
-  ParameterHandlerOsc* osc = nullptr;
   
   std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec, osc);
+  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
+
+  //###############################################################################################################################
+  // Set all systematics to their nominal (prior central) values for Asimov generation
+  
+  if (xsec != nullptr) {
+    MACH3LOG_INFO("Setting all systematic parameters to their prior central values for Asimov generation");
+    xsec->SetParameters();  // Empty argument sets all params to prior central values
+  }
 
   //###############################################################################################################################
   //Perform reweight, print total integral, and set data
-  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
-  for (int i = 0; i < oscpars.size(); i++)
-    osc->SetPar(i, oscpars.at(i));
 
   std::vector<TH1*> DUNEHists;
   for(auto Sample : DUNEPdfs){
     Sample->Reweight();
-    if (Sample->GetNDim() == 1) {
-      DUNEHists.push_back(Sample->Get1DHist());
-    } else if (Sample->GetNDim() == 2) {
-      DUNEHists.push_back(Sample->Get2DHist());
-    }
+    DUNEHists.push_back(Sample->GetMCHist(Sample->GetNDim()));
+    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetTitle(), Sample->GetMCHist(Sample->GetNDim())->Integral());
 
-    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetTitle(), Sample->Get1DHist()->Integral());
     if (Sample->GetNDim() == 1) {
       Sample->AddData((TH1D*)DUNEHists.back());
     } else if (Sample->GetNDim() == 2) {
@@ -73,7 +73,6 @@ int main(int argc, char * argv[]) {
     MaCh3Fitter->AddSampleHandler(Sample);
   }
 
-  MaCh3Fitter->AddSystObj(osc);
   MaCh3Fitter->AddSystObj(xsec);
   
   if (do_1d_llhscan) {

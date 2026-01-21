@@ -1,8 +1,12 @@
-set(HEADERS BinnedSplineHandlerDUNE.h
+set(HEADERS BinnedSplineHandlerDUNE.h 
+            MonolithSplineHandlerDUNE.h
+            SplineHandlerFactoryDUNE.h
 )
 
 add_library(SplinesDUNE SHARED
     BinnedSplineHandlerDUNE.cpp
+    MonolithSplineHandlerDUNE.cpp
+    SplineHandlerFactoryDUNE.cpp
 )
 
 set_target_properties(SplinesDUNE PROPERTIES

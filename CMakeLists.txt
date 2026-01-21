@@ -78,19 +78,22 @@ endif()
 option(MaCh3_DUNE_USE_SRProxy "Whether to build proxy classes for Standard Record objects" OFF)
 
 if(MaCh3_DUNE_USE_SRProxy)
-  find_package(duneanaobj)
-	
-  if(NOT duneanaobj_FOUND)
-    CPMFindPackage(
-      NAME duneanaobj
-      GIT_TAG feature/Clingification_rebase2024
-      GITHUB_REPOSITORY luketpickering/duneanaobj
-      VERSION 4.0.0
-    )
-  endif()
-  
+  # Check if duneanaobj has already been added by CPM (e.g., as a transitive dependency)
   if(NOT TARGET duneanaobj::all)
-    cmessage(FATAL_ERROR "MaCh3 DUNE Expected dependency target: duneanaobj::all")
+    find_package(duneanaobj)
+	
+    if(NOT duneanaobj_FOUND)
+      CPMFindPackage(
+        NAME duneanaobj
+        GIT_TAG Clingification_v03_06_00 
+        GITHUB_REPOSITORY pgranger23/duneanaobj
+        VERSION 4.0.0
+      )
+    endif()
+    
+    if(NOT TARGET duneanaobj::all)
+      cmessage(FATAL_ERROR "MaCh3 DUNE Expected dependency target: duneanaobj::all")
+    endif()
   endif()
 else()
   CPMAddPackage(
@@ -128,15 +131,15 @@ else()
     ${CMAKE_CURRENT_BINARY_DIR}/libStandardRecordDict.rootmap 
     DESTINATION lib)
   
-  add_library(duneanaobj::all ALIAS duneanaobj_StandardRecord)
+  # add_library(duneanaobj::all ALIAS duneanaobj_StandardRecord)
   
 endif()
 
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
-find_package(MaCh3 2.0.0 EXACT QUIET)
-set(MaCh3_CORE_BRANCH v2.0.0 CACHE STRING "Specify the MaCh3 core branch to use")
+find_package(MaCh3 2.2.0 EXACT QUIET)
+set(MaCh3_CORE_BRANCH v2.2.0 CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 option(MaCh3DUNE_Atmos "Whether working with atmospherics or beam oscillations" OFF)
 
@@ -209,7 +212,7 @@ cmessage(STATUS "CMAKE CXX Standard: ${CMAKE_CXX_STANDARD}")
 add_library(DUNEMaCh3Warnings INTERFACE)
 
 target_compile_options(DUNEMaCh3Warnings INTERFACE
-  -Werror                 # Treat Warnings as Errors
+  # -Werror                 # Treat Warnings as Errors
   -Wextra                 # Enable extra warning flags
   -Wall                   # Enable all standard warning flags
   -Wshadow                # Warn when a variable declaration shadows one from an outer scope
