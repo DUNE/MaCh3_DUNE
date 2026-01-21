@@ -1,0 +1,57 @@
+General:
+  Minuit2:
+    NSteps: 3000
+    ToleranceLevel: 5e-6
+
+  OutputFile: "test.root"
+
+  DUNESamples:
+   - "Configs/BeamOffAxis/Samples/dummy.yaml"
+
+
+  OscillationParameters: []
+
+  Systematics:
+    XsecCovFile:
+      - "Configs/BeamOffAxis/Enu_Enubias_templateparams.yaml"
+      - "Configs/CovObjs/NuWroFakeDataWeight.yaml"
+
+    XsecCovName: "xsec_cov"
+
+    XsecStepScale: 1.0
+
+    XsecAtGen: false
+    xsec_var1: "TrueNeutrinoEnergy"
+    xsec_var2: "EnuBias"
+    Parameter_fixing_threshold: 1e-50
+
+  Fitter:
+    FitTestLikelihood: false
+
+
+  MCMC:
+    NSteps: 8000
+    AutoSave: 5000
+    BurnInSteps: 0
+
+  ProcessMCMC: No
+  Seed: 0
+  Debug: Yes
+
+LLHScan:
+  ParPoints: 50
+
+AdaptionOptions:
+  Settings:
+    StartThrow: 10000
+    StartUpdate: 1000
+    UpdateStep: 1000
+    EndUpdate: 8000
+    SaveNIterations: 1
+    OutputFileName: "adapted.root"
+
+  Covariance:
+    xsec_cov:
+      DoAdaption: True
+      UseExternalMatrix: False
+      PrincipalComponentThreshold: 0.995
