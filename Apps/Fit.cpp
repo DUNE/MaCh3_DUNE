@@ -65,7 +65,7 @@ int main(int argc, char * argv[]) {
 
   //Now we have made the data histograms we need to make sure that parameters are all reset to their prior values...
   xsec->SetPar(xsec->GetParIndex("NuWroFakeDataWeight"), 0);
-
+  xsec->ToggleFixParameter("NuWroFakeDataWeight");
 
   //Now print out some event rates, we'll make a nice latex table at some point
   for (unsigned iPDF = 0; iPDF < DUNEPdfs.size() ; ++iPDF) {
