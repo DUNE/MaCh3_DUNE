@@ -5,8 +5,8 @@
 #   check_names: false
 Systematics:
   - Systematic:
-      SampleNames: ["*"]        
-      Error: 1.0                 
+      SampleNames: ["*"]
+      Error: 1.0
       FlatPrior: false
       FixParam: true
       Names:
@@ -19,7 +19,6 @@ Systematics:
       ParameterValues:
         Generated: 0.0
         PreFitValue: 0.0
-        PostND: 0.0
       StepScale:
         MCMC: 0.05
       Type: Functional
