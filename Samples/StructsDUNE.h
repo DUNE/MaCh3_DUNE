@@ -129,7 +129,8 @@ struct dunemc_beamoffaxis
     double y;
     double EHad;
     double sum_ehad;
-
+    
+   
     double eP;
     double ePip;
     double ePim;
@@ -147,6 +148,12 @@ struct dunemc_beamoffaxis
 
   struct {
     double erec;
+    double ELep;
+    double eP;
+    double ePi0;
+    double ePip;
+    double ePim;
+    double eN;
   } shift;
 };
 

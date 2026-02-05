@@ -258,10 +258,10 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
       if ( dunemcSamples[iEvent].shift.erec < 0.)  dunemcSamples[iEvent].shift.erec = 0.;
       if (dunemcSamples[iEvent].reco.ELep < 0.) dunemcSamples[iEvent].reco.ELep = 0.;
 
-      if(abs(dunemcSamples[iEvent].LepPDG == 11)){
+      if(abs(dunemcSamples[iEvent].LepPDG) == 11){
         dunemcSamples[iEvent].shift.erec *= (1.0 + (*par));
 
-        dunemcSamples[iEvent].reco.ELep *= (1.0 + (*par));
+        dunemcSamples[iEvent].shift.ELep *= (1.0 + (*par));
       }
         dunemcSamples[iEvent].shift.erec += (*par) * dunemcSamples[iEvent].reco.EHad;
         //dunemcSamples[iEvent].reco.ELep += (*par) * dunemcSamples[iEvent].reco.EHad;
@@ -276,10 +276,10 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
       "TotalEScaleND_mu", kTotalEScaleND_mu,
       [this](const double *par, std::size_t iEvent) {
 
-        if(abs(dunemcSamples[iEvent].LepPDG == 13) && (dunemcSamples[iEvent].reco.muon_contained == 1 ||dunemcSamples[iEvent].reco.muon_tracker==1) ){
+        if(abs(dunemcSamples[iEvent].LepPDG) == 13 && (dunemcSamples[iEvent].reco.muon_contained == 1 ||dunemcSamples[iEvent].reco.muon_tracker==1) ){
           dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].reco.ELep);
            //dunemcSamples[iEvent].shift.etrue += (*par) * (dunemcSamples[iEvent].reco.ELep);
-          dunemcSamples[iEvent].reco.ELep *= (1.0 + (*par));
+          dunemcSamples[iEvent].shift.ELep *= (1.0 + (*par));
         }
 
       });
@@ -291,9 +291,9 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
         dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].truth.ePi0 - dunemcSamples[iEvent].reco.ePi0);
 
         dunemcSamples[iEvent].reco.ePi0 += (*par) * (dunemcSamples[iEvent].truth.ePi0 - dunemcSamples[iEvent].reco.ePi0);
-        if(abs(dunemcSamples[iEvent].LepPDG == 11)){
+        if(abs(dunemcSamples[iEvent].LepPDG) == 11){
           dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
-          dunemcSamples[iEvent].reco.ELep += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
+          dunemcSamples[iEvent].shift.ELep += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
 
 
         }
@@ -305,9 +305,9 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
     RegisterIndividualFunctionalParameter(
       "EScaleMuSpectND", kEScaleMuSpectND,
       [this](const double *par, std::size_t iEvent) {
-        if(abs(dunemcSamples[iEvent].LepPDG == 13) && dunemcSamples[iEvent].reco.muon_tracker==1){
+        if(abs(dunemcSamples[iEvent].LepPDG) == 13 && dunemcSamples[iEvent].reco.muon_tracker==1){
           dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].reco.ELep);
-           dunemcSamples[iEvent].reco.ELep *= ((*par) + 1.0);
+           dunemcSamples[iEvent].shift.ELep *= ((*par) + 1.0);
 
 
         }
@@ -316,9 +316,9 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
 
   RegisterIndividualFunctionalParameter(
       "MuonRes_ND", kMuonRes_ND, [this](const double *par, std::size_t iEvent) {
-        if(abs(dunemcSamples[iEvent].LepPDG == 13)){
+        if(abs(dunemcSamples[iEvent].LepPDG) == 13){
         dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
-        dunemcSamples[iEvent].reco.ELep += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
+        dunemcSamples[iEvent].shift.ELep += (*par) * (dunemcSamples[iEvent].truth.LepE - dunemcSamples[iEvent].reco.ELep);
         }
       });
 
@@ -410,7 +410,7 @@ void PrintFluxParameterNames() {
 // HH: Reset the shifted values to the original values
 void SampleHandlerBeamOffAxis::resetShifts(int iEvent) {
   dunemcSamples[iEvent].shift.erec = dunemcSamples[iEvent].rw_erec;
-  dunemcSamples[iEvent].reco.ELep = dunemcSamples[iEvent].reco.ELep;
+  dunemcSamples[iEvent].shift.ELep = dunemcSamples[iEvent].reco.ELep;
   dunemcSamples[iEvent].flux_w = 1.0;
 }
 // =================================
@@ -641,6 +641,15 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
     dunemcSamples[iEvent].truth.nPim = *nPim;
     dunemcSamples[iEvent].truth.nPi0 = *nPi0;
 
+    if (!std::isnan(*W)) {
+    dunemcSamples[iEvent].truth.W = *W;
+    } else {
+      std::cout<<"W is nan..." <<std::endl;
+        // Optionally: assign a default value, or skip the event
+        // dunemcSamples[iEvent].truth.W = 0.0;
+        // or simply don't fill this event
+    }
+
     dunemcSamples[iEvent].reco.numu = *reco_numu;
     dunemcSamples[iEvent].reco.muon_contained = *muon_contained;
     dunemcSamples[iEvent].reco.muon_tracker = *muon_tracker;
@@ -659,6 +668,7 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
     dunemcSamples[iEvent].reco.eN = *eRecoN;
 
     dunemcSamples[iEvent].shift.erec = dunemcSamples[iEvent].rw_erec;
+    dunemcSamples[iEvent].shift.ELep = *Elep_reco;
 
 
     dunemcSamples[iEvent].syst.EHad_sqrt =
@@ -783,13 +793,15 @@ SampleHandlerBeamOffAxis::GetPointerToKinematicParameter(KinematicTypes KinPar,
   case kIsFHC:
     return &isFHC;
   case kELepRec:
-    return &dunemcSamples[iEvent].reco.ELep;
+    return &dunemcSamples[iEvent].shift.ELep;
   case kEnubias:
     return &dunemcSamples[iEvent].truth.enu_bias;
   case kisCC:
     return &dunemcSamples[iEvent].rw_isCC;
   case kOscillationChannel:
     return &dunemcSamples[iEvent].OscChannelIndex;
+  case kTrueW:
+    return &dunemcSamples[iEvent].truth.W;
   case kOffAxisPosition:
     return &dunemcSamples[iEvent].truth.off_axis_pos_m;
   default:

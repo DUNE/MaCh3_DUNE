@@ -34,6 +34,7 @@ public:
   X(TrueXPos)                                                                  \
   X(TrueYPos)                                                                  \
   X(TrueZPos)                                                                  \
+  X(TrueW)                                                                 \
   X(Mode)                                                                      \
   X(IsFHC)                                                                     \
   X(ELepRec)                                                                   \
