@@ -251,7 +251,9 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
   //           (*par) * (dunemcSamples[iEvent].truth.ePim -
   //                     dunemcSamples[iEvent].reco.ePim);
   //     });
-  RegisterIndividualFunctionalParameter(
+  
+
+    RegisterIndividualFunctionalParameter(
       "TotalEScaleND", kTotalEScaleND,
       [this](const double *par, std::size_t iEvent) {
 
@@ -326,7 +328,7 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
       "NRes_ND", kNRes_ND, [this](const double *par, std::size_t iEvent) {
         if(dunemcSamples[iEvent].reco.eN < 0.0) dunemcSamples[iEvent].reco.eN = 0.0;
         dunemcSamples[iEvent].shift.erec += (*par) * (dunemcSamples[iEvent].truth.eN - dunemcSamples[iEvent].reco.eN);
-        dunemcSamples[iEvent].reco.eN += (*par) * (dunemcSamples[iEvent].truth.eN - dunemcSamples[iEvent].reco.eN);
+        dunemcSamples[iEvent].shift.eN += (*par) * (dunemcSamples[iEvent].truth.eN - dunemcSamples[iEvent].reco.eN);
       });
 
   RegisterIndividualFunctionalParameter(
@@ -338,15 +340,16 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
                         dunemcSamples[iEvent].reco.ePip)) +
                       ((dunemcSamples[iEvent].truth.eP -
                         dunemcSamples[iEvent].reco.eP)));
-        dunemcSamples[iEvent].reco.eP += (*par) *(dunemcSamples[iEvent].truth.eP -
+        dunemcSamples[iEvent].shift.eP += (*par) *(dunemcSamples[iEvent].truth.eP -
                         dunemcSamples[iEvent].reco.eP) ;
-        dunemcSamples[iEvent].reco.ePip += (*par) *(dunemcSamples[iEvent].truth.ePip -
+        dunemcSamples[iEvent].shift.ePip += (*par) *(dunemcSamples[iEvent].truth.ePip -
                         dunemcSamples[iEvent].reco.ePip) ;
-        dunemcSamples[iEvent].reco.ePim += (*par) * (dunemcSamples[iEvent].truth.ePim -
+        dunemcSamples[iEvent].shift.ePim += (*par) * (dunemcSamples[iEvent].truth.ePim -
                        dunemcSamples[iEvent].reco.ePim);
 
 
       });
+
 
 
   /// Fake Data Syst
@@ -672,7 +675,7 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
     dunemcSamples[iEvent].reco.ePi0 = *eRecoPi0;
     dunemcSamples[iEvent].reco.eN = *eRecoN;
 
-     dunemcSamples[iEvent].shift.eP = *eRecoP;
+    dunemcSamples[iEvent].shift.eP = *eRecoP;
     dunemcSamples[iEvent].shift.ePip = *eRecoPip;
     dunemcSamples[iEvent].shift.ePim = *eRecoPim;
     dunemcSamples[iEvent].shift.ePi0 = *eRecoPi0;
