@@ -411,6 +411,11 @@ void PrintFluxParameterNames() {
 void SampleHandlerBeamOffAxis::resetShifts(int iEvent) {
   dunemcSamples[iEvent].shift.erec = dunemcSamples[iEvent].rw_erec;
   dunemcSamples[iEvent].shift.ELep = dunemcSamples[iEvent].reco.ELep;
+  dunemcSamples[iEvent].shift.eN = dunemcSamples[iEvent].reco.eN;
+  dunemcSamples[iEvent].shift.eP = dunemcSamples[iEvent].reco.eP;
+  dunemcSamples[iEvent].shift.ePip = dunemcSamples[iEvent].reco.ePip;
+  dunemcSamples[iEvent].shift.ePim = dunemcSamples[iEvent].reco.ePim;
+  dunemcSamples[iEvent].shift.ePi0 = dunemcSamples[iEvent].reco.ePi0;
   dunemcSamples[iEvent].flux_w = 1.0;
 }
 // =================================
@@ -666,6 +671,12 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
     dunemcSamples[iEvent].reco.ePim = *eRecoPim;
     dunemcSamples[iEvent].reco.ePi0 = *eRecoPi0;
     dunemcSamples[iEvent].reco.eN = *eRecoN;
+
+     dunemcSamples[iEvent].shift.eP = *eRecoP;
+    dunemcSamples[iEvent].shift.ePip = *eRecoPip;
+    dunemcSamples[iEvent].shift.ePim = *eRecoPim;
+    dunemcSamples[iEvent].shift.ePi0 = *eRecoPi0;
+    dunemcSamples[iEvent].shift.eN = *eRecoN;
 
     dunemcSamples[iEvent].shift.erec = dunemcSamples[iEvent].rw_erec;
     dunemcSamples[iEvent].shift.ELep = *Elep_reco;
