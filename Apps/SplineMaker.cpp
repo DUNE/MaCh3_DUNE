@@ -46,7 +46,8 @@ int main(int argc, char * argv[]) {
 
   int nshifts = 7;
   std::vector<double> SigmaKnots{-3., -2., -1., 0., 1., 2., 3.};
-  std::vector<double> TrueEBinning{0., 0.5, 1.0, 1.5, 2., 2.5, 3., 3.5, 4., 4.5, 5., 6., 1000.};
+  std::vector<double> TrueEBinning{0.0, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0, 3.25, 3.5, 3.75, 4.0, 5.0, 6.0, 10.0, 1200};   //{0., 0.5, 1.0, 1.5, 2., 2.5, 3., 3.5, 4., 4.5, 5., 6., 1000.};
+  
   size_t NTrueEbins = TrueEBinning.size() - 1;
 
 
@@ -93,7 +94,32 @@ int main(int argc, char * argv[]) {
             for (int ybin = 0; ybin < NBinsY; ybin++) {
               TGraph* WeightGraph = new TGraph();
 	      for (int knot = 0; knot < nshifts; knot++) {
-	        WeightGraph->SetPoint(knot, SigmaKnots[knot], BinnedWeights[iParam][knot][mode][TrueEbin]->GetBinContent(xbin+1, ybin+1));
+          auto* hist = BinnedWeights[iParam][knot][mode][TrueEbin];
+
+          if (!hist) {
+              std::cout << "NULL histogram at "
+                        << "iParam=" << iParam
+                        << ", knot=" << knot
+                        << ", mode=" << mode
+                        << ", TrueEbin=" << TrueEbin
+                        << std::endl;
+          }
+          std::cout << "Integral = " << hist->Integral() << std::endl;
+
+	        WeightGraph->SetPoint(knot, SigmaKnots[knot], BinnedWeights[iParam][knot][mode][TrueEbin]->GetBinContent(xbin+1, ybin+1) > 0. ? BinnedWeights[iParam][knot][mode][TrueEbin]->GetBinContent(xbin+1, ybin+1) : 1.);
+          double weight = BinnedWeights[iParam][knot][mode][TrueEbin]->GetBinContent(xbin+1, ybin+1);
+
+          std::cout << "[DEBUG] "
+                    << "iParam=" << iParam
+                    << ", mode=" << mode
+                    << ", TrueEbin=" << TrueEbin
+                    << ", xbin=" << xbin
+                    << ", ybin=" << ybin
+                    << ", knot=" << knot
+                    << ", sigma=" << SigmaKnots[knot]
+                    << ", weight=" << weight
+                    << std::endl;
+
 	      }
 	      char SplineName[1000];
 	      sprintf(SplineName, "dev_%s_%s_sp_%d_%d_%d", SplineNames[iParam].c_str(), Modes->GetSplineSuffixFromMaCh3Mode(SplineModes[iParam][mode]).c_str(), TrueEbin, xbin, ybin);

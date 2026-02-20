@@ -1,0 +1,84 @@
+Systematics:
+- Systematic:
+    SampleNames: ["ND_*", "FD_*", "ATM"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: MAQE
+      ParameterName: MAQE
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode: [0]
+      SplineName: maqe
+    StepScale:
+      MCMC: 0.4
+    Type: Spline
+    ParameterGroup: Xsec
+- Systematic:
+    SampleNames: ["ND_*", "FD_*", "ATM"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: VecFFCCQEshape
+      ParameterName: VecFFCCQEshape
+    ParameterBounds:
+    - 0.0
+    - 1.0
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 0
+      SplineName: vecffqeshape
+    StepScale:
+      MCMC: 0.2
+    Type: Spline
+    ParameterGroup: Xsec
+- Systematic:
+    SampleNames: ["ND_*", "FD_*", "ATM"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: CCQEPauliSupViaKF
+      ParameterName: CCQEPauliSupViaKF
+    ParameterBounds:
+    - 0.0
+    - 1.0
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 0
+      SplineName: pauli
+    StepScale:
+      MCMC: 0.6
+    Type: Spline
+    ParameterGroup: Xsec
+- Systematic:
+    SampleNames: ["ND_*", "FD_*", "ATM"]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: MvCCRES
+      ParameterName: MvCCRES
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode:
+      - 14
+      SplineName: mvres
+    StepScale:
+      MCMC: 0.4
+    Type: Spline
+    ParameterGroup: Xsec

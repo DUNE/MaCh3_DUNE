@@ -1228,12 +1228,53 @@ int main(int argc, char* argv[]) {
         h_mean->SetBinContent(bin_q0, bin_q3, mean);
         h_stddev->SetBinContent(bin_q0, bin_q3, stddev);
     }
+
+    // Create trimmed stddev histogram
+TAxis* xax = h_stddev->GetXaxis();
+TAxis* yax = h_stddev->GetYaxis();
+
+int nX = xax->GetNbins();
+int nY = yax->GetNbins();
+
+std::vector<double> yEdgesNew;
+for (int j = 2; j <= nY + 1; ++j) {
+    yEdgesNew.push_back(yax->GetBinLowEdge(j));
+}
+
+TH2D* h_stddev_noBottom = new TH2D(
+    "xsec_param_stddev_noBottom",
+    "Posterior StdDev (bottom Y-bin removed)",
+    nX, xax->GetXbins()->GetArray(),
+    nY - 1, yEdgesNew.data()
+);
+
+    // Copy bin contents
+    for (int ix = 1; ix <= nX; ++ix) {
+        for (int iy = 2; iy <= nY; ++iy) {
+            h_stddev_noBottom->SetBinContent(
+                ix, iy - 1,
+                h_stddev->GetBinContent(ix, iy)
+            );
+        }
+    }
+
+    // =================== END INSERT ===================
+
+    setRedWhiteBluePalette();
+
+    
      setRedWhiteBluePalette();
     h_mean->Write("xsec_param_mean");
     h_stddev->Write("xsec_param_stddev");
     h_mean->GetZaxis()->SetRangeUser(0.5,1.5);
     h_stddev->GetZaxis()->SetRangeUser(0.0, 0.5);
+    h_stddev_noBottom->GetZaxis()->SetRangeUser(0.0,0.5);
+    h_stddev_noBottom->Write("xsec_param_stddev_noBottom");
 
+    setRedWhiteBluePalette();
+
+
+    
 
     // Samlple Posterior
 
@@ -1327,47 +1368,6 @@ int main(int argc, char* argv[]) {
             h_eventrate_stddev->SetBinContent(bx, by, stddev);
         }
     }
-
-            /////////////////cut off hstddev:
-        // Original binning
-    int nBinsXstddev = h_stddev->GetNbinsX();
-    int nBinsYstddev = h_stddev->GetNbinsY();
-
-    const TArrayD* xEdges = h_stddev->GetXaxis()->GetXbins();
-    const TArrayD* yEdges = h_stddev->GetYaxis()->GetXbins();
-
-    // Sanity check: must be variable binning
-    if (xEdges->GetSize() == 0 || yEdges->GetSize() == 0) {
-        std::cerr << "[Error] Histogram does not use variable binning.\n";
-    }
-
-    // Create new Y edges, skipping the first (bottom) bin edge
-    std::vector<double> newYEdges;
-    for (int i = 1; i < yEdges->GetSize(); ++i) {
-        newYEdges.push_back(yEdges->At(i));
-    }
-
-    // New histogram
-    TH2D* h_stddev_noBottom = new TH2D(
-        "h_param_stddev_noBottom",
-        "Posterior StdDev (bottom row removed);",
-        nBinsX, xEdges->GetArray(),
-        nBinsY - 1, newYEdges.data()
-    );
-
-    h_stddev_noBottom->SetDirectory(nullptr);
-
-    for (int bx = 1; bx <= nBinsXstddev; ++bx) {
-        for (int by = 2; by <= nBinsYstddev; ++by) {  // start at 2 → skip bottom row
-            double val = h_stddev->GetBinContent(bx, by);
-            double err = h_stddev->GetBinError(bx, by);
-
-            h_stddev_noBottom->SetBinContent(bx, by - 1, val);
-            h_stddev_noBottom->SetBinError  (bx, by - 1, err);
-        }
-    }
-
-    
     c_master->Print((pdfOut + "[").c_str());  // open PDF
 
     c_master->Clear();
@@ -1398,65 +1398,51 @@ int main(int argc, char* argv[]) {
     h_stddev->SetTitle("Posterior post-fit. std dev.");
     h_stddev->Draw("COLZ");
     h_stddev->Write();
-
-    c_master->Update();
     c_master->Print(pdfOut.c_str());          // add a page
     c_master->Clear();
 
 
     h_stddev_noBottom->GetXaxis()->SetTitle(xsec_var1.c_str());
     h_stddev_noBottom->GetYaxis()->SetTitle(xsec_var2.c_str());
-    h_stddev_noBottom->GetZaxis()->SetRangeUser(0.0, 0.5);
-
-
+    h_stddev_noBottom->SetTitle("Posterior post-fit. std dev.");
     h_stddev_noBottom->Draw("COLZ");
-    h_stddev_noBottom->Write("xsec_param_stddev_noBottom");
-
-    c_master->Update();
-    c_master->Print(pdfOut.c_str());          // add a page
-    c_master->Clear();
-
-
-
-
-
-
+    h_stddev_noBottom->Write();
     c_master->Update();
     c_master->Print(pdfOut.c_str());          // add a page
 
     std::cout << "xsec_var1  = " << xsec_var1 << std::endl;
     std::cout << "xsec_var2  = " << xsec_var2 << std::endl;
 
-    // Combined slices: event rate, posterior, and correlation on each page
-    Save1DSlicesWithEventRateAndCorr(
-        h_eventrate_labels, h_eventrate_stddev,  // event rate and its error
-        h_mean, h_stddev,                        // posterior mean and stddev
-        *corrMatrix,                                   // correlation matrix
-        binDefs,                                 // bin definitions
-        paramNames,                             // parameter names
-        c_master,                                // canvas
-        pdfOut,                                  // output PDF
-        true,                                    // slice along xvar2
-        xsec_var1,                               // x-axis variable for 1D slices
-        xsec_var2 ,
-        OutputFile.get()                               // y-axis variable for correlation/2D
-    );
+    // // Combined slices: event rate, posterior, and correlation on each page
+    // Save1DSlicesWithEventRateAndCorr(
+    //     h_eventrate_labels, h_eventrate_stddev,  // event rate and its error
+    //     h_mean, h_stddev,                        // posterior mean and stddev
+    //     *corrMatrix,                                   // correlation matrix
+    //     binDefs,                                 // bin definitions
+    //     paramNames,                             // parameter names
+    //     c_master,                                // canvas
+    //     pdfOut,                                  // output PDF
+    //     true,                                    // slice along xvar2
+    //     xsec_var1,                               // x-axis variable for 1D slices
+    //     xsec_var2 ,
+    //     OutputFile.get()                               // y-axis variable for correlation/2D
+    // );
 
 
-    // Combined slices: event rate, posterior, and correlation on each page
-    Save1DSlicesWithEventRateAndCorr(
-        h_eventrate_labels, h_eventrate_stddev,  // event rate and its error
-        h_mean, h_stddev,                        // posterior mean and stddev
-        *corrMatrix,                                   // correlation matrix
-        binDefs,                                 // bin definitions
-        paramNames,                             // parameter names
-        c_master,                                // canvas
-        pdfOut,                                  // output PDF
-        false,                                    // slice along q3
-        xsec_var2,                               // x-axis variable for 1D slices
-        xsec_var1  ,
-        OutputFile.get()                              // y-axis variable for correlation/2D
-    );
+    // // Combined slices: event rate, posterior, and correlation on each page
+    // Save1DSlicesWithEventRateAndCorr(
+    //     h_eventrate_labels, h_eventrate_stddev,  // event rate and its error
+    //     h_mean, h_stddev,                        // posterior mean and stddev
+    //     *corrMatrix,                                   // correlation matrix
+    //     binDefs,                                 // bin definitions
+    //     paramNames,                             // parameter names
+    //     c_master,                                // canvas
+    //     pdfOut,                                  // output PDF
+    //     false,                                    // slice along q3
+    //     xsec_var2,                               // x-axis variable for 1D slices
+    //     xsec_var1  ,
+    //     OutputFile.get()                              // y-axis variable for correlation/2D
+    // );
 
     c_master->Print((pdfOut + "]").c_str());  // close PDF
 

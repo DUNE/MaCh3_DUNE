@@ -34,7 +34,7 @@ void Write1DHistogramsToPdf(std::string OutFileName, std::vector<TH1*> Histogram
   c1->cd();
   c1->Print(std::string(OutFileName+"[").c_str());
   for(auto Hist : Histograms){
-    Hist->Draw("HIST");
+    Hist->Draw("HIST COLZ");
     c1->Print(OutFileName.c_str());
   }
   c1->Print(std::string(OutFileName+"]").c_str());
@@ -55,7 +55,12 @@ int main(int argc, char * argv[]) {
 
   //###############################################################################################################################
   //Perform reweight and print total integral
-
+  //For fake data study
+   xsec->PrintNominalCurrProp();
+   std::cout<< "Fixing fake data syst... " << std::endl;
+   xsec->ToggleFixParameter("NuWroFakeDataWeight"); //take fake data systematic parameters and fix them to 1.0
+   xsec->SetPar(xsec->GetParIndex("NuWroFakeDataWeight"), 0.0);
+ 
   std::vector<TH1*> DUNEHists;
   for(auto Sample : DUNEPdfs){
     Sample->Reweight();
@@ -67,6 +72,7 @@ int main(int argc, char * argv[]) {
     Sample->PrintIntegral();
   }
 
+  xsec->PrintNominalCurrProp();
   std::string OutFileName = GetFromManager<std::string>(fitMan->raw()["General"]["OutputFile"], "EventRatesOutput.root");
   Write1DHistogramsToFile(OutFileName, DUNEHists);
   Write1DHistogramsToPdf(OutFileName, DUNEHists);

@@ -15,6 +15,7 @@ struct dunemc_base { // Store variables used in fitting
   double rw_isCC;
   double OscChannelIndex;
   int _isCC;
+  
   double rw_erec;
   double rw_etru;
 
@@ -119,6 +120,8 @@ struct dunemc_beamoffaxis
     double W;
     double X;
     double Y;
+
+    double isFHC_selection;
   } truth;
 
   struct {

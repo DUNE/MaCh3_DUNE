@@ -1,7 +1,7 @@
 Systematics:
   - Systematic:
-      SampleNames: ["ND*" ]
-      Error: 0.02           # Width of Gaussian prior
+      SampleNames: ["ND*", "OffAxisND" ]
+      Error: 0.02          # Width of Gaussian prior
       FlatPrior: false        # Can also set true if you want fully unbounded
       Names:
         FancyName: TotalEScaleND
@@ -20,8 +20,8 @@ Systematics:
       ParameterBounds:
       - -2.0                
       - 2.0    
-      SampleNames: ["ND*" ]
-      Error: 0.02             # Width of Gaussian prior
+      SampleNames: ["ND*", "OffAxisND" ]
+      Error: 0.02            # Width of Gaussian prior
       FlatPrior: false        # Can also set true if you want fully unbounded
       Names:
         FancyName: TotalEScaleND_mu
@@ -40,8 +40,8 @@ Systematics:
       ParameterBounds:
       - -2.0                
       - 2.0   
-      SampleNames: ["ND*" ]
-      Error: 0.02              # Width of Gaussian prior
+      SampleNames: ["ND*", "OffAxisND" ]
+      Error: 0.02             # Width of Gaussian prior
       FlatPrior: false        # Can also set true if you want fully unbounded
       Names:
         FancyName: EMResND
@@ -60,8 +60,8 @@ Systematics:
       ParameterBounds:
       - -2.0                
       - 2.0   
-      SampleNames: ["ND*" ]
-      Error: 0.02              # Width of Gaussian prior
+      SampleNames: ["ND*", "OffAxisND" ]
+      Error: 0.02             # Width of Gaussian prior
       FlatPrior: false        # Can also set true if you want fully unbounded
       Names:
         FancyName: EScaleMuSpectND
@@ -80,8 +80,8 @@ Systematics:
       ParameterBounds:
       - -2.0                
       - 2.0    
-      SampleNames: ["ND*" ]
-      Error: 0.02              # Width of Gaussian prior
+      SampleNames: ["ND*", "OffAxisND" ]
+      Error: 0.02             # Width of Gaussian prior
       FlatPrior: false        # Can also set true if you want fully unbounded
       Names:
         FancyName: MuonRes_ND
@@ -100,8 +100,8 @@ Systematics:
       ParameterBounds:
       - -2.0                
       - 2.0    
-      SampleNames: ["ND*" ]
-      Error: 0.02              # Width of Gaussian prior
+      SampleNames: ["ND*", "OffAxisND" ]
+      Error: 0.02             # Width of Gaussian prior
       FlatPrior: false        # Can also set true if you want fully unbounded
       Names:
         FancyName: NRes_ND
@@ -120,8 +120,8 @@ Systematics:
       ParameterBounds:
       - -2.0                
       - 2.0    
-      SampleNames: ["ND*" ]
-      Error: 0.02              # Width of Gaussian prior
+      SampleNames: ["ND*", "OffAxisND" ]
+      Error: 0.02             # Width of Gaussian prior
       FlatPrior: false        # Can also set true if you want fully unbounded
       Names:
         FancyName: HadRes_ND

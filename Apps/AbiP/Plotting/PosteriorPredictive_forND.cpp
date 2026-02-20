@@ -151,6 +151,10 @@ int main(int argc, char* argv[]) {
         pdf->Reweight();  // refresh weights for Reco
         MakeSpectaVariations(pdf, "RecoNeutrinoEnergy", fOut, ND_or_FD, pdfTitle, -1);
 
+        pdf->Reweight();  // refresh weights for Reco
+        MakeSpectaVariations(pdf, "Enubias", fOut, ND_or_FD, pdfTitle, -1);
+
+
         fOut->cd();
     }
 
@@ -228,6 +232,7 @@ int main(int argc, char* argv[]) {
             // Generate histograms with correct binning for each variable
             MakeSpectaVariations(pdf, "TrueNeutrinoEnergy", fOut, ND_or_FD, pdfTitle, p);
             MakeSpectaVariations(pdf, "RecoNeutrinoEnergy", fOut, ND_or_FD, pdfTitle, p);
+            MakeSpectaVariations(pdf, "Enubias", fOut, ND_or_FD, pdfTitle, p);
         }
         fOut->cd();
     }

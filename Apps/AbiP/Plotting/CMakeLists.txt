@@ -8,6 +8,7 @@ Compare_runplans.cpp
 PosteriorPredictive_forFD.cpp
 PosteriorPredictive_forND.cpp
 Post_xsec_diagnostics_withcorr.cpp
+Post_xsec_2D.cpp
 )
 
 # Add executables

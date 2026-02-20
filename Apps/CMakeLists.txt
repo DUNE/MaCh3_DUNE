@@ -9,6 +9,7 @@ foreach(app
 	Variations
 	SplineMaker
 	GetHessianMatrix
+	Fit_fakedata
       )
 
     add_executable(${app} ${app}.cpp)

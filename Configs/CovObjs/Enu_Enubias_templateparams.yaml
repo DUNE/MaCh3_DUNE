@@ -1,11 +1,6 @@
----
-ThrowMatrixOverride:
-  file: "/scratch/abipeake/MaCh3_DUNE_makingsplines/MaCh3_DUNE/CovMatrix_13thJan2026_alltemplateparameters.root"
-  mat_name: "xsec_cov"
-  check_names: False
 Systematics:
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -29,7 +24,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -53,7 +48,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -77,7 +72,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -101,7 +96,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -125,7 +120,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -149,7 +144,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -173,7 +168,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -197,7 +192,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -221,7 +216,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -245,7 +240,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -269,7 +264,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -293,7 +288,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -317,7 +312,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -341,7 +336,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -365,7 +360,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -389,7 +384,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -413,7 +408,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -437,7 +432,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -461,7 +456,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -485,7 +480,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -509,7 +504,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -533,7 +528,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -557,7 +552,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -581,7 +576,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -605,7 +600,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -629,7 +624,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -653,7 +648,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -677,7 +672,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -701,7 +696,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -725,7 +720,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -749,7 +744,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -773,7 +768,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -797,7 +792,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -821,7 +816,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -845,7 +840,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -869,7 +864,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -893,7 +888,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -917,7 +912,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -941,7 +936,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -965,7 +960,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -989,7 +984,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1013,7 +1008,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1037,7 +1032,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1061,7 +1056,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1085,7 +1080,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1109,7 +1104,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1133,7 +1128,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1157,7 +1152,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1181,7 +1176,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1205,7 +1200,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1229,7 +1224,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1253,7 +1248,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1277,7 +1272,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1301,7 +1296,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1325,7 +1320,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1349,7 +1344,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1373,7 +1368,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1397,7 +1392,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1421,7 +1416,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1445,7 +1440,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1469,7 +1464,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1493,7 +1488,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1517,7 +1512,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1541,7 +1536,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1565,7 +1560,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1589,7 +1584,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1613,7 +1608,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1637,7 +1632,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1661,7 +1656,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1685,7 +1680,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1709,7 +1704,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1733,7 +1728,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1757,7 +1752,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1781,7 +1776,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1805,7 +1800,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1829,7 +1824,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1853,7 +1848,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1877,7 +1872,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1901,7 +1896,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1925,7 +1920,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1949,7 +1944,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1973,7 +1968,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -1997,7 +1992,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2021,7 +2016,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2045,7 +2040,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2069,7 +2064,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2093,7 +2088,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2117,7 +2112,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2141,7 +2136,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2165,7 +2160,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2189,7 +2184,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2213,7 +2208,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2237,7 +2232,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2261,7 +2256,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2285,7 +2280,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2309,7 +2304,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2333,7 +2328,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2357,7 +2352,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2381,7 +2376,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2405,7 +2400,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2429,7 +2424,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2453,7 +2448,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2477,7 +2472,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2501,7 +2496,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2525,7 +2520,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2549,7 +2544,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2573,7 +2568,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2597,7 +2592,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2621,7 +2616,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2645,7 +2640,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2669,7 +2664,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2693,7 +2688,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2717,7 +2712,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2741,7 +2736,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2765,7 +2760,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2789,7 +2784,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2813,7 +2808,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2837,7 +2832,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2861,7 +2856,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2885,7 +2880,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2909,7 +2904,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2933,7 +2928,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2957,7 +2952,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -2981,7 +2976,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3005,7 +3000,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3029,7 +3024,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3053,7 +3048,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3077,7 +3072,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3101,7 +3096,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3125,7 +3120,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3149,7 +3144,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3173,7 +3168,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3197,7 +3192,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3221,7 +3216,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3245,7 +3240,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3269,7 +3264,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3293,7 +3288,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3317,7 +3312,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3341,7 +3336,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3365,7 +3360,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3389,7 +3384,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3413,7 +3408,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3437,7 +3432,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3461,7 +3456,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3485,7 +3480,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3509,7 +3504,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3533,7 +3528,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3557,7 +3552,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3581,7 +3576,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3605,7 +3600,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3629,7 +3624,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3653,7 +3648,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3677,7 +3672,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3701,7 +3696,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3725,7 +3720,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3749,7 +3744,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3773,7 +3768,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3797,7 +3792,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3821,7 +3816,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3845,7 +3840,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3869,7 +3864,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3893,7 +3888,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3917,7 +3912,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3941,7 +3936,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3965,7 +3960,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -3989,7 +3984,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4013,7 +4008,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4037,7 +4032,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4061,7 +4056,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4085,7 +4080,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4109,7 +4104,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4133,7 +4128,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4157,7 +4152,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4181,7 +4176,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4205,7 +4200,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4229,7 +4224,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4253,7 +4248,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4277,7 +4272,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4301,7 +4296,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4325,7 +4320,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4349,7 +4344,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4373,7 +4368,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4397,7 +4392,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4421,7 +4416,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4445,7 +4440,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4469,7 +4464,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4493,7 +4488,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4517,7 +4512,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4541,7 +4536,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4565,7 +4560,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4589,7 +4584,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4613,7 +4608,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4637,7 +4632,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4661,7 +4656,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4685,7 +4680,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4709,7 +4704,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4733,7 +4728,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4757,7 +4752,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4781,7 +4776,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4805,7 +4800,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4829,7 +4824,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4853,7 +4848,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4877,7 +4872,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4901,7 +4896,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4925,7 +4920,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4949,7 +4944,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4973,7 +4968,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -4997,7 +4992,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5021,7 +5016,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5045,7 +5040,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5069,7 +5064,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5093,7 +5088,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5117,7 +5112,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5141,7 +5136,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5165,7 +5160,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5189,7 +5184,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5213,7 +5208,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5237,7 +5232,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5261,7 +5256,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5285,7 +5280,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5309,7 +5304,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5333,7 +5328,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5357,7 +5352,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5381,7 +5376,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5405,7 +5400,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5429,7 +5424,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5453,7 +5448,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5477,7 +5472,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5501,7 +5496,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5525,7 +5520,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5549,7 +5544,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5573,7 +5568,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5597,7 +5592,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5621,7 +5616,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5645,7 +5640,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5669,7 +5664,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5693,7 +5688,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5717,7 +5712,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5741,7 +5736,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5765,7 +5760,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5789,7 +5784,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5813,7 +5808,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5837,7 +5832,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5861,7 +5856,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5885,7 +5880,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5909,7 +5904,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5933,7 +5928,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5957,7 +5952,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -5981,7 +5976,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6005,7 +6000,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6029,7 +6024,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6053,7 +6048,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6077,7 +6072,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6101,7 +6096,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6125,7 +6120,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6149,7 +6144,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6173,7 +6168,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6197,7 +6192,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6221,7 +6216,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6245,7 +6240,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6269,7 +6264,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6293,7 +6288,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6317,7 +6312,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6341,7 +6336,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6365,7 +6360,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6389,7 +6384,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6413,7 +6408,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6437,7 +6432,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6461,7 +6456,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6485,7 +6480,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6509,7 +6504,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6533,7 +6528,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6557,7 +6552,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6581,7 +6576,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6605,7 +6600,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6629,7 +6624,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6653,7 +6648,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6677,7 +6672,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6701,7 +6696,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6725,7 +6720,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6749,7 +6744,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6773,7 +6768,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6797,7 +6792,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6821,7 +6816,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6845,7 +6840,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6869,7 +6864,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6893,7 +6888,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6917,7 +6912,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6941,7 +6936,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6965,7 +6960,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -6989,7 +6984,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7013,7 +7008,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7037,7 +7032,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7061,7 +7056,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7085,7 +7080,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7109,7 +7104,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7133,7 +7128,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7157,7 +7152,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7181,7 +7176,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7205,7 +7200,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7229,7 +7224,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7253,7 +7248,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7277,7 +7272,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7301,7 +7296,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7325,7 +7320,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7349,7 +7344,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7373,7 +7368,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7397,7 +7392,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7421,7 +7416,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7445,7 +7440,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7469,7 +7464,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7493,7 +7488,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7517,7 +7512,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7541,7 +7536,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7565,7 +7560,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7589,7 +7584,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7613,7 +7608,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7637,7 +7632,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7661,7 +7656,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7685,7 +7680,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7709,7 +7704,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7733,7 +7728,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7757,7 +7752,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7781,7 +7776,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7805,7 +7800,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7829,7 +7824,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7853,7 +7848,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7877,7 +7872,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7901,7 +7896,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7925,7 +7920,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7949,7 +7944,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7973,7 +7968,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -7997,7 +7992,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8021,7 +8016,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8045,7 +8040,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8069,7 +8064,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8093,7 +8088,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8117,7 +8112,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8141,7 +8136,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8165,7 +8160,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8189,7 +8184,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8213,7 +8208,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8237,7 +8232,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8261,7 +8256,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8285,7 +8280,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8309,7 +8304,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8333,7 +8328,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8357,7 +8352,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8381,7 +8376,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8405,7 +8400,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8429,7 +8424,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8453,7 +8448,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8477,7 +8472,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8501,7 +8496,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8525,7 +8520,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8549,7 +8544,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8573,7 +8568,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8597,7 +8592,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8621,7 +8616,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8645,7 +8640,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8669,7 +8664,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8693,7 +8688,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8717,7 +8712,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8741,7 +8736,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8765,7 +8760,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8789,7 +8784,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8813,7 +8808,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8837,7 +8832,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8861,7 +8856,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8885,7 +8880,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8909,7 +8904,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8933,7 +8928,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8957,7 +8952,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -8981,7 +8976,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9005,7 +9000,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9029,7 +9024,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9053,7 +9048,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9077,7 +9072,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9101,7 +9096,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9125,7 +9120,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9149,7 +9144,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9173,7 +9168,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9197,7 +9192,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9221,7 +9216,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9245,7 +9240,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9269,7 +9264,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9293,7 +9288,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9317,7 +9312,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9341,7 +9336,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9365,7 +9360,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9389,7 +9384,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9413,7 +9408,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9437,7 +9432,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9461,7 +9456,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9485,7 +9480,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9509,7 +9504,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9533,7 +9528,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9557,7 +9552,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9581,7 +9576,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9605,7 +9600,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9629,7 +9624,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9653,7 +9648,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9677,7 +9672,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9701,7 +9696,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9725,7 +9720,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9749,7 +9744,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9773,7 +9768,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9797,7 +9792,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9821,7 +9816,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9845,7 +9840,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9869,7 +9864,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9893,7 +9888,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9917,7 +9912,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9941,7 +9936,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9965,7 +9960,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -9989,7 +9984,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10013,7 +10008,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10037,7 +10032,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10061,7 +10056,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10085,7 +10080,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10109,7 +10104,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10133,7 +10128,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10157,7 +10152,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10181,7 +10176,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10205,7 +10200,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10229,7 +10224,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10253,7 +10248,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10277,7 +10272,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10301,7 +10296,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10325,7 +10320,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10349,7 +10344,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10373,7 +10368,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10397,7 +10392,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10421,7 +10416,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10445,7 +10440,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10469,7 +10464,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10493,7 +10488,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10517,7 +10512,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10541,7 +10536,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10565,7 +10560,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10589,7 +10584,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10613,7 +10608,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10637,7 +10632,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10661,7 +10656,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10685,7 +10680,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10709,7 +10704,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10733,7 +10728,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10757,7 +10752,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10781,7 +10776,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10805,7 +10800,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10829,7 +10824,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10853,7 +10848,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10877,7 +10872,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10901,7 +10896,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10925,7 +10920,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10949,7 +10944,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10973,7 +10968,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -10997,7 +10992,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11021,7 +11016,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11045,7 +11040,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11069,7 +11064,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11093,7 +11088,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11117,7 +11112,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11141,7 +11136,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11165,7 +11160,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11189,7 +11184,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11213,7 +11208,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11237,7 +11232,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11261,7 +11256,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11285,7 +11280,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11309,7 +11304,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11333,7 +11328,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11357,7 +11352,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11381,7 +11376,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11405,7 +11400,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11429,7 +11424,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11453,7 +11448,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11477,7 +11472,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:
@@ -11501,7 +11496,7 @@ Systematics:
     Type: Norm
     ParameterGroup: Xsec
 - Systematic:
-    SampleNames: ["ND*" , "FD*"]
+    SampleNames: ["ND*" , "FD*", "*"]
     Error: 0.5
     FlatPrior: false
     KinematicCuts:

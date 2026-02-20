@@ -18,6 +18,84 @@
 #include "Fitters/MaCh3Factory.h"
 
 
+void PlotSigmaVariations(const std::string& filename,
+                         const std::vector<double>& sigmaVariations)
+{
+  TFile* file = TFile::Open(filename.c_str(), "READ");
+  if (!file || file->IsZombie()) {
+    MACH3LOG_ERROR("Could not open {}", filename);
+    return;
+  }
+
+  auto canvas = std::make_unique<TCanvas>("c", "c", 1000, 800);
+  canvas->SetGrid();
+
+  std::string pdfName = filename.substr(0, filename.find(".root")) + "_SigmaVar.pdf";
+  canvas->Print((pdfName + "[").c_str());
+
+  TIter parIter(file->GetListOfKeys());
+  TKey* parKey = nullptr;
+
+  while ((parKey = static_cast<TKey*>(parIter()))) {
+    if (std::string(parKey->GetClassName()) != "TDirectoryFile") continue;
+
+    TDirectory* parDir = file->GetDirectory(parKey->GetName());
+    std::string parName = parKey->GetName();
+
+    TIter sampIter(parDir->GetListOfKeys());
+    TKey* sampKey = nullptr;
+
+    while ((sampKey = static_cast<TKey*>(sampIter()))) {
+      if (std::string(sampKey->GetClassName()) != "TDirectoryFile") continue;
+
+      TDirectory* sampDir =
+          parDir->GetDirectory(sampKey->GetName());
+      std::string sampName = sampKey->GetName();
+
+      std::vector<TH1*> hists;
+      double maxY = 0;
+
+      for (size_t i = 0; i < sigmaVariations.size(); ++i) {
+        auto* h = sampDir->Get<TH1>(Form("Variation_%zu", i));
+        if (!h) continue;
+
+        h = static_cast<TH1*>(h->Clone());
+        h->SetDirectory(nullptr);
+
+        h->SetLineWidth(2);
+        h->SetLineColor(kBlack + i);
+        h->SetLineStyle(i == 3 ? kSolid : kDashed);
+
+        maxY = std::max(maxY, h->GetMaximum());
+        hists.push_back(h);
+      }
+
+      if (hists.empty()) continue;
+
+      canvas->Clear();
+      hists[0]->SetTitle(Form("%s – %s", parName.c_str(), sampName.c_str()));
+      hists[0]->SetMaximum(maxY * 1.2);
+      hists[0]->Draw("HIST");
+
+      for (size_t i = 1; i < hists.size(); ++i)
+        hists[i]->Draw("HIST SAME");
+
+      auto leg = std::make_unique<TLegend>(0.6, 0.6, 0.88, 0.88);
+      for (size_t i = 0; i < hists.size(); ++i)
+        leg->AddEntry(hists[i],
+                      Form("%+.0f#sigma", sigmaVariations[i]),
+                      "l");
+
+      leg->Draw();
+      canvas->Print(pdfName.c_str());
+
+      for (auto* h : hists) delete h;
+    }
+  }
+
+  canvas->Print((pdfName + "]").c_str());
+  file->Close();
+}
 
 
 int main(int argc, char * argv[]) {
@@ -106,5 +184,9 @@ int main(int argc, char * argv[]) {
   }
 
   File->Close();
+  
+
+  PlotSigmaVariations(OutputFileName, sigmaVariations);
+
   
 }

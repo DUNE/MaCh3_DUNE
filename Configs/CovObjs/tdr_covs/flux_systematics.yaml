@@ -1,7 +1,7 @@
 Systematics:
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -10,7 +10,7 @@ Systematics:
     ParameterBounds:
     - -3
     - 3
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -19,7 +19,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -28,7 +28,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -37,7 +37,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -46,7 +46,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -55,7 +55,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -64,7 +64,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -73,7 +73,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -82,7 +82,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -91,7 +91,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -100,7 +100,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -109,7 +109,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -118,7 +118,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -127,7 +127,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -136,7 +136,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -154,7 +154,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -163,7 +163,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -172,7 +172,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -181,7 +181,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -190,7 +190,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -199,7 +199,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -208,7 +208,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -217,7 +217,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -226,7 +226,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -235,7 +235,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -244,7 +244,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -253,7 +253,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -262,7 +262,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -271,7 +271,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -280,7 +280,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -289,7 +289,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -298,7 +298,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -307,7 +307,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -316,7 +316,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -325,7 +325,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -334,7 +334,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -343,7 +343,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -352,7 +352,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -361,7 +361,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -370,7 +370,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -379,7 +379,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -388,7 +388,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -397,7 +397,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -406,7 +406,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -415,7 +415,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -424,7 +424,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -433,7 +433,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -442,7 +442,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -451,7 +451,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -460,7 +460,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -469,7 +469,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -478,7 +478,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -487,7 +487,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -496,7 +496,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -505,7 +505,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -514,7 +514,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -523,7 +523,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -532,7 +532,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -541,7 +541,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -550,7 +550,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -559,7 +559,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -568,7 +568,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -577,7 +577,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -586,7 +586,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -595,7 +595,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -604,7 +604,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -613,7 +613,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -622,7 +622,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -631,7 +631,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -640,7 +640,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -649,7 +649,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -658,7 +658,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -667,7 +667,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -676,7 +676,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -685,7 +685,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -694,7 +694,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -703,7 +703,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -712,7 +712,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -721,7 +721,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -730,7 +730,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -739,7 +739,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -748,7 +748,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -757,7 +757,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -766,7 +766,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -775,7 +775,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -784,7 +784,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -793,7 +793,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -802,7 +802,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -811,7 +811,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -820,7 +820,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -829,7 +829,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -838,7 +838,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -847,7 +847,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -856,7 +856,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -865,7 +865,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -874,7 +874,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -883,7 +883,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -892,7 +892,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -901,7 +901,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -910,7 +910,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -919,7 +919,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -928,7 +928,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -937,7 +937,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -946,7 +946,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -955,7 +955,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -964,7 +964,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -973,7 +973,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -982,7 +982,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -991,7 +991,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1000,7 +1000,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -1009,7 +1009,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1018,7 +1018,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -1027,7 +1027,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1036,7 +1036,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -1045,7 +1045,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1054,7 +1054,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -1063,7 +1063,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1072,7 +1072,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -1081,7 +1081,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1090,7 +1090,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -1099,7 +1099,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1108,7 +1108,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -1117,7 +1117,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1126,7 +1126,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -1135,7 +1135,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1144,7 +1144,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -1153,7 +1153,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1162,7 +1162,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0
@@ -1171,7 +1171,7 @@ Systematics:
     Type: Functional
 - Systematic:
     SampleNames:
-    - "*"
+    - "OffAxisND"
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1180,7 +1180,7 @@ Systematics:
     ParameterBounds:
     - -3.0
     - 3.0
-    ParameterGroup: FluxSys
+    ParameterGroup: Flux
     ParameterValues:
       Generated: 0.0
       PreFitValue: 0.0

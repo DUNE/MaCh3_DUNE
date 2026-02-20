@@ -37,6 +37,7 @@ public:
   X(TrueW)                                                                 \
   X(Mode)                                                                      \
   X(IsFHC)                                                                     \
+  X(isFHC)                                                                     \
   X(ELepRec)                                                                   \
   X(Enubias)                                                                   \
   X(isCC)                                                                      \
@@ -127,6 +128,8 @@ protected:
   const double *GetPointerToKinematicParameter(KinematicTypes KinPar,
                                                int iEvent);
 
+
+  void FillSplineBins();
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicParameter Kinematic parameter name as string (gets cast ->
   /// int)
