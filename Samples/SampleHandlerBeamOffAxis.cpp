@@ -570,6 +570,9 @@ RegisterIndividualFunctionalParameter(
           OffAxisFluxUncertaintyHelper::Get().GetFocussingParamName(par_it),
           int(kNFuncPars + par_it),
           [this, par_it](const double *par, std::size_t iEvent) {
+            if(dunemcSamples[iEvent].syst.flux_focussing_ratio.size() <= par_it){
+              return 1;
+            }
             dunemcSamples[iEvent].flux_w *=
                 (1 +
                  (*par) *
@@ -587,6 +590,9 @@ RegisterIndividualFunctionalParameter(
               OffAxisFluxUncertaintyHelper::Get().GetNFocussingParams() +
               par_it),
           [this, par_it](const double *par, std::size_t iEvent) {
+            if(dunemcSamples[iEvent].syst.flux_hadprod_ratio.size() <= par_it){
+              return 1;
+            }
             dunemcSamples[iEvent].flux_w *=
                 (1 + (*par) *
                          dunemcSamples[iEvent].syst.flux_hadprod_ratio[par_it]);
@@ -842,7 +848,7 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
     !std::isfinite(*eOther);
 
     if (badHad) {
-        continue;
+      dunemcSamples[iEvent].truth.eHad_av = -999;
     } else {
         dunemcSamples[iEvent].truth.eHad_av =
             *eP + *ePip + *ePim + *ePi0 + *eOther + (*nipi0) * 0.1349;
