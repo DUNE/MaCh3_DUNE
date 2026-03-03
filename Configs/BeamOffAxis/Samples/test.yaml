@@ -1,0 +1,51 @@
+SampleTitle: "OffAxisND"
+SampleType: "OffAxisND"
+SampleName: "ND"
+
+POT: 2.95895e+19
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
+
+Binning:
+  XVarStr: "RecoNeutrinoEnergy"
+  XVarBins: [0.0000, 0.1364, 0.2727, 0.4091, 0.5455, 0.6818, 0.8182, 0.9545, 1.0909, 1.2273, 1.3636, 1.5000, 1.6364, 1.7727, 1.9091, 2.0455, 2.1818, 2.3182, 2.4545, 2.5909, 2.7273, 2.8636, 3.0000, 3.25, 3.5, 4, 6, 10.0]
+  YVarStr: "ELepRec"
+  YVarBins: [0.0000, 0.1364, 0.2727, 0.4091, 0.5455, 0.6818, 0.8182, 0.9545, 1.0909, 1.2273, 1.3636, 1.5000, 1.6364, 1.7727, 1.9091, 2.0455, 2.1818, 2.3182, 2.4545, 2.5909, 2.7273, 2.8636, 3.0000, 3.25, 3.5, 4, 6, 10.0]
+
+DUNESampleBools:
+  isFHC: 1
+  iselike: no
+
+InputFiles:
+  PrepSplineFile: false    # set true if generating new splines
+  mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+  mtuplesuffix: ".root"
+  splineprefix: ""
+  splinesuffix: ""
+
+BinningFile: "/scratch/abipeake/MaCh3_DUNE_makingsplines/MaCh3_DUNE/Configs/TutorialConfigs/TutorialBinning.yaml"
+
+SubSamples:
+  - Name: "CAFv7_0m_130_FHC"
+    LatexName: "CAFv7_0m_130_FHC"
+    mtuplefile: "CAFv7_0m_130_FHC"
+    splinefile: ""          # will be generated
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_0m_131_FHC"
+    LatexName: "CAFv7_0m_131_FHC"
+    mtuplefile: "CAFv7_0m_131_FHC"
+    splinefile: ""          # will be generated
+    samplevecno: 1
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_0m_132_FHC"
+    LatexName: "CAFv7_0m_132_FHC"
+    mtuplefile: "CAFv7_0m_132_FHC"
+    splinefile: ""          # will be generated
+    samplevecno: 2
+    nutype: 14
+    oscnutype: 14
+    signal: false

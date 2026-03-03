@@ -1,0 +1,68 @@
+SampleTitle: "OffAxisND_0m"
+SampleType: "OffAxisND"   # can stay the same
+SampleName: "OffAxisND"
+
+
+POT: 1.10e+21
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
+
+# Downsample: 0.01
+
+Binning:
+  #XVarStr: "TrueNeutrinoEnergy"
+  #XVarBins: [0.0, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0, 3.25, 3.5, 3.75, 4.0, 5.0, 6.0, 10.0]
+  XVarStr: "RecoNeutrinoEnergy"
+  XVarBins: [0.0000, 0.1364, 0.2727, 0.4091, 0.5455, 0.6818, 0.8182, 0.9545, 1.0909, 1.2273, 1.3636, 1.5000, 1.6364, 1.7727, 1.9091, 2.0455, 2.1818, 2.3182, 2.4545, 2.5909, 2.7273, 2.8636, 3.0000, 3.25, 3.5, 4.0, 6.0, 10.0]
+  #XVarStr: "ELepRec"
+  #XVarBins: [0.0000, 0.1364, 0.2727, 0.4091, 0.5455, 0.6818, 0.8182, 0.9545, 1.0909, 1.2273, 1.3636, 1.5000, 1.6364, 1.7727, 1.9091, 2.0455, 2.1818, 2.3182, 2.4545, 2.5909, 2.7273, 2.8636, 3.0000, 3.25, 3.5, 4.0, 6.0, 10.0]
+  # XVarStr: "RecoNeutrinoEnergy" #TrueNeutrinoEnergy #"RecoNeutrinoEnergy"
+  # XVarBins: [0.0000, 0.1364, 0.2727, 0.4091, 0.5455, 0.6818, 0.8182, 0.9545, 1.0909, 1.2273, 1.3636, 1.5000, 1.6364, 1.7727, 1.9091, 2.0455, 2.1818, 2.3182, 2.4545, 2.5909, 2.7273, 2.8636, 3.0000,3.25,3.5,4, 6, 10.0]
+  # YVarStr: "ELepRec" #TrueNeutrinoEnergy #"RecoNeutrinoEnergy"
+  # YVarBins: [0.0000, 0.1364, 0.2727, 0.4091, 0.5455, 0.6818, 0.8182, 0.9545, 1.0909, 1.2273, 1.3636, 1.5000, 1.6364, 1.7727, 1.9091, 2.0455, 2.1818, 2.3182, 2.4545, 2.5909, 2.7273, 2.8636, 3.0000,3.25,3.5, 4, 6, 10.0]
+ 
+DUNESampleBools:
+  isFHC: 1
+  iselike: no
+
+SelectionCuts:
+  - KinematicStr: "isCC"
+    Bounds: [ 0.8, 1.4 ]
+  
+InputFiles:
+  PrepSplineFile: true  # Change to true
+  mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+  mtuplesuffix: ".root"
+  splineprefix: "" #"/scratch/abipeake/MaCh3_DUNE_makingsplines/MaCh3_DUNE/"  # Add path to spline directory
+  splinesuffix: "" #"_splines.root"          
+
+NuOsc:
+  NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
+  EqualBinningPerOscChannel: false
+BinningFile: "Configs/TutorialConfigs/TutorialBinning.yaml"
+
+
+SubSamples:
+  - Name: "CAFv7_0m_130_FHC"
+    LatexName: "CAFv7_0m_130_FHC"
+    mtuplefile: "CAFv7_0m_130_FHC"
+    splinefile:  "" #"OffAxisND_0m"
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_0m_131_FHC"
+    LatexName: "CAFv7_0m_131_FHC"
+    mtuplefile: "CAFv7_0m_131_FHC"
+    splinefile:  "" #"OffAxisND_0m"
+    samplevecno: 1
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_0m_132_FHC"
+    LatexName: "CAFv7_0m_132_FHC"
+    mtuplefile: "CAFv7_0m_132_FHC"
+    splinefile:  "" #"OffAxisND_0m"
+    samplevecno: 2
+    nutype: 14
+    oscnutype: 14
+    signal: false

@@ -92,10 +92,10 @@ esac
 # Number of threads to use for multi-threading jobs
 # Change these if you want!
 # Number of threads, memory, and GPUs
-NTHREADS=8
-RAM=10
+NTHREADS=16
+RAM=20
 NGPU=0
-SEC_PER_STEP=0.05
+SEC_PER_STEP=0.1
 
 
 ###########################################################
@@ -210,7 +210,7 @@ fi
 
 
 # Number of threads, memory, and GPUs
-NTHREADS=8
+NTHREADS=16
 RAM=72
 NGPU=0
 SEC_PER_STEP=0.3
@@ -228,7 +228,7 @@ WALLTIME=$(echo "${SEC_PER_STEP} * ${NSTEPS} + 1800" | bc)  # 1800 = 30 min setu
 
 # Optional: Cap max walltime to 8 hours (28800 sec) for better scheduling
 #MAX_WALLTIME=28800  #86400 #28800 #86400 #28800
-MAX_WALLTIME=86400 #432000 #172800  # 24 hours
+MAX_WALLTIME=432000 #432000 #172800  # 24 hours
 if (( $(echo "$WALLTIME > $MAX_WALLTIME" | bc -l) )); then
   echo "⚠️  Walltime capped at 8 hours to improve queue time"
  WALLTIME=$MAX_WALLTIME
@@ -303,7 +303,7 @@ fi
 ##################
 # Output directory
 #OutputDir=${ScratchDir}/"FinalChains/"${FitName}
-OutputDir=${ScratchDir}/"DecemberChains/"${FitName}
+OutputDir=${ScratchDir}/"March2026/"${FitName}
 
 counter=0
 # Check to see if this path exists, display a warning if exists

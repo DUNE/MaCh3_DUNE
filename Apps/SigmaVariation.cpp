@@ -11,6 +11,7 @@
 #include <TLegend.h>
 #include <TColor.h>
 #include <TMath.h>
+#include <TH3.h>
 #include "TError.h"
 
 #include "Samples/MaCh3DUNEFactory.h"
@@ -136,52 +137,113 @@ int main(int argc, char * argv[]) {
 
   std::string OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
   TFile* File = TFile::Open(OutputFileName.c_str(),"RECREATE");
-  
-  for (ParameterHandlerBase* CovObj: CovObjs) {
-    MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",CovObj->GetName());
-    
+
+  for (ParameterHandlerBase* CovObj : CovObjs) {
+    MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}", CovObj->GetName());
+
     int nPars = CovObj->GetNumParams();
-    for (int iPar=0;iPar<nPars;iPar++) {
-      std::string ParName = CovObj->GetParFancyName(iPar);
-      double VarInit = CovObj->GetParInit(iPar);
-      double VarSigma = CovObj->GetDiagonalError(iPar);
-      
-      MACH3LOG_INFO("\tParameter : {:<30} - Variations around value : {:<10.7f} , in units of 1 Sigma : {:<10.7f}",ParName,VarInit,VarSigma);
+    for (int iPar = 0; iPar < nPars; iPar++) {
+        std::string ParName = CovObj->GetParFancyName(iPar);
+        double VarInit = CovObj->GetParInit(iPar);
+        double VarSigma = CovObj->GetDiagonalError(iPar);
 
-      File->cd();
-      File->mkdir(ParName.c_str());
-      File->cd(ParName.c_str());
-      
-      for (size_t iSigVar=0;iSigVar<sigmaVariations.size();iSigVar++) {
-	double VarVal = VarInit + sigmaVariations[iSigVar]*VarSigma;
-	if (VarVal < CovObj->GetLowerBound(iPar)) VarVal = CovObj->GetLowerBound(iPar);
-	if (VarVal > CovObj->GetUpperBound(iPar)) VarVal = CovObj->GetUpperBound(iPar);
-	
-	MACH3LOG_INFO("\t\tVariation {:<5.3f} - Parameter Value : {:<10.7f}",sigmaVariations[iSigVar],VarVal);
-	CovObj->SetParProp(iPar,VarVal);
+        MACH3LOG_INFO("\tParameter : {:<30} - Variations around value : {:<10.7f} , in units of 1 Sigma : {:<10.7f}",
+                      ParName, VarInit, VarSigma);
 
-	for (size_t iSample=0;iSample<DUNEPdfs.size();iSample++) {
-	  std::string SampleName = DUNEPdfs[iSample]->GetTitle();
-	  
-	  File->cd(ParName.c_str());
-	  if (iSigVar == 0) {
-	    File->mkdir((ParName+"/"+SampleName).c_str());
-	  }
-	  File->cd((ParName+"/"+SampleName).c_str());
-	  
-	  DUNEPdfs[iSample]->Reweight();
-	  TH1* Hist = DUNEPdfs[iSample]->GetMCHist(DUNEPdfs[iSample]->GetNDim());
-	  MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}",SampleName,Hist->Integral());
-	  
-	  Hist->Write(Form("Variation_%i",(int)iSigVar));
-	}
-      }
+        File->cd();
+        File->mkdir(ParName.c_str());
+        File->cd(ParName.c_str());
 
-      CovObj->SetParProp(iPar,VarInit);
+        for (size_t iSigVar = 0; iSigVar < sigmaVariations.size(); iSigVar++) {
+            double VarVal = VarInit + sigmaVariations[iSigVar] * VarSigma;
+            if (VarVal < CovObj->GetLowerBound(iPar)) VarVal = CovObj->GetLowerBound(iPar);
+            if (VarVal > CovObj->GetUpperBound(iPar)) VarVal = CovObj->GetUpperBound(iPar);
+
+            MACH3LOG_INFO("\t\tVariation {:<5.3f} - Parameter Value : {:<10.7f}", sigmaVariations[iSigVar], VarVal);
+            CovObj->SetParProp(iPar, VarVal);
+
+            for (size_t iSample = 0; iSample < DUNEPdfs.size(); iSample++) {
+                std::string SampleName = DUNEPdfs[iSample]->GetTitle();
+
+                File->cd(ParName.c_str());
+                if (iSigVar == 0) {
+                    File->mkdir((ParName + "/" + SampleName).c_str());
+                }
+                File->cd((ParName + "/" + SampleName).c_str());
+
+                DUNEPdfs[iSample]->Reweight();
+                TH1* HistOrig = DUNEPdfs[iSample]->GetMCHist(DUNEPdfs[iSample]->GetNDim());
+                TH1* HistToWrite = nullptr;
+
+                // Project to X if 2D or 3D
+                if (HistOrig->InheritsFrom("TH3")) {
+                    HistToWrite = static_cast<TH3*>(HistOrig)->ProjectionX(Form("%s_projX", HistOrig->GetName()));
+                } else if (HistOrig->InheritsFrom("TH2")) {
+                    HistToWrite = static_cast<TH2*>(HistOrig)->ProjectionX(Form("%s_projX", HistOrig->GetName()));
+                } else {
+                    HistToWrite = static_cast<TH1*>(HistOrig->Clone());
+                    HistToWrite->SetDirectory(nullptr);
+                }
+
+                MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}", SampleName, HistToWrite->Integral());
+
+                HistToWrite->Write(Form("Variation_%i", (int)iSigVar));
+                delete HistToWrite;  // Prevent memory leak
+            }
+        }
+
+        // Restore original parameter value
+        CovObj->SetParProp(iPar, VarInit);
     }
 
     MACH3LOG_INFO("=======================================================");
-  }
+}
+  
+  // for (ParameterHandlerBase* CovObj: CovObjs) {
+  //   MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",CovObj->GetName());
+    
+  //   int nPars = CovObj->GetNumParams();
+  //   for (int iPar=0;iPar<nPars;iPar++) {
+  //     std::string ParName = CovObj->GetParFancyName(iPar);
+  //     double VarInit = CovObj->GetParInit(iPar);
+  //     double VarSigma = CovObj->GetDiagonalError(iPar);
+      
+  //     MACH3LOG_INFO("\tParameter : {:<30} - Variations around value : {:<10.7f} , in units of 1 Sigma : {:<10.7f}",ParName,VarInit,VarSigma);
+
+  //     File->cd();
+  //     File->mkdir(ParName.c_str());
+  //     File->cd(ParName.c_str());
+      
+  //     for (size_t iSigVar=0;iSigVar<sigmaVariations.size();iSigVar++) {
+	// double VarVal = VarInit + sigmaVariations[iSigVar]*VarSigma;
+	// if (VarVal < CovObj->GetLowerBound(iPar)) VarVal = CovObj->GetLowerBound(iPar);
+	// if (VarVal > CovObj->GetUpperBound(iPar)) VarVal = CovObj->GetUpperBound(iPar);
+	
+	// MACH3LOG_INFO("\t\tVariation {:<5.3f} - Parameter Value : {:<10.7f}",sigmaVariations[iSigVar],VarVal);
+	// CovObj->SetParProp(iPar,VarVal);
+
+	// for (size_t iSample=0;iSample<DUNEPdfs.size();iSample++) {
+	//   std::string SampleName = DUNEPdfs[iSample]->GetTitle();
+	  
+	//   File->cd(ParName.c_str());
+	//   if (iSigVar == 0) {
+	//     File->mkdir((ParName+"/"+SampleName).c_str());
+	//   }
+	//   File->cd((ParName+"/"+SampleName).c_str());
+	  
+	//   DUNEPdfs[iSample]->Reweight();
+	//   TH1* Hist = DUNEPdfs[iSample]->GetMCHist(DUNEPdfs[iSample]->GetNDim());
+	//   MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}",SampleName,Hist->Integral());
+	  
+	//   Hist->Write(Form("Variation_%i",(int)iSigVar));
+	// }
+  //     }
+
+  //     CovObj->SetParProp(iPar,VarInit);
+  //   }
+
+  //   MACH3LOG_INFO("=======================================================");
+  // }
 
   File->Close();
   

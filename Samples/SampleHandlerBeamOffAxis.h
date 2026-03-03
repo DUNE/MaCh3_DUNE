@@ -25,6 +25,8 @@ public:
                    std::vector<std::vector<int>> ParamModes,
                    std::vector<double> TrueEBins);
 
+  
+
   // below is ugly, but lets us define it only once and get the enum and both
   // maps https://en.wikipedia.org/wiki/X_macro
 

@@ -10,6 +10,9 @@ foreach(app
 	SplineMaker
 	GetHessianMatrix
 	Fit_fakedata
+	SigmaVarTutorial
+	MakeCovarianceMatrix
+	MakeCovarianceMatrix_compressed
       )
 
     add_executable(${app} ${app}.cpp)
