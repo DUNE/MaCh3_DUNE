@@ -13,3 +13,4 @@ install(TARGETS FluxSystematics
         EXPORT mach3dune-targets
         LIBRARY DESTINATION lib/
         PUBLIC_HEADER DESTINATION include/Systematics/Flux)
+install(FILES flux_variations_FD_and_PRISM_2023.root DESTINATION Systematics/Flux)
