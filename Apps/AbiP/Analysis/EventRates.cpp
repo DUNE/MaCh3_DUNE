@@ -34,27 +34,33 @@ void Write1DHistogramsToPdf(std::string OutFileName, std::vector<TH1*> Histogram
   c1->cd();
   c1->Print(std::string(OutFileName+"[").c_str());
   for(auto Hist : Histograms){
-    Hist->Draw("HIST");
+    Hist->Draw("HIST COLZ");
     c1->Print(OutFileName.c_str());
   }
   c1->Print(std::string(OutFileName+"]").c_str());
 }
 
 int main(int argc, char * argv[]) {
+  gErrorIgnoreLevel = kFatal;
   MaCh3Utils::MaCh3Usage(argc, argv);
   auto fitMan = MaCh3ManagerFactory(argc, argv);
 
-  //###############################################################################################################################
+  //############################################################################################################################
   //Create SampleHandlerFD objects
-  
+
   ParameterHandlerGeneric* xsec = nullptr;
-  
+
   std::vector<SampleHandlerFD*> DUNEPdfs;
   MakeMaCh3DuneInstance(fitMan, DUNEPdfs, xsec);
 
   //###############################################################################################################################
   //Perform reweight and print total integral
-
+  //For fake data study
+   xsec->PrintNominalCurrProp();
+   std::cout<< "Fixing fake data syst... " << std::endl;
+   xsec->ToggleFixParameter("NuWroFakeDataWeight"); //take fake data systematic parameters and fix them to 1.0
+   xsec->SetPar(xsec->GetParIndex("NuWroFakeDataWeight"), 0.0);
+ 
   std::vector<TH1*> DUNEHists;
   for(auto Sample : DUNEPdfs){
     Sample->Reweight();
@@ -66,8 +72,9 @@ int main(int argc, char * argv[]) {
     Sample->PrintIntegral();
   }
 
+  xsec->PrintNominalCurrProp();
   std::string OutFileName = GetFromManager<std::string>(fitMan->raw()["General"]["OutputFile"], "EventRatesOutput.root");
-  Write1DHistogramsToFile(OutFileName, DUNEHists); 
+  Write1DHistogramsToFile(OutFileName, DUNEHists);
   Write1DHistogramsToPdf(OutFileName, DUNEHists);
 
   //###############################################################################################################################
@@ -76,26 +83,26 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("Oscillation Mode Breakdown:");
-  
-  for(auto Sample : DUNEPdfs) {
-    MACH3LOG_INFO("======================");
-    int nOscChannels = Sample->GetNOscChannels();
-    for (int iOscChan=0;iOscChan<nOscChannels;iOscChan++) {
-      std::vector< KinematicCut > SelectionVec;
 
-      KinematicCut SelecChannel;
-      SelecChannel.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString("OscillationChannel");
-      SelecChannel.LowerBound = iOscChan;
-      SelecChannel.UpperBound = iOscChan+1;
-      SelectionVec.push_back(SelecChannel);
-      
-      TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName(),SelectionVec);
-      MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetTitle(),Sample->GetFlavourName(iOscChan),Hist->Integral());
-    }
+  // for(auto Sample : DUNEPdfs) {
+  //   MACH3LOG_INFO("======================");
+  //   int nOscChannels = Sample->GetNOscChannels();
+  //   for (int iOscChan=0;iOscChan<nOscChannels;iOscChan++) {
+  //     std::vector< KinematicCut > SelectionVec;
 
-    TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName());
-    MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetTitle(),Hist->Integral());
-  }
+  //     KinematicCut SelecChannel;
+  //     SelecChannel.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString("OscillationChannel");
+  //     SelecChannel.LowerBound = iOscChan;
+  //     SelecChannel.UpperBound = iOscChan+1;
+  //     SelectionVec.push_back(SelecChannel);
+
+  //     TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName(),SelectionVec);
+  //     MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetTitle(),Sample->GetFlavourName(iOscChan),Hist->Integral());
+  //   }
+
+  //   TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName());
+  //   MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetTitle(),Hist->Integral());
+  // }
 
   //###############################################################################################################################
   //Make interaction channel breakdown
