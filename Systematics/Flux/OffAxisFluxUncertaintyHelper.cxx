@@ -8,6 +8,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <cmath>
 
 static OffAxisFluxUncertaintyHelper *globalFluxHelper = nullptr;
 
@@ -423,7 +424,7 @@ OffAxisFluxUncertaintyHelper::GetNDOffAxisShifts(TFile *f, std::string nd_dir,
 int OffAxisFluxUncertaintyHelper::GetFocussingBin(int nu_pdg, double enu_GeV,
                                                   double off_axis_pos_m,
                                                   int nu_config) const {
-  off_axis_pos_m = std::fabs(off_axis_pos_m);   
+  off_axis_pos_m = std::fabs(off_axis_pos_m);
   if (nu_config < kFD_numu_numode) {
     // Sign flip in off axis position
     int bin_oa = focussing.OffAxisTAxes.front()->FindFixBin(off_axis_pos_m);
@@ -461,7 +462,7 @@ int OffAxisFluxUncertaintyHelper::GetFocussingBin(int nu_pdg, double enu_GeV,
 int OffAxisFluxUncertaintyHelper::GetHadProdBin(int nu_pdg, double enu_GeV,
                                                 double off_axis_pos_m,
                                                 int nu_config) const {
-     off_axis_pos_m = std::fabs(off_axis_pos_m);                                            
+     off_axis_pos_m = std::fabs(off_axis_pos_m);
   if (nu_config < kFD_numu_numode) {
     int bin_oa =
         hadprod.OffAxisTAxes.front()[nu_config]->FindFixBin(off_axis_pos_m);
