@@ -148,7 +148,11 @@ if(NOT MaCh3_FOUND)
   endif()
 
   if(NOT DEFINED MaCh3_DEBUG_ENABLED)
-    set(MaCh3_DEBUG_ENABLED FALSE)
+    if(DEFINED CMAKE_BUILD_TYPE AND "${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+      set(MaCh3_DEBUG_ENABLED TRUE)
+    else()
+      set(MaCh3_DEBUG_ENABLED FALSE)
+    endif()
   endif()
 
   if(NOT DEFINED MaCh3_MULTITHREAD_ENABLED)
