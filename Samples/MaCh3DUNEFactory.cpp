@@ -3,10 +3,10 @@
 #ifdef BUILD_NDGAR
 #include "Samples/SampleHandlerBeamNDGAr.h"
 #else
-#include "Samples/SampleHandlerBeamFD.h"
-#include "Samples/SampleHandlerBeamND.h"
+// #include "Samples/SampleHandlerBeamFD.h"
+// #include "Samples/SampleHandlerBeamND.h"
 #include "Samples/SampleHandlerBeamOffAxis.h"
-#include "Samples/SampleHandlerAtm.h"
+// #include "Samples/SampleHandlerAtm.h"
 #endif
 
 SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, ParameterHandlerGeneric* &xsec, const std::shared_ptr<OscillationHandler>&  BeamOscillator_, const std::shared_ptr<OscillationHandler>&  AtmOscillator_, TMatrixD* NDCov_FHC, TMatrixD* NDCov_RHC) {
@@ -27,28 +27,29 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
 
   #else // NORMAL DUNE BUILD
 
-    if (SampleType == "BeamFD") {
-      Sample = new SampleHandlerBeamFD(SampleConfig, xsec, BeamOscillator_);
-    }
-    else if (SampleType == "BeamND") {
+    // if (SampleType == "BeamFD") {
+    //   Sample = new SampleHandlerBeamFD(SampleConfig, xsec, BeamOscillator_);
+    // }
+    // else if (SampleType == "BeamND") {
 
-      if (NDCov_FHC == nullptr || NDCov_RHC == nullptr) {
-        MACH3LOG_ERROR("NDCov objects are not defined");
-        throw MaCh3Exception(__FILE__, __LINE__);
-      }
+    //   if (NDCov_FHC == nullptr || NDCov_RHC == nullptr) {
+    //     MACH3LOG_ERROR("NDCov objects are not defined");
+    //     throw MaCh3Exception(__FILE__, __LINE__);
+    //   }
 
-      manager* tempSampleManager = new manager(SampleConfig.c_str());
-      int isFHC = tempSampleManager->raw()["DUNESampleBools"]["isFHC"].as<int>();
-      TMatrixD* NDCov = (isFHC ? NDCov_FHC : NDCov_RHC);
+    //   manager* tempSampleManager = new manager(SampleConfig.c_str());
+    //   int isFHC = tempSampleManager->raw()["DUNESampleBools"]["isFHC"].as<int>();
+    //   TMatrixD* NDCov = (isFHC ? NDCov_FHC : NDCov_RHC);
 
-      Sample = new SampleHandlerBeamND(SampleConfig, xsec, NDCov);
-    }
-    else if (SampleType == "OffAxisND") {
+    //   Sample = new SampleHandlerBeamND(SampleConfig, xsec, NDCov);
+    // }
+    // else
+    if (SampleType == "OffAxisND") {
       Sample = new SampleHandlerBeamOffAxis(SampleConfig, xsec, nullptr);
     }
-    else if (SampleType == "Atm") {
-      Sample = new SampleHandlerAtm(SampleConfig, xsec, AtmOscillator_);
-    }
+    // else if (SampleType == "Atm") {
+    //   Sample = new SampleHandlerAtm(SampleConfig, xsec, AtmOscillator_);
+    // }
     else {
       MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
       throw MaCh3Exception(__FILE__, __LINE__);
@@ -101,7 +102,7 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
 }
 // }
 
-void MakeMaCh3DuneInstance(std::unique_ptr<manager>& FitManager, std::vector<SampleHandlerFD*> &DUNEPdfs, ParameterHandlerGeneric *&xsec){
+void MakeMaCh3DuneInstance(std::unique_ptr<Manager>& FitManager, std::vector<SampleHandlerFD*> &DUNEPdfs, ParameterHandlerGeneric *&xsec){
 
   // there's a check inside the manager class that does this; left here for demonstrative purposes
   if (FitManager == nullptr) {
@@ -211,7 +212,7 @@ void MakeMaCh3DuneInstance(std::unique_ptr<manager>& FitManager, std::vector<Sam
 
   for(unsigned int Sample_i = 0 ; Sample_i < DUNESampleConfigs.size() ; Sample_i++){
 
-    manager* tempSampleManager = new manager(DUNESampleConfigs[Sample_i].c_str());
+    Manager* tempSampleManager = new Manager(DUNESampleConfigs[Sample_i].c_str());
     std::string SampleType = tempSampleManager->raw()["SampleType"].as<std::string>();
 
     DUNEPdfs.push_back(GetMaCh3DuneInstance(SampleType, DUNESampleConfigs[Sample_i], xsec, BeamOscHandler, AtmOscHandler, NDCov_FHC, NDCov_RHC));

@@ -11,16 +11,16 @@ if (Build_NDGAr)
 else()
   message(STATUS "Building Atm, BeamFD and BeamND samples")
   set(HEADERS
-    SampleHandlerAtm.h
-    SampleHandlerBeamFD.h
-    SampleHandlerBeamND.h
+    # SampleHandlerAtm.h
+    # SampleHandlerBeamFD.h
+    # SampleHandlerBeamND.h
     SampleHandlerBeamOffAxis.h
     MaCh3DUNEFactory.h
   )
   set(SOURCE_FILES
-    SampleHandlerAtm.cpp
-    SampleHandlerBeamFD.cpp
-    SampleHandlerBeamND.cpp
+    # SampleHandlerAtm.cpp
+    # SampleHandlerBeamFD.cpp
+    # SampleHandlerBeamND.cpp
     SampleHandlerBeamOffAxis.cpp
     MaCh3DUNEFactory.cpp
   )
