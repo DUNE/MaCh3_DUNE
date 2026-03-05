@@ -4,9 +4,14 @@
 
 #include "Samples/SampleHandlerFD.h"
 
-#include "Samples/StructsDUNE.h"
+#include "Samples/BeamOffAxis/EventInfo.h"
+#include "Samples/BeamOffAxis/Projections.h"
+#include "Samples/BeamOffAxis/Utility.h"
+
+namespace dune::beamoffaxis {
+
 /// @brief Base class for handling FD Beam samples
-class SampleHandlerBeamOffAxis : virtual public SampleHandlerFD {
+class SampleHandlerBeamOffAxis : public SampleHandlerFD {
 public:
   /// @brief SampleHandler FD beam Constructor
   /// @param mc_version Config Name
@@ -15,100 +20,47 @@ public:
   /// @param Oscillator_ Shared Oscillation Handler object
   SampleHandlerBeamOffAxis(
       std::string mc_version, ParameterHandlerGeneric *xsec_cov,
-      const std::shared_ptr<OscillationHandler> &Oscillator_);
+      const std::shared_ptr<OscillationHandler> &Oscillator);
 
   /// @brief destructor
-  ~SampleHandlerBeamOffAxis();
+  ~SampleHandlerBeamOffAxis(){}
 
-  std::vector<std::vector<std::vector<std::vector<TH2D *>>>>
-  GetBinnedWeights(std::vector<std::string> ParamNames,
+  std::vector<double> ReturnKinematicParameterBinning(
+      const int iSubSample,
+      const std::string &KinematicParameter) const override {
+    return SampleHandlerFD::ReturnKinematicParameterBinning(iSubSample,
+                                                            KinematicParameter);
+  }
+
+  friend std::vector<
+      std::vector<std::vector<std::vector<std::unique_ptr<TH2D>>>>>
+  GetBinnedWeights(SampleHandlerBeamOffAxis &sample, int iSubSample,
+                   std::vector<std::string> ParamNames,
                    std::vector<std::vector<int>> ParamModes,
                    std::vector<double> TrueEBins);
 
-  
-
-  // below is ugly, but lets us define it only once and get the enum and both
-  // maps https://en.wikipedia.org/wiki/X_macro
-
-#define LIST_OF_VARIABLES                                                      \
-  X(TrueNeutrinoEnergy)                                                        \
-  X(RecoNeutrinoEnergy)                                                        \
-  X(TrueXPos)                                                                  \
-  X(TrueYPos)                                                                  \
-  X(TrueZPos)                                                                  \
-  X(TrueW)                                                                 \
-  X(Mode)                                                                      \
-  X(IsFHC)                                                                     \
-  X(isFHC)                                                                     \
-  X(ELepRec)                                                                   \
-  X(Enubias)                                                                   \
-  X(isCC)                                                                      \
-  X(OscillationChannel)                                                        \
-  X(OffAxisPosition)
-#define X(a) k##a,
-
-  /// @brief Enum to identify kinematics
-  enum KinematicTypes { LIST_OF_VARIABLES };
-
-#undef X
-
-  std::vector<double>
-  ReturnKinematicParameterBinning(const std::string &KinematicParameter) {
-    return SampleHandlerFD::ReturnKinematicParameterBinning(KinematicParameter);
-  }
-
 protected:
   /// @brief Initialises object
-  void Init();
+  void Init() override;
 
   /// @brief Function to setup MC from file
   /// @return Total number of events
-  int SetupExperimentMC();
+  int SetupExperimentMC() override;
 
   /// @brief Tells FD base which variables to point to/be set to
-  void SetupFDMC();
+  void SetupFDMC() override;
 
-  /// @brief Sets up pointers weights for each event (oscillation/xsec/etc.)
-  void SetupWeightPointers();
-  void SetupSplines();
-
-  enum FuncParEnum {
-    kTotalEScaleND = 0,
-    // kTotalEScaleND_invsqrt,
-    // kTotalEScaleND_sqrt,
-    kTotalEScaleND_mu,
-    kEMResND,
-    kEScaleMuSpectND,
-    kMuonRes_ND,
-    kNRes_ND,
-    kHadRes_ND,
-    kNuWroFakeDataWeight,
-    // kTotalEScaleND_musqrt,
-    // kTotalEScaleND_muinvsqrt,
-    // kTotalEScaleND_had,
-    // kTotalEScaleND_hadsqrt,
-    // kTotalEScaleND_hadinvsqrt,
-    // kTotalEScaleND_EM,
-    // kTotalEScaleND_EMinvsqrt,
-    // kTotalEScaleND_EMsqrt,
-    // kMuonRes_ND,
-    // kNRes_ND,
-    // kHadRes_ND,
-
-    kNFuncPars
-  };
-
-  float NuWroFakeDataWeight(std::size_t iEvent);
+  void AddAdditionalWeightPointers() override;
+  void SetupSplines() override;
   void RegisterFunctionalParameters() override;
-  void resetShifts(int iEvent) override;
-
-  double CalculatePOT();
+  void ResetShifts(int iEvent) override;
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter Type
   /// @param iEvent Event ID
   /// @return Value of kinematic parameter corresponding for a given event
-  double ReturnKinematicParameter(KinematicTypes KinPar, int iEvent);
+  double ReturnKinematicParameter(dune::beamoffaxis::KinematicTypes KinPar,
+                                  int iEvent);
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter ID as int
@@ -127,11 +79,10 @@ protected:
   /// @param KinPar Kinematic Parameter Type
   /// @param iEvent Event ID
   /// @return Pointer to KinPar for a given event
-  const double *GetPointerToKinematicParameter(KinematicTypes KinPar,
-                                               int iEvent);
+  const double *
+  GetPointerToKinematicParameter(dune::beamoffaxis::KinematicTypes KinPar,
+                                 int iEvent);
 
-
-  void FillSplineBins();
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicParameter Kinematic parameter name as string (gets cast ->
   /// int)
@@ -147,43 +98,11 @@ protected:
   const double *GetPointerToKinematicParameter(double KinematicVariable,
                                                int iEvent);
 
-  // std::vector<double> ReturnKinematicParameterBinning(std::string
-  // KinematicParameter);
-  inline std::string
-  ReturnStringFromKinematicParameter(int KinematicParameterStr);
+  std::vector<dune::beamoffaxis::EventInfo> DUNEMCEvents;
 
-  // DB functions which could be initialised to do something which is
-  // non-trivial
-
-  /// @brief NOT IMPLEMENTED: Dunder method to calculate xsec weights
-  /// @param iEvent Event number
-  double CalcXsecWeightFunc(int iEvent) {
-    (void)iEvent;
-    return 1.;
-  }
-
-  // std::vector<std::vector<std::vector<std::vector<TH2D*>>>>
-  // GetBinnedWeights(std::vector<std::string> ParamNames,
-  // std::vector<std::vector<int>> ParamModes, std::vector<double> TrueEBins);
-
-  std::vector<dunemc_beamoffaxis> dunemcSamples;
-
-  /// Value of POT used for sample
   double pot;
-  double isFHC;
 
-#define X(a) {#a, k##a},
-  const std::unordered_map<std::string, int> KinematicParametersDUNE = {
-      LIST_OF_VARIABLES};
-
-#undef X
-#define X(a) {k##a, #a},
-  const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
-      LIST_OF_VARIABLES};
-
-#undef X
-#undef LIST_OF_VARIABLES
-
-  /// @brief Cleanup memory
-  void CleanMemoryBeforeFit() override {};
+  void CleanMemoryBeforeFit(){}
 };
+
+} // namespace dune::beamoffaxis

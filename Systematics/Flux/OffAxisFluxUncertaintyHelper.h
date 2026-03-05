@@ -1,9 +1,9 @@
 #pragma once
 
 // forward declaration
-class TFile;
-class TH1;
-class TAxis;
+#include "TFile.h"
+#include "TH1.h"
+#include "TAxis.h"
 
 #include <iostream>
 #include <limits>

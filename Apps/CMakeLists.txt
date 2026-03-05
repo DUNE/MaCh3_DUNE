@@ -3,16 +3,14 @@ add_custom_target(MaCh3DUNEApps)
 foreach(app
 	EventRates
 	Fit
-	Projections
-	SigmaVariation
-	LikelihoodScan
-	Variations
+	# Projections
+	# SigmaVariation
+	# LikelihoodScan
+	# Variations
 	SplineMaker
-	GetHessianMatrix
-	Fit_fakedata
-	SigmaVarTutorial
-	MakeCovarianceMatrix
-	MakeCovarianceMatrix_compressed
+	# SigmaVarTutorial
+	# MakeCovarianceMatrix
+	# MakeCovarianceMatrix_compressed
       )
 
     add_executable(${app} ${app}.cpp)
@@ -23,4 +21,4 @@ foreach(app
     install(TARGETS ${app} DESTINATION ${CMAKE_BINARY_DIR}/bin)
 endforeach(app)
 
-add_subdirectory(AbiP/Plotting)
+# add_subdirectory(AbiP/Plotting)

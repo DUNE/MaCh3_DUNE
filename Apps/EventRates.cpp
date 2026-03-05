@@ -46,9 +46,9 @@ int main(int argc, char * argv[]) {
 
   //###############################################################################################################################
   //Create SampleHandlerFD objects
-  
+
   ParameterHandlerGeneric* xsec = nullptr;
-  
+
   std::vector<SampleHandlerFD*> DUNEPdfs;
   MakeMaCh3DuneInstance(fitMan, DUNEPdfs, xsec);
 
@@ -58,16 +58,15 @@ int main(int argc, char * argv[]) {
   std::vector<TH1*> DUNEHists;
   for(auto Sample : DUNEPdfs){
     Sample->Reweight();
-    DUNEHists.push_back(Sample->GetMCHist(Sample->GetNDim()));
-
-    std::string EventRateString = fmt::format("{:.2f}", Sample->GetMCHist(Sample->GetNDim())->Integral());
-    MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetTitle(), EventRateString);
-
-    Sample->PrintIntegral();
+    for(int iSubSample = 0; iSubSample < Sample->GetNsamples(); ++iSubSample){
+      DUNEHists.push_back(Sample->GetMCHist(iSubSample));
+      MACH3LOG_INFO("Event rate for {} : {:.2f}", Sample->GetSampleTitle(iSubSample), DUNEHists.back()->Integral());
+      Sample->PrintIntegral(iSubSample);
+    }
   }
 
   std::string OutFileName = GetFromManager<std::string>(fitMan->raw()["General"]["OutputFile"], "EventRatesOutput.root");
-  Write1DHistogramsToFile(OutFileName, DUNEHists); 
+  Write1DHistogramsToFile(OutFileName, DUNEHists);
   Write1DHistogramsToPdf(OutFileName, DUNEHists);
 
   //###############################################################################################################################
@@ -76,25 +75,30 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("Oscillation Mode Breakdown:");
-  
+
   for(auto Sample : DUNEPdfs) {
     MACH3LOG_INFO("======================");
-    int nOscChannels = Sample->GetNOscChannels();
-    for (int iOscChan=0;iOscChan<nOscChannels;iOscChan++) {
-      std::vector< KinematicCut > SelectionVec;
+    for (int iSubSample = 0; iSubSample < Sample->GetNsamples(); ++iSubSample) {
+      int nOscChannels = Sample->GetNOscChannels(iSubSample);
+      for (int iOscChan = 0; iOscChan < nOscChannels; iOscChan++) {
+        std::vector<KinematicCut> SelectionVec;
 
-      KinematicCut SelecChannel;
-      SelecChannel.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString("OscillationChannel");
-      SelecChannel.LowerBound = iOscChan;
-      SelecChannel.UpperBound = iOscChan+1;
-      SelectionVec.push_back(SelecChannel);
-      
-      TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName(),SelectionVec);
-      MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetTitle(),Sample->GetFlavourName(iOscChan),Hist->Integral());
+        KinematicCut SelecChannel;
+        SelecChannel.ParamToCutOnIt =
+            Sample->ReturnKinematicParameterFromString("OscillationChannel");
+        SelecChannel.LowerBound = iOscChan;
+        SelecChannel.UpperBound = iOscChan + 1;
+        SelectionVec.push_back(SelecChannel);
+
+        TH1 *Hist =
+            Sample->Get1DVarHist(iSubSample, Sample->GetXBinVarName(iSubSample), SelectionVec);
+        MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}", Sample->GetSampleTitle(iSubSample),
+                      Sample->GetFlavourName(iSubSample,iOscChan), Hist->Integral());
+      }
+
+      TH1 *Hist = Sample->Get1DVarHist(iSubSample, Sample->GetXBinVarName(iSubSample));
+      MACH3LOG_INFO("{:<20} : {:<20.2f}", Sample->GetSampleTitle(iSubSample), Hist->Integral());
     }
-
-    TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName());
-    MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetTitle(),Hist->Integral());
   }
 
   //###############################################################################################################################
@@ -109,21 +113,23 @@ int main(int argc, char * argv[]) {
 
     MaCh3Modes* Modes = Sample->GetMaCh3Modes();
     int nModeChannels = Modes->GetNModes();
-    for (int iModeChan=0;iModeChan<nModeChannels;iModeChan++) {
-      std::vector< KinematicCut > SelectionVec;
+    for (int iSubSample = 0; iSubSample < Sample->GetNsamples(); ++iSubSample) {
+      for (int iModeChan=0;iModeChan<nModeChannels;iModeChan++) {
+        std::vector< KinematicCut > SelectionVec;
 
-      KinematicCut SelecChannel;
-      SelecChannel.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString("Mode");
-      SelecChannel.LowerBound = iModeChan;
-      SelecChannel.UpperBound = iModeChan+1;
-      SelectionVec.push_back(SelecChannel);
+        KinematicCut SelecChannel;
+        SelecChannel.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString("Mode");
+        SelecChannel.LowerBound = iModeChan;
+        SelecChannel.UpperBound = iModeChan+1;
+        SelectionVec.push_back(SelecChannel);
 
-      TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName(),SelectionVec);
-      MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetTitle(),Modes->GetMaCh3ModeName(iModeChan),Hist->Integral());
+        TH1* Hist = Sample->Get1DVarHist(iSubSample, Sample->GetXBinVarName(iSubSample),SelectionVec);
+        MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetSampleTitle(iSubSample),Modes->GetMaCh3ModeName(iModeChan),Hist->Integral());
+      }
+
+      TH1* Hist = Sample->Get1DVarHist(iSubSample, Sample->GetXBinVarName(iSubSample));
+      MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetSampleTitle(iSubSample),Hist->Integral());
     }
-
-    TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName());
-    MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetTitle(),Hist->Integral());
   }
 
   //###############################################################################################################################

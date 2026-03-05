@@ -15,12 +15,14 @@ struct dunemc_base { // Store variables used in fitting
   double rw_isCC;
   double OscChannelIndex;
   int _isCC;
-  
+
   double rw_erec;
   double rw_etru;
 
   double flux_w;
   double mode;
+
+  int sample; // subsample index
 };
 
 struct dunemc_atm
@@ -46,8 +48,7 @@ struct dunemc_beamfd
   double rw_ePi0;
   double rw_eN;
   double enu_bias;
-  
-  
+
   double rw_berpaacvwgt;
 
   double rw_cvnnumu;
@@ -85,81 +86,6 @@ struct dunemc_beamnd
   double rw_reco_q;
 };
 
-struct dunemc_beamoffaxis
-    : public dunemc_beamnd { // Store variables used by SampleHandlerBeamND
-  struct {
-    double LepE;
-    double LepE_sqrt;
-    double LepE_invsqrt;
-    double LepNuAngle;
-    double eP;
-    double ePip;
-    double ePim;
-    double ePi0;
-    double eN;
-    double eHad_av;
-
-    int nP;
-    int nN;
-    int nPip;
-    int nPi0;
-    int nPim;
-    int niem;
-
-    double enu_bias;
-
-    double ERec_QE;
-
-    double det_x;
-    double vtx_x;
-    double vtx_y;
-    double vtx_z;
-    double off_axis_pos_m;
-
-    double Q2;
-    double W;
-    double X;
-    double Y;
-
-    double isFHC_selection;
-  } truth;
-
-  struct {
-    int numu;
-    int muon_contained;
-    int muon_tracker;
-    double ELep;
-    double y;
-    double EHad;
-    double sum_ehad;
-    
-   
-    double eP;
-    double ePip;
-    double ePim;
-    double ePi0;
-    double eN;
-  } reco;
-
-  struct {
-    double EHad_sqrt;
-    double sum_ehad_sqrt;
-    double ELep_sqrt;
-    std::vector<double> flux_focussing_ratio;
-    std::vector<double> flux_hadprod_ratio;
-  } syst;
-
-  struct {
-    double erec;
-    double ELep;
-    double eP;
-    double ePi0;
-    double ePip;
-    double ePim;
-    double eN;
-  } shift;
-};
-
 struct dunemc_beamndgar
     : public dunemc_base { // Store variables used by SampleHandlerBeamNDGAr
   double rw_LepE;
@@ -168,7 +94,6 @@ struct dunemc_beamndgar
   double rw_vtx_y;
   double rw_vtx_z;
   double rw_Q0;
-
 
   double rw_Q3;
   double rw_lep_pT; // transverse lepton momentum

@@ -1,3 +1,5 @@
+add_subdirectory(BeamOffAxis)
+
 if (Build_NDGAr)
   message(STATUS "Building BeamNDGAr sample only")
   set(HEADERS
@@ -38,8 +40,8 @@ if(NOT CPU_ONLY)
   set_target_properties(SamplesDUNE PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 endif()
 
-target_link_libraries(SamplesDUNE PUBLIC SplinesDUNE SystematicsDUNE duneanaobj::all MaCh3::All MaCh3DUNECompilerOptions)
-target_link_libraries(SamplesDUNE PRIVATE FDTDRFakeDataStudies DUNEMaCh3Warnings ROOT::TreePlayer)
+target_link_libraries(SamplesDUNE PUBLIC SamplesDUNEBeamOffAxis SplinesDUNE SystematicsDUNE duneanaobj::all MaCh3::All MaCh3DUNECompilerOptions)
+target_link_libraries(SamplesDUNE PRIVATE DUNEMaCh3Warnings ROOT::TreePlayer)
 
 target_include_directories(SamplesDUNE PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../>

@@ -45,7 +45,7 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
     // }
     // else
     if (SampleType == "OffAxisND") {
-      Sample = new SampleHandlerBeamOffAxis(SampleConfig, xsec, nullptr);
+      Sample = new dune::beamoffaxis::SampleHandlerBeamOffAxis(SampleConfig, xsec, nullptr);
     }
     // else if (SampleType == "Atm") {
     //   Sample = new SampleHandlerAtm(SampleConfig, xsec, AtmOscillator_);

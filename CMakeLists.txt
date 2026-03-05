@@ -135,7 +135,7 @@ endif()
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
-find_package(MaCh3 2.4.1 EXACT QUIET)
+# find_package(MaCh3 2.4.1 EXACT QUIET)
 set(MaCh3_CORE_BRANCH v2.4.1 CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 option(MaCh3DUNE_Atmos "Whether working with atmospherics or beam oscillations" OFF)
@@ -216,9 +216,9 @@ cmessage(STATUS "CMAKE CXX Standard: ${CMAKE_CXX_STANDARD}")
 add_library(DUNEMaCh3Warnings INTERFACE)
 
 target_compile_options(DUNEMaCh3Warnings INTERFACE
-  #-Werror                 # Treat Warnings as Errors
-  -Wextra                 # Enable extra warning flags
-  -Wall                   # Enable all standard warning flags
+  # -Werror                 # Treat Warnings as Errors
+  # -Wextra                 # Enable extra warning flags
+  # -Wall                   # Enable all standard warning flags
   -Wshadow                # Warn when a variable declaration shadows one from an outer scope
   -Wuninitialized         # Warn about uninitialized variables
   -Wnon-virtual-dtor      # Warn when a class with virtual functions has a non-virtual destructor
@@ -266,8 +266,7 @@ set_target_properties(MaCh3DUNECompilerOptions PROPERTIES EXPORT_NAME CompilerOp
 
 target_include_directories(MaCh3DUNECompilerOptions
   INTERFACE
-  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/Apps>
-  $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
   $<INSTALL_INTERFACE:include>)
 
 install(TARGETS MaCh3DUNECompilerOptions
