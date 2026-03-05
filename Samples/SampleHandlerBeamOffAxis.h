@@ -100,7 +100,8 @@ protected:
 
   std::vector<dune::beamoffaxis::EventInfo> DUNEMCEvents;
 
-  double pot;
+  std::vector<double> subsample_analysispot;
+  std::vector<bool> subsample_is_numode;
 
   void CleanMemoryBeforeFit(){}
 };

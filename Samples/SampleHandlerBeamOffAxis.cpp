@@ -20,12 +20,15 @@ SampleHandlerBeamOffAxis::SampleHandlerBeamOffAxis(
 }
 
 void SampleHandlerBeamOffAxis::Init() {
-  if (CheckNodeExists(SampleManager->raw(), "POT")) {
-    pot = SampleManager->raw()["POT"].as<double>();
-  } else {
-    MACH3LOG_ERROR("POT not defined in {}, please add this!",
-                   SampleManager->GetFileName());
-    throw MaCh3Exception(__FILE__, __LINE__);
+  subsample_analysispot.resize(GetNsamples());
+  subsample_is_numode.resize(GetNsamples());
+
+  for (int iSubSample = 0; iSubSample < GetNsamples(); iSubSample++) {
+    auto const &sample_conf = SampleManager->raw()[GetSampleTitle(iSubSample)];
+    subsample_analysispot[iSubSample] =
+        Get<double>(sample_conf["POT"], __FILE__, __LINE__);
+    subsample_is_numode[iSubSample] =
+        Get<bool>(sample_conf["is_numode"], __FILE__, __LINE__);
   }
 }
 
@@ -101,15 +104,16 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
       MetaChain.Add(filename.c_str(), -1);
     }
 
-    double cafpot = GetPOT(MetaChain);
+    double subsample_cafpot = GetPOT(MetaChain);
     auto sample_evs = ReadEvents(CAFChain);
 
     // fix up any analysis specific information
     for (auto &ev : sample_evs) {
 
       ev.subsample = iSubSample;
+      ev.is_numode = subsample_is_numode[iSubSample];
 
-      ev.weights.pot = pot / cafpot; // LP - this is not right
+      ev.weights.pot = subsample_analysispot[iSubSample] / subsample_cafpot;
 
       ev.truth.mach3_mode =
           Modes->GetModeFromGenerator(std::abs(ev.truth.generator_mode));

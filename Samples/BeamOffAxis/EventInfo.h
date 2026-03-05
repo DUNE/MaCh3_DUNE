@@ -83,6 +83,7 @@ struct EventInfo : public CAFEventInfo {
   CAFEventInfo::Reconstructed varied_reco;
 
   int subsample;
+  int is_numode;
 
   struct SystInfo {
     struct Flux {
