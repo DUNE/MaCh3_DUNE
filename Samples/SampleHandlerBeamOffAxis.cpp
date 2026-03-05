@@ -126,6 +126,7 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
         std::tie(ev.syst.flux.focussing_ratio, ev.syst.flux.hadprod_ratio) =
             GetFluxVariationRatios(ev.truth.nu.pdg, ev.truth.nu.e,
                                    ev.truth.vtx.off_axis_pos_m, true);
+        num_events++;
       }
     }
 

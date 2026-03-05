@@ -86,7 +86,7 @@ std::vector<EventInfo> ReadEvents(TTree &tree) {
   size_t ev_it = 0;
   while (caf_reader.Next()) {
 
-    auto &ev = events[ev_it];
+    auto &ev = events[ev_it++];
 
     ev.truth.target_a = 40;
 
@@ -122,7 +122,8 @@ std::vector<EventInfo> ReadEvents(TTree &tree) {
     ev.truth.had.n_pi0 = *nPi0;
 
     ev.truth.vtx.detcoords_cm = {*vtx_x, *vtx_y, *vtx_z};
-    ev.truth.vtx.off_axis_pos_m = (ev.truth.vtx.detcoords_cm[0] + *vtx_x) / 100.0;
+    ev.truth.vtx.off_axis_pos_m =
+        (ev.truth.vtx.detcoords_cm[0] + *vtx_x) / 100.0;
 
     ev.truth.kine.Q2 = *Q2;
     ev.truth.kine.invariant_mass = *W;
