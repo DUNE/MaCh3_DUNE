@@ -54,6 +54,7 @@ protected:
   void SetupSplines() override;
   void RegisterFunctionalParameters() override;
   void ResetShifts(int iEvent) override;
+  void FinaliseShifts(int iEvent) override;
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter Type

@@ -4,187 +4,46 @@
 
 namespace dune::beamoffaxis {
 
-// void TotalEScaleND(const double *par, EventInfo &ev) {
+void EMEnergyResolution(const double *par_val, EventInfo &ev) {
+  ev.varied_reco.e_pi0 = std::max(
+      0.0, ev.reco.e_pi0 + (*par_val) * (ev.truth.had.e_pi0 - ev.reco.e_pi0));
 
-//   double enu_rec = ev.reco.shift.enu;
-//   double e_lep = reco.ELep;
+  if (std::abs(ev.truth.lep.pdg) == 11) {
+    ev.varied_reco.e_lep = std::max(
+        0.0, ev.reco.e_lep + (*par_val) * (ev.truth.lep.e - ev.reco.e_lep));
+  }
+}
 
-//   if (std::abs(ev.LepPDG) == 11) {
-//     ev.reco.shift.enu *= (1.0 + *par);
-//     ev.reco.shift.e_lep *= (1.0 + *par);
-//   }
+void MuonEnergyScale(const double *par_val, EventInfo &ev) {
+  if (std::abs(ev.truth.lep.pdg) == 13) {
+    ev.varied_reco.e_lep = std::max(0.0, ev.reco.e_lep * (1 + *par_val));
+  }
+}
 
-//   erec += (*par) * reco.EHad;
+void MuonEnergyResolution(const double *par_val, EventInfo &ev) {
+  if (std::abs(ev.truth.lep.pdg) == 13) {
+    ev.varied_reco.e_lep = std::max(
+        0.0, ev.reco.e_lep + (*par_val) * (ev.truth.lep.e - ev.reco.e_lep));
+  }
+}
 
-//   shift.erec = std::max(0, erec);
-//   shift.ELep = std::max(0, ELep);
-// };
+void NeutronEnergyResolution(const double *par_val, EventInfo &ev) {
+  ev.varied_reco.e_neutron =
+      std::max(0.0, ev.reco.e_neutron + (*par_val) * (ev.truth.had.e_neutron -
+                                                    ev.reco.e_neutron));
+}
 
-// RegisterIndividualFunctionalParameter(
-//     "TotalEScaleND_mu", kTotalEScaleND_mu,
-//     [this](const double *par, std::size_t iEvent) {
-//       const auto &reco = DUNEMCEvents[iEvent].reco;
-//       auto &shift = DUNEMCEvents[iEvent].shift;
-
-//       if (std::abs(DUNEMCEvents[iEvent].LepPDG) == 13 &&
-//           (reco.muon_contained || reco.muon_tracker)) {
-
-//         double ELep = reco.ELep * (1.0 + *par);
-//         double erec = DUNEMCEvents[iEvent].rw_erec + (*par) * reco.ELep;
-
-//         if (ELep < 0.0 || erec < 0.0)
-//           throw std::runtime_error("Negative muon energy");
-
-//         shift.ELep = ELep;
-//         shift.erec = erec;
-//       }
-//     });
-// RegisterIndividualFunctionalParameter(
-//     "EMResND", kEMResND, [this](const double *par, std::size_t iEvent) {
-//       const auto &reco = DUNEMCEvents[iEvent].reco;
-//       const auto &truth = DUNEMCEvents[iEvent].truth;
-//       auto &shift = DUNEMCEvents[iEvent].shift;
-
-//       double recoPi0 = reco.ePi0;
-//       if (recoPi0 < 0.0)
-//         recoPi0 = 0.0;
-
-//       double ePi0 = recoPi0 + (*par) * (truth.ePi0 - recoPi0);
-//       if (ePi0 < 0.0)
-//         ePi0 = 0.0;
-
-//       shift.ePi0 = ePi0;
-//       shift.erec += ePi0 - recoPi0;
-
-//       if (std::abs(DUNEMCEvents[iEvent].LepPDG) == 11) {
-//         double ELep = reco.ELep + (*par) * (truth.LepE - reco.ELep);
-//         if (ELep < 0.0)
-//           ELep = 0.0;
-
-//         shift.ELep = ELep;
-//         shift.erec += ELep - reco.ELep;
-//       }
-//     });
-
-// RegisterIndividualFunctionalParameter(
-//     "EScaleMuSpectND", kEScaleMuSpectND,
-//     [this](const double *par, std::size_t iEvent) {
-//       const auto &reco = DUNEMCEvents[iEvent].reco;
-//       auto &shift = DUNEMCEvents[iEvent].shift;
-
-//       if (std::abs(DUNEMCEvents[iEvent].LepPDG) == 13 && reco.muon_tracker) {
-
-//         double ELep = reco.ELep * (1.0 + *par);
-//         double erec = DUNEMCEvents[iEvent].rw_erec + (*par) * reco.ELep;
-
-//         if (ELep < 0.0 || erec < 0.0)
-//           throw std::runtime_error("Negative muon energy");
-
-//         shift.ELep = ELep;
-//         shift.erec = erec;
-//       }
-//     });
-
-// RegisterIndividualFunctionalParameter(
-//     "MuonRes_ND", kMuonRes_ND, [this](const double *par, std::size_t iEvent) {
-//       const auto &reco = DUNEMCEvents[iEvent].reco;
-//       const auto &truth = DUNEMCEvents[iEvent].truth;
-//       auto &shift = DUNEMCEvents[iEvent].shift;
-
-//       if (std::abs(DUNEMCEvents[iEvent].LepPDG) == 13) {
-
-//         double dE = (*par) * (truth.LepE - reco.ELep);
-//         double ELep = reco.ELep + dE;
-//         double erec = DUNEMCEvents[iEvent].rw_erec + dE;
-
-//         if (ELep < 0.0)
-//           ELep = 0.0;
-//         if (erec < 0.0)
-//           erec = 0.0;
-
-//         shift.ELep = ELep;
-//         shift.erec = erec;
-//       }
-//     });
-
-// RegisterIndividualFunctionalParameter(
-//     "NRes_ND", kNRes_ND, [this](const double *par, std::size_t iEvent) {
-//       const auto &reco = DUNEMCEvents[iEvent].reco;
-//       const auto &truth = DUNEMCEvents[iEvent].truth;
-//       auto &shift = DUNEMCEvents[iEvent].shift;
-
-//       double eN = reco.eN + (*par) * (truth.eN - reco.eN);
-
-//       if (eN < 0.0) {
-//         // Set shift to safe values
-//         shift.eN = 0.0;
-//         shift.erec = 0.0;
-//       } else {
-//         // Normal computation
-//         shift.eN = eN;
-//         shift.erec += eN - reco.eN;
-//       }
-//     });
-
-// RegisterIndividualFunctionalParameter(
-//     "HadRes_ND", kHadRes_ND, [this](const double *par, std::size_t iEvent) {
-//       const auto &reco = DUNEMCEvents[iEvent].reco;
-//       const auto &truth = DUNEMCEvents[iEvent].truth;
-//       auto &shift = DUNEMCEvents[iEvent].shift;
-
-//       double dE = (*par) * ((truth.ePim - reco.ePim) +
-//                             (truth.ePip - reco.ePip) + (truth.eP - reco.eP));
-
-//       shift.erec = DUNEMCEvents[iEvent].rw_erec + dE;
-//       shift.eP = reco.eP + (*par) * (truth.eP - reco.eP);
-//       shift.ePip = reco.ePip + (*par) * (truth.ePip - reco.ePip);
-//       shift.ePim = reco.ePim + (*par) * (truth.ePim - reco.ePim);
-//     });
-
-// /// Fake Data Syst
-// RegisterIndividualFunctionalParameter(
-//     "NuWroFakeDataWeight", kNuWroFakeDataWeight,
-//     [this](const double *par, std::size_t iEvent) {
-//       DUNEMCEvents[iEvent].flux_w *=
-//           (((*par) * (this->NuWroFakeDataWeight(iEvent) - 1.0)) + 1);
-//     });
-
-// // don't register flux parameters if we're not using them.
-// if (ParHandler->GetNumParFromGroup("Flux")) {
-
-//   for (size_t par_it = 0;
-//        par_it < OffAxisFluxUncertaintyHelper::Get().GetNFocussingParams();
-//        par_it++) {
-//     RegisterIndividualFunctionalParameter(
-//         OffAxisFluxUncertaintyHelper::Get().GetFocussingParamName(par_it),
-//         int(kNFuncPars + par_it),
-//         [this, par_it](const double *par, std::size_t iEvent) {
-//           if (DUNEMCEvents[iEvent].syst.flux_focussing_ratio.size() <= par_it) {
-//             return;
-//           }
-//           DUNEMCEvents[iEvent].flux_w *=
-//               (1 +
-//                (*par) * DUNEMCEvents[iEvent].syst.flux_focussing_ratio[par_it]);
-//         });
-//   }
-
-//   for (size_t par_it = 0;
-//        par_it < OffAxisFluxUncertaintyHelper::Get().GetNHadProdPCAComponents();
-//        par_it++) {
-//     RegisterIndividualFunctionalParameter(
-//         "Flux_HadProd_Param_" + std::to_string(par_it),
-//         int(kNFuncPars +
-//             OffAxisFluxUncertaintyHelper::Get().GetNFocussingParams() + par_it),
-//         [this, par_it](const double *par, std::size_t iEvent) {
-//           if (DUNEMCEvents[iEvent].syst.flux_hadprod_ratio.size() <= par_it) {
-//             return;
-//           }
-//           DUNEMCEvents[iEvent].flux_w *=
-//               (1 +
-//                (*par) * DUNEMCEvents[iEvent].syst.flux_hadprod_ratio[par_it]);
-//         });
-//   }
-// }
+void ChargedHadronEnergyResolution(const double *par_val, EventInfo &ev) {
+  ev.varied_reco.e_proton =
+      std::max(0.0, ev.reco.e_proton +
+                      (*par_val) * (ev.truth.had.e_proton - ev.reco.e_proton));
+  ev.varied_reco.e_piplus =
+      std::max(0.0, ev.reco.e_piplus +
+                      (*par_val) * (ev.truth.had.e_piplus - ev.reco.e_piplus));
+  ev.varied_reco.e_piminus =
+      std::max(0.0, ev.reco.e_piminus + (*par_val) * (ev.truth.had.e_piminus -
+                                                    ev.reco.e_piminus));
+}
 
 std::pair<std::vector<float>, std::vector<float>>
 GetFluxVariationRatios(int nu_pdg, double enu_true_GeV, double off_axis_pos_m,

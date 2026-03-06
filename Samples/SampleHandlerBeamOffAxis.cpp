@@ -3,6 +3,8 @@
 #include "Samples/BeamOffAxis/ReadEvents.h"
 #include "Samples/BeamOffAxis/Systematics.h"
 
+#include "Systematics/Flux/OffAxisFluxUncertaintyHelper.h"
+
 #include <iostream>
 
 #include <fstream>
@@ -59,20 +61,82 @@ void SampleHandlerBeamOffAxis::SetupSplines() {
   }
 }
 
-void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {}
+void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
+  RegisterIndividualFunctionalParameter(
+      "EMEnergyResolution", kEMEnergyResolution,
+      [this](const double *par, std::size_t iEvent) {
+        EMEnergyResolution(par, DUNEMCEvents[iEvent]);
+      });
+  RegisterIndividualFunctionalParameter(
+      "MuonEnergyScale", kMuonEnergyScale,
+      [this](const double *par, std::size_t iEvent) {
+        MuonEnergyScale(par, DUNEMCEvents[iEvent]);
+      });
+  RegisterIndividualFunctionalParameter(
+      "MuonEnergyResolution", kMuonEnergyResolution,
+      [this](const double *par, std::size_t iEvent) {
+        MuonEnergyResolution(par, DUNEMCEvents[iEvent]);
+      });
+  RegisterIndividualFunctionalParameter(
+      "NeutronEnergyResolution", kNeutronEnergyResolution,
+      [this](const double *par, std::size_t iEvent) {
+        NeutronEnergyResolution(par, DUNEMCEvents[iEvent]);
+      });
+  RegisterIndividualFunctionalParameter(
+      "ChargedHadronEnergyResolution", kChargedHadronEnergyResolution,
+      [this](const double *par, std::size_t iEvent) {
+        ChargedHadronEnergyResolution(par, DUNEMCEvents[iEvent]);
+      });
 
-// HH: Reset the shifted values to the original values
+  if (ParHandler->GetNumParFromGroup("Flux")) {
+    for (int focussing_par = 0;
+         focussing_par <
+         OffAxisFluxUncertaintyHelper::Get().GetNFocussingParams();
+         focussing_par++) {
+      int par_it = kNDetSysts + focussing_par;
+      RegisterIndividualFunctionalParameter(
+          OffAxisFluxUncertaintyHelper::Get().GetFocussingParamName(
+              focussing_par),
+          par_it, [=, this](double const *par_val, std::size_t iEvent) {
+            DUNEMCEvents[iEvent].syst.flux.total_weight *=
+                1 + (*par_val) * DUNEMCEvents[iEvent]
+                                     .syst.flux.focussing_ratio[focussing_par];
+          });
+    }
+
+    for (int hadprod_par = 0;
+         hadprod_par <
+         OffAxisFluxUncertaintyHelper::Get().GetNHadProdPCAComponents();
+         hadprod_par++) {
+      int par_it =
+          kNDetSysts +
+          int(OffAxisFluxUncertaintyHelper::Get().GetNFocussingParams()) +
+          hadprod_par;
+      RegisterIndividualFunctionalParameter(
+          "Flux_HadProd_Param_" + std::to_string(hadprod_par), par_it,
+          [=, this](double const *par_val, std::size_t iEvent) {
+            DUNEMCEvents[iEvent].syst.flux.total_weight *=
+                1 +
+                (*par_val) *
+                    DUNEMCEvents[iEvent].syst.flux.hadprod_ratio[hadprod_par];
+          });
+    }
+  }
+}
+
 void SampleHandlerBeamOffAxis::ResetShifts(int iEvent) {
   DUNEMCEvents[iEvent].varied_reco = DUNEMCEvents[iEvent].reco;
   DUNEMCEvents[iEvent].syst.flux.total_weight = 1.0;
 }
-// =================================
+
+void SampleHandlerBeamOffAxis::FinaliseShifts(int iEvent) {
+  // DUNEMCEvents[iEvent].varied_reco.
+}
 
 void SampleHandlerBeamOffAxis::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < DUNEMCEvents.size(); ++i) {
-    MCSamples[i].total_weight_pointers.push_back(
-        &(DUNEMCEvents[i].weights.pot));
-    MCSamples[i].total_weight_pointers.push_back(
+    MCEvents[i].total_weight_pointers.push_back(&(DUNEMCEvents[i].weights.pot));
+    MCEvents[i].total_weight_pointers.push_back(
         &(DUNEMCEvents[i].syst.flux.total_weight));
   }
 }
@@ -118,11 +182,12 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
       ev.truth.mach3_mode =
           Modes->GetModeFromGenerator(std::abs(ev.truth.generator_mode));
       if (!ev.truth.is_cc) {
-        ev.truth.mach3_mode +=
-            14; // Account for no ability to distinguish CC/NC
+        // Account for no ability to distinguish CC/NC
+        ev.truth.mach3_mode += 14;
       }
       if (ev.truth.mach3_mode > 15) {
-        ev.truth.mach3_mode -= 1; // Account for no NCSingleKaon
+        // Account for no NCSingleKaon
+        ev.truth.mach3_mode -= 1;
       }
 
       ev.syst.flux.total_weight = 1;
@@ -175,15 +240,15 @@ double SampleHandlerBeamOffAxis::ReturnKinematicParameter(
 void SampleHandlerBeamOffAxis::SetupFDMC() {
   size_t iEvent = 0;
   for (auto const &ev : DUNEMCEvents) {
-    MCSamples[iEvent].Target = &ev.truth.target_a;
-    MCSamples[iEvent].mode = &ev.truth.mach3_mode;
-    MCSamples[iEvent].isNC = !ev.truth.is_cc;
+    MCEvents[iEvent].Target = ev.truth.target_a;
+    MCEvents[iEvent].mode = int(ev.truth.mach3_mode);
+    MCEvents[iEvent].isNC = !ev.truth.is_cc;
 
-    MCSamples[iEvent].rw_etru = &ev.truth.nu.e;
-    MCSamples[iEvent].nupdg = &ev.truth.nu.pdg;
-    MCSamples[iEvent].nupdgUnosc = &ev.truth.nu.pdg_unosc;
+    MCEvents[iEvent].enu_true = ev.truth.nu.e;
+    MCEvents[iEvent].nupdg = ev.truth.nu.pdg;
+    MCEvents[iEvent].nupdgUnosc = ev.truth.nu.pdg_unosc;
 
-    MCSamples[iEvent].NominalSample = ev.subsample;
+    MCEvents[iEvent].NominalSample = ev.subsample;
 
     iEvent++;
   }
