@@ -1,27 +1,27 @@
 SampleTitle: "OffAxisND"
 SampleType: "OffAxisND"
 
-POT: 5.5e20
+POT: 1.1e21
 MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
 SampleName: "ND"
 # Downsample: 0.01
-# SelectionCuts:
-#   - KinematicStr: "isCC"
-#     Bounds: [0.5, 1.5]
-#   - KinematicStr: "RecoNumu"
-#     Bounds: [0.5, 1.5]
-#   - KinematicStr: "MuonSelected"
-#     Bounds: [0.5, 1.5]
-#   - KinematicStr: "EHadVeto"
-#     Bounds: [0.0, 30.0]
-#   - KinematicStr: "RecoVtxX"
-#     Bounds: [-300.0, 300.0]
-#   - KinematicStr: "RecoVtxY"
-#     Bounds: [-100.0, 100.0]
-#   - KinematicStr: "RecoVtxZ"
-#     Bounds: [50.0, 350.0]
-#   - KinematicStr: "RecoNeutrinoEnergy"
-#     Bounds: [0.1, 9999]
+SelectionCuts:
+  - KinematicStr: "isCC"
+    Bounds: [0.5, 1.5]
+  - KinematicStr: "RecoNumu"
+    Bounds: [0.9, 1.1]
+  - KinematicStr: "MuonSelected"
+    Bounds: [0.9, 1.1]
+  - KinematicStr: "EhadVeto"
+    Bounds: [0.0, 30.0]
+  - KinematicStr: "TrueXPos"
+    Bounds: [-300.0, 300.0]
+  - KinematicStr: "TrueYPos"
+    Bounds: [-100.0, 100.0]
+  - KinematicStr: "TrueZPos"
+    Bounds: [50.0, 350.0]
+  - KinematicStr: "RecoNeutrinoEnergy"
+    Bounds: [0.1, 9999]
 
 Binning:
   XVarStr: "RecoNeutrinoEnergy" #TrueNeutrinoEnergy #"RecoNeutrinoEnergy"
@@ -29,47 +29,9 @@ Binning:
   YVarStr: "ELepRec" #TrueNeutrinoEnergy #"RecoNeutrinoEnergy"
   YVarBins: [0.0000, 0.1364, 0.2727, 0.4091, 0.5455, 0.6818, 0.8182, 0.9545, 1.0909, 1.2273, 1.3636, 1.5000, 1.6364, 1.7727, 1.9091, 2.0455, 2.1818, 2.3182, 2.4545, 2.5909, 2.7273, 2.8636, 3.0000, 5, 6, 10.0]
  
- 
-  #[0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
-#  YVarStr:  OffAxisPosition #"RecoNeutrinoEnergy"
-#  YVarBins:
-#   [
-#      0.0,
-#      0.875,
-#      1.875,
-#      3.0,
-#      4.875,
-#      6.875,
-#      8.875,
-#      10.875,
-#      12.875,
-#      14.875,
-#      16.875,
-#      18.875,
-#      20.875,
-#      22.875,
-#      24.875,
-#      26.0,
-#      27.125,
-#      28.125,
-#      28.375,
-#      28.625
-#   ]
-
-
-
-  
-
 DUNESampleBools:
   isFHC: 1
   iselike: no
-
-#SelectionCuts:
-    #- KinematicStr: "isCC"
-     # Bounds: [0.8, 1.4]
-    #- KinematicStr: "RecoNeutrinoEnergy"
-     # Bounds: [0.1, 9999]
-    
 
 InputFiles:
   PrepSplineFile: false

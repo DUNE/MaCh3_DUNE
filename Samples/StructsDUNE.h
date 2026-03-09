@@ -126,19 +126,25 @@ struct dunemc_beamoffaxis
 
   struct {
     int numu;
-    int muon_contained;
-    int muon_tracker;
+    double muon_contained;
+    double muon_tracker;
     double ELep;
     double y;
     double EHad;
     double sum_ehad;
     
-   
+    double muon_selected;
     double eP;
     double ePip;
     double ePim;
     double ePi0;
     double eN;
+
+   
+    double reco_numu;
+
+    double EHad_veto;
+    
   } reco;
 
   struct {

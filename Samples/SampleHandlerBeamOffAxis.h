@@ -44,8 +44,13 @@ public:
   X(Enubias)                                                                   \
   X(isCC)                                                                      \
   X(OscillationChannel)                                                        \
-  X(OffAxisPosition)
-#define X(a) k##a,
+  X(OffAxisPosition)                                                           \
+  X(EhadVeto)                                                                   \
+  X(MuonContained)                                                               \
+  X(MuonTracker)                                                                 \
+  X(MuonSelected)                                                                \
+  X(RecoNumu)                                                                    
+#define X(a) k##a,         
 
   /// @brief Enum to identify kinematics
   enum KinematicTypes { LIST_OF_VARIABLES };

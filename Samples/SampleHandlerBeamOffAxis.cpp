@@ -638,7 +638,9 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
         // or simply don't fill this event
     }
 
-    dunemcSamples[iEvent].reco.numu = *reco_numu;
+    //dunemcSamples[iEvent].reco.reco_numu = *reco_numu;
+    dunemcSamples[iEvent].reco.reco_numu = static_cast<double>(*reco_numu);
+    
     dunemcSamples[iEvent].reco.muon_contained = *muon_contained;
     dunemcSamples[iEvent].reco.muon_tracker = *muon_tracker;
 
@@ -661,6 +663,7 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
     dunemcSamples[iEvent].shift.ePi0 = *eRecoPi0;
     dunemcSamples[iEvent].shift.eN = *eRecoN;
 
+    dunemcSamples[iEvent].reco.muon_selected = *muon_contained || *muon_tracker;
     dunemcSamples[iEvent].shift.erec = dunemcSamples[iEvent].rw_erec;
     dunemcSamples[iEvent].shift.ELep = *Elep_reco;
 
@@ -800,6 +803,16 @@ SampleHandlerBeamOffAxis::GetPointerToKinematicParameter(KinematicTypes KinPar,
     return &dunemcSamples[iEvent].truth.W;
   case kOffAxisPosition:
     return &dunemcSamples[iEvent].truth.off_axis_pos_m;
+  case kEhadVeto:
+    return &dunemcSamples[iEvent].reco.EHad_veto;
+  case kRecoNumu:
+    return &dunemcSamples[iEvent].reco.reco_numu;
+  case kMuonContained:
+    return &dunemcSamples[iEvent].reco.muon_contained;
+  case kMuonTracker:
+   return &dunemcSamples[iEvent].reco.muon_tracker;
+  case kMuonSelected:
+    return &dunemcSamples[iEvent].reco.muon_selected;
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
     throw MaCh3Exception(__FILE__, __LINE__);
@@ -935,7 +948,7 @@ int NEvents = static_cast<int>(MCData->GetEntries());
   
 
   for (int iEvent = 0; iEvent < NEvents; iEvent++) {
-    MCData->GetEntry(iEvent);  // <- add this back here
+    MCData->GetEntry(iEvent);  
     double x_var = ReturnKinematicParameter(GetXBinVarName(), iEvent);
     double y_var = ReturnKinematicParameter(GetYBinVarName(), iEvent);
 
