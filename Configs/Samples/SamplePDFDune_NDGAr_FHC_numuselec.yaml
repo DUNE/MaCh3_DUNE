@@ -22,15 +22,11 @@ DetectorVariables:
   TPCFidRadius: 160
   TPCInstrumentedLength: 250
   TPCInstrumentedRadius: 260
-  ECALInnerRadius: 278.04
-  ECALOuterRadius: 322.252
-  # TPCInstrumentedLength: 250
-  # TPCInstrumentedRadius: 210
-  # ECALInnerRadius: 228.04
-  # ECALOuterRadius: 272.252
-  ECALEndCapStart: 329.25
-  ECALEndCapEnd: 374.4
-  downsampling: 0.01
+  # ECALInnerRadius: 278.04
+  # ECALOuterRadius: 322.252
+  # ECALEndCapStart: 329.25
+  # ECALEndCapEnd: 374.4
+  downsampling: 1
   EDepCrit: 2 # Max energy for a contained shower to deposit in the outer crit_layers (MeV)
   CritLayers: 2 # Number of layers defining this outer region
 
@@ -53,9 +49,9 @@ SubSamples:
   #   splinefile: ""
   #   nutype: 14
   #   oscnutype: 14
-  - Name: "100k_pilot"
-    LatexName: "100k_pilot"
-    mtuplefile: "100k_pilot"
+  - Name: "FastGArSim_CC_numu"
+    LatexName: "FastGArSim_CC_numu"
+    mtuplefile: "FastGArSim_CC_numu"
     splinefile: ""
     nutype: 14
     oscnutype: 14

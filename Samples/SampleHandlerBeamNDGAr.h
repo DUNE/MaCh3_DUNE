@@ -15,12 +15,13 @@ public:
     kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted,  kInFDV, kIsCC, kEPi0, kNPi0,
     kLepTrackLengthYZ};
   
-  enum KinematicVecs {kParticle_EVis, kParticle_Momentum, kParticle_EndMomentum, kParticle_TransverseMomentum, 
-    kParticle_BAngle, kParticle_BeamAngle, kParticle_IsAccepted, kParticle_IsCurvatureResolved, kParticle_IsDecayed, kParticle_PDG,
-    kParticle_IsStoppedInTPC, kParticle_IsStoppedInECal, kParticle_IsStoppedInBarrel, kParticle_IsStoppedInEndCap, kParticle_IsStoppedInGap, 
-    kParticle_IsStoppedInEndGap, kParticle_IsStoppedInBarrelGap, kParticle_IsEscaped, kParticle_NTurns, kParticle_NHits,
-    kParticle_TrackLengthYZ, kParticle_MomResMS, kParticle_MomResYZ, kParticle_MomResX, kParticle_StartR2, kParticle_EndR, 
-    kParticle_EndDepth, kParticle_EndX, kParticle_EndY, kParticle_EndZ, kParticle_StartX, kParticle_EDepCrit, kParticle_IsBarrelPart};
+  enum KinematicVecs {kPrim_EVis, kPrim_Momentum, kPrim_EndMomentum, kPrim_TransverseMomentum, 
+    kPrim_BAngle, kPrim_BeamAngle, kPrim_IsAccepted, kPrim_IsCurvatureResolved, kPrim_IsDecayed, kPrim_PDG,
+    kPrim_IsStoppedInTPC, kPrim_IsStoppedInECal, kPrim_IsStoppedInBarrel, kPrim_IsStoppedInEndCap, kPrim_IsStoppedInGap, 
+    kPrim_IsStoppedInEndGap, kPrim_IsStoppedInBarrelGap, kPrim_IsEscaped, kPrim_NTurns, kPrim_NHits,
+    kPrim_TrackLengthYZ, kPrim_MomResMS, kPrim_MomResYZ, kPrim_MomResX, kPrim_StartR2, kPrim_EndR, 
+    kPrim_EndDepth, kPrim_EndX, kPrim_EndY, kPrim_EndZ, kPrim_StartX, kPrim_EDepCrit, kPrim_IsBarrelPart,
+    kPhoton_Energy, kPhoton_EndX, kPhoton_EndY, kPhoton_EndZ};
 
 protected:
   //Functions required by core
@@ -60,11 +61,12 @@ protected:
   bool CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, dunemc_plotting& plotting_vars, double pixel_spacing_cm);
   void EraseDescendants(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID);
   bool IsParticleSelected(const int iSample, const int iEvent, const int iParticle);
+  void FillGeoVars();
 
   double pot;
   double _BeRPA_cvwgt = 1;
   
-  // FastGArSim inputs
+  // FastGArSim anatree inputs
   int _EventID;
   void clearBranchVectors();
   void fixCoordinates();
@@ -99,6 +101,22 @@ protected:
   std::vector<float> *_MuIDHitX=nullptr;
   std::vector<float> *_MuIDHitY=nullptr;
   std::vector<float> *_MuIDHitZ=nullptr;
+
+  // FastGArSim geotree inputs
+  double _TPCRad;
+  double _TPCLen;
+  double _BField;
+  double _BarrelGap;
+  double _EndCapGap;
+  double _HGAbsWidth;
+  double _LGAbsWidth;
+  double _HGSciWidth;
+  double _LGSciWidth;
+  double _HGBoardWidth;
+  int _NBarrelHG;
+  int _NBarrelLG;
+  int _NEndCapHG;
+  int _NEndCapLG;
 
   // Genie inputs
   double _Enu;
@@ -194,74 +212,82 @@ protected:
   };
     
   const std::unordered_map<std::string, int> KinematicVectorsDUNE = {
-    {"Particle_EVis",kParticle_EVis},
-    {"Particle_Momentum",kParticle_Momentum},
-    {"Particle_EndMomentum",kParticle_EndMomentum},
-    {"Particle_TransverseMomentum",kParticle_TransverseMomentum},
-    {"Particle_BAngle",kParticle_BAngle},
-    {"Particle_BeamAngle",kParticle_BeamAngle},
-    {"Particle_IsAccepted",kParticle_IsAccepted},
-    {"Particle_IsCurvatureResolved",kParticle_IsCurvatureResolved},
-    {"Particle_IsDecayed",kParticle_IsDecayed},
-    {"Particle_PDG",kParticle_PDG},
-    {"Particle_IsStoppedInTPC",kParticle_IsStoppedInTPC},
-    {"Particle_IsStoppedInECal",kParticle_IsStoppedInECal},
-    {"Particle_IsStoppedInBarrel",kParticle_IsStoppedInBarrel},
-    {"Particle_IsStoppedInEndCap",kParticle_IsStoppedInEndCap},
-    {"Particle_IsStoppedInGap",kParticle_IsStoppedInGap},
-    {"Particle_IsStoppedInEndGap",kParticle_IsStoppedInEndGap},
-    {"Particle_IsStoppedInBarrelGap",kParticle_IsStoppedInBarrelGap},
-    {"Particle_IsEscaped",kParticle_IsEscaped},
-    {"Particle_NTurns",kParticle_NTurns},
-    {"Particle_NHits",kParticle_NHits},
-    {"Particle_TrackLengthYZ",kParticle_TrackLengthYZ},
-    {"Particle_MomResMS",kParticle_MomResMS},
-    {"Particle_MomResYZ",kParticle_MomResYZ},
-    {"Particle_MomResX",kParticle_MomResX},
-    {"Particle_StartR2",kParticle_StartR2},
-    {"Particle_EndR",kParticle_EndR},
-    {"Particle_EndDepth",kParticle_EndDepth},
-    {"Particle_EndX",kParticle_EndX},
-    {"Particle_EndY",kParticle_EndY},
-    {"Particle_EndZ",kParticle_EndZ},
-    {"Particle_StartX",kParticle_StartX},
-    {"Particle_EDepCrit",kParticle_EDepCrit},
-    {"Particle_IsBarrelPart",kParticle_IsBarrelPart},
+    {"Prim_EVis",kPrim_EVis},
+    {"Prim_Momentum",kPrim_Momentum},
+    {"Prim_EndMomentum",kPrim_EndMomentum},
+    {"Prim_TransverseMomentum",kPrim_TransverseMomentum},
+    {"Prim_BAngle",kPrim_BAngle},
+    {"Prim_BeamAngle",kPrim_BeamAngle},
+    {"Prim_IsAccepted",kPrim_IsAccepted},
+    {"Prim_IsCurvatureResolved",kPrim_IsCurvatureResolved},
+    {"Prim_IsDecayed",kPrim_IsDecayed},
+    {"Prim_PDG",kPrim_PDG},
+    {"Prim_IsStoppedInTPC",kPrim_IsStoppedInTPC},
+    {"Prim_IsStoppedInECal",kPrim_IsStoppedInECal},
+    {"Prim_IsStoppedInBarrel",kPrim_IsStoppedInBarrel},
+    {"Prim_IsStoppedInEndCap",kPrim_IsStoppedInEndCap},
+    {"Prim_IsStoppedInGap",kPrim_IsStoppedInGap},
+    {"Prim_IsStoppedInEndGap",kPrim_IsStoppedInEndGap},
+    {"Prim_IsStoppedInBarrelGap",kPrim_IsStoppedInBarrelGap},
+    {"Prim_IsEscaped",kPrim_IsEscaped},
+    {"Prim_NTurns",kPrim_NTurns},
+    {"Prim_NHits",kPrim_NHits},
+    {"Prim_TrackLengthYZ",kPrim_TrackLengthYZ},
+    {"Prim_MomResMS",kPrim_MomResMS},
+    {"Prim_MomResYZ",kPrim_MomResYZ},
+    {"Prim_MomResX",kPrim_MomResX},
+    {"Prim_StartR2",kPrim_StartR2},
+    {"Prim_EndR",kPrim_EndR},
+    {"Prim_EndDepth",kPrim_EndDepth},
+    {"Prim_EndX",kPrim_EndX},
+    {"Prim_EndY",kPrim_EndY},
+    {"Prim_EndZ",kPrim_EndZ},
+    {"Prim_StartX",kPrim_StartX},
+    {"Prim_EDepCrit",kPrim_EDepCrit},
+    {"Prim_IsBarrelPart",kPrim_IsBarrelPart},
+    {"Photon_Energy",kPhoton_Energy},
+    {"Photon_EndX",kPhoton_EndX},
+    {"Photon_EndY",kPhoton_EndY},
+    {"Photon_EndZ",kPhoton_EndZ},
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicVectorsDUNE = {
-    {kParticle_EVis,"Particle_EVis"},
-    {kParticle_Momentum,"Particle_Momentum"},
-    {kParticle_EndMomentum,"Particle_EndMomentum"},
-    {kParticle_TransverseMomentum,"Particle_TransverseMomentum"},
-    {kParticle_BAngle,"Particle_BAngle"},
-    {kParticle_BeamAngle,"Particle_BeamAngle"},
-    {kParticle_IsAccepted,"Particle_IsAccepted"},
-    {kParticle_IsCurvatureResolved,"Particle_IsCurvatureResolved"},
-    {kParticle_PDG,"Particle_PDG"},
-    {kParticle_IsStoppedInTPC,"Particle_IsStoppedInTPC"},
-    {kParticle_IsStoppedInECal,"Particle_IsStoppedInECal"},
-    {kParticle_IsStoppedInBarrel,"Particle_IsStoppedInBarrel"},
-    {kParticle_IsStoppedInEndCap,"Particle_IsStoppedInEndCap"},
-    {kParticle_IsStoppedInGap,"Particle_IsStoppedInGap"},
-    {kParticle_IsStoppedInEndGap,"Particle_IsStoppedInEndGap"},
-    {kParticle_IsStoppedInBarrelGap,"Particle_IsStoppedInBarrelGap"},
-    {kParticle_IsEscaped,"Particle_IsEscaped"},
-    {kParticle_NTurns,"Particle_NTurns"},
-    {kParticle_NHits,"Particle_NHits"},
-    {kParticle_TrackLengthYZ,"Particle_TrackLengthYZ"},
-    {kParticle_MomResMS,"Particle_MomResMS"},
-    {kParticle_MomResYZ,"Particle_MomResYZ"},
-    {kParticle_MomResX,"Particle_MomResX"},
-    {kParticle_StartR2,"Particle_StartR2"},
-    {kParticle_EndR,"Particle_EndR"},
-    {kParticle_EndDepth,"Particle_EndDepth"},
-    {kParticle_EndX,"Particle_EndX"},
-    {kParticle_EndY,"Particle_EndY"},
-    {kParticle_EndZ,"Particle_EndZ"},
-    {kParticle_StartX,"Particle_StartX"},
-    {kParticle_EDepCrit,"Particle_EDepCrit"},
-    {kParticle_IsBarrelPart,"Particle_IsBarrelPart"},
+    {kPrim_EVis,"Prim_EVis"},
+    {kPrim_Momentum,"Prim_Momentum"},
+    {kPrim_EndMomentum,"Prim_EndMomentum"},
+    {kPrim_TransverseMomentum,"Prim_TransverseMomentum"},
+    {kPrim_BAngle,"Prim_BAngle"},
+    {kPrim_BeamAngle,"Prim_BeamAngle"},
+    {kPrim_IsAccepted,"Prim_IsAccepted"},
+    {kPrim_IsCurvatureResolved,"Prim_IsCurvatureResolved"},
+    {kPrim_PDG,"Prim_PDG"},
+    {kPrim_IsStoppedInTPC,"Prim_IsStoppedInTPC"},
+    {kPrim_IsStoppedInECal,"Prim_IsStoppedInECal"},
+    {kPrim_IsStoppedInBarrel,"Prim_IsStoppedInBarrel"},
+    {kPrim_IsStoppedInEndCap,"Prim_IsStoppedInEndCap"},
+    {kPrim_IsStoppedInGap,"Prim_IsStoppedInGap"},
+    {kPrim_IsStoppedInEndGap,"Prim_IsStoppedInEndGap"},
+    {kPrim_IsStoppedInBarrelGap,"Prim_IsStoppedInBarrelGap"},
+    {kPrim_IsEscaped,"Prim_IsEscaped"},
+    {kPrim_NTurns,"Prim_NTurns"},
+    {kPrim_NHits,"Prim_NHits"},
+    {kPrim_TrackLengthYZ,"Prim_TrackLengthYZ"},
+    {kPrim_MomResMS,"Prim_MomResMS"},
+    {kPrim_MomResYZ,"Prim_MomResYZ"},
+    {kPrim_MomResX,"Prim_MomResX"},
+    {kPrim_StartR2,"Prim_StartR2"},
+    {kPrim_EndR,"Prim_EndR"},
+    {kPrim_EndDepth,"Prim_EndDepth"},
+    {kPrim_EndX,"Prim_EndX"},
+    {kPrim_EndY,"Prim_EndY"},
+    {kPrim_EndZ,"Prim_EndZ"},
+    {kPrim_StartX,"Prim_StartX"},
+    {kPrim_EDepCrit,"Prim_EDepCrit"},
+    {kPrim_IsBarrelPart,"Prim_IsBarrelPart"},
+    {kPhoton_Energy,"Photon_Energy"},
+    {kPhoton_EndX,"Photon_EndX"},
+    {kPhoton_EndY,"Photon_EndY"},
+    {kPhoton_EndZ,"Photon_EndZ"},
   };
     
 };
