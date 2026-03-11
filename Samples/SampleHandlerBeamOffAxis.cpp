@@ -1036,8 +1036,33 @@ for (size_t iParam = 0; iParam < ParamNames.size(); iParam++) {
         }
     }
 }
+ 
+// for (size_t iParam = 0; iParam < ParamNames.size(); iParam++) {
+//     for (int shift = 0; shift < nshifts; shift++) {
+//         for (size_t mode = 0; mode < ParamModes[iParam].size(); mode++) {
+//             for (int b_etrue = 0; b_etrue < NTrueEBins; b_etrue++) {
 
-  // Take the ratio
+//                 TH2D* wgt = histVec[iParam][shift][mode][b_etrue];
+//                 TH2D* nom = NomVec[iParam][shift][mode][b_etrue];
+
+//                 double nomIntegral = nom->Integral();
+//                 double wgtIntegral = wgt->Integral();
+//                 double sliceWeight = (nomIntegral > 0) 
+//                                      ? wgtIntegral / nomIntegral 
+//                                      : 1.0;
+
+//                 // Set all reco bins to the slice-level weight
+//                 for (int ix = 1; ix <= NBinsX; ix++) {
+//                     for (int iy = 1; iy <= NBinsY; iy++) {
+//                         double nomBin = nom->GetBinContent(ix, iy);
+//                         wgt->SetBinContent(ix, iy, nomBin > 0 ? sliceWeight : 1.0);
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
+  // Take the ratio ----original
   for (size_t iParam = 0; iParam < ParamNames.size(); iParam++) {
     for (int shift=0; shift < nshifts; shift++) {
       for (size_t mode = 0; mode < ParamModes[iParam].size(); mode++) {
