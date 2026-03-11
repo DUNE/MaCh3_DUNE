@@ -331,7 +331,10 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   
   MACH3LOG_INFO("-------------------------------------------------------------------");
   TChain* _data = new TChain("caf");
-  std::unordered_map<std::string, size_t> sample_map;
+  // Maps the file index within the TChain (GetTreeNumber()) to its sample index and
+  // per-file norm values. 
+  std::vector<size_t> fileIndexToSample;
+  std::vector<std::array<double, 2>> fileIndexToNorm; // [norm_s, pot_s]
   for (size_t iSample=0; iSample<SampleDetails.size(); iSample++) {
     for (const std::string& filename : SampleDetails[iSample].mc_files) {
       MACH3LOG_INFO("Adding file to TChain: {}", filename);
@@ -343,16 +346,15 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
         MACH3LOG_ERROR("Add a norm KEY to the root file using MakeNormHists.cxx");
         throw MaCh3Exception(__FILE__, __LINE__);
       }
-      // HH: currently storing the norm_s and POT_s in a map since this is a sample/file specific thing, maybe this could be done in a more elegant way
-      norm_map[filename] = std::vector<double>{norm->GetBinContent(1), beamFDSampleDetails[iSample].pot/norm->GetBinContent(2)};
-      sample_map[filename] = iSample;
+      fileIndexToSample.push_back(iSample);
+      fileIndexToNorm.push_back({norm->GetBinContent(1), beamFDSampleDetails[iSample].pot / norm->GetBinContent(2)});
+      _sampleFile->Close();
       // HH: Check whether the file exists, see https://root.cern/doc/master/classTChain.html#a78a896924ac6c7d3691b7e013bcbfb1c
       int _add_rtn = _data->Add(filename.c_str(), -1);
       if(_add_rtn == 0){
         MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", filename);
         throw MaCh3Exception(__FILE__, __LINE__);
       }
-      _sampleFile->Close();
     }
   }
   
@@ -482,8 +484,7 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
       MaCh3Utils::PrintProgressBar(i, static_cast<Long64_t>(nEntries));
     }
 
-    std::string CurrFileName = _data->GetCurrentFile()->GetName();
-    auto sample_index = sample_map[CurrFileName];
+    const size_t sample_index = fileIndexToSample[static_cast<size_t>(_data->GetTreeNumber())];
     const bool iselike_temp = beamFDSampleDetails[sample_index].iselike;
     dunemcSamples[i].sample_index = sample_index;
     dunemcSamples[i].nupdgUnosc = _nuPDGunosc;
@@ -491,8 +492,8 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
     dunemcSamples[i].OscChannelIndex = static_cast<double>(GetOscChannel(SampleDetails[sample_index].OscChannels, dunemcSamples[i].nupdgUnosc, dunemcSamples[i].nupdg));
 
     // POT stuff
-    dunemcSamples[i].norm_s = norm_map[CurrFileName][0]; // Norm in sample
-    dunemcSamples[i].pot_s = norm_map[CurrFileName][1]; // POT in sample
+    dunemcSamples[i].norm_s = fileIndexToNorm[static_cast<size_t>(_data->GetTreeNumber())][0]; // Norm in sample
+    dunemcSamples[i].pot_s = fileIndexToNorm[static_cast<size_t>(_data->GetTreeNumber())][1]; // POT in sample
     
     dunemcSamples[i].rw_cvnnumu = (_cvnnumu);
     dunemcSamples[i].rw_cvnnue = (_cvnnue);

@@ -143,7 +143,7 @@ protected:
   // dunemc
   /// DUNE MC sampels
   std::vector<struct dunemc_beamfd> dunemcSamples;
-  std::vector<BeamSampleInfo> beamFDSampleDetails;
+  std::vector<BeamFDSampleInfo> beamFDSampleDetails;
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},

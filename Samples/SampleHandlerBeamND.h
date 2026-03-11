@@ -9,7 +9,7 @@
 class SampleHandlerBeamND : virtual public SampleHandlerFD
 {
 public:
-  SampleHandlerBeamND(std::string mc_version, ParameterHandlerGeneric* xsec_cov, TMatrixD* nd_cov) ;
+  SampleHandlerBeamND(std::string mc_version, ParameterHandlerGeneric* xsec_cov, BeamNDCov beamNDCov);
   ~SampleHandlerBeamND();
 
   enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kyRec,kOscChannel,kMode,kIsFHC};
@@ -19,7 +19,7 @@ public:
   int SetupExperimentMC();
   void SetupFDMC();
 
-  void SetupWeightPointers();
+  void AddAdditionalWeightPointers();
   void SetupSplines();
 
   void RegisterFunctionalParameters() override {};
@@ -36,10 +36,11 @@ public:
   //DB functions which could be initialised to do something which is non-trivial
   double CalcXsecWeightFunc(int iEvent) {return 1.; (void)iEvent;}
 
-  void setNDCovMatrix();
-  double GetLikelihood() override;
+  void setNDCovMatrix() const;
+  double GetLikelihood() const override;
 
   std::vector<struct dunemc_beamnd> dunendmcSamples;
+  std::vector<BeamNDSampleInfo> beamNDSampleDetails;
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
@@ -61,10 +62,6 @@ public:
 
   TString _nutype;
   int _mode;
-
-  double pot;
-  double pot_s;
-  double norm_s;
 
   // dunendmc Variables
   double _ev;
@@ -106,11 +103,12 @@ public:
   bool isND;
   double IsFHC;
 
-  bool isNDCovSet = false;
+  mutable bool isNDCovSet = false;
   // The ND detector covariance matrix
-  TMatrixD *NDCovMatrix;
+  BeamNDCov beamNDCov;
+  // TMatrixD *NDCovMatrix;
   // The inverse ND detector covariance matrix
-  double **NDInvertCovMatrix;
+  mutable double **NDInvertCovMatrix;
 
 
   std::vector<const double*> NDDetectorSystPointers;

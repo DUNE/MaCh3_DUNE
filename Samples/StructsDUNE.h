@@ -1,10 +1,29 @@
 #ifndef _StructsDUNE_h_
 #define _StructsDUNE_h_
 
+#include "TMatrixD.h"
+
+// HH: A little struct to store the ND covariance matrices together, to avoid having to pass multiple TMatrixD* around in the code. 
+// Also includes a bool to specify whether to use a combined ND covariance matrix or separate ones for FHC and RHC
+struct BeamNDCov{
+  TMatrixD* NDCov_FHC;
+  TMatrixD* NDCov_RHC;
+  TMatrixD* NDCov_all;
+  bool useCombinedNDCov;
+};
+
 struct BeamSampleInfo {
   bool iselike;
   double isFHC;
   double pot;
+};
+
+struct BeamFDSampleInfo : public BeamSampleInfo {
+};
+
+struct BeamNDSampleInfo : public BeamSampleInfo {
+  double pot_s;
+  double norm_s;
 };
 
 struct dunemc_base { // Store variables used in fitting
