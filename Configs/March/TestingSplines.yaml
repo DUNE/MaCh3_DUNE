@@ -1,0 +1,63 @@
+General:
+  CovarianceMatrixParams:
+    NThrows: 5000000
+  OutputFile: "sigmavar_splinestest.root"
+
+
+  DUNESamples:
+    - "/home/abipeake/scratch/MaCh3DUNE_OffAxisnew/MaCh3_DUNE/Configs/Samples/OnAxisOnly/0m_spines.yaml"
+    #- "/home/abipeake/scratch/MaCh3DUNE_OffAxisnew/MaCh3_DUNE/Configs/Samples/OnAxisOnly/0m_splines.yaml"
+  OscillationParameters: []
+
+  
+  Systematics:
+    XsecCovFile:
+      - "/home/abipeake/scratch/MaCh3DUNE_OffAxisnew/MaCh3_DUNE/Configs/CovObjs/xsec_covariance_DUNE_systs_2022a_FD_v3_xsec.yaml"
+      #- "/home/abipeake/scratch/MaCh3DUNE_OffAxisnew/MaCh3_DUNE/Configs/CovObjs/xsec_maqe.yaml"
+      #- "/home/abipeake/scratch/MaCh3DUNE_OffAxisnew/MaCh3_DUNE/Configs/CovObjs/1D_Reconeutrinoenergy.yaml"
+     #- "/home/abipeake/scratch/MaCh3DUNE_OffAxisnew/MaCh3_DUNE/Configs/CovObjs/Enu_Enubias_templateparams.yaml"
+    XsecCovName: "xsec_cov"
+    SplineMakingCov: "/home/abipeake/scratch/MaCh3DUNE_OffAxisnew/MaCh3_DUNE/Configs/CovObjs/spline_xsec.yaml" #"/home/abipeake/scratch/MaCh3DUNE_OffAxisnew/MaCh3_DUNE/Configs/CovObjs/splinetest.yaml" #"/home/abipeake/scratch/MaCh3DUNE_OffAxisnew/MaCh3_DUNE/Configs/CovObjs/xsec_maqe.yaml"
+    #SplineMakingCov: "/home/abipeake/scratch/MaCh3_DUNE_makingsplines/MaCh3_DUNE/Configs/CovObjs/spline_xsec.yaml" #"/scratch/abipeake/MaCh3_DUNE_makingsplines/MaCh3_DUNE/Configs/CovObjs/xsec_covariance_DUNE_systs_2022a_FD_v3_xsec.yaml"
+
+    
+    XsecStepScale: 0.2
+
+    XsecAtGen: false
+    xsec_var1: "TrueNeutrinoEnergy"
+    xsec_var2: "Enubias"
+    Parameter_fixing_threshold: 1e-50
+
+  Fitter:
+    FitTestLikelihood: false
+
+  
+  MCMC:
+    NSteps: 4000000
+    AutoSave: 10000
+    BurnInSteps: 0
+
+  ProcessMCMC: No
+  Seed: 0
+  Debug: Yes  
+  #ThrowMatrixFile: "/home/abipeake/scratch/DecemberChains/Monday16thfeb_offaxis_asimov_templateparams_newfit2/Monday16thfeb_offaxis_asimov_templateparams_newfit2_adaptive_chain_0_job_0.root"
+  #ThrowMatrixName: "15990000_xsec_cov_throw_matrix"
+  
+  
+LLHScan:
+  ParPoints: 50
+
+AdaptionOptions:
+  Settings:
+    StartThrow: 100000
+    StartUpdate: 50000
+    UpdateStep: 10000
+    EndUpdate: 20000000
+    SaveNIterations: 1
+    OutputFileName: "adapted.root"
+
+  Covariance:
+    xsec_cov:
+      DoAdaption: True
+      UseExternalMatrix: False
+      PrincipalComponentThreshold: 0.995

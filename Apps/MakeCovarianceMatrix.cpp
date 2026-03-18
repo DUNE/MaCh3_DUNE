@@ -58,9 +58,8 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  // -------------------------------------------------------
-  // Unfix only DetSys parameters
-  // -------------------------------------------------------
+  
+  // Free only the detector systematic parameters
   auto xsecCovFiles = FitManager->raw()["General"]["Systematics"]["XsecCovFile"].as<std::vector<std::string>>();
   int nDetSys = 0;
 
@@ -99,9 +98,8 @@ int main(int argc, char* argv[]) {
     xsec->SetPar(i, xsec->GetParInit(i));
   }
 
-  // -------------------------------------------------------
+  
   // Get nominal prediction
-  // -------------------------------------------------------
   std::vector<double> nominal;
   std::vector<int> sample_nbins;
 
@@ -117,9 +115,8 @@ int main(int argc, char* argv[]) {
   int totalBins = nominal.size();
   MACH3LOG_INFO("Total bins across all samples: {}", totalBins);
 
-  // -------------------------------------------------------
+  
   // Initialise covariance accumulator
-  // -------------------------------------------------------
   TMatrixDSym CovMatrix(totalBins);
   CovMatrix.Zero();
 

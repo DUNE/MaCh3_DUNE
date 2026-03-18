@@ -1,0 +1,300 @@
+SampleTitle: "OffAxisND"
+SampleType: "OffAxisND"
+
+POT: 2.69954e+20
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
+SampleName: "OffAxisND"
+# Downsample: 0.01
+
+Binning:
+ XVarStr: TrueNeutrinoEnergy #"RecoNeutrinoEnergy"
+ XVarBins: [0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
+ YVarStr:  OffAxisPosition #"RecoNeutrinoEnergy"
+ YVarBins: [-40,-30,-28,-26,-24,-22,-20,-18,-16,-14,-12,-10,-8,-4,-2,0,2,4,10]
+
+  # [
+  #    0.0,
+  #    0.875,
+  #    1.875,
+  #    3.0,
+  #    4.875,
+  #    6.875,
+  #    8.875,
+  #    10.875,
+  #    12.875,
+  #    14.875,
+  #    16.875,
+  #    18.875,
+  #    20.875,
+  #    22.875,
+  #    24.875,
+  #    26.0,
+  #    27.125,
+  #    28.125,
+  #    28.375,
+  #    28.625
+  # ]
+
+
+
+  
+
+DUNESampleBools:
+  isFHC: 1
+  iselike: no
+
+#SelectionCuts:
+    #- KinematicStr: "isCC"
+     # Bounds: [0.8, 1.4]
+    #- KinematicStr: "RecoNeutrinoEnergy"
+     # Bounds: [0.1, 9999]
+    
+
+InputFiles:
+  PrepSplineFile: true
+  mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+  mtuplesuffix: ".root"
+  splineprefix: "/scratch/abipeake/MaCh3DUNE_OffAxisnew/MaCh3_DUNE/Splinesfiles/OffAxis/"
+  splinesuffix: ".root"
+
+#NuOsc:
+ # NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
+  #EqualBinningPerOscChannel: false
+BinningFile: "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/TutorialConfigs/TutorialBinning.yaml"
+
+
+SubSamples:
+  - Name: "CAFv7_0m_130_FHC"
+    LatexName: "CAFv7_0m_130_FHC"
+    mtuplefile: "CAFv7_0m_130_FHC"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_0m_131_FHC"
+    LatexName: "CAFv7_0m_131_FHC"
+    mtuplefile: "CAFv7_0m_131_FHC"
+    splinefile: ""
+    samplevecno: 1
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_0m_132_FHC"
+    LatexName: "CAFv7_0m_132_FHC"
+    mtuplefile: "CAFv7_0m_132_FHC"
+    splinefile: ""
+    samplevecno: 2
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_1.75m_08_FHC"
+    LatexName: "CAFv7_1.75m_08_FHC"
+    mtuplefile: "CAFv7_1.75m_08_FHC"
+    splinefile: ""
+    samplevecno: 3
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_2m_subset10"
+    LatexName: "CAFv7_2m_subset10"
+    mtuplefile: "CAFv7_2m_subset10"
+    splinefile: ""
+    samplevecno: 4
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_4m_subset10"
+    LatexName: "CAFv7_4m_subset10"
+    mtuplefile: "CAFv7_4m_subset10"
+    splinefile: ""
+    samplevecno: 5
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_5.75m_00_FHC"
+    LatexName: "CAFv7_5.75m_00_FHC"
+    mtuplefile: "CAFv7_5.75m_00_FHC"
+    splinefile: ""
+    samplevecno: 6
+    nutype: 14
+    oscnutype: 14
+    signal: false    
+  - Name: "CAFv7_8m_subset10"
+    LatexName: "CAFv7_8m_subset10"
+    mtuplefile: "CAFv7_8m_subset10"
+    splinefile: ""
+    samplevecno: 7
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_9.75m_00_FHC"
+    LatexName: "CAFv7_9.75m_00_FHC"
+    mtuplefile: "CAFv7_9.75m_00_FHC"
+    splinefile: ""
+    samplevecno: 8
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_12m_subset20"
+    LatexName: "CAFv7_12m_subset20"
+    mtuplefile: "CAFv7_12m_subset20"
+    splinefile: ""
+    samplevecno: 9
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_13.75m_04_FHC"
+    LatexName: "CAFv7_13.75m_04_FHC"
+    mtuplefile: "CAFv7_13.75m_04_FHC"
+    splinefile: ""
+    samplevecno: 10
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_16m_subset13"
+    LatexName: "CAFv7_16m_subset13"
+    mtuplefile: "CAFv7_16m_subset13"
+    splinefile: ""
+    samplevecno: 11
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_17.75m_11_FHC"
+    LatexName: "CAFv7_17.75m_11_FHC"
+    mtuplefile: "CAFv7_17.75m_11_FHC"
+    splinefile: ""
+    samplevecno: 12
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_20m_subset11"
+    LatexName: "CAFv7_20m_subset11"
+    mtuplefile: "CAFv7_20m_subset11"
+    splinefile: ""
+    samplevecno: 13
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_21.75m_07_FHC"
+    LatexName: "CAFv7_21.75m_07_FHC"
+    mtuplefile: "CAFv7_21.75m_07_FHC"
+    splinefile: ""
+    samplevecno: 14
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_24m_subset28"
+    LatexName: "CAFv7_24m_subset28"
+    mtuplefile: "CAFv7_24m_subset28"
+    splinefile: ""
+    samplevecno: 15
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_25.75m_00_FHC"
+    LatexName: "CAFv7_25.75m_00_FHC"
+    mtuplefile: "CAFv7_25.75m_00_FHC"
+    splinefile: ""
+    samplevecno: 16
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_25.75m_01_FHC"
+    LatexName: "CAFv7_25.75m_01_FHC"
+    mtuplefile: "CAFv7_25.75m_01_FHC"
+    splinefile: ""
+    samplevecno: 17
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_25.75m_13_FHC"
+    LatexName: "CAFv7_25.75m_02_FHC"
+    mtuplefile: "CAFv7_25.75m_13_FHC"
+    splinefile: ""
+    samplevecno: 18
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_26.25m_03_FHC"
+    LatexName: "CAFv7_26.25m_03_FHC"
+    mtuplefile: "CAFv7_26.25m_03_FHC"
+    splinefile: ""
+    samplevecno: 19
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_26.25m_04_FHC"
+    LatexName: "CAFv7_26.25m_04_FHC"
+    mtuplefile: "CAFv7_26.25m_04_FHC"
+    splinefile: ""
+    samplevecno: 20
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_26.25m_05_FHC"
+    LatexName: "CAFv7_26.25m_05_FHC"
+    mtuplefile: "CAFv7_26.25m_05_FHC"
+    splinefile: ""
+    samplevecno: 21
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_28.5m_07_FHC"
+    LatexName: "CAFv7_28.5m_07_FHC"
+    mtuplefile: "CAFv7_28.5m_07_FHC"
+    splinefile: ""
+    samplevecno:  22
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_28.5m_08_FHC"
+    LatexName: "CAFv7_28.5m_08_FHC"
+    mtuplefile: "CAFv7_28.5m_08_FHC"
+    splinefile: ""
+    samplevecno: 23
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_28.5m_09_FHC"
+    LatexName: "CAFv7_28.5m_09_FHC"
+    mtuplefile: "CAFv7_28.5m_09_FHC"
+    splinefile: ""
+    samplevecno: 24
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_28.25m_00_FHC"
+    LatexName: "CAFv7_28.25m_00_FHC"
+    mtuplefile: "CAFv7_28.25m_00_FHC"
+    splinefile: ""
+    samplevecno: 25
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_28.25m_01_FHC"
+    LatexName: "CAFv7_28.25m_01_FHC"
+    mtuplefile: "CAFv7_28.25m_01_FHC"
+    splinefile: ""
+    samplevecno: 26
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_28.25m_02_FHC"
+    LatexName: "CAFv7_28.25m_02_FHC"
+    mtuplefile: "CAFv7_28.25m_02_FHC"
+    splinefile: ""
+    samplevecno: 27
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - Name: "CAFv7_28m_subset28"
+    LatexName: "CAFv7_28m_subset28"
+    mtuplefile: "CAFv7_28m_subset28"
+    splinefile: ""
+    samplevecno: 28
+    nutype: 14
+    oscnutype: 14
+    signal: false
+
+  

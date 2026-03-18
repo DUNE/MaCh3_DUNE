@@ -37,8 +37,8 @@ int main(int argc, char * argv[]) {
 
 
   //For fake data study
-  xsec->ToggleFixParameter("NuWroFakeDataWeight"); //take fake data systematic parameters and fix them to 1.0
-  xsec->SetPar(xsec->GetParIndex("NuWroFakeDataWeight"), 1);
+  //xsec->ToggleFixParameter("NuWroFakeDataWeight"); //take fake data systematic parameters and fix them to 1.0
+  //xsec->SetPar(xsec->GetParIndex("NuWroFakeDataWeight"), 1);
 
   for (unsigned sample_i = 0 ; sample_i < DUNEPdfs.size() ; ++sample_i) {
 
@@ -64,8 +64,8 @@ int main(int argc, char * argv[]) {
   }
 
   //Now we have made the data histograms we need to make sure that parameters are all reset to their prior values...
-  xsec->SetPar(xsec->GetParIndex("NuWroFakeDataWeight"), 0);
-  xsec->ToggleFixParameter("NuWroFakeDataWeight");
+  //xsec->SetPar(xsec->GetParIndex("NuWroFakeDataWeight"), 0);
+  //xsec->ToggleFixParameter("NuWroFakeDataWeight");
 
   //Now print out some event rates, we'll make a nice latex table at some point
   for (unsigned iPDF = 0; iPDF < DUNEPdfs.size() ; ++iPDF) {

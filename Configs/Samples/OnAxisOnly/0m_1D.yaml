@@ -34,10 +34,10 @@ DUNESampleBools:
   iselike: no
 
 InputFiles:
-  PrepSplineFile: true
+  PrepSplineFile: false
   mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
   mtuplesuffix: ".root"
-  splineprefix: #"/home/abipeake/scratch/MaCh3DUNE_OffAxisnew/MaCh3_DUNE/"
+  splineprefix: "" #"/home/abipeake/scratch/MaCh3DUNE_OffAxisnew/MaCh3_DUNE/"
   splinesuffix: ""
 
 #NuOsc:

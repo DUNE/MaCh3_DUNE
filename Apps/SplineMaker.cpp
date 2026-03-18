@@ -83,7 +83,7 @@ int main(int argc, char * argv[]) {
 
     //Make Splines
 
-    std::string SplineFileName = SampleName + "_splines.root";
+    std::string SplineFileName = SampleName + "_splines_offaxis.root";
     auto SplineFile = std::unique_ptr<TFile>(TFile::Open(SplineFileName.c_str(), "RECREATE"));
     SplineFile->cd();
 
@@ -96,31 +96,54 @@ int main(int argc, char * argv[]) {
 	      for (int knot = 0; knot < nshifts; knot++) {
           auto* hist = BinnedWeights[iParam][knot][mode][TrueEbin];
 
-          if (!hist) {
-              std::cout << "NULL histogram at "
-                        << "iParam=" << iParam
-                        << ", knot=" << knot
-                        << ", mode=" << mode
-                        << ", TrueEbin=" << TrueEbin
-                        << std::endl;
-          }
-          std::cout << "Integral = " << hist->Integral() << std::endl;
+          // if (!hist) {
+          //     std::cout << "NULL histogram at "
+          //               << "iParam=" << iParam
+          //               << ", knot=" << knot
+          //               << ", mode=" << mode
+          //               << ", TrueEbin=" << TrueEbin
+          //               << std::endl;
+          // }
+          // std::cout << "Integral = " << hist->Integral() << std::endl;
 
 	        WeightGraph->SetPoint(knot, SigmaKnots[knot], BinnedWeights[iParam][knot][mode][TrueEbin]->GetBinContent(xbin+1, ybin+1) > 0. ? BinnedWeights[iParam][knot][mode][TrueEbin]->GetBinContent(xbin+1, ybin+1) : 1.);
           double weight = BinnedWeights[iParam][knot][mode][TrueEbin]->GetBinContent(xbin+1, ybin+1);
 
-          std::cout << "[DEBUG] "
-                    << "iParam=" << iParam
-                    << ", mode=" << mode
-                    << ", TrueEbin=" << TrueEbin
-                    << ", xbin=" << xbin
-                    << ", ybin=" << ybin
-                    << ", knot=" << knot
-                    << ", sigma=" << SigmaKnots[knot]
-                    << ", weight=" << weight
-                    << std::endl;
+          // std::cout << "[DEBUG] "
+          //           << "iParam=" << iParam
+          //           << ", mode=" << mode
+          //           << ", TrueEbin=" << TrueEbin
+          //           << ", xbin=" << xbin
+          //           << ", ybin=" << ybin
+          //           << ", knot=" << knot
+          //           << ", sigma=" << SigmaKnots[knot]
+          //           << ", weight=" << weight
+          //           << std::endl;
 
 	      }
+        // Check if spline is flat (all weights are 1.0)
+        bool isFlat = true;
+        for (int knot = 0; knot < nshifts; knot++) {
+          double w = BinnedWeights[iParam][knot][mode][TrueEbin]->GetBinContent(xbin+1, ybin+1);
+          if (std::abs(w - 1.0) > 1e-6 && w > 0.) { isFlat = false; break; }
+        }
+        // if (isFlat) {
+        //   std::cout << "[FLAT SPLINE] "
+        //             << "Param=" << ParamNames[iParam]
+        //             << ", Mode=" << Modes->GetSplineSuffixFromMaCh3Mode(SplineModes[iParam][mode])
+        //             << ", TrueEbin=" << TrueEbin
+        //             << ", erec=" << xbin
+        //             << ", leprec=" << ybin
+        //             << std::endl;
+
+        // }
+        // std::cout << "Enurec bin edges: ";
+        // for (auto e : BinEdgesX) std::cout << e << " ";
+        // std::cout << std::endl;
+        // std::cout << "RecoLep bin edges: ";
+        // for (auto e : BinEdgesY) std::cout << e << " ";
+        // std::cout << std::endl;
+        
 	      char SplineName[1000];
 	      sprintf(SplineName, "dev_%s_%s_sp_%d_%d_%d", SplineNames[iParam].c_str(), Modes->GetSplineSuffixFromMaCh3Mode(SplineModes[iParam][mode]).c_str(), TrueEbin, xbin, ybin);
 	      TSpline3* Spline = new TSpline3(SplineName, WeightGraph);
@@ -131,6 +154,53 @@ int main(int argc, char * argv[]) {
 	}
       }
     }
+
+    // After all splines are written, print summary of non-flat splines
+std::vector<std::string> nonFlatSummary;
+
+for (size_t iParam = 0; iParam < NSplineParams; iParam++) {
+  for (size_t mode = 0; mode < SplineModes[iParam].size(); mode++) {
+    for (size_t TrueEbin = 0; TrueEbin < NTrueEbins; TrueEbin++) {
+      for (int xbin = 0; xbin < NBinsX; xbin++) {
+        for (int ybin = 0; ybin < NBinsY; ybin++) {
+
+          bool isFlat = true;
+          for (int knot = 0; knot < nshifts; knot++) {
+            double w = BinnedWeights[iParam][knot][mode][TrueEbin]->GetBinContent(xbin+1, ybin+1);
+            if (w > 0. && std::abs(w - 1.0) > 1e-6) { isFlat = false; break; }
+          }
+
+          if (!isFlat) {
+            double xLow = BinEdgesX[xbin];
+            double xHigh = BinEdgesX[xbin+1];
+            double yLow = BinEdgesY[ybin];
+            double yHigh = BinEdgesY[ybin+1];
+            double eLow = TrueEBinning[TrueEbin];
+            double eHigh = TrueEBinning[TrueEbin+1];
+
+            std::ostringstream oss;
+            oss << "Param=" << ParamNames[iParam]
+                << " Mode=" << Modes->GetSplineSuffixFromMaCh3Mode(SplineModes[iParam][mode])
+                << " TrueE=[" << eLow << "," << eHigh << "]"
+                << " Erec=[" << xLow << "," << xHigh << "]"
+                << " LepRec=[" << yLow << "," << yHigh << "]"
+                << " weights: [";
+            for (int k = 0; k < nshifts; k++) {
+              oss << BinnedWeights[iParam][k][mode][TrueEbin]->GetBinContent(xbin+1, ybin+1);
+              if (k < nshifts-1) oss << ", ";
+            }
+            oss << "]";
+            nonFlatSummary.push_back(oss.str());
+          }
+        }
+      }
+    }
+  }
+}
+
+std::cout << "\n========== NON-FLAT SPLINE SUMMARY (" << nonFlatSummary.size() << " total) ==========" << std::endl;
+for (auto const& s : nonFlatSummary) std::cout << s << std::endl;
+std::cout << "================================================================\n" << std::endl;
 
     BinningTemplate->Write();
     SplineFile->Close();

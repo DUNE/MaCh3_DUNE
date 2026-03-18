@@ -1,7 +1,7 @@
-SampleTitle: "OffAxisND"
+SampleTitle: "OffAxisND_13.75m"
 SampleType: "OffAxisND"
 
-POT: 1.1e21
+POT: 3.06e19
 MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
 SampleName: "OffAxisND"
 # Downsample: 0.01
@@ -25,20 +25,51 @@ SelectionCuts:
 
 Binning:
   XVarStr: "RecoNeutrinoEnergy" #TrueNeutrinoEnergy #"RecoNeutrinoEnergy"
-  XVarBins: [0.0000, 0.1364, 0.2727, 0.4091, 0.5455, 0.6818, 0.8182, 0.9545, 1.0909, 1.2273, 1.3636, 1.5000, 1.6364, 1.7727, 1.9091, 2.0455, 2.1818, 2.3182, 2.4545, 2.5909, 2.7273, 2.8636, 3.0000, 3.1,3.2,3.3,3.4,3.5,4, 5, 6, 10.0]
+  XVarBins: [0.0000, 0.1364, 0.2727, 0.4091, 0.5455, 0.6818, 0.8182, 0.9545, 1.0909, 1.2273, 1.3636, 1.5000, 1.6364, 1.7727, 1.9091, 2.0455, 2.1818, 2.3182, 2.4545, 2.5909, 2.7273, 2.8636, 3.0000, 3.1,3.2,3.3,3.4,3.5,4, 5, 6, 10.0] 
   YVarStr: "ELepRec" #TrueNeutrinoEnergy #"RecoNeutrinoEnergy"
-  YVarBins: [0.0000, 0.1364, 0.2727, 0.4091, 0.5455, 0.6818, 0.8182, 0.9545, 1.0909, 1.2273, 1.3636, 1.5000, 1.6364, 1.7727, 1.9091, 2.0455, 2.1818, 2.3182, 2.4545, 2.5909, 2.7273, 2.8636, 3.0000, 5, 6, 10.0]
- 
+  YVarBins: [0.0000,  10.0] # [
+  #   -28.625,
+  #   -28.375,
+  #   -28.125,
+  #   -27.125,
+  #   -26.0,
+  #   -24.875,
+  #   -22.875,
+  #   -20.875,
+  #   -18.875,
+  #   -16.875,
+  #   -14.875,
+  #   -12.875,
+  #   -10.875,
+  #   -8.875,
+  #   -6.875,
+  #   -4.875,
+  #   -3.0,
+  #   -1.875,
+  #   -0.875,
+  #    0.0
+  # ]
+
+
+  
+
 DUNESampleBools:
   isFHC: 1
   iselike: no
+
+#SelectionCuts:
+    #- KinematicStr: "isCC"
+     # Bounds: [0.8, 1.4]
+    #- KinematicStr: "RecoNeutrinoEnergy"
+     # Bounds: [0.1, 9999]
+    
 
 InputFiles:
   PrepSplineFile: true
   mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
   mtuplesuffix: ".root"
-  splineprefix: #"/home/abipeake/scratch/MaCh3DUNE_OffAxisnew/MaCh3_DUNE/"
-  splinesuffix: ""
+  splineprefix: "/scratch/abipeake/MaCh3DUNE_OffAxisnew/MaCh3_DUNE/Splinesfiles/OffAxis/"
+  splinesuffix: ".root"
 
 #NuOsc:
  # NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
@@ -47,27 +78,11 @@ BinningFile: "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/Configs/TutorialCo
 
 
 SubSamples:
-  - Name: "CAFv7_0m_130_FHC"
-    LatexName: "CAFv7_0m_130_FHC"
-    mtuplefile: "CAFv7_0m_130_FHC"
-    splinefile: ""
+  - Name: "CAFv7_13.75m_04_FHC"
+    LatexName: "CAFv7_13.75m_04_FHC"
+    mtuplefile: "CAFv7_13.75m_04_FHC"
+    splinefile: "OffAxisND_13.75m_splines_offaxis"
     samplevecno: 0
-    nutype: 14
-    oscnutype: 14
-    signal: false
-  - Name: "CAFv7_0m_131_FHC"
-    LatexName: "CAFv7_0m_131_FHC"
-    mtuplefile: "CAFv7_0m_131_FHC"
-    splinefile: ""
-    samplevecno: 1
-    nutype: 14
-    oscnutype: 14
-    signal: false
-  - Name: "CAFv7_0m_132_FHC"
-    LatexName: "CAFv7_0m_132_FHC"
-    mtuplefile: "CAFv7_0m_132_FHC"
-    splinefile: ""
-    samplevecno: 2
     nutype: 14
     oscnutype: 14
     signal: false

@@ -34,10 +34,10 @@ DUNESampleBools:
   iselike: no
 
 InputFiles:
-  PrepSplineFile: true
+  PrepSplineFile: false
   mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
   mtuplesuffix: ".root"
-  splineprefix: #"/home/abipeake/scratch/MaCh3DUNE_OffAxisnew/MaCh3_DUNE/"
+  splineprefix: "/home/abipeake/scratch/MaCh3DUNE_OffAxisnew/MaCh3_DUNE/"
   splinesuffix: ""
 
 #NuOsc:
@@ -50,7 +50,7 @@ SubSamples:
   - Name: "CAFv7_0m_130_FHC"
     LatexName: "CAFv7_0m_130_FHC"
     mtuplefile: "CAFv7_0m_130_FHC"
-    splinefile: ""
+    splinefile: "OffAxisND_splines.root"
     samplevecno: 0
     nutype: 14
     oscnutype: 14
@@ -58,7 +58,7 @@ SubSamples:
   - Name: "CAFv7_0m_131_FHC"
     LatexName: "CAFv7_0m_131_FHC"
     mtuplefile: "CAFv7_0m_131_FHC"
-    splinefile: ""
+    splinefile: "OffAxisND_splines.root"
     samplevecno: 1
     nutype: 14
     oscnutype: 14
@@ -66,7 +66,7 @@ SubSamples:
   - Name: "CAFv7_0m_132_FHC"
     LatexName: "CAFv7_0m_132_FHC"
     mtuplefile: "CAFv7_0m_132_FHC"
-    splinefile: ""
+    splinefile: "OffAxisND_splines.root"
     samplevecno: 2
     nutype: 14
     oscnutype: 14
