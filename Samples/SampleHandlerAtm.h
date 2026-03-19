@@ -34,7 +34,7 @@ protected:
   void SetupFDMC();
 
   /// @brief Sets up pointers weights for each event (oscillation/xsec/etc.)
-  void SetupWeightPointers();
+  void AddAdditionalWeightPointers();
 
   /// @brief Sets up splines 
   void SetupSplines();
@@ -123,7 +123,7 @@ protected:
   std::vector<dunemc_atm> dunemcSamples;
 
   /// Is the sample e-like
-  bool IsELike;
+  std::vector<int> IsELike;
 
   /// Multiplicative scaling to scale from the assumed 400ktyr value in the CAF files
   double ExposureScaling;

@@ -45,7 +45,7 @@ struct dunemc_base { // Store variables used in fitting
   double mode;
 
   // Analysis sample
-  unsigned int sample_index = M3::_BAD_INT_;
+  unsigned int SampleIndex = M3::_BAD_INT_;
 };
 
 struct dunemc_atm : public dunemc_base { // Store variables used by SampleHandlerAtm

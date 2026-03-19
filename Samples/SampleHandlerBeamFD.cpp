@@ -486,7 +486,7 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
 
     const size_t sample_index = fileIndexToSample[static_cast<size_t>(_data->GetTreeNumber())];
     const bool iselike_temp = beamFDSampleDetails[sample_index].iselike;
-    dunemcSamples[i].sample_index = sample_index;
+    dunemcSamples[i].SampleIndex = static_cast<int>(sample_index);
     dunemcSamples[i].nupdgUnosc = _nuPDGunosc;
     dunemcSamples[i].nupdg = _nuPDG;
     dunemcSamples[i].OscChannelIndex = static_cast<double>(GetOscChannel(SampleDetails[sample_index].OscChannels, dunemcSamples[i].nupdgUnosc, dunemcSamples[i].nupdg));
@@ -665,7 +665,7 @@ void SampleHandlerBeamFD::SetupFDMC() {
     MCSamples[iEvent].isNC = !(dunemcSamples[iEvent].rw_isCC);
     MCSamples[iEvent].nupdg = &(dunemcSamples[iEvent].nupdg);
     MCSamples[iEvent].nupdgUnosc = &(dunemcSamples[iEvent].nupdgUnosc);
-    MCSamples[iEvent].NominalSample = static_cast<int>(dunemcSamples[iEvent].sample_index);
+    MCSamples[iEvent].NominalSample = dunemcSamples[iEvent].SampleIndex;
   }
   
 }

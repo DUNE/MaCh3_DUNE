@@ -143,7 +143,7 @@ int SampleHandlerBeamND::SetupExperimentMC() {
       throw MaCh3Exception(__FILE__, __LINE__);
     }
     const size_t sample_index = fileIndexToSample[static_cast<size_t>(treeNum)];
-    dunendmcSamples[i].sample_index = static_cast<unsigned int>(sample_index);
+    dunendmcSamples[i].SampleIndex = static_cast<unsigned int>(sample_index);
     dunendmcSamples[i].nupdgUnosc = _nuPDGunosc;
     dunendmcSamples[i].nupdg = _nuPDG;
     dunendmcSamples[i].OscChannelIndex = static_cast<double>(GetOscChannel(SampleDetails[sample_index].OscChannels, dunendmcSamples[i].nupdgUnosc, dunendmcSamples[i].nupdg));
@@ -241,7 +241,7 @@ void SampleHandlerBeamND::SetupFDMC() {
     MCSamples[iEvent].isNC = !(dunendmcSamples[iEvent].rw_isCC);
     MCSamples[iEvent].nupdgUnosc = &(dunendmcSamples[iEvent].nupdgUnosc);
     MCSamples[iEvent].nupdg = &(dunendmcSamples[iEvent].nupdg);
-    MCSamples[iEvent].NominalSample = static_cast<int>(dunendmcSamples[iEvent].sample_index);
+    MCSamples[iEvent].NominalSample = dunendmcSamples[iEvent].SampleIndex;
   }
 }
 

@@ -3,7 +3,7 @@
 #include "Samples/SampleHandlerBeamFD.h"
 #include "Samples/SampleHandlerBeamND.h"
 // #include "Samples/SampleHandlerBeamNDGAr.h"
-// #include "Samples/SampleHandlerAtm.h"
+#include "Samples/SampleHandlerAtm.h"
 
 SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, ParameterHandlerGeneric* &xsec, const std::shared_ptr<OscillationHandler>&  BeamOscillator_, const std::shared_ptr<OscillationHandler>&  AtmOscillator_, BeamNDCov beamNDCov) {
   SampleHandlerFD *Sample;
@@ -26,8 +26,8 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
     // else {NDCov = NDCov_RHC;}
     
     Sample = new SampleHandlerBeamND(SampleConfig, xsec, beamNDCov); 
-  // } else if (SampleType == "Atm") {
-  //   Sample = new SampleHandlerAtm(SampleConfig, xsec, AtmOscillator_);
+  } else if (SampleType == "Atm") {
+    Sample = new SampleHandlerAtm(SampleConfig, xsec, AtmOscillator_);
   // } else if (SampleType == "BeamNDGAr") {
   //   Sample = new SampleHandlerBeamNDGAr(SampleConfig, xsec);
   }
