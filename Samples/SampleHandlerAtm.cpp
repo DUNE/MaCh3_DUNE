@@ -63,51 +63,10 @@ int SampleHandlerAtm::SetupExperimentMC() {
   Chain->SetBranchAddress("rec", &sr);
 
   //================================================================================================
-  //Count how many "sensible" entries we have
-
-  MACH3LOG_INFO("Counting sensible entries...");
   
-  int nSensibleEntries = 0;
-  for (int iChainEntry=0;iChainEntry<nChainEntries;iChainEntry++) {
-    Chain->GetEntry(iChainEntry);
+  //First set struct length to maximum number of events from the MC
+  dunemcSamples.resize(nChainEntries);
 
-    if ((iChainEntry % (nChainEntries/10))==0) {
-      MACH3LOG_INFO("\tProcessing entry: {}/{}",iChainEntry,nChainEntries);
-    }
-    
-    if(sr->common.ixn.pandora.size() != 1) {
-      continue;
-    }
-
-    const size_t SampleIndex = FileIndexToSample[static_cast<size_t>(Chain->GetTreeNumber())];
-    
-    TVector3 RecoNuMomentumVector;
-    double RecoENu;
-    if (IsELike[SampleIndex]) {
-      RecoENu = sr->common.ixn.pandora[0].Enu.e_calo;
-      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.heshw.X(),sr->common.ixn.pandora[0].dir.heshw.Y(),sr->common.ixn.pandora[0].dir.heshw.Z())).Unit();
-    } else {
-      RecoENu = sr->common.ixn.pandora[0].Enu.lep_calo;
-      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.X(),sr->common.ixn.pandora[0].dir.lngtrk.Y(),sr->common.ixn.pandora[0].dir.lngtrk.Z())).Unit();      
-    }
-    double RecoCZ = -RecoNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
-    if (std::isnan(RecoCZ)) {
-      continue;
-    }
-    if (std::isnan(RecoENu)) {
-      continue;
-    }
-    
-    nSensibleEntries += 1;
-  }
-
-  MACH3LOG_INFO("Found {} sensible events out of the {} MC entries",nSensibleEntries,nChainEntries);
-  
-  dunemcSamples.resize(nSensibleEntries);
-
-  //================================================================================================
-  //Now load "sensible" events
-  
   int iEvent = 0;
   for (int iChainEntry=0;iChainEntry<nChainEntries;iChainEntry++) {
     Chain->GetEntry(iChainEntry);
@@ -142,11 +101,6 @@ int SampleHandlerAtm::SetupExperimentMC() {
       continue;
     }
 
-    if (iEvent >= nSensibleEntries) {
-      MACH3LOG_ERROR("EventIndex ({}) greater than number of SensibleEntries found ({})",iEvent,nSensibleEntries);
-      throw MaCh3Exception(__FILE__, __LINE__);
-    }
-
     dunemcSamples[iEvent].rw_erec = RecoENu;
     dunemcSamples[iEvent].rw_theta = RecoCZ;
     
@@ -175,16 +129,14 @@ int SampleHandlerAtm::SetupExperimentMC() {
     iEvent += 1;
   }
 
-  if (iEvent != nSensibleEntries) {
-    MACH3LOG_ERROR("Mismatch in number of counted 'sensible' entries vs number of events loaded");
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
+  //Now resize to number of events which passed "sensible" cuts
+  dunemcSamples.resize(iEvent);
 
   //================================================================================================
   delete Chain;
   gErrorIgnoreLevel = CurrErrorLevel;
 
-  return nSensibleEntries;
+  return iEvent;
 }
 
 void SampleHandlerAtm::SetupFDMC() {
