@@ -1,15 +1,17 @@
 ---
 General:
-  OutputFile: "DuneEventRates.root"
+  OutputFile: "BestHopeCont2.root"
+  StartFromPos: True
+  PosFileName: BestHopeCont.root
   DUNESamples:
    - "Configs/Samples/SamplePDFDune_FHC_numuselec.yaml"
    - "Configs/Samples/SamplePDFDune_FHC_nueselec.yaml"
    - "Configs/Samples/SamplePDFDune_RHC_numuselec.yaml"
    - "Configs/Samples/SamplePDFDune_RHC_nueselec.yaml"
-   - "Configs/Samples/SamplePDFDuneND_FHC_CCnumuselec.yaml"
-   - "Configs/Samples/SamplePDFDuneND_RHC_CCnumuselec.yaml"
+  #  - "Configs/Samples/SamplePDFDuneND_FHC_CCnumuselec.yaml"
+  #  - "Configs/Samples/SamplePDFDuneND_RHC_CCnumuselec.yaml"
   # Nu-FIT
-  OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 1284.9, 2.848] #CUDAProb3
+  #OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 1284.9, 2.848] #CUDAProb3 # Remove for unoscillated data
   #OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 1284.9, 2.848,  0.5] #NuFAST
 
   # T2K-like best-fit
@@ -20,12 +22,13 @@ General:
 
   Systematics:
     XsecCovFile:
-      - "Configs/CovObjs/tdr_covs/Flux_ND+FD.yaml"
-      - "Configs/CovObjs/tdr_covs/Xsec_ND+FD.yaml"
-      - "Configs/CovObjs/tdr_covs/DetSysts_FD.yaml"
-      - "Configs/CovObjs/OscCov_PDG2021_v2.yaml"
+      #- "Configs/CovObjs/tdr_covs/Flux_ND+FD.yaml"
+      #- "Configs/CovObjs/tdr_covs/Xsec_ND+FD.yaml"
+      #- "Configs/CovObjs/tdr_covs/DetSysts_FD.yaml"
+      - "Configs/CovObjs/tdr_covs/EnergyNormParams.yaml" # Remove for oscillated data
+      #- "Configs/CovObjs/OscCov_PDG2021_v2.yaml"   # Remove for unoscillated data
     XsecCovName: "xsec_cov"
-    XsecStepScale: 0.05
+    XsecStepScale: 0.00005
     XsecAtGen: false
     NDCovFile: "Configs/CovObjs/tdr_covs/det_sys_cov.root"
     XsecFix: ["baseline", "density"]
@@ -37,14 +40,37 @@ General:
   Fitter:
     FitTestLikelihood: false
   MCMC:
-    NSteps: 2000
-    AutoSave: 10000
+    NSteps: 10000000                         # 30/40k to test Params working etc, 2m as per usual for direct calculation/creation
+    AutoSave: 1000000
   Output:
     FileName: "TestEventRates.root"
     OUTPUTNAME: "TestLLH.root"
   ProcessMCMC: No
   Seed: 0
   Debug: No
+
+AdaptionOptions:
+  Settings:
+    StartThrow: 1500     # [int] At which step do we start throwing from our new matrix?
+    StartUpdate: 1000    # [int] At which step do we start adding steps to the covariance matrix?
+    EndUpdate: 1000000      # [int] At which step do we stop adding steps + fix the covariance matrix?
+    UpdateStep: 5000     # [int] How often do we want to update i.e. change matrix we're throwing from?
+    SaveNIterations: 100000  # [int] How often do we want to save this to file
+    OutputFileName: "NoOscMat.root" # [str] Name of the file containing the matrix -> Change this for each sample
+
+    # Robbins Monroe adaption settings
+    UseRobbinsMonro: True # Do we use this along with adaption 
+    TargetAcceptance: 0.234 # Target acceptance rate
+    TotalRobbinsMonroRestarts: 3 # How many times do we restart the Robbins Monroe count
+    AcceptanceRateBatchSize: 5000 # How often do we restart the Robbins Monroe count
+
+  Covariance:
+    xsec_cov: # Name of covariance matrix
+      DoAdaption: false  # [bool] Adapt this parameter
+
+      UseExternalMatrix: False # To run a new adaptive (after changing params) set to False
+      ExternalMatrixFileName: "FullRangeEBins.root" 
+      ExternalMatrixName: "xsec_cov_posfit_matrix;1"
 
 # LLH Scan settings
 LLHScan:
@@ -64,3 +90,16 @@ LLHScan:
 Tests:
   SkipChecks: False
   TestResultsFile: tests/test_results/EventRatesV2TDR.txt
+
+# Prior/Posterior predictive settings
+Predictive:
+  Ntoy: 1000
+  #Ntoy: 5000
+  #Use Full LLH or only sample contribution based on discussion with Asher we almost always only want the sample likelihood
+  FullLLH: false
+  PriorPredictive: false
+  BurnInSteps: 3000000 # May need to increase due to number of steps
+  PosteriorFile: "BestHopeCont.root" # Change to name of file we sample posterior from
+  ThrowParamGroupOnly: []
+  ThrowSinlgeParams: []
+  DebugHistograms: true
