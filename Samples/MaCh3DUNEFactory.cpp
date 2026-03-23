@@ -94,10 +94,12 @@ void MakeMaCh3DuneInstance(std::unique_ptr<manager>& FitManager, std::vector<Sam
   xsec->SetParameters();
   xsec->SetStepScale(FitManager->raw()["General"]["Systematics"]["XsecStepScale"].as<double>());
 
-  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
-  xsec->SetGroupOnlyParameters("Osc", oscpars);
-  
+  if(CheckNodeExists(FitManager->raw(), "General", "OscillationParameters")){
+    std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
+    xsec->SetGroupOnlyParameters("Osc", oscpars);
+  }
   // ==========================================================
+  xsec->InitialiseAdaption(FitManager->raw());
 
   std::shared_ptr<OscillationHandler> AtmOscHandler;
 
