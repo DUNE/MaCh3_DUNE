@@ -4,6 +4,7 @@ foreach(app
 	EventRates
 	Fit
 	Projections
+	PostPredDUNE
 	SigmaVariation
 	LikelihoodScan
 	Variations
