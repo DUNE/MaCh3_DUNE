@@ -53,7 +53,7 @@ protected:
 	kRecoCVNNumu, kRecoCVNNue
   };
   void RegisterFunctionalParameters() override;
-  void resetShifts(int iEvent) override;
+  void ResetShifts(int iEvent) override;
 
   // Global energy scale systematics
   void TotalEScale(const double * par, std::size_t iEvent);

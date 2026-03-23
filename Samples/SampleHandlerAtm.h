@@ -91,16 +91,6 @@ protected:
   /// @return Value of kinematic parameter corresponding for a given event
   double ReturnKinematicParameter(std::string KinematicParameter, int iEvent);
 
-  /// @brief Gets binning for a given parameter
-  /// @param KinematicParameterStr Parameter name
-  /// @return Vector containing parameter bins
-  std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameterStr);
-
-  /// @brief Gets binning for a given parameter
-  /// @param KinPar Parameter ID
-  /// @return Vector containing parameter bins
-  std::vector<double> ReturnKinematicParameterBinning(KinematicTypes KinPar);
-  
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
     {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},

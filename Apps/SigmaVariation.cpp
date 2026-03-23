@@ -39,7 +39,7 @@ int main(int argc, char * argv[]) {
   for(SampleHandlerFD* handler: DUNEPdfs){
     handler->Reweight();
     for (int iSample=0;iSample<handler->GetNsamples();iSample++) {
-      MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample, handler->GetNDim(iSample))->Integral());
+      MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample)->Integral());
     }
   }
   
@@ -91,7 +91,7 @@ int main(int argc, char * argv[]) {
             File->cd((ParName + "/" + SampleName).c_str());
 
             handler->Reweight();
-            TH1 *Hist = handler->GetMCHist(iSample, handler->GetNDim(iSample));
+            TH1 *Hist = handler->GetMCHist(iSample);
             MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}", SampleName,
                           Hist->Integral());
 

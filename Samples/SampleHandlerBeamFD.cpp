@@ -308,7 +308,7 @@ void SampleHandlerBeamFD::RegisterFunctionalParameters() {
 }
 
 // HH: Reset the shifted values to the original values
-void SampleHandlerBeamFD::resetShifts(int iEvent) {
+void SampleHandlerBeamFD::ResetShifts(int iEvent) {
   dunemcSamples[iEvent].rw_erec_shifted = dunemcSamples[iEvent].rw_erec;
   dunemcSamples[iEvent].rw_cvnnumu_shifted = dunemcSamples[iEvent].rw_cvnnumu;
   dunemcSamples[iEvent].rw_cvnnue_shifted = dunemcSamples[iEvent].rw_cvnnue;

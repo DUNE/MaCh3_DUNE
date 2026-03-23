@@ -131,7 +131,7 @@ int main(int argc, char *argv[]) {
   for (auto handler : DUNEPdfs) {
     handler->Reweight();
     for (int iSample = 0; iSample < handler->GetNsamples(); iSample++) {
-      std::string EventRateString = fmt::format("{:.2f}", handler->GetMCHist(iSample, handler->GetNDim(iSample))->Integral());
+      std::string EventRateString = fmt::format("{:.2f}", handler->GetMCHist(iSample)->Integral());
       MACH3LOG_INFO("Event rate for {} : {:<5}", handler->GetSampleTitle(iSample), EventRateString);
     }
   }

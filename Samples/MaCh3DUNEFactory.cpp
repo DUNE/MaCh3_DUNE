@@ -39,7 +39,7 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
   return Sample;
 }
 
-void MakeMaCh3DuneInstance(std::unique_ptr<manager>& FitManager, std::vector<SampleHandlerFD*> &DUNEPdfs, ParameterHandlerGeneric *&xsec){
+void MakeMaCh3DuneInstance(std::unique_ptr<Manager>& FitManager, std::vector<SampleHandlerFD*> &DUNEPdfs, ParameterHandlerGeneric *&xsec){
 
   // there's a check inside the manager class that does this; left here for demonstrative purposes
   if (FitManager == nullptr) {
@@ -155,7 +155,7 @@ void MakeMaCh3DuneInstance(std::unique_ptr<manager>& FitManager, std::vector<Sam
 
   for(unsigned int Sample_i = 0 ; Sample_i < DUNESampleConfigs.size() ; Sample_i++){
 
-    manager* tempSampleManager = new manager(DUNESampleConfigs[Sample_i].c_str());
+    Manager* tempSampleManager = new Manager(DUNESampleConfigs[Sample_i].c_str());
     std::string SampleType = tempSampleManager->raw()["SampleHandlerName"].as<std::string>();
 
     DUNEPdfs.push_back(GetMaCh3DuneInstance(SampleType, DUNESampleConfigs[Sample_i], xsec, BeamOscHandler, AtmOscHandler, beamNDCov));

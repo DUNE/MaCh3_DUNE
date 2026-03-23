@@ -201,14 +201,3 @@ double SampleHandlerAtm::ReturnKinematicParameter(int KinematicVariable, int iEv
 double SampleHandlerAtm::ReturnKinematicParameter(std::string KinematicParameter, int iEvent) {
   return *GetPointerToKinematicParameter(KinematicParameter, iEvent);
 }
-
-std::vector<double> SampleHandlerAtm::ReturnKinematicParameterBinning(std::string KinematicParameterStr) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameterStr));
-  return ReturnKinematicParameterBinning(KinPar);
-}
-
-std::vector<double> SampleHandlerAtm::ReturnKinematicParameterBinning(KinematicTypes KinPar)  {
-  (void)KinPar;
-  std::vector<double> ReturnVec;
-  return ReturnVec;
-}

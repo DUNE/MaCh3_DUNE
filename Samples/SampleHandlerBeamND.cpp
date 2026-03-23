@@ -271,10 +271,13 @@ void SampleHandlerBeamND::setNDCovMatrix() const {
   std::vector<double> FlatCV(covSize);
   int globalBin = 0;
 
+  /*==========================================================================================================================
+  //DB Do not trust the below code (between the lines of '=') - changed just to compile  
+  */
+  
   for (int iSample = 0; iSample < static_cast<int>(SampleDetails.size()); iSample++) {
-    const int nXBins = Binning->GetNXBins(iSample);
-    const int nYBins = Binning->GetNYBins(iSample);
-    const int blockSize = nXBins * nYBins;
+    const int nBins = Binning->GetNBins(iSample);
+    const int blockSize = nBins;
 
     if (!beamNDCov.useCombinedNDCov) {
       // Fill the block-diagonal entry for this sub-sample
@@ -296,18 +299,17 @@ void SampleHandlerBeamND::setNDCovMatrix() const {
 
     // Fill flat CV vector and add statistical term to diagonal
     int localBin = 0;
-    for (int xBin = 0; xBin < nXBins; xBin++) {
-      for (int yBin = 0; yBin < nYBins; yBin++) {
-        const int idx = Binning->GetBinSafe(iSample, xBin, yBin);
-        const double CV = SampleHandlerFD_data[idx];
-        FlatCV[globalBin + localBin] = CV;
-        if (CV > 0)
-          WorkCov(globalBin + localBin, globalBin + localBin) += 1.0 / CV;
-        localBin++;
-      }
+    for (int iBin = 0; iBin < nBins; iBin++) {
+      const double CV = SampleHandlerFD_data[iBin];
+      FlatCV[globalBin + localBin] = CV;
+      if (CV > 0)
+	WorkCov(globalBin + localBin, globalBin + localBin) += 1.0 / CV;
+      localBin++;
     }
     globalBin += blockSize;
   }
+
+  //==========================================================================================================================
 
   // Invert the working matrix
   WorkCov.Invert();
@@ -325,7 +327,7 @@ void SampleHandlerBeamND::setNDCovMatrix() const {
 
 // New likelihood calculation for ND samples using detector covariance matrix
 double SampleHandlerBeamND::GetLikelihood() const {
-  if (SampleHandlerFD_data == nullptr) {
+  if (SampleHandlerFD_data.empty()) {
     MACH3LOG_ERROR("data sample is empty!");
     return -1;
   }
@@ -339,19 +341,20 @@ double SampleHandlerBeamND::GetLikelihood() const {
 
   std::vector<double> FlatData(covSize);
   std::vector<double> FlatMCPred(covSize);
-  int flatIdx = 0;
 
+  /*==========================================================================================================================
+  //DB Do not trust the below code (between the lines of '=') - changed just to compile
+  */
+  
   // 2D -> 1D, iterating over all sub-samples in the same order as setNDCovMatrix
   for (int iSample = 0; iSample < static_cast<int>(SampleDetails.size()); iSample++) {
-    for (int xBin = 0; xBin < Binning->GetNXBins(iSample); xBin++) {
-      for (int yBin = 0; yBin < Binning->GetNYBins(iSample); yBin++) {
-        const int idx = Binning->GetBinSafe(iSample, xBin, yBin);
-        FlatData[flatIdx] = SampleHandlerFD_data[idx];
-        FlatMCPred[flatIdx] = SampleHandlerFD_array[idx];
-        flatIdx++;
-      }
+    for (int iBin = 0; iBin < Binning->GetNBins(iSample); iBin++) {
+      FlatData[iBin] = SampleHandlerFD_data[iBin];
+      FlatMCPred[iBin] = SampleHandlerFD_array[iBin];
     }
   }
+
+  //==========================================================================================================================
 
   double negLogL = 0.;
 #ifdef MULTITHREAD

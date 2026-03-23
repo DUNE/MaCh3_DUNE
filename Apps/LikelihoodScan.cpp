@@ -43,8 +43,8 @@ int main(int argc, char * argv[]) {
   for(auto handler : DUNEPdfs){
     for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
       handler->Reweight();
-      DUNEHists.push_back(handler->GetMCHist(iSample, handler->GetNDim(iSample)));
-      MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample, handler->GetNDim(iSample))->Integral());
+      DUNEHists.push_back(handler->GetMCHist(iSample));
+      MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample)->Integral());
 
       if (handler->GetNDim(iSample) == 1) {
         handler->AddData(iSample, (TH1D*)DUNEHists.back());

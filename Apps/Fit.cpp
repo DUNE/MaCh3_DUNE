@@ -43,7 +43,7 @@ int main(int argc, char * argv[]) {
       TString NameTString = TString(name.c_str());
       
       handler->Reweight();
-      PredictionHistograms.push_back(static_cast<TH1*>(handler->GetMCHist(iSample, handler->GetNDim(iSample))->Clone(NameTString+"_unosc")));
+      PredictionHistograms.push_back(static_cast<TH1*>(handler->GetMCHist(iSample)->Clone(NameTString+"_DataHist")));
 
       if (handler->GetNDim(iSample) == 1){
         handler->AddData(iSample, static_cast<TH1D*>(PredictionHistograms.back()));

@@ -31,8 +31,6 @@ public:
   double ReturnKinematicParameter(int KinematicVariable, int iEvent);
   double ReturnKinematicParameter(std::string KinematicParameter, int iEvent);
 
-  std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameter);
-  
   //DB functions which could be initialised to do something which is non-trivial
   double CalcXsecWeightFunc(int iEvent) {return 1.; (void)iEvent;}
 
