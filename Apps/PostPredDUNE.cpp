@@ -14,9 +14,10 @@
 #include <TFile.h>
 #include <TKey.h>
 
-#include "Fitters/mcmc.h"
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/StructsDUNE.h"
+#include "Fitters/MaCh3Factory.h"
+#include "Fitters/PredictiveThrower.h"
 
 int main(int argc, char * argv[]) {
 
@@ -99,7 +100,7 @@ int main(int argc, char * argv[]) {
     }
   }
 
-  auto MaCh3Fitter = MaCh3FitterFactory(FitManager.get());
+  std::unique_ptr<PredictiveThrower> MaCh3Fitter = std::make_unique<PredictiveThrower>(FitManager.get());
 
   // #########################################################################
   // Add samples and run the Posterior Predictive
