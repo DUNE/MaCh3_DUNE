@@ -55,6 +55,51 @@ int main(int argc, char * argv[]) {
   //###############################################################################################################################
   //Perform reweight and print total integral
 
+  TFile* Osc = TFile::Open("TrueIndChanOsc.root");
+  TFile* Unosc = TFile::Open("TrueIndChanUnosc.root");
+
+  TIter next(Osc->GetListOfKeys()); 
+  TKey* key; 
+  int ParIndex = 0.0; // 293.0 if all params included
+  //int KeyCount = 0.0;
+
+  for(int i = 0; i < xsec->GetNumParams(); i++){
+    if( xsec->IsParFromGroup(i, "EParam")){
+      ParIndex = i;
+      break;
+    }
+  }
+
+  while ((key = (TKey*)next())) { 
+    //if (KeyCount >= 12) break;
+
+    auto HistoOsc = Osc->Get<TH1D>(key->GetName());
+    auto HistoUnosc = Unosc->Get<TH1D>(key->GetName());
+
+    int NumBins = HistoOsc->GetNbinsX();
+
+    for(int j = 1; j <= NumBins; j++) {
+      double BinSizeOsc = HistoOsc->GetBinContent(j);
+      double BinSizeUnosc = HistoUnosc->GetBinContent(j);
+
+      double Param;
+      if(BinSizeUnosc == 0) {
+        Param = 0;
+        xsec->SetPar(ParIndex, Param);
+      }
+      else {
+        Param = BinSizeOsc / BinSizeUnosc; 
+        xsec->SetPar(ParIndex, Param);
+      }
+        
+      ParIndex++;
+    }
+
+    //KeyCount++;
+
+  }
+
+
   std::vector<TH1*> DUNEHists;
   for(auto Sample : DUNEPdfs){
     Sample->Reweight();
@@ -77,9 +122,53 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("Oscillation Mode Breakdown:");
   
+  // Include for producing plots with variable param values
+  
+  // TFile* Osc = TFile::Open("IndChanOsc.root");
+  // TFile* Unosc = TFile::Open("IndChanUnosc.root");
+
+  // TIter next(Osc->GetListOfKeys()); 
+  // TKey* key; 
+  // int ParIndex = 0.0; // 293.0 if all params included
+  // int KeyCount = 0.0;
+
+  // while ((key = (TKey*)next())) { 
+  //   if (KeyCount >= 12) break;
+
+  //   auto HistoOsc = Osc->Get<TH1D>(key->GetName());
+  //   auto HistoUnosc = Unosc->Get<TH1D>(key->GetName());
+
+  //   int NumBins = HistoOsc->GetNbinsX();
+
+  //   for(int j = 1; j <= NumBins; j++) {
+  //     double BinSizeOsc = HistoOsc->GetBinContent(j);
+  //     double BinSizeUnosc = HistoUnosc->GetBinContent(j);
+
+  //     double Param;
+  //     if(BinSizeUnosc == 0) {
+  //       Param = 0;
+  //       xsec->SetPar(ParIndex, Param);
+  //     }
+  //     else {
+  //       Param = BinSizeOsc / BinSizeUnosc; 
+  //       xsec->SetPar(ParIndex, Param);
+  //     }
+        
+  //     ParIndex++;
+  //   }
+
+  //   KeyCount++;
+
+  // }
+  
+  // TFile* outHist = new TFile("TrueCCIndChanReweight.root", "recreate"); 
+
   for(auto Sample : DUNEPdfs) {
     MACH3LOG_INFO("======================");
+    
+    Sample->Reweight();
     int nOscChannels = Sample->GetNOscChannels();
+
     for (int iOscChan=0;iOscChan<nOscChannels;iOscChan++) {
       std::vector< KinematicCut > SelectionVec;
 
@@ -90,12 +179,19 @@ int main(int argc, char * argv[]) {
       SelectionVec.push_back(SelecChannel);
       
       TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName(),SelectionVec);
+      TString HistoName = Form("%s_%s", Sample->GetTitle().c_str(), Sample->GetFlavourName(iOscChan).c_str());
+
+      // Hist->SetName(HistoName);
+      // Hist->Write();
+
       MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetTitle(),Sample->GetFlavourName(iOscChan),Hist->Integral());
     }
 
     TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName());
     MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetTitle(),Hist->Integral());
   }
+
+  // outHist->Close();
 
   //###############################################################################################################################
   //Make interaction channel breakdown
