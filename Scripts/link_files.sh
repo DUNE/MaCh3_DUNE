@@ -4,7 +4,7 @@
 
 MACH3DIR=`pwd`
 FILESDIR=/vols/dune/LibanDUNEInputs/
-FILESDIR1=/vols/dune/jmm224/data
+NDGAR_FILESDIR=/vols/dune/jmm224/data
 
 if [ ! -d "$MACH3DIR/Inputs/DUNE_CAF_files" ]
 then
@@ -36,20 +36,16 @@ fi
 ln -sf ${FILESDIR}/DUNE_2023_ND_CAFs_FV_CCINC_Q/*root Inputs/DUNE_ND_CAF_files
 
 
-if [ ! -d "$MACH3DIR/Inputs/DUNE_NDGAr_AnaTrees" ]
+if [ ! -d "$MACH3DIR/Inputs/DUNE_NDGAr_files" ]
 then
-  mkdir $MACH3DIR/Inputs/DUNE_NDGAr_AnaTrees
+  mkdir $MACH3DIR/Inputs/DUNE_NDGAr_files
 fi
-
-ln -sf ${FILESDIR1}/NDGAr/rad260/bfield0.5/Anatree/*root Inputs/DUNE_NDGAr_AnaTrees
-
-
-if [ ! -d "$MACH3DIR/Inputs/DUNE_NDGAr_FastGarSim" ]
+ln -sf ${NDGAR_FILESDIR}/NDGAr/rad260/bfield0.5/FastGarSim/FastGArSim_FHC_numu_hA.root Inputs/DUNE_NDGAr_files
+if [ ! -d "$MACH3DIR/Inputs/DUNE_NDGAr_files/GenieTrees" ]
 then
-  mkdir $MACH3DIR/Inputs/DUNE_NDGAr_FastGarSim
+  mkdir $MACH3DIR/Inputs/DUNE_NDGAr_files/GenieTrees
 fi
-
-ln -sf ${FILESDIR1}/NDGAr/genie_inputs/GENIE_hA/*root Inputs/DUNE_NDGAr_FastGarSim
+ln -sf ${NDGAR_FILESDIR}/NDGAr/genie_inputs/*root Inputs/DUNE_NDGAr_files/GenieTrees
 
 
 ln -sf ${FILESDIR}/DUNE_2023_ND_CAFs_FV_CCINC_Q/*root Inputs/DUNE_ND_CAF_files

@@ -14,7 +14,6 @@ SampleHandlerBeamNDGAr::~SampleHandlerBeamNDGAr() {
 }
 
 void SampleHandlerBeamNDGAr::Init() {
-  pot = SampleManager->raw()["POT"].as<double>();
   momentum_resolution_threshold = SampleManager->raw()["DetectorVariables"]["momentum_resolution_threshold"].as<double>(); //NK momentum_resolution threshold, total as a fraction of momentum
   pixel_spacing = SampleManager->raw()["DetectorVariables"]["pixel_spacing"].as<double>(); //NK pixel spacing in mm to find num hits in y,z plane
   spatial_resolution = SampleManager->raw()["DetectorVariables"]["spatial_resolution"].as<double>(); //NK spatial resolution in mm to find  in y,z plane
@@ -29,31 +28,53 @@ void SampleHandlerBeamNDGAr::Init() {
   TPCInstrumentedLength = SampleManager->raw()["DetectorVariables"]["TPCInstrumentedLength"].as<double>();
   TPCInstrumentedRadius = SampleManager->raw()["DetectorVariables"]["TPCInstrumentedRadius"].as<double>();
   ECALSciX0 = SampleManager->raw()["DetectorVariables"]["ECALSciX0"].as<double>();
+
+  beamNDGArSampleDetails.resize(static_cast<size_t>(GetNsamples()));
+  
+  auto EnabledSamples = Get<std::vector<std::string>>(SampleManager->raw()["Samples"], __FILE__ , __LINE__);
+
+  for (size_t i = 0; i < static_cast<size_t>(GetNsamples()); i++){
+    const auto TempTitle = EnabledSamples[i];
+    beamNDGArSampleDetails[i].isFHC = SampleManager->raw()[TempTitle]["DUNESampleBools"]["isFHC"].as<double>();
+    beamNDGArSampleDetails[i].iselike = SampleManager->raw()[TempTitle]["DUNESampleBools"]["iselike"].as<bool>();
+    beamNDGArSampleDetails[i].pot = SampleManager->raw()[TempTitle]["POT"].as<double>();
+
+    if (beamNDGArSampleDetails[i].isFHC == 1.) { 
+      beamNDGArSampleDetails[i].norm_s = (1e21/1.905e21);
+    } else {
+      beamNDGArSampleDetails[i].norm_s = (1e21/1.5e21);
+    }
+    beamNDGArSampleDetails[i].pot_s = (beamNDGArSampleDetails[i].pot)/1e21;
+
+    MACH3LOG_INFO("Setting up beam ND sample {}", GetSampleTitle(static_cast<int>(i)));
+    MACH3LOG_INFO("- isFHC: {}", beamNDGArSampleDetails[i].isFHC);
+    MACH3LOG_INFO("- iselike: {}", beamNDGArSampleDetails[i].iselike);
+  }
+
+  MACH3LOG_INFO("-------------------------------------------------------------------");
 }
 
 void SampleHandlerBeamNDGAr::SetupSplines() {
   ///@todo move all of the spline setup into core
-  if(ParHandler->GetNumParamsFromSampleName(SampleName, kSpline) > 0){
-    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", ParHandler->GetNumParamsFromSampleName(SampleName, kSpline));
+  if(ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline) > 0){
+    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline));
     SplineHandler = std::unique_ptr<BinnedSplineHandler>(new BinnedSplineHandlerDUNE(ParHandler,Modes.get()));
     InitialiseSplineObject();
   }
   else{
-    MACH3LOG_INFO("Found {} splines for this sample so I will not load or evaluate splines", ParHandler->GetNumParamsFromSampleName(SampleName, kSpline));
+    MACH3LOG_INFO("Found {} splines for this sample so I will not load or evaluate splines", ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline));
     SplineHandler = nullptr;
   }
 
   return;
 }
 
-void SampleHandlerBeamNDGAr::SetupWeightPointers() {
+void SampleHandlerBeamNDGAr::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < dunendgarmcFitting.size(); ++i) {
       MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].pot_s));
       MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].norm_s));
-      MCSamples[i].total_weight_pointers.push_back(MCSamples[i].osc_w_pointer);
       MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].rw_berpaacvwgt));
       MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].flux_w));
-      MCSamples[i].total_weight_pointers.push_back(&(MCSamples[i].xsec_w));
       MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcPlotting[i].geometric_correction));
   }
 }
@@ -603,6 +624,7 @@ void SampleHandlerBeamNDGAr::clearBranchVectors() {
   _MCPTrkID->clear();
   _MCPMotherTrkID->clear();
   _TPCHitTrkID->clear();
+  _TPCHitIsSec->clear();
   _TPCHitEnergy->clear();
   _TPCHitX->clear();
   _TPCHitY->clear();
@@ -687,160 +709,185 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
   MACH3LOG_INFO("-------------------------------------------------------------------");
 
-  // Read fastgarsim file
-  if (mc_files.size() != 1) {
-    MACH3LOG_ERROR("Please specify just one FastGarSim input file in the config.");
-    throw MaCh3Exception(__FILE__, __LINE__);
+  TChain* _data = new TChain("AnaTree");
+  TChain* _geometry = new TChain("GeoTree");
+  TChain* _genie = new TChain("gst");
+  // Maps the file index within the TChain (GetTreeNumber()) to its sample index.
+  std::vector<size_t> fileIndexToSample;
+  for (size_t iSample=0;iSample<SampleDetails.size();iSample++) {
+    for (const std::string& filename : SampleDetails[iSample].mc_files) {
+      MACH3LOG_INFO("Adding simulation file to TChain: {}", filename);
+      // HH: Check whether the file exists, see https://root.cern/doc/master/classTChain.html#a78a896924ac6c7d3691b7e013bcbfb1c
+      int _add_rtn = _data->Add(filename.c_str(), -1);
+      if(_add_rtn == 0){
+        MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", filename);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+
+      int _add_rtn_geo = _geometry->Add(filename.c_str(), -1);
+      if(_add_rtn_geo == 0){
+        MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", filename);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+
+      // Read Genie file
+      std::string genieFileStr = "";
+      if (filename.find("hA") != std::string::npos) genieFileStr = "Inputs/DUNE_NDGAr_files/GenieTrees/numu_argon_G18_10a_gst.root";
+      else if (filename.find("hN") != std::string::npos) genieFileStr = "Inputs/DUNE_NDGAr_files/GenieTrees/numu_argon_G18_10b_gst.root";
+      else {
+        genieFileStr = "Inputs/DUNE_NDGAr_files/GenieTrees/numu_argon_G18_10a_gst.root";
+        MACH3LOG_WARN("Could not find interaction model in file name. Using GENIE file {}", genieFileStr);
+      }
+
+      MACH3LOG_INFO("Adding genie file to TChain: {}", genieFileStr);
+
+      int _add_rtn_genie = _genie->Add(genieFileStr.c_str(), -1);
+      if(_add_rtn_genie == 0){
+        MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", genieFileStr);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+
+      // Each file added (glob patterns may expand to multiple) gets the same sample index.
+      // We query how many files are now in the chain to know how many entries to push.
+      const int nFilesNow = _data->GetListOfFiles()->GetEntries();
+      while(static_cast<int>(fileIndexToSample.size()) < nFilesNow){
+        fileIndexToSample.push_back(iSample);
+      }
+    }
   }
 
-  std::string simFileStr = mc_files.at(0);
-  TFile* simFile = TFile::Open(simFileStr.c_str(), "READ");
-  TTree* simTree = static_cast<TTree*>(simFile->Get("AnaTree"));
-  TTree* geoTree = static_cast<TTree*>(simFile->Get("GeoTree"));
-
-  if(!simTree || simTree->IsZombie()){
-    MACH3LOG_ERROR("Could not find anatree in {}", mc_files[0]);
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-  else if(!geoTree || geoTree->IsZombie()){
-    MACH3LOG_ERROR("Could not find geotree in {}", mc_files[0]);
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-  else{
-    MACH3LOG_INFO("Found anatree in {}", mc_files[0]);
-    MACH3LOG_INFO("With number of entries: {}", simTree->GetEntries());
-  }
-
-  // Read Genie file
-  std::string genieFileStr = "";
-  if (simFileStr.find("hA") != std::string::npos) genieFileStr = "Inputs/DUNE_NDGAr_FastGarSim/GenieTrees/numu_argon_G18_10a_gst.root";
-  else if (simFileStr.find("hN") != std::string::npos) genieFileStr = "Inputs/DUNE_NDGAr_FastGarSim/GenieTrees/numu_argon_G18_10b_gst.root";
-  else {
-    genieFileStr = "Inputs/DUNE_NDGAr_FastGarSim/GenieTrees/numu_argon_G18_10a_gst.root";
-    MACH3LOG_INFO("Could not find interaction model in file name. Using GENIE file {}", genieFileStr);
-  }
-
-  TFile* genieFile = TFile::Open(genieFileStr.c_str(), "READ");
-  TTree* genieTree = static_cast<TTree*>(genieFile->Get("gst"));
-
-  if(!genieTree || genieTree->IsZombie()){
-    MACH3LOG_ERROR("Could not find Genie tree in {}", genieFileStr);
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-  else{
-    MACH3LOG_INFO("Found Genie tree in {}", genieFileStr);
-    MACH3LOG_INFO("With number of entries: {}", genieTree->GetEntries());
-  }
-
-  simTree->SetBranchStatus("*", 0);
-  genieTree->SetBranchStatus("*", 0);
+  _data->SetBranchStatus("*", 0);
+  _genie->SetBranchStatus("*", 0);
 
   auto readBranch = [&](TTree* tree, const char* name, void* addr) {
     tree->SetBranchStatus(name, 1);
     tree->SetBranchAddress(name, addr);
   };
 
-  readBranch(simTree, "eventID", &_EventID);
-  readBranch(simTree, "startX", &_MCPStartX);
-  readBranch(simTree, "startY", &_MCPStartY);
-  readBranch(simTree, "startZ", &_MCPStartZ);
-  readBranch(simTree, "endX", &_MCPEndX);
-  readBranch(simTree, "endY", &_MCPEndY);
-  readBranch(simTree, "endZ", &_MCPEndZ);
-  readBranch(simTree, "startPX", &_MCPStartPX);
-  readBranch(simTree, "startPY", &_MCPStartPY);
-  readBranch(simTree, "startPZ", &_MCPStartPZ);
-  readBranch(simTree, "ecalPX", &_MCPCalPX);
-  readBranch(simTree, "ecalPY", &_MCPCalPY);
-  readBranch(simTree, "ecalPZ", &_MCPCalPZ);
-  readBranch(simTree, "endPX", &_MCPEndPX);
-  readBranch(simTree, "endPY", &_MCPEndPY);
-  readBranch(simTree, "endPZ", &_MCPEndPZ);
-  readBranch(simTree, "pdgCode", &_MCPPDG);
-  readBranch(simTree, "trackID", &_MCPTrkID);
-  readBranch(simTree, "motherID", &_MCPMotherTrkID);
-  readBranch(simTree, "tpcHitTrackID", &_TPCHitTrkID);
-  readBranch(simTree, "tpcHitEdep", &_TPCHitEnergy);
-  readBranch(simTree, "tpcHitX", &_TPCHitX);
-  readBranch(simTree, "tpcHitY", &_TPCHitY);
-  readBranch(simTree, "tpcHitZ", &_TPCHitZ);
-  readBranch(simTree, "tpcHitIsSec", &_TPCHitIsSec);
-  readBranch(simTree, "ecalHitTrackID", &_CalHitTrkID);
-  readBranch(simTree, "ecalHitLayer", &_CalHitLayer);
-  readBranch(simTree, "ecalHitEdep", &_CalHitEnergy);
-  readBranch(simTree, "ecalHitIsSec", &_CalHitIsSec);
-  readBranch(simTree, "ecalHitTime", &_CalHitTime);
-  readBranch(simTree, "ecalHitX", &_CalHitX);
-  readBranch(simTree, "ecalHitY", &_CalHitY);
-  readBranch(simTree, "ecalHitZ", &_CalHitZ);
-  readBranch(simTree, "muidHitTrackID", &_MuIDHitTrkID);
-  readBranch(simTree, "muidHitEdep", &_MuIDHitEnergy);
-  readBranch(simTree, "muidHitX", &_MuIDHitX);
-  readBranch(simTree, "muidHitY", &_MuIDHitY);
-  readBranch(simTree, "muidHitZ", &_MuIDHitZ);
+  readBranch(_data, "eventID", &_EventID);
+  readBranch(_data, "startX", &_MCPStartX);
+  readBranch(_data, "startY", &_MCPStartY);
+  readBranch(_data, "startZ", &_MCPStartZ);
+  readBranch(_data, "endX", &_MCPEndX);
+  readBranch(_data, "endY", &_MCPEndY);
+  readBranch(_data, "endZ", &_MCPEndZ);
+  readBranch(_data, "startPX", &_MCPStartPX);
+  readBranch(_data, "startPY", &_MCPStartPY);
+  readBranch(_data, "startPZ", &_MCPStartPZ);
+  readBranch(_data, "ecalPX", &_MCPCalPX);
+  readBranch(_data, "ecalPY", &_MCPCalPY);
+  readBranch(_data, "ecalPZ", &_MCPCalPZ);
+  readBranch(_data, "endPX", &_MCPEndPX);
+  readBranch(_data, "endPY", &_MCPEndPY);
+  readBranch(_data, "endPZ", &_MCPEndPZ);
+  readBranch(_data, "pdgCode", &_MCPPDG);
+  readBranch(_data, "trackID", &_MCPTrkID);
+  readBranch(_data, "motherID", &_MCPMotherTrkID);
+  readBranch(_data, "tpcHitTrackID", &_TPCHitTrkID);
+  readBranch(_data, "tpcHitEdep", &_TPCHitEnergy);
+  readBranch(_data, "tpcHitX", &_TPCHitX);
+  readBranch(_data, "tpcHitY", &_TPCHitY);
+  readBranch(_data, "tpcHitZ", &_TPCHitZ);
+  readBranch(_data, "tpcHitIsSec", &_TPCHitIsSec);
+  readBranch(_data, "ecalHitTrackID", &_CalHitTrkID);
+  readBranch(_data, "ecalHitLayer", &_CalHitLayer);
+  readBranch(_data, "ecalHitEdep", &_CalHitEnergy);
+  readBranch(_data, "ecalHitIsSec", &_CalHitIsSec);
+  readBranch(_data, "ecalHitTime", &_CalHitTime);
+  readBranch(_data, "ecalHitX", &_CalHitX);
+  readBranch(_data, "ecalHitY", &_CalHitY);
+  readBranch(_data, "ecalHitZ", &_CalHitZ);
+  readBranch(_data, "muidHitTrackID", &_MuIDHitTrkID);
+  readBranch(_data, "muidHitEdep", &_MuIDHitEnergy);
+  readBranch(_data, "muidHitX", &_MuIDHitX);
+  readBranch(_data, "muidHitY", &_MuIDHitY);
+  readBranch(_data, "muidHitZ", &_MuIDHitZ);
 
-  readBranch(geoTree, "gar_tpc_radius", &_TPCRad);
-  readBranch(geoTree, "gar_tpc_length", &_TPCLen);
-  readBranch(geoTree, "gar_magnetic_field", &_BField);
-  readBranch(geoTree, "ecal_num_sides", &_NumCalSides);
-  readBranch(geoTree, "ecal_barrel_gap", &_BarrelGap);
-  readBranch(geoTree, "ecal_endcap_gap", &_EndCapGap);
-  readBranch(geoTree, "ecal_hg_absorber_thickness", &_HGAbsWidth);
-  readBranch(geoTree, "ecal_lg_absorber_thickness", &_LGAbsWidth);
-  readBranch(geoTree, "ecal_hg_scintillator_thickness", &_HGSciWidth);
-  readBranch(geoTree, "ecal_lg_scintillator_thickness", &_LGSciWidth);
-  readBranch(geoTree, "ecal_hg_board_thickness", &_HGBoardWidth);
-  readBranch(geoTree, "ecal_barrel_hg_layers", &_NBarrelHG);
-  readBranch(geoTree, "ecal_barrel_lg_layers", &_NBarrelLG);
-  readBranch(geoTree, "ecal_endcap_hg_layers", &_NEndCapHG);
-  readBranch(geoTree, "ecal_endcap_lg_layers", &_NEndCapLG);
-  geoTree->GetEntry(0);
+  readBranch(_geometry, "gar_tpc_radius", &_TPCRad);
+  readBranch(_geometry, "gar_tpc_length", &_TPCLen);
+  readBranch(_geometry, "gar_magnetic_field", &_BField);
+  readBranch(_geometry, "ecal_num_sides", &_NumCalSides);
+  readBranch(_geometry, "ecal_barrel_gap", &_BarrelGap);
+  readBranch(_geometry, "ecal_endcap_gap", &_EndCapGap);
+  readBranch(_geometry, "ecal_hg_absorber_thickness", &_HGAbsWidth);
+  readBranch(_geometry, "ecal_lg_absorber_thickness", &_LGAbsWidth);
+  readBranch(_geometry, "ecal_hg_scintillator_thickness", &_HGSciWidth);
+  readBranch(_geometry, "ecal_lg_scintillator_thickness", &_LGSciWidth);
+  readBranch(_geometry, "ecal_hg_board_thickness", &_HGBoardWidth);
+  readBranch(_geometry, "ecal_barrel_hg_layers", &_NBarrelHG);
+  readBranch(_geometry, "ecal_barrel_lg_layers", &_NBarrelLG);
+  readBranch(_geometry, "ecal_endcap_hg_layers", &_NEndCapHG);
+  readBranch(_geometry, "ecal_endcap_lg_layers", &_NEndCapLG);
+  _geometry->GetEntry(0);
   FillGeoVars();
 
-  readBranch(genieTree, "Ev", &_Enu);
-  readBranch(genieTree, "pxv", &_PXnu);
-  readBranch(genieTree, "pyv", &_PYnu);
-  readBranch(genieTree, "pzv", &_PZnu);
-  readBranch(genieTree, "neu", &_nuPDG);
-  readBranch(genieTree, "El", &_Elep);
-  readBranch(genieTree, "pxl", &_PXlep);
-  readBranch(genieTree, "pyl", &_PYlep);
-  readBranch(genieTree, "pzl", &_PZlep);
-  readBranch(genieTree, "cc", &_isCC);
-  readBranch(genieTree, "nfpip", &_npip);
-  readBranch(genieTree, "nfpim", &_npim);
-  readBranch(genieTree, "nfpi0", &_npi0);
+  readBranch(_genie, "Ev", &_Enu);
+  readBranch(_genie, "pxv", &_PXnu);
+  readBranch(_genie, "pyv", &_PYnu);
+  readBranch(_genie, "pzv", &_PZnu);
+  readBranch(_genie, "neu", &_nuPDG);
+  readBranch(_genie, "El", &_Elep);
+  readBranch(_genie, "pxl", &_PXlep);
+  readBranch(_genie, "pyl", &_PYlep);
+  readBranch(_genie, "pzl", &_PZlep);
+  readBranch(_genie, "cc", &_isCC);
+  readBranch(_genie, "nfpip", &_npip);
+  readBranch(_genie, "nfpim", &_npim);
+  readBranch(_genie, "nfpi0", &_npi0);
+  readBranch(_genie, "neut_code", &_neut_code);
 
-  size_t nEntries = static_cast<size_t>(downsampling*static_cast<double>(simTree->GetEntries()));
+  size_t nEntries = static_cast<size_t>(downsampling*static_cast<double>(_data->GetEntries()));
+  size_t countwidth = nEntries / 50;
 
   dunendgarmcFitting.resize(nEntries);
   dunendgarmcPlotting.resize(nEntries);
+  _data->GetEntry(0);
+  _genie->GetEntry(0);
 
   double pixel_spacing_cm = pixel_spacing/10; //convert to cm
   int numCC = 0;
   int num_in_fdv = 0;
   bool do_geometric_correction = false;
 
-  for (size_t i_event = 0; i_event < nEntries; ++i_event) { 
+  for (unsigned int i_event = 0; i_event < nEntries; ++i_event) { 
     if (i_event != 0) clearBranchVectors();
-    simTree->GetEntry(static_cast<Long64_t>(i_event));
-    genieTree->GetEntry(_EventID);
-    
-    // Note that the FastGArSim output has a different coordinate system to the genie file and this code. This is fixed here.
+    _data->GetEntry(i_event);
+    _genie->GetEntry(_EventID);
+
+    // FastGArSim output has a different coordinate system to the genie file and this code. This is fixed here.
     fixCoordinates();
 
-    if (i_event % (nEntries/100) == 0) {
-      MACH3LOG_INFO("\tNow processing event: {}/{}",i_event,nEntries);
+    if (i_event % countwidth == 0) {
+      MaCh3Utils::PrintProgressBar(i_event, static_cast<Long64_t>(nEntries));
     }
 
-    std::vector<double> vertex = {M3::_BAD_DOUBLE_, M3::_BAD_DOUBLE_, M3::_BAD_DOUBLE_};
+    const Int_t treeNum = _data->GetTreeNumber();
+    if(treeNum < 0 || static_cast<size_t>(treeNum) >= fileIndexToSample.size()){
+      MACH3LOG_ERROR("GetTreeNumber() returned {} which is out of range [0, {})", treeNum, fileIndexToSample.size());
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+    const size_t sample_index = fileIndexToSample[static_cast<size_t>(treeNum)];
 
+    dunendgarmcFitting[i_event].SampleIndex = static_cast<unsigned int>(sample_index);
     dunendgarmcFitting[i_event].rw_etru = _Enu;
     dunendgarmcFitting[i_event].rw_isCC = _isCC;
     dunendgarmcFitting[i_event].nupdg = _nuPDG;
     dunendgarmcFitting[i_event].nupdgUnosc = _nuPDG;
-    dunendgarmcFitting[i_event].OscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, dunendgarmcFitting[i_event].nupdgUnosc, dunendgarmcFitting[i_event].nupdg));
+    dunendgarmcFitting[i_event].OscChannelIndex = static_cast<double>(GetOscChannel(SampleDetails[sample_index].OscChannels, dunendgarmcFitting[i_event].nupdgUnosc, dunendgarmcFitting[i_event].nupdg));
     dunendgarmcFitting[i_event].rw_berpaacvwgt = _BeRPA_cvwgt;
+    dunendgarmcFitting[i_event].Target = 40; // Assume everything is Argon
+    dunendgarmcFitting[i_event].rw_Q0 = _Enu - _Elep;
+    dunendgarmcFitting[i_event].rw_Q3 = std::sqrt((_PXnu-_PXlep)*(_PXnu-_PXlep) + (_PYnu-_PYlep)*(_PYnu-_PYlep) + (_PZnu-_PZlep)*(_PZnu-_PZlep));
+    dunendgarmcFitting[i_event].norm_s = 1.;
+    dunendgarmcFitting[i_event].pot_s = pot/(downsampling*1e21);
+    dunendgarmcFitting[i_event].flux_w = 1.0;
+
+    int M3Mode = Modes->GetModeFromGenerator(std::abs(_neut_code));
+    if (!_isCC) M3Mode += 14; //Account for no ability to distinguish CC/NC
+    if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
+    dunendgarmcFitting[i_event].mode = M3Mode;
+
+    std::vector<double> vertex = {M3::_BAD_DOUBLE_, M3::_BAD_DOUBLE_, M3::_BAD_DOUBLE_};
 
     std::unordered_map<int, std::vector<int>> mother_to_daughter_ID;
     std::unordered_map<int, size_t> ID_to_index;
@@ -1045,6 +1092,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     dunendgarmcPlotting[i_event].rw_lep_phi = lep_phi;
     dunendgarmcPlotting[i_event].rw_lep_bangle = lep_bangle;
     dunendgarmcPlotting[i_event].rw_lep_p = lep_momentum;
+    dunendgarmcFitting[i_event].rw_lep_pT = std::sqrt(lep_momentum*lep_momentum - lep_pBeam*lep_pBeam); 
 
     double radius = std::sqrt((vertex[1]-TPC_centre_y)*(vertex[1]-TPC_centre_y) 
                               + (vertex[2]-TPC_centre_z)*(vertex[2]-TPC_centre_z)); //find radius of interaction vertex
@@ -1056,6 +1104,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     } else{
       dunendgarmcPlotting[i_event].in_fdv = 0;
     }
+    if(_isCC) numCC++;
 
     // Perform 'geometric correction' if do_geometric_correction set to true
     dunendgarmcPlotting[i_event].geometric_correction = 1.;
@@ -1064,22 +1113,15 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       else if ((lep_perpangle < 45 || lep_perpangle > 135) && lep_momentum > 0.3) dunendgarmcPlotting[i_event].geometric_correction = 2.;
     }
 
-    // Fill remaining event-level kinematic parameters
-    dunendgarmcFitting[i_event].Target = 40; // Assume everything is Argon
-    dunendgarmcFitting[i_event].rw_Q0 = _Enu - _Elep;
-    dunendgarmcFitting[i_event].rw_Q3 = std::sqrt((_PXnu-_PXlep)*(_PXnu-_PXlep) + (_PYnu-_PYlep)*(_PYnu-_PYlep) + (_PZnu-_PZlep)*(_PZnu-_PZlep));
-    dunendgarmcFitting[i_event].rw_lep_pT = std::sqrt(lep_momentum*lep_momentum - lep_pBeam*lep_pBeam); 
-    dunendgarmcFitting[i_event].norm_s = 1.;
-    dunendgarmcFitting[i_event].pot_s = pot/(downsampling*1e21);
-    dunendgarmcFitting[i_event].flux_w = 1.0;
-    if(dunendgarmcFitting[i_event].rw_isCC == 1) numCC++;
   }
   MACH3LOG_INFO("nEntries = {}, numCC = {}, numFDV = {}", nEntries, numCC, num_in_fdv);
 
-  simFile->Close();
-  genieFile->Close();
-  delete simFile;
-  delete genieFile;
+  _data->Reset();
+  delete _data;
+  _geometry->Reset();
+  delete _geometry;
+  _genie->Reset();
+  delete _genie;
 
   return static_cast<int>(nEntries);
 }
@@ -1090,6 +1132,8 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
   switch(KinematicParameter) {
     case kTrueNeutrinoEnergy:
       return &dunendgarmcFitting[iEvent].rw_etru; 
+    case kMode:
+      return &dunendgarmcFitting[iEvent].mode;
     case kOscChannel:
       return &dunendgarmcFitting[iEvent].OscChannelIndex;
     case kTrueXPos:
@@ -1307,5 +1351,6 @@ void SampleHandlerBeamNDGAr::SetupFDMC() {
     MCSamples[iEvent].isNC = !dunendgarmcFitting[iEvent].rw_isCC;
     MCSamples[iEvent].nupdg = &(dunendgarmcFitting[iEvent].nupdg);
     MCSamples[iEvent].nupdgUnosc = &(dunendgarmcFitting[iEvent].nupdgUnosc);
+    MCSamples[iEvent].NominalSample = static_cast<int>(dunendgarmcFitting[iEvent].SampleIndex);
   }
 }

@@ -1,0 +1,164 @@
+---
+
+Title: "DUNE Interaction modes"
+
+GeneratorName: "NEUT"
+
+MaCh3Modes: [
+  "CCQE",
+  "CC1Kaon",
+  "CCDIS",
+  "CCRES",
+  "CCCOH",
+  "CCDiff",
+  "CCMEC",
+  "CC1eta",
+  "CC1gamma",
+  "CCNpi",
+  "NCQE",
+  "NCDIS",
+  "NCRES",
+  "NCCOH",
+  "NCDiff",
+  "NC1eta",
+  "NC1gamma",
+  "NCNpi",
+  "NC1Kaon"
+  ]
+
+#CC Interaction Modes
+
+CCQE:
+  Name: "CCQE"
+  GeneratorMaping: [1]
+  IsNC: false
+  PlotColor: 1
+  SplineSuffix: "ccqe"
+
+CC1Kaon:
+  Name: "CC1Kaon"
+  GeneratorMaping: [23]
+  IsNC: false
+  PlotColor: 1
+  SplineSuffix: "cc1kaon"
+
+CCDIS:
+  Name: "CCDIS"
+  GeneratorMaping: [26]
+  IsNC: false
+  PlotColor: 2
+  SplineSuffix: "ccdis"
+
+CCRES:
+  Name: "CCRES"
+  GeneratorMaping: [11, 12, 13]
+  IsNC: false
+  PlotColor: 2
+  SplineSuffix: "ccres"
+
+CCCOH:
+  Name: "CCCOH"
+  GeneratorMaping: [16]
+  IsNC: false
+  PlotColor: 2
+  SplineSuffix: "cccoh"
+
+CCDiff:
+  Name: "CCDiff"
+  GeneratorMaping: [15]
+  IsNC: false
+  PlotColor: 2
+  SplineSuffix: "ccdiff"
+
+CCMEC:
+  Name: "CCMEC"
+  GeneratorMaping: [2]
+  IsNC: false
+  PlotColor: 2
+  SplineSuffix: "ccmec"
+
+CC1eta:
+  Name: "CC1eta"
+  GeneratorMaping: [22]
+  IsNC: false
+  PlotColor: 3
+  SplineSuffix: "cc1eta"
+
+CC1gamma:
+  Name: "CC1gamma"
+  GeneratorMaping: [17]
+  IsNC: false
+  PlotColor: 3
+  SplineSuffix: "cc1gamma"
+
+CCNpi:
+  Name: "CCNpi"
+  GeneratorMaping: [21]
+  IsNC: false
+  PlotColor: 3
+  SplineSuffix: "ccnpi"
+
+#NC Interaction Modes
+
+NCQE:
+  Name: "NCQE"
+  GeneratorMaping: [51, 52]
+  IsNC: true
+  PlotColor: 1
+  SplineSuffix: "ncqe"
+
+NCDIS:
+  Name: "NCDIS"
+  GeneratorMaping: [46]
+  IsNC: true
+  PlotColor: 2
+  SplineSuffix: "ncdis"
+
+NCRES:
+  Name: "NCRES"
+  GeneratorMaping: [31, 32, 33, 34]
+  IsNC: true
+  PlotColor: 2
+  SplineSuffix: "ncres"
+
+NCCOH:
+  Name: "NCCOH"
+  GeneratorMaping: [36]
+  IsNC: true
+  PlotColor: 2
+  SplineSuffix: "nccoh"
+
+NCDiff:
+  Name: "NCDiff"
+  GeneratorMaping: [35]
+  IsNC: true
+  PlotColor: 2
+  SplineSuffix: "ncdiff"
+
+NC1eta:
+  Name: "NC1eta"
+  GeneratorMaping: [42, 43]
+  IsNC: true
+  PlotColor: 3
+  SplineSuffix: "nc1eta"
+
+NC1gamma:
+  Name: "NC1gamma"
+  GeneratorMaping: [38, 39]
+  IsNC: true
+  PlotColor: 3
+  SplineSuffix: "nc1gamma"
+
+NCNpi:
+  Name: "NCNpi"
+  GeneratorMaping: [41]
+  IsNC: true
+  PlotColor: 3
+  SplineSuffix: "ncnpi"
+
+NC1Kaon:
+  Name: "NC1Kaon"
+  GeneratorMaping: [44, 45]
+  IsNC: true
+  PlotColor: 3
+  SplineSuffix: "nc1kaon"

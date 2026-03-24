@@ -29,7 +29,7 @@ protected:
   void Init() override;
   int SetupExperimentMC() override;
   void SetupFDMC() override;
-  void SetupWeightPointers() override;
+  void AddAdditionalWeightPointers() override;
   void SetupSplines() override;
 
   void CleanMemoryBeforeFit() override;
@@ -49,6 +49,7 @@ protected:
 
   std::vector<dunemc_beamndgar> dunendgarmcFitting;
   std::vector<dunemc_plotting> dunendgarmcPlotting;
+  std::vector<BeamNDSampleInfo> beamNDGArSampleDetails;
 
   //NDGAr-specific functions
   double FindNHits(double pixel_spacing_cm, double centre_circle_y, double centre_circle_z, double rad_curvature, double theta_start, double theta_spanned, int charge);
@@ -144,6 +145,7 @@ protected:
   int _npip;
   int _npim;
   int _npi0;
+  int _neut_code;
 
   // TPC dimensions
   double TPCFidLength;
