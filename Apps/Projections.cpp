@@ -370,8 +370,11 @@ int main(int argc, char *argv[]) {
             } else {
               BreakdownHist->Add(Hist);
             }
-            leg->AddEntry(Hist, Projections[iProj].CategoryCuts[iCat].CategoryNames[iBreak].c_str(), "f");
+            //leg->AddEntry(Hist, Projections[iProj].CategoryCuts[iCat].CategoryNames[iBreak].c_str(), "f");
           }
+
+          // add legend entry here
+          leg->AddEntry(BreakdownHist, Projections[iProj].CategoryCuts[iCat].CategoryNames[iBreak].c_str(), "f");
 
           MACH3LOG_INFO("\t\t\tBreakdown: {:<10} - Integral: {:<10}", iBreak, BreakdownHist->Integral());
           Stack->Add(BreakdownHist);
