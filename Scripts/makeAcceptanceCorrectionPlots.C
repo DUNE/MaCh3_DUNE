@@ -112,8 +112,9 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename) {
     if (obj->InheritsFrom(TH1D::Class())) {
       rawHist->Draw("HIST");
 
-      for (int i = 1; i <= rawHist->GetNbinsX(); i++) { // Undo width scaling
-        totEntries += rawHist->GetBinContent(i) * rawHist->GetBinWidth(i);
+      for (int i = 1; i <= rawHist->GetNbinsX(); i++) {
+        totEntries += rawHist->GetBinContent(i);
+        // totEntries += rawHist->GetBinContent(i) * rawHist->GetBinWidth(i); // To undo width scaling for normalised hists
       }
       totEntries += rawHist->GetBinContent(rawHist->GetNbinsX()+1);
     }

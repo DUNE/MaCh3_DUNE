@@ -135,7 +135,15 @@ struct dunemc_plotting { // Store variables just used in plotting (cleared from 
   std::vector<double> prim_momresyz = {};
   std::vector<double> prim_momresx = {};
   std::vector<double> prim_edepcrit = {};
-  std::vector<double> prim_isbarrelpart = {};
+  std::vector<double> prim_tpcedepfrac = {};
+  std::vector<double> prim_iscontained = {};
+
+  std::vector<double> shower_dcalboundary = {};
+  std::vector<double> shower_pdg = {};
+  std::vector<double> shower_energy = {};
+  std::vector<double> shower_bangle = {};
+  std::vector<double> shower_iscontained = {};
+  std::vector<double> shower_cosnorm = {};
 
   std::vector<double> photon_energy = {};
   std::vector<double> photon_endx = {};

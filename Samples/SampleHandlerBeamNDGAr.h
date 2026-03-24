@@ -20,7 +20,8 @@ public:
     kPrim_IsStoppedInTPC, kPrim_IsStoppedInECal, kPrim_IsStoppedInBarrel, kPrim_IsStoppedInEndCap, kPrim_IsStoppedInGap, 
     kPrim_IsStoppedInEndGap, kPrim_IsStoppedInBarrelGap, kPrim_IsEscaped, kPrim_NTurns, kPrim_NHits,
     kPrim_TrackLengthYZ, kPrim_MomResMS, kPrim_MomResYZ, kPrim_MomResX, kPrim_StartR2, kPrim_EndR, 
-    kPrim_EndDepth, kPrim_EndX, kPrim_EndY, kPrim_EndZ, kPrim_StartX, kPrim_EDepCrit, kPrim_IsBarrelPart,
+    kPrim_EndDepth, kPrim_EndX, kPrim_EndY, kPrim_EndZ, kPrim_StartX, kPrim_EDepCrit, kPrim_IsContained, kPrim_TPCEDepFrac,
+    kShower_DCalBoundary, kShower_Energy, kShower_BAngle, kShower_IsContained, kShower_PDG, kShower_CosNorm,
     kPhoton_Energy, kPhoton_EndX, kPhoton_EndY, kPhoton_EndZ};
 
 protected:
@@ -56,9 +57,13 @@ protected:
   int GetChargeFromPDG(int pdg);
   bool IsResolvedFromCurvature(dunemc_plotting& plotting_vars, size_t i_anapart, double pixel_spacing_cm);
   double GetCalDepth(double x, double y, double z);
+  double GetDCalBoundary(const std::vector<double>& pos, const std::vector<double>& dir, size_t& boundary_index);
   double DepthToLayer(double depth, double r);
   double CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers);
   bool CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, dunemc_plotting& plotting_vars, double pixel_spacing_cm);
+  bool IsPrimContained(int id, const std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, 
+                       const std::unordered_map<int, std::vector<double>>& eID_to_showerstart, const std::unordered_map<int, std::pair<double, double>>& pID_to_EDep,
+                       dunemc_plotting& plotting_vars);
   void EraseDescendants(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID);
   bool IsParticleSelected(const int iSample, const int iEvent, const int iParticle);
   void FillGeoVars();
@@ -82,6 +87,9 @@ protected:
   std::vector<float> *_MCPEndPX=nullptr;
   std::vector<float> *_MCPEndPY=nullptr;
   std::vector<float> *_MCPEndPZ=nullptr;
+  std::vector<float> *_MCPCalPX=nullptr;
+  std::vector<float> *_MCPCalPY=nullptr;
+  std::vector<float> *_MCPCalPZ=nullptr;
   std::vector<int> *_MCPPDG=nullptr;
   std::vector<int> *_MCPTrkID=nullptr;
   std::vector<int> *_MCPMotherTrkID=nullptr;
@@ -90,9 +98,12 @@ protected:
   std::vector<float> *_TPCHitX=nullptr;
   std::vector<float> *_TPCHitY=nullptr;
   std::vector<float> *_TPCHitZ=nullptr;
+  std::vector<bool> *_TPCHitIsSec=nullptr;
   std::vector<int> *_CalHitTrkID=nullptr;
   std::vector<int> *_CalHitLayer=nullptr;
   std::vector<float> *_CalHitEnergy=nullptr;
+  std::vector<bool> *_CalHitIsSec=nullptr;
+  std::vector<float> *_CalHitTime=nullptr;
   std::vector<float> *_CalHitX=nullptr;
   std::vector<float> *_CalHitY=nullptr;
   std::vector<float> *_CalHitZ=nullptr;
@@ -106,6 +117,7 @@ protected:
   double _TPCRad;
   double _TPCLen;
   double _BField;
+  double _NumCalSides;
   double _BarrelGap;
   double _EndCapGap;
   double _HGAbsWidth;
@@ -142,6 +154,10 @@ protected:
   double ECALOuterRadius;
   double ECALEndCapStart;
   double ECALEndCapEnd;
+  double ECALSciX0;
+  std::vector<std::vector<double>> outerECalP;
+  std::vector<std::vector<double>> outerECalA;
+  
   double TPC_centre_x = 0.;
   double TPC_centre_y = 0.;
   double TPC_centre_z = 0.;
@@ -244,7 +260,14 @@ protected:
     {"Prim_EndZ",kPrim_EndZ},
     {"Prim_StartX",kPrim_StartX},
     {"Prim_EDepCrit",kPrim_EDepCrit},
-    {"Prim_IsBarrelPart",kPrim_IsBarrelPart},
+    {"Prim_TPCEDepFrac",kPrim_TPCEDepFrac},
+    {"Prim_IsContained",kPrim_IsContained},
+    {"Shower_DCalBoundary",kShower_DCalBoundary},
+    {"Shower_Energy",kShower_Energy},
+    {"Shower_BAngle",kShower_BAngle},
+    {"Shower_IsContained",kShower_IsContained},
+    {"Shower_PDG",kShower_PDG},
+    {"Shower_CosNorm",kShower_CosNorm},
     {"Photon_Energy",kPhoton_Energy},
     {"Photon_EndX",kPhoton_EndX},
     {"Photon_EndY",kPhoton_EndY},
@@ -283,7 +306,14 @@ protected:
     {kPrim_EndZ,"Prim_EndZ"},
     {kPrim_StartX,"Prim_StartX"},
     {kPrim_EDepCrit,"Prim_EDepCrit"},
-    {kPrim_IsBarrelPart,"Prim_IsBarrelPart"},
+    {kPrim_TPCEDepFrac,"Prim_TPCEDepFrac"},
+    {kPrim_IsContained,"Prim_IsContained"},
+    {kShower_DCalBoundary,"Shower_DCalBoundary"},
+    {kShower_Energy,"Shower_Energy"},
+    {kShower_BAngle,"Shower_BAngle"},
+    {kShower_IsContained,"Shower_IsContained"},
+    {kShower_PDG,"Shower_PDG"},
+    {kShower_CosNorm,"Shower_CosNorm"},
     {kPhoton_Energy,"Photon_Energy"},
     {kPhoton_EndX,"Photon_EndX"},
     {kPhoton_EndY,"Photon_EndY"},

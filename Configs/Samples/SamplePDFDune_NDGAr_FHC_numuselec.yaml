@@ -22,13 +22,14 @@ DetectorVariables:
   TPCFidRadius: 160
   TPCInstrumentedLength: 250
   TPCInstrumentedRadius: 260
+  ECALSciX0: 0.892453
   # ECALInnerRadius: 278.04
   # ECALOuterRadius: 322.252
   # ECALEndCapStart: 329.25
   # ECALEndCapEnd: 374.4
   downsampling: 1
   EDepCrit: 2 # Max energy for a contained shower to deposit in the outer crit_layers (MeV)
-  CritLayers: 2 # Number of layers defining this outer region
+  CritLayers: 1 # Number of layers defining this outer region
 
 InputFiles:
   mtupleprefix: "Inputs/DUNE_NDGAr_FastGarSim/"
