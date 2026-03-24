@@ -116,7 +116,6 @@ struct dunemc_beamndgar : public dunemc_base { // Store variables used by Sample
 };
 
 struct dunemc_plotting { // Store variables just used in plotting (cleared from memory before a fit)
-
   bool in_fdv;
   bool is_accepted;
   double geometric_correction;
@@ -128,42 +127,56 @@ struct dunemc_plotting { // Store variables just used in plotting (cleared from 
   int npi0;
   double rw_ePi0;
  
-  std::vector<int> particle_event = {};
-  std::vector<int> particle_trkid = {};
-  std::vector<int> particle_pdg = {};
-  std::vector<double> particle_evis = {};
-  std::vector<double> particle_theta = {};
-  std::vector<double> particle_bangle = {};
-  std::vector<double> particle_beamangle = {};
-  std::vector<double> particle_dedx = {};
-  std::vector<double> particle_momentum = {};
-  std::vector<double> particle_endmomentum = {};
-  std::vector<double> particle_transversemomentum = {};
-  std::vector<int> particle_isaccepted = {};
-  std::vector<int> particle_iscurvatureresolved = {};
-  std::vector<int> particle_isdecayed = {};
-  std::vector<int> particle_isstoppedintpc = {};
-  std::vector<int> particle_isstoppedinecal = {};
-  std::vector<int> particle_isstoppedingap = {};
-  std::vector<int> particle_isstoppedinbarrelgap = {};
-  std::vector<int> particle_isstoppedinendgap = {};
-  std::vector<int> particle_isstoppedinbarrel = {};
-  std::vector<int> particle_isstoppedinendcap = {};
-  std::vector<int> particle_isescaped = {};
-  std::vector<double> particle_startx = {};
-  std::vector<double> particle_startr2 = {};
-  std::vector<double> particle_endr = {};
-  std::vector<double> particle_enddepth = {};
-  std::vector<double> particle_endx = {};
-  std::vector<double> particle_endy = {};
-  std::vector<double> particle_endz = {};
-  std::vector<double> particle_nturns = {};
-  std::vector<double> particle_nhits = {};
-  std::vector<double> particle_tracklengthyz = {};
-  std::vector<double> particle_momresms = {};
-  std::vector<double> particle_momresyz = {};
-  std::vector<double> particle_momresx = {};
-  std::vector<double> particle_edepcrit = {};
+  std::vector<int> prim_event = {};
+  std::vector<int> prim_trkid = {};
+  std::vector<int> prim_pdg = {};
+  std::vector<double> prim_evis = {};
+  std::vector<double> prim_theta = {};
+  std::vector<double> prim_bangle = {};
+  std::vector<double> prim_beamangle = {};
+  std::vector<double> prim_dedx = {};
+  std::vector<double> prim_momentum = {};
+  std::vector<double> prim_endmomentum = {};
+  std::vector<double> prim_transversemomentum = {};
+  std::vector<int> prim_isaccepted = {};
+  std::vector<int> prim_iscurvatureresolved = {};
+  std::vector<int> prim_isdecayed = {};
+  std::vector<int> prim_isstoppedintpc = {};
+  std::vector<int> prim_isstoppedinecal = {};
+  std::vector<int> prim_isstoppedingap = {};
+  std::vector<int> prim_isstoppedinbarrelgap = {};
+  std::vector<int> prim_isstoppedinendgap = {};
+  std::vector<int> prim_isstoppedinbarrel = {};
+  std::vector<int> prim_isstoppedinendcap = {};
+  std::vector<int> prim_isescaped = {};
+  std::vector<double> prim_startx = {};
+  std::vector<double> prim_startr2 = {};
+  std::vector<double> prim_endr = {};
+  std::vector<double> prim_enddepth = {};
+  std::vector<double> prim_endx = {};
+  std::vector<double> prim_endy = {};
+  std::vector<double> prim_endz = {};
+  std::vector<double> prim_nturns = {};
+  std::vector<double> prim_nhits = {};
+  std::vector<double> prim_tracklengthyz = {};
+  std::vector<double> prim_momresms = {};
+  std::vector<double> prim_momresyz = {};
+  std::vector<double> prim_momresx = {};
+  std::vector<double> prim_edepcrit = {};
+  std::vector<double> prim_tpcedepfrac = {};
+  std::vector<double> prim_iscontained = {};
+
+  std::vector<double> shower_dcalboundary = {};
+  std::vector<double> shower_pdg = {};
+  std::vector<double> shower_energy = {};
+  std::vector<double> shower_bangle = {};
+  std::vector<double> shower_iscontained = {};
+  std::vector<double> shower_cosnorm = {};
+
+  std::vector<double> photon_energy = {};
+  std::vector<double> photon_endx = {};
+  std::vector<double> photon_endy = {};
+  std::vector<double> photon_endz = {};
 };
 
 #endif
