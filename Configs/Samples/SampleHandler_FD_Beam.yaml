@@ -5,9 +5,9 @@ BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
 InputFiles:
   PrepSplineFile: false
 
-# NuOsc:
-#   NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
-#   EqualBinningPerOscChannel: false
+NuOsc:
+  NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
+  EqualBinningPerOscChannel: false
 
 Samples: [
   "FD_FHC_numu",
