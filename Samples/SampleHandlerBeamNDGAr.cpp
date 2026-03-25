@@ -835,7 +835,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
   size_t nEntries = static_cast<size_t>(downsampling*static_cast<double>(_data->GetEntries()));
   size_t countwidth = nEntries / 50;
-  MACH3LOG_INFO("hello");
 
   dunendgarmcFitting.resize(nEntries);
   dunendgarmcPlotting.resize(nEntries);
