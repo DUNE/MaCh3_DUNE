@@ -39,12 +39,8 @@ void SampleHandlerBeamNDGAr::Init() {
     beamNDGArSampleDetails[i].iselike = SampleManager->raw()[TempTitle]["DUNESampleBools"]["iselike"].as<bool>();
     beamNDGArSampleDetails[i].pot = SampleManager->raw()[TempTitle]["POT"].as<double>();
 
-    if (beamNDGArSampleDetails[i].isFHC == 1.) { 
-      beamNDGArSampleDetails[i].norm_s = (1e21/1.905e21);
-    } else {
-      beamNDGArSampleDetails[i].norm_s = (1e21/1.5e21);
-    }
-    beamNDGArSampleDetails[i].pot_s = (beamNDGArSampleDetails[i].pot)/1e21;
+    beamNDGArSampleDetails[i].norm_s = 1;
+    beamNDGArSampleDetails[i].pot_s = (beamNDGArSampleDetails[i].pot)/(downsampling*1e21);
 
     MACH3LOG_INFO("Setting up beam ND sample {}", GetSampleTitle(static_cast<int>(i)));
     MACH3LOG_INFO("- isFHC: {}", beamNDGArSampleDetails[i].isFHC);
@@ -71,11 +67,12 @@ void SampleHandlerBeamNDGAr::SetupSplines() {
 
 void SampleHandlerBeamNDGAr::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < dunendgarmcFitting.size(); ++i) {
-      MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].pot_s));
-      MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].norm_s));
-      MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].rw_berpaacvwgt));
-      MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].flux_w));
-      MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcPlotting[i].geometric_correction));
+    MACH3LOG_INFO("pot: {}\nnorm: {}\nberpa: {}\nflux: {}\ngeom: {}", dunendgarmcFitting[i].pot_s, dunendgarmcFitting[i].norm_s, dunendgarmcFitting[i].rw_berpaacvwgt, dunendgarmcFitting[i].flux_w, dunendgarmcPlotting[i].geometric_correction);
+    MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].pot_s));
+    MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].norm_s));
+    MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].rw_berpaacvwgt));
+    MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].flux_w));
+    MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcPlotting[i].geometric_correction));
   }
 }
 
@@ -716,7 +713,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   std::vector<size_t> fileIndexToSample;
   for (size_t iSample=0;iSample<SampleDetails.size();iSample++) {
     for (const std::string& filename : SampleDetails[iSample].mc_files) {
-      MACH3LOG_INFO("Adding simulation file to TChain: {}", filename);
+      MACH3LOG_INFO("Adding FastGArSim file to TChain: {}", filename);
       // HH: Check whether the file exists, see https://root.cern/doc/master/classTChain.html#a78a896924ac6c7d3691b7e013bcbfb1c
       int _add_rtn = _data->Add(filename.c_str(), -1);
       if(_add_rtn == 0){
@@ -838,6 +835,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
   size_t nEntries = static_cast<size_t>(downsampling*static_cast<double>(_data->GetEntries()));
   size_t countwidth = nEntries / 50;
+  MACH3LOG_INFO("hello");
 
   dunendgarmcFitting.resize(nEntries);
   dunendgarmcPlotting.resize(nEntries);
@@ -879,8 +877,8 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     dunendgarmcFitting[i_event].rw_Q0 = _Enu - _Elep;
     dunendgarmcFitting[i_event].rw_Q3 = std::sqrt((_PXnu-_PXlep)*(_PXnu-_PXlep) + (_PYnu-_PYlep)*(_PYnu-_PYlep) + (_PZnu-_PZlep)*(_PZnu-_PZlep));
     dunendgarmcFitting[i_event].norm_s = 1.;
-    dunendgarmcFitting[i_event].pot_s = pot/(downsampling*1e21);
-    dunendgarmcFitting[i_event].flux_w = 1.0;
+    dunendgarmcFitting[i_event].pot_s = beamNDGArSampleDetails[sample_index].pot/(downsampling*1e21);
+    dunendgarmcFitting[i_event].flux_w = 1.;
 
     int M3Mode = Modes->GetModeFromGenerator(std::abs(_neut_code));
     if (!_isCC) M3Mode += 14; //Account for no ability to distinguish CC/NC

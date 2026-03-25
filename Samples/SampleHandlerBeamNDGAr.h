@@ -69,7 +69,6 @@ protected:
   bool IsParticleSelected(const int iSample, const int iEvent, const int iParticle);
   void FillGeoVars();
 
-  double pot;
   double _BeRPA_cvwgt = 1;
   
   // FastGArSim anatree inputs
@@ -118,7 +117,7 @@ protected:
   double _TPCRad;
   double _TPCLen;
   double _BField;
-  double _NumCalSides;
+  int _NumCalSides;
   double _BarrelGap;
   double _EndCapGap;
   double _HGAbsWidth;
