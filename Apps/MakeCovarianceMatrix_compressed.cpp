@@ -58,7 +58,6 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  
   // Free only the detector systematic parameters
   auto xsecCovFiles = FitManager->raw()["General"]["Systematics"]["XsecCovFile"].as<std::vector<std::string>>();
   int nDetSys = 0;
@@ -70,13 +69,13 @@ int main(int argc, char* argv[]) {
     for (const auto& syst : covConfig["Systematics"]) {
       const auto& s = syst["Systematic"];
       if (!s["ParameterGroup"]) continue;
-      if (s["ParameterGroup"].as<std::string>() != "DetSys") continue;
+      if (s["ParameterGroup"].as<std::string>() != "Xsec") continue;
 
       std::string parName = s["Names"]["ParameterName"].as<std::string>();
       int idx = xsec->GetParIndex(parName);
 
       if (idx < 0) {
-        MACH3LOG_WARN("DetSys parameter {} not found in handler, skipping", parName);
+        MACH3LOG_WARN("Xsec parameter {} not found in handler, skipping", parName);
         continue;
       }
 
@@ -91,105 +90,80 @@ int main(int argc, char* argv[]) {
   }
 
   MACH3LOG_INFO("Total DetSys parameters being thrown: {}", nDetSys);
-  
 
   // Set all parameters to prior values before getting nominal
   for (int i = 0; i < nPars; ++i) {
     xsec->SetPar(i, xsec->GetParInit(i));
   }
 
-  
-  // Get nominal prediction (all bins, including empty ones)
-  std::vector<double> nominal_all;
-  std::vector<int> sample_nbins_all;
 
-  for (auto& pdf : DUNEPdfs) {
+  // Get nominal prediction — only keep bins with events
+  std::vector<double> nominal;
+  std::vector<int> sample_nbins;
+  // Maps each  bin index (bins with events in  to the sample index, local bin index within that sample)
+  std::vector<std::pair<int,int>> activeBinOrigin;
+
+  for (unsigned s = 0; s < DUNEPdfs.size(); ++s) {
+    auto& pdf = DUNEPdfs[s];
     pdf->Reweight();
     TH1* h = static_cast<TH1*>(pdf->GetMCHist(pdf->GetNDim())->Clone());
     std::vector<double> bins = GetObservablebinning(h, pdf->GetNDim());
-    sample_nbins_all.push_back(bins.size());
-    nominal_all.insert(nominal_all.end(), bins.begin(), bins.end());
+
+    int bin_haseventsin = 0;
+    for (int ib = 0; ib < (int)bins.size(); ++ib) {
+      if (bins[ib] > 0.0) {
+        nominal.push_back(bins[ib]);
+        activeBinOrigin.push_back({(int)s, ib});
+        ++bin_haseventsin;
+      }
+    }
+    sample_nbins.push_back(bin_haseventsin);
+    MACH3LOG_INFO("Sample {}: {}/{} bins has non-zero numer of events in",
+                  pdf->GetTitle(), bin_haseventsin, (int)bins.size());
     delete h;
   }
 
-  int totalBins_all = nominal_all.size();
+  int totalBins = nominal.size();
+  MACH3LOG_INFO("Total bins containing events across all samples: {}", totalBins);
 
-  // Build index map: only keep bins with nominal > 0
-  // activeBinIndices[i] = original flat bin index for active bin i
-  std::vector<int> activeBinIndices;
-  for (int i = 0; i < totalBins_all; ++i) {
-    if (nominal_all[i] > 0.0) {
-      activeBinIndices.push_back(i);
-    }
-  }
 
-  int totalBins = static_cast<int>(activeBinIndices.size());
-  MACH3LOG_INFO("Total bins across all samples:  {}", totalBins_all);
-  MACH3LOG_INFO("Non-empty bins (used for covariance): {}", totalBins);
-  MACH3LOG_INFO("Removed {} empty bins", totalBins_all - totalBins);
-
-  // Compressed nominal vector (non-empty bins only)
-  std::vector<double> nominal(totalBins);
-  for (int i = 0; i < totalBins; ++i) {
-    nominal[i] = nominal_all[activeBinIndices[i]];
-  }
-
-  // Per-sample bin counts after filtering, for boundary drawing
-  // Map each active bin back to its sample
-  std::vector<int> sample_nbins(DUNEPdfs.size(), 0);
-  {
-    // Build per-sample start offsets in the all-bins flat vector
-    std::vector<int> sampleStart(DUNEPdfs.size(), 0);
-    for (unsigned s = 1; s < DUNEPdfs.size(); ++s)
-      sampleStart[s] = sampleStart[s-1] + sample_nbins_all[s-1];
-
-    for (int i = 0; i < totalBins; ++i) {
-      int origIdx = activeBinIndices[i];
-      // Find which sample this original index belongs to
-      for (unsigned s = 0; s < DUNEPdfs.size(); ++s) {
-        int lo = sampleStart[s];
-        int hi = lo + sample_nbins_all[s];
-        if (origIdx >= lo && origIdx < hi) {
-          sample_nbins[s]++;
-          break;
-        }
-      }
-    }
-  }
-
-  
   // Initialise covariance accumulator
   TMatrixDSym CovMatrix(totalBins);
   CovMatrix.Zero();
 
- 
-  // Throw loop
+
+  // Initialise per-bin throw histograms
   std::vector<TH1D*> histogram_per_bin;
   for (int i = 0; i < totalBins; ++i) {
-    std::string hname = "bin_" + std::to_string(activeBinIndices[i]);
-    histogram_per_bin.push_back(new TH1D(hname.c_str(), hname.c_str(), 100, +1, -1));
+    std::string hname = "bin_" + std::to_string(i);
+    double nom = nominal[i];
+    double range = std::max(nom * 0.5, 1.0);
+    histogram_per_bin.push_back(
+      new TH1D(hname.c_str(), hname.c_str(), 100, nom - range, nom + range));
   }
 
+
+  // Throw loop
   for (int iThrow = 0; iThrow < nThrows; ++iThrow) {
 
     xsec->ThrowParameters();
+    xsec->PrintFunctionalParams();
 
-    // Collect full prediction for this throw
-    std::vector<double> thrown_all;
-    thrown_all.reserve(totalBins_all);
-
-    for (auto& pdf : DUNEPdfs) {
+    // Collect all bins from all samples for this throw, indexed by sample
+    std::vector<std::vector<double>> allSampleBins(DUNEPdfs.size());
+    for (unsigned s = 0; s < DUNEPdfs.size(); ++s) {
+      auto& pdf = DUNEPdfs[s];
       pdf->Reweight();
       TH1* h = static_cast<TH1*>(pdf->GetMCHist(pdf->GetNDim())->Clone());
-      std::vector<double> bins = GetObservablebinning(h, pdf->GetNDim());
-      thrown_all.insert(thrown_all.end(), bins.begin(), bins.end());
+      allSampleBins[s] = GetObservablebinning(h, pdf->GetNDim());
       delete h;
     }
 
-    // Compress to active bins only
-    std::vector<double> thrown_pred(totalBins);
-    for (int i = 0; i < totalBins; ++i) {
-      thrown_pred[i] = thrown_all[activeBinIndices[i]];
+    // Build thrown prediction using the same active bins as the nominal
+    std::vector<double> thrown_pred;
+    thrown_pred.reserve(totalBins);
+    for (auto& [si, ib] : activeBinOrigin) {
+      thrown_pred.push_back(allSampleBins[si][ib]);
     }
 
     // Fill per-bin histograms
@@ -197,6 +171,7 @@ int main(int argc, char* argv[]) {
       histogram_per_bin[i]->Fill(thrown_pred[i]);
     }
 
+    // Accumulate covariance
     for (int i = 0; i < totalBins; ++i) {
       double delta_i = thrown_pred[i] - nominal[i];
       for (int j = i; j < totalBins; ++j) {
@@ -206,18 +181,34 @@ int main(int argc, char* argv[]) {
       }
     }
 
+   
+    const int printpredictions = 20; 
+    std::cout << "Bin | Nominal | Thrown | Delta\n";
+    std::cout << "-------------------------------------------------\n";
+    for (int i = 0; i < std::min(printpredictions, totalBins); ++i) {
+        double delta = thrown_pred[i] - nominal[i];
+        std::cout << std::setw(4)  << i             << " | "
+                  << std::setw(10) << nominal[i]     << " | "
+                  << std::setw(10) << thrown_pred[i] << " | "
+                  << std::setw(10) << delta           << "\n";
+    }
+
     if (iThrow % 100 == 0) {
       MACH3LOG_INFO("Throw {}/{}", iThrow, nThrows);
     }
   }
 
-  // Normalise
+  
+
+
+  // Normalise cov matrix
   double norm = 1.0 / (double)nThrows;
   for (int i = 0; i < totalBins; ++i)
     for (int j = 0; j < totalBins; ++j)
       CovMatrix(i, j) *= norm;
+      
 
-  
+
   // Fractional covariance
   TMatrixDSym FracCovMatrix(totalBins);
   for (int i = 0; i < totalBins; ++i) {
@@ -229,25 +220,33 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  // Correlation matrix
+  // Correlation matrix — diagonal is explicitly set to 1.0
   TMatrixDSym CorrMatrix(totalBins);
   for (int i = 0; i < totalBins; ++i) {
     for (int j = 0; j < totalBins; ++j) {
-      double denom = std::sqrt(CovMatrix(i,i) * CovMatrix(j,j));
-      CorrMatrix(i, j) = denom > 0 ? CovMatrix(i, j) / denom : 0.0;
+      if (i == j) {
+        CorrMatrix(i, j) = 1.0;
+      } else {
+        double denom = std::sqrt(CovMatrix(i,i) * CovMatrix(j,j));
+        CorrMatrix(i, j) = denom > 0 ? CovMatrix(i, j) / denom : 0.0;
+      }
     }
   }
 
+  for (int i = 0; i < totalBins; ++i) {
+    for (int j = 0; j < totalBins; ++j) {
+      std::cout << "Cov matrix element (i,j) = " << CovMatrix(i,j) << std::endl;
+    }
+  }
   // Print fractional uncertainty per bin for sanity check
   MACH3LOG_INFO("Fractional uncertainty (sqrt of frac cov diagonal) per bin:");
   for (int i = 0; i < totalBins; ++i) {
     if (FracCovMatrix(i,i) > 0)
-      MACH3LOG_INFO("  bin {} (orig {}): {:.2f}%", i, activeBinIndices[i], std::sqrt(FracCovMatrix(i,i)) * 100.0);
+      MACH3LOG_INFO("  bin {}: {:.2f}%", i, std::sqrt(FracCovMatrix(i,i)) * 100.0);
   }
 
-  // -------------------------------------------------------
-  // Save output
-  // -------------------------------------------------------
+
+  // Write outputs
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
 
@@ -260,25 +259,16 @@ int main(int argc, char* argv[]) {
     hNominal.SetBinContent(i+1, nominal[i]);
   hNominal.Write();
 
-  // Save mapping from compressed bin index -> original flat bin index
-  TH1D hActiveBinMap("ActiveBinMap", "Compressed->Original bin index map", totalBins, 0, totalBins);
-  for (int i = 0; i < totalBins; ++i)
-    hActiveBinMap.SetBinContent(i+1, activeBinIndices[i]);
-  hActiveBinMap.Write();
-
   TH1D hBinMap("BinMap", "Sample bin ranges", DUNEPdfs.size(), 0, DUNEPdfs.size());
   int binOffset = 0;
   for (unsigned s = 0; s < DUNEPdfs.size(); ++s) {
-    MACH3LOG_INFO("Sample {}: {} active bins (of {} total)", DUNEPdfs[s]->GetTitle(), sample_nbins[s], sample_nbins_all[s]);
+    MACH3LOG_INFO("Sample {}: bins {} to {}", DUNEPdfs[s]->GetTitle(), binOffset, binOffset + sample_nbins[s] - 1);
     hBinMap.GetXaxis()->SetBinLabel(s+1, DUNEPdfs[s]->GetTitle().c_str());
     hBinMap.SetBinContent(s+1, sample_nbins[s]);
     binOffset += sample_nbins[s];
   }
   hBinMap.Write();
 
-  // -------------------------------------------------------
-  // Plot matrices to PDF
-  // -------------------------------------------------------
   gStyle->SetOptStat(0);
 
   auto MatrixToHist = [&](const TMatrixDSym& mat, const char* name, const char* title) -> TH2D* {
@@ -299,9 +289,9 @@ int main(int argc, char* argv[]) {
     }
   };
 
-  TH2D* hCov  = MatrixToHist(CovMatrix,     "hCovMatrix",     "ND Covariance Matrix");
-  TH2D* hFrac = MatrixToHist(FracCovMatrix,  "hFracCovMatrix", "ND Fractional Covariance Matrix");
-  TH2D* hCorr = MatrixToHist(CorrMatrix,     "hCorrMatrix",    "ND Correlation Matrix");
+  TH2D* hCov  = MatrixToHist(CovMatrix,    "hCovMatrix",     "ND Covariance Matrix");
+  TH2D* hFrac = MatrixToHist(FracCovMatrix, "hFracCovMatrix", "ND Fractional Covariance Matrix");
+  TH2D* hCorr = MatrixToHist(CorrMatrix,    "hCorrMatrix",    "ND Correlation Matrix");
 
   DrawSampleBoundaries(hCov);
   DrawSampleBoundaries(hFrac);
@@ -329,11 +319,20 @@ int main(int argc, char* argv[]) {
 
   c->Print((pdfName + "[").c_str());
 
-  hCov->SetMinimum(-10000.0);
-  hCov->SetMaximum(10000.0);
+  
+  double covMax = 0.0;
+  double fracMax = 0.0;
+  for (int i = 0; i < totalBins; ++i)
+    for (int j = 0; j < totalBins; ++j)
+      covMax = std::max(covMax, std::abs(CovMatrix(i, j)));
+     
 
+  hCov->SetMinimum(0);
+  hCov->SetMaximum(200000);
+
+  
   hFrac->SetMinimum(0.0);
-  hFrac->SetMaximum(1e-3);
+  hFrac->SetMaximum(1e-2);
 
   hCov->Draw("COLZ");
   DrawLines();
@@ -347,7 +346,7 @@ int main(int argc, char* argv[]) {
   DrawLines();
   c->Print(pdfName.c_str());
 
-  // Save per-bin throw distributions
+  // Save per-bin throw distribution to see if throws look Gaussian
   TDirectory* throwDir = OutputFile->mkdir("ThrowDistributions");
   throwDir->cd();
   for (int i = 0; i < totalBins; ++i) {
@@ -355,17 +354,16 @@ int main(int argc, char* argv[]) {
   }
   OutputFile->cd();
 
-  // Cleanup
+  
   for (auto h : histogram_per_bin) delete h;
 
   c->Print((pdfName + "]").c_str());
 
-  MACH3LOG_INFO("Matrix plots written to {}", pdfName);
 
   delete hCov; delete hFrac; delete hCorr; delete c;
   OutputFile->Close();
 
-  MACH3LOG_INFO("Done. Covariance matrix written to {}", OutputFileName);
+  MACH3LOG_INFO("Covariance matrix written to {}", OutputFileName);
 
   return 0;
 }
