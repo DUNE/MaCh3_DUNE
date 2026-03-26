@@ -304,7 +304,7 @@ Systematics:
 
   - Systematic:
       SampleNames: ["*"]
-      Error: 0.02
+      Error: 0.2
       FlatPrior: false
       Names:
         FancyName: MuonEnergyResolution
@@ -320,7 +320,7 @@ Systematics:
       Type: Functional
   - Systematic:
       SampleNames: ["*"]
-      Error: 0.02
+      Error: 0.2
       FlatPrior: false
       Names:
         FancyName: EMEnergyResolution
@@ -336,7 +336,7 @@ Systematics:
       Type: Functional
   - Systematic:
       SampleNames: ["*"]
-      Error: 0.02
+      Error: 0.3
       FlatPrior: false
       Names:
         FancyName: ChgHadEnergyResolution
@@ -363,6 +363,6 @@ Systematics:
         Generated: 0.0
         PreFitValue: 0.0
       StepScale:
-        MCMC: 0.0005
+        MCMC: 0.01
       FixParam: false
       Type: Functional
