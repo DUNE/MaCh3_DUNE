@@ -100,8 +100,26 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
 }
 
 void SampleHandlerBeamOffAxis::ResetShifts(int iEvent) {
-  DUNEMCEvents[iEvent].varied_reco = DUNEMCEvents[iEvent].reco;
-  DUNEMCEvents[iEvent].syst.flux.total_weight = 1.0;
+  auto & ev = DUNEMCEvents[iEvent];
+  ev.varied_reco = ev.reco;
+
+  //resolution variables
+  ev.varied_res.enu = ev.reco.enu - ev.truth.nu.e;
+  ev.varied_res.e_lep = ev.reco.e_lep - ev.truth.lep.e;
+  ev.varied_res.e_had =
+      (ev.reco.enu - ev.reco.e_lep) - (ev.truth.nu.e - ev.truth.lep.e);
+
+  ev.varied_res.e_EM = (ev.reco.e_pi0 - ev.truth.had.e_pi0);
+  if (std::abs(ev.truth.lep.pdg) == 11) {
+    ev.varied_res.e_EM += ev.varied_res.e_lep;
+  }
+  ev.varied_res.e_ChgHad = (ev.reco.e_proton - ev.truth.had.e_proton) +
+                           (ev.reco.e_piplus - ev.truth.had.e_piplus) +
+                           (ev.reco.e_piminus - ev.truth.had.e_piminus);
+  ev.varied_res.e_neutron = ev.reco.e_neutron - ev.truth.had.e_neutron;
+
+  //flux weights
+  ev.syst.flux.total_weight = 1.0;
 }
 
 void SampleHandlerBeamOffAxis::FinaliseShifts(int iEvent) {
@@ -110,8 +128,7 @@ void SampleHandlerBeamOffAxis::FinaliseShifts(int iEvent) {
 
 void SampleHandlerBeamOffAxis::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < DUNEMCEvents.size(); ++i) {
-    MCEvents[i].total_weight_pointers.push_back(
-        &(DUNEMCEvents[i].weights.pot));
+    MCEvents[i].total_weight_pointers.push_back(&(DUNEMCEvents[i].weights.pot));
     MCEvents[i].total_weight_pointers.push_back(
         &(DUNEMCEvents[i].syst.flux.total_weight));
   }

@@ -83,6 +83,17 @@ struct EventInfo : public CAFEventInfo {
   // A copy of the reconstructed info for systematically varying
   CAFEventInfo::Reconstructed varied_reco;
 
+  struct {
+
+    double enu;
+
+    double e_lep;
+    double e_had;
+
+    double e_EM, e_ChgHad, e_neutron;
+
+  } varied_res;
+
   int subsample;
   int is_numode;
 

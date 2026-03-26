@@ -105,6 +105,23 @@ void CalculateVariedCompositeQuantities(EventInfo &ev) {
 
   varreco.enu = reco.enu + e_lep_shift + e_had_shift + e_proton_shift +
                 e_piplus_shift + e_piminus_shift + e_neutron_shift;
+                e_pi0_shift + e_piplus_shift + e_piminus_shift +
+                e_neutron_shift;
+
+  auto &res = ev.varied_res;
+
+  res.enu = varreco.enu - ev.truth.nu.e;
+  res.e_lep = varreco.e_lep - ev.truth.lep.e;
+  res.e_had = (varreco.enu - varreco.e_lep) - (ev.truth.nu.e - ev.truth.lep.e);
+
+  res.e_EM = (varreco.e_pi0 - ev.truth.had.e_pi0);
+  if (std::abs(ev.truth.lep.pdg) == 11) {
+    res.e_EM += res.e_lep;
+  }
+  res.e_ChgHad = (varreco.e_proton - ev.truth.had.e_proton) +
+                 (varreco.e_piplus - ev.truth.had.e_piplus) +
+                 (varreco.e_piminus - ev.truth.had.e_piminus);
+  res.e_neutron = varreco.e_neutron - ev.truth.had.e_neutron;
 }
 
 std::pair<std::vector<float>, std::vector<float>>

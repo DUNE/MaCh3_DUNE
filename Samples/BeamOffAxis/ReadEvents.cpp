@@ -164,6 +164,20 @@ std::vector<EventInfo> ReadEvents(TTree &tree) {
     ev.reco.e_lep = ev.reco.e_lep;
     ev.reco.e_had = ev.reco.e_had;
 
+    ev.varied_res.enu = ev.reco.enu - ev.truth.nu.e;
+    ev.varied_res.e_lep = ev.reco.e_lep - ev.truth.lep.e;
+    ev.varied_res.e_had =
+        (ev.reco.enu - ev.reco.e_lep) - (ev.truth.nu.e - ev.truth.lep.e);
+
+    ev.varied_res.e_EM = (ev.reco.e_pi0 - ev.truth.had.e_pi0);
+    if (std::abs(ev.truth.lep.pdg) == 11) {
+      ev.varied_res.e_EM += ev.varied_res.e_lep;
+    }
+    ev.varied_res.e_ChgHad = (ev.reco.e_proton - ev.truth.had.e_proton) +
+                   (ev.reco.e_piplus - ev.truth.had.e_piplus) +
+                   (ev.reco.e_piminus - ev.truth.had.e_piminus);
+    ev.varied_res.e_neutron = ev.reco.e_neutron - ev.truth.had.e_neutron;
+
     ev.syst.sqrt_e.proton = std::sqrt(std::max(0.0, ev.reco.e_proton));
     ev.syst.sqrt_e.neutron = std::sqrt(std::max(0.0, ev.reco.e_neutron));
     ev.syst.sqrt_e.pi0 = std::sqrt(std::max(0.0, ev.reco.e_pi0));
