@@ -1,0 +1,368 @@
+# https://arxiv.org/pdf/2002.03005 Errors set from table on p5-158
+
+Systematics:
+
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.02
+      FlatPrior: false
+      Names:
+        FancyName: ContainedMuonEnergyScale
+        ParameterName: ContainedMuonEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.02
+      FlatPrior: false
+      Names:
+        FancyName: ContainedMuonSqrtEnergyScale
+        ParameterName: ContainedMuonSqrtEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.02
+      FlatPrior: false
+      Names:
+        FancyName: ContainedMuonInvSqrtEnergyScale
+        ParameterName: ContainedMuonInvSqrtEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+
+
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.01
+      FlatPrior: false
+      Names:
+        FancyName: TrackedMuonEnergyScale
+        ParameterName: TrackedMuonEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.01
+      FlatPrior: false
+      Names:
+        FancyName: TrackedMuonSqrtEnergyScale
+        ParameterName: TrackedMuonSqrtEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.01
+      FlatPrior: false
+      Names:
+        FancyName: TrackedMuonInvSqrtEnergyScale
+        ParameterName: TrackedMuonInvSqrtEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+
+
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.025
+      FlatPrior: false
+      Names:
+        FancyName: EMEnergyScale
+        ParameterName: EMEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.025
+      FlatPrior: false
+      Names:
+        FancyName: EMSqrtEnergyScale
+        ParameterName: EMSqrtEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.025
+      FlatPrior: false
+      Names:
+        FancyName: EMInvSqrtEnergyScale
+        ParameterName: EMInvSqrtEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+
+
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.05
+      FlatPrior: false
+      Names:
+        FancyName: ChgHadEnergyScale
+        ParameterName: ChgHadEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.05
+      FlatPrior: false
+      Names:
+        FancyName: ChgHadSqrtEnergyScale
+        ParameterName: ChgHadSqrtEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.05
+      FlatPrior: false
+      Names:
+        FancyName: ChgHadInvSqrtEnergyScale
+        ParameterName: ChgHadInvSqrtEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+
+
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.2
+      FlatPrior: false
+      Names:
+        FancyName: NeutronEnergyScale
+        ParameterName: NeutronEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.3
+      FlatPrior: false
+      Names:
+        FancyName: NeutronSqrtEnergyScale
+        ParameterName: NeutronSqrtEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.3
+      FlatPrior: false
+      Names:
+        FancyName: NeutronInvSqrtEnergyScale
+        ParameterName: NeutronInvSqrtEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+
+
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.02
+      FlatPrior: false
+      Names:
+        FancyName: TotalEnergyScale
+        ParameterName: TotalEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.01
+      FlatPrior: false
+      Names:
+        FancyName: TotalSqrtEnergyScale
+        ParameterName: TotalSqrtEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.02
+      FlatPrior: false
+      Names:
+        FancyName: TotalInvSqrtEnergyScale
+        ParameterName: TotalInvSqrtEnergyScale
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+
+
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.02
+      FlatPrior: false
+      Names:
+        FancyName: MuonEnergyResolution
+        ParameterName: MuonEnergyResolution
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.02
+      FlatPrior: false
+      Names:
+        FancyName: EMEnergyResolution
+        ParameterName: EMEnergyResolution
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.02
+      FlatPrior: false
+      Names:
+        FancyName: ChgHadEnergyResolution
+        ParameterName: ChgHadEnergyResolution
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.4
+      FlatPrior: false
+      Names:
+        FancyName: NeutronEnergyResolution
+        ParameterName: NeutronEnergyResolution
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: Detector
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.0
+      StepScale:
+        MCMC: 0.0005
+      FixParam: false
+      Type: Functional

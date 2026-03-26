@@ -1,0 +1,75 @@
+SampleTitle: "OffAxisND_0m"
+SampleType: "OffAxisND"
+SampleName: "OffAxisND"
+
+POT: 1.10e+21
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
+
+Binning:
+ XVarStr: "TemplateBinNumber" #TrueNeutrinoEnergy #"RecoNeutrinoEnergy"
+ XVarBinsLinSpaced: [500,0,500]
+ YVarStr: "RecoNeutrinoEnergy" #TrueNeutrinoEnergy #"RecoNeutrinoEnergy"
+ YVarBinsLinSpaced: [100,0,10]
+
+BinningFile: "Configs/TutorialConfigs/TutorialBinning.yaml"
+
+DUNESampleBools:
+  isFHC: 1
+  iselike: no
+
+InputFiles:
+  PrepSplineFile: false
+  mtupleprefix: "inputs/ND/FHC/skimmed/CAFv7_0m_"
+  mtuplesuffix: "_FHC.root"
+  splineprefix: "inputs/ND/FHC/skimmed/"
+  splinesuffix: "_splines.root"
+
+SubSamples:
+  - Name: "CAFv7_0m_130_FHC"
+    LatexName: "130"
+    mtuplefile: "130"
+    splinefile: ""
+    nutype: 14
+    oscnutype: 14
+  - Name: "CAFv7_0m_131_FHC"
+    LatexName: "131"
+    mtuplefile: "131"
+    splinefile: ""
+    nutype: 14
+    oscnutype: 14
+  - Name: "CAFv7_0m_132_FHC"
+    LatexName: "132"
+    mtuplefile: "132"
+    splinefile: ""
+    nutype: 14
+    oscnutype: 14
+  - Name: "CAFv7_0m_133_FHC"
+    LatexName: "133"
+    mtuplefile: "133"
+    splinefile: ""
+    nutype: 14
+    oscnutype: 14
+  - Name: "CAFv7_0m_134_FHC"
+    LatexName: "134"
+    mtuplefile: "134"
+    splinefile: ""
+    nutype: 14
+    oscnutype: 14
+  - Name: "CAFv7_0m_135_FHC"
+    LatexName: "135"
+    mtuplefile: "135"
+    splinefile: ""
+    nutype: 14
+    oscnutype: 14
+  - Name: "CAFv7_0m_138_FHC"
+    LatexName: "138"
+    mtuplefile: "138"
+    splinefile: ""
+    nutype: 14
+    oscnutype: 14
+  - Name: "CAFv7_0m_139_FHC"
+    LatexName: "139"
+    mtuplefile: "139"
+    splinefile: ""
+    nutype: 14
+    oscnutype: 14

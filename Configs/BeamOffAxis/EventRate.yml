@@ -1,0 +1,15 @@
+General:
+  OutputFile: "EventRate.root"
+  DUNESamples:
+    - Configs/BeamOffAxis/Samples/CAFv7_skimmed_OnAnd8m.yml
+
+  OscillationParameters: []
+
+  Systematics:
+    XsecCovFile:
+      - Configs/BeamOffAxis/NDDetSysts.yml
+      # - Configs/BeamOffAxis/FluxSysts.yml
+
+    XsecCovName: "xsec_cov"
+
+    XsecStepScale: 1.0
