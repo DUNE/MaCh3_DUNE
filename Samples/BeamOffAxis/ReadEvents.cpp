@@ -148,17 +148,27 @@ std::vector<EventInfo> ReadEvents(TTree &tree) {
     }
 
     ev.reco.is_muonlike = *reco_numu;
-    ev.reco.muonlike_contained = *muon_contained;
-    ev.reco.muonlike_tracker = *muon_tracker;
+    ev.reco.muonlike_contained = ev.reco.is_muonlike && (*muon_contained);
+    ev.reco.muonlike_tracker = ev.reco.is_muonlike && (*muon_tracker);
 
-    ev.reco.enu = *Ev_reco;
-    ev.reco.e_lep = *Elep_reco;
+    ev.reco.enu = std::max(0.0, *Ev_reco);
+    ev.reco.e_lep = std::max(0.0, *Elep_reco);
+    ev.reco.e_had = std::max(0.0, ev.reco.enu - ev.reco.e_lep);
 
-    ev.reco.e_proton = *eRecoP;
-    ev.reco.e_neutron = *eRecoN;
-    ev.reco.e_pi0 = *eRecoPip;
-    ev.reco.e_piplus = *eRecoPim;
-    ev.reco.e_piminus = *eRecoPi0;
+    ev.reco.e_proton = std::max(0.0, *eRecoP);
+    ev.reco.e_neutron = std::max(0.0, *eRecoN);
+    ev.reco.e_pi0 = std::max(0.0, *eRecoPip);
+    ev.reco.e_piplus = std::max(0.0, *eRecoPim);
+    ev.reco.e_piminus = std::max(0.0, *eRecoPi0);
+
+    ev.reco.e_lep = ev.reco.e_lep;
+    ev.reco.e_had = ev.reco.e_had;
+
+    ev.syst.sqrt_e.proton = std::sqrt(std::max(0.0, ev.reco.e_proton));
+    ev.syst.sqrt_e.neutron = std::sqrt(std::max(0.0, ev.reco.e_neutron));
+    ev.syst.sqrt_e.pi0 = std::sqrt(std::max(0.0, ev.reco.e_pi0));
+    ev.syst.sqrt_e.piplus = std::sqrt(std::max(0.0, ev.reco.e_piplus));
+    ev.syst.sqrt_e.piminus = std::sqrt(std::max(0.0, ev.reco.e_piminus));
   }
 
   return events;

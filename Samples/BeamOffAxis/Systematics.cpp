@@ -2,47 +2,101 @@
 
 #include "Systematics/Flux/OffAxisFluxUncertaintyHelper.h"
 
+#include <cmath>
+
 namespace dune::beamoffaxis {
 
-void EMEnergyResolution(const double *par_val, EventInfo &ev) {
-  ev.varied_reco.e_pi0 = std::max(
-      0.0, ev.reco.e_pi0 + (*par_val) * (ev.truth.had.e_pi0 - ev.reco.e_pi0));
+inline double EnergyScaleVariation(double const *par_vals, double e,
+                                   double sqrte) {
+  double e_prime =
+      e * (par_vals[0] + par_vals[1] * sqrte) + (par_vals[2] * sqrte);
+  return std::max(0.0, e_prime - e);
+}
+
+void EnergyScales(std::vector<double> const &par_vals, EventInfo &ev) {
+  auto MuonContained_vals = par_vals.data();
+  auto MuonTracked_vals = MuonContained_vals + 3;
+  auto EM_vals = MuonTracked_vals + 3;
+  auto ChgHad_vals = EM_vals + 3;
+  auto Neutron_vals = ChgHad_vals + 3;
+  auto Total_vals = Neutron_vals + 3;
+
+  if (std::abs(ev.truth.lep.pdg) == 13) {
+    if (ev.reco.muonlike_contained) {
+      ev.varied_reco.e_lep += EnergyScaleVariation(
+          MuonContained_vals, ev.reco.e_lep, ev.syst.sqrt_e.lep);
+    } else if (ev.reco.muonlike_tracker) {
+      ev.varied_reco.e_lep += EnergyScaleVariation(
+          MuonTracked_vals, ev.reco.e_lep, ev.syst.sqrt_e.lep);
+    }
+  }
+
+  ev.varied_reco.e_pi0 +=
+      EnergyScaleVariation(EM_vals, ev.reco.e_pi0, ev.syst.sqrt_e.pi0);
+  if (std::abs(ev.truth.lep.pdg) == 11) {
+    ev.varied_reco.e_lep +=
+        EnergyScaleVariation(EM_vals, ev.reco.e_lep, ev.syst.sqrt_e.lep);
+  }
+
+  ev.varied_reco.e_proton += EnergyScaleVariation(ChgHad_vals, ev.reco.e_proton,
+                                                  ev.syst.sqrt_e.proton);
+  ev.varied_reco.e_piplus += EnergyScaleVariation(ChgHad_vals, ev.reco.e_piplus,
+                                                  ev.syst.sqrt_e.piplus);
+  ev.varied_reco.e_piminus += EnergyScaleVariation(
+      ChgHad_vals, ev.reco.e_piminus, ev.syst.sqrt_e.piminus);
+
+  ev.varied_reco.e_neutron += EnergyScaleVariation(
+      Neutron_vals, ev.reco.e_neutron, ev.syst.sqrt_e.neutron);
 
   if (std::abs(ev.truth.lep.pdg) == 11) {
-    ev.varied_reco.e_lep = std::max(
-        0.0, ev.reco.e_lep + (*par_val) * (ev.truth.lep.e - ev.reco.e_lep));
+    ev.varied_reco.e_lep +=
+        EnergyScaleVariation(Total_vals, ev.reco.e_lep, ev.syst.sqrt_e.lep);
   }
+  ev.varied_reco.e_had +=
+      EnergyScaleVariation(Total_vals, ev.reco.e_had, ev.syst.sqrt_e.had);
 }
 
-void MuonEnergyScale(const double *par_val, EventInfo &ev) {
+void ParticleEnergyResolutions(std::vector<double> const &par_vals,
+                               EventInfo &ev) {
+  auto const &Muon_val = par_vals[0];
+  auto const &EM_val = par_vals[1];
+  auto const &ChgHad_val = par_vals[2];
+  auto const &Neutron_val = par_vals[3];
+
   if (std::abs(ev.truth.lep.pdg) == 13) {
-    ev.varied_reco.e_lep = std::max(0.0, ev.reco.e_lep * (1 + *par_val));
+    auto e_lep_bias = (ev.truth.lep.e - ev.reco.e_lep);
+    ev.varied_reco.e_lep += std::max(0.0, Muon_val * e_lep_bias);
   }
-}
 
-void MuonEnergyResolution(const double *par_val, EventInfo &ev) {
-  if (std::abs(ev.truth.lep.pdg) == 13) {
-    ev.varied_reco.e_lep = std::max(
-        0.0, ev.reco.e_lep + (*par_val) * (ev.truth.lep.e - ev.reco.e_lep));
+  auto e_pi0_bias = (ev.truth.had.e_pi0 - ev.reco.e_pi0);
+  ev.varied_reco.e_pi0 += std::max(0.0, EM_val * e_pi0_bias);
+
+  if (std::abs(ev.truth.lep.pdg) == 11) {
+    auto e_lep_bias = (ev.truth.lep.e - ev.reco.e_lep);
+    ev.varied_reco.e_lep += std::max(0.0, EM_val * e_lep_bias);
   }
+
+  auto e_proton_bias = (ev.truth.had.e_proton - ev.reco.e_proton);
+  ev.varied_reco.e_proton += std::max(0.0, ChgHad_val * e_proton_bias);
+  auto e_piplus_bias = (ev.truth.had.e_piplus - ev.reco.e_piplus);
+  ev.varied_reco.e_piplus += std::max(0.0, ChgHad_val * e_piplus_bias);
+  auto e_piminus_bias = (ev.truth.had.e_piminus - ev.reco.e_piminus);
+  ev.varied_reco.e_piminus += std::max(0.0, ChgHad_val * e_piminus_bias);
+
+  auto e_neutron_bias = (ev.truth.had.e_neutron - ev.reco.e_neutron);
+  ev.varied_reco.e_neutron += std::max(0.0, Neutron_val * e_neutron_bias);
 }
 
-void NeutronEnergyResolution(const double *par_val, EventInfo &ev) {
-  ev.varied_reco.e_neutron =
-      std::max(0.0, ev.reco.e_neutron + (*par_val) * (ev.truth.had.e_neutron -
-                                                    ev.reco.e_neutron));
-}
+void CalculateVariedCompositeQuantities(EventInfo &ev) {
+  auto const &reco = ev.reco;
+  auto &varreco = ev.varied_reco;
 
-void ChargedHadronEnergyResolution(const double *par_val, EventInfo &ev) {
-  ev.varied_reco.e_proton =
-      std::max(0.0, ev.reco.e_proton +
-                      (*par_val) * (ev.truth.had.e_proton - ev.reco.e_proton));
-  ev.varied_reco.e_piplus =
-      std::max(0.0, ev.reco.e_piplus +
-                      (*par_val) * (ev.truth.had.e_piplus - ev.reco.e_piplus));
-  ev.varied_reco.e_piminus =
-      std::max(0.0, ev.reco.e_piminus + (*par_val) * (ev.truth.had.e_piminus -
-                                                    ev.reco.e_piminus));
+  varreco.enu = std::max(0.0, reco.enu + (varreco.e_lep - reco.e_lep) +
+                                  (varreco.e_had - reco.e_had) +
+                                  (varreco.e_proton - reco.e_proton) +
+                                  (varreco.e_piplus - reco.e_piplus) +
+                                  (varreco.e_piminus - reco.e_piminus) +
+                                  (varreco.e_neutron - reco.e_neutron));
 }
 
 std::pair<std::vector<float>, std::vector<float>>
@@ -76,20 +130,52 @@ GetFluxVariationRatios(int nu_pdg, double enu_true_GeV, double off_axis_pos_m,
   return ratios;
 }
 
+void UpdateFluxFocussingWeight(std::vector<double> const &par_vals,
+                               EventInfo &ev) {
+  for (int i = 0; i < par_vals.size(); ++i) {
+    ev.syst.flux.total_weight *=
+        1 + (par_vals[i] * ev.syst.flux.focussing_ratio[i]);
+  }
+}
+void UpdateFluxHadProdWeight(std::vector<double> const &par_vals,
+                             EventInfo &ev) {
+  for (int i = 0; i < par_vals.size(); ++i) {
+    ev.syst.flux.total_weight *=
+        1 + (par_vals[i] * ev.syst.flux.hadprod_ratio[i]);
+  }
+}
+
+std::vector<std::string> GetFluxFocussingParamNames() {
+  size_t nfocus_par = OffAxisFluxUncertaintyHelper::Get().GetNFocussingParams();
+  std::vector<std::string> focussing_par_names;
+  for (size_t focussing_par = 0; focussing_par < nfocus_par; focussing_par++) {
+    focussing_par_names.push_back(
+        OffAxisFluxUncertaintyHelper::Get().GetFocussingParamName(
+            focussing_par));
+  }
+  return focussing_par_names;
+}
+std::vector<std::string> GetFluxHadProdParamNames() {
+  size_t Nhadprod_par =
+      OffAxisFluxUncertaintyHelper::Get().GetNHadProdPCAComponents();
+  std::vector<std::string> hadprod_par_names;
+  for (size_t hadprod_par = 0; hadprod_par < Nhadprod_par; hadprod_par++) {
+    hadprod_par_names.push_back("Flux_HadProd_Param_" +
+                                std::to_string(hadprod_par));
+  }
+  return hadprod_par_names;
+}
+
 void PrintFluxParameterNames() {
 
-  std::cout << "=== Focusing Flux Params ===\n";
-  for (size_t i = 0;
-       i < OffAxisFluxUncertaintyHelper::Get().GetNFocussingParams(); i++) {
-    std::cout << OffAxisFluxUncertaintyHelper::Get().GetFocussingParamName(i)
-              << "\n";
+  std::cout << "=== Focussing Flux Params ===\n";
+  for (auto const &name : GetFluxFocussingParamNames()) {
+    std::cout << name << "\n";
   }
 
   std::cout << "=== Hadron-Production PCA Params ===\n";
-  for (size_t i = 0;
-       i < OffAxisFluxUncertaintyHelper::Get().GetNHadProdPCAComponents();
-       i++) {
-    std::cout << "Flux_HadProd_Param_" << i << "\n";
+  for (auto const &name : GetFluxHadProdParamNames()) {
+    std::cout << name << "\n";
   }
 }
 

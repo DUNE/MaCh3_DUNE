@@ -3,8 +3,6 @@
 #include "Samples/BeamOffAxis/ReadEvents.h"
 #include "Samples/BeamOffAxis/Systematics.h"
 
-#include "Systematics/Flux/OffAxisFluxUncertaintyHelper.h"
-
 #include <iostream>
 
 #include <fstream>
@@ -62,65 +60,43 @@ void SampleHandlerBeamOffAxis::SetupSplines() {
 }
 
 void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
+
+  RegisterIndividualFunctionalParameter(DUNEMCEvents,
+                                        {
+                                            "ContainedMuonEnergyScale",
+                                            "ContainedMuonSqrtEnergyScale",
+                                            "ContainedMuonInvSqrtEnergyScale",
+                                            "TrackedMuonEnergyScale",
+                                            "TrackedMuonSqrtEnergyScale",
+                                            "TrackedMuonInvSqrtEnergyScale",
+                                            "EMEnergyScale",
+                                            "EMSqrtEnergyScale",
+                                            "EMInvSqrtEnergyScale",
+                                            "ChgHadEnergyScale",
+                                            "ChgHadSqrtEnergyScale",
+                                            "ChgHadInvSqrtEnergyScale",
+                                            "NeutronEnergyScale",
+                                            "NeutronSqrtEnergyScale",
+                                            "NeutronInvSqrtEnergyScale",
+                                            "TotalEnergyScale",
+                                            "TotalSqrtEnergyScale",
+                                            "TotalInvSqrtEnergyScale",
+                                        },
+                                        EnergyScales);
+
   RegisterIndividualFunctionalParameter(
-      "EMEnergyResolution", kEMEnergyResolution,
-      [this](const double *par, std::size_t iEvent) {
-        EMEnergyResolution(par, DUNEMCEvents[iEvent]);
-      });
-  RegisterIndividualFunctionalParameter(
-      "MuonEnergyScale", kMuonEnergyScale,
-      [this](const double *par, std::size_t iEvent) {
-        MuonEnergyScale(par, DUNEMCEvents[iEvent]);
-      });
-  RegisterIndividualFunctionalParameter(
-      "MuonEnergyResolution", kMuonEnergyResolution,
-      [this](const double *par, std::size_t iEvent) {
-        MuonEnergyResolution(par, DUNEMCEvents[iEvent]);
-      });
-  RegisterIndividualFunctionalParameter(
-      "NeutronEnergyResolution", kNeutronEnergyResolution,
-      [this](const double *par, std::size_t iEvent) {
-        NeutronEnergyResolution(par, DUNEMCEvents[iEvent]);
-      });
-  RegisterIndividualFunctionalParameter(
-      "ChargedHadronEnergyResolution", kChargedHadronEnergyResolution,
-      [this](const double *par, std::size_t iEvent) {
-        ChargedHadronEnergyResolution(par, DUNEMCEvents[iEvent]);
-      });
+      DUNEMCEvents,
+      {"MuonEnergyResolution", "EMEnergyResolution", "ChgHadEnergyResolution",
+       "NeutronEnergyResolution"},
+      ParticleEnergyResolutions);
 
   if (ParHandler->GetNumParFromGroup("Flux")) {
-    for (int focussing_par = 0;
-         focussing_par <
-         OffAxisFluxUncertaintyHelper::Get().GetNFocussingParams();
-         focussing_par++) {
-      int par_it = kNDetSysts + focussing_par;
-      RegisterIndividualFunctionalParameter(
-          OffAxisFluxUncertaintyHelper::Get().GetFocussingParamName(
-              focussing_par),
-          par_it, [=, this](double const *par_val, std::size_t iEvent) {
-            DUNEMCEvents[iEvent].syst.flux.total_weight *=
-                1 + (*par_val) * DUNEMCEvents[iEvent]
-                                     .syst.flux.focussing_ratio[focussing_par];
-          });
-    }
 
-    for (int hadprod_par = 0;
-         hadprod_par <
-         OffAxisFluxUncertaintyHelper::Get().GetNHadProdPCAComponents();
-         hadprod_par++) {
-      int par_it =
-          kNDetSysts +
-          int(OffAxisFluxUncertaintyHelper::Get().GetNFocussingParams()) +
-          hadprod_par;
-      RegisterIndividualFunctionalParameter(
-          "Flux_HadProd_Param_" + std::to_string(hadprod_par), par_it,
-          [=, this](double const *par_val, std::size_t iEvent) {
-            DUNEMCEvents[iEvent].syst.flux.total_weight *=
-                1 +
-                (*par_val) *
-                    DUNEMCEvents[iEvent].syst.flux.hadprod_ratio[hadprod_par];
-          });
-    }
+    RegisterIndividualFunctionalParameter(
+        DUNEMCEvents, GetFluxFocussingParamNames(), UpdateFluxFocussingWeight);
+
+    RegisterIndividualFunctionalParameter(
+        DUNEMCEvents, GetFluxHadProdParamNames(), UpdateFluxHadProdWeight);
   }
 }
 
@@ -130,12 +106,13 @@ void SampleHandlerBeamOffAxis::ResetShifts(int iEvent) {
 }
 
 void SampleHandlerBeamOffAxis::FinaliseShifts(int iEvent) {
-  // DUNEMCEvents[iEvent].varied_reco.
+  CalculateVariedCompositeQuantities(DUNEMCEvents[iEvent]);
 }
 
 void SampleHandlerBeamOffAxis::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < DUNEMCEvents.size(); ++i) {
-    MCEvents[i].total_weight_pointers.push_back(&(DUNEMCEvents[i].weights.pot));
+    MCEvents[i].total_weight_pointers.push_back(
+        &(DUNEMCEvents[i].weights.pot));
     MCEvents[i].total_weight_pointers.push_back(
         &(DUNEMCEvents[i].syst.flux.total_weight));
   }
@@ -145,8 +122,6 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
 
   MACH3LOG_INFO(
       "-------------------------------------------------------------------");
-
-  int num_events = 0;
 
   bool do_flux_systematics = ParHandler->GetNumParFromGroup("Flux");
 
@@ -195,7 +170,6 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
         std::tie(ev.syst.flux.focussing_ratio, ev.syst.flux.hadprod_ratio) =
             GetFluxVariationRatios(ev.truth.nu.pdg, ev.truth.nu.e,
                                    ev.truth.vtx.off_axis_pos_m, true);
-        num_events++;
       }
     }
 
@@ -204,7 +178,7 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
               std::back_inserter(DUNEMCEvents));
   }
 
-  return num_events;
+  return int(DUNEMCEvents.size());
 }
 
 const double *
@@ -241,7 +215,7 @@ void SampleHandlerBeamOffAxis::SetupFDMC() {
   size_t iEvent = 0;
   for (auto const &ev : DUNEMCEvents) {
     MCEvents[iEvent].Target = ev.truth.target_a;
-    MCEvents[iEvent].mode = int(ev.truth.mach3_mode);
+    MCEvents[iEvent].mode = ev.truth.mach3_mode;
     MCEvents[iEvent].isNC = !ev.truth.is_cc;
 
     MCEvents[iEvent].enu_true = ev.truth.nu.e;

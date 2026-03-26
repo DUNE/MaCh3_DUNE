@@ -2,8 +2,8 @@
 
 #include "Samples/BeamOffAxis/EventInfo.h"
 
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
 namespace dune::beamoffaxis {
 
@@ -17,6 +17,7 @@ namespace dune::beamoffaxis {
   X(TrueZPos)                                                                  \
   X(TrueW)                                                                     \
   X(Mode)                                                                      \
+  X(OscillationChannel)                                                        \
   X(ELepRec)                                                                   \
   X(Enubias)                                                                   \
   X(IsCC)                                                                      \
@@ -40,9 +41,11 @@ const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
 #undef LIST_OF_VARIABLES
 
 inline const double *ResolveKinematicEventMember(KinematicTypes KinPar,
-                                          EventInfo const &ev) {
+                                                 EventInfo const &ev) {
   switch (KinPar) {
   case kMode:
+    return &ev.truth.mach3_mode;
+  case kOscillationChannel:
     return &ev.truth.mach3_mode;
   case kIsCC:
     return &ev.truth.is_cc;

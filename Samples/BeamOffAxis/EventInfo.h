@@ -68,6 +68,7 @@ struct CAFEventInfo {
     double enu;
 
     double e_lep;
+    double e_had;
 
     double e_proton;
     double e_neutron;
@@ -92,6 +93,17 @@ struct EventInfo : public CAFEventInfo {
 
       double total_weight;
     } flux;
+
+    struct {
+      double lep;
+      double had;
+
+      double proton;
+      double neutron;
+      double pi0;
+      double piplus;
+      double piminus;
+    } sqrt_e;
   } syst;
 
   struct Weights {
