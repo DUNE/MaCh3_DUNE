@@ -4,7 +4,7 @@ foreach(app
 	EventRates
 	Fit
 	# Projections
-	# SigmaVariation
+	SigmaVariation
 	# LikelihoodScan
 	# Variations
 	SplineMaker
