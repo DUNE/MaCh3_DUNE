@@ -26,7 +26,7 @@ int main(int argc, char * argv[]) {
 
   //###############################################################################################################################
   //Create samplePDFFD objects
-  
+
   ParameterHandlerGeneric* xsec = nullptr;
 
   std::vector<SampleHandlerFD*> DUNEPdfs;
@@ -42,12 +42,12 @@ int main(int argc, char * argv[]) {
       MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample)->Integral());
     }
   }
-  
+
   //###############################################################################################################################
   //DB Can't use the core sigma variations as it's entirely set up around the concept of multiple selections per samplePDF object
   //   Thats not the case in the FD code, which has one selection per samplePDF object
   //   Consequently have to write out own code
-  
+
   std::vector<ParameterHandlerBase*> CovObjs;
   CovObjs.emplace_back(xsec);
 
@@ -55,22 +55,23 @@ int main(int argc, char * argv[]) {
 
   std::string OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
   TFile* File = TFile::Open(OutputFileName.c_str(),"RECREATE");
-  
+
   for (ParameterHandlerBase* CovObj: CovObjs) {
     MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",CovObj->GetName());
-    
+
     int nPars = CovObj->GetNumParams();
     for (int iPar=0;iPar<nPars;iPar++) {
+      if(CovObj->IsParameterFixed(iPar)) { continue; }
       std::string ParName = CovObj->GetParFancyName(iPar);
       double VarInit = CovObj->GetParInit(iPar);
       double VarSigma = CovObj->GetDiagonalError(iPar);
-      
+
       MACH3LOG_INFO("\tParameter : {:<30} - Variations around value : {:<10.7f} , in units of 1 Sigma : {:<10.7f}",ParName,VarInit,VarSigma);
 
       File->cd();
       File->mkdir(ParName.c_str());
       File->cd(ParName.c_str());
-      
+
       for (size_t iSigVar=0;iSigVar<sigmaVariations.size();iSigVar++) {
         double VarVal = VarInit + sigmaVariations[iSigVar] * VarSigma;
         if (VarVal < CovObj->GetLowerBound(iPar)) VarVal = CovObj->GetLowerBound(iPar);
