@@ -91,7 +91,6 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
       ParticleEnergyResolutions);
 
   if (ParHandler->GetNumParFromGroup("Flux")) {
-
     RegisterIndividualFunctionalParameter(
         DUNEMCEvents, GetFluxFocussingParamNames(), UpdateFluxFocussingWeight);
 

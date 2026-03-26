@@ -99,6 +99,8 @@ protected:
   const double *GetPointerToKinematicParameter(double KinematicVariable,
                                                int iEvent);
 
+  // override double GetLikelihood() const {}; (data - mc).T() * cov_inverse * (data - mc)
+
   std::vector<dune::beamoffaxis::EventInfo> DUNEMCEvents;
 
   std::vector<double> subsample_analysispot;

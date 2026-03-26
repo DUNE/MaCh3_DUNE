@@ -9,8 +9,9 @@ namespace dune::beamoffaxis {
 inline double EnergyScaleVariation(double const *par_vals, double e,
                                    double sqrte) {
   double e_prime =
-      e * (par_vals[0] + par_vals[1] * sqrte) + (par_vals[2] * sqrte);
-  return std::max(0.0, e_prime - e);
+      e * ((1 + par_vals[0]) + par_vals[1] * sqrte) + (par_vals[2] * sqrte);
+  // std::cout << "e = " << e << ", e_prime = " << e_prime << std::endl;
+  return (e_prime < 0) ? 0 : e_prime - e;
 }
 
 void EnergyScales(std::vector<double> const &par_vals, EventInfo &ev) {
@@ -65,38 +66,45 @@ void ParticleEnergyResolutions(std::vector<double> const &par_vals,
 
   if (std::abs(ev.truth.lep.pdg) == 13) {
     auto e_lep_bias = (ev.truth.lep.e - ev.reco.e_lep);
-    ev.varied_reco.e_lep += std::max(0.0, Muon_val * e_lep_bias);
+    ev.varied_reco.e_lep += Muon_val * e_lep_bias;
   }
 
   auto e_pi0_bias = (ev.truth.had.e_pi0 - ev.reco.e_pi0);
-  ev.varied_reco.e_pi0 += std::max(0.0, EM_val * e_pi0_bias);
+  ev.varied_reco.e_pi0 += EM_val * e_pi0_bias;
 
   if (std::abs(ev.truth.lep.pdg) == 11) {
     auto e_lep_bias = (ev.truth.lep.e - ev.reco.e_lep);
-    ev.varied_reco.e_lep += std::max(0.0, EM_val * e_lep_bias);
+    ev.varied_reco.e_lep += EM_val * e_lep_bias;
   }
 
   auto e_proton_bias = (ev.truth.had.e_proton - ev.reco.e_proton);
-  ev.varied_reco.e_proton += std::max(0.0, ChgHad_val * e_proton_bias);
+  ev.varied_reco.e_proton += ChgHad_val * e_proton_bias;
   auto e_piplus_bias = (ev.truth.had.e_piplus - ev.reco.e_piplus);
-  ev.varied_reco.e_piplus += std::max(0.0, ChgHad_val * e_piplus_bias);
+  ev.varied_reco.e_piplus += ChgHad_val * e_piplus_bias;
   auto e_piminus_bias = (ev.truth.had.e_piminus - ev.reco.e_piminus);
-  ev.varied_reco.e_piminus += std::max(0.0, ChgHad_val * e_piminus_bias);
+  ev.varied_reco.e_piminus += ChgHad_val * e_piminus_bias;
 
   auto e_neutron_bias = (ev.truth.had.e_neutron - ev.reco.e_neutron);
-  ev.varied_reco.e_neutron += std::max(0.0, Neutron_val * e_neutron_bias);
+  ev.varied_reco.e_neutron += Neutron_val * e_neutron_bias;
 }
 
 void CalculateVariedCompositeQuantities(EventInfo &ev) {
   auto const &reco = ev.reco;
   auto &varreco = ev.varied_reco;
 
-  varreco.enu = std::max(0.0, reco.enu + (varreco.e_lep - reco.e_lep) +
-                                  (varreco.e_had - reco.e_had) +
-                                  (varreco.e_proton - reco.e_proton) +
-                                  (varreco.e_piplus - reco.e_piplus) +
-                                  (varreco.e_piminus - reco.e_piminus) +
-                                  (varreco.e_neutron - reco.e_neutron));
+  auto e_lep_shift = (varreco.e_lep < 0) ? 0 : (varreco.e_lep - reco.e_lep);
+  auto e_had_shift = (varreco.e_had < 0) ? 0 : (varreco.e_had - reco.e_had);
+  auto e_proton_shift =
+      (varreco.e_proton < 0) ? 0 : (varreco.e_proton - reco.e_proton);
+  auto e_piplus_shift =
+      (varreco.e_piplus < 0) ? 0 : (varreco.e_piplus - reco.e_piplus);
+  auto e_piminus_shift =
+      (varreco.e_piminus < 0) ? 0 : (varreco.e_piminus - reco.e_piminus);
+  auto e_neutron_shift =
+      (varreco.e_neutron < 0) ? 0 : (varreco.e_neutron - reco.e_neutron);
+
+  varreco.enu = reco.enu + e_lep_shift + e_had_shift + e_proton_shift +
+                e_piplus_shift + e_piminus_shift + e_neutron_shift;
 }
 
 std::pair<std::vector<float>, std::vector<float>>

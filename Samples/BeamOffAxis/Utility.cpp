@@ -52,6 +52,8 @@ GetBinnedWeights(SampleHandlerBeamOffAxis &sample, int iSubSample,
                            sample.GetName(), sample.GetSampleTitle(iSubSample))
             << std::endl;
 
+  // use sample.GetNDim(iSubSample) to work outif 1D or 2D
+
   // Vector Structure:
   // Parameter<Knot<Mode<TrueE<TH2D>>>
   std::vector<std::vector<std::vector<std::vector<std::unique_ptr<TH2D>>>>>
