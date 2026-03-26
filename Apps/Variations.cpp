@@ -44,9 +44,11 @@ int main(int argc, char * argv[]) {
   //Perform reweight and print total integral
 
   MACH3LOG_INFO("=======================================================");
-  for(SampleHandlerFD* Sample: DUNEPdfs){
-    Sample->Reweight();
-    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetTitle(), Sample->GetMCHist(Sample->GetNDim())->Integral());
+  for(auto handler: DUNEPdfs){
+    handler->Reweight();
+    for (int iSample=0;iSample<handler->GetNsamples();iSample++) {
+      MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample)->Integral());
+    }
   }
   
   //###############################################################################################################################
@@ -62,65 +64,70 @@ int main(int argc, char * argv[]) {
   std::string OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
   TFile* File = TFile::Open(OutputFileName.c_str(),"RECREATE");
 
-  for (ParameterHandlerBase* CovObj: CovObjs) {
-    MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",CovObj->GetName());
-    
+  for (ParameterHandlerBase *CovObj : CovObjs) {
+    MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",
+                  CovObj->GetName());
+
     int nPars = CovObj->GetNumParams();
 
-    for (int iPar=0;iPar<nPars;iPar++) {
+    for (int iPar = 0; iPar < nPars; iPar++) {
       std::string ParName = CovObj->GetParName(iPar);
 
       for (auto const &param : FitManager->raw()["Variations"]) {
 
         std::string VarName = (param["Name"].as<std::string>());
 
-        if(ParName == VarName) {
+        if (ParName == VarName) {
 
-          MACH3LOG_INFO("\tParameter : {:<30}",ParName);
+          MACH3LOG_INFO("\tParameter : {:<30}", ParName);
 
-          if(!param["OscParDefault"]){ //if specific default values not specified for the parameter then use global default ones
+          if (!param["OscParDefault"]) { // if specific default values not
+                                         // specified for the parameter then use
+                                         // global default ones
             CovObj->SetParameters(oscpars);
-          }
-          else {
-            CovObj->SetParameters((param["OscParDefault"].as<std::vector<double>>()));
+          } else {
+            CovObj->SetParameters(
+                (param["OscParDefault"].as<std::vector<double>>()));
           }
 
-          std::vector<double> valVariations = (param["VarValues"].as<std::vector<double>>());
+          std::vector<double> valVariations =
+              (param["VarValues"].as<std::vector<double>>());
 
           File->cd();
           File->mkdir(ParName.c_str());
           File->cd(ParName.c_str());
-      
-          for (size_t iSigVar=0;iSigVar<valVariations.size();iSigVar++) {
-	    double VarVal = valVariations[iSigVar];
-	    
-	    MACH3LOG_INFO("\t\tParameter Value : {:<10.7f}",VarVal);
-            CovObj->SetParProp(iPar,VarVal);
-	    
-	    for (size_t iSample=0;iSample<DUNEPdfs.size();iSample++) {
-	      std::string SampleName = DUNEPdfs[iSample]->GetTitle();
-	      
-	      File->cd(ParName.c_str());
-	      if (iSigVar == 0) {
-		File->mkdir((ParName+"/"+SampleName).c_str());
-	      }
-	      File->cd((ParName+"/"+SampleName).c_str());
-	      
-	      DUNEPdfs[iSample]->Reweight();
-              TH1* Hist = DUNEPdfs[iSample]->GetMCHist(DUNEPdfs[iSample]->GetNDim());
-	      MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}",SampleName,Hist->Integral());
-	      Hist->Write(Form("Variation_%.2e",VarVal));
-	    }
-          }
 
+          for (size_t iSigVar = 0; iSigVar < valVariations.size(); iSigVar++) {
+            double VarVal = valVariations[iSigVar];
+
+            MACH3LOG_INFO("\t\tParameter Value : {:<10.7f}", VarVal);
+            CovObj->SetParProp(iPar, VarVal);
+
+            for (auto handler : DUNEPdfs) {
+              for (int iSample = 0; iSample < handler->GetNsamples(); iSample++) {
+                std::string SampleName = handler->GetSampleTitle(iSample);
+
+                File->cd(ParName.c_str());
+                if (iSigVar == 0) {
+                  File->mkdir((ParName + "/" + SampleName).c_str());
+                }
+                File->cd((ParName + "/" + SampleName).c_str());
+
+                handler->Reweight();
+                TH1 *Hist =
+                    handler->GetMCHist(iSample);
+                MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}",
+                              SampleName, Hist->Integral());
+                Hist->Write(Form("Variation_%.2e", VarVal));
+              }
+            }
+          }
         }
       }
     }
 
     MACH3LOG_INFO("=======================================================");
   }
-  
 
   File->Close();
-  
 }

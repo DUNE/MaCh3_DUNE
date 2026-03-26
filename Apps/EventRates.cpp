@@ -46,9 +46,9 @@ int main(int argc, char * argv[]) {
 
   //###############################################################################################################################
   //Create SampleHandlerFD objects
-
+  
   ParameterHandlerGeneric* xsec = nullptr;
-
+  
   std::vector<SampleHandlerFD*> DUNEPdfs;
   MakeMaCh3DuneInstance(fitMan, DUNEPdfs, xsec);
 
@@ -56,17 +56,19 @@ int main(int argc, char * argv[]) {
   //Perform reweight and print total integral
 
   std::vector<TH1*> DUNEHists;
-  for(auto Sample : DUNEPdfs){
-    Sample->Reweight();
-    for(int iSubSample = 0; iSubSample < Sample->GetNsamples(); ++iSubSample){
-      DUNEHists.push_back(Sample->GetMCHist(iSubSample));
-      MACH3LOG_INFO("Event rate for {} : {:.2f}", Sample->GetSampleTitle(iSubSample), DUNEHists.back()->Integral());
-      Sample->PrintIntegral(iSubSample);
+  for(auto handler : DUNEPdfs){
+    handler->Reweight();
+    for (int iSample=0; iSample<handler->GetNsamples(); iSample++) {
+      DUNEHists.push_back(handler->GetMCHist(iSample));
+
+      std::string EventRateString = fmt::format("{:.2f}", handler->GetMCHist(iSample)->Integral());
+      MACH3LOG_INFO("Event rate for {} : {:<5}", handler->GetSampleTitle(iSample), EventRateString);
+      handler->PrintIntegral(iSample);
     }
   }
 
   std::string OutFileName = GetFromManager<std::string>(fitMan->raw()["General"]["OutputFile"], "EventRatesOutput.root");
-  Write1DHistogramsToFile(OutFileName, DUNEHists);
+  Write1DHistogramsToFile(OutFileName, DUNEHists); 
   Write1DHistogramsToPdf(OutFileName, DUNEHists);
 
   //###############################################################################################################################
@@ -75,29 +77,26 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("Oscillation Mode Breakdown:");
-
-  for(auto Sample : DUNEPdfs) {
-    MACH3LOG_INFO("======================");
-    for (int iSubSample = 0; iSubSample < Sample->GetNsamples(); ++iSubSample) {
-      int nOscChannels = Sample->GetNOscChannels(iSubSample);
-      for (int iOscChan = 0; iOscChan < nOscChannels; iOscChan++) {
-        std::vector<KinematicCut> SelectionVec;
+  
+  for(auto handler : DUNEPdfs) {
+    for (int iSample = 0; iSample < handler->GetNsamples(); iSample++) {
+      MACH3LOG_INFO("======================");
+      int nOscChannels = handler->GetNOscChannels(iSample);
+      for (int iOscChan=0;iOscChan<nOscChannels;iOscChan++) {
+        std::vector< KinematicCut > SelectionVec;
 
         KinematicCut SelecChannel;
-        SelecChannel.ParamToCutOnIt =
-            Sample->ReturnKinematicParameterFromString("OscillationChannel");
+        SelecChannel.ParamToCutOnIt = handler->ReturnKinematicParameterFromString("OscillationChannel");
         SelecChannel.LowerBound = iOscChan;
-        SelecChannel.UpperBound = iOscChan + 1;
+        SelecChannel.UpperBound = iOscChan+1;
         SelectionVec.push_back(SelecChannel);
-
-        TH1 *Hist =
-            Sample->Get1DVarHist(iSubSample, Sample->GetXBinVarName(iSubSample), SelectionVec);
-        MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}", Sample->GetSampleTitle(iSubSample),
-                      Sample->GetFlavourName(iSubSample,iOscChan), Hist->Integral());
+        
+        TH1* Hist = handler->Get1DVarHist(iSample, handler->GetXBinVarName(iSample),SelectionVec);
+        MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),handler->GetFlavourName(iSample, iOscChan),Hist->Integral());
       }
 
-      TH1 *Hist = Sample->Get1DVarHist(iSubSample, Sample->GetXBinVarName(iSubSample));
-      MACH3LOG_INFO("{:<20} : {:<20.2f}", Sample->GetSampleTitle(iSubSample), Hist->Integral());
+      TH1* Hist = handler->Get1DVarHist(iSample, handler->GetXBinVarName(iSample));
+      MACH3LOG_INFO("{:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),Hist->Integral());
     }
   }
 
@@ -108,27 +107,27 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("Interaction Mode Breakdown:");
 
-  for(auto Sample : DUNEPdfs) {
-    MACH3LOG_INFO("======================");
+  for(auto handler : DUNEPdfs) {
+    for (int iSample = 0; iSample < handler->GetNsamples(); iSample++) {
+      MACH3LOG_INFO("======================");
 
-    MaCh3Modes* Modes = Sample->GetMaCh3Modes();
-    int nModeChannels = Modes->GetNModes();
-    for (int iSubSample = 0; iSubSample < Sample->GetNsamples(); ++iSubSample) {
+      MaCh3Modes* Modes = handler->GetMaCh3Modes();
+      int nModeChannels = Modes->GetNModes();
       for (int iModeChan=0;iModeChan<nModeChannels;iModeChan++) {
         std::vector< KinematicCut > SelectionVec;
 
         KinematicCut SelecChannel;
-        SelecChannel.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString("Mode");
+        SelecChannel.ParamToCutOnIt = handler->ReturnKinematicParameterFromString("Mode");
         SelecChannel.LowerBound = iModeChan;
         SelecChannel.UpperBound = iModeChan+1;
         SelectionVec.push_back(SelecChannel);
 
-        TH1* Hist = Sample->Get1DVarHist(iSubSample, Sample->GetXBinVarName(iSubSample),SelectionVec);
-        MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetSampleTitle(iSubSample),Modes->GetMaCh3ModeName(iModeChan),Hist->Integral());
+        TH1* Hist = handler->Get1DVarHist(iSample, handler->GetXBinVarName(iSample),SelectionVec);
+        MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),Modes->GetMaCh3ModeName(iModeChan),Hist->Integral());
       }
 
-      TH1* Hist = Sample->Get1DVarHist(iSubSample, Sample->GetXBinVarName(iSubSample));
-      MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetSampleTitle(iSubSample),Hist->Integral());
+      TH1* Hist = handler->Get1DVarHist(iSample, handler->GetXBinVarName(iSample));
+      MACH3LOG_INFO("{:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),Hist->Integral());
     }
   }
 

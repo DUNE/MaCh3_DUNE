@@ -36,7 +36,7 @@ protected:
   void SetupFDMC();
 
   /// @brief Sets up pointers weights for each event (oscillation/xsec/etc.)
-  void SetupWeightPointers();
+  void AddAdditionalWeightPointers();
   void SetupSplines();
 	
 	// === HH: Functional parameters ===
@@ -53,7 +53,7 @@ protected:
 	kRecoCVNNumu, kRecoCVNNue
   };
   void RegisterFunctionalParameters() override;
-  void resetShifts(int iEvent) override;
+  void ResetShifts(int iEvent) override;
 
   // Global energy scale systematics
   void TotalEScale(const double * par, std::size_t iEvent);
@@ -143,11 +143,7 @@ protected:
   // dunemc
   /// DUNE MC sampels
   std::vector<struct dunemc_beamfd> dunemcSamples;
-
-  /// Value of POT used for sample
-  double pot;
-  bool iselike;
-  double isFHC;
+  std::vector<BeamFDSampleInfo> beamFDSampleDetails;
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},

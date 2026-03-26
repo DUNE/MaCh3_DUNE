@@ -14,48 +14,65 @@ SampleHandlerBeamNDGAr::~SampleHandlerBeamNDGAr() {
 }
 
 void SampleHandlerBeamNDGAr::Init() {
-  pot = SampleManager->raw()["POT"].as<double>();
-  B_field = SampleManager->raw()["DetectorVariables"]["B_field"].as<double>(); //NK B field value in T
   momentum_resolution_threshold = SampleManager->raw()["DetectorVariables"]["momentum_resolution_threshold"].as<double>(); //NK momentum_resolution threshold, total as a fraction of momentum
   pixel_spacing = SampleManager->raw()["DetectorVariables"]["pixel_spacing"].as<double>(); //NK pixel spacing in mm to find num hits in y,z plane
   spatial_resolution = SampleManager->raw()["DetectorVariables"]["spatial_resolution"].as<double>(); //NK spatial resolution in mm to find  in y,z plane
   adc_sampling_frequency = SampleManager->raw()["DetectorVariables"]["adc_sampling_frequency"].as<double>(); //NK sampling frequency for ADC - needed to find timing resolution and spatial resolution in x dir in MHz
   drift_velocity = SampleManager->raw()["DetectorVariables"]["drift_velocity"].as<double>(); //NK drift velocity of electrons in gas - needed to find timing resolution and spatial resolution in x dir in cm/microsecond
   downsampling = SampleManager->raw()["DetectorVariables"]["downsampling"].as<double>(); //JM downsampling fraction
+  edepcrit_threshold = SampleManager->raw()["DetectorVariables"]["EDepCrit"].as<double>()/1000.; //JM max energy for a contained shower to deposit in the outer crit_layers of calorimeter in GeV 
+  crit_layers = SampleManager->raw()["DetectorVariables"]["CritLayers"].as<int>(); // JM number of layers defining this outer region
   TPCFidLength = SampleManager->raw()["DetectorVariables"]["TPCFidLength"].as<double>();
   TPCFidRadius = SampleManager->raw()["DetectorVariables"]["TPCFidRadius"].as<double>();
+  B_field = SampleManager->raw()["DetectorVariables"]["B_field"].as<double>(); //NK B field value in T
   TPCInstrumentedLength = SampleManager->raw()["DetectorVariables"]["TPCInstrumentedLength"].as<double>();
   TPCInstrumentedRadius = SampleManager->raw()["DetectorVariables"]["TPCInstrumentedRadius"].as<double>();
-  ECALInnerRadius = SampleManager->raw()["DetectorVariables"]["ECALInnerRadius"].as<double>();
-  ECALOuterRadius = SampleManager->raw()["DetectorVariables"]["ECALOuterRadius"].as<double>();
-  ECALEndCapStart = SampleManager->raw()["DetectorVariables"]["ECALEndCapStart"].as<double>();
-  ECALEndCapEnd = SampleManager->raw()["DetectorVariables"]["ECALEndCapEnd"].as<double>();
+  ECALSciX0 = SampleManager->raw()["DetectorVariables"]["ECALSciX0"].as<double>();
+
+  beamNDGArSampleDetails.resize(static_cast<size_t>(GetNsamples()));
+  
+  auto EnabledSamples = Get<std::vector<std::string>>(SampleManager->raw()["Samples"], __FILE__ , __LINE__);
+
+  for (size_t i = 0; i < static_cast<size_t>(GetNsamples()); i++){
+    const auto TempTitle = EnabledSamples[i];
+    beamNDGArSampleDetails[i].isFHC = SampleManager->raw()[TempTitle]["DUNESampleBools"]["isFHC"].as<double>();
+    beamNDGArSampleDetails[i].iselike = SampleManager->raw()[TempTitle]["DUNESampleBools"]["iselike"].as<bool>();
+    beamNDGArSampleDetails[i].pot = SampleManager->raw()[TempTitle]["POT"].as<double>();
+
+    beamNDGArSampleDetails[i].norm_s = 1;
+    beamNDGArSampleDetails[i].pot_s = (beamNDGArSampleDetails[i].pot)/(downsampling*1e21);
+
+    MACH3LOG_INFO("Setting up beam ND sample {}", GetSampleTitle(static_cast<int>(i)));
+    MACH3LOG_INFO("- isFHC: {}", beamNDGArSampleDetails[i].isFHC);
+    MACH3LOG_INFO("- iselike: {}", beamNDGArSampleDetails[i].iselike);
+  }
+
+  MACH3LOG_INFO("-------------------------------------------------------------------");
 }
 
 void SampleHandlerBeamNDGAr::SetupSplines() {
   ///@todo move all of the spline setup into core
-  if(ParHandler->GetNumParamsFromSampleName(SampleName, kSpline) > 0){
-    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", ParHandler->GetNumParamsFromSampleName(SampleName, kSpline));
+  if(ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline) > 0){
+    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline));
     SplineHandler = std::unique_ptr<BinnedSplineHandler>(new BinnedSplineHandlerDUNE(ParHandler,Modes.get()));
     InitialiseSplineObject();
   }
   else{
-    MACH3LOG_INFO("Found {} splines for this sample so I will not load or evaluate splines", ParHandler->GetNumParamsFromSampleName(SampleName, kSpline));
+    MACH3LOG_INFO("Found {} splines for this sample so I will not load or evaluate splines", ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline));
     SplineHandler = nullptr;
   }
 
   return;
 }
 
-void SampleHandlerBeamNDGAr::SetupWeightPointers() {
+void SampleHandlerBeamNDGAr::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < dunendgarmcFitting.size(); ++i) {
-      MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].pot_s));
-      MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].norm_s));
-      MCSamples[i].total_weight_pointers.push_back(MCSamples[i].osc_w_pointer);
-      MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].rw_berpaacvwgt));
-      MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].flux_w));
-      MCSamples[i].total_weight_pointers.push_back(&(MCSamples[i].xsec_w));
-      MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcPlotting[i].geometric_correction));
+    MACH3LOG_INFO("pot: {}\nnorm: {}\nberpa: {}\nflux: {}\ngeom: {}", dunendgarmcFitting[i].pot_s, dunendgarmcFitting[i].norm_s, dunendgarmcFitting[i].rw_berpaacvwgt, dunendgarmcFitting[i].flux_w, dunendgarmcPlotting[i].geometric_correction);
+    MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].pot_s));
+    MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].norm_s));
+    MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].rw_berpaacvwgt));
+    MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].flux_w));
+    MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcPlotting[i].geometric_correction));
   }
 }
 
@@ -143,6 +160,8 @@ int SampleHandlerBeamNDGAr::GetChargeFromPDG(const int pdg) {
     case -211:  // pi-
     case -321:  // K-
     case -213:  // rho-
+    case -411:  // D-
+    case -431:  // Ds-
     case -2212: // p-
     case 3112:  // Sig-
     case -3222: // anti Sig+
@@ -156,12 +175,19 @@ int SampleHandlerBeamNDGAr::GetChargeFromPDG(const int pdg) {
     case 211:   // pi+
     case 321:   // K+
     case 213:   // rho+
+    case 411:   // D+
+    case 431:   // Ds+
     case 2212:  // p+
     case -3112: // anti Sig-
     case 3222:  // Sig+
     case -3312: // Xi+
     case -3334: // Omega+
+    case 4122:  // Lambda_c+
+    case 4212:  // Sigma_c+
       return 1;
+
+    case 4222:  // Sigma_c++
+      return 2;
 
     default:
       switch(std::abs(pdg)) {
@@ -177,6 +203,7 @@ int SampleHandlerBeamNDGAr::GetChargeFromPDG(const int pdg) {
         case 130:   // K0L
         case 310:   // K0S
         case 223:   // omega
+        case 421:   // D0
         case 2112:  // n
         case 3122:  // Lambda
         case 3212:  // Sig0
@@ -197,10 +224,11 @@ void SampleHandlerBeamNDGAr::EraseDescendants(int motherID, std::unordered_map<i
 }
 
 // Removes descendants of primID which can be reconstructed from curvature from mother_to_daughter_ID map
-bool SampleHandlerBeamNDGAr::CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, dunemc_plotting& plotting_vars, double pixel_spacing_cm) {
+bool SampleHandlerBeamNDGAr::CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, 
+                                                       const std::unordered_map<int, size_t>& ID_to_index, dunemc_plotting& plotting_vars, double pixel_spacing_cm) {
   if (IsResolvedFromCurvature(plotting_vars, ID_to_index.at(id), pixel_spacing_cm)) { // If mother can be reconstructed from curvature, remove her and her descendants
     size_t index = ID_to_index.at(id);
-    int motherID = _MotherTrkID->at(index);
+    int motherID = _MCPMotherTrkID->at(index);
     if (motherID != 0) {
       EraseDescendants(id, mother_to_daughter_ID);
     }
@@ -217,19 +245,147 @@ bool SampleHandlerBeamNDGAr::CurvatureResolutionFilter(int id, std::unordered_ma
   return false;
 }
 
-// Returns depth of a coordinate position in the dodecoganol ecal, or +999 if it is beyond the ecal boundaries
+double SampleHandlerBeamNDGAr::GetDCalBoundary(const std::vector<double>& startpos, const std::vector<double>& dir, size_t& boundary_index) {
+  double dmin = std::numeric_limits<double>::max();
+  for (size_t iPlane=0; iPlane < outerECalP.size(); iPlane++) {
+    double num = 0;
+    double denom = 0;
+    double norm = 0;
+    for (size_t j=0; j<3; j++) {
+      num += (outerECalP[iPlane][j] - startpos[j]) * outerECalA[iPlane][j];
+      denom += dir[j] * outerECalA[iPlane][j];
+      norm += dir[j] * dir[j];
+    }
+    if (denom == 0) continue;
+
+    double d = num * std::sqrt(norm) / denom;
+    if ((d >= 0) && (d < dmin)) {
+      dmin = d;
+      boundary_index = iPlane;
+    }
+  }
+  return dmin / ECALSciX0;
+}
+
+bool SampleHandlerBeamNDGAr::IsPrimContained(int id, const std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index,
+                                             const std::unordered_map<int, std::vector<double>>& eID_to_showerstart, const std::unordered_map<int, std::pair<double, double>>& pID_to_EDep,
+                                             dunemc_plotting& plotting_vars) {
+  size_t idx = ID_to_index.at(id);
+  int pdg = _MCPPDG->at(idx);
+
+  // Don't require containment of secondary neutrons/neutrinos/nuclei
+  if ((std::abs(pdg) == 2112) || (std::abs(pdg) == 12) || (std::abs(pdg) ==14) || (std::abs(pdg) == 16)) return true;
+
+  const std::vector<double> startpos = {_MCPStartX->at(idx), _MCPStartY->at(idx), _MCPStartZ->at(idx)};
+  const std::vector<double> endpos = {_MCPEndX->at(idx), _MCPEndY->at(idx), _MCPEndZ->at(idx)};
+
+  bool leavesTPC = (GetCalDepth(startpos[0], startpos[1], startpos[2]) == -999.) && (GetCalDepth(endpos[0], endpos[1], endpos[2]) != -999.);
+  if (leavesTPC) {
+    bool isContained = true;
+
+    if ((std::abs(pdg) == 22) || (std::abs(pdg) == 11) || (std::abs(pdg) == 111)) { // Check for EM shower containment
+      const std::vector<double> ecalP = {_MCPCalPX->at(idx)/1000., _MCPCalPY->at(idx)/1000., _MCPCalPZ->at(idx)/1000.};
+      if (std::isnan(ecalP[0])) {
+        MACH3LOG_WARN("Particle (pdg {}) which leaves TPC has no stored ecal momentum", pdg);
+        return true;
+      }
+      double ecalE = std::sqrt(ecalP[0]*ecalP[0] + ecalP[1]*ecalP[1] + ecalP[2]*ecalP[2] + MaCh3Utils::GetMassFromPDG(pdg)*MaCh3Utils::GetMassFromPDG(pdg));
+
+      std::vector<double> showerstart;
+      double a_par, b_par, c_par;
+
+      // External studies derive a line y = a + b log ( x - c ) above which resolution <5%
+      // Photons: [12.806, 0.68, 0.033]
+      // Electrons: [13.573, 0.716, 0.03]
+      if (std::abs(pdg) == 11) {
+        if (eID_to_showerstart.find(id) != eID_to_showerstart.end()) showerstart = eID_to_showerstart.at(id);
+        else {
+          if (std::abs(GetCalDepth(endpos[0], endpos[1], endpos[2])) == 999)  {
+            MACH3LOG_WARN("Electron of energy {} GeV has no hits above threshold and does not stop in the ECal - considered uncontained.", ecalE);
+            return false;
+          }
+          showerstart = endpos;
+        }
+        a_par = 13.573;
+        b_par = 0.716;
+        c_par = 0.03;
+      }
+      else if (std::abs(pdg) == 22) {
+        showerstart = endpos;
+        a_par = 12.806;
+        b_par = 0.68;
+        c_par = 0.033;
+      }
+      else {
+        showerstart = endpos;
+        a_par = 13.573;
+        b_par = 0.716;
+        c_par = 0.03;
+      }
+
+      double px = _MCPStartPX->at(idx)/1000.;
+      double py = _MCPStartPY->at(idx)/1000.;
+      double pz = _MCPStartPZ->at(idx)/1000.;
+      double ptot = std::sqrt(px*px + py*py + pz*pz);
+
+      size_t boundary_index = 999;
+      double d_boundary = GetDCalBoundary(showerstart, ecalP, boundary_index);
+
+      if (ecalE < (c_par+1e-6)) isContained = true;
+      else isContained = d_boundary >= a_par + (b_par*std::log(ecalE - c_par));
+
+      // Fill shower-level kinpars
+      if (boundary_index == 999) {
+        MACH3LOG_WARN("No boundary found for shower of pdg {}", pdg);
+        MACH3LOG_WARN("Start Position ({} {}, {})", showerstart[0], showerstart[1], showerstart[2]);
+        MACH3LOG_WARN("Direction ({}, {}, {})", ecalP[0], ecalP[1], ecalP[2]);
+        plotting_vars.shower_cosnorm.push_back(std::numeric_limits<double>::quiet_NaN());
+      }
+      else {
+        std::vector<double> normal = outerECalA[boundary_index];
+        double dotProd = ecalP[0]*normal[0] + ecalP[1]*normal[1] + ecalP[2]*normal[2];
+        plotting_vars.shower_cosnorm.push_back(dotProd/ptot);
+      }
+
+      plotting_vars.shower_dcalboundary.push_back(d_boundary);
+      plotting_vars.shower_energy.push_back(ecalE);
+      plotting_vars.shower_bangle.push_back(acos(px/ptot)*180/M_PI);
+      plotting_vars.shower_iscontained.push_back(isContained);
+      plotting_vars.shower_pdg.push_back(pdg);
+    }
+    else { // For non-EM showers, simply check if stops in ecal for now
+      isContained = GetCalDepth(endpos[0], endpos[1], endpos[2]) != 999.;
+
+      if (pdg == 2212 && pID_to_EDep.find(id) != pID_to_EDep.end()) isContained = isContained && (pID_to_EDep.at(id).first / pID_to_EDep.at(id).second > 0.9);
+    }
+    // No need to check secondaries if uncontained - just return false
+    if (!isContained) return false;
+  }
+  // Check secondaries - if any are uncontained, just return false
+  auto& daughters = mother_to_daughter_ID.at(id); 
+  for (int daughterID : daughters) {
+    if (!IsPrimContained(daughterID, mother_to_daughter_ID, ID_to_index, eID_to_showerstart, pID_to_EDep, plotting_vars)) return false;
+  }
+
+  return true; // No daughters are uncontained, so return true
+}
+
+// Returns depth of a coordinate position in the dodecoganol ecal, or +/- 999 if it is beyond/within the ecal boundary
 double SampleHandlerBeamNDGAr::GetCalDepth(double x, double y, double z) {
   x = x - TPC_centre_x;
   y = y - TPC_centre_y;
   z = z - TPC_centre_z;
   double r = std::sqrt(y*y + z*z);
-  if (x > ECALEndCapEnd) return 999.;
-  if (r < ECALInnerRadius) return std::abs(x) - ECALEndCapStart; // give depth relative to end cap
+
+  if (std::abs(x) > ECALEndCapEnd) return 999.; // beyond ecal length-wise
+  if ((r < ECALInnerRadius) && (std::abs(x) >= ECALEndCapStart)) return std::abs(x) - ECALEndCapStart; // give depth relative to end cap
 
   double theta = atan2(y, z);
   double theta_segment = std::round(theta/(M_PI/6.))*M_PI/6.;
   double projected_r = r*cos(theta_segment - theta);
-  if (projected_r > ECALOuterRadius) return 999.;
+
+  if (projected_r > ECALOuterRadius) return 999.; // beyond ecal radially
+  if (projected_r < ECALInnerRadius) return -999.; // in tpc
 
   return projected_r - ECALInnerRadius; // give depth relative to barrel
 }
@@ -237,20 +393,23 @@ double SampleHandlerBeamNDGAr::GetCalDepth(double x, double y, double z) {
 // Calculate the layer from the depth. Barrel: 8x0.673cm, 34x1.142cm. Endcap: 6x0.673cm, 36x1.142cm.
 double SampleHandlerBeamNDGAr::DepthToLayer(double depth, double r) {
   int n_thin_layers;
-  if (r < ECALInnerRadius) n_thin_layers = 6;
-  else n_thin_layers = 8;
+  if (r < ECALInnerRadius) n_thin_layers = _NEndCapHG;
+  else n_thin_layers = _NBarrelHG;
+
+  double hg_width = _HGAbsWidth+_HGSciWidth+_HGBoardWidth;
+  double lg_width = _LGAbsWidth+_LGSciWidth;
 
   double layer;
-  if (depth < static_cast<double>(n_thin_layers)*0.673) {
-    layer = static_cast<int>(depth/0.673) + 1;
+  if (depth < static_cast<double>(n_thin_layers)*hg_width) {
+    layer = static_cast<int>(depth/hg_width) + 1;
   } else {
-    layer = static_cast<int>((depth-static_cast<double>(n_thin_layers)*0.673)/1.142) + 1 + n_thin_layers;
+    layer = static_cast<int>((depth-static_cast<double>(n_thin_layers)*hg_width)/lg_width) + 1 + n_thin_layers;
   }
 
   return layer;
 }
 
-double SampleHandlerBeamNDGAr::CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers, const int crit_layers) {
+double SampleHandlerBeamNDGAr::CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers) {
   auto it = mother_to_daughter_ID.find(motherID);
   double EDepCrit = 0.;
   if (it != mother_to_daughter_ID.end()) {
@@ -258,75 +417,74 @@ double SampleHandlerBeamNDGAr::CalcEDepCal(int motherID, std::unordered_map<int,
       EDepCrit += ID_to_ECalDep.at(motherID)[static_cast<size_t>(i_layer)];
     }
     for (int daughterID : it->second) {
-      EDepCrit += CalcEDepCal(daughterID, mother_to_daughter_ID, ID_to_ECalDep, tot_layers, crit_layers);
+      EDepCrit += CalcEDepCal(daughterID, mother_to_daughter_ID, ID_to_ECalDep, tot_layers);
     }
   }
   return EDepCrit;
 }
 
-bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_vars, size_t i_anapart, double pixel_spacing_cm){
+bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_vars, size_t i_particle, double pixel_spacing_cm){
   // Get particle properties from Anatree
-  double xstart = _MCPStartX->at(i_anapart);
-  double ystart = _MCPStartY->at(i_anapart);
-  double zstart = _MCPStartZ->at(i_anapart);
+  double xstart = _MCPStartX->at(i_particle);
+  double ystart = _MCPStartY->at(i_particle);
+  double zstart = _MCPStartZ->at(i_particle);
   double start_radius = std::sqrt((ystart-TPC_centre_y)*(ystart-TPC_centre_y) + (zstart-TPC_centre_z)*(zstart-TPC_centre_z));
   double start_length = xstart - TPC_centre_x;
   bool starts_in_tpc = std::abs(start_length)<=TPCInstrumentedLength && start_radius<=TPCInstrumentedRadius;
   if (!starts_in_tpc) return false;
 
-  int pdg = _PDG->at(i_anapart);
+  int pdg = _MCPPDG->at(i_particle);
   if (pdg > 1000000000) return false;
   int charge = GetChargeFromPDG(pdg);
   double mass = MaCh3Utils::GetMassFromPDG(pdg);
-  double p_x = _MCPStartPX->at(i_anapart);
-  double p_y = _MCPStartPY->at(i_anapart);
-  double p_z = _MCPStartPZ->at(i_anapart);
-  double p_beam = p_y*BeamDirection[1] + p_z*BeamDirection[2];
+  double p_x = _MCPStartPX->at(i_particle)/1000.;
+  double p_y = _MCPStartPY->at(i_particle)/1000.;
+  double p_z = _MCPStartPZ->at(i_particle)/1000.;
+  double p_beam = p_x*BeamDirection[0] + p_y*BeamDirection[1] + p_z*BeamDirection[2];
 
   double energy = std::sqrt(p_x*p_x + p_y*p_y + p_z*p_z + mass*mass);
   double transverse_mom = std::sqrt(p_y*p_y + p_z*p_z); //transverse to B-field
   double mom_tot = std::sqrt(p_x*p_x + transverse_mom*transverse_mom);
-  double end_mom = std::sqrt(_MCPEndPX->at(i_anapart)*_MCPEndPX->at(i_anapart) + _MCPEndPY->at(i_anapart)*_MCPEndPY->at(i_anapart) + _MCPEndPZ->at(i_anapart)*_MCPEndPZ->at(i_anapart)); 
+  double end_mom = std::sqrt(_MCPEndPX->at(i_particle)*_MCPEndPX->at(i_particle) + _MCPEndPY->at(i_particle)*_MCPEndPY->at(i_particle) + _MCPEndPZ->at(i_particle)*_MCPEndPZ->at(i_particle))/1000.; 
 
-  double xend = _MCPEndX->at(i_anapart);
-  double yend = _MCPEndY->at(i_anapart);
-  double zend = _MCPEndZ->at(i_anapart);
+  double xend = _MCPEndX->at(i_particle);
+  double yend = _MCPEndY->at(i_particle);
+  double zend = _MCPEndZ->at(i_particle);
   double end_radius = std::sqrt((yend-TPC_centre_y)*(yend-TPC_centre_y) + (zend-TPC_centre_z)*(zend-TPC_centre_z)); 
   double end_length = xend-TPC_centre_x;
   double end_ecaldepth = GetCalDepth(xend, yend, zend);
 
   bool stops_in_tpc = std::abs(end_length)<=TPCInstrumentedLength && end_radius<=TPCInstrumentedRadius;
-  bool stops_before_ecal = end_ecaldepth < 0.;
-  bool stops_beyond_ecal = (end_ecaldepth == 999.);
+  bool stops_before_ecal = end_ecaldepth == -999.;
+  bool stops_beyond_ecal = end_ecaldepth == 999.;
   bool stops_in_ecal = !(stops_before_ecal || stops_beyond_ecal);
 
   //Fill particle-level kinematic variables with default or actual (if possible at this stage) values
-  if (_MotherTrkID->at(i_anapart) == 0) {
+  if (_MCPMotherTrkID->at(i_particle) == 0) {
     double invis_mass = (pdg == 2212 || pdg == 2112) ? mass : 0.; 
-    plotting_vars.particle_evis[i_anapart] = std::sqrt(energy*energy - invis_mass*invis_mass); // don't include rest mass energy for p/n
-    plotting_vars.particle_momentum[i_anapart] = mom_tot;
-    plotting_vars.particle_endmomentum[i_anapart] = end_mom;
-    plotting_vars.particle_transversemomentum[i_anapart] = transverse_mom; //momentum transverse to B-field
-    plotting_vars.particle_bangle[i_anapart] = acos(p_x/mom_tot)*180/M_PI; //angle to B-field
-    plotting_vars.particle_beamangle[i_anapart] = acos(p_beam/mom_tot)*180/M_PI;
+    plotting_vars.prim_evis[i_particle] = std::sqrt(energy*energy - invis_mass*invis_mass); // don't include rest mass energy for p/n
+    plotting_vars.prim_momentum[i_particle] = mom_tot;
+    plotting_vars.prim_endmomentum[i_particle] = end_mom;
+    plotting_vars.prim_transversemomentum[i_particle] = transverse_mom; //momentum transverse to B-field
+    plotting_vars.prim_bangle[i_particle] = acos(p_x/mom_tot)*180/M_PI; //angle to B-field
+    plotting_vars.prim_beamangle[i_particle] = acos(p_beam/mom_tot)*180/M_PI;
 
-    plotting_vars.particle_startx[i_anapart] = start_length;
-    plotting_vars.particle_startr2[i_anapart] = start_radius*start_radius;
-    plotting_vars.particle_endr[i_anapart] = end_radius;
-    plotting_vars.particle_enddepth[i_anapart] = end_ecaldepth;
-    plotting_vars.particle_endx[i_anapart] = end_length;
-    plotting_vars.particle_endy[i_anapart] = yend-TPC_centre_y;
-    plotting_vars.particle_endz[i_anapart] = zend-TPC_centre_z;
+    plotting_vars.prim_startx[i_particle] = start_length;
+    plotting_vars.prim_startr2[i_particle] = start_radius*start_radius;
+    plotting_vars.prim_endr[i_particle] = end_radius;
+    plotting_vars.prim_enddepth[i_particle] = end_ecaldepth;
+    plotting_vars.prim_endx[i_particle] = end_length;
+    plotting_vars.prim_endy[i_particle] = yend-TPC_centre_y;
+    plotting_vars.prim_endz[i_particle] = zend-TPC_centre_z;
 
-    plotting_vars.particle_isdecayed[i_anapart] = _MCPEndProc->at(i_anapart) == "Decay";
-    plotting_vars.particle_isstoppedingap[i_anapart] = !stops_in_tpc && stops_before_ecal;
-    plotting_vars.particle_isstoppedinbarrelgap[i_anapart] = !stops_in_tpc && stops_before_ecal && std::abs(end_length)<=TPCInstrumentedLength; 
-    plotting_vars.particle_isstoppedinendgap[i_anapart] = !stops_in_tpc && stops_before_ecal && std::abs(end_length)>TPCInstrumentedLength; 
-    plotting_vars.particle_isstoppedinecal[i_anapart] = stops_in_ecal;
-    plotting_vars.particle_isstoppedinbarrel[i_anapart] = stops_in_ecal && end_radius>=ECALInnerRadius;
-    plotting_vars.particle_isstoppedinendcap[i_anapart] = stops_in_ecal && end_radius<ECALInnerRadius;
-    plotting_vars.particle_isstoppedintpc[i_anapart] = stops_in_tpc;
-    plotting_vars.particle_isescaped[i_anapart] = stops_beyond_ecal;
+    plotting_vars.prim_isstoppedingap[i_particle] = !stops_in_tpc && stops_before_ecal;
+    plotting_vars.prim_isstoppedinbarrelgap[i_particle] = !stops_in_tpc && stops_before_ecal && std::abs(end_length)<=TPCInstrumentedLength; 
+    plotting_vars.prim_isstoppedinendgap[i_particle] = !stops_in_tpc && stops_before_ecal && std::abs(end_length)>TPCInstrumentedLength; 
+    plotting_vars.prim_isstoppedinecal[i_particle] = stops_in_ecal;
+    plotting_vars.prim_isstoppedinbarrel[i_particle] = stops_in_ecal && end_radius>=ECALInnerRadius;
+    plotting_vars.prim_isstoppedinendcap[i_particle] = stops_in_ecal && end_radius<ECALInnerRadius;
+    plotting_vars.prim_isstoppedintpc[i_particle] = stops_in_tpc;
+    plotting_vars.prim_isescaped[i_particle] = stops_beyond_ecal;
   }
 
   if (charge == 0) return false;
@@ -353,7 +511,7 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
   double theta_start = atan2(ystart - centre_circle_y, zstart - centre_circle_z);
 
   if (stops_in_tpc) { 
-    theta_spanned = std::abs(xstart - _MCPEndX->at(i_anapart))*2*M_PI/pitch; 
+    theta_spanned = std::abs(xstart - _MCPEndX->at(i_particle))*2*M_PI/pitch; 
   }
   else { //Case where primary exits TPC
 
@@ -423,35 +581,27 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
   double sigmax_frac = sigmax/(std::abs(length_track_x)/100);
   double sigmayz = (spatial_resolution/(1000)); //needs to be in m
   double momres_yz = transverse_mom*(std::sqrt(720/(nhits+4)) * (sigmayz*transverse_mom/(0.3*B_field*(L_yz/100)*(L_yz/100)))
-    * std::sqrt(1.-(1./21)*(L_yz/rad_curvature)*(L_yz/rad_curvature)));
+    * std::sqrt(1.-(1./21.)*(L_yz/rad_curvature)*(L_yz/rad_curvature)));
   double momres_ms = transverse_mom*(0.016/(0.3*B_field*(L_yz/100)*cos(theta_xT)*beta))*std::sqrt(L_yz/X0);
   double momres_tottransverse = std::sqrt(momres_yz*momres_yz + momres_ms*momres_ms)/transverse_mom;
   double sigma_theta = (cos(theta_xT)*cos(theta_xT) * (pitch/(2*M_PI*rad_curvature)) *
     std::sqrt(sigmax_frac*sigmax_frac + momres_tottransverse*momres_tottransverse));
   double momres_frac = std::sqrt(momres_tottransverse*momres_tottransverse + (sigma_theta*tan_theta)*(sigma_theta*tan_theta));
 
-  if (_MotherTrkID->at(i_anapart) == 0) {
-    plotting_vars.particle_nturns[i_anapart] = nturns;
-    plotting_vars.particle_nhits[i_anapart] = nhits;
-    plotting_vars.particle_tracklengthyz[i_anapart] = L_yz;
-    plotting_vars.particle_momresms[i_anapart] = momres_ms/transverse_mom;
-    plotting_vars.particle_momresyz[i_anapart] = momres_yz/transverse_mom;
-    plotting_vars.particle_momresx[i_anapart] = std::abs(sigma_theta*tan_theta);
+  if (_MCPMotherTrkID->at(i_particle) == 0) {
+    plotting_vars.prim_nturns[i_particle] = nturns*2*M_PI;
+    plotting_vars.prim_nhits[i_particle] = nhits;
+    plotting_vars.prim_tracklengthyz[i_particle] = L_yz;
+    plotting_vars.prim_momresms[i_particle] = momres_ms/transverse_mom;
+    plotting_vars.prim_momresyz[i_particle] = momres_yz/transverse_mom;
+    plotting_vars.prim_momresx[i_particle] = std::abs(sigma_theta*tan_theta);
   }
 
-  if(momres_frac > momentum_resolution_threshold) return false;
+  if(momres_frac*(mom_tot/energy)*(mom_tot/energy) > momentum_resolution_threshold) return false;
   return true;
 }
 
 void SampleHandlerBeamNDGAr::clearBranchVectors() {
-  _MCVertX->clear();
-  _MCVertY->clear();
-  _MCVertZ->clear();
-  _MCNuPx->clear();
-  _MCNuPy->clear();
-  _MCNuPz->clear();
-  _IsNC->clear();
-  _MCMode->clear();
   _MCPStartX->clear();
   _MCPStartY->clear();
   _MCPStartZ->clear();
@@ -464,261 +614,474 @@ void SampleHandlerBeamNDGAr::clearBranchVectors() {
   _MCPEndPX->clear();
   _MCPEndPY->clear();
   _MCPEndPZ->clear();
-  _PDG ->clear();
+  _MCPCalPX->clear();
+  _MCPCalPY->clear();
+  _MCPCalPZ->clear();
+  _MCPPDG->clear();
   _MCPTrkID->clear();
-  _MCPProc->clear();
-  _MCPEndProc->clear();
-  _MotherTrkID->clear();
-  _SimHitTrkID->clear();
-  _SimHitLayer->clear();
-  _SimHitEnergy->clear();
-  _SimHitX->clear();
-  _SimHitY->clear();
-  _SimHitZ->clear();
+  _MCPMotherTrkID->clear();
+  _TPCHitTrkID->clear();
+  _TPCHitIsSec->clear();
+  _TPCHitEnergy->clear();
+  _TPCHitX->clear();
+  _TPCHitY->clear();
+  _TPCHitZ->clear();
+  _CalHitTrkID->clear();
+  _CalHitLayer->clear();
+  _CalHitEnergy->clear();
+  _CalHitIsSec->clear();
+  _CalHitTime->clear();
+  _CalHitX->clear();
+  _CalHitY->clear();
+  _CalHitZ->clear();
+  _MuIDHitTrkID->clear();
+  _MuIDHitEnergy->clear();
+  _MuIDHitX->clear();
+  _MuIDHitY->clear();
+  _MuIDHitZ->clear();
+}
+
+// FastGArSim output has beam x, Genie has beam z but left handed coordinate system. This code uses beam z but right handed coordinate system
+void SampleHandlerBeamNDGAr::fixCoordinates() {
+  auto switchCoords = [&](float& xcoord, float& zcoord) {
+    float tmp = xcoord;
+    xcoord = -zcoord;
+    zcoord = tmp;
+  };
+
+  for (size_t i = 0; i < _MCPStartX->size(); i++) {
+    switchCoords(_MCPStartX->at(i), _MCPStartZ->at(i));
+    switchCoords(_MCPEndX->at(i), _MCPEndZ->at(i));
+    switchCoords(_MCPStartPX->at(i), _MCPStartPZ->at(i));
+    switchCoords(_MCPEndPX->at(i), _MCPEndPZ->at(i));
+    switchCoords(_MCPCalPX->at(i), _MCPCalPZ->at(i));
+  }
+  for (size_t i = 0; i < _TPCHitX->size(); i++) {
+    switchCoords(_TPCHitX->at(i), _TPCHitZ->at(i));
+  }
+  for (size_t i = 0; i < _CalHitX->size(); i++) {
+    switchCoords(_CalHitX->at(i), _CalHitZ->at(i));
+  }
+  for (size_t i = 0; i < _MuIDHitX->size(); i++) {
+    switchCoords(_MuIDHitX->at(i), _MuIDHitZ->at(i));
+  }
+  _PXnu = -_PXnu;
+  _PXlep = -_PXlep;
+}
+
+void SampleHandlerBeamNDGAr::FillGeoVars() {
+  if (B_field != _BField) {
+    MACH3LOG_ERROR("B-field specified in config ({} T) does not match the input file ({} T)", B_field, _BField);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  if (TPCInstrumentedRadius != _TPCRad) {
+    MACH3LOG_ERROR("TPC radius specified in config does not match the input file");
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  if (TPCInstrumentedLength != _TPCLen/2.) {
+    MACH3LOG_ERROR("TPC length specified in config {} does not match the input file {}", TPCInstrumentedLength, _TPCLen/2.);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  ECALInnerRadius = _TPCRad + _BarrelGap;
+  ECALOuterRadius = ECALInnerRadius + (_NBarrelHG*(_HGAbsWidth+_HGSciWidth+_HGBoardWidth) + _NBarrelLG*(_LGAbsWidth+_LGSciWidth));
+  ECALEndCapStart = _TPCLen/2. + _EndCapGap + 0.5; // 0.5cm readout PCB
+  ECALEndCapEnd   = ECALEndCapStart + (_NEndCapHG*(_HGAbsWidth+_HGSciWidth+_HGBoardWidth) + _NEndCapLG*(_LGAbsWidth+_LGSciWidth));
+
+  outerECalA = {};
+  outerECalP = {};
+  
+  for (int iPlane=0; iPlane<_NumCalSides; iPlane++) {
+    double y = ECALOuterRadius*sin(2. * M_PI * iPlane / _NumCalSides);
+    double z = ECALOuterRadius*cos(2. * M_PI * iPlane / _NumCalSides);
+    outerECalP.push_back({0, y, z});
+    outerECalA.push_back({0, y/ECALOuterRadius, z/ECALOuterRadius});
+  }
+  outerECalP.push_back({ECALEndCapEnd, 0., 0.});
+  outerECalP.push_back({-ECALEndCapEnd, 0., 0.});
+  outerECalA.push_back({1., 0., 0.});
+  outerECalA.push_back({-1., 0., 0.});
 }
 
 int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
   MACH3LOG_INFO("-------------------------------------------------------------------");
 
-  TChain* _data = new TChain("GArAnaTree");
-  for (size_t iSample=0;iSample<mc_files.size();iSample++) {
-    MACH3LOG_INFO("Adding file to TChain: {}", mc_files[iSample]);
+  TChain* _data = new TChain("AnaTree");
+  TChain* _geometry = new TChain("GeoTree");
+  TChain* _genie = new TChain("gst");
+  // Maps the file index within the TChain (GetTreeNumber()) to its sample index.
+  std::vector<size_t> fileIndexToSample;
+  for (size_t iSample=0;iSample<SampleDetails.size();iSample++) {
+    for (const std::string& filename : SampleDetails[iSample].mc_files) {
+      MACH3LOG_INFO("Adding FastGArSim file to TChain: {}", filename);
+      // HH: Check whether the file exists, see https://root.cern/doc/master/classTChain.html#a78a896924ac6c7d3691b7e013bcbfb1c
+      int _add_rtn = _data->Add(filename.c_str(), -1);
+      if(_add_rtn == 0){
+        MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", filename);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
 
-    int _add_rtn = _data->Add(mc_files[iSample].c_str(), -1);
-    if(_add_rtn == 0){
-      MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", mc_files[iSample]);
-      throw MaCh3Exception(__FILE__, __LINE__);
+      int _add_rtn_geo = _geometry->Add(filename.c_str(), -1);
+      if(_add_rtn_geo == 0){
+        MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", filename);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+
+      // Read Genie file
+      std::string genieFileStr = "";
+      if (filename.find("hA") != std::string::npos) genieFileStr = "Inputs/DUNE_NDGAr_files/GenieTrees/numu_argon_G18_10a_gst.root";
+      else if (filename.find("hN") != std::string::npos) genieFileStr = "Inputs/DUNE_NDGAr_files/GenieTrees/numu_argon_G18_10b_gst.root";
+      else {
+        genieFileStr = "Inputs/DUNE_NDGAr_files/GenieTrees/numu_argon_G18_10a_gst.root";
+        MACH3LOG_WARN("Could not find interaction model in file name. Using GENIE file {}", genieFileStr);
+      }
+
+      MACH3LOG_INFO("Adding genie file to TChain: {}", genieFileStr);
+
+      int _add_rtn_genie = _genie->Add(genieFileStr.c_str(), -1);
+      if(_add_rtn_genie == 0){
+        MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", genieFileStr);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+
+      // Each file added (glob patterns may expand to multiple) gets the same sample index.
+      // We query how many files are now in the chain to know how many entries to push.
+      const int nFilesNow = _data->GetListOfFiles()->GetEntries();
+      while(static_cast<int>(fileIndexToSample.size()) < nFilesNow){
+        fileIndexToSample.push_back(iSample);
+      }
     }
   }
 
   _data->SetBranchStatus("*", 0);
+  _genie->SetBranchStatus("*", 0);
 
-  auto readBranch = [&](const char* name, void* addr) {
-    _data->SetBranchStatus(name, 1);
-    _data->SetBranchAddress(name, addr);
+  auto readBranch = [&](TTree* tree, const char* name, void* addr) {
+    tree->SetBranchStatus(name, 1);
+    tree->SetBranchAddress(name, addr);
   };
 
-  readBranch("MCVertX", &_MCVertX);
-  readBranch("MCVertY", &_MCVertY);
-  readBranch("MCVertZ", &_MCVertZ);
-  readBranch("MCNuPx", &_MCNuPx);
-  readBranch("MCNuPy", &_MCNuPy);
-  readBranch("MCNuPz", &_MCNuPz);
-  readBranch("CCNC", &_IsNC);
-  readBranch("Mode", &_MCMode);
-  readBranch("MCPStartX", &_MCPStartX);
-  readBranch("MCPStartY", &_MCPStartY);
-  readBranch("MCPStartZ", &_MCPStartZ);
-  readBranch("MCPEndX", &_MCPEndX);
-  readBranch("MCPEndY", &_MCPEndY);
-  readBranch("MCPEndZ", &_MCPEndZ);
-  readBranch("MCPStartPX", &_MCPStartPX);
-  readBranch("MCPStartPY", &_MCPStartPY);
-  readBranch("MCPStartPZ", &_MCPStartPZ);
-  readBranch("MCPEndPX", &_MCPEndPX);
-  readBranch("MCPEndPY", &_MCPEndPY);
-  readBranch("MCPEndPZ", &_MCPEndPZ);
-  readBranch("PDG", &_PDG);
-  readBranch("MCPTrkID", &_MCPTrkID);
-  readBranch("MCPProc", &_MCPProc);
-  readBranch("MCPEndProc", &_MCPEndProc);
-  readBranch("MotherTrkID", &_MotherTrkID);
-  readBranch("SimHitTrkID", &_SimHitTrkID);
-  readBranch("SimHitLayer", &_SimHitLayer);
-  readBranch("SimHitEnergy", &_SimHitEnergy);
-  readBranch("SimHitX", &_SimHitX);
-  readBranch("SimHitY", &_SimHitY);
-  readBranch("SimHitZ", &_SimHitZ);
+  readBranch(_data, "eventID", &_EventID);
+  readBranch(_data, "startX", &_MCPStartX);
+  readBranch(_data, "startY", &_MCPStartY);
+  readBranch(_data, "startZ", &_MCPStartZ);
+  readBranch(_data, "endX", &_MCPEndX);
+  readBranch(_data, "endY", &_MCPEndY);
+  readBranch(_data, "endZ", &_MCPEndZ);
+  readBranch(_data, "startPX", &_MCPStartPX);
+  readBranch(_data, "startPY", &_MCPStartPY);
+  readBranch(_data, "startPZ", &_MCPStartPZ);
+  readBranch(_data, "ecalPX", &_MCPCalPX);
+  readBranch(_data, "ecalPY", &_MCPCalPY);
+  readBranch(_data, "ecalPZ", &_MCPCalPZ);
+  readBranch(_data, "endPX", &_MCPEndPX);
+  readBranch(_data, "endPY", &_MCPEndPY);
+  readBranch(_data, "endPZ", &_MCPEndPZ);
+  readBranch(_data, "pdgCode", &_MCPPDG);
+  readBranch(_data, "trackID", &_MCPTrkID);
+  readBranch(_data, "motherID", &_MCPMotherTrkID);
+  readBranch(_data, "tpcHitTrackID", &_TPCHitTrkID);
+  readBranch(_data, "tpcHitEdep", &_TPCHitEnergy);
+  readBranch(_data, "tpcHitX", &_TPCHitX);
+  readBranch(_data, "tpcHitY", &_TPCHitY);
+  readBranch(_data, "tpcHitZ", &_TPCHitZ);
+  readBranch(_data, "tpcHitIsSec", &_TPCHitIsSec);
+  readBranch(_data, "ecalHitTrackID", &_CalHitTrkID);
+  readBranch(_data, "ecalHitLayer", &_CalHitLayer);
+  readBranch(_data, "ecalHitEdep", &_CalHitEnergy);
+  readBranch(_data, "ecalHitIsSec", &_CalHitIsSec);
+  readBranch(_data, "ecalHitTime", &_CalHitTime);
+  readBranch(_data, "ecalHitX", &_CalHitX);
+  readBranch(_data, "ecalHitY", &_CalHitY);
+  readBranch(_data, "ecalHitZ", &_CalHitZ);
+  readBranch(_data, "muidHitTrackID", &_MuIDHitTrkID);
+  readBranch(_data, "muidHitEdep", &_MuIDHitEnergy);
+  readBranch(_data, "muidHitX", &_MuIDHitX);
+  readBranch(_data, "muidHitY", &_MuIDHitY);
+  readBranch(_data, "muidHitZ", &_MuIDHitZ);
+
+  readBranch(_geometry, "gar_tpc_radius", &_TPCRad);
+  readBranch(_geometry, "gar_tpc_length", &_TPCLen);
+  readBranch(_geometry, "gar_magnetic_field", &_BField);
+  readBranch(_geometry, "ecal_num_sides", &_NumCalSides);
+  readBranch(_geometry, "ecal_barrel_gap", &_BarrelGap);
+  readBranch(_geometry, "ecal_endcap_gap", &_EndCapGap);
+  readBranch(_geometry, "ecal_hg_absorber_thickness", &_HGAbsWidth);
+  readBranch(_geometry, "ecal_lg_absorber_thickness", &_LGAbsWidth);
+  readBranch(_geometry, "ecal_hg_scintillator_thickness", &_HGSciWidth);
+  readBranch(_geometry, "ecal_lg_scintillator_thickness", &_LGSciWidth);
+  readBranch(_geometry, "ecal_hg_board_thickness", &_HGBoardWidth);
+  readBranch(_geometry, "ecal_barrel_hg_layers", &_NBarrelHG);
+  readBranch(_geometry, "ecal_barrel_lg_layers", &_NBarrelLG);
+  readBranch(_geometry, "ecal_endcap_hg_layers", &_NEndCapHG);
+  readBranch(_geometry, "ecal_endcap_lg_layers", &_NEndCapLG);
+  _geometry->GetEntry(0);
+  FillGeoVars();
+
+  readBranch(_genie, "Ev", &_Enu);
+  readBranch(_genie, "pxv", &_PXnu);
+  readBranch(_genie, "pyv", &_PYnu);
+  readBranch(_genie, "pzv", &_PZnu);
+  readBranch(_genie, "neu", &_nuPDG);
+  readBranch(_genie, "El", &_Elep);
+  readBranch(_genie, "pxl", &_PXlep);
+  readBranch(_genie, "pyl", &_PYlep);
+  readBranch(_genie, "pzl", &_PZlep);
+  readBranch(_genie, "cc", &_isCC);
+  readBranch(_genie, "nfpip", &_npip);
+  readBranch(_genie, "nfpim", &_npim);
+  readBranch(_genie, "nfpi0", &_npi0);
+  readBranch(_genie, "neut_code", &_neut_code);
 
   size_t nEntries = static_cast<size_t>(downsampling*static_cast<double>(_data->GetEntries()));
+  size_t countwidth = nEntries / 50;
 
   dunendgarmcFitting.resize(nEntries);
   dunendgarmcPlotting.resize(nEntries);
+  _data->GetEntry(0);
+  _genie->GetEntry(0);
 
   double pixel_spacing_cm = pixel_spacing/10; //convert to cm
   int numCC = 0;
   int num_in_fdv = 0;
   bool do_geometric_correction = false;
 
-  for (size_t i_event = 0; i_event < nEntries; ++i_event) { 
+  for (unsigned int i_event = 0; i_event < nEntries; ++i_event) { 
     if (i_event != 0) clearBranchVectors();
-    _data->GetEntry(static_cast<Long64_t>(i_event));
+    _data->GetEntry(i_event);
+    _genie->GetEntry(_EventID);
 
-    if (i_event % (nEntries/100) == 0) {
-      MACH3LOG_INFO("\tNow processing event: {}/{}",i_event,nEntries);
+    // FastGArSim output has a different coordinate system to the genie file and this code. This is fixed here.
+    fixCoordinates();
+
+    if (i_event % countwidth == 0) {
+      MaCh3Utils::PrintProgressBar(i_event, static_cast<Long64_t>(nEntries));
     }
 
-    double radius = std::sqrt((_MCVertY->at(0)-TPC_centre_y)*(_MCVertY->at(0)-TPC_centre_y) + (_MCVertZ->at(0)-TPC_centre_z)*(_MCVertZ->at(0)-TPC_centre_z)); //find radius of interaction vertex
-
-    if(std::abs(_MCVertX->at(0) - TPC_centre_x)<=TPCFidLength &&  radius<=TPCFidRadius){
-      num_in_fdv++;
-      dunendgarmcPlotting[i_event].in_fdv = 1;
-    } else{
-      dunendgarmcPlotting[i_event].in_fdv = 0;
+    const Int_t treeNum = _data->GetTreeNumber();
+    if(treeNum < 0 || static_cast<size_t>(treeNum) >= fileIndexToSample.size()){
+      MACH3LOG_ERROR("GetTreeNumber() returned {} which is out of range [0, {})", treeNum, fileIndexToSample.size());
+      throw MaCh3Exception(__FILE__, __LINE__);
     }
+    const size_t sample_index = fileIndexToSample[static_cast<size_t>(treeNum)];
 
-    dunendgarmcFitting[i_event].rw_etru = std::sqrt(_MCNuPx->at(0)*_MCNuPx->at(0) + _MCNuPy->at(0)*_MCNuPy->at(0) + _MCNuPz->at(0)*_MCNuPz->at(0));
-    dunendgarmcFitting[i_event].rw_isCC = static_cast<int>(!_IsNC->at(0));
-    dunendgarmcFitting[i_event].nupdg = 14;
-    dunendgarmcFitting[i_event].nupdgUnosc = 14;
-    dunendgarmcFitting[i_event].OscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, dunendgarmcFitting[i_event].nupdgUnosc, dunendgarmcFitting[i_event].nupdg));
+    dunendgarmcFitting[i_event].SampleIndex = static_cast<unsigned int>(sample_index);
+    dunendgarmcFitting[i_event].rw_etru = _Enu;
+    dunendgarmcFitting[i_event].rw_isCC = _isCC;
+    dunendgarmcFitting[i_event].nupdg = _nuPDG;
+    dunendgarmcFitting[i_event].nupdgUnosc = _nuPDG;
+    dunendgarmcFitting[i_event].OscChannelIndex = static_cast<double>(GetOscChannel(SampleDetails[sample_index].OscChannels, dunendgarmcFitting[i_event].nupdgUnosc, dunendgarmcFitting[i_event].nupdg));
     dunendgarmcFitting[i_event].rw_berpaacvwgt = _BeRPA_cvwgt;
+    dunendgarmcFitting[i_event].Target = 40; // Assume everything is Argon
+    dunendgarmcFitting[i_event].rw_Q0 = _Enu - _Elep;
+    dunendgarmcFitting[i_event].rw_Q3 = std::sqrt((_PXnu-_PXlep)*(_PXnu-_PXlep) + (_PYnu-_PYlep)*(_PYnu-_PYlep) + (_PZnu-_PZlep)*(_PZnu-_PZlep));
+    dunendgarmcFitting[i_event].norm_s = 1.;
+    dunendgarmcFitting[i_event].pot_s = beamNDGArSampleDetails[sample_index].pot/(downsampling*1e21);
+    dunendgarmcFitting[i_event].flux_w = 1.;
 
-    dunendgarmcFitting[i_event].rw_vtx_x = _MCVertX->at(0);
-    dunendgarmcFitting[i_event].rw_vtx_y = _MCVertY->at(0);
-    dunendgarmcFitting[i_event].rw_vtx_z = _MCVertZ->at(0);
+    int M3Mode = Modes->GetModeFromGenerator(std::abs(_neut_code));
+    if (!_isCC) M3Mode += 14; //Account for no ability to distinguish CC/NC
+    if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
+    dunendgarmcFitting[i_event].mode = M3Mode;
+
+    std::vector<double> vertex = {M3::_BAD_DOUBLE_, M3::_BAD_DOUBLE_, M3::_BAD_DOUBLE_};
+
+    std::unordered_map<int, std::vector<int>> mother_to_daughter_ID;
+    std::unordered_map<int, size_t> ID_to_index;
+    std::unordered_map<int, std::vector<double>> ID_to_ECalDep; // particle track ID -> total energy deposited in each ecal layer
+    std::unordered_map<int, std::vector<double>> eID_to_showerstart; // electron track ID -> shower start position (x, y, z)
+    std::unordered_map<int, std::pair<double, double>> pID_to_EDep; // proton track ID -> pair (EDepCalPrim, EDepCal)
+    std::unordered_map<int, double> ID_to_TPCDep;
+    std::unordered_map<int, double> ID_to_MuIDDep;
+    size_t n_particles = _MCPTrkID->size();
     dunendgarmcPlotting[i_event].rw_ePi0 = 0.; 
     dunendgarmcPlotting[i_event].npi0 = 0; 
 
-    std::unordered_map<int, std::vector<int>> mother_to_daughter_ID; // particle track ID -> vector of daughter IDs
-    std::unordered_map<int, size_t> ID_to_index; // particle track ID -> index in anatree
-    std::unordered_map<int, std::vector<double>> ID_to_ECalDep; // particle track ID -> total energy deposited in each ecal layer
-    size_t n_particles_in_event = _MCPTrkID->size();
-    const int tot_ecal_layers = 42;
+    const int tot_ecal_layers = std::max(_NBarrelHG+_NBarrelHG, _NEndCapHG+_NEndCapLG);
 
     // Fill maps
-    for (size_t i_anapart=0; i_anapart<n_particles_in_event; i_anapart++) {
-      int secID = _MCPTrkID->at(i_anapart);
-      int motherID = _MotherTrkID->at(i_anapart);
-      ID_to_ECalDep[secID] = std::vector<double>(tot_ecal_layers,0.);
-      ID_to_index[secID] = i_anapart;
-      mother_to_daughter_ID[motherID].push_back(secID);
-      mother_to_daughter_ID[secID]; // Ensure all particles are added to the map (even if no secondaries)
-    }
+    for (size_t i_particle=0; i_particle<n_particles; i_particle++) {
+      int trkID = _MCPTrkID->at(i_particle);
+      int motherID = _MCPMotherTrkID->at(i_particle);
+      ID_to_ECalDep[trkID] = std::vector<double>(static_cast<size_t>(tot_ecal_layers),0.);
+      ID_to_index[trkID] = i_particle;
+      mother_to_daughter_ID[motherID].push_back(trkID);
+      mother_to_daughter_ID[trkID]; //Ensure all particles are added to the map (even if no secondaries)
 
-    for (size_t i_ecaldep=0; i_ecaldep<_SimHitTrkID->size(); i_ecaldep++) {
-      int simhit_trkid = _SimHitTrkID->at(i_ecaldep);
-      int simhit_layer = _SimHitLayer->at(i_ecaldep);
-      if (simhit_trkid <= 0 || simhit_layer <= 0) {
-        continue;
-      }
-      ID_to_ECalDep[simhit_trkid][static_cast<size_t>(simhit_layer-1)] += _SimHitEnergy->at(i_ecaldep);
-
-      double hitx = _SimHitX->at(i_ecaldep);
-      double hity = _SimHitY->at(i_ecaldep);
-      double hitz = _SimHitZ->at(i_ecaldep);
-      double hitr = std::sqrt((hity - TPC_centre_y)*(hity - TPC_centre_y) + (hitz - TPC_centre_z)*(hitz - TPC_centre_z));
-
-      bool isEndCapHit = hitr < ECALInnerRadius; // Whether the hit is in the end cap radially (agnostic to x coordinate)
-      double dep_depth = GetCalDepth(hitx, hity, hitz);
-      double layer_calc = DepthToLayer(dep_depth, hitr);
-
-      if (layer_calc < 0 || layer_calc > 42) MACH3LOG_INFO("Hit recorded outside ECAL dimensions. IsEndCap: {}. TrueLayer: {}. Calculated layer: {}. Depth: {}.", isEndCapHit, simhit_layer, layer_calc, dep_depth);
-      if (layer_calc != simhit_layer) {
-        MACH3LOG_INFO("Miscalculated layer for hit. IsEndCap: {}. Simhitlayer = {}, calculated layer = {}, depth = {} cm.", isEndCapHit, simhit_layer, layer_calc, dep_depth);
+      // Fill particle-level variables
+      if (_MCPPDG->at(i_particle) == 22) {
+        double photon_energy = std::sqrt(_MCPStartPX->at(i_particle)*_MCPStartPX->at(i_particle) + _MCPStartPY->at(i_particle)*_MCPStartPY->at(i_particle) + _MCPStartPZ->at(i_particle)*_MCPStartPZ->at(i_particle))/1000.;
+        dunendgarmcPlotting[i_event].photon_energy.push_back(photon_energy);
+        dunendgarmcPlotting[i_event].photon_endx.push_back(_MCPEndX->at(i_particle));
+        dunendgarmcPlotting[i_event].photon_endy.push_back(_MCPEndY->at(i_particle));
+        dunendgarmcPlotting[i_event].photon_endz.push_back(_MCPEndZ->at(i_particle));
       }
     }
 
-    double muon_p2 = 0.;
-    double pi0_p2 = 0.;
+    // Fill map from particle ID to ECal deposited energy
+    double smallest_t = std::numeric_limits<double>::max();
+    for (size_t i_calhit=0; i_calhit<_CalHitTrkID->size(); i_calhit++) {
+      int dep_trkid = _CalHitTrkID->at(i_calhit);
+      if (dep_trkid <= 0) continue;
+      int dep_layer = _CalHitLayer->at(i_calhit); 
+      double dep_energy = _CalHitEnergy->at(i_calhit)/1000.;
+      // double dep_depth = GetCalDepth(_CalHitX->at(i_calhit), _CalHitY->at(i_calhit), _CalHitZ->at(i_calhit));
+      ID_to_ECalDep[dep_trkid][static_cast<size_t>(dep_layer)] += dep_energy;
+
+      // Also store the position of first hit above energy threshold for electrons/positrons
+      bool dep_issec = _CalHitIsSec->at(i_calhit);
+      double energy_threshold = 0.0005;
+      if ((dep_energy > energy_threshold) && (!dep_issec) && (std::abs(_MCPPDG->at(ID_to_index[dep_trkid])) == 11)) {
+        double time = _CalHitTime->at(i_calhit);
+        if (time < smallest_t) {
+          smallest_t = time;
+          eID_to_showerstart[dep_trkid] = {_CalHitX->at(i_calhit), _CalHitY->at(i_calhit), _CalHitZ->at(i_calhit)};
+        }
+      }
+
+      // Also store the ratio EDepCalPrim/EDepCal for protons (distinguish those which reinteract in the calorimeter)
+      if (std::abs(_MCPPDG->at(ID_to_index[dep_trkid])) == 2212) {
+        pID_to_EDep[dep_trkid].second += dep_energy;
+        if (dep_issec) pID_to_EDep[dep_trkid].first += dep_energy;
+      }
+    }
+
+    // Fill map from particle ID to TPC deposited energy
+    for (size_t i_tpchit=0; i_tpchit<_TPCHitTrkID->size(); i_tpchit++) {
+      int trkid = _TPCHitTrkID->at(i_tpchit);
+      if (trkid <= 0) continue;
+      double dep_energy = _TPCHitEnergy->at(i_tpchit)/1000.;
+      if (!_TPCHitIsSec->at(i_tpchit)) ID_to_TPCDep[trkid] += dep_energy;
+    }
+
+    // Fill map from particle ID to MuID deposited energy
+    for (size_t i_muidhit=0; i_muidhit<_MuIDHitTrkID->size(); i_muidhit++) {
+      int trkid = _MuIDHitTrkID->at(i_muidhit);
+      if (trkid <= 0) continue;
+      double dep_energy = _MuIDHitEnergy->at(i_muidhit)/1000.;
+      ID_to_MuIDDep[trkid] += dep_energy;
+    }
+
     bool isEventAccepted = true;
-    int crit_layers = 1; // Number of outer layers of the calorimeter forming the 'critical' region
+    double pi0_p2 = 0.;
+    // double mu_p2 = 0.;
 
-    // Resize vectors for particle-level parameters
+    // Resize vectors for prim-level parameters
     size_t n_prim_in_event = mother_to_daughter_ID[0].size();
-    dunendgarmcPlotting[i_event].particle_pdg.resize(n_prim_in_event, M3::_BAD_INT_);
-    dunendgarmcPlotting[i_event].particle_evis.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_momentum.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_endmomentum.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_transversemomentum.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_bangle.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_beamangle.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_isaccepted.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].particle_iscurvatureresolved.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].particle_isdecayed.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].particle_isstoppedintpc.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].particle_isstoppedinecal.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].particle_isstoppedingap.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].particle_isstoppedinbarrelgap.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].particle_isstoppedinendgap.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].particle_isstoppedinbarrel.resize(n_prim_in_event, M3::_BAD_INT_);
-    dunendgarmcPlotting[i_event].particle_isstoppedinendcap.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].particle_isescaped.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].particle_startx.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_startr2.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_endr.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_enddepth.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_endx.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_endy.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_endz.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_nturns.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_nhits.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_tracklengthyz.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_momresms.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_momresyz.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_momresx.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].particle_edepcrit.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_pdg.resize(n_prim_in_event, M3::_BAD_INT_);
+    dunendgarmcPlotting[i_event].prim_evis.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_momentum.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_endmomentum.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_transversemomentum.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_bangle.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_beamangle.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_isaccepted.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].prim_iscurvatureresolved.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].prim_isdecayed.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].prim_isstoppedintpc.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].prim_isstoppedinecal.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].prim_isstoppedingap.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].prim_isstoppedinbarrelgap.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].prim_isstoppedinendgap.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].prim_isstoppedinbarrel.resize(n_prim_in_event, M3::_BAD_INT_);
+    dunendgarmcPlotting[i_event].prim_isstoppedinendcap.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].prim_isescaped.resize(n_prim_in_event, M3::_BAD_INT_); 
+    dunendgarmcPlotting[i_event].prim_startx.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_startr2.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_endr.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_enddepth.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_endx.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_endy.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_endz.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_nturns.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_nhits.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_tracklengthyz.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_momresms.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_momresyz.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_momresx.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_edepcrit.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_tpcedepfrac.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim_iscontained.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
 
     // Loop through primaries
     for (int& primID : mother_to_daughter_ID[0]) {
 
       // Do not require the reconstruction of neutrons and neutrinos
-      size_t i_anaprim = ID_to_index[primID];
-      int pdg = _PDG->at(i_anaprim);
+      size_t prim_index = ID_to_index[primID];
+      int pdg = _MCPPDG->at(prim_index);
       if (pdg == 2112 || std::abs(pdg) == 12 || std::abs(pdg) == 14 || std::abs(pdg) == 16) continue;
 
-      dunendgarmcPlotting[i_event].particle_edepcrit[i_anaprim] = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers, crit_layers);
-      dunendgarmcPlotting[i_event].particle_pdg[i_anaprim] = pdg; 
+      dunendgarmcPlotting[i_event].prim_pdg[prim_index] = pdg; 
+      dunendgarmcPlotting[i_event].prim_edepcrit[prim_index] = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers);
 
       // Check if primary is resolved from curvature
       bool isCurvatureResolved = false;
-      // Remove secondaries (and their descendants) from mother_to_daughter_ID who's momentum we get from curvature
+      // Remove all descendants of primID from mother_to_daughter_ID whose momentum we get from curvature (or whose parent we get from curvature)
       if (CurvatureResolutionFilter(primID, mother_to_daughter_ID, ID_to_index, dunendgarmcPlotting[i_event], pixel_spacing_cm)) {
         isCurvatureResolved = true;
       }
-      dunendgarmcPlotting[i_event].particle_iscurvatureresolved[i_anaprim] = isCurvatureResolved;
+      dunendgarmcPlotting[i_event].prim_iscurvatureresolved[prim_index] = isCurvatureResolved;
 
-      // Find energy deposited by by primary and non-curvature-resolved descendants in critical region of calorimeter
-      double EDepCrit = CalcEDepCal(primID, mother_to_daughter_ID, ID_to_ECalDep, tot_ecal_layers, crit_layers);
       // Check for containment
-      bool isContained = true;
-      if (EDepCrit > 0.001) {
-        isContained = false;
-      }
+      bool isContained = IsPrimContained(primID, mother_to_daughter_ID, ID_to_index, eID_to_showerstart, pID_to_EDep, dunendgarmcPlotting[i_event]);
 
       // Primary is accepted if contained or curvature resolved
-      bool isParticleAccepted = true;
+      bool isPrimAccepted = true;
       if (!(isContained || isCurvatureResolved)) {
-        isParticleAccepted = false;
+        isPrimAccepted = false;
         isEventAccepted = false;
-      } 
-      dunendgarmcPlotting[i_event].particle_isaccepted[i_anaprim] = isParticleAccepted;
+      }
+      dunendgarmcPlotting[i_event].prim_isaccepted[prim_index] = isPrimAccepted;
+      dunendgarmcPlotting[i_event].prim_iscontained[prim_index] = isContained;
 
-      double p_x = _MCPStartPX->at(i_anaprim);
-      double p_y = _MCPStartPY->at(i_anaprim);
-      double p_z = _MCPStartPZ->at(i_anaprim);
+      double p_x = _MCPStartPX->at(prim_index)/1000.;
+      double p_y = _MCPStartPY->at(prim_index)/1000.;
+      double p_z = _MCPStartPZ->at(prim_index)/1000.;
       double p2 = p_x*p_x + p_y*p_y + p_z*p_z;
 
-      // Get primary muon information
-      if(pdg == 13 && p2 > muon_p2) {
-        muon_p2 = p2;
+      if (!isContained && p2 < 0.0001) {
+        MACH3LOG_WARN("Particle of pdg {} with momentum {} is uncontained", pdg, std::sqrt(p2));
+      }
+      if (pdg < 1000000000) {
         double mass = MaCh3Utils::GetMassFromPDG(pdg);
-        dunendgarmcFitting[i_event].rw_lep_pX = p_x;
-        dunendgarmcFitting[i_event].rw_lep_pY = p_y;
-        dunendgarmcFitting[i_event].rw_lep_pZ = p_z;
-        dunendgarmcFitting[i_event].rw_LepE = std::sqrt(p2 + mass*mass);
-        dunendgarmcPlotting[i_event].lep_tracklengthyz = dunendgarmcPlotting[i_event].particle_tracklengthyz[i_anaprim];
+        double energy = std::sqrt(p2+mass*mass);
+        dunendgarmcPlotting[i_event].prim_tpcedepfrac[prim_index] = ID_to_TPCDep[primID]/energy;
+      }
+
+      // Get vertex from primary muon start position
+      if (pdg == 13 && std::abs((p_x-_PXlep)/_PXlep) < 0.00001 && std::abs((p_y-_PYlep)/_PYlep) < 0.00001 && std::abs((p_z-_PZlep)/_PZlep) < 0.00001) {
+        vertex = {_MCPStartX->at(prim_index), _MCPStartY->at(prim_index), _MCPStartZ->at(prim_index)};
+        dunendgarmcPlotting[i_event].lep_tracklengthyz = dunendgarmcPlotting[i_event].prim_tracklengthyz[prim_index];
       }
 
       // Get pi0 information 
       if(pdg == 111) {
         dunendgarmcPlotting[i_event].npi0 ++;
         if (p2 > pi0_p2) {
+          pi0_p2 = p2;
           double mass = MaCh3Utils::GetMassFromPDG(pdg);
           dunendgarmcPlotting[i_event].rw_ePi0 = std::sqrt(p2+mass*mass);
         }
       }
     }
+    if (vertex[0] == M3::_BAD_DOUBLE_) MACH3LOG_ERROR("No vertex found for event {}.", i_event);
+
+    dunendgarmcFitting[i_event].rw_lep_pX = _PXlep;
+    dunendgarmcFitting[i_event].rw_lep_pY = _PYlep;
+    dunendgarmcFitting[i_event].rw_lep_pZ = _PZlep;
+    dunendgarmcFitting[i_event].rw_LepE = _Elep;
     dunendgarmcPlotting[i_event].is_accepted = isEventAccepted;
+    dunendgarmcFitting[i_event].rw_vtx_x = vertex[0]-TPC_centre_x;
+    dunendgarmcFitting[i_event].rw_vtx_y = vertex[1]-TPC_centre_y;
+    dunendgarmcFitting[i_event].rw_vtx_z = vertex[2]-TPC_centre_z;
 
     // Find lepton kinematic variables
-    double lep_momentum = std::sqrt(dunendgarmcFitting[i_event].rw_lep_pX*dunendgarmcFitting[i_event].rw_lep_pX + dunendgarmcFitting[i_event].rw_lep_pY*dunendgarmcFitting[i_event].rw_lep_pY + dunendgarmcFitting[i_event].rw_lep_pZ*dunendgarmcFitting[i_event].rw_lep_pZ);
-    double lep_pBeam = dunendgarmcFitting[i_event].rw_lep_pY*BeamDirection[1] + dunendgarmcFitting[i_event].rw_lep_pZ*BeamDirection[2];
-    double lep_pB = dunendgarmcFitting[i_event].rw_lep_pX;
-    double lep_pPerp = dunendgarmcFitting[i_event].rw_lep_pY*BeamDirection[2] - dunendgarmcFitting[i_event].rw_lep_pZ*BeamDirection[1];
-    double lep_beamangle = acos(lep_pBeam/lep_momentum)*180/M_PI; //Angle to beam (beam direction: [0.0,-0.101,0.995])
-    double lep_bangle = acos(lep_pB/lep_momentum)*180/M_PI; //Angle to B-field (b-field along x)
+    double lep_momentum = std::sqrt(_PXlep*_PXlep + _PYlep*_PYlep + _PZlep*_PZlep);
+    double lep_pBeam = (_PYlep*BeamDirection[1] + _PZlep*BeamDirection[2]);
+    double lep_pB = _PXlep;
+    double lep_pPerp = (_PYlep*BeamDirection[2] - _PZlep*BeamDirection[1]);
+    double lep_beamangle = acos(lep_pBeam/lep_momentum)*180/M_PI; //Angle to beam 
+    double lep_bangle = acos(lep_pB/lep_momentum)*180/M_PI; //Angle to B-field
     double lep_perpangle = acos(lep_pPerp/lep_momentum)*180/M_PI; //Angle to axis perpendicular to beam and B
     double lep_phi = atan2(lep_pPerp, lep_pB)*180/M_PI;
 
@@ -726,6 +1089,19 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     dunendgarmcPlotting[i_event].rw_lep_phi = lep_phi;
     dunendgarmcPlotting[i_event].rw_lep_bangle = lep_bangle;
     dunendgarmcPlotting[i_event].rw_lep_p = lep_momentum;
+    dunendgarmcFitting[i_event].rw_lep_pT = std::sqrt(lep_momentum*lep_momentum - lep_pBeam*lep_pBeam); 
+
+    double radius = std::sqrt((vertex[1]-TPC_centre_y)*(vertex[1]-TPC_centre_y) 
+                              + (vertex[2]-TPC_centre_z)*(vertex[2]-TPC_centre_z)); //find radius of interaction vertex
+    dunendgarmcFitting[i_event].rw_rad = radius;
+
+    if(std::abs(vertex[0] - TPC_centre_x) <= TPCFidLength && radius<=TPCFidRadius){
+      num_in_fdv++;
+      dunendgarmcPlotting[i_event].in_fdv = 1;
+    } else{
+      dunendgarmcPlotting[i_event].in_fdv = 0;
+    }
+    if(_isCC) numCC++;
 
     // Perform 'geometric correction' if do_geometric_correction set to true
     dunendgarmcPlotting[i_event].geometric_correction = 1.;
@@ -734,24 +1110,16 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       else if ((lep_perpangle < 45 || lep_perpangle > 135) && lep_momentum > 0.3) dunendgarmcPlotting[i_event].geometric_correction = 2.;
     }
 
-    // Fill remaining event-level kinematic parameters
-    dunendgarmcFitting[i_event].rw_rad = radius;
-    dunendgarmcFitting[i_event].Target = 40; // Assume everything is Argon
-    dunendgarmcFitting[i_event].rw_Q0 = dunendgarmcFitting[i_event].rw_etru - dunendgarmcFitting[i_event].rw_LepE;
-    dunendgarmcFitting[i_event].rw_Q3 = std::sqrt((_MCNuPx->at(0)-dunendgarmcFitting[i_event].rw_lep_pX)*(_MCNuPx->at(0)-dunendgarmcFitting[i_event].rw_lep_pX) + 
-                                                  (_MCNuPy->at(0)-dunendgarmcFitting[i_event].rw_lep_pY)*(_MCNuPy->at(0)-dunendgarmcFitting[i_event].rw_lep_pY) + 
-                                                  (_MCNuPz->at(0)-dunendgarmcFitting[i_event].rw_lep_pZ)*(_MCNuPz->at(0)-dunendgarmcFitting[i_event].rw_lep_pZ));
-    dunendgarmcFitting[i_event].rw_lep_pT = std::sqrt(lep_momentum*lep_momentum - lep_pBeam*lep_pBeam); 
-    dunendgarmcFitting[i_event].mode = _MCMode->at(0);
-    dunendgarmcFitting[i_event].norm_s = 1.;
-    dunendgarmcFitting[i_event].pot_s = pot/(downsampling*1e21);
-    dunendgarmcFitting[i_event].flux_w = 1.0;
-    if(dunendgarmcFitting[i_event].rw_isCC == 1) numCC++;
   }
   MACH3LOG_INFO("nEntries = {}, numCC = {}, numFDV = {}", nEntries, numCC, num_in_fdv);
 
   _data->Reset();
   delete _data;
+  _geometry->Reset();
+  delete _geometry;
+  _genie->Reset();
+  delete _genie;
+
   return static_cast<int>(nEntries);
 }
 
@@ -844,94 +1212,118 @@ double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, s
 
 std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(KinematicVecs KinVec, size_t iEvent) {
   switch(KinVec) {
-    case kParticle_IsAccepted:
+    case kPrim_IsAccepted:
       return std::vector<double>(
-        dunendgarmcPlotting[iEvent].particle_isaccepted.begin(),
-        dunendgarmcPlotting[iEvent].particle_isaccepted.end());
-    case kParticle_IsCurvatureResolved:
+        dunendgarmcPlotting[iEvent].prim_isaccepted.begin(),
+        dunendgarmcPlotting[iEvent].prim_isaccepted.end());
+    case kPrim_IsCurvatureResolved:
       return std::vector<double>(
-        dunendgarmcPlotting[iEvent].particle_iscurvatureresolved.begin(),
-        dunendgarmcPlotting[iEvent].particle_iscurvatureresolved.end());
-    case kParticle_IsDecayed:
+        dunendgarmcPlotting[iEvent].prim_iscurvatureresolved.begin(),
+        dunendgarmcPlotting[iEvent].prim_iscurvatureresolved.end());
+    case kPrim_IsDecayed:
       return std::vector<double>(
-        dunendgarmcPlotting[iEvent].particle_isdecayed.begin(),
-        dunendgarmcPlotting[iEvent].particle_isdecayed.end());
-    case kParticle_PDG:
+        dunendgarmcPlotting[iEvent].prim_isdecayed.begin(),
+        dunendgarmcPlotting[iEvent].prim_isdecayed.end());
+    case kPrim_PDG:
       return std::vector<double>(
-        dunendgarmcPlotting[iEvent].particle_pdg.begin(),
-        dunendgarmcPlotting[iEvent].particle_pdg.end());
-    case kParticle_IsStoppedInTPC:
+        dunendgarmcPlotting[iEvent].prim_pdg.begin(),
+        dunendgarmcPlotting[iEvent].prim_pdg.end());
+    case kPrim_IsStoppedInTPC:
       return std::vector<double>(
-        dunendgarmcPlotting[iEvent].particle_isstoppedintpc.begin(),
-        dunendgarmcPlotting[iEvent].particle_isstoppedintpc.end());
-    case kParticle_IsStoppedInECal:
+        dunendgarmcPlotting[iEvent].prim_isstoppedintpc.begin(),
+        dunendgarmcPlotting[iEvent].prim_isstoppedintpc.end());
+    case kPrim_IsStoppedInECal:
       return std::vector<double>(
-        dunendgarmcPlotting[iEvent].particle_isstoppedinecal.begin(),
-        dunendgarmcPlotting[iEvent].particle_isstoppedinecal.end());
-    case kParticle_IsStoppedInBarrel:
+        dunendgarmcPlotting[iEvent].prim_isstoppedinecal.begin(),
+        dunendgarmcPlotting[iEvent].prim_isstoppedinecal.end());
+    case kPrim_IsStoppedInBarrel:
       return std::vector<double>(
-        dunendgarmcPlotting[iEvent].particle_isstoppedinbarrel.begin(),
-        dunendgarmcPlotting[iEvent].particle_isstoppedinbarrel.end());
-    case kParticle_IsStoppedInEndCap:
+        dunendgarmcPlotting[iEvent].prim_isstoppedinbarrel.begin(),
+        dunendgarmcPlotting[iEvent].prim_isstoppedinbarrel.end());
+    case kPrim_IsStoppedInEndCap:
       return std::vector<double>(
-        dunendgarmcPlotting[iEvent].particle_isstoppedinendcap.begin(),
-        dunendgarmcPlotting[iEvent].particle_isstoppedinendcap.end());
-    case kParticle_IsStoppedInGap:
+        dunendgarmcPlotting[iEvent].prim_isstoppedinendcap.begin(),
+        dunendgarmcPlotting[iEvent].prim_isstoppedinendcap.end());
+    case kPrim_IsStoppedInGap:
       return std::vector<double>(
-        dunendgarmcPlotting[iEvent].particle_isstoppedingap.begin(),
-        dunendgarmcPlotting[iEvent].particle_isstoppedingap.end());
-    case kParticle_IsStoppedInEndGap:
+        dunendgarmcPlotting[iEvent].prim_isstoppedingap.begin(),
+        dunendgarmcPlotting[iEvent].prim_isstoppedingap.end());
+    case kPrim_IsStoppedInEndGap:
       return std::vector<double>(
-        dunendgarmcPlotting[iEvent].particle_isstoppedinendgap.begin(),
-        dunendgarmcPlotting[iEvent].particle_isstoppedinendgap.end());
-    case kParticle_IsStoppedInBarrelGap:
+        dunendgarmcPlotting[iEvent].prim_isstoppedinendgap.begin(),
+        dunendgarmcPlotting[iEvent].prim_isstoppedinendgap.end());
+    case kPrim_IsStoppedInBarrelGap:
       return std::vector<double>(
-        dunendgarmcPlotting[iEvent].particle_isstoppedinbarrelgap.begin(),
-        dunendgarmcPlotting[iEvent].particle_isstoppedinbarrelgap.end());
-    case kParticle_IsEscaped:
+        dunendgarmcPlotting[iEvent].prim_isstoppedinbarrelgap.begin(),
+        dunendgarmcPlotting[iEvent].prim_isstoppedinbarrelgap.end());
+    case kPrim_IsEscaped:
       return std::vector<double>(
-        dunendgarmcPlotting[iEvent].particle_isescaped.begin(),
-        dunendgarmcPlotting[iEvent].particle_isescaped.end());
-    case kParticle_EVis:
-      return dunendgarmcPlotting[iEvent].particle_evis;
-    case kParticle_Momentum:
-      return dunendgarmcPlotting[iEvent].particle_momentum;
-    case kParticle_EndMomentum:
-      return dunendgarmcPlotting[iEvent].particle_endmomentum;
-    case kParticle_TransverseMomentum:
-      return dunendgarmcPlotting[iEvent].particle_transversemomentum;
-    case kParticle_BAngle:
-      return dunendgarmcPlotting[iEvent].particle_bangle;
-    case kParticle_BeamAngle:
-      return dunendgarmcPlotting[iEvent].particle_beamangle;
-    case kParticle_NTurns:
-      return dunendgarmcPlotting[iEvent].particle_nturns;
-    case kParticle_NHits:
-      return dunendgarmcPlotting[iEvent].particle_nhits;
-    case kParticle_TrackLengthYZ:
-      return dunendgarmcPlotting[iEvent].particle_tracklengthyz;
-    case kParticle_MomResMS:
-      return dunendgarmcPlotting[iEvent].particle_momresms;
-    case kParticle_MomResYZ:
-      return dunendgarmcPlotting[iEvent].particle_momresyz;
-    case kParticle_MomResX:
-      return dunendgarmcPlotting[iEvent].particle_momresx;
-    case kParticle_StartR2:
-      return dunendgarmcPlotting[iEvent].particle_startr2;
-    case kParticle_EndR:
-      return dunendgarmcPlotting[iEvent].particle_endr;
-    case kParticle_EndDepth:
-      return dunendgarmcPlotting[iEvent].particle_enddepth;
-    case kParticle_EndX:
-      return dunendgarmcPlotting[iEvent].particle_endx;
-    case kParticle_EndY:
-      return dunendgarmcPlotting[iEvent].particle_endy;
-    case kParticle_EndZ:
-      return dunendgarmcPlotting[iEvent].particle_endz;
-    case kParticle_StartX:
-      return dunendgarmcPlotting[iEvent].particle_startx;
-    case kParticle_EDepCrit:
-      return dunendgarmcPlotting[iEvent].particle_edepcrit;
+        dunendgarmcPlotting[iEvent].prim_isescaped.begin(),
+        dunendgarmcPlotting[iEvent].prim_isescaped.end());
+    case kPrim_EVis:
+      return dunendgarmcPlotting[iEvent].prim_evis;
+    case kPrim_Momentum:
+      return dunendgarmcPlotting[iEvent].prim_momentum;
+    case kPrim_EndMomentum:
+      return dunendgarmcPlotting[iEvent].prim_endmomentum;
+    case kPrim_TransverseMomentum:
+      return dunendgarmcPlotting[iEvent].prim_transversemomentum;
+    case kPrim_BAngle:
+      return dunendgarmcPlotting[iEvent].prim_bangle;
+    case kPrim_BeamAngle:
+      return dunendgarmcPlotting[iEvent].prim_beamangle;
+    case kPrim_NTurns:
+      return dunendgarmcPlotting[iEvent].prim_nturns;
+    case kPrim_NHits:
+      return dunendgarmcPlotting[iEvent].prim_nhits;
+    case kPrim_TrackLengthYZ:
+      return dunendgarmcPlotting[iEvent].prim_tracklengthyz;
+    case kPrim_MomResMS:
+      return dunendgarmcPlotting[iEvent].prim_momresms;
+    case kPrim_MomResYZ:
+      return dunendgarmcPlotting[iEvent].prim_momresyz;
+    case kPrim_MomResX:
+      return dunendgarmcPlotting[iEvent].prim_momresx;
+    case kPrim_StartR2:
+      return dunendgarmcPlotting[iEvent].prim_startr2;
+    case kPrim_EndR:
+      return dunendgarmcPlotting[iEvent].prim_endr;
+    case kPrim_EndDepth:
+      return dunendgarmcPlotting[iEvent].prim_enddepth;
+    case kPrim_EndX:
+      return dunendgarmcPlotting[iEvent].prim_endx;
+    case kPrim_EndY:
+      return dunendgarmcPlotting[iEvent].prim_endy;
+    case kPrim_EndZ:
+      return dunendgarmcPlotting[iEvent].prim_endz;
+    case kPrim_StartX:
+      return dunendgarmcPlotting[iEvent].prim_startx;
+    case kPrim_EDepCrit:
+      return dunendgarmcPlotting[iEvent].prim_edepcrit;
+    case kPrim_TPCEDepFrac:
+      return dunendgarmcPlotting[iEvent].prim_tpcedepfrac;
+    case kPrim_IsContained:
+      return dunendgarmcPlotting[iEvent].prim_iscontained;
+    case kShower_CosNorm:
+      return dunendgarmcPlotting[iEvent].shower_cosnorm;
+    case kShower_PDG:
+      return dunendgarmcPlotting[iEvent].shower_pdg;
+    case kShower_DCalBoundary:
+      return dunendgarmcPlotting[iEvent].shower_dcalboundary;
+    case kShower_Energy:
+      return dunendgarmcPlotting[iEvent].shower_energy;
+    case kShower_BAngle:
+      return dunendgarmcPlotting[iEvent].shower_bangle;
+    case kShower_IsContained:
+      return dunendgarmcPlotting[iEvent].shower_iscontained;
+    case kPhoton_Energy:
+      return dunendgarmcPlotting[iEvent].photon_energy;
+    case kPhoton_EndX:
+      return dunendgarmcPlotting[iEvent].photon_endx;
+    case kPhoton_EndY:
+      return dunendgarmcPlotting[iEvent].photon_endy;
+    case kPhoton_EndZ:
+      return dunendgarmcPlotting[iEvent].photon_endz;
     default:
       MACH3LOG_ERROR("Unrecognized Kinematic Vector: {}", static_cast<int>(KinVec));
       throw MaCh3Exception(__FILE__, __LINE__);
@@ -956,5 +1348,6 @@ void SampleHandlerBeamNDGAr::SetupFDMC() {
     MCSamples[iEvent].isNC = !dunendgarmcFitting[iEvent].rw_isCC;
     MCSamples[iEvent].nupdg = &(dunendgarmcFitting[iEvent].nupdg);
     MCSamples[iEvent].nupdgUnosc = &(dunendgarmcFitting[iEvent].nupdgUnosc);
+    MCSamples[iEvent].NominalSample = static_cast<int>(dunendgarmcFitting[iEvent].SampleIndex);
   }
 }
