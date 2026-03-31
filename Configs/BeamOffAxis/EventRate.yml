@@ -7,8 +7,10 @@ General:
 
   Systematics:
     XsecCovFile:
-      - Configs/BeamOffAxis/NDDetSysts.yml
+      # - Configs/BeamOffAxis/FakeDataSysts.yml
+      # - Configs/BeamOffAxis/NDDetSysts.yml
       # - Configs/BeamOffAxis/FluxSysts.yml
+      - Configs/BeamOffAxis/XSecSysts.yml
 
     XsecCovName: "xsec_cov"
 

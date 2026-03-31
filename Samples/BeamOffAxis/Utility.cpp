@@ -42,37 +42,58 @@ double ERecQE(int nupdg, bool isCC, double el_MeV, double theta_lep_rad) {
 
 namespace dune::beamoffaxis {
 
-std::vector<std::vector<std::vector<std::vector<std::unique_ptr<TH2D>>>>>
+std::vector<std::vector<std::vector<std::vector<std::unique_ptr<TH1>>>>>
 GetBinnedWeights(SampleHandlerBeamOffAxis &sample, int iSubSample,
                  std::vector<std::string> ParamNames,
                  std::vector<std::vector<int>> ParamModes,
                  std::vector<double> TrueEBins) {
 
+  if (!ParamNames.size()) {
+    return {};
+  }
+
   std::cout << fmt::format("Making Binned Weights for Sample: {}/{}",
                            sample.GetName(), sample.GetSampleTitle(iSubSample))
             << std::endl;
 
-  // use sample.GetNDim(iSubSample) to work outif 1D or 2D
+  int ndim = sample.GetNDim(iSubSample);
+
+  int xvarenum = sample.ReturnKinematicParameterFromString(
+      sample.GetXBinVarName(iSubSample));
+  int yvarenum = 0;
+  if (ndim == 2) {
+    yvarenum = sample.ReturnKinematicParameterFromString(
+        sample.GetYBinVarName(iSubSample));
+  }
 
   // Vector Structure:
-  // Parameter<Knot<Mode<TrueE<TH2D>>>
-  std::vector<std::vector<std::vector<std::vector<std::unique_ptr<TH2D>>>>>
+  // Parameter<Knot<Mode<TrueE<TH1>>>
+  std::vector<std::vector<std::vector<std::vector<std::unique_ptr<TH1>>>>>
       histVec, NomVec;
   int nshifts = 7;
 
   // True Energy Binning
   int NTrueEBins = static_cast<int>(TrueEBins.size()) - 1;
-  TH1D *TrueEbinning =
-      new TH1D("Template True E binning", "", NTrueEBins, TrueEBins.data());
+  TAxis TrueEbinning(NTrueEBins, TrueEBins.data());
 
   // Sample Binning
   std::vector<double> BinEdgesX = sample.ReturnKinematicParameterBinning(
       iSubSample, sample.GetXBinVarName(iSubSample));
   int NBinsX = static_cast<int>(BinEdgesX.size()) - 1;
+  TAxis Xbinning(NBinsX, BinEdgesX.data());
 
-  std::vector<double> BinEdgesY = sample.ReturnKinematicParameterBinning(
-      iSubSample, sample.GetYBinVarName(iSubSample));
-  int NBinsY = static_cast<int>(BinEdgesY.size()) - 1;
+  std::vector<double> BinEdgesY = {};
+  int NBinsY = 0;
+  TAxis Ybinning;
+
+  if (ndim == 2) {
+    BinEdgesY = sample.ReturnKinematicParameterBinning(
+        iSubSample, sample.GetYBinVarName(iSubSample));
+    NBinsY = static_cast<int>(BinEdgesY.size()) - 1;
+    Ybinning = TAxis(NBinsY, BinEdgesY.data());
+  } else if (ndim > 2) {
+    throw std::runtime_error("Cannot use more than 2 dimensions.");
+  }
 
   // Setup Histograms
   histVec.resize(ParamNames.size());
@@ -89,13 +110,23 @@ GetBinnedWeights(SampleHandlerBeamOffAxis &sample, int iSubSample,
         NomVec[iParam][shift][mode].resize(NTrueEBins);
         for (int b_etrue = 0; b_etrue < NTrueEBins; b_etrue++) {
 
-          histVec[iParam][shift][mode][b_etrue] = std::make_unique<TH2D>(
-              Form("bn_p:%zu_s:%d_m:%zu_e:%d", iParam, shift, mode, b_etrue),
-              "", NBinsX, BinEdgesX.data(), NBinsY, BinEdgesY.data());
+          if (ndim == 1) {
+            histVec[iParam][shift][mode][b_etrue] = std::make_unique<TH1D>(
+                Form("bn_p:%zu_s:%d_m:%zu_e:%d", iParam, shift, mode, b_etrue),
+                "", NBinsX, BinEdgesX.data());
 
-          NomVec[iParam][shift][mode][b_etrue] = std::make_unique<TH2D>(
-              Form("nom_p:%zu_s:%d_m:%zu_e:%d", iParam, shift, mode, b_etrue),
-              "", NBinsX, BinEdgesX.data(), NBinsY, BinEdgesY.data());
+            NomVec[iParam][shift][mode][b_etrue] = std::make_unique<TH1D>(
+                Form("nom_p:%zu_s:%d_m:%zu_e:%d", iParam, shift, mode, b_etrue),
+                "", NBinsX, BinEdgesX.data());
+          } else if (ndim == 2) {
+            histVec[iParam][shift][mode][b_etrue] = std::make_unique<TH2D>(
+                Form("bn_p:%zu_s:%d_m:%zu_e:%d", iParam, shift, mode, b_etrue),
+                "", NBinsX, BinEdgesX.data(), NBinsY, BinEdgesY.data());
+
+            NomVec[iParam][shift][mode][b_etrue] = std::make_unique<TH2D>(
+                Form("nom_p:%zu_s:%d_m:%zu_e:%d", iParam, shift, mode, b_etrue),
+                "", NBinsX, BinEdgesX.data(), NBinsY, BinEdgesY.data());
+          }
         }
       }
     }
@@ -138,31 +169,39 @@ GetBinnedWeights(SampleHandlerBeamOffAxis &sample, int iSubSample,
   }
 
   int NEvents = static_cast<int>(CAFChain.GetEntries());
-
   for (int iEvent = 0; iEvent < NEvents; iEvent++) {
     CAFChain.GetEntry(iEvent);
-    double x_var = sample.ReturnKinematicParameter(
-        sample.GetXBinVarName(iSubSample), iEvent);
-    double y_var = sample.ReturnKinematicParameter(
-        sample.GetYBinVarName(iSubSample), iEvent);
 
     // skip if event does not pass selections
     if (!sample.IsEventSelected(iSubSample, iEvent)) {
       continue;
     }
 
-    int TrueEbin =
-        TrueEbinning->FindBin(sample.DUNEMCEvents[iEvent].truth.nu.e) - 1;
-    if (iEvent < 10) {
-      std::cout << "Event " << iEvent
-                << " truth.nu.e=" << sample.DUNEMCEvents[iEvent].truth.nu.e
-                << " truth.lep.e=" << sample.DUNEMCEvents[iEvent].truth.lep.e
-                << " TrueEbin=" << TrueEbin << std::endl;
+    double x_var = sample.ReturnKinematicParameter(xvarenum, iEvent);
+    int x_bin = Xbinning.FindBin(x_var);
+
+    double y_var = 0;
+    int y_bin = -1;
+    if (ndim == 2) {
+      y_var = sample.ReturnKinematicParameter(yvarenum, iEvent);
+      y_bin = Ybinning.FindBin(y_var);
     }
-    std::cout << "TrueE bin edges: ";
-    for (auto e : TrueEBins)
-      std::cout << e << " ";
-    std::cout << std::endl;
+
+    int TrueEbin =
+        TrueEbinning.FindBin(sample.DUNEMCEvents[iEvent].truth.nu.e) - 1;
+    if (iEvent < 10) {
+      std::cout << "Event: " << iEvent
+                << "\n\ttruth.nu.e=" << sample.DUNEMCEvents[iEvent].truth.nu.e
+                << " truth.lep.e=" << sample.DUNEMCEvents[iEvent].truth.lep.e
+                << " TrueEbin=" << TrueEbin
+                << "\n\t" << sample.GetXBinVarName(iSubSample) << "=" << x_var
+                << ", xbin=" << x_bin;
+      if (ndim == 2) {
+        std::cout << "\n\t" << sample.GetYBinVarName(iSubSample) << "=" << y_var
+                  << ", ybin=" << y_bin;
+      }
+      std::cout << std::endl;
+    }
 
     for (size_t iParam = 0; iParam < ParamNames.size(); iParam++) {
 
@@ -174,16 +213,7 @@ GetBinnedWeights(SampleHandlerBeamOffAxis &sample, int iSubSample,
 
         if (ParamModes[iParam][mode] ==
             sample.DUNEMCEvents[iEvent].truth.mach3_mode) {
-
-          // double weightArr[1000];
-          // double cvweight;
-          //  Vector Structure:
-          //  Parameter<Knot<ETrue<InteractionMode<TH2D>>>
-
-          // CAFChain.SetBranchAddress(WeightBranchName.c_str(), &weightArr);
-          // CAFChain.SetBranchAddress(CVBranchName.c_str(), &cvweight);
-          // CAFChain.GetEntry(iEvent);
-
+#ifdef DEBUG_SPLINEMAKER
           // Debug print for weights being read
           std::cout << "Event " << iEvent << " | Param: " << ParamNames[iParam]
                     << " | Mode: " << ParamModes[iParam][mode]
@@ -195,44 +225,72 @@ GetBinnedWeights(SampleHandlerBeamOffAxis &sample, int iSubSample,
               std::cout << ", ";
           }
           std::cout << "]" << std::endl;
+#endif
 
           for (int shift = 0; shift < nshifts; shift++) {
-            histVec[iParam][shift][mode][TrueEbin]->Fill(
-                x_var, y_var, weightArr[iParam][shift]);
-            NomVec[iParam][shift][mode][TrueEbin]->Fill(x_var, y_var, 1.0);
-          }
-        }
-      }
-    }
-  }
-
-  // Summary of filled histograms before taking ratio
-  for (size_t iParam = 0; iParam < ParamNames.size(); iParam++) {
-
-    for (size_t mode = 0; mode < ParamModes[iParam].size(); mode++) {
-      for (int b_etrue = 0; b_etrue < NTrueEBins; b_etrue++) {
-        for (int shift = 0; shift < nshifts; shift++) {
-          int nBinsX = histVec[iParam][shift][mode][b_etrue]->GetNbinsX();
-          int nBinsY = histVec[iParam][shift][mode][b_etrue]->GetNbinsY();
-          for (int ix = 1; ix <= nBinsX; ix++) {
-            for (int iy = 1; iy <= nBinsY; iy++) {
-              std::cout << "Param: " << ParamNames[iParam]
-                        << " | Shift: " << shift
-                        << " | Mode: " << ParamModes[iParam][mode]
-                        << " | TrueEBin: " << b_etrue << " | xbin: " << ix
-                        << " | ybin: " << iy << " | Content (weighted): "
-                        << histVec[iParam][shift][mode][b_etrue]->GetBinContent(
-                               ix, iy)
-                        << " | Content (nominal): "
-                        << NomVec[iParam][shift][mode][b_etrue]->GetBinContent(
-                               ix, iy)
-                        << std::endl;
+            if (ndim == 1) {
+              histVec[iParam][shift][mode][TrueEbin]->AddBinContent(
+                  x_bin, weightArr[iParam][shift]);
+              NomVec[iParam][shift][mode][TrueEbin]->AddBinContent(x_bin);
+            } else if (ndim == 2) {
+              static_cast<TH2 *>(histVec[iParam][shift][mode][TrueEbin].get())
+                  ->AddBinContent(x_bin, y_bin, weightArr[iParam][shift]);
+              static_cast<TH2 *>(NomVec[iParam][shift][mode][TrueEbin].get())
+                  ->AddBinContent(x_bin, y_bin);
             }
           }
         }
       }
     }
   }
+
+#ifdef DEBUG_SPLINEMAKER
+  // Summary of filled histograms before taking ratio
+  for (size_t iParam = 0; iParam < ParamNames.size(); iParam++) {
+
+    for (size_t mode = 0; mode < ParamModes[iParam].size(); mode++) {
+      for (int b_etrue = 0; b_etrue < NTrueEBins; b_etrue++) {
+        for (int shift = 0; shift < nshifts; shift++) {
+
+          if (ndim == 1) {
+            int nBinsX = histVec[iParam][shift][mode][b_etrue]->GetNbinsX();
+            for (int ix = 1; ix <= nBinsX; ix++) {
+              std::cout
+                  << "Param: " << ParamNames[iParam] << " | Shift: " << shift
+                  << " | Mode: " << ParamModes[iParam][mode]
+                  << " | TrueEBin: " << b_etrue << " | xbin: " << ix
+                  << " | Content (weighted): "
+                  << histVec[iParam][shift][mode][b_etrue]->GetBinContent(ix)
+                  << " | Content (nominal): "
+                  << NomVec[iParam][shift][mode][b_etrue]->GetBinContent(ix)
+                  << std::endl;
+            }
+          } else if (ndim == 2) {
+            int nBinsX = histVec[iParam][shift][mode][b_etrue]->GetNbinsX();
+            int nBinsY = histVec[iParam][shift][mode][b_etrue]->GetNbinsY();
+            for (int ix = 1; ix <= nBinsX; ix++) {
+              for (int iy = 1; iy <= nBinsY; iy++) {
+                std::cout << "Param: " << ParamNames[iParam]
+                          << " | Shift: " << shift
+                          << " | Mode: " << ParamModes[iParam][mode]
+                          << " | TrueEBin: " << b_etrue << " | xbin: " << ix
+                          << " | ybin: " << iy << " | Content (weighted): "
+                          << static_cast<TH2 *>(
+                                 histVec[iParam][shift][mode][b_etrue].get())
+                                 ->GetBinContent(ix, iy)
+                          << " | Content (nominal): "
+                          << static_cast<TH2 *>(
+                                 NomVec[iParam][shift][mode][b_etrue].get())
+                                 ->GetBinContent(ix, iy)
+                          << std::endl;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+#endif
 
   // Take the ratio
   for (size_t iParam = 0; iParam < ParamNames.size(); iParam++) {
@@ -246,8 +304,6 @@ GetBinnedWeights(SampleHandlerBeamOffAxis &sample, int iSubSample,
     }
   }
 
-  std::cout << "finished making binned weights" << std::endl;
-  // return final vector of response histograms
   return histVec;
 }
 

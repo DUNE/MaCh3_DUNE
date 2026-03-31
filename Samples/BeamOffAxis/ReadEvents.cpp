@@ -164,6 +164,8 @@ std::vector<EventInfo> ReadEvents(TTree &tree) {
     ev.reco.e_lep = ev.reco.e_lep;
     ev.reco.e_had = ev.reco.e_had;
 
+    ev.varied_reco = ev.reco;
+
     ev.varied_res.enu = ev.reco.enu - ev.truth.nu.e;
     ev.varied_res.e_lep = ev.reco.e_lep - ev.truth.lep.e;
     ev.varied_res.e_had =

@@ -33,7 +33,7 @@ public:
   }
 
   friend std::vector<
-      std::vector<std::vector<std::vector<std::unique_ptr<TH2D>>>>>
+      std::vector<std::vector<std::vector<std::unique_ptr<TH1>>>>>
   GetBinnedWeights(SampleHandlerBeamOffAxis &sample, int iSubSample,
                    std::vector<std::string> ParamNames,
                    std::vector<std::vector<int>> ParamModes,
