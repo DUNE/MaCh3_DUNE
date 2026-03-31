@@ -71,7 +71,7 @@ inline const double *ResolveKinematicEventMember(KinematicTypes KinPar,
   case kTrueW:
     return &ev.truth.kine.invariant_mass;
   case kEnubias:
-    return &ev.truth.kine.enurec_hadavailable_missed;
+    return &ev.varied_truth.enurec_hadavailable_missed;
 
   case kRecoNeutrinoEnergy:
     return &ev.varied_reco.enu;

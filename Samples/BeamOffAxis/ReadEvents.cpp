@@ -142,9 +142,13 @@ std::vector<EventInfo> ReadEvents(TTree &tree) {
       ev.truth.kine.enurec_hadav = (ev.truth.lep.e + ev.truth.had.e_available);
       ev.truth.kine.enurec_hadavailable_missed =
           ev.truth.kine.enurec_hadav - ev.truth.nu.e;
+      ev.varied_truth.enurec_hadavailable_missed =
+          ev.truth.kine.enurec_hadavailable_missed;
+
     } else {
       ev.truth.kine.enurec_hadav = -999;
       ev.truth.kine.enurec_hadavailable_missed = -999;
+      ev.varied_truth.enurec_hadavailable_missed = -999;
     }
 
     ev.reco.is_muonlike = *reco_numu;
@@ -176,8 +180,8 @@ std::vector<EventInfo> ReadEvents(TTree &tree) {
       ev.varied_res.e_EM += ev.varied_res.e_lep;
     }
     ev.varied_res.e_ChgHad = (ev.reco.e_proton - ev.truth.had.e_proton) +
-                   (ev.reco.e_piplus - ev.truth.had.e_piplus) +
-                   (ev.reco.e_piminus - ev.truth.had.e_piminus);
+                             (ev.reco.e_piplus - ev.truth.had.e_piplus) +
+                             (ev.reco.e_piminus - ev.truth.had.e_piminus);
     ev.varied_res.e_neutron = ev.reco.e_neutron - ev.truth.had.e_neutron;
 
     ev.syst.sqrt_e.proton = std::sqrt(std::max(0.0, ev.reco.e_proton));

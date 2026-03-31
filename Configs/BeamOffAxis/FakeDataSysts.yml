@@ -1,0 +1,17 @@
+Systematics:
+
+  - Systematic:
+      SampleNames: ["*"]
+      Error: 0.06666666667
+      FlatPrior: false
+      Names:
+        FancyName: MissingProtonFD
+        ParameterName: MissingProtonFD
+      ParameterBounds: [ -1, 1 ]
+      ParameterGroup: FakeData
+      ParameterValues:
+        Generated: 0.0
+        PreFitValue: 0.2
+      StepScale:
+        MCMC: 0.02
+      Type: Functional

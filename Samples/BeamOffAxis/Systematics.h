@@ -26,4 +26,12 @@ void UpdateFluxHadProdWeight(std::vector<double> const &par_vals,
                              EventInfo &ev);
 void PrintFluxParameterNames();
 
+void MissingProtonFD(double const &par_val, EventInfo &ev) {
+  ev.varied_truth.enurec_hadavailable_missed -= par_val * ev.truth.had.e_proton;
+
+  ev.varied_reco.enu -= par_val * ev.truth.had.e_proton;
+  ev.varied_reco.e_had -= par_val * ev.truth.had.e_proton;
+  ev.varied_reco.e_proton -= par_val * ev.truth.had.e_proton;
+}
+
 } // namespace dune::beamoffaxis

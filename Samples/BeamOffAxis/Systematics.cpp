@@ -127,6 +127,11 @@ void CalculateVariedCompositeQuantities(EventInfo &ev) {
                  (varreco.e_piplus - ev.truth.had.e_piplus) +
                  (varreco.e_piminus - ev.truth.had.e_piminus);
   res.e_neutron = varreco.e_neutron - ev.truth.had.e_neutron;
+
+  ev.varied_truth.enurec_hadavailable_missed =
+      std::max(0.0,
+               ev.varied_truth.enurec_hadavailable_missed + ev.truth.nu.e) -
+      ev.truth.nu.e;
 }
 
 std::pair<std::vector<float>, std::vector<float>>

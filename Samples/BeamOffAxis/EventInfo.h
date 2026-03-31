@@ -94,6 +94,10 @@ struct EventInfo : public CAFEventInfo {
 
   } varied_res;
 
+  struct {
+    double enurec_hadavailable_missed;
+  } varied_truth;
+
   int subsample;
   int is_numode;
 

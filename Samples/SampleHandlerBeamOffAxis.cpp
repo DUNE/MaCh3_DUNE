@@ -97,13 +97,16 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
     RegisterIndividualFunctionalParameter(
         DUNEMCEvents, GetFluxHadProdParamNames(), UpdateFluxHadProdWeight);
   }
+
+  RegisterIndividualFunctionalParameter(DUNEMCEvents, "MissingProtonFD",
+                                        MissingProtonFD);
 }
 
 void SampleHandlerBeamOffAxis::ResetShifts(int iEvent) {
-  auto & ev = DUNEMCEvents[iEvent];
+  auto &ev = DUNEMCEvents[iEvent];
   ev.varied_reco = ev.reco;
 
-  //resolution variables
+  // resolution variables
   ev.varied_res.enu = ev.reco.enu - ev.truth.nu.e;
   ev.varied_res.e_lep = ev.reco.e_lep - ev.truth.lep.e;
   ev.varied_res.e_had =
@@ -118,7 +121,10 @@ void SampleHandlerBeamOffAxis::ResetShifts(int iEvent) {
                            (ev.reco.e_piminus - ev.truth.had.e_piminus);
   ev.varied_res.e_neutron = ev.reco.e_neutron - ev.truth.had.e_neutron;
 
-  //flux weights
+  ev.varied_truth.enurec_hadavailable_missed =
+      ev.truth.kine.enurec_hadavailable_missed;
+
+  // flux weights
   ev.syst.flux.total_weight = 1.0;
 }
 
