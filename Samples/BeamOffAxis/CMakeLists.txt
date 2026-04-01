@@ -28,5 +28,5 @@ install(TARGETS SamplesDUNEBeamOffAxis
   LIBRARY DESTINATION lib/
   PUBLIC_HEADER DESTINATION include/Samples)
 
-target_link_libraries(SamplesDUNEBeamOffAxis PUBLIC SplinesDUNE SystematicsDUNE duneanaobj::all MaCh3::All MaCh3DUNECompilerOptions)
+target_link_libraries(SamplesDUNEBeamOffAxis PUBLIC SplinesDUNE SystematicsDUNE duneanaobj::all Eigen3::Eigen MaCh3::All MaCh3DUNECompilerOptions)
 target_link_libraries(SamplesDUNEBeamOffAxis PRIVATE FDTDRFakeDataStudies DUNEMaCh3Warnings ROOT::TreePlayer)

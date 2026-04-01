@@ -132,6 +132,14 @@ else()
 
 endif()
 
+FetchContent_Declare(
+  Eigen3
+  GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+  GIT_TAG 5.0.1
+)
+SET(EIGEN_BUILD_CMAKE_PACKAGE ON) #export targets
+FetchContent_MakeAvailable(Eigen3)
+
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
