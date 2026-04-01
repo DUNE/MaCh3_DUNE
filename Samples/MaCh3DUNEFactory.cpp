@@ -118,67 +118,68 @@ void MakeMaCh3DuneInstance(std::unique_ptr<Manager>& FitManager, std::vector<Sam
 
   // ==========================================================
 
-  // Get inputted systematic parameters covariance matrices
-  std::vector<std::string> xsecCovMatrixFile;
-  if (CheckNodeExists(FitManager->raw(), "General", "Systematics", "XsecCovFile") ){
-    xsecCovMatrixFile = FitManager->raw()["General"]["Systematics"]["XsecCovFile"].as<std::vector<std::string>>();
-  } else {
-    MACH3LOG_ERROR("Require General:Systematics:XsecCovFile node in {}, please add this to the file!", FitManager->GetFileName());
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
+  if (xsec == nullptr) {
 
-  // Setup the covariance matrices
-  if(xsec == nullptr){
-    xsec = new ParameterHandlerGeneric(xsecCovMatrixFile, "xsec_cov");
-  }
-  else{
-    MACH3LOG_INFO("covariance Xsec has already been created so I am not re-initialising the object");
+    // Get inputted systematic parameters covariance matrices
+    std::vector<std::string> xsecCovMatrixFile;
+    if (CheckNodeExists(FitManager->raw(), "General", "Systematics",
+                        "XsecCovFile")) {
+      xsecCovMatrixFile =
+          FitManager->raw()["General"]["Systematics"]["XsecCovFile"]
+              .as<std::vector<std::string>>();
+      // Setup the covariance matrices
+      xsec = new ParameterHandlerGeneric(xsecCovMatrixFile, "xsec_cov");
+    }
+  } else {
+    MACH3LOG_INFO("covariance Xsec has already been created so I am not "
+                  "re-initialising the object");
   }
 
   MACH3LOG_INFO("cov xsec setup");
   MACH3LOG_INFO("------------------------------");
 
-  //read flat prior, fixed paramas from the config file
-  std::vector<std::string> XsecFixParams = GetFromManager<std::vector<std::string>>(FitManager->raw()["General"]["Systematics"]["XsecFix"], {});
+    std::shared_ptr<OscillationHandler> AtmOscHandler;
+    std::shared_ptr<OscillationHandler> BeamOscHandler;
 
-  // Fixed xsec parameters loop
-  if (XsecFixParams.size() == 1 && XsecFixParams.at(0) == "All") {
-    for (int j = 0; j < xsec->GetNumParams(); j++) {
-      xsec->ToggleFixParameter(j);
+  if(xsec){
+    //read flat prior, fixed paramas from the config file
+    std::vector<std::string> XsecFixParams = GetFromManager<std::vector<std::string>>(FitManager->raw()["General"]["Systematics"]["XsecFix"], {});
+
+    // Fixed xsec parameters loop
+    if (XsecFixParams.size() == 1 && XsecFixParams.at(0) == "All") {
+      for (int j = 0; j < xsec->GetNumParams(); j++) {
+        xsec->ToggleFixParameter(j);
+      }
+    } else {
+      for (unsigned int j = 0; j < XsecFixParams.size(); j++) {
+        xsec->ToggleFixParameter(XsecFixParams.at(j));
+      }
     }
-  } else {
-    for (unsigned int j = 0; j < XsecFixParams.size(); j++) {
-      xsec->ToggleFixParameter(XsecFixParams.at(j));
+    MACH3LOG_INFO("xsec parameters loop done");
+
+    xsec->SetParameters();
+    xsec->SetStepScale(FitManager->raw()["General"]["Systematics"]["XsecStepScale"].as<double>());
+
+    std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
+    xsec->SetGroupOnlyParameters("Osc", oscpars);
+
+    // ==========================================================
+
+    if (CheckNodeExists(FitManager->raw(), "General", "SharedNuOscillatorObject", "ATM") == false) {
+      MACH3LOG_INFO("No SharedNuOscillatorObject for ATM specified, so not creating one");
+    } else {
+      std::string OscillatorConfig = Get<std::string>(FitManager->raw()["General"]["SharedNuOscillatorObject"]["ATM"], __FILE__, __LINE__);
+      std::vector<const double*> OscParams = xsec->GetOscParsFromSampleName("ATM");
+      AtmOscHandler = std::make_shared<OscillationHandler>(OscillatorConfig,true,OscParams,12);
     }
-  }
-  MACH3LOG_INFO("xsec parameters loop done");
 
-  xsec->SetParameters();
-  xsec->SetStepScale(FitManager->raw()["General"]["Systematics"]["XsecStepScale"].as<double>());
-
-  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
-  xsec->SetGroupOnlyParameters("Osc", oscpars);
-
-  // ==========================================================
-
-  std::shared_ptr<OscillationHandler> AtmOscHandler;
-
-  if (CheckNodeExists(FitManager->raw(), "General", "SharedNuOscillatorObject", "ATM") == false) {
-    MACH3LOG_INFO("No SharedNuOscillatorObject for ATM specified, so not creating one");
-  } else {
-    std::string OscillatorConfig = Get<std::string>(FitManager->raw()["General"]["SharedNuOscillatorObject"]["ATM"], __FILE__, __LINE__);
-    std::vector<const double*> OscParams = xsec->GetOscParsFromSampleName("ATM");
-    AtmOscHandler = std::make_shared<OscillationHandler>(OscillatorConfig,true,OscParams,12);
-  }
-
-  std::shared_ptr<OscillationHandler> BeamOscHandler;
-
-  if (CheckNodeExists(FitManager->raw(), "General", "SharedNuOscillatorObject", "Beam") == false) {
-    MACH3LOG_INFO("No SharedNuOscillatorObject for Beam specified, so not creating one");
-  } else {
-    std::string OscillatorConfig = Get<std::string>(FitManager->raw()["General"]["SharedNuOscillatorObject"]["Beam"], __FILE__, __LINE__);
-    std::vector<const double*> OscParams = xsec->GetOscParsFromSampleName("FD_");
-    BeamOscHandler = std::make_shared<OscillationHandler>(OscillatorConfig,true,OscParams,12);
+    if (CheckNodeExists(FitManager->raw(), "General", "SharedNuOscillatorObject", "Beam") == false) {
+      MACH3LOG_INFO("No SharedNuOscillatorObject for Beam specified, so not creating one");
+    } else {
+      std::string OscillatorConfig = Get<std::string>(FitManager->raw()["General"]["SharedNuOscillatorObject"]["Beam"], __FILE__, __LINE__);
+      std::vector<const double*> OscParams = xsec->GetOscParsFromSampleName("FD_");
+      BeamOscHandler = std::make_shared<OscillationHandler>(OscillatorConfig,true,OscParams,12);
+    }
   }
 
   // ==========================================================
@@ -225,7 +226,7 @@ void MakeMaCh3DuneInstance(std::unique_ptr<Manager>& FitManager, std::vector<Sam
   }
   // Adaptive MCMC stuff
 
-  if (FitManager->raw()["AdaptionOptions"]){
+  if (xsec && FitManager->raw()["AdaptionOptions"]){
     xsec->InitialiseAdaption(FitManager->raw());
   }
 

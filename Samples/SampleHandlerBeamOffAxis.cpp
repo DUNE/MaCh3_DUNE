@@ -33,6 +33,9 @@ void SampleHandlerBeamOffAxis::Init() {
 }
 
 void SampleHandlerBeamOffAxis::SetupSplines() {
+  if (!ParHandler) {
+    return;
+  }
 
   ///@todo move all of the spline setup into core
 
@@ -60,6 +63,9 @@ void SampleHandlerBeamOffAxis::SetupSplines() {
 }
 
 void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
+  if (!ParHandler) {
+    return;
+  }
 
   RegisterIndividualFunctionalParameter(DUNEMCEvents,
                                         {
@@ -145,7 +151,8 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
   MACH3LOG_INFO(
       "-------------------------------------------------------------------");
 
-  bool do_flux_systematics = ParHandler->GetNumParFromGroup("Flux");
+  bool do_flux_systematics =
+      ParHandler && ParHandler->GetNumParFromGroup("Flux");
 
   for (int iSubSample = 0; iSubSample < int(SampleDetails.size());
        iSubSample++) {
