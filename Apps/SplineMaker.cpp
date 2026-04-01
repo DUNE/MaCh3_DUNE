@@ -22,8 +22,31 @@
 // #define DEBUG_SPLINEMAKER
 
 int main(int argc, char *argv[]) {
-  MaCh3Utils::MaCh3Usage(argc, argv);
-  auto fitMan = MaCh3ManagerFactory(argc, argv);
+
+  if (argc <= 2) {
+    std::cout << "[ERROR]: Runlike " << argv[0]
+              << " <Mach3_Config.yml> <SplineParameterConfig.yml>" << std::endl;
+  }
+
+  auto conf_yml = M3OpenConfig(argv[1]);
+  conf_yml["General"]["Systematics"] = YAML::Load("[]");
+  auto fitMan = std::make_unique<Manager>(conf_yml);
+
+  auto spline_yml = M3OpenConfig(argv[2]);
+
+  std::vector<std::string> ParamNames;
+  std::vector<std::string> SplineNames;
+  std::vector<std::vector<int>> SplineModes;
+  for (auto const &param : spline_yml["Systematics"]) {
+    ParamNames.push_back(
+        param["Systematic"]["Names"]["FancyName"].as<std::string>());
+    SplineNames.push_back(param["Systematic"]["SplineInformation"]["SplineName"]
+                              .as<std::string>());
+    std::vector<int> Modes =
+        param["Systematic"]["SplineInformation"]["Mode"].as<std::vector<int>>();
+    SplineModes.push_back(Modes);
+  }
+  size_t NSplineParams = ParamNames.size();
 
   // ###############################################################################################################################
   // Create SampleHandlerFD objects
@@ -56,18 +79,6 @@ int main(int argc, char *argv[]) {
       std::string SubSampleName = Sample->GetSampleTitle(iSample);
 
       int ndim = Sample->GetNDim(iSample);
-
-      std::vector<std::string> ParamNames;
-      std::vector<std::string> SplineNames;
-      std::vector<std::vector<int>> SplineModes;
-      auto spline_pars = xsec->GetSplineParsFromSampleName(SubSampleName);
-      for (auto const &sp : spline_pars) {
-        std::cout << "Building bin splines for: " << sp.name << std::endl;
-        ParamNames.push_back(sp.name);
-        SplineNames.push_back(sp._fSplineNames);
-        SplineModes.push_back(sp._fSplineModes);
-      }
-      size_t NSplineParams = ParamNames.size();
 
       // Sample Binning
       std::vector<double> BinEdgesX =
