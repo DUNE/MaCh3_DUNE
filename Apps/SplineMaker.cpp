@@ -106,9 +106,15 @@ int main(int argc, char *argv[]) {
       SplineFile->cd();
 
       // Make Template Binning Histogram
-      TH3F *BinningTemplate = new TH3F(
-          "dev_tmp_0_0", "dev_tmp_0_0", NTrueEbins, TrueEBinning.data(), NBinsX,
-          BinEdgesX.data(), NBinsY, BinEdgesY.data());
+      TH1 *BinningTemplate =
+          (ndim == 2)
+              ? static_cast<TH1 *>(new TH3F("dev_tmp_0_0", "dev_tmp_0_0",
+                                            NTrueEbins, TrueEBinning.data(),
+                                            NBinsX, BinEdgesX.data(), NBinsY,
+                                            BinEdgesY.data()))
+              : static_cast<TH1 *>(new TH2F("dev_tmp_0_0", "dev_tmp_0_0",
+                                            NTrueEbins, TrueEBinning.data(),
+                                            NBinsX, BinEdgesX.data()));
 
       for (size_t iParam = 0; iParam < NSplineParams; iParam++) {
         for (size_t mode = 0; mode < SplineModes[iParam].size(); mode++) {
