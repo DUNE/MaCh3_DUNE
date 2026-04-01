@@ -30,6 +30,25 @@ void SampleHandlerBeamOffAxis::Init() {
     subsample_is_numode[iSubSample] =
         Get<bool>(sample_conf["is_numode"], __FILE__, __LINE__);
   }
+
+  if (SampleManager->raw()["InputFiles"]["CovarianceMatrix"]) {
+    auto cvmx_details = Get<std::vector<std::string>>(
+        SampleManager->raw()["InputFiles"]["CovarianceMatrix"], __FILE__,
+        __LINE__);
+
+    TFile cvmx_file(cvmx_details[0].c_str(), "READ");
+    auto *rcvmx = cvmx_file.Get<TMatrixD>(cvmx_details[1].c_str());
+
+    cvmx = Eigen::Map<Eigen::MatrixXd>(rcvmx->GetMatrixArray(),
+                                       rcvmx->GetNrows(), rcvmx->GetNcols());
+    icvmx = cvmx.inverse();
+
+    MACH3LOG_INFO("Using ND Covariance Matrix({},{}):", cvmx.rows(),
+                  cvmx.cols());
+    std::stringstream ss;
+    ss << cvmx;
+    MACH3LOG_INFO("\n{}", ss.str());
+  }
 }
 
 void SampleHandlerBeamOffAxis::SetupSplines() {

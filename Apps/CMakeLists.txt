@@ -5,12 +5,11 @@ foreach(app
 	Fit
 	# Projections
 	SigmaVariation
-	# LikelihoodScan
+	LikelihoodScan
 	# Variations
 	SplineMaker
 	# SigmaVarTutorial
-	# MakeCovarianceMatrix
-	# MakeCovarianceMatrix_compressed
+	MakeCovarianceMatrix
       )
 
     add_executable(${app} ${app}.cpp)
