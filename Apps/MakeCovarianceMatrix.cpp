@@ -15,16 +15,20 @@
 
 int main(int argc, char *argv[]) {
 
-  if (argc <= 4) {
+  if (argc <= 5) {
     std::cout << "[ERROR]: Runlike " << argv[0]
-              << " <Mach3_Config.yml> <NThrows> <output.root>" << std::endl;
+              << " <Mach3_Config.yml> <Parameter.yml> <NThrows> <output.root>"
+              << std::endl;
   }
 
   auto conf_yml = M3OpenConfig(argv[1]);
+  conf_yml["General"]["Systematics"] =
+      YAML::Load(std::string("XsecCovFile:\n\t[") + argv[2] +
+                 "]\nXsecCovName: xsec_cov\nXsecStepScale: 1.0");
   auto fitMan = std::make_unique<Manager>(conf_yml);
 
-  auto nThrows = std::stol(argv[2]);
-  auto OutputFileName = std::string(argv[3]);
+  auto nThrows = std::stol(argv[3]);
+  auto OutputFileName = std::string(argv[4]);
 
   ParameterHandlerGeneric *xsec = nullptr;
   std::vector<SampleHandlerFD *> DUNEPdfs;
@@ -100,6 +104,8 @@ int main(int argc, char *argv[]) {
   cvpred_root.Write("NDCV");
   mean_root.Write("NDThrowsMean");
   CovMatrix_root.Write("NDCovMatrix");
+
+  // write PDF of covmatrix (correlation matrix)
 
   OutputFile->Write();
   OutputFile->Close();
