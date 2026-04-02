@@ -46,7 +46,11 @@ Assumes and only works with a single configured SampleHandler (but multiple *Sam
 
 ### Template Parameter definition
 
--- Abi handles this.
+New python script for generating:
+
+```bash
+python3 ../Samples/BeamOffAxis/scripts/gen_template_param_yml.py > ../Configs/BeamOffAxis/TemplateParams.yml
+```
 
 ## Anaysis Details
 
