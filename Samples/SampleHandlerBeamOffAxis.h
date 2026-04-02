@@ -110,6 +110,7 @@ _MaCh3_Safe_Include_Start_ //{
         return SampleHandlerFD::GetLikelihood();
       }
 
+      //Map allows use of Eigen linear algebra syntax without copying the data out of the vectors.
       Eigen::Map<Eigen::VectorXd const> data(SampleHandlerFD_data.data(),
                                              SampleHandlerFD_data.size());
       Eigen::Map<Eigen::VectorXd const> mc(SampleHandlerFD_array.data(),
@@ -125,7 +126,12 @@ _MaCh3_Safe_Include_Start_ //{
       double lh = (data - mc).transpose() * icvmx * (data - mc);
 
       return lh;
-    };
+    }
+
+    // consider additional regularisation hook?
+    // could add prior penalty for regularisation here or could add
+    // access ParHandler->
+
 
     std::vector<dune::beamoffaxis::EventInfo> DUNEMCEvents;
 
