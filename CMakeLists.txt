@@ -273,9 +273,13 @@ endif()
 add_library(MaCh3DUNECompilerOptions INTERFACE)
 set_target_properties(MaCh3DUNECompilerOptions PROPERTIES EXPORT_NAME CompilerOptions)
 
-target_compile_options(MaCh3DUNECompilerOptions INTERFACE
-  -mno-avx
-)
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i.86")
+  if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(MaCh3DUNECompilerOptions INTERFACE
+      -mno-avx
+    )
+  endif()
+endif()
 
 target_include_directories(MaCh3DUNECompilerOptions
   INTERFACE
