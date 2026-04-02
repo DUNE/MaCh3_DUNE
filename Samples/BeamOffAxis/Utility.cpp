@@ -193,8 +193,8 @@ GetBinnedWeights(SampleHandlerBeamOffAxis &sample, int iSubSample,
       std::cout << "Event: " << iEvent
                 << "\n\ttruth.nu.e=" << sample.DUNEMCEvents[iEvent].truth.nu.e
                 << " truth.lep.e=" << sample.DUNEMCEvents[iEvent].truth.lep.e
-                << " TrueEbin=" << TrueEbin
-                << "\n\t" << sample.GetXBinVarName(iSubSample) << "=" << x_var
+                << " TrueEbin=" << TrueEbin << "\n\t"
+                << sample.GetXBinVarName(iSubSample) << "=" << x_var
                 << ", xbin=" << x_bin;
       if (ndim == 2) {
         std::cout << "\n\t" << sample.GetYBinVarName(iSubSample) << "=" << y_var
@@ -233,10 +233,19 @@ GetBinnedWeights(SampleHandlerBeamOffAxis &sample, int iSubSample,
                   x_bin, weightArr[iParam][shift]);
               NomVec[iParam][shift][mode][TrueEbin]->AddBinContent(x_bin);
             } else if (ndim == 2) {
+
+              double bc = static_cast<TH2 *>(
+                              histVec[iParam][shift][mode][TrueEbin].get())
+                              ->GetBinContent(x_bin, y_bin);
+
               static_cast<TH2 *>(histVec[iParam][shift][mode][TrueEbin].get())
-                  ->AddBinContent(x_bin, y_bin, weightArr[iParam][shift]);
+                  ->SetBinContent(x_bin, y_bin, bc + weightArr[iParam][shift]);
+
+              bc = static_cast<TH2 *>(
+                       NomVec[iParam][shift][mode][TrueEbin].get())
+                       ->GetBinContent(x_bin, y_bin);
               static_cast<TH2 *>(NomVec[iParam][shift][mode][TrueEbin].get())
-                  ->AddBinContent(x_bin, y_bin);
+                  ->SetBinContent(x_bin, y_bin, bc + 1);
             }
           }
         }
