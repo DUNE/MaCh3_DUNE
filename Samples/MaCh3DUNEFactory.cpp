@@ -9,6 +9,8 @@
 // #include "Samples/SampleHandlerAtm.h"
 #endif
 
+#include "Parameters/ParameterHandlerRegularised.h"
+
 SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, ParameterHandlerGeneric* &xsec, const std::shared_ptr<OscillationHandler>&  BeamOscillator_, const std::shared_ptr<OscillationHandler>&  AtmOscillator_, TMatrixD* NDCov_FHC, TMatrixD* NDCov_RHC) {
   SampleHandlerFD *Sample;
 
@@ -128,7 +130,7 @@ void MakeMaCh3DuneInstance(std::unique_ptr<Manager>& FitManager, std::vector<Sam
           FitManager->raw()["General"]["Systematics"]["XsecCovFile"]
               .as<std::vector<std::string>>();
       // Setup the covariance matrices
-      xsec = new ParameterHandlerGeneric(xsecCovMatrixFile, "xsec_cov");
+      xsec = new ParameterHandlerRegularised(xsecCovMatrixFile, "xsec_cov");
     }
   } else {
     MACH3LOG_INFO("covariance Xsec has already been created so I am not "
