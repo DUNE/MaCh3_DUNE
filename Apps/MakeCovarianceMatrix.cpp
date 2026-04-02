@@ -5,7 +5,7 @@
 
 #include "yaml-cpp/yaml.h"
 
-#include "eigen/Dense"
+#include "Eigen/Dense"
 
 #include <cmath>
 #include <iostream>

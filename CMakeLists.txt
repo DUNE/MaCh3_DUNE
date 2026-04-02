@@ -227,6 +227,7 @@ target_compile_options(DUNEMaCh3Warnings INTERFACE
   # -Werror                 # Treat Warnings as Errors
   # -Wextra                 # Enable extra warning flags
   # -Wall                   # Enable all standard warning flags
+  -Wsuggest-override
   -Wshadow                # Warn when a variable declaration shadows one from an outer scope
   -Wuninitialized         # Warn about uninitialized variables
   -Wnon-virtual-dtor      # Warn when a class with virtual functions has a non-virtual destructor
@@ -271,6 +272,10 @@ endif()
 ################################# Build MaCh3 ##################################
 add_library(MaCh3DUNECompilerOptions INTERFACE)
 set_target_properties(MaCh3DUNECompilerOptions PROPERTIES EXPORT_NAME CompilerOptions)
+
+target_compile_options(MaCh3DUNECompilerOptions INTERFACE
+  -mno-avx
+)
 
 target_include_directories(MaCh3DUNECompilerOptions
   INTERFACE
