@@ -7,7 +7,7 @@ MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
 BinningFile: "Configs/TutorialConfigs/TutorialBinning.yaml"
 
 InputFiles:
-  LoadSplineFile: false
+  CovarianceMatrix: ["bla.root", "NDCovMatrix"]
 
 Samples: ["OnAxis_numuCC_numode", "OffAxis8m_numuCC_numode"]
 
