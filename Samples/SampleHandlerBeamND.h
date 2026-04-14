@@ -2,11 +2,11 @@
 #define _SampleHandlerBeamND_h_
 
 #include "Splines/BinnedSplineHandlerDUNE.h"
-#include "Samples/SampleHandlerFD.h"
+#include "Samples/SampleHandlerBase.h"
 
 #include "StructsDUNE.h"
 
-class SampleHandlerBeamND : virtual public SampleHandlerFD
+class SampleHandlerBeamND : virtual public SampleHandlerBase
 {
 public:
   SampleHandlerBeamND(std::string mc_version, ParameterHandlerGeneric* xsec_cov, BeamNDCov beamNDCov);
@@ -17,19 +17,19 @@ public:
  protected:
   void Init();
   int SetupExperimentMC();
-  void SetupFDMC();
+  void SetupMC();
+
+  /// @brief Initialise data hist (can be overridden)
+  void InititialiseData() override;
 
   void AddAdditionalWeightPointers();
   void SetupSplines();
 
   void RegisterFunctionalParameters() override {};
   
-  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent);
-  const double* GetPointerToKinematicParameter(double KinematicVariable, int iEvent);
-  const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent);
+  const double* GetPointerToKinematicParameter(const int KinPar, const int iEvent) const override;
 
-  double ReturnKinematicParameter(int KinematicVariable, int iEvent);
-  double ReturnKinematicParameter(std::string KinematicParameter, int iEvent);
+  double ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const;
 
   //DB functions which could be initialised to do something which is non-trivial
   double CalcXsecWeightFunc(int iEvent) {return 1.; (void)iEvent;}

@@ -33,23 +33,23 @@ int main(int argc, char * argv[]) {
   
   ParameterHandlerGeneric* xsec = nullptr;
   
-  std::vector<SampleHandlerFD*> DUNEPdfs;
+  std::vector<SampleHandlerBase*> DUNEPdfs;
   MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
 
   //###############################################################################################################################
   //Perform reweight, print total integral, and set data
 
-  std::vector<TH1*> DUNEHists;
+  std::vector<std::unique_ptr<TH1>> DUNEHists;
   for(auto handler : DUNEPdfs){
-    for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
+    for (unsigned iSample = 0; iSample < handler->GetNSamples(); ++iSample) {
       handler->Reweight();
-      DUNEHists.push_back(handler->GetMCHist(iSample));
+      DUNEHists.push_back(M3::Clone(handler->GetMCHist(iSample)));
       MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample)->Integral());
 
       if (handler->GetNDim(iSample) == 1) {
-        handler->AddData(iSample, (TH1D*)DUNEHists.back());
+        handler->AddData(iSample, static_cast<TH1D*>(DUNEHists.back().get()));
       } else if (handler->GetNDim(iSample) == 2) {
-        handler->AddData(iSample, (TH2D*)DUNEHists.back());
+        handler->AddData(iSample, static_cast<TH2D*>(DUNEHists.back().get()));
       }
     }
   }

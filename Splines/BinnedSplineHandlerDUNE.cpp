@@ -7,7 +7,7 @@ BinnedSplineHandlerDUNE::BinnedSplineHandlerDUNE(ParameterHandlerGeneric* xsec_c
 BinnedSplineHandlerDUNE::~BinnedSplineHandlerDUNE() {
 }
 
-std::vector<std::string> BinnedSplineHandlerDUNE::GetTokensFromSplineName(std::string FullSplineName) {
+std::vector<std::string> BinnedSplineHandlerDUNE::GetTokensFromSplineName(const std::string& FullSplineName) {
   std::vector<std::string> ReturnVec(TokenOrdering::kNTokens);
 
   TObjArray *tokens = TString(FullSplineName).Tokenize("_");

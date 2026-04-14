@@ -35,7 +35,7 @@ int main(int argc, char * argv[]) {
   
   ParameterHandlerGeneric* xsec = nullptr;
 
-  std::vector<SampleHandlerFD*> DUNEPdfs;
+  std::vector<SampleHandlerBase*> DUNEPdfs;
   MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
 
   std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
@@ -46,7 +46,7 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("=======================================================");
   for(auto handler: DUNEPdfs){
     handler->Reweight();
-    for (int iSample=0;iSample<handler->GetNsamples();iSample++) {
+    for (int iSample=0;iSample<handler->GetNSamples();iSample++) {
       MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample)->Integral());
     }
   }
@@ -104,7 +104,7 @@ int main(int argc, char * argv[]) {
             CovObj->SetParProp(iPar, VarVal);
 
             for (auto handler : DUNEPdfs) {
-              for (int iSample = 0; iSample < handler->GetNsamples(); iSample++) {
+              for (int iSample = 0; iSample < handler->GetNSamples(); iSample++) {
                 std::string SampleName = handler->GetSampleTitle(iSample);
 
                 File->cd(ParName.c_str());
@@ -114,7 +114,7 @@ int main(int argc, char * argv[]) {
                 File->cd((ParName + "/" + SampleName).c_str());
 
                 handler->Reweight();
-                TH1 *Hist =
+                auto Hist =
                     handler->GetMCHist(iSample);
                 MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}",
                               SampleName, Hist->Integral());

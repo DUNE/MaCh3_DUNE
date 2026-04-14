@@ -5,8 +5,8 @@
 #include "Samples/SampleHandlerBeamNDGAr.h"
 #include "Samples/SampleHandlerAtm.h"
 
-SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, ParameterHandlerGeneric* &xsec, const std::shared_ptr<OscillationHandler>&  BeamOscillator_, const std::shared_ptr<OscillationHandler>&  AtmOscillator_, BeamNDCov beamNDCov) {
-  SampleHandlerFD *Sample;
+SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, ParameterHandlerGeneric* &xsec, const std::shared_ptr<OscillationHandler>&  BeamOscillator_, const std::shared_ptr<OscillationHandler>&  AtmOscillator_, BeamNDCov beamNDCov) {
+  SampleHandlerBase *Sample;
 
   (void)beamNDCov;
   
@@ -39,7 +39,7 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
   return Sample;
 }
 
-void MakeMaCh3DuneInstance(std::unique_ptr<Manager>& FitManager, std::vector<SampleHandlerFD*> &DUNEPdfs, ParameterHandlerGeneric *&xsec){
+void MakeMaCh3DuneInstance(std::unique_ptr<Manager>& FitManager, std::vector<SampleHandlerBase*> &DUNEPdfs, ParameterHandlerGeneric *&xsec){
 
   // there's a check inside the manager class that does this; left here for demonstrative purposes
   if (FitManager == nullptr) {

@@ -25,7 +25,7 @@ int main(int argc, char * argv[]) {
   //####################################################################################
   //Create samplePDFSKBase Objs
 
-  std::vector<SampleHandlerFD*> DUNEPdfs;
+  std::vector<SampleHandlerBase*> DUNEPdfs;
   MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
 
   //Some place to store the histograms
@@ -36,7 +36,7 @@ int main(int argc, char * argv[]) {
   OutputFile->cd();
 
   for (auto handler : DUNEPdfs) {
-    for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
+    for (unsigned iSample = 0; iSample < handler->GetNSamples(); ++iSample) {
     
       std::string name = handler->GetSampleTitle(iSample);
       sample_names.push_back(name);
@@ -94,8 +94,8 @@ int main(int argc, char * argv[]) {
   MaCh3Fitter->RunMCMC();
 
   //Writing the memory usage at the end to eventually spot some nasty leak
-  MACH3LOG_WARN("\033[0;31mCurrent Total RAM usage is {:.2f} GB\033[0m", MaCh3Utils::getValue("VmRSS") / 1048576.0);
-  MACH3LOG_WARN("\033[0;31mOut of Total available RAM {:.2f} GB\033[0m", MaCh3Utils::getValue("MemTotal") / 1048576.0);
+  MACH3LOG_WARN("\033[0;31mCurrent Total RAM usage is {:.2f} GB\033[0m", M3::Utils::getValue("VmRSS") / 1048576.0);
+  MACH3LOG_WARN("\033[0;31mOut of Total available RAM {:.2f} GB\033[0m", M3::Utils::getValue("MemTotal") / 1048576.0);
 
   return 0;
 }

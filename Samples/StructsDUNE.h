@@ -39,7 +39,7 @@ struct dunemc_base { // Store variables used in fitting
   double OscChannelIndex;
   
   double rw_erec;
-  double rw_etru;
+  double enu_true;
 
   double flux_w;
   double mode;
@@ -50,7 +50,7 @@ struct dunemc_base { // Store variables used in fitting
 
 struct dunemc_atm : public dunemc_base { // Store variables used by SampleHandlerAtm
   double rw_theta;
-  double rw_truecz;
+  double coszenith_true;
 };
 
 struct dunemc_beamfd : public dunemc_base { // Store variables used by SampleHandlerBeamFD

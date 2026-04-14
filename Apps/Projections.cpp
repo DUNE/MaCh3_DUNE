@@ -55,12 +55,12 @@ std::string ReturnFormattedHistogramNameFromProjection(ProjectionVariable Proj) 
   return ReturnStr;
 }
 
-void WriteTH1Histogram(TH1 *Hist, std::string Name, TDirectory *Dir = nullptr) {
+void WriteTH1Histogram(std::unique_ptr<TH1>& Hist, std::string& Name, TDirectory *Dir = nullptr) {
   if (Dir) Dir->cd();
   Hist->Write(Name.c_str());
 }
 
-void PrintTH1Histogram(TH1 *Hist, std::string OutputName) {
+void PrintTH1Histogram(std::unique_ptr<TH1>& Hist, std::string& OutputName) {
   TCanvas Canv = TCanvas();
   Hist->Draw("COLZ");
   Canv.Print(OutputName.c_str());
@@ -121,7 +121,7 @@ int main(int argc, char *argv[]) {
 
   ParameterHandlerGeneric *xsec = nullptr;
 
-  std::vector<SampleHandlerFD*> DUNEPdfs;
+  std::vector<SampleHandlerBase*> DUNEPdfs;
   MakeMaCh3DuneInstance(fitMan, DUNEPdfs, xsec);
 
   // ###############################################################################################################################
@@ -130,7 +130,7 @@ int main(int argc, char *argv[]) {
   MACH3LOG_INFO("=================================================");
   for (auto handler : DUNEPdfs) {
     handler->Reweight();
-    for (int iSample = 0; iSample < handler->GetNsamples(); iSample++) {
+    for (int iSample = 0; iSample < handler->GetNSamples(); iSample++) {
       std::string EventRateString = fmt::format("{:.2f}", handler->GetMCHist(iSample)->Integral());
       MACH3LOG_INFO("Event rate for {} : {:<5}", handler->GetSampleTitle(iSample), EventRateString);
     }
@@ -280,7 +280,7 @@ int main(int argc, char *argv[]) {
   MACH3LOG_INFO("=================================================");
   MACH3LOG_INFO("Building Projections..");
 
-  TH1* Hist;
+  std::unique_ptr<TH1> Hist;
   THStack* Stack;
 
   for (size_t iProj=0;iProj<Projections.size();iProj++) {
@@ -289,10 +289,6 @@ int main(int argc, char *argv[]) {
 
     std::vector<std::string> ProjectionVar_Str = Projections[iProj].VarStrings;
     int histdim = ProjectionVar_Str.size();
-    TAxis AxisX = TAxis(Projections[iProj].BinEdges[0].size()-1,Projections[iProj].BinEdges[0].data());
-    TAxis AxisY;
-    if (histdim == 2) {AxisY = TAxis(Projections[iProj].BinEdges[1].size()-1,Projections[iProj].BinEdges[1].data());}
-
     for (auto handler : DUNEPdfs) {
 
       //File->mkdir(Sample->GetName().c_str());
@@ -315,15 +311,15 @@ int main(int argc, char *argv[]) {
         }
       }
 
-      for (int iSample = 0; iSample < handler->GetNsamples(); iSample++) {
+      for (int iSample = 0; iSample < handler->GetNSamples(); iSample++) {
         std::string outputname;
         if (histdim==1) {
-          Hist = (TH1*)handler->Get1DVarHist(iSample, ProjectionVar_Str[0],EventSelectionVector,WeightStyle,&AxisX,SubEventSelectionVector);
+          Hist = handler->Get1DVarHist(iSample, ProjectionVar_Str[0],EventSelectionVector,WeightStyle ,SubEventSelectionVector);
           outputname = handler->GetSampleTitle(iSample)+"_"+Projections[iProj].Name;
           if (Scale1DHistsByBinWidth) Hist->Scale(1.0,"Width");
         } 
         else {
-          Hist = (TH1*)handler->Get2DVarHist(iSample, ProjectionVar_Str[0],ProjectionVar_Str[1],EventSelectionVector,WeightStyle,&AxisX,&AxisY,SubEventSelectionVector);
+          Hist = handler->Get2DVarHist(iSample, ProjectionVar_Str[0],ProjectionVar_Str[1],EventSelectionVector,WeightStyle,SubEventSelectionVector);
           outputname = handler->GetSampleTitle(iSample)+"_"+Projections[iProj].Name;
         }
         Hist->SetTitle(ReturnFormattedHistogramNameFromProjection(Projections[iProj]).c_str());
@@ -341,7 +337,7 @@ int main(int argc, char *argv[]) {
 
           for (size_t iBreak = 0; iBreak < Projections[iProj].CategoryCuts[iCat].Breakdown.size(); iBreak++) {
 
-            TH1 *BreakdownHist = nullptr;
+            std::unique_ptr<TH1> BreakdownHist = nullptr;
 
             for (size_t iGroup=0;iGroup<Projections[iProj].CategoryCuts[iCat].Breakdown[iBreak].size();iGroup++) {
               std::vector< KinematicCut > EventSelectionVector_IncCategory = std::vector< KinematicCut >(EventSelectionVector);
@@ -361,23 +357,23 @@ int main(int argc, char *argv[]) {
               }
 
               if (histdim==1) {
-                Hist = handler->Get1DVarHist(iSample, ProjectionVar_Str[0],EventSelectionVector_IncCategory,WeightStyle,&AxisX,SubEventSelectionVector_IncCategory);
+                Hist = handler->Get1DVarHist(iSample, ProjectionVar_Str[0],EventSelectionVector_IncCategory,WeightStyle,SubEventSelectionVector_IncCategory);
                 if (Scale1DHistsByBinWidth) Hist->Scale(1.0,"Width");
               }	else {
-                Hist = (TH1*)handler->Get2DVarHist(iSample, ProjectionVar_Str[0],ProjectionVar_Str[1],EventSelectionVector_IncCategory,WeightStyle,&AxisX,&AxisY,SubEventSelectionVector_IncCategory);
+                Hist = (std::unique_ptr<TH1>)handler->Get2DVarHist(iSample, ProjectionVar_Str[0],ProjectionVar_Str[1],EventSelectionVector_IncCategory,WeightStyle,SubEventSelectionVector_IncCategory);
               }
               Hist->SetFillColor(Projections[iProj].CategoryCuts[iCat].Colours[iBreak]);
 
               if (BreakdownHist == nullptr) {
-                BreakdownHist = Hist;
+                BreakdownHist = std::move(Hist);
               } else {
-                BreakdownHist->Add(Hist);
+                BreakdownHist->Add(Hist.get());
               }
-              leg->AddEntry(Hist, Projections[iProj].CategoryCuts[iCat].CategoryNames[iBreak].c_str(), "f");
+              leg->AddEntry(Hist.get(), Projections[iProj].CategoryCuts[iCat].CategoryNames[iBreak].c_str(), "f");
             }
 
             MACH3LOG_INFO("\t\t\tBreakdown: {:<10} - Integral: {:<10}", iBreak, BreakdownHist->Integral());
-            Stack->Add(BreakdownHist);
+            Stack->Add(BreakdownHist.get());
           }
           // HH: Add the stack to the file
           TCanvas Canv = TCanvas();

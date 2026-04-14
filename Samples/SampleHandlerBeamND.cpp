@@ -2,7 +2,7 @@
 #include "Samples/StructsDUNE.h"
 
 //Here nullptr is passed instead of OscCov to prevent oscillation calculations from being performed for the ND Samples
-SampleHandlerBeamND::SampleHandlerBeamND(std::string mc_version_, ParameterHandlerGeneric* ParHandler_, BeamNDCov beamNDCov_) : SampleHandlerFD(mc_version_, ParHandler_) {
+SampleHandlerBeamND::SampleHandlerBeamND(std::string mc_version_, ParameterHandlerGeneric* ParHandler_, BeamNDCov beamNDCov_) : SampleHandlerBase(mc_version_, ParHandler_) {
   if(!(beamNDCov_.NDCov_FHC && beamNDCov_.NDCov_RHC && beamNDCov_.NDCov_all)){
     MACH3LOG_ERROR("You've passed me a nullptr to a ND covarince matrix... ");
     throw MaCh3Exception(__FILE__, __LINE__);
@@ -20,11 +20,11 @@ SampleHandlerBeamND::~SampleHandlerBeamND() {
 }
 
 void SampleHandlerBeamND::Init() {
-  beamNDSampleDetails.resize(GetNsamples());
+  beamNDSampleDetails.resize(GetNSamples());
   
   auto EnabledSamples = Get<std::vector<std::string>>(SampleManager->raw()["Samples"], __FILE__ , __LINE__);
 
-  for (int i = 0; i < GetNsamples(); i++){
+  for (int i = 0; i < GetNSamples(); i++){
     const auto TempTitle = EnabledSamples[i];
     beamNDSampleDetails[i].isFHC = SampleManager->raw()[TempTitle]["DUNESampleBools"]["isFHC"].as<double>();
     beamNDSampleDetails[i].iselike = SampleManager->raw()[TempTitle]["DUNESampleBools"]["iselike"].as<bool>();
@@ -45,6 +45,19 @@ void SampleHandlerBeamND::Init() {
   MACH3LOG_INFO("-------------------------------------------------------------------");
 }
 
+// ************************************************
+void SampleHandlerBeamND::InititialiseData()
+{
+  // ************************************************
+  // Reweight MC to match
+  Reweight();
+  // set asimov data
+  for (int iSample = 0; iSample < GetNSamples(); iSample++)
+  {
+    AddData(iSample, GetMCArray(iSample));
+  }
+}
+
 void SampleHandlerBeamND::SetupSplines() {
   ///@todo move all of the spline setup into core
   if(ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline) > 0){
@@ -62,10 +75,10 @@ void SampleHandlerBeamND::SetupSplines() {
 
 void SampleHandlerBeamND::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < dunendmcSamples.size(); ++i) {
-    MCSamples[i].total_weight_pointers.push_back(&(dunendmcSamples[i].pot_s));
-    MCSamples[i].total_weight_pointers.push_back(&(dunendmcSamples[i].norm_s));
-    MCSamples[i].total_weight_pointers.push_back(&(dunendmcSamples[i].rw_berpaacvwgt));
-    MCSamples[i].total_weight_pointers.push_back(&(dunendmcSamples[i].flux_w));
+    MCEvents[i].total_weight_pointers.push_back(&(dunendmcSamples[i].pot_s));
+    MCEvents[i].total_weight_pointers.push_back(&(dunendmcSamples[i].norm_s));
+    MCEvents[i].total_weight_pointers.push_back(&(dunendmcSamples[i].rw_berpaacvwgt));
+    MCEvents[i].total_weight_pointers.push_back(&(dunendmcSamples[i].flux_w));
   }
 }
 
@@ -79,19 +92,22 @@ int SampleHandlerBeamND::SetupExperimentMC() {
   // Maps the file index within the TChain (GetTreeNumber()) to its sample index.
   std::vector<size_t> fileIndexToSample;
   for (size_t iSample=0;iSample<SampleDetails.size();iSample++) {
-    for (const std::string& filename : SampleDetails[iSample].mc_files) {
-      MACH3LOG_INFO("Adding file to TChain: {}", filename);
-      // HH: Check whether the file exists, see https://root.cern/doc/master/classTChain.html#a78a896924ac6c7d3691b7e013bcbfb1c
-      int _add_rtn = _data->Add(filename.c_str(), -1);
-      if(_add_rtn == 0){
-        MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", filename);
-        throw MaCh3Exception(__FILE__, __LINE__);
-      }
-      // Each file added (glob patterns may expand to multiple) gets the same sample index.
-      // We query how many files are now in the chain to know how many entries to push.
-      const int nFilesNow = _data->GetListOfFiles()->GetEntries();
-      while(static_cast<int>(fileIndexToSample.size()) < nFilesNow){
-        fileIndexToSample.push_back(iSample);
+    for (const std::vector<std::string>& files : SampleDetails[iSample].mc_files) {
+      for (const std::string& filename : files) {
+
+        MACH3LOG_INFO("Adding file to TChain: {}", filename);
+        // HH: Check whether the file exists, see https://root.cern/doc/master/classTChain.html#a78a896924ac6c7d3691b7e013bcbfb1c
+        int _add_rtn = _data->Add(filename.c_str(), -1);
+        if(_add_rtn == 0){
+          MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", filename);
+          throw MaCh3Exception(__FILE__, __LINE__);
+        }
+        // Each file added (glob patterns may expand to multiple) gets the same sample index.
+        // We query how many files are now in the chain to know how many entries to push.
+        const int nFilesNow = _data->GetListOfFiles()->GetEntries();
+        while(static_cast<int>(fileIndexToSample.size()) < nFilesNow){
+          fileIndexToSample.push_back(iSample);
+        }
       }
     }
   }
@@ -134,7 +150,7 @@ int SampleHandlerBeamND::SetupExperimentMC() {
     _data->GetEntry(i);
 
     if (i % countwidth == 0) {
-      MaCh3Utils::PrintProgressBar(i, static_cast<Long64_t>(nEntries));
+      M3::Utils::PrintProgressBar(i, static_cast<Long64_t>(nEntries));
     }
 
     const Int_t treeNum = _data->GetTreeNumber();
@@ -157,7 +173,7 @@ int SampleHandlerBeamND::SetupExperimentMC() {
     dunendmcSamples[i].rw_erec_lep = _erec_lep;
     dunendmcSamples[i].rw_erec_had = (_erec - _erec_lep);
     dunendmcSamples[i].rw_yrec = ((_erec - _erec_lep)/_erec);
-    dunendmcSamples[i].rw_etru = _ev; // in GeV
+    dunendmcSamples[i].enu_true = _ev; // in GeV
     dunendmcSamples[i].rw_theta = _LepNuAngle;
     dunendmcSamples[i].rw_isCC = _isCC;
     dunendmcSamples[i].rw_reco_q = _reco_q;
@@ -178,15 +194,16 @@ int SampleHandlerBeamND::SetupExperimentMC() {
   _data->Reset();
   delete _data;
   return static_cast<int>(nEntries);
+  
 }
 
 
-const double* SampleHandlerBeamND::GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent) {
-  double* KinematicValue;
+const double* SampleHandlerBeamND::GetPointerToKinematicParameter(const int KinPar, const int iEvent) const{
+  const double* KinematicValue;
   
   switch(KinPar){
   case kTrueNeutrinoEnergy:
-    KinematicValue = &(dunendmcSamples[iEvent].rw_etru);
+    KinematicValue = &(dunendmcSamples[iEvent].enu_true);
     break;
   case kRecoNeutrinoEnergy:
     KinematicValue = &(dunendmcSamples[iEvent].rw_erec_shifted);
@@ -211,37 +228,23 @@ const double* SampleHandlerBeamND::GetPointerToKinematicParameter(KinematicTypes
   return KinematicValue;
 }
 
-const double* SampleHandlerBeamND::GetPointerToKinematicParameter(double KinematicVariable, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
-  return GetPointerToKinematicParameter(KinPar,iEvent);
-}
 
-const double* SampleHandlerBeamND::GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
-  return GetPointerToKinematicParameter(KinPar,iEvent);
-}
 
-double SampleHandlerBeamND::ReturnKinematicParameter(int KinematicVariable, int iEvent) {
+double SampleHandlerBeamND::ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const {
   KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
   return *GetPointerToKinematicParameter(KinPar, iEvent);
 }
 
-double SampleHandlerBeamND::ReturnKinematicParameter(std::string KinematicParameter, int iEvent) {
-  return *GetPointerToKinematicParameter(KinematicParameter, iEvent);
-}
-
-void SampleHandlerBeamND::SetupFDMC() {
+void SampleHandlerBeamND::SetupMC() {
   // dunemc_base *duneobj = &(dunendmcSamples[iSample]);
-  // FarDetectorCoreInfo *fdobj = &(MCSamples[iSample]);
+  // FarDetectorCoreInfo *fdobj = &(MCEvents[iSample]);
   
   for (unsigned int iEvent = 0; iEvent < GetNEvents(); ++iEvent) {
-    MCSamples[iEvent].rw_etru = &(dunendmcSamples[iEvent].rw_etru);
-    MCSamples[iEvent].mode = &(dunendmcSamples[iEvent].mode);
-    MCSamples[iEvent].Target = &(dunendmcSamples[iEvent].Target); 
-    MCSamples[iEvent].isNC = !(dunendmcSamples[iEvent].rw_isCC);
-    MCSamples[iEvent].nupdgUnosc = &(dunendmcSamples[iEvent].nupdgUnosc);
-    MCSamples[iEvent].nupdg = &(dunendmcSamples[iEvent].nupdg);
-    MCSamples[iEvent].NominalSample = dunendmcSamples[iEvent].SampleIndex;
+    MCEvents[iEvent].enu_true = dunendmcSamples[iEvent].enu_true;
+    MCEvents[iEvent].isNC = !(dunendmcSamples[iEvent].rw_isCC);
+    MCEvents[iEvent].nupdgUnosc = dunendmcSamples[iEvent].nupdgUnosc;
+    MCEvents[iEvent].nupdg = dunendmcSamples[iEvent].nupdg;
+    MCEvents[iEvent].NominalSample = dunendmcSamples[iEvent].SampleIndex;
   }
 }
 
@@ -300,7 +303,7 @@ void SampleHandlerBeamND::setNDCovMatrix() const {
     // Fill flat CV vector and add statistical term to diagonal
     int localBin = 0;
     for (int iBin = 0; iBin < nBins; iBin++) {
-      const double CV = SampleHandlerFD_data[iBin];
+      const double CV = SampleHandler_data[iBin];
       FlatCV[globalBin + localBin] = CV;
       if (CV > 0)
 	WorkCov(globalBin + localBin, globalBin + localBin) += 1.0 / CV;
@@ -327,7 +330,7 @@ void SampleHandlerBeamND::setNDCovMatrix() const {
 
 // New likelihood calculation for ND samples using detector covariance matrix
 double SampleHandlerBeamND::GetLikelihood() const {
-  if (SampleHandlerFD_data.empty()) {
+  if (SampleHandler_data.empty()) {
     MACH3LOG_ERROR("data sample is empty!");
     return -1;
   }
@@ -349,8 +352,8 @@ double SampleHandlerBeamND::GetLikelihood() const {
   // 2D -> 1D, iterating over all sub-samples in the same order as setNDCovMatrix
   for (int iSample = 0; iSample < static_cast<int>(SampleDetails.size()); iSample++) {
     for (int iBin = 0; iBin < Binning->GetNBins(iSample); iBin++) {
-      FlatData[iBin] = SampleHandlerFD_data[iBin];
-      FlatMCPred[iBin] = SampleHandlerFD_array[iBin];
+      FlatData[iBin] = SampleHandler_data[iBin];
+      FlatMCPred[iBin] = SampleHandler_array[iBin];
     }
   }
 

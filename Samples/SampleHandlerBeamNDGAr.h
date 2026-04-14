@@ -1,11 +1,11 @@
 #ifndef _SampleHandlerBeamNDGAr_h_
 #define _SampleHandlerBeamNDGAr_h_
 
-#include "Samples/SampleHandlerFD.h"
+#include "Samples/SampleHandlerBase.h"
 #include "Samples/StructsDUNE.h"
 #include "Splines/BinnedSplineHandlerDUNE.h"
 
-class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
+class SampleHandlerBeamNDGAr : virtual public SampleHandlerBase
 {
 public:
   SampleHandlerBeamNDGAr(std::string mc_version, ParameterHandlerGeneric* xsec_cov);
@@ -28,24 +28,22 @@ protected:
   //Functions required by core
   void Init() override;
   int SetupExperimentMC() override;
-  void SetupFDMC() override;
+  void SetupMC() override;
+
+  /// @brief Initialise data hist (can be overridden)
+  void InititialiseData() override;
+
   void AddAdditionalWeightPointers() override;
   void SetupSplines() override;
 
   void CleanMemoryBeforeFit() override;
   void RegisterFunctionalParameters() override {};
 
-  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, size_t iEvent);
-  const double* GetPointerToKinematicParameter(double KinematicVariable, int iEvent) override;
-  const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent) override;
+  const double* GetPointerToKinematicParameter(const int KinematicVariable, const int iEvent) const override;
 
-  double ReturnKinematicParameter(KinematicTypes KinPar, size_t iEvent); // Extra function to deal with non-doubles
-  double ReturnKinematicParameter(int KinematicVariable, int iEvent) override;
-  double ReturnKinematicParameter(std::string KinematicParameter, int iEvent) override;
+  double ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const override;
 
-  std::vector<double> ReturnKinematicVector(KinematicVecs KinVec, size_t iEvent);
-  std::vector<double> ReturnKinematicVector(int KinematicVector, int iEvent) override;
-  std::vector<double> ReturnKinematicVector(std::string KinematicVector, int iEvent) override;
+  std::vector<double> ReturnKinematicVector(const int KinematicVector, const int iEvent) const override;
 
   std::vector<dunemc_beamndgar> dunendgarmcFitting;
   std::vector<dunemc_plotting> dunendgarmcPlotting;

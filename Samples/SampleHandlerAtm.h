@@ -2,11 +2,11 @@
 #define _SampleHandlerAtm_h_
 
 #include "Splines/BinnedSplineHandlerDUNE.h"
-#include "Samples/SampleHandlerFD.h"
+#include "Samples/SampleHandlerBase.h"
 
 #include "StructsDUNE.h"
 /// @brief Base class for handling atmospheric samples
-class SampleHandlerAtm : virtual public SampleHandlerFD
+class SampleHandlerAtm : public SampleHandlerBase
 {
 public:
   /// @brief Constructor
@@ -24,6 +24,9 @@ protected:
   /// @brief Initialises object
   void Init();
 
+  /// @brief Initialise data hist (can be overridden)
+  void InititialiseData() override;
+
   /// @brief Function to setup MC from file
   /// @param iSample sample ID
   /// @return Total number of events
@@ -31,7 +34,7 @@ protected:
 
   /// @brief Tells FD base which variables to point to/be set to
   /// @param iSample Sample ID
-  void SetupFDMC();
+  void SetupMC();
 
   /// @brief Sets up pointers weights for each event (oscillation/xsec/etc.)
   void AddAdditionalWeightPointers();
@@ -68,28 +71,14 @@ protected:
   /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Pointer to KinPar for a given event
-  const double* GetPointerToKinematicParameter(double KinematicVariable, int iEvent);
-
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinematicParameter Kinematic parameter name as string (gets cast -> int)
-  /// @param iSample Sample ID
-  /// @param iEvent Event ID
-  /// @return Pointer to KinPar for a given event
-  const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent);
+  const double* GetPointerToKinematicParameter(const int KinematicVariable, const int iEvent) const override;
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter ID as double (gets cast -> int)
   /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Value of kinematic parameter corresponding for a given event
-  double ReturnKinematicParameter(int KinematicVariable, int iEvent);
-
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinematicParameter Kinematic parameter name as string (gets cast -> int)
-  /// @param iSample Sample ID
-  /// @param iEvent Event ID
-  /// @return Value of kinematic parameter corresponding for a given event
-  double ReturnKinematicParameter(std::string KinematicParameter, int iEvent);
+  double ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const override;
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
