@@ -11,7 +11,7 @@ Systematics:
       ParameterName: sin2th_12
 
 
-    SampleNames: ["FD_*", "ATM"]
+    SampleNames: ["*FD*", "ATM"]
     Error: 0.0129961532770277840
     FlatPrior: false
     ParameterBounds: [0, 1]
