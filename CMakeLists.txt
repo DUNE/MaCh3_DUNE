@@ -124,8 +124,8 @@ endif()
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
-find_package(MaCh3 2.4.2 EXACT QUIET)
-set(MaCh3_CORE_BRANCH v2.4.2 CACHE STRING "Specify the MaCh3 core branch to use")
+find_package(MaCh3 2.5.0 EXACT QUIET)
+set(MaCh3_CORE_BRANCH v2.5.0 CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 option(MaCh3DUNE_Atmos "Whether working with atmospherics or beam oscillations" OFF)
 
@@ -269,6 +269,15 @@ install(TARGETS MaCh3DUNEAll
   EXPORT mach3dune-targets
   LIBRARY DESTINATION lib/)
 
+# NOW add the python subdirectory - MaCh3_PREFIX is already set
+if(PYTHON_ENABLED)
+  cmessage(STATUS "PYTHON IS ENABLED!!")
+  set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
+  cmessage(STATUS "CMAKE_INSTALL_RPATH is ${CMAKE_INSTALL_RPATH}")
+  set(PYMACH3_PATH ${CMAKE_BINARY_DIR}/python/pyMaCh3)
+  add_subdirectory(python)
+endif()
+
 configure_file(cmake/Templates/setup.MaCh3DUNE.sh.in
   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/setup.MaCh3DUNE.sh" @ONLY)
 install(FILES
@@ -280,6 +289,15 @@ file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/output)
 install(DIRECTORY Inputs DESTINATION ${CMAKE_BINARY_DIR})
 install(DIRECTORY Configs DESTINATION ${CMAKE_BINARY_DIR})
 install(DIRECTORY Utils DESTINATION ${CMAKE_BINARY_DIR})
+
+# NOW add the python subdirectory - MaCh3_PREFIX is already set
+if(PYTHON_ENABLED)
+  cmessage(STATUS "PYTHON IS ENABLED!!")
+  set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
+  cmessage(STATUS "CMAKE_INSTALL_RPATH is ${CMAKE_INSTALL_RPATH}")
+  set(PYMACH3_PATH ${CMAKE_BINARY_DIR}/python/pyMaCh3)
+  add_subdirectory(python)
+endif()
 
 install(EXPORT mach3dune-targets
   FILE MaCh3DUNETargets.cmake

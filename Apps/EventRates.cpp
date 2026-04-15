@@ -42,15 +42,16 @@ void Write1DHistogramsToPdf(std::string OutFileName, std::vector<std::unique_ptr
 
 int main(int argc, char * argv[]) {
   M3::Utils::MaCh3Usage(argc, argv);
-  auto fitMan = MaCh3ManagerFactory(argc, argv);
+  auto FitManager = MaCh3ManagerFactory(argc, argv);
 
   //###############################################################################################################################
   //Create SampleHandlerBase objects
   
-  ParameterHandlerGeneric* xsec = nullptr;
-  
-  std::vector<SampleHandlerBase*> DUNEPdfs;
-  MakeMaCh3DuneInstance(fitMan, DUNEPdfs, xsec);
+  auto xsec = MaCh3CovarianceFactory<ParameterHandlerGeneric>(FitManager.get(), "Xsec");
+  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();  
+  xsec->SetGroupOnlyParameters("Osc", oscpars);
+
+  auto DUNEPdfs = MaCh3DuneSampleFactory(FitManager, xsec);
 
   //###############################################################################################################################
   //Perform reweight and print total integral
@@ -67,7 +68,7 @@ int main(int argc, char * argv[]) {
     }
   }
 
-  std::string OutFileName = GetFromManager<std::string>(fitMan->raw()["General"]["OutputFile"], "EventRatesOutput.root");
+  std::string OutFileName = GetFromManager<std::string>(FitManager->raw()["General"]["OutputFile"], "EventRatesOutput.root");
   Write1DHistogramsToFile(OutFileName, DUNEHists); 
   Write1DHistogramsToPdf(OutFileName, DUNEHists);
 

@@ -1,5 +1,8 @@
 #pragma once
 
+// Std includes
+#include "memory"
+
 // Include the input manager
 #include "Manager/Manager.h"
 
@@ -14,8 +17,6 @@
 #include "Samples/SampleHandlerAtm.h"
 
 /// @brief Factory function that generates MaCh3 DUNE instance including configured samples
-/// @param fitMan Configuration Manager 
-/// @param sample_vec Vector of SampleHandler objects
-/// @param xsec Cross-section covariance matrix
-/// @param osc Oscillation covariance matrix
-std::vector<std::unique_ptr<SampleHandlerBase>> MaCh3DuneSampleFactory(std::unique_ptr<Manager> &FitManager, std::unique_ptr<ParameterHandlerGeneric> &xsec);
+/// @param fitMan Configuration Manager
+/// @param param_handler Cross-section covariance matrix
+std::vector<SampleHandlerBase*> MaCh3DuneSampleFactory(std::unique_ptr<Manager> &FitManager, std::unique_ptr<ParameterHandlerGeneric> &param_handler);

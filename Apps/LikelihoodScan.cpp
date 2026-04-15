@@ -30,11 +30,8 @@ int main(int argc, char * argv[]) {
 
   //###############################################################################################################################
   //Create samplePDFFD objects
-  
-  ParameterHandlerGeneric* xsec = nullptr;
-  
-  std::vector<SampleHandlerBase*> DUNEPdfs;
-  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
+  auto xsec = MaCh3CovarianceFactory<ParameterHandlerGeneric>(FitManager.get(), "Xsec");
+  auto DUNEPdfs = MaCh3DuneSampleFactory(FitManager, xsec);
 
   //###############################################################################################################################
   //Perform reweight, print total integral, and set data
@@ -63,7 +60,7 @@ int main(int argc, char * argv[]) {
     MaCh3Fitter->AddSampleHandler(Sample);
   }
 
-  MaCh3Fitter->AddSystObj(xsec);
+  MaCh3Fitter->AddSystObj(xsec.get());
   
   if (do_1d_llhscan) {
     MaCh3Fitter->RunLLHScan();

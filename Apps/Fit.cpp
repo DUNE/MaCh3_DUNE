@@ -20,13 +20,13 @@ int main(int argc, char * argv[]) {
   auto FitManager = MaCh3ManagerFactory(argc, argv);
   auto OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
 
-  ParameterHandlerGeneric* xsec = nullptr;
-
   //####################################################################################
   //Create samplePDFSKBase Objs
+  auto xsec = MaCh3CovarianceFactory<ParameterHandlerGeneric>(FitManager.get(), "Xsec");
+  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();  
+  xsec->SetGroupOnlyParameters("Osc", oscpars);
 
-  std::vector<SampleHandlerBase*> DUNEPdfs;
-  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
+  auto DUNEPdfs = MaCh3DuneSampleFactory(FitManager, xsec);
 
   //Some place to store the histograms
   std::vector<TH1*> PredictionHistograms;
@@ -76,7 +76,7 @@ int main(int argc, char * argv[]) {
   }
 
   //Add systematic objects
-  MaCh3Fitter->AddSystObj(xsec);
+  MaCh3Fitter->AddSystObj(xsec.get());
 
   if (StartFromPreviousChain) {
     std::string PreviousChainPath = FitManager->raw()["General"]["PosFileName"].as<std::string>();

@@ -112,17 +112,18 @@ void WriteTHStackHistogram(THStack *Hist, std::string Name, TDirectory *Dir = nu
 }
 
 int main(int argc, char *argv[]) {
-  auto fitMan = MaCh3ManagerFactory(argc, argv);
+  auto FitManager = MaCh3ManagerFactory(argc, argv);
 
   int WeightStyle = 0;
   gStyle->SetPalette(1);
   // ###############################################################################################################################
   // Create samplePDFFD objects
 
-  ParameterHandlerGeneric *xsec = nullptr;
+  auto xsec = MaCh3CovarianceFactory<ParameterHandlerGeneric>(FitManager.get(), "Xsec");
+  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
+  xsec->SetGroupOnlyParameters("Osc", oscpars);
 
-  std::vector<SampleHandlerBase*> DUNEPdfs;
-  MakeMaCh3DuneInstance(fitMan, DUNEPdfs, xsec);
+  auto DUNEPdfs = MaCh3DuneSampleFactory(FitManager, xsec);
 
   // ###############################################################################################################################
   // Perform reweight and print total integral for sanity check
@@ -141,10 +142,10 @@ int main(int argc, char *argv[]) {
 
   std::vector<ProjectionVariable> Projections;
 
-  std::string OutputFileName = fitMan->raw()["General"]["OutputFile"].as<std::string>();
+  std::string OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
   TFile *File = TFile::Open(OutputFileName.c_str(), "RECREATE");
 
-  for (auto &ProjectionConfig : fitMan->raw()["Projections"]) {
+  for (auto &ProjectionConfig : FitManager->raw()["Projections"]) {
     std::string VarName = ProjectionConfig["Name"].as<std::string>();
     //JM now a vector of size 1 (for 1d hists) or 2 (for 2d hists)
     std::vector<std::string> VarStrings = ProjectionConfig["VarStrings"].as< std::vector<std::string> >();
@@ -177,7 +178,7 @@ int main(int argc, char *argv[]) {
         }
       }
     }
-    for (auto &KinematicCutConfig: fitMan->raw()["GeneralKinematicCuts"]) {
+    for (auto &KinematicCutConfig: FitManager->raw()["GeneralKinematicCuts"]) {
       std::string KinematicCutName = KinematicCutConfig["Name"].as<std::string>();
       std::string KinematicCutVarString = KinematicCutConfig["VarString"].as<std::string>();
       std::vector<double> KinematicCutRange = KinematicCutConfig["Range"].as< std::vector<double> >();

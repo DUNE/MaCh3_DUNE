@@ -1,13 +1,14 @@
 #include "Samples/MaCh3DUNEFactory.h"
 
-
-SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, std::unique_ptr<ParameterHandlerGeneric>& xsec, const std::shared_ptr<OscillationHandler>&  BeamOscillator_, const std::shared_ptr<OscillationHandler>&  AtmOscillator_, BeamNDCov beamNDCov) {
+// ###############################################################
+SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, std::unique_ptr<ParameterHandlerGeneric>& param_handler, const std::shared_ptr<OscillationHandler>&  BeamOscillator_, const std::shared_ptr<OscillationHandler>&  AtmOscillator_, BeamNDCov beamNDCov) {
+// ###############################################################
   SampleHandlerBase *Sample;
 
   (void)beamNDCov;
   
   if (SampleType == "BeamFD") {
-    Sample = new SampleHandlerBeamFD(SampleConfig, xsec.get(), BeamOscillator_);
+    Sample = new SampleHandlerBeamFD(SampleConfig, param_handler.get(), BeamOscillator_);
   } else if (SampleType == "BeamND") {
     
     if (beamNDCov.NDCov_FHC == nullptr || beamNDCov.NDCov_RHC == nullptr || beamNDCov.NDCov_all == nullptr) {
@@ -21,11 +22,11 @@ SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string Samp
     // if(isFHC) {NDCov = NDCov_FHC;}
     // else {NDCov = NDCov_RHC;}
     
-    Sample = new SampleHandlerBeamND(SampleConfig, xsec.get(), beamNDCov); 
+    Sample = new SampleHandlerBeamND(SampleConfig, param_handler.get(), beamNDCov); 
   } else if (SampleType == "Atm") {
-    Sample = new SampleHandlerAtm(SampleConfig, xsec.get(), AtmOscillator_);
+    Sample = new SampleHandlerAtm(SampleConfig, param_handler.get(), AtmOscillator_);
   } else if (SampleType == "BeamNDGAr") {
-    Sample = new SampleHandlerBeamNDGAr(SampleConfig, xsec.get());
+    Sample = new SampleHandlerBeamNDGAr(SampleConfig, param_handler.get());
   }
   else {
     MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
@@ -35,7 +36,60 @@ SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string Samp
   return Sample;
 }
 
-std::vector<SampleHandlerBase*> MakeMaCh3DuneInstance(std::unique_ptr<Manager>& FitManager, std::unique_ptr<ParameterHandlerGeneric>&xsec){
+std::shared_ptr<OscillationHandler> SetupOscillationHandler(std::unique_ptr<Manager> &FitManager, std::unique_ptr<ParameterHandlerGeneric>& param_handler,
+                                                            const std::string& osc_config_file, const std::string& sample_name){
+
+  if (!CheckNodeExists(FitManager->raw(), "General", "SharedNuOscillatorObject", osc_config_file))
+  {
+    MACH3LOG_INFO("No SharedNuOscillatorObject for {} found, so not creating one", osc_config_file);
+    return nullptr;
+  }
+
+  auto osc_config = Get<std::string>(FitManager->raw()["General"]["SharedNuOscillatorObject"][osc_config_file], __FILE__, __LINE__);
+  auto osc_params = param_handler->GetOscParsFromSampleName(sample_name);
+  return std::make_shared<OscillationHandler>(osc_config, true, osc_params, 12);
+}
+
+// ###############################################################
+BeamNDCov SetupBeamNDCov(std::unique_ptr<Manager> &FitManager)
+// ###############################################################
+{
+
+  BeamNDCov beam_nd_cov;
+
+  if (!CheckNodeExists(FitManager->raw(), "General", "Systematics", "NDCovFile"))
+  {
+    return beam_nd_cov;
+  }
+
+  std::string NDCovMatrixFile = FitManager->raw()["General"]["Systematics"]["NDCovFile"].as<std::string>();
+  bool useCombinedNDCov = GetFromManager(FitManager->raw()["General"]["Systematics"]["UseCombinedNDCov"], true);
+
+  auto NDCovFile = M3::Open(NDCovMatrixFile, "READ", __FILE__, __LINE__);
+
+  TMatrixD *NDCov_FHC = NDCovFile->Get<TMatrixD>("nd_fhc_frac_cov");
+  TMatrixD *NDCov_RHC = NDCovFile->Get<TMatrixD>("nd_rhc_frac_cov");
+  TMatrixD *NDCov_all = NDCovFile->Get<TMatrixD>("nd_all_frac_cov");
+
+  if (!(NDCov_FHC && NDCov_RHC && NDCov_all))
+  {
+    MACH3LOG_ERROR("Could not find NDCov objects from file: {}", NDCovMatrixFile);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+
+  beam_nd_cov.NDCov_FHC = NDCov_FHC;
+  beam_nd_cov.NDCov_RHC = NDCov_RHC;
+  beam_nd_cov.NDCov_all = NDCov_all;
+  beam_nd_cov.useCombinedNDCov = useCombinedNDCov;
+
+  NDCovFile->Close();
+  return beam_nd_cov;
+}
+
+// ###############################################################
+std::vector<SampleHandlerBase *> MaCh3DuneSampleFactory(std::unique_ptr<Manager> &FitManager, std::unique_ptr<ParameterHandlerGeneric> &param_handler)
+// ###############################################################
+{
 
   // there's a check inside the manager class that does this; left here for demonstrative purposes
   if (FitManager == nullptr) {
@@ -51,58 +105,15 @@ std::vector<SampleHandlerBase*> MakeMaCh3DuneInstance(std::unique_ptr<Manager>& 
 
   
   // ==========================================================
-
-  std::shared_ptr<OscillationHandler> AtmOscHandler;
-
-  if (CheckNodeExists(FitManager->raw(), "General", "SharedNuOscillatorObject", "ATM") == false) {
-    MACH3LOG_INFO("No SharedNuOscillatorObject for ATM specified, so not creating one");
-  } else {
-    std::string OscillatorConfig = Get<std::string>(FitManager->raw()["General"]["SharedNuOscillatorObject"]["ATM"], __FILE__, __LINE__);
-    std::vector<const double*> OscParams = xsec->GetOscParsFromSampleName("ATM");
-    AtmOscHandler = std::make_shared<OscillationHandler>(OscillatorConfig,true,OscParams,12);
-  }
-
-  std::shared_ptr<OscillationHandler> BeamOscHandler;
-
-  if (CheckNodeExists(FitManager->raw(), "General", "SharedNuOscillatorObject", "Beam") == false) {
-    MACH3LOG_INFO("No SharedNuOscillatorObject for Beam specified, so not creating one");
-  } else {
-    std::string OscillatorConfig = Get<std::string>(FitManager->raw()["General"]["SharedNuOscillatorObject"]["Beam"], __FILE__, __LINE__);
-    std::vector<const double*> OscParams = xsec->GetOscParsFromSampleName("FD_");
-    BeamOscHandler = std::make_shared<OscillationHandler>(OscillatorConfig,true,OscParams,12);
-  }
-
+  // Setup oscillation handlers
+  auto AtmOscHandler = SetupOscillationHandler(FitManager, param_handler, "ATM", "ATM");
+  auto BeamOscHandler = SetupOscillationHandler(FitManager, param_handler, "Beam",  "FD_");
   // ==========================================================
-  
-  BeamNDCov beamNDCov;
 
-  // Get ND detector covariance matrix
-  if (CheckNodeExists(FitManager->raw(), "General", "Systematics", "NDCovFile") ){
-    std::string NDCovMatrixFile = FitManager->raw()["General"]["Systematics"]["NDCovFile"].as<std::string>();
-    bool useCombinedNDCov = GetFromManager(FitManager->raw()["General"]["Systematics"]["UseCombinedNDCov"], true);
+  auto beamNDCov = SetupBeamNDCov(FitManager);
 
-    TFile *NDCovFile = new TFile(NDCovMatrixFile.c_str(), "READ");
-
-    TMatrixD* NDCov_FHC = NDCovFile->Get<TMatrixD>("nd_fhc_frac_cov");
-    TMatrixD* NDCov_RHC = NDCovFile->Get<TMatrixD>("nd_rhc_frac_cov");
-    TMatrixD* NDCov_all = NDCovFile->Get<TMatrixD>("nd_all_frac_cov");
-
-    if (!(NDCov_FHC && NDCov_RHC && NDCov_all)) {
-      MACH3LOG_ERROR("Could not find NDCov objects from file: {}",NDCovMatrixFile);
-      throw MaCh3Exception(__FILE__, __LINE__);
-    }
-
-    beamNDCov.NDCov_FHC = NDCov_FHC;
-    beamNDCov.NDCov_RHC = NDCov_RHC;
-    beamNDCov.NDCov_all = NDCov_all;
-    beamNDCov.useCombinedNDCov = useCombinedNDCov;
-
-    NDCovFile->Close();
-    delete NDCovFile;
-  }
-
-  //####################################################################################
-  //Create SampleHandler Objs
+    // ####################################################################################
+  // Create SampleHandler Objs
   MACH3LOG_INFO("-------------------------------------------------------------------");
   MACH3LOG_INFO("Loading DUNE samples..");
   std::vector<std::string> DUNESampleConfigs = FitManager->raw()["General"]["DUNESamples"].as<std::vector<std::string>>();
@@ -115,7 +126,7 @@ std::vector<SampleHandlerBase*> MakeMaCh3DuneInstance(std::unique_ptr<Manager>& 
     Manager* tempSampleManager = new Manager(DUNESampleConfigs[Sample_i].c_str());
     std::string SampleType = tempSampleManager->raw()["SampleHandlerName"].as<std::string>();
 
-    auto sample = GetMaCh3DuneInstance(SampleType, DUNESampleConfigs[Sample_i], xsec, BeamOscHandler, AtmOscHandler, beamNDCov);
+    auto sample = GetMaCh3DuneInstance(SampleType, DUNESampleConfigs[Sample_i], param_handler, BeamOscHandler, AtmOscHandler, beamNDCov);
     
     #if DEBUG_DUNE_WEIGHTS==1
     // Pure for debugging, lets us set which weights we don't want via the manager
