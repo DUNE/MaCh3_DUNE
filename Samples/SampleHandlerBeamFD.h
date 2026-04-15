@@ -99,28 +99,10 @@ protected:
   void RecoCVNNue(const double * par, std::size_t iEvent);
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinematicVariable Kinematic parameter Type
-  /// @param iEvent Event ID
-  /// @return Value of kinematic parameter corresponding for a given event 
-  double ReturnKinematicParameter (KinematicTypes KinPar, int iEvent);
-
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter ID as int
   /// @param iEvent Event ID
   /// @return Value of kinematic parameter corresponding for a given event 
   double ReturnKinematicParameter (const int KinematicVariable, const int iEvent) const override;
-
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinPar Kinematic Parameter Type
-  /// @param iEvent Event ID
-  /// @return Pointer to KinPar for a given event
-  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent);
-
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinematicParameter Kinematic parameter name as string (gets cast -> int)
-  /// @param iEvent Event ID
-  /// @return Pointer to KinPar for a given event
-  const double* GetPointerToKinematicParameter(const std::string& KinematicParameter, const int iEvent) const;
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter as double (gets cast -> int)
@@ -128,11 +110,7 @@ protected:
   /// @return Pointer to KinPar for a given event
   const double* GetPointerToKinematicParameter(const int KinematicVariable, const int iEvent) const override; 
 
-  // std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameter);
-  inline std::string ReturnStringFromKinematicParameter(int KinematicParameterStr);
-  
   //DB functions which could be initialised to do something which is non-trivial
-
   /// @brief NOT IMPLEMENTED: Dunder method to calculate xsec weights
   /// @param iEvent Event number
   double CalcXsecWeightFunc(int iEvent) {(void)iEvent; return 1.;}

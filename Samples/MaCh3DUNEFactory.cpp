@@ -47,6 +47,11 @@ std::shared_ptr<OscillationHandler> SetupOscillationHandler(std::unique_ptr<Mana
 
   auto osc_config = Get<std::string>(FitManager->raw()["General"]["SharedNuOscillatorObject"][osc_config_file], __FILE__, __LINE__);
   auto osc_params = param_handler->GetOscParsFromSampleName(sample_name);
+  if (osc_params.size()==0){
+    MACH3LOG_ERROR("Tried to set up oscillator {} but found 0 oscillation parameters!", sample_name);
+    throw MaCh3Exception("Oscillator has no oscillation parameters" __FILE__, __LINE__);
+  }
+
   return std::make_shared<OscillationHandler>(osc_config, true, osc_params, 12);
 }
 
@@ -107,7 +112,7 @@ std::vector<SampleHandlerBase *> MaCh3DuneSampleFactory(std::unique_ptr<Manager>
   // ==========================================================
   // Setup oscillation handlers
   auto AtmOscHandler = SetupOscillationHandler(FitManager, param_handler, "ATM", "ATM");
-  auto BeamOscHandler = SetupOscillationHandler(FitManager, param_handler, "Beam",  "FD_");
+  auto BeamOscHandler = SetupOscillationHandler(FitManager, param_handler, "BeamFD",  "BeamFD");
   // ==========================================================
 
   auto beamNDCov = SetupBeamNDCov(FitManager);

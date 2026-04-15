@@ -60,13 +60,6 @@ protected:
   void applyShifts(int iEvent) {(void)iEvent;}
   
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinPar Kinematic parameter enum val
-  /// @param iSample Sample ID
-  /// @param iEvent Event ID
-  /// @return Pointer to KinPar for a given event
-  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent);
-
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter as double (gets cast -> int)
   /// @param iSample Sample ID
   /// @param iEvent Event ID

@@ -604,58 +604,39 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   return static_cast<int>(nEntries);
 }
 
-const double* SampleHandlerBeamFD::GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent) {
-  double* KinematicValue = nullptr;
-
+const double* SampleHandlerBeamFD::GetPointerToKinematicParameter(const int KinPar, const int iEvent) const {
   switch(KinPar){
   case kTrueNeutrinoEnergy:
-    KinematicValue = &(dunemcSamples[iEvent].enu_true); 
-    break;
+    return &(dunemcSamples[iEvent].enu_true); 
   case kRecoNeutrinoEnergy:
-    KinematicValue = &(dunemcSamples[iEvent].rw_erec_shifted);
+    return &(dunemcSamples[iEvent].rw_erec_shifted);
     break;
   case kTrueXPos:
-    KinematicValue = &(dunemcSamples[iEvent].rw_vtx_x);
-    break;
+    return &(dunemcSamples[iEvent].rw_vtx_x);
   case kTrueYPos:
-    KinematicValue = &(dunemcSamples[iEvent].rw_vtx_y);
-    break;
+    return &(dunemcSamples[iEvent].rw_vtx_y);
   case kTrueZPos:
-    KinematicValue = &(dunemcSamples[iEvent].rw_vtx_z);
-    break;
+    return &(dunemcSamples[iEvent].rw_vtx_z);
   case kCVNNumu:
-    KinematicValue = &(dunemcSamples[iEvent].rw_cvnnumu_shifted);
-    break;
+    return &(dunemcSamples[iEvent].rw_cvnnumu_shifted);
   case kCVNNue:
-    KinematicValue = &(dunemcSamples[iEvent].rw_cvnnue_shifted);
-    break;
+    return &(dunemcSamples[iEvent].rw_cvnnue_shifted);
   case kM3Mode:
-    KinematicValue = &(dunemcSamples[iEvent].mode);
-    break;
+    return &(dunemcSamples[iEvent].mode);
   case kOscChannel:
-    KinematicValue = &(dunemcSamples[iEvent].OscChannelIndex);
-    break;
+    return &(dunemcSamples[iEvent].OscChannelIndex);
   case kIsFHC:
-    KinematicValue = &(beamFDSampleDetails[MCEvents[iEvent].NominalSample].isFHC);
-    break;
+    return &(beamFDSampleDetails[MCEvents[iEvent].NominalSample].isFHC);
   case kTrueCCnue: 
-	KinematicValue = &(dunemcSamples[iEvent].rw_trueccnue);
- 	break;
+	return &(dunemcSamples[iEvent].rw_trueccnue);
   case kTrueCCnumu: 
-	KinematicValue = &(dunemcSamples[iEvent].rw_trueccnumu);
- 	break;
+	return &(dunemcSamples[iEvent].rw_trueccnumu);
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
     throw MaCh3Exception(__FILE__, __LINE__);
-  }
-  
-  return KinematicValue;
+  }  
 }
 
-const double* SampleHandlerBeamFD::GetPointerToKinematicParameter(const int KinematicVariable, const int iEvent) const {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
-  return GetPointerToKinematicParameter(KinPar, iEvent);
-}
 
 double SampleHandlerBeamFD::ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const{
   KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);

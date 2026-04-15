@@ -165,40 +165,26 @@ void SampleHandlerAtm::SetupMC() {
   }
 }
 
-const double* SampleHandlerAtm::GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent) {
-  double* KinematicValue;
-
+const double* SampleHandlerAtm::GetPointerToKinematicParameter(const int KinPar, int iEvent) const {
   switch (KinPar) {
   case kTrueNeutrinoEnergy:
-    KinematicValue = &(dunemcSamples[iEvent].enu_true);
-    break;
+    return &(dunemcSamples[iEvent].enu_true);
   case kRecoNeutrinoEnergy:
-    KinematicValue = &(dunemcSamples[iEvent].rw_erec);
-    break;
+    return &(dunemcSamples[iEvent].rw_erec);
   case kTrueCosZ:
-    KinematicValue = &(dunemcSamples[iEvent].coszenith_true);
-    break;
+    return &(dunemcSamples[iEvent].coszenith_true);
   case kRecoCosZ:
-    KinematicValue = &(dunemcSamples[iEvent].rw_theta);
-    break;
+    return &(dunemcSamples[iEvent].rw_theta);
   case kOscChannel:
-    KinematicValue = &(dunemcSamples[iEvent].OscChannelIndex);
-    break;
+    return &(dunemcSamples[iEvent].OscChannelIndex);
   case kMode:
-    KinematicValue = &(dunemcSamples[iEvent].mode);
-    break;
+    return &(dunemcSamples[iEvent].mode);
   default:
     MACH3LOG_ERROR("Unknown KinPar: {}",static_cast<int>(KinPar));
     throw MaCh3Exception(__FILE__, __LINE__);
   }
-  
-  return KinematicValue;
 }
 
-const double* SampleHandlerAtm::GetPointerToKinematicParameter(const int KinematicVariable, const int iEvent) const {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
-  return GetPointerToKinematicParameter(KinPar,iEvent);
-}
 
 double SampleHandlerAtm::ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const {
   KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
