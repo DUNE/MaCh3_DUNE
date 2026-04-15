@@ -23,8 +23,8 @@ int main(int argc, char * argv[]) {
   //####################################################################################
   //Create samplePDFSKBase Objs
   auto xsec = MaCh3CovarianceFactory<ParameterHandlerGeneric>(FitManager.get(), "Xsec");
-  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();  
-  xsec->SetGroupOnlyParameters("Osc", oscpars);
+  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
+  xsec->SetGroupOnlyParameters("Oscillation", oscpars);
 
   auto DUNEPdfs = MaCh3DuneSampleFactory(FitManager, xsec);
 
