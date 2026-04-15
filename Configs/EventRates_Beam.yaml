@@ -1,7 +1,7 @@
 ---
 General:
-  OutputFile: "BestHopePMNS.root"
-  StartFromPos: False
+  OutputFile: "BestHopeProcess.root"
+  StartFromPos: false
   PosFileName: BestHopeCont.root
   DUNESamples:
    - "Configs/Samples/SamplePDFDune_FHC_numuselec.yaml"
@@ -11,7 +11,7 @@ General:
   #  - "Configs/Samples/SamplePDFDuneND_FHC_CCnumuselec.yaml"
   #  - "Configs/Samples/SamplePDFDuneND_RHC_CCnumuselec.yaml"
   # Nu-FIT
-  OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 1284.9, 2.848] #CUDAProb3 # Remove for unoscillated data
+  #OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 1284.9, 2.848] #CUDAProb3 # Remove for unoscillated data
   #OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 1284.9, 2.848,  0.5] #NuFAST
 
   # T2K-like best-fit
@@ -25,10 +25,11 @@ General:
       #- "Configs/CovObjs/tdr_covs/Flux_ND+FD.yaml"
       #- "Configs/CovObjs/tdr_covs/Xsec_ND+FD.yaml"
       #- "Configs/CovObjs/tdr_covs/DetSysts_FD.yaml"
-      #- "Configs/CovObjs/tdr_covs/EnergyNormParams.yaml" # Remove for oscillated data
-      - "Configs/CovObjs/OscCov_PDG2021_v2.yaml"   # Remove for unoscillated data
+      - "Configs/CovObjs/tdr_covs/EnergyNormParams.yaml" # Remove for oscillated data -> Full E Param set across all 12 channels and 4 samples
+      #- "Configs/CovObjs/tdr_covs/RedENormParams.yaml" # Reduced parameter set across channels only
+      #- "Configs/CovObjs/OscCov_PDG2021_v2.yaml"   # Remove for unoscillated data
     XsecCovName: "xsec_cov"
-    XsecStepScale: 0.005
+    XsecStepScale: 0.0005 # 0.0543 for 1920 params, 0.109 for 480 params, 0.841 for 8 params
     XsecAtGen: false
     NDCovFile: "Configs/CovObjs/tdr_covs/det_sys_cov.root"
     XsecFix: ["baseline", "density"]
@@ -66,7 +67,7 @@ AdaptionOptions:
 
   Covariance:
     xsec_cov: # Name of covariance matrix
-      DoAdaption: false  # [bool] Adapt this parameter
+      DoAdaption: false # [bool] Adapt this parameter
 
       UseExternalMatrix: False # To run a new adaptive (after changing params) set to False
       ExternalMatrixFileName: "FullRangeEBins.root" 
@@ -98,12 +99,20 @@ Predictive:
   #Use Full LLH or only sample contribution based on discussion with Asher we almost always only want the sample likelihood
   FullLLH: false
   PriorPredictive: false
-  BurnInSteps: 10000000 # May need to increase due to number of steps
-  PosteriorFile: "BestHopeCont.root" # Change to name of file we sample posterior from
+  BurnInSteps: 20000000 # May need to increase due to number of steps
+  PosteriorFile: "BestHopeCont2.root" # Change to name of file we sample posterior from
   ThrowParamGroupOnly: []
   ThrowSinlgeParams: []
   DebugHistograms: true
 
 PredictivePlotting:
   FileTitle: ["Model Free", "PMNS"]
-  PosteriorColor: [632, 600] # kRed, kBlue
+  PosteriorColor: [600, 632] # kRed, kBlue
+
+ProcessMCMC:
+  Posterior1DCut: "step>2000000"
+  PlotCorr: true
+  Post2DPlotThreshold: 0.2
+  PrintToPDF: true
+  #PlotErrorForFlatPrior: true
+  FancyNames: true
