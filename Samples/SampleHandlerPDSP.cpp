@@ -28,12 +28,6 @@ void SampleHandlerPDSP::SetupSplines() {
 
 }
 
-// ************************************************
-void SampleHandlerPDSP::AddAdditionalWeightPointers() {
-// ************************************************
-
-}
-
 void SampleHandlerPDSP::CleanMemoryBeforeFit() {
   CleanVector(PDSPPlottingSamples);
 }
@@ -56,7 +50,7 @@ int SampleHandlerPDSP::SetupExperimentMC() {
   // ***
 
   // Set size of data vectors
-  PDSPSamples.resize(nEntries);config_name, parameter_handler
+  PDSPSamples.resize(nEntries);
   PDSPPlottingSamples.resize(nEntries);
 
   int TotalEventCounter = 0;
@@ -95,7 +89,7 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       _data->SetBranchAddress("KE_int_reco", &recoKEInt);
 
       for (int i = 0; i < _data->GetEntries(); ++i) { // Loop through tree (events)
-        _data->GetEntry(i);config_name, parameter_handler
+        _data->GetEntry(i);
         PDSPSamples[TotalEventCounter].TrueKEInt = trueKEInt;
         PDSPSamples[TotalEventCounter].RecoKEInt = recoKEInt;
 
