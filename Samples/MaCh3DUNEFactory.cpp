@@ -107,18 +107,22 @@ std::vector<SampleHandlerBase*> MakeMaCh3DuneInstance(std::unique_ptr<Manager>& 
   MACH3LOG_INFO("Loading DUNE samples..");
   std::vector<std::string> DUNESampleConfigs = FitManager->raw()["General"]["DUNESamples"].as<std::vector<std::string>>();
 
-  for(unsigned int Sample_i = 0 ; Sample_i < DUNESampleConfigs.size() ; Sample_i++){
+  std::vector<SampleHandlerBase *> DUNEPdfs(DUNESampleConfigs.size());
+
+  for (unsigned int Sample_i = 0; Sample_i < DUNESampleConfigs.size(); Sample_i++)
+  {
 
     Manager* tempSampleManager = new Manager(DUNESampleConfigs[Sample_i].c_str());
     std::string SampleType = tempSampleManager->raw()["SampleHandlerName"].as<std::string>();
 
-    DUNEPdfs.push_back(GetMaCh3DuneInstance(SampleType, DUNESampleConfigs[Sample_i], xsec, BeamOscHandler, AtmOscHandler, beamNDCov));
-
+    auto sample = GetMaCh3DuneInstance(SampleType, DUNESampleConfigs[Sample_i], xsec, BeamOscHandler, AtmOscHandler, beamNDCov);
+    
+    #if DEBUG_DUNE_WEIGHTS==1
     // Pure for debugging, lets us set which weights we don't want via the manager
-#if DEBUG_DUNE_WEIGHTS==1
-    DUNEPdfs.back()->setWeightSwitchOffVector(FitManager->getWeightSwitchOffVector());
-    DUNEPdfs.back()->setXsecWeightSwitchOffVector(FitManager->getXsecWeightSwitchOffVector());
-#endif
+    sample->setWeightSwitchOffVector(FitManager->getWeightSwitchOffVector());
+    sample->setXsecWeightSwitchOffVector(FitManager->getXsecWeightSwitchOffVector());
+    #endif
+    DUNEPdfs.push_back(sample);
   }
 
   return DUNEPdfs;
