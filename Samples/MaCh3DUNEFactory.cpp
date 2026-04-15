@@ -1,17 +1,13 @@
 #include "Samples/MaCh3DUNEFactory.h"
 
-#include "Samples/SampleHandlerBeamFD.h"
-#include "Samples/SampleHandlerBeamND.h"
-#include "Samples/SampleHandlerBeamNDGAr.h"
-#include "Samples/SampleHandlerAtm.h"
 
-SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, ParameterHandlerGeneric* &xsec, const std::shared_ptr<OscillationHandler>&  BeamOscillator_, const std::shared_ptr<OscillationHandler>&  AtmOscillator_, BeamNDCov beamNDCov) {
+SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, std::unique_ptr<ParameterHandlerGeneric>& xsec, const std::shared_ptr<OscillationHandler>&  BeamOscillator_, const std::shared_ptr<OscillationHandler>&  AtmOscillator_, BeamNDCov beamNDCov) {
   SampleHandlerBase *Sample;
 
   (void)beamNDCov;
   
   if (SampleType == "BeamFD") {
-    Sample = new SampleHandlerBeamFD(SampleConfig, xsec, BeamOscillator_);
+    Sample = new SampleHandlerBeamFD(SampleConfig, xsec.get(), BeamOscillator_);
   } else if (SampleType == "BeamND") {
     
     if (beamNDCov.NDCov_FHC == nullptr || beamNDCov.NDCov_RHC == nullptr || beamNDCov.NDCov_all == nullptr) {
@@ -25,11 +21,11 @@ SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string Samp
     // if(isFHC) {NDCov = NDCov_FHC;}
     // else {NDCov = NDCov_RHC;}
     
-    Sample = new SampleHandlerBeamND(SampleConfig, xsec, beamNDCov); 
+    Sample = new SampleHandlerBeamND(SampleConfig, xsec.get(), beamNDCov); 
   } else if (SampleType == "Atm") {
-    Sample = new SampleHandlerAtm(SampleConfig, xsec, AtmOscillator_);
+    Sample = new SampleHandlerAtm(SampleConfig, xsec.get(), AtmOscillator_);
   } else if (SampleType == "BeamNDGAr") {
-    Sample = new SampleHandlerBeamNDGAr(SampleConfig, xsec);
+    Sample = new SampleHandlerBeamNDGAr(SampleConfig, xsec.get());
   }
   else {
     MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
@@ -39,7 +35,7 @@ SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string Samp
   return Sample;
 }
 
-void MakeMaCh3DuneInstance(std::unique_ptr<Manager>& FitManager, std::vector<SampleHandlerBase*> &DUNEPdfs, ParameterHandlerGeneric *&xsec){
+std::vector<SampleHandlerBase*> MakeMaCh3DuneInstance(std::unique_ptr<Manager>& FitManager, std::unique_ptr<ParameterHandlerGeneric>&xsec){
 
   // there's a check inside the manager class that does this; left here for demonstrative purposes
   if (FitManager == nullptr) {
@@ -53,48 +49,6 @@ void MakeMaCh3DuneInstance(std::unique_ptr<Manager>& FitManager, std::vector<Sam
     throw MaCh3Exception(__FILE__, __LINE__);
   }
 
-  // ==========================================================
-  
-  // Get inputted systematic parameters covariance matrices
-  std::vector<std::string> xsecCovMatrixFile;
-  if (CheckNodeExists(FitManager->raw(), "General", "Systematics", "XsecCovFile") ){
-    xsecCovMatrixFile = FitManager->raw()["General"]["Systematics"]["XsecCovFile"].as<std::vector<std::string>>();
-  } else {
-    MACH3LOG_ERROR("Require General:Systematics:XsecCovFile node in {}, please add this to the file!", FitManager->GetFileName());
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-
-  // Setup the covariance matrices
-  if(xsec == nullptr){
-    xsec = new ParameterHandlerGeneric(xsecCovMatrixFile, "xsec_cov");
-  }
-  else{
-    MACH3LOG_INFO("covariance Xsec has already been created so I am not re-initialising the object"); 
-  }
-
-  MACH3LOG_INFO("cov xsec setup");
-  MACH3LOG_INFO("------------------------------");
-
-  //read flat prior, fixed paramas from the config file
-  std::vector<std::string> XsecFixParams = GetFromManager<std::vector<std::string>>(FitManager->raw()["General"]["Systematics"]["XsecFix"], {});
-
-  // Fixed xsec parameters loop
-  if (XsecFixParams.size() == 1 && XsecFixParams.at(0) == "All") {
-    for (int j = 0; j < xsec->GetNumParams(); j++) {
-      xsec->ToggleFixParameter(j);
-    }
-  } else {
-    for (unsigned int j = 0; j < XsecFixParams.size(); j++) {
-      xsec->ToggleFixParameter(XsecFixParams.at(j));
-    }
-  }
-  MACH3LOG_INFO("xsec parameters loop done");
-
-  xsec->SetParameters();
-  xsec->SetStepScale(FitManager->raw()["General"]["Systematics"]["XsecStepScale"].as<double>());
-
-  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
-  xsec->SetGroupOnlyParameters("Osc", oscpars);
   
   // ==========================================================
 
@@ -167,5 +121,5 @@ void MakeMaCh3DuneInstance(std::unique_ptr<Manager>& FitManager, std::vector<Sam
 #endif
   }
 
-  return;
+  return DUNEPdfs;
 }

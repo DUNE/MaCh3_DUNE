@@ -6,7 +6,7 @@
 
 #include "StructsDUNE.h"
 /// @brief Base class for handling FD Beam samples
-class SampleHandlerBeamFD : public SampleHandlerBase
+class SampleHandlerBeamFD : virtual public SampleHandlerBase
 {
 public:
 

@@ -6,7 +6,7 @@
 
 #include "StructsDUNE.h"
 /// @brief Base class for handling atmospheric samples
-class SampleHandlerAtm : public SampleHandlerBase
+class SampleHandlerAtm : virtual public SampleHandlerBase
 {
 public:
   /// @brief Constructor
