@@ -1,35 +1,23 @@
-if (Build_NDGAr)
-  message(STATUS "Building BeamNDGAr sample only")
-  set(HEADERS
-    SampleHandlerBeamNDGAr.h
-    MaCh3DUNEFactory.h
-  )
-  set(SOURCE_FILES
-    SampleHandlerBeamNDGAr.cpp
-    MaCh3DUNEFactory.cpp
-  )
-else()
-  message(STATUS "Building Atm, BeamFD and BeamND samples")
-  set(HEADERS
-    SampleHandlerAtm.h
-    SampleHandlerBeamFD.h
-    SampleHandlerBeamND.h
-    MaCh3DUNEFactory.h
-  )
-  set(SOURCE_FILES
-    SampleHandlerPDSP.cpp
-    SampleHandlerAtm.cpp
-    SampleHandlerBeamFD.cpp
-    SampleHandlerBeamND.cpp
-    MaCh3DUNEFactory.cpp
-  )
-  set(HEADERS_PDSP
-    SampleHandlerPDSP.h
-  )
-  set(SOURCE_FILES_PDSP
-    SampleHandlerPDSP.cpp
-  )
-endif()
+set(HEADERS
+  SampleHandlerAtm.h
+  SampleHandlerBeamFD.h
+  SampleHandlerBeamND.h
+  SampleHandlerBeamNDGAr.h
+  MaCh3DUNEFactory.h
+)
+set(SOURCE_FILES
+  SampleHandlerAtm.cpp
+  SampleHandlerBeamFD.cpp
+  SampleHandlerBeamND.cpp
+  SampleHandlerBeamNDGAr.cpp
+  MaCh3DUNEFactory.cpp
+)
+set(HEADERS_PDSP
+  SampleHandlerPDSP.h
+)
+set(SOURCE_FILES_PDSP
+  SampleHandlerPDSP.cpp
+)
 
 add_library(SamplesDUNE SHARED
   ${SOURCE_FILES}

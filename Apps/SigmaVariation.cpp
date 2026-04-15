@@ -12,16 +12,12 @@
 #include <TColor.h>
 #include <TMath.h>
 
-#include "Fitters/mcmc.h"
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/StructsDUNE.h"
+#include "Fitters/MaCh3Factory.h"
 
 int main(int argc, char * argv[]) {
-  if(argc == 1){
-    MACH3LOG_ERROR("Usage: bin/EventRatesDUNEBeam config.cfg");
-    return 1;
-  }
-  manager* FitManager = new manager(argv[1]);
+  auto FitManager = MaCh3ManagerFactory(argc, argv);
 
   //###############################################################################################################################
 
@@ -32,18 +28,19 @@ int main(int argc, char * argv[]) {
   //Create samplePDFFD objects
   
   ParameterHandlerGeneric* xsec = nullptr;
-  ParameterHandlerOsc* osc = nullptr;
 
   std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec, osc);
+  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
 
   //###############################################################################################################################
   //Perform reweight and print total integral
 
   MACH3LOG_INFO("=======================================================");
-  for(SampleHandlerFD* Sample: DUNEPdfs){
-    Sample->Reweight();
-    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetTitle(), Sample->Get1DHist()->Integral());
+  for(SampleHandlerFD* handler: DUNEPdfs){
+    handler->Reweight();
+    for (int iSample=0;iSample<handler->GetNsamples();iSample++) {
+      MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample)->Integral());
+    }
   }
   
   //###############################################################################################################################
@@ -53,7 +50,6 @@ int main(int argc, char * argv[]) {
   
   std::vector<ParameterHandlerBase*> CovObjs;
   CovObjs.emplace_back(xsec);
-  CovObjs.emplace_back(osc);
 
   MACH3LOG_INFO("=======================================================");
 
@@ -76,41 +72,39 @@ int main(int argc, char * argv[]) {
       File->cd(ParName.c_str());
       
       for (size_t iSigVar=0;iSigVar<sigmaVariations.size();iSigVar++) {
-	double VarVal = VarInit + sigmaVariations[iSigVar]*VarSigma;
-	if (VarVal < CovObj->GetLowerBound(iPar)) VarVal = CovObj->GetLowerBound(iPar);
-	if (VarVal > CovObj->GetUpperBound(iPar)) VarVal = CovObj->GetUpperBound(iPar);
-	
-	MACH3LOG_INFO("\t\tVariation {:<5.3f} - Parameter Value : {:<10.7f}",sigmaVariations[iSigVar],VarVal);
-	CovObj->SetParProp(iPar,VarVal);
+        double VarVal = VarInit + sigmaVariations[iSigVar] * VarSigma;
+        if (VarVal < CovObj->GetLowerBound(iPar)) VarVal = CovObj->GetLowerBound(iPar);
+        if (VarVal > CovObj->GetUpperBound(iPar)) VarVal = CovObj->GetUpperBound(iPar);
 
-	for (size_t iSample=0;iSample<DUNEPdfs.size();iSample++) {
-	  std::string SampleName = DUNEPdfs[iSample]->GetTitle();
-	  
-	  File->cd(ParName.c_str());
-	  if (iSigVar == 0) {
-	    File->mkdir((ParName+"/"+SampleName).c_str());
-	  }
-	  File->cd((ParName+"/"+SampleName).c_str());
-	  
-	  DUNEPdfs[iSample]->Reweight();
-	  TH1* Hist;
-	  if (DUNEPdfs[iSample]->GetNDim() == 1) {
-	    Hist = DUNEPdfs[iSample]->Get1DHist();
-	  } else if (DUNEPdfs[iSample]->GetNDim() == 2) {
-	    Hist = DUNEPdfs[iSample]->Get2DHist();
-	  }
-	  MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}",SampleName,Hist->Integral());
-	  
-	  Hist->Write(Form("Variation_%i",(int)iSigVar));
-	}
+        MACH3LOG_INFO("\t\tVariation {:<5.3f} - Parameter Value : {:<10.7f}",
+                      sigmaVariations[iSigVar], VarVal);
+        CovObj->SetParProp(iPar, VarVal);
+
+        for (auto handler : DUNEPdfs) {
+          for (int iSample = 0; iSample < handler->GetNsamples(); iSample++) {
+            std::string SampleName = handler->GetSampleTitle(iSample);
+
+            File->cd(ParName.c_str());
+            if (iSigVar == 0) {
+              File->mkdir((ParName + "/" + SampleName).c_str());
+            }
+            File->cd((ParName + "/" + SampleName).c_str());
+
+            handler->Reweight();
+            TH1 *Hist = handler->GetMCHist(iSample);
+            MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}", SampleName,
+                          Hist->Integral());
+
+            Hist->Write(Form("Variation_%i", (int)iSigVar));
+          }
+        }
       }
 
-      CovObj->SetParProp(iPar,VarInit);
+      CovObj->SetParProp(iPar, VarInit);
     }
 
     MACH3LOG_INFO("=======================================================");
   }
 
   File->Close();
-  
 }

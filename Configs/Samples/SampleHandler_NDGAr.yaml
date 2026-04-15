@@ -1,0 +1,58 @@
+---
+SampleHandlerName: "BeamNDGAr"
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_NEUT.yaml"
+BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
+InputFiles:
+  LoadSplineFile: false
+  PrepSplineFile: false
+
+DetectorVariables:
+  B_field: 0.5
+  momentum_resolution_threshold: 0.05
+  pixel_spacing: 6.
+  spatial_resolution: 2.5
+  adc_sampling_frequency: 20.
+  drift_velocity: 3.011
+  TPCFidLength: 210
+  TPCFidRadius: 160
+  TPCInstrumentedLength: 250
+  TPCInstrumentedRadius: 260
+  ECALSciX0: 0.892453
+  # ECALInnerRadius: 278.04
+  # ECALOuterRadius: 322.252
+  # ECALEndCapStart: 329.25
+  # ECALEndCapEnd: 374.4
+  downsampling: 1
+  EDepCrit: 2 # Max energy for a contained shower to deposit in the outer crit_layers (MeV)
+  CritLayers: 1 # Number of layers defining this outer region
+
+Samples: ["NDGAr_FHC_numu"]
+
+NDGAr_FHC_numu:
+  SampleTitle: "NDGAr_FHC_numu"
+  POT: 1.0e+21
+
+  SelectionCuts:
+
+  Binning:
+    VarStr: "TrueNeutrinoEnergy"
+    Uniform: true
+    BinEdges: [0., 0.25, 0.5, 0.75, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 4.25, 4.5, 4.75, 5., 5.25, 5.5, 5.75, 6., 6.25, 6.5, 6.75, 7., 7.25, 7.5, 7.75, 8., 8.25, 8.5, 8.75, 9., 9.25, 9.5, 9.75, 10., 1000.]
+
+  DUNESampleBools:
+    iselike: no
+    isFHC: 1
+
+  InputFiles:
+    mtupleprefix: "Inputs/DUNE_NDGAr_files/FastGArSim_FHC_numu_"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ""
+
+  SubSamples:
+    - Name: "FHC_CC_numu_hA"
+      LatexName: "FHC_CC_numu_hA"
+      mtuplefile: "hA"
+      splinefile: ""
+      nutype: 14
+      oscnutype: 14
