@@ -28,28 +28,28 @@ NuOsc:
   NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
   EqualBinningPerOscChannel: false
 
-SubSamples:
+OscChannels:
   - Name: "FHC_numu_x_numu"
     LatexName: "FHC_numu_x_numu"
-    mtuplefile: "numu_x_numu_*"
+    mtuplefile: ["numu_x_numu_*"]
     splinefile: "numu_x_numu"
     nutype: 14
     oscnutype: 14
   - Name: "FHC_nue_x_nue"
     LatexName: "FHC_nue_x_nue"
-    mtuplefile: "nue_x_nue"
+    mtuplefile: ["nue_x_nue"]
     splinefile: "nue_x_nue"
     nutype: 12
     oscnutype: 12
   - Name: "FHC_numubar_x_numubar"
     LatexName: "FHC_numubar_x_numubar"
-    mtuplefile: "numubar_x_numubar"
+    mtuplefile: ["numubar_x_numubar"]
     splinefile: "numubar_x_numubar"
     nutype: -14
     oscnutype: -14
   - Name: "FHC_nuebar_x_nuebar"
     LatexName: "FHC_nuebar_x_nuebar"
-    mtuplefile: "nuebar_x_nuebar"
+    mtuplefile: ["nuebar_x_nuebar"]
     splinefile: "nuebar_x_nuebar"
     nutype: -12
     oscnutype: -12
