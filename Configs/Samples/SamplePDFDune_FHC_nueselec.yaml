@@ -38,7 +38,7 @@ InputFiles:
   splinesuffix: "_nueselec_splines.root"
 
 NuOsc:
-  NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
+  NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml" # Change to binned for PMNS fits
   EqualBinningPerOscChannel: false
 
 SubSamples:

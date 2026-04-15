@@ -55,49 +55,45 @@ int main(int argc, char * argv[]) {
   //###############################################################################################################################
   //Perform reweight and print total integral
 
-  TFile* Osc = TFile::Open("TrueIndChanOsc.root");
-  TFile* Unosc = TFile::Open("TrueIndChanUnosc.root");
+  // TFile* Osc = TFile::Open("TrueIndChanOsc.root"); // Loading in histograms
+  // TFile* Unosc = TFile::Open("TrueIndChanUnosc.root");
 
-  TIter next(Osc->GetListOfKeys()); 
-  TKey* key; 
-  int ParIndex = 0.0; // 293.0 if all params included
-  //int KeyCount = 0.0;
+  // TIter next(Osc->GetListOfKeys()); // Get list of different items within oscillated data histograms (48 in total, 12 channels in 4 samples)
+  // TKey* key;  // Initialise
+  // int ParIndex = 0.0;
 
-  for(int i = 0; i < xsec->GetNumParams(); i++){
-    if( xsec->IsParFromGroup(i, "EParam")){
-      ParIndex = i;
-      break;
-    }
-  }
+  // for(int i = 0; i < xsec->GetNumParams(); i++){ // For every param in the xsec group
+  //   if(xsec->IsParFromGroup(i, "EParam")){ // If param is from our energy normalisation parameter group
+  //     ParIndex = i; // Set the index of first parameter
+  //     break;
+  //   }
+  // }
 
-  while ((key = (TKey*)next())) { 
-    //if (KeyCount >= 12) break;
+  // while ((key = (TKey*)next())) { // Go through all keys in sequence
+  //   auto HistoOsc = Osc->Get<TH1D>(key->GetName()); // Getting names of histograms
+  //   auto HistoUnosc = Unosc->Get<TH1D>(key->GetName()); 
+  //   int NumBins = HistoOsc->GetNbinsX(); // Find number of bins (number of energy normalisation parameters for this histogram)
+  //   for(int j = 1; j <= NumBins; j++) { // For each energy bin, starting from 1 to avoid the overflow bin
+  //     double BinSizeOsc = HistoOsc->GetBinContent(j); // Get the number of events in specific energy bin
+  //     double BinSizeUnosc = HistoUnosc->GetBinContent(j);
+  //     double Param;
+  //     if(BinSizeUnosc == 0) { // If no unoscillated data, set param to 0
+  //       Param = 0;
+  //       xsec->SetPar(ParIndex, Param);
+  //     }
+  //     else { // If unoscillated data, calculate ratio between these as needed to induce oscillation
+  //       Param = BinSizeOsc / BinSizeUnosc; 
+  //       xsec->SetPar(ParIndex, Param);
+  //     } 
+  //     ParIndex++; // Increment parameter index to keep amending in sequence
+  //   }
+  // }
 
-    auto HistoOsc = Osc->Get<TH1D>(key->GetName());
-    auto HistoUnosc = Unosc->Get<TH1D>(key->GetName());
-
-    int NumBins = HistoOsc->GetNbinsX();
-
-    for(int j = 1; j <= NumBins; j++) {
-      double BinSizeOsc = HistoOsc->GetBinContent(j);
-      double BinSizeUnosc = HistoUnosc->GetBinContent(j);
-
-      double Param;
-      if(BinSizeUnosc == 0) {
-        Param = 0;
-        xsec->SetPar(ParIndex, Param);
-      }
-      else {
-        Param = BinSizeOsc / BinSizeUnosc; 
-        xsec->SetPar(ParIndex, Param);
-      }
-        
-      ParIndex++;
-    }
-
-    //KeyCount++;
-
-  }
+  // for(int k = 0; k < xsec->GetNumParams(); k++){ // For every param in the xsec group
+  //   if((xsec->GetParProp(k) == 0) && xsec->IsParFromGroup(k, "EParam")){ // If it has a value of 0 and is an energy normalisation parameter
+  //     xsec->ToggleFixParameter(k); // Fix these params at 0
+  //   }
+  // }
 
 
   std::vector<TH1*> DUNEHists;
@@ -122,46 +118,7 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("Oscillation Mode Breakdown:");
   
-  // Include for producing plots with variable param values
-  
-  // TFile* Osc = TFile::Open("IndChanOsc.root");
-  // TFile* Unosc = TFile::Open("IndChanUnosc.root");
-
-  // TIter next(Osc->GetListOfKeys()); 
-  // TKey* key; 
-  // int ParIndex = 0.0; // 293.0 if all params included
-  // int KeyCount = 0.0;
-
-  // while ((key = (TKey*)next())) { 
-  //   if (KeyCount >= 12) break;
-
-  //   auto HistoOsc = Osc->Get<TH1D>(key->GetName());
-  //   auto HistoUnosc = Unosc->Get<TH1D>(key->GetName());
-
-  //   int NumBins = HistoOsc->GetNbinsX();
-
-  //   for(int j = 1; j <= NumBins; j++) {
-  //     double BinSizeOsc = HistoOsc->GetBinContent(j);
-  //     double BinSizeUnosc = HistoUnosc->GetBinContent(j);
-
-  //     double Param;
-  //     if(BinSizeUnosc == 0) {
-  //       Param = 0;
-  //       xsec->SetPar(ParIndex, Param);
-  //     }
-  //     else {
-  //       Param = BinSizeOsc / BinSizeUnosc; 
-  //       xsec->SetPar(ParIndex, Param);
-  //     }
-        
-  //     ParIndex++;
-  //   }
-
-  //   KeyCount++;
-
-  // }
-  
-  // TFile* outHist = new TFile("TrueCCIndChanReweight.root", "recreate"); 
+  // TFile* outHist = new TFile("TrueCCIndChanReweight.root", "recreate"); // If we want to save the individual channels from the samples, create this file
 
   for(auto Sample : DUNEPdfs) {
     MACH3LOG_INFO("======================");
@@ -181,8 +138,8 @@ int main(int argc, char * argv[]) {
       TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName(),SelectionVec);
       TString HistoName = Form("%s_%s", Sample->GetTitle().c_str(), Sample->GetFlavourName(iOscChan).c_str());
 
-      // Hist->SetName(HistoName);
-      // Hist->Write();
+      // Hist->SetName(HistoName); // Set the name of the histograms
+      // Hist->Write(); // Save to file
 
       MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetTitle(),Sample->GetFlavourName(iOscChan),Hist->Integral());
     }
@@ -191,7 +148,7 @@ int main(int argc, char * argv[]) {
     MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetTitle(),Hist->Integral());
   }
 
-  // outHist->Close();
+  // outHist->Close(); // Close our individual channel histograms
 
   //###############################################################################################################################
   //Make interaction channel breakdown
