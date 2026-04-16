@@ -4,10 +4,14 @@ General:
   StartFromPos: false
   PosFileName: BestHopeCont.root
   DUNESamples:
+<<<<<<< HEAD
    - "Configs/Samples/SamplePDFDune_FHC_numuselec.yaml"
    - "Configs/Samples/SamplePDFDune_FHC_nueselec.yaml"
    - "Configs/Samples/SamplePDFDune_RHC_numuselec.yaml"
    - "Configs/Samples/SamplePDFDune_RHC_nueselec.yaml"
+=======
+   - "Configs/Samples/SampleHandler_FD_Beam.yaml"
+>>>>>>> origin/dbarrow257/feature/CoreV2.4.2
   #  - "Configs/Samples/SamplePDFDuneND_FHC_CCnumuselec.yaml"
   #  - "Configs/Samples/SamplePDFDuneND_RHC_CCnumuselec.yaml"
   # Nu-FIT

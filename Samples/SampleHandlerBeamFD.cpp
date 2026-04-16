@@ -11,27 +11,20 @@ SampleHandlerBeamFD::~SampleHandlerBeamFD() {
 }
 
 void SampleHandlerBeamFD::Init() {
-  dunemcSamples.resize(nSamples,dunemc_beamfd());
-  
-  if (CheckNodeExists(SampleManager->raw(), "DUNESampleBools", "iselike" )) {
-    iselike = SampleManager->raw()["DUNESampleBools"]["iselike"].as<bool>();
-  } else{
-    MACH3LOG_ERROR("Did not find DUNESampleBools:iselike in {}, please add this", SampleManager->GetFileName());
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
+  beamFDSampleDetails.resize(GetNsamples());
+  // dunemcSamples.resize(nSamples,dunemc_beamfd());
 
-  if (CheckNodeExists(SampleManager->raw(), "DUNESampleBools", "isFHC" )) {
-    isFHC = SampleManager->raw()["DUNESampleBools"]["isFHC"].as<double>();
-  } else{
-    MACH3LOG_ERROR("Did not find DUNESampleBools:isFHC in {}, please add this", SampleManager->GetFileName());
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-  
-  if (CheckNodeExists(SampleManager->raw(), "POT")) {
-    pot = SampleManager->raw()["POT"].as<double>();
-  } else{
-    MACH3LOG_ERROR("POT not defined in {}, please add this!", SampleManager->GetFileName());
-    throw MaCh3Exception(__FILE__, __LINE__);
+  auto EnabledSamples = Get<std::vector<std::string>>(SampleManager->raw()["Samples"], __FILE__ , __LINE__);
+
+  for(int i = 0; i < GetNsamples(); i++){
+    const auto TempTitle = EnabledSamples[i];
+    beamFDSampleDetails[i].isFHC = Get<double>(SampleManager->raw()[TempTitle]["DUNESampleBools"]["isFHC"], __FILE__ , __LINE__);
+    beamFDSampleDetails[i].iselike = Get<bool>(SampleManager->raw()[TempTitle]["DUNESampleBools"]["iselike"], __FILE__ , __LINE__);
+    beamFDSampleDetails[i].pot = Get<double>(SampleManager->raw()[TempTitle]["POT"], __FILE__ , __LINE__);
+
+    MACH3LOG_INFO("Setting up beam sample {}", GetSampleTitle(i));
+    MACH3LOG_INFO("- isFHC: {}", beamFDSampleDetails[i].isFHC);
+    MACH3LOG_INFO("- iselike: {}", beamFDSampleDetails[i].iselike);
   }
   
   MACH3LOG_INFO("-------------------------------------------------------------------");
@@ -40,13 +33,13 @@ void SampleHandlerBeamFD::Init() {
 void SampleHandlerBeamFD::SetupSplines() {
 
   ///@todo move all of the spline setup into core
-  if(ParHandler->GetNumParamsFromSampleName(SampleName, kSpline) > 0){
-    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", ParHandler->GetNumParamsFromSampleName(SampleName, kSpline));
+  if(ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline) > 0){
+    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline));
     SplineHandler = std::unique_ptr<BinnedSplineHandler>(new BinnedSplineHandlerDUNE(ParHandler,Modes.get()));
     InitialiseSplineObject();
   }
   else{
-    MACH3LOG_INFO("Found {} splines for this sample so I will not load or evaluate splines", ParHandler->GetNumParamsFromSampleName(SampleName, kSpline));
+    MACH3LOG_INFO("Found {} splines for this sample so I will not load or evaluate splines", ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline));
     SplineHandler = nullptr;
   }
   
@@ -315,21 +308,19 @@ void SampleHandlerBeamFD::RegisterFunctionalParameters() {
 }
 
 // HH: Reset the shifted values to the original values
-void SampleHandlerBeamFD::resetShifts(int iEvent) {
+void SampleHandlerBeamFD::ResetShifts(int iEvent) {
   dunemcSamples[iEvent].rw_erec_shifted = dunemcSamples[iEvent].rw_erec;
   dunemcSamples[iEvent].rw_cvnnumu_shifted = dunemcSamples[iEvent].rw_cvnnumu;
   dunemcSamples[iEvent].rw_cvnnue_shifted = dunemcSamples[iEvent].rw_cvnnue;
 }
 // =================================
 
-void SampleHandlerBeamFD::SetupWeightPointers() {
+void SampleHandlerBeamFD::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < dunemcSamples.size(); ++i) {
     MCSamples[i].total_weight_pointers.push_back(&(dunemcSamples[i].pot_s));
     MCSamples[i].total_weight_pointers.push_back( &(dunemcSamples[i].norm_s));
-    MCSamples[i].total_weight_pointers.push_back( MCSamples[i].osc_w_pointer);
     MCSamples[i].total_weight_pointers.push_back( &(dunemcSamples[i].rw_berpaacvwgt));
     MCSamples[i].total_weight_pointers.push_back( &(dunemcSamples[i].flux_w));
-    MCSamples[i].total_weight_pointers.push_back( &(MCSamples[i].xsec_w));
   }
 }
 
@@ -340,25 +331,31 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   
   MACH3LOG_INFO("-------------------------------------------------------------------");
   TChain* _data = new TChain("caf");
-  for (size_t iSample=0;iSample<mc_files.size();iSample++) {
-    MACH3LOG_INFO("Adding file to TChain: {}", mc_files[iSample]);
-    TFile* _sampleFile = TFile::Open(mc_files[iSample].c_str(), "READ");
-    // HH: still have the read the individual ROOT file to get the norm histograms
-    TH1D* norm = _sampleFile->Get<TH1D>("norm");
-    if(!norm){
-      MACH3LOG_ERROR("Add a norm KEY to the root file using MakeNormHists.cxx");
-      throw MaCh3Exception(__FILE__, __LINE__);
+  // Maps the file index within the TChain (GetTreeNumber()) to its sample index and
+  // per-file norm values. 
+  std::vector<size_t> fileIndexToSample;
+  std::vector<std::array<double, 2>> fileIndexToNorm; // [norm_s, pot_s]
+  for (size_t iSample=0; iSample<SampleDetails.size(); iSample++) {
+    for (const std::string& filename : SampleDetails[iSample].mc_files) {
+      MACH3LOG_INFO("Adding file to TChain: {}", filename);
+    
+      TFile* _sampleFile = TFile::Open(filename.c_str(), "READ");
+      // HH: still have the read the individual ROOT file to get the norm histograms
+      TH1D* norm = _sampleFile->Get<TH1D>("norm");
+      if(!norm){
+        MACH3LOG_ERROR("Add a norm KEY to the root file using MakeNormHists.cxx");
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+      fileIndexToSample.push_back(iSample);
+      fileIndexToNorm.push_back({norm->GetBinContent(1), beamFDSampleDetails[iSample].pot / norm->GetBinContent(2)});
+      _sampleFile->Close();
+      // HH: Check whether the file exists, see https://root.cern/doc/master/classTChain.html#a78a896924ac6c7d3691b7e013bcbfb1c
+      int _add_rtn = _data->Add(filename.c_str(), -1);
+      if(_add_rtn == 0){
+        MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", filename);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
     }
-    // HH: currently storing the norm_s and POT_s in a map since this is a sample/file specific thing, maybe this could be done in a more elegant way
-    norm_map[mc_files[iSample]] = std::vector<double>{norm->GetBinContent(1), pot/norm->GetBinContent(2)};
-
-    // HH: Check whether the file exists, see https://root.cern/doc/master/classTChain.html#a78a896924ac6c7d3691b7e013bcbfb1c
-    int _add_rtn = _data->Add(mc_files[iSample].c_str(), -1);
-    if(_add_rtn == 0){
-      MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", mc_files[iSample]);
-      throw MaCh3Exception(__FILE__, __LINE__);
-    }
-    _sampleFile->Close();
   }
   
   
@@ -466,6 +463,7 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   _data->SetBranchAddress("vtx_z", &_vtx_z);  
 
   size_t nEntries = static_cast<size_t>(_data->GetEntries());
+  size_t countwidth = nEntries / 5;
   dunemcSamples.resize(nEntries);
   _data->GetEntry(0);
 
@@ -482,20 +480,26 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   for (unsigned int i = 0; i < nEntries; ++i) { // Loop through tree
     _data->GetEntry(i);
 
-    std::string CurrFileName = _data->GetCurrentFile()->GetName();
+    if (i % countwidth == 0) {
+      MaCh3Utils::PrintProgressBar(i, static_cast<Long64_t>(nEntries));
+    }
+
+    const size_t sample_index = fileIndexToSample[static_cast<size_t>(_data->GetTreeNumber())];
+    const bool iselike_temp = beamFDSampleDetails[sample_index].iselike;
+    dunemcSamples[i].SampleIndex = static_cast<int>(sample_index);
     dunemcSamples[i].nupdgUnosc = _nuPDGunosc;
     dunemcSamples[i].nupdg = _nuPDG;
-    dunemcSamples[i].OscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, dunemcSamples[i].nupdgUnosc, dunemcSamples[i].nupdg));
+    dunemcSamples[i].OscChannelIndex = static_cast<double>(GetOscChannel(SampleDetails[sample_index].OscChannels, dunemcSamples[i].nupdgUnosc, dunemcSamples[i].nupdg));
 
     // POT stuff
-    dunemcSamples[i].norm_s = norm_map[CurrFileName][0]; // Norm in sample
-    dunemcSamples[i].pot_s = norm_map[CurrFileName][1]; // POT in sample
+    dunemcSamples[i].norm_s = fileIndexToNorm[static_cast<size_t>(_data->GetTreeNumber())][0]; // Norm in sample
+    dunemcSamples[i].pot_s = fileIndexToNorm[static_cast<size_t>(_data->GetTreeNumber())][1]; // POT in sample
     
     dunemcSamples[i].rw_cvnnumu = (_cvnnumu);
     dunemcSamples[i].rw_cvnnue = (_cvnnue);
     dunemcSamples[i].rw_cvnnumu_shifted = (_cvnnumu); 
     dunemcSamples[i].rw_cvnnue_shifted = (_cvnnue);
-    if (iselike) {
+    if (iselike_temp) {
       dunemcSamples[i].rw_erec = (_erec_nue);
       dunemcSamples[i].rw_erec_shifted = (_erec_nue); 
       dunemcSamples[i].rw_erec_had = (_erec_had_nue);
@@ -575,7 +579,7 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   // HH: Give a warning if any negative energies were found
   for (const auto& pair : negative_counts) {
     if (pair.second > 0) {
-      MACH3LOG_WARN("Found {} negative values for {} in sample {}", pair.second, pair.first, GetSampleName());
+      MACH3LOG_WARN("Found {} negative values for {}.", pair.second, pair.first);
     }
   }
   
@@ -615,7 +619,7 @@ const double* SampleHandlerBeamFD::GetPointerToKinematicParameter(KinematicTypes
     KinematicValue = &(dunemcSamples[iEvent].OscChannelIndex);
     break;
   case kIsFHC:
-    KinematicValue = &(isFHC);
+    KinematicValue = &(beamFDSampleDetails[MCSamples[iEvent].NominalSample].isFHC);
     break;
   case kTrueCCnue: 
 	KinematicValue = &(dunemcSamples[iEvent].rw_trueccnue);
@@ -654,13 +658,14 @@ void SampleHandlerBeamFD::SetupFDMC() {
   // dunemc_base *duneobj = &(dunemcSamples[iSample]);
   // FarDetectorCoreInfo *fdobj = &(MCSamples[iSample]);  
   
-  for(int iEvent = 0 ;iEvent < int(GetNEvents()); ++iEvent) {
+  for (unsigned int iEvent = 0; iEvent < GetNEvents(); ++iEvent) {
     MCSamples[iEvent].rw_etru = &(dunemcSamples[iEvent].rw_etru);
     MCSamples[iEvent].mode = &(dunemcSamples[iEvent].mode);
-    MCSamples[iEvent].Target = &(dunemcSamples[iEvent].Target); 
+    MCSamples[iEvent].Target = &(dunemcSamples[iEvent].Target);
     MCSamples[iEvent].isNC = !(dunemcSamples[iEvent].rw_isCC);
     MCSamples[iEvent].nupdg = &(dunemcSamples[iEvent].nupdg);
     MCSamples[iEvent].nupdgUnosc = &(dunemcSamples[iEvent].nupdgUnosc);
+    MCSamples[iEvent].NominalSample = dunemcSamples[iEvent].SampleIndex;
   }
   
 }

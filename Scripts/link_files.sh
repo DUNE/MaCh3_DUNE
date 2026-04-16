@@ -3,8 +3,13 @@
 # A script to link required files to the proper place i.e. where the sample config files will look for them
 
 MACH3DIR=`pwd`
+<<<<<<< HEAD
 FILESDIR=/home/acarney/scratch/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v3 # Need to update after uncompressing the tar.gz file
 FILESDIR1=/home/acarney/scratch/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v3
+=======
+FILESDIR=/vols/dune/LibanDUNEInputs/
+NDGAR_FILESDIR=/vols/dune/jmm224/data
+>>>>>>> origin/dbarrow257/feature/CoreV2.4.2
 
 if [ ! -d "$MACH3DIR/Inputs/DUNE_CAF_files" ]
 then
@@ -36,6 +41,7 @@ fi
 ln -sf ${FILESDIR}/DUNE_2023_ND_CAFs_FV_CCINC_Q/*root Inputs/DUNE_ND_CAF_files
 
 
+<<<<<<< HEAD
 # if [ ! -d "$MACH3DIR/Inputs/DUNE_NDGAr_AnaTrees" ]
 # then
 #   mkdir $MACH3DIR/Inputs/DUNE_NDGAr_AnaTrees
@@ -50,6 +56,18 @@ ln -sf ${FILESDIR}/DUNE_2023_ND_CAFs_FV_CCINC_Q/*root Inputs/DUNE_ND_CAF_files
 # fi
 
 # ln -sf ${FILESDIR1}/NDGAr/rad260/bfield0_5/FastGarSim/GENIE_hA/*root Inputs/DUNE_NDGAr_FastGarSim
+=======
+if [ ! -d "$MACH3DIR/Inputs/DUNE_NDGAr_files" ]
+then
+  mkdir $MACH3DIR/Inputs/DUNE_NDGAr_files
+fi
+ln -sf ${NDGAR_FILESDIR}/NDGAr/rad260/bfield0.5/FastGarSim/FastGArSim_FHC_numu_hA.root Inputs/DUNE_NDGAr_files
+if [ ! -d "$MACH3DIR/Inputs/DUNE_NDGAr_files/GenieTrees" ]
+then
+  mkdir $MACH3DIR/Inputs/DUNE_NDGAr_files/GenieTrees
+fi
+ln -sf ${NDGAR_FILESDIR}/NDGAr/genie_inputs/*root Inputs/DUNE_NDGAr_files/GenieTrees
+>>>>>>> origin/dbarrow257/feature/CoreV2.4.2
 
 
 ln -sf ${FILESDIR}/DUNE_2023_ND_CAFs_FV_CCINC_Q/*root Inputs/DUNE_ND_CAF_files

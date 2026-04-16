@@ -116,14 +116,15 @@ int main(int argc, char * argv[]) {
 
 
   std::vector<TH1*> DUNEHists;
-  for(auto Sample : DUNEPdfs){
-    Sample->Reweight();
-    DUNEHists.push_back(Sample->GetMCHist(Sample->GetNDim()));
+  for(auto handler : DUNEPdfs){
+    handler->Reweight();
+    for (int iSample=0; iSample<handler->GetNsamples(); iSample++) {
+      DUNEHists.push_back(handler->GetMCHist(iSample));
 
-    std::string EventRateString = fmt::format("{:.2f}", Sample->GetMCHist(Sample->GetNDim())->Integral());
-    MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetTitle(), EventRateString);
-
-    Sample->PrintIntegral();
+      std::string EventRateString = fmt::format("{:.2f}", handler->GetMCHist(iSample)->Integral());
+      MACH3LOG_INFO("Event rate for {} : {:<5}", handler->GetSampleTitle(iSample), EventRateString);
+      handler->PrintIntegral(iSample);
+    }
   }
 
   std::string OutFileName = GetFromManager<std::string>(fitMan->raw()["General"]["OutputFile"], "EventRatesOutput.root");
@@ -137,6 +138,7 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("Oscillation Mode Breakdown:");
   
+<<<<<<< HEAD
   // TFile* outHist = new TFile("TrueCCIndChanReweight.root", "recreate"); // If we want to save the individual channels from the samples, create this file
 
   for(auto Sample : DUNEPdfs) {
@@ -161,10 +163,28 @@ int main(int argc, char * argv[]) {
       // Hist->Write(); // Save to file
 
       MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetTitle(),Sample->GetFlavourName(iOscChan),Hist->Integral());
-    }
+=======
+  for(auto handler : DUNEPdfs) {
+    for (int iSample = 0; iSample < handler->GetNsamples(); iSample++) {
+      MACH3LOG_INFO("======================");
+      int nOscChannels = handler->GetNOscChannels(iSample);
+      for (int iOscChan=0;iOscChan<nOscChannels;iOscChan++) {
+        std::vector< KinematicCut > SelectionVec;
 
-    TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName());
-    MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetTitle(),Hist->Integral());
+        KinematicCut SelecChannel;
+        SelecChannel.ParamToCutOnIt = handler->ReturnKinematicParameterFromString("OscillationChannel");
+        SelecChannel.LowerBound = iOscChan;
+        SelecChannel.UpperBound = iOscChan+1;
+        SelectionVec.push_back(SelecChannel);
+        
+        TH1* Hist = handler->Get1DVarHist(iSample, handler->GetXBinVarName(iSample),SelectionVec);
+        MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),handler->GetFlavourName(iSample, iOscChan),Hist->Integral());
+      }
+
+      TH1* Hist = handler->Get1DVarHist(iSample, handler->GetXBinVarName(iSample));
+      MACH3LOG_INFO("{:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),Hist->Integral());
+>>>>>>> origin/dbarrow257/feature/CoreV2.4.2
+    }
   }
 
   // outHist->Close(); // Close our individual channel histograms
@@ -176,26 +196,28 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("Interaction Mode Breakdown:");
 
-  for(auto Sample : DUNEPdfs) {
-    MACH3LOG_INFO("======================");
+  for(auto handler : DUNEPdfs) {
+    for (int iSample = 0; iSample < handler->GetNsamples(); iSample++) {
+      MACH3LOG_INFO("======================");
 
-    MaCh3Modes* Modes = Sample->GetMaCh3Modes();
-    int nModeChannels = Modes->GetNModes();
-    for (int iModeChan=0;iModeChan<nModeChannels;iModeChan++) {
-      std::vector< KinematicCut > SelectionVec;
+      MaCh3Modes* Modes = handler->GetMaCh3Modes();
+      int nModeChannels = Modes->GetNModes();
+      for (int iModeChan=0;iModeChan<nModeChannels;iModeChan++) {
+        std::vector< KinematicCut > SelectionVec;
 
-      KinematicCut SelecChannel;
-      SelecChannel.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString("Mode");
-      SelecChannel.LowerBound = iModeChan;
-      SelecChannel.UpperBound = iModeChan+1;
-      SelectionVec.push_back(SelecChannel);
+        KinematicCut SelecChannel;
+        SelecChannel.ParamToCutOnIt = handler->ReturnKinematicParameterFromString("Mode");
+        SelecChannel.LowerBound = iModeChan;
+        SelecChannel.UpperBound = iModeChan+1;
+        SelectionVec.push_back(SelecChannel);
 
-      TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName(),SelectionVec);
-      MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetTitle(),Modes->GetMaCh3ModeName(iModeChan),Hist->Integral());
+        TH1* Hist = handler->Get1DVarHist(iSample, handler->GetXBinVarName(iSample),SelectionVec);
+        MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),Modes->GetMaCh3ModeName(iModeChan),Hist->Integral());
+      }
+
+      TH1* Hist = handler->Get1DVarHist(iSample, handler->GetXBinVarName(iSample));
+      MACH3LOG_INFO("{:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),Hist->Integral());
     }
-
-    TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName());
-    MACH3LOG_INFO("{:<20} : {:<20.2f}",Sample->GetTitle(),Hist->Integral());
   }
 
   //###############################################################################################################################

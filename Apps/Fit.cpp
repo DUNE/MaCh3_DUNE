@@ -102,6 +102,7 @@ int main(int argc, char * argv[]) {
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
 
+<<<<<<< HEAD
   TFile* PMNSData = TFile::Open("OscPMNSNoNC.root"); // Loading in the oscillated data we want to fit to
   for (unsigned sample_i = 0 ; sample_i < DUNEPdfs.size() ; ++sample_i) {
     
@@ -118,12 +119,34 @@ int main(int argc, char * argv[]) {
 
     PredictionHistograms.push_back(static_cast<TH1*>(CloneHist->Clone(NameTString+"_unosc"))); // Add our data histograms to the DUNE histograms
     //PredictionHistograms.push_back(static_cast<TH1*>(DUNEPdfs[sample_i]->GetMCHist(DUNEPdfs[sample_i]->GetNDim())->Clone(NameTString+"_unosc"))); // Use this for PMNS data?
+=======
+  for (auto handler : DUNEPdfs) {
+    for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
+    
+      std::string name = handler->GetSampleTitle(iSample);
+      sample_names.push_back(name);
+      TString NameTString = TString(name.c_str());
+      
+      handler->Reweight();
+      PredictionHistograms.push_back(static_cast<TH1*>(handler->GetMCHist(iSample)->Clone(NameTString+"_DataHist")));
+>>>>>>> origin/dbarrow257/feature/CoreV2.4.2
 
-    if (DUNEPdfs[sample_i]->GetNDim() == 1){
-      DUNEPdfs[sample_i]->AddData(static_cast<TH1D*>(PredictionHistograms[sample_i]));
-    } else if (DUNEPdfs[sample_i]->GetNDim() == 2){
-      DUNEPdfs[sample_i]->AddData(static_cast<TH2D*>(PredictionHistograms[sample_i]));
+      if (handler->GetNDim(iSample) == 1){
+        handler->AddData(iSample, static_cast<TH1D*>(PredictionHistograms.back()));
+      } else if (handler->GetNDim(iSample) == 2){
+        handler->AddData(iSample, static_cast<TH2D*>(PredictionHistograms.back()));
+      }
+      
+      else {
+        MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting"); 
+        throw MaCh3Exception(__FILE__ , __LINE__ );
+      }
+
+      MACH3LOG_INFO("Integrals of nominal hists: ");
+      MACH3LOG_INFO("{} : {}",name.c_str(),PredictionHistograms.back()->Integral());
+      MACH3LOG_INFO("--------------");
     }
+<<<<<<< HEAD
     
     else {
       MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting"); 
@@ -136,6 +159,8 @@ int main(int argc, char * argv[]) {
     MACH3LOG_INFO("Integrals of nominal hists: ");
     MACH3LOG_INFO("{} : {}",sample_names[iPDF].c_str(),PredictionHistograms[iPDF]->Integral());
     MACH3LOG_INFO("--------------");
+=======
+>>>>>>> origin/dbarrow257/feature/CoreV2.4.2
   }
   
   //###########################################################################################################
