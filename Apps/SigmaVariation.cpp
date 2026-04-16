@@ -20,11 +20,6 @@ int main(int argc, char * argv[]) {
   auto FitManager = MaCh3ManagerFactory(argc, argv);
 
   //###############################################################################################################################
-
-  //DB Sigma variations in units of each parameters Sigma
-  std::vector<double> sigmaVariations = {-3, -1, 0, 1, 3};
-
-  //###############################################################################################################################
   //Create samplePDFFD objects
   auto xsec = MaCh3CovarianceFactory<ParameterHandlerGeneric>(FitManager.get(), "Xsec");
   if (CheckNodeExists(FitManager->raw(), "General", "OscillationParameters"))
@@ -46,66 +41,17 @@ int main(int argc, char * argv[]) {
     }
   }
   
-  //###############################################################################################################################
-  //DB Can't use the core sigma variations as it's entirely set up around the concept of multiple selections per samplePDF object
-  //   Thats not the case in the FD code, which has one selection per samplePDF object
-  //   Consequently have to write out own code
-  
-  // std::vector<std::unique_ptr<ParameterHandlerBase>> CovObjs;
-  // CovObjs.emplace_back(xsec);
-
-  MACH3LOG_INFO("=======================================================");
-
-  std::string OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
-  TFile* File = TFile::Open(OutputFileName.c_str(),"RECREATE");
-  
-  MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",xsec->GetName());
-  
-  int nPars = xsec->GetNumParams();
-  for (int iPar=0;iPar<nPars;iPar++) {
-    std::string ParName = xsec->GetParFancyName(iPar);
-    double VarInit = xsec->GetParInit(iPar);
-    double VarSigma = xsec->GetDiagonalError(iPar);
-    
-    MACH3LOG_INFO("\tParameter : {:<30} - Variations around value : {:<10.7f} , in units of 1 Sigma : {:<10.7f}",ParName,VarInit,VarSigma);
-
-    File->cd();
-    File->mkdir(ParName.c_str());
-    File->cd(ParName.c_str());
-    
-    for (size_t iSigVar=0;iSigVar<sigmaVariations.size();iSigVar++) {
-      double VarVal = VarInit + sigmaVariations[iSigVar] * VarSigma;
-      if (VarVal < xsec->GetLowerBound(iPar)) VarVal = xsec->GetLowerBound(iPar);
-      if (VarVal > xsec->GetUpperBound(iPar)) VarVal = xsec->GetUpperBound(iPar);
-
-      MACH3LOG_INFO("\t\tVariation {:<5.3f} - Parameter Value : {:<10.7f}",
-                    sigmaVariations[iSigVar], VarVal);
-      xsec->SetParProp(iPar, VarVal);
-
-      for (auto handler : DUNEPdfs) {
-        for (int iSample = 0; iSample < handler->GetNSamples(); iSample++) {
-          std::string SampleName = handler->GetSampleTitle(iSample);
-
-          File->cd(ParName.c_str());
-          if (iSigVar == 0) {
-            File->mkdir((ParName + "/" + SampleName).c_str());
-          }
-          File->cd((ParName + "/" + SampleName).c_str());
-
-          handler->Reweight();
-          auto Hist = handler->GetMCHist(iSample);
-          MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}", SampleName,
-                        Hist->Integral());
-
-          Hist->Write(Form("Variation_%i", (int)iSigVar));
-        }
-      }
-    }
-
-    xsec->SetParProp(iPar, VarInit);
-
-    MACH3LOG_INFO("=======================================================");
+  //###############################################################################################################################  
+  auto MaCh3Fitter = MaCh3FitterFactory(FitManager.get());
+  MaCh3Fitter->AddSystObj(xsec.get());
+  //Add samples
+  for(auto Sample : DUNEPdfs){
+    MaCh3Fitter->AddSampleHandler(Sample);
+  }
+  MaCh3Fitter->RunSigmaVar();
+  for (auto& pdf : DUNEPdfs) {
+    delete pdf;
   }
 
-  File->Close();
+  return 0;
 }
