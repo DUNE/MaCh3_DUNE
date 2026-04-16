@@ -179,6 +179,8 @@ const double* SampleHandlerAtm::GetPointerToKinematicParameter(const int KinPar,
     return &(dunemcSamples[iEvent].OscChannelIndex);
   case kMode:
     return &(dunemcSamples[iEvent].mode);
+  case kTargetNucleus:
+    return &(dunemcSamples[iEvent].Target);
   default:
     MACH3LOG_ERROR("Unknown KinPar: {}",static_cast<int>(KinPar));
     throw MaCh3Exception(__FILE__, __LINE__);

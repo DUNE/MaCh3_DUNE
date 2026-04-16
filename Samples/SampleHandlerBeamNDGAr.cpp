@@ -1178,6 +1178,8 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(const int K
       return &dunendgarmcFitting[iEvent].rw_Q3;
     case kEPi0:
       return &dunendgarmcPlotting[iEvent].rw_ePi0;
+    case kTargetNucleus:
+      return &(dunendgarmcPlotting[iEvent].Target);
     default:
       MACH3LOG_ERROR("Did not recognise Kinematic Parameter {}", static_cast<int>(KinematicParameter));
       throw MaCh3Exception(__FILE__, __LINE__);

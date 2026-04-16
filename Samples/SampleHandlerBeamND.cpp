@@ -198,34 +198,28 @@ int SampleHandlerBeamND::SetupExperimentMC() {
 }
 
 
-const double* SampleHandlerBeamND::GetPointerToKinematicParameter(const int KinPar, const int iEvent) const{
-  const double* KinematicValue;
-  
+const double* SampleHandlerBeamND::GetPointerToKinematicParameter(const int KinPar, const int iEvent) const{  
   switch(KinPar){
   case kTrueNeutrinoEnergy:
-    KinematicValue = &(dunendmcSamples[iEvent].enu_true);
-    break;
+    return &(dunendmcSamples[iEvent].enu_true);
   case kRecoNeutrinoEnergy:
-    KinematicValue = &(dunendmcSamples[iEvent].rw_erec_shifted);
-    break;
+    return &(dunendmcSamples[iEvent].rw_erec_shifted);
   case kyRec:
-    KinematicValue = &(dunendmcSamples[iEvent].rw_yrec);
-    break;
+    return &(dunendmcSamples[iEvent].rw_yrec);
   case kOscChannel:
-    KinematicValue = &(dunendmcSamples[iEvent].OscChannelIndex);
-    break;
+    return &(dunendmcSamples[iEvent].OscChannelIndex);
   case kMode:
-    KinematicValue = &(dunendmcSamples[iEvent].mode);
+    return &(dunendmcSamples[iEvent].mode);
     break;
   case kIsFHC:
-    KinematicValue = &(IsFHC);
+    return &(IsFHC);
     break;
+  case kTargetNucleus:
+    return &(dunendmcSamples[iEvent].Target);
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
     throw MaCh3Exception(__FILE__, __LINE__);
-  }
-  
-  return KinematicValue;
+  }  
 }
 
 
