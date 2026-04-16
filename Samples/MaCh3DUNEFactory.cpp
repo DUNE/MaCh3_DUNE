@@ -112,7 +112,7 @@ std::vector<SampleHandlerBase *> MaCh3DuneSampleFactory(std::unique_ptr<Manager>
   // ==========================================================
   // Setup oscillation handlers
   auto AtmOscHandler = SetupOscillationHandler(FitManager, param_handler, "ATM", "ATM");
-  auto BeamOscHandler = SetupOscillationHandler(FitManager, param_handler, "BeamFD",  "BeamFD");
+  auto BeamOscHandler = SetupOscillationHandler(FitManager, param_handler, "BeamFD",  "BeamFD_Sample");
   // ==========================================================
 
   auto beamNDCov = SetupBeamNDCov(FitManager);
@@ -138,7 +138,7 @@ std::vector<SampleHandlerBase *> MaCh3DuneSampleFactory(std::unique_ptr<Manager>
     sample->setWeightSwitchOffVector(FitManager->getWeightSwitchOffVector());
     sample->setXsecWeightSwitchOffVector(FitManager->getXsecWeightSwitchOffVector());
     #endif
-    DUNEPdfs.push_back(sample);
+    DUNEPdfs[Sample_i] = sample;
   }
 
   return DUNEPdfs;

@@ -18,8 +18,17 @@ public:
   ~SampleHandlerAtm();
 
   /// @brief Enum to identify kinematics
-  enum KinematicTypes{kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueCosZ,kRecoCosZ,kOscChannel,kMode};
-  
+  enum KinematicTypes
+  {
+    kTrueNeutrinoEnergy,
+    kRecoNeutrinoEnergy,
+    kTrueCosZ,
+    kRecoCosZ,
+    kOscChannel,
+    kMode,
+    kTargetNucleus
+  };
+
 protected:
   /// @brief Initialises object
   void Init();
@@ -79,7 +88,8 @@ protected:
     {"TrueCosineZ",kTrueCosZ},
     {"RecoCosineZ",kRecoCosZ},
     {"OscillationChannel",kOscChannel},
-    {"Mode",kMode}
+    {"Mode",kMode},
+    {"TargetNucleus", kTargetNucleus}
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -88,7 +98,8 @@ protected:
     {kTrueCosZ,"TrueCosineZ"},    
     {kRecoCosZ,"RecoCosineZ"},
     {kOscChannel,"OscillationChannel"},
-    {kMode,"Mode"}
+    {kMode,"Mode"},
+    {kTargetNucleus, "TargetNucleus"},
   };
   
   /// Array filled with MC samples for each oscillation channel

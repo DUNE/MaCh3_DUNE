@@ -630,9 +630,11 @@ const double* SampleHandlerBeamFD::GetPointerToKinematicParameter(const int KinP
   case kTrueCCnue: 
 	return &(dunemcSamples[iEvent].rw_trueccnue);
   case kTrueCCnumu: 
-	return &(dunemcSamples[iEvent].rw_trueccnumu);
+	  return &(dunemcSamples[iEvent].rw_trueccnumu);
+  case kTargetNucleus:
+    return &(dunemcSamples[iEvent].Target);
   default:
-    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
+    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type {}...", KinPar);
     throw MaCh3Exception(__FILE__, __LINE__);
   }  
 }

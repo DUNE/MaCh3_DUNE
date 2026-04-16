@@ -31,7 +31,7 @@ struct dunemc_base { // Store variables used in fitting
   double pot_s;
   double norm_s;
   
-  int Target; //Target the interaction was on
+  double Target; //Target the interaction was on
   
   int nupdg;
   int nupdgUnosc;

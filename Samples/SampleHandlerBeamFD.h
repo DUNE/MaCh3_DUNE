@@ -22,7 +22,22 @@ public:
   ~SampleHandlerBeamFD();
 
   /// @brief Enum to identify kinematics
-  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC, kTrueCCnue, kTrueCCnumu};
+  enum KinematicTypes
+  {
+    kTrueNeutrinoEnergy,
+    kRecoNeutrinoEnergy,
+    kTrueXPos,
+    kTrueYPos,
+    kTrueZPos,
+    kCVNNumu,
+    kCVNNue,
+    kM3Mode,
+    kOscChannel,
+    kIsFHC,
+    kTargetNucleus,
+    kTrueCCnue,
+    kTrueCCnumu
+  };
 
 protected:
   /// @brief Initialises object
@@ -131,6 +146,7 @@ protected:
     {"Mode",kM3Mode},
     {"OscillationChannel",kOscChannel},
     {"IsFHC",kIsFHC},
+    {"TargetNucleus", kTargetNucleus},
     {"IsTrueCCnue", kTrueCCnue},
     {"IsTrueCCnumu", kTrueCCnumu}
   };
@@ -146,6 +162,7 @@ protected:
     {kM3Mode,"Mode"},
     {kOscChannel,"OscillationChannel"},
     {kIsFHC,"IsFHC"},
+    {kTargetNucleus, "TargetNucleus"},
     {kTrueCCnue,"IsTrueCCnue"},
     {kTrueCCnumu,"IsTrueCCnumu"}
   };

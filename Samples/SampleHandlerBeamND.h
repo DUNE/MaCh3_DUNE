@@ -12,9 +12,18 @@ public:
   SampleHandlerBeamND(std::string mc_version, ParameterHandlerGeneric* xsec_cov, BeamNDCov beamNDCov);
   ~SampleHandlerBeamND();
 
-  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kyRec,kOscChannel,kMode,kIsFHC};
-  
- protected:
+  enum KinematicTypes
+  {
+    kTrueNeutrinoEnergy,
+    kRecoNeutrinoEnergy,
+    kyRec,
+    kOscChannel,
+    kMode,
+    kIsFHC,
+    kTargetNucleus
+  };
+
+protected:
   void Init();
   int SetupExperimentMC();
   void SetupMC();
@@ -41,13 +50,13 @@ public:
   std::vector<BeamNDSampleInfo> beamNDSampleDetails;
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
-    {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
-    {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},
-    {"yRec",kyRec},
-    {"OscillationChannel",kOscChannel},
-    {"Mode",kMode},
-    {"IsFHC",kIsFHC}
-  };
+    {"TrueNeutrinoEnergy", kTrueNeutrinoEnergy},
+    {"RecoNeutrinoEnergy", kRecoNeutrinoEnergy},
+    {"yRec", kyRec},
+    {"OscillationChannel", kOscChannel},
+    {"Mode", kMode},
+    {"IsFHC", kIsFHC},
+    {"TargetNucleus", kTargetNucleus}};
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
     {kTrueNeutrinoEnergy,"TrueNeutrinoEnergy"},
@@ -55,7 +64,8 @@ public:
     {kyRec,"yRec"},
     {kOscChannel,"OscillationChannel"},
     {kMode,"Mode"},
-    {kIsFHC,"IsFHC"}
+    {kIsFHC,"IsFHC"},
+    {kTargetNucleus, "TargetNucleus"},
   };
 
   TString _nutype;
