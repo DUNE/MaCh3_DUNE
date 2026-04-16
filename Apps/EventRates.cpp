@@ -48,16 +48,28 @@ int main(int argc, char * argv[]) {
   //Create SampleHandlerBase objects
   
   auto xsec = MaCh3CovarianceFactory<ParameterHandlerGeneric>(FitManager.get(), "Xsec");
-  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();  
-  xsec->SetGroupOnlyParameters("oscillation", oscpars);
+  if (CheckNodeExists(FitManager->raw(), "General", "OscillationParameters"))
+  {
+    auto oscpars = Get<std::vector<double>>(FitManager->raw()["General"]["OscillationParameters"], __FILE__, __LINE__);
+    xsec->SetGroupOnlyParameters("Osc", oscpars);
+  }
 
   auto DUNEPdfs = MaCh3DuneSampleFactory(FitManager, xsec);
+
+  if(DUNEPdfs.empty()){
+    MACH3LOG_ERROR("Cannot find any samples");
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
 
   //###############################################################################################################################
   //Perform reweight and print total integral
 
   std::vector<std::unique_ptr<TH1>> DUNEHists;
-  for(auto handler : DUNEPdfs){
+  for(auto& handler : DUNEPdfs){
+    if (!handler){
+      MACH3LOG_ERROR("Sample not set up correctly");
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
     handler->Reweight();
     for (int iSample=0; iSample<handler->GetNSamples(); iSample++) {
       DUNEHists.push_back(M3::Clone(handler->GetMCHist(iSample)));
@@ -92,11 +104,11 @@ int main(int argc, char * argv[]) {
         SelecChannel.UpperBound = iOscChan+1;
         SelectionVec.push_back(SelecChannel);
         
-        auto Hist = handler->Get1DVarHist(iSample, handler->GetKinVarName(iSample, 1),SelectionVec);
+        auto Hist = handler->Get1DVarHist(iSample, handler->GetKinVarName(iSample, 0),SelectionVec);
         MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),handler->GetFlavourName(iSample, iOscChan),Hist->Integral());
       }
 
-      auto Hist = handler->Get1DVarHist(iSample, handler->GetKinVarName(iSample, 1));
+      auto Hist = handler->Get1DVarHist(iSample, handler->GetKinVarName(iSample, 0));
       MACH3LOG_INFO("{:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),Hist->Integral());
     }
   }
@@ -123,11 +135,11 @@ int main(int argc, char * argv[]) {
         SelecChannel.UpperBound = iModeChan+1;
         SelectionVec.push_back(SelecChannel);
 
-        auto Hist = handler->Get1DVarHist(iSample, handler->GetKinVarName(iSample,1), SelectionVec);
+        auto Hist = handler->Get1DVarHist(iSample, handler->GetKinVarName(iSample,0), SelectionVec);
         MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),Modes->GetMaCh3ModeName(iModeChan),Hist->Integral());
       }
 
-      auto Hist = handler->Get1DVarHist(iSample, handler->GetKinVarName(iSample,1));
+      auto Hist = handler->Get1DVarHist(iSample, handler->GetKinVarName(iSample,0));
       MACH3LOG_INFO("{:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),Hist->Integral());
     }
   }

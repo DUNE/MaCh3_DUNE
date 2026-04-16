@@ -33,8 +33,14 @@ int main(int argc, char * argv[]) {
   //###############################################################################################################################
   //Create samplePDFFD objects
   auto xsec = MaCh3CovarianceFactory<ParameterHandlerGeneric>(FitManager.get(), "Xsec");
-  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();  
+  if (!CheckNodeExists(FitManager->raw(), "General", "OscillationParameters")){
+    MACH3LOG_ERROR("Cannot find OscillationParameters in your config, Variations will not work");
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+
+  auto oscpars = Get<std::vector<double>>(FitManager->raw()["General"]["OscillationParameters"], __FILE__, __LINE__);
   xsec->SetGroupOnlyParameters("Osc", oscpars);
+  
 
   auto DUNEPdfs = MaCh3DuneSampleFactory(FitManager, xsec);
 
