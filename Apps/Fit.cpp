@@ -34,12 +34,13 @@ int main(int argc, char * argv[]) {
   // std::vector<double> AvgParams(480, 0.0);
   // std::vector<int> Count(480, 0);
 
-  TFile* Osc = TFile::Open("TrueIndChanOsc.root"); // Loading in histograms
-  TFile* Unosc = TFile::Open("TrueIndChanUnosc.root");
+  TFile* Osc = TFile::Open("CCIndChanOsc.root"); // Loading in histograms
+  TFile* Unosc = TFile::Open("CCIndChanUnosc.root");
 
   TIter next(Osc->GetListOfKeys()); // Get list of different items within oscillated data histograms (48 in total, 12 channels in 4 samples)
   TKey* key;  // Initialise
   int ParIndex = 0.0;
+  int KeyIndex = 0.0;
 
   for(int i = 0; i < xsec->GetNumParams(); i++){ // For every param in the xsec group
     if(xsec->IsParFromGroup(i, "EParam")){ // If param is from our energy normalisation parameter group
@@ -49,6 +50,8 @@ int main(int argc, char * argv[]) {
   }
 
   while ((key = (TKey*)next())) { // Go through all keys in sequence
+    if(KeyIndex == 12.0) break;
+    KeyIndex++;
     auto HistoOsc = Osc->Get<TH1D>(key->GetName()); // Getting names of histograms
     auto HistoUnosc = Unosc->Get<TH1D>(key->GetName()); 
     int NumBins = HistoOsc->GetNbinsX(); // Find number of bins (number of energy normalisation parameters for this histogram)

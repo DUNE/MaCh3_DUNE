@@ -55,6 +55,10 @@ int main(int argc, char * argv[]) {
   //###############################################################################################################################
   //Perform reweight and print total integral
 
+  // std::vector<double> Params;
+  // std::vector<double> AvgParams(480, 0.0);
+  // std::vector<int> Count(480, 0);
+
   // TFile* Osc = TFile::Open("TrueIndChanOsc.root"); // Loading in histograms
   // TFile* Unosc = TFile::Open("TrueIndChanUnosc.root");
 
@@ -79,14 +83,29 @@ int main(int argc, char * argv[]) {
   //     double Param;
   //     if(BinSizeUnosc == 0) { // If no unoscillated data, set param to 0
   //       Param = 0;
-  //       xsec->SetPar(ParIndex, Param);
+  //       //xsec->SetPar(ParIndex, Param);
+  //       Params.push_back(Param);
   //     }
   //     else { // If unoscillated data, calculate ratio between these as needed to induce oscillation
   //       Param = BinSizeOsc / BinSizeUnosc; 
-  //       xsec->SetPar(ParIndex, Param);
+  //       //xsec->SetPar(ParIndex, Param);
+  //       Params.push_back(Param);
   //     } 
-  //     ParIndex++; // Increment parameter index to keep amending in sequence
+  //     //ParIndex++; // Increment parameter index to keep amending in sequence
   //   }
+  // }
+  // for(int p = 0; p < 1920; p++){
+  //   int sample = p / 480;
+  //   int channel = (p % 480) / 40;
+  //   int bin = p % 40;
+  //   int Index = channel * 40 + bin;
+  //   AvgParams[Index] += Params[p];
+  //   Count[Index] += 1;
+  // }
+  // for(int i = 0; i < 480; i++){
+  //   AvgParams[i] /= Count[i];
+  //   xsec->SetPar(ParIndex, AvgParams[i]);
+  //   ParIndex++;
   // }
 
   // for(int k = 0; k < xsec->GetNumParams(); k++){ // For every param in the xsec group
