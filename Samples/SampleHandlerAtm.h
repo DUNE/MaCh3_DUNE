@@ -18,7 +18,7 @@ public:
   ~SampleHandlerAtm();
 
   /// @brief Enum to identify kinematics
-  enum KinematicTypes{kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueCosZ,kRecoCosZ,kOscChannel,kMode};
+  enum KinematicTypes{kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kRecoHadronEnergy,kRecoLeptonEnergy,kTrueCosZ,kRecoCosZ,kOscChannel,kMode};
   
 protected:
   /// @brief Initialises object
@@ -94,6 +94,8 @@ protected:
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
     {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},
+    {"RecoHadronEnergy",kRecoHadronEnergy},
+    {"RecoLeptonEnergy",kRecoLeptonEnergy},
     {"TrueCosineZ",kTrueCosZ},
     {"RecoCosineZ",kRecoCosZ},
     {"OscillationChannel",kOscChannel},
@@ -103,6 +105,8 @@ protected:
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
     {kTrueNeutrinoEnergy,"TrueNeutrinoEnergy"},
     {kRecoNeutrinoEnergy,"RecoNeutrinoEnergy"},
+    {kRecoHadronEnergy,"RecoHadronEnergy"},
+    {kRecoLeptonEnergy,"RecoLeptonEnergy"},
     {kTrueCosZ,"TrueCosineZ"},    
     {kRecoCosZ,"RecoCosineZ"},
     {kOscChannel,"OscillationChannel"},

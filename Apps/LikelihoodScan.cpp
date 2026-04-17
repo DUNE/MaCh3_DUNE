@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <TH1D.h>
+#include <TH3D.h>
 #include <THStack.h>
 #include <TStyle.h>
 #include <TCanvas.h>
@@ -50,6 +51,8 @@ int main(int argc, char * argv[]) {
         handler->AddData(iSample, (TH1D*)DUNEHists.back());
       } else if (handler->GetNDim(iSample) == 2) {
         handler->AddData(iSample, (TH2D*)DUNEHists.back());
+      } else if (handler->GetNDim(iSample) == 3) {
+        handler->AddData(iSample, (TH3D*)DUNEHists.back());
       }
     }
   }

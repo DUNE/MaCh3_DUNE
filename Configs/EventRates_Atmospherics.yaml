@@ -1,6 +1,6 @@
 ---
 General:
-  OutputFile: "DuneEventRates.root"
+  OutputFile: "Default_LLH.root"
 
   DUNESamples:
     - "Configs/Samples/SampleHandler_FD_Atm.yaml"
@@ -32,8 +32,8 @@ General:
     FitTestLikelihood: false
 
   MCMC:
-    NSteps: 20000
-    AutoSave: 5000
+    NSteps: 5000
+    AutoSave: 1000
 
   Output:
     FileName: "TestEventRates.root"
@@ -44,6 +44,21 @@ General:
   StartFromPos: false
   PosFileName: "chain_0.root"
 
+LLHScan:
+  # don't make LLH for certain systematic groups
+  LLHScanSkipVector: []
+  # Save individual sample contributions to the LLH
+  LLHScanBySample: true
+  LLHParameters: ['delta_cp','sin2th_23','sin2th_13']
+  # Number of points we run LLH scans for each systematic
+  LLHScanPoints: 50
+  # Number of points for 2D scan in each direction
+  2DLLHScanPoints: 20
+  # Add physical ranges for special params whose priors/errors may not be well well-defined
+  ScanRanges:
+    delta_cp: [-3.14,3.14]
+    sin2th_23: [0.35, 0.65]
+    
 ProcessMCMC:
   BurnInSteps: 80000
   Thinning: [false, 100]

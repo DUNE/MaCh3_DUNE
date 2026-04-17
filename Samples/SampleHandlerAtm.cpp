@@ -84,11 +84,17 @@ int SampleHandlerAtm::SetupExperimentMC() {
     
     TVector3 RecoNuMomentumVector;
     double RecoENu;
+    double RecoEHad;
+    double RecoELep;
     if (IsELike[SampleIndex]) {
       RecoENu = sr->common.ixn.pandora[0].Enu.e_calo;
+      RecoEHad = sr->common.ixn.pandora[0].Enu.e_had;
+      RecoELep = RecoENu-RecoEHad;	
       RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.heshw.X(),sr->common.ixn.pandora[0].dir.heshw.Y(),sr->common.ixn.pandora[0].dir.heshw.Z())).Unit();
     } else {
       RecoENu = sr->common.ixn.pandora[0].Enu.lep_calo;
+      RecoEHad = sr->common.ixn.pandora[0].Enu.mu_had;
+      RecoELep = RecoENu-RecoEHad;
       RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.X(),sr->common.ixn.pandora[0].dir.lngtrk.Y(),sr->common.ixn.pandora[0].dir.lngtrk.Z())).Unit();      
     }
     double RecoCZ = -RecoNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
@@ -100,8 +106,18 @@ int SampleHandlerAtm::SetupExperimentMC() {
       MACH3LOG_WARN("Skipping entry {}/{} -> Reconstructed Neutrino Energy is NAN",iChainEntry,nChainEntries);
       continue;
     }
+    if (std::isnan(RecoEHad)) {
+      MACH3LOG_WARN("Skipping entry {}/{} -> Reconstructed Hadron  Energy is NAN",iChainEntry,nChainEntries);
+      continue;
+    }
+     if (std::isnan(RecoELep)) {
+      MACH3LOG_WARN("Skipping entry {}/{} -> Reconstructed Lepton  Energy is NAN",iChainEntry,nChainEntries);
+      continue;
+    }
 
     dunemcSamples[iEvent].rw_erec = RecoENu;
+    dunemcSamples[iEvent].rw_ehad = RecoEHad;
+    dunemcSamples[iEvent].rw_elep = RecoELep;
     dunemcSamples[iEvent].rw_theta = RecoCZ;
     
     auto& OscillationChannels = SampleDetails[SampleIndex].OscChannels;
@@ -162,6 +178,12 @@ const double* SampleHandlerAtm::GetPointerToKinematicParameter(KinematicTypes Ki
     break;
   case kRecoNeutrinoEnergy:
     KinematicValue = &(dunemcSamples[iEvent].rw_erec);
+    break;
+  case kRecoHadronEnergy:
+    KinematicValue = &(dunemcSamples[iEvent].rw_ehad);
+    break;
+  case kRecoLeptonEnergy:
+    KinematicValue = &(dunemcSamples[iEvent].rw_elep);
     break;
   case kTrueCosZ:
     KinematicValue = &(dunemcSamples[iEvent].rw_truecz);

@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <TH1D.h>
+#include <TH3D.h>
 #include <THStack.h>
 #include <TStyle.h>
 #include <TCanvas.h>
@@ -50,9 +51,12 @@ int main(int argc, char * argv[]) {
       } else if (handler->GetNDim(iSample) == 2){
         handler->AddData(iSample, static_cast<TH2D*>(PredictionHistograms.back()));
       }
+        else if (handler->GetNDim(iSample) == 3){
+        handler->AddData(iSample, static_cast<TH3D*>(PredictionHistograms.back()));
+      }
       
       else {
-        MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting"); 
+        MACH3LOG_ERROR("Unsupported number of dimensions > 3 - Quitting"); 
         throw MaCh3Exception(__FILE__ , __LINE__ );
       }
 

@@ -20,15 +20,17 @@ Atm_nuelike:
   SampleTitle: "nueselec"
   
   Binning:
+    #VarStr: ["RecoCosineZ","RecoLeptonEnergy","RecoHadronEnergy"]
     VarStr: ["RecoCosineZ","RecoNeutrinoEnergy"]
-    VarBins: [[-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1], [0, 0.11, 0.17, 0.26, 0.4, 0.63, 1.03, 1.71, 2.94, 5.48, 1e8]]
+    VarBins: [[-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1],  [0, 0.23, 0.31, 0.47, 0.81, 1.28, 1.99, 3.17, 5.38, 11.54, 1e8]]
     Uniform: true
 
   SampleOptions:
     IsELike: 1
 
   InputFiles:
-    mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"
+    mtupleprefix: "Inputs/Atmospherics/CAFs/MC/MC_hd"
+      #mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"
     mtuplesuffix: "_nueselec.root"
     splineprefix: ""
     splinesuffix: ""
@@ -112,6 +114,7 @@ Atm_numulike:
   SampleTitle: "numuselec"
   
   Binning:
+    #VarStr: ["RecoCosineZ","RecoLeptonEnergy", "RecoHadronEnergy"]
     VarStr: ["RecoCosineZ","RecoNeutrinoEnergy"]
     VarBins: [[-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1], [0, 0.23, 0.31, 0.47, 0.81, 1.28, 1.99, 3.17, 5.38, 11.54, 1e8]]
     Uniform: true    
@@ -120,7 +123,8 @@ Atm_numulike:
     IsELike: 0
 
   InputFiles:
-    mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"
+    mtupleprefix: "Inputs/Atmospherics/CAFs/MC/MC_hd"
+      #mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"
     mtuplesuffix: "_numuselec.root"
     splineprefix: ""
     splinesuffix: ""
