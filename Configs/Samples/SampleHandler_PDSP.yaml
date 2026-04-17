@@ -1,57 +1,59 @@
 ---
 #Global Sample Handler setting
 SampleHandlerName: "PDSP"
-POT: 2.1428e+21
-MaCh3ModeConfig: "MaCh3Modes.yaml"
+POT: 0
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_PDSP.yaml" # do we need to make our own version, or just ignore?
 
 LikelihoodOptions:
   #False means you calculate W2 histogram only during first reweight, advisable for Barlow-Beeston
   UpdateW2: true
   TestStatistic: "Poisson"
 
-BinningFile: "PDSP/PDSPBinning.yaml"
+BinningFile: "PDSPBinning.yaml"
 InputFiles:
   PrepSplineFile: false
 
 #Settings for a single sample
 Samples: ["PDSP"]
-Tutorial_Beam:
+PDSP:
   SelectionCuts:
     - KinematicStr: "TrueKEInt"
-      Bounds: [ 0., 4 ]
+      Bounds: [ 0., 999 ]
   SampleTitle: "PDSP"
 
   Binning:
     VarStr : [ "RecoKEInt" ]
-    VarBins: [[1, 1.5, 2, 2.5]]
+    VarBins: [[0, 1.5, 1.7, 1.9, 2.1, 999]]
     Uniform: true
 
   InputFiles:
-    mtupleprefix: "/home/bhuller/work/analysis_main/analysis_input/root_analysis_input_mc_selected/mc_mc_selected_*"
+    mtupleprefix: "/home/bhuller/work/analysis_main/analysis_input/root_analysis_input_mc_selected/mc_mc_selected_"
     mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ""
 
   SubSamples:
     - Name: "absorption"
       LatexName: "abs"
       mtuplefile: "Tabsorption"
       splinefile: ""
-      nutype: 14
-      oscnutype: 14
+      nutype: 0
+      oscnutype: 0
     - Name: "charge_exchange"
       LatexName: "cex"
       mtuplefile: "Tcharge_exchange"
       splinefile: ""
-      nutype: 14
-      oscnutype: 14
+      nutype: 1
+      oscnutype: 1
     - Name: "single_pion_production"
       LatexName: "spip"
       mtuplefile: "Tsingle_pion_production"
       splinefile: ""
-      nutype: 14
-      oscnutype: 14
+      nutype: 2
+      oscnutype: 2
     - Name: "pion_production"
       LatexName: "pip"
       mtuplefile: "Tpion_production"
       splinefile: ""
-      nutype: 14
-      oscnutype: 14
+      nutype: 3
+      oscnutype: 3

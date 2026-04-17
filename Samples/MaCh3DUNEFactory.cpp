@@ -4,6 +4,7 @@
 #include "Samples/SampleHandlerBeamND.h"
 #include "Samples/SampleHandlerBeamNDGAr.h"
 #include "Samples/SampleHandlerAtm.h"
+#include "Samples/SampleHandlerPDSP.h"
 
 SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, ParameterHandlerGeneric* &xsec, const std::shared_ptr<OscillationHandler>&  BeamOscillator_, const std::shared_ptr<OscillationHandler>&  AtmOscillator_, BeamNDCov beamNDCov) {
   SampleHandlerFD *Sample;
@@ -30,6 +31,8 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
     Sample = new SampleHandlerAtm(SampleConfig, xsec, AtmOscillator_);
   } else if (SampleType == "BeamNDGAr") {
     Sample = new SampleHandlerBeamNDGAr(SampleConfig, xsec);
+  } else if (SampleType == "PDSP") {
+    Sample = new SampleHandlerPDSP(SampleConfig, xsec);
   }
   else {
     MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
