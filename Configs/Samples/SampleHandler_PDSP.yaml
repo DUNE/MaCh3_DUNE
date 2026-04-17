@@ -18,13 +18,13 @@ Samples: ["PDSP"]
 PDSP:
   SelectionCuts:
     - KinematicStr: "TrueKEInt"
-      Bounds: [ 0., 999 ]
+      Bounds: [ 0., 999999 ]
   SampleTitle: "PDSP"
 
   Binning:
     VarStr : [ "RecoKEInt" ]
-    VarBins: [[0, 1.5, 1.7, 1.9, 2.1, 999]]
-    Uniform: true
+    VarBins: [[0, 1500, 1700, 1900, 2100, 2400]]
+    Uniform: True
 
   InputFiles:
     mtupleprefix: "/home/bhuller/work/analysis_main/analysis_input/root_analysis_input_mc_selected/mc_mc_selected_"
@@ -37,23 +37,23 @@ PDSP:
       LatexName: "abs"
       mtuplefile: "Tabsorption"
       splinefile: ""
-      nutype: 0
-      oscnutype: 0
+      nutype: 1
+      oscnutype: 1
     - Name: "charge_exchange"
       LatexName: "cex"
       mtuplefile: "Tcharge_exchange"
       splinefile: ""
-      nutype: 1
-      oscnutype: 1
+      nutype: 2
+      oscnutype: 2
     - Name: "single_pion_production"
       LatexName: "spip"
       mtuplefile: "Tsingle_pion_production"
       splinefile: ""
-      nutype: 2
-      oscnutype: 2
+      nutype: 3
+      oscnutype: 3
     - Name: "pion_production"
       LatexName: "pip"
       mtuplefile: "Tpion_production"
       splinefile: ""
-      nutype: 3
-      oscnutype: 3
+      nutype: 4
+      oscnutype: 4

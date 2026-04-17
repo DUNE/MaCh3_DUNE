@@ -25,7 +25,7 @@ General:
 
   MCMC:
     # Number of MCMC steps that will be performed
-    NSteps: 100000
+    NSteps: 10000
     #KS: Sets how frequent (number of steps) you want to autosave your chain, if you autosave rarely chain will be slightly faster, if you job wall is small you might want more frequent autosave to reduce number of lost steps
     AutoSave: 10000
 
@@ -125,10 +125,10 @@ AdaptionOptions:
 KinematicDistributionPlots:
 - Name: "True Interacting Kinetic Energy"
   VarStrings: ["TrueKeInt"]
-  VarBins: [[40,0,4]]
+  VarBins: [[40,0,3000]]
   KinematicCuts:
   - VarString: "TrueKeInt"
-    Range: [0.5,3]
+    Range: [500,3000]
 - Name: "Reconstructed Kinetic Energy"
   VarStrings: ["RecoKEInt"]
-  VarBins: [[50,0,4]]
+  VarBins: [[50,0,3000]]
