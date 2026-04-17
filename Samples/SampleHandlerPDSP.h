@@ -10,7 +10,7 @@ class SampleHandlerPDSP : public SampleHandlerFD
   SampleHandlerPDSP(const std::string& config_name, ParameterHandlerGeneric* parameter_handler);
   virtual ~SampleHandlerPDSP();
 
-  enum KinematicTypes {kTrueKEInt, kRecoKEInt};
+  enum KinematicTypes {kTrueKEInt, kRecoKEInt, kMode, kOscChannel};
   
   // =============================================
 
@@ -24,29 +24,36 @@ class SampleHandlerPDSP : public SampleHandlerFD
 
   void CleanMemoryBeforeFit() override;
 
+  void AddAdditionalWeightPointers() override;
 
   double ReturnKinematicParameter(KinematicTypes KinPar, int iEvent);
   double ReturnKinematicParameter(int KinematicVariable, int iEvent) override;
   double ReturnKinematicParameter(std::string KinematicParameter, int iEvent) override;
   
   const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent);
-  const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent) override;
   const double* GetPointerToKinematicParameter(double KinematicVariable, int iEvent) override;
+  const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent) override;
 
   void SetupFDMC() override;
   void CalcWeightFunc(int iEvent) override {return; (void)iEvent;}
 
+  std::vector<MetaData> PDSPSampleMetaData;
   std::vector<PDSPMCInfo> PDSPSamples;
   std::vector<PDSPMCPlottingInfo> PDSPPlottingSamples;
 
   const std::unordered_map<std::string, int> KinematicParametersPDSP = {
     {"TrueKEInt", kTrueKEInt},
     {"RecoKEInt", kRecoKEInt},
+    {"Mode", kMode},
+    {"OscillationChannel", kOscChannel}
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersPDSP = {
     {kTrueKEInt, "TrueKEInt"},
     {kRecoKEInt, "RecoKEInt"},
+    {kMode, "Mode"},
+    {kOscChannel, "OscillationChannel"},
+
   };
 
   // functional parameters, currently have none for the time being

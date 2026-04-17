@@ -1,3 +1,39 @@
-TrueKEInt: [1, 1.5, 2, 2.5]
-RecoKEInt: [1, 1.5, 2, 2.5]
+Title: "MaCh3 PDSP Sample Info"
+
+GeneratorName: "GENIE"
+
+MaCh3Modes: [
+  "Abs",
+  "Cex",
+  "Spip",
+  "Pip"
+]
+
+Abs:
+  Name: "Absorption"
+  GeneratorMaping: [1]
+  IsNC: false
+  PlotColor: 632
+  SplineSuffix: "abs"
+
+Cex:
+  Name: "Charge Exchange"
+  GeneratorMaping: [2]
+  IsNC: false
+  PlotColor: 618
+  SplineSuffix: "cex"
+
+Spip:
+  Name: "Single pion production"
+  GeneratorMaping: [3]
+  IsNC: false
+  PlotColor: 416
+  SplineSuffix: "spip"
+
+Pip:
+  Name: "Pion production"
+  GeneratorMaping: [4]
+  IsNC: false
+  PlotColor: 840
+  SplineSuffix: "pip"
 

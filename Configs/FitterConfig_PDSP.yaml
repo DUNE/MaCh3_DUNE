@@ -1,8 +1,9 @@
 General:
   OutputFile: "Test.root"
-  TutorialSamples:  [
-    "PDSP/SampleHandler_PDSP.yaml"
+  DUNESamples:  [
+    "Configs/Samples/SampleHandler_PDSP.yaml"
   ]
+  OscillationParameters: []
   FittingAlgorithm: "MR2T2"
   ProcessMCMC: No
   Debug: No
@@ -47,8 +48,8 @@ General:
     # KeepFlippingOnReject: True
   Systematics:
     XsecCovName: "xsec_cov"
-    XsecFix: [ "baseline", "density", "Ye", "prod_height" ]
-    XsecCovFile: ["PDSP/SystematicModel.yaml",
+    XsecFix: [] # any of these are fixed
+    XsecCovFile: ["Configs/CovObjs/PDSPFitModel.yaml",
                   ]
     XsecPCAThreshold: -1
     XsecPCAParams: [-999, -999]
@@ -86,12 +87,10 @@ LLHScan:
   # Number of points for 2D scan in each direction
   #2DLLHScanPoints: 20
   # Add parameters to scan over in LLHMap
-  LLHParameters: ['Norm_Param_0','Norm_Param_1','Norm_Param_2']
+  LLHParameters: ['Abs_TrueEBin_0'] # example LLH scan, should expand to add more if needed.
   # Add physical ranges for special params whose priors/errors may not be well well-defined
   ScanRanges:
-    Norm_Param_0: [0, 10]
-    Norm_Param_1: [0, 10]
-    Norm_Param_2: [0, 10]
+    Abs_TrueEBin_0: [0, 10]
 
 SigmaVar:
   # Values of sigma you want to perform, it must contain 0!
@@ -101,7 +100,7 @@ SigmaVar:
 
   # Allows to overwrite default 1,3 sigma range, useful for cross-fitter comparison
   CustomRange:
-    Norm_Param_0: { "-3": 0.25, "-1": 0.5, "1": 1.25, "3": 1.5 }
+    Abs_TrueEBin_0: { "-3": 0.25, "-1": 0.5, "1": 1.25, "3": 1.5 }
 
 AdaptionOptions:
   Settings:

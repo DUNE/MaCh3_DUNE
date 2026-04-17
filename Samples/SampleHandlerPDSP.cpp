@@ -28,6 +28,11 @@ void SampleHandlerPDSP::SetupSplines() {
 
 }
 
+// ************************************************
+void SampleHandlerPDSP::AddAdditionalWeightPointers() {
+// ************************************************
+}
+
 void SampleHandlerPDSP::CleanMemoryBeforeFit() {
   CleanVector(PDSPPlottingSamples);
 }
@@ -50,6 +55,7 @@ int SampleHandlerPDSP::SetupExperimentMC() {
   // ***
 
   // Set size of data vectors
+  PDSPSampleMetaData.resize(nEntries);
   PDSPSamples.resize(nEntries);
   PDSPPlottingSamples.resize(nEntries);
 
@@ -78,18 +84,21 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       _data->SetBranchStatus("*", false);
       
       // Truth variables
-      float trueKEInt;
+      double trueKEInt;
       _data->SetBranchStatus("KE_int_true", true);
       _data->SetBranchAddress("KE_int_true", &trueKEInt);
 
       // Reco variables
-      float recoKEInt;
+      double recoKEInt;
 
       _data->SetBranchStatus("KE_int_reco", true);
       _data->SetBranchAddress("KE_int_reco", &recoKEInt);
 
       for (int i = 0; i < _data->GetEntries(); ++i) { // Loop through tree (events)
         _data->GetEntry(i);
+
+        PDSPSampleMetaData[TotalEventCounter].SampleIndex = static_cast<int>(iSample);
+
         PDSPSamples[TotalEventCounter].TrueKEInt = trueKEInt;
         PDSPSamples[TotalEventCounter].RecoKEInt = recoKEInt;
 
@@ -128,6 +137,10 @@ const double* SampleHandlerPDSP::GetPointerToKinematicParameter(KinematicTypes K
       return &PDSPSamples[iEvent].TrueKEInt;
     case kRecoKEInt:
       return &PDSPSamples[iEvent].RecoKEInt;
+    case kMode: // required to work with SampleHandlerFD
+      return &PDSPSamples[iEvent].Mode;
+    case kOscChannel: // required to work with SampleHandlerFD
+      return &PDSPSamples[iEvent].OscillationChannel;
     default:
       MACH3LOG_ERROR("Unrecognized Kinematic Parameter type: {}", static_cast<int>(KinPar));
       throw MaCh3Exception(__FILE__, __LINE__);
@@ -144,8 +157,10 @@ const double* SampleHandlerPDSP::GetPointerToKinematicParameter(std::string Kine
   return GetPointerToKinematicParameter(KinPar, iEvent);
 }
 
-void SampleHandlerPDSP::SetupFDMC() {
-
+void SampleHandlerPDSP::SetupFDMC() { 
+  for (unsigned int iEvent = 0; iEvent < GetNEvents(); ++iEvent) {
+    MCSamples[iEvent].NominalSample = PDSPSampleMetaData[iEvent].SampleIndex;
+  }
 }
 
 void SampleHandlerPDSP::RegisterFunctionalParameters() {
