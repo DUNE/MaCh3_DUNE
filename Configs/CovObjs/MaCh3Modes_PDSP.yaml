@@ -1,11 +1,10 @@
 Title: "MaCh3 PDSP Sample Info"
 
-GeneratorName: "GENIE"
+GeneratorName: "NA"
 
 MaCh3Modes: [
   "Abs",
   "Cex",
-  "Spip",
   "Pip"
 ]
 
@@ -23,16 +22,9 @@ Cex:
   PlotColor: 618
   SplineSuffix: "cex"
 
-Spip:
-  Name: "Single pion production"
-  GeneratorMaping: [3]
-  IsNC: false
-  PlotColor: 416
-  SplineSuffix: "spip"
-
 Pip:
   Name: "Pion production"
-  GeneratorMaping: [4]
+  GeneratorMaping: [3]
   IsNC: false
   PlotColor: 840
   SplineSuffix: "pip"

@@ -11,7 +11,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [0., 1.5]
+      - TrueEInt: [0., 1500]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -31,7 +31,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1.5, 1.7]
+      - TrueEInt: [1500, 1700]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -51,7 +51,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1.7, 1.9]
+      - TrueEInt: [1700, 1900]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -71,7 +71,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1.9, 2.1]
+      - TrueEInt: [1900, 2100]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -91,7 +91,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [2.1, 999.]
+      - TrueEInt: [2100, 999999]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -130,7 +130,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [0., 1.5]
+      - TrueEInt: [0., 1500]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -150,7 +150,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1.5, 1.7]
+      - TrueEInt: [1500, 1700]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -170,7 +170,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1.7, 1.9]
+      - TrueEInt: [1700, 1900]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -190,7 +190,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1.9, 2.1]
+      - TrueEInt: [1900, 2100]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -210,7 +210,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [2.1, 999.]
+      - TrueEInt: [2100, 999999]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -249,7 +249,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [0., 1.5]
+      - TrueEInt: [0., 1500]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -269,7 +269,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1.5, 1.7]
+      - TrueEInt: [1500, 1700]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -289,7 +289,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1.7, 1.9]
+      - TrueEInt: [1700, 1900]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -309,7 +309,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1.9, 2.1]
+      - TrueEInt: [1900, 2100]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -329,7 +329,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [2.1, 999.]
+      - TrueEInt: [2100, 999999]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -368,7 +368,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [0., 1.5]
+      - TrueEInt: [0., 1500]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -388,7 +388,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1.5, 1.7]
+      - TrueEInt: [1500, 1700]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -408,7 +408,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1.7, 1.9]
+      - TrueEInt: [1700, 1900]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -428,7 +428,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1.9, 2.1]
+      - TrueEInt: [1900, 2100]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
@@ -448,7 +448,7 @@ Systematics:
     ParameterBounds: [0, 999]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [2.1, 999.]
+      - TrueEInt: [2100, 999999]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.

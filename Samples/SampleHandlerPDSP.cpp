@@ -85,11 +85,32 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       
       // Truth variables
       double trueKEInt;
+      bool true_abs;
+      bool true_cex;
+      bool true_spip;
+      bool true_pip;
+
       _data->SetBranchStatus("KE_int_true", true);
       _data->SetBranchAddress("KE_int_true", &trueKEInt);
 
+      _data->SetBranchStatus("exclusive_process_absorption", true);
+      _data->SetBranchAddress("exclusive_process_absorption", &true_abs);
+
+      _data->SetBranchStatus("exclusive_process_charge_exchange", true);
+      _data->SetBranchAddress("exclusive_process_charge_exchange", &true_cex);
+
+      _data->SetBranchStatus("exclusive_process_single_pion_production", true);
+      _data->SetBranchAddress("exclusive_process_single_pion_production", &true_spip);
+
+      _data->SetBranchStatus("exclusive_process_pion_production", true);
+      _data->SetBranchAddress("exclusive_process_pion_production", &true_pip);
+
       // Reco variables
       double recoKEInt;
+      // int reco_abs;
+      // int reco_cex;
+      // int reco_spip;
+      // int reco_pip;
 
       _data->SetBranchStatus("KE_int_reco", true);
       _data->SetBranchAddress("KE_int_reco", &recoKEInt);
@@ -101,6 +122,20 @@ int SampleHandlerPDSP::SetupExperimentMC() {
 
         PDSPSamples[TotalEventCounter].TrueKEInt = trueKEInt;
         PDSPSamples[TotalEventCounter].RecoKEInt = recoKEInt;
+
+        int mode;
+        if(true_abs == 1) {
+          mode = 0;
+        }else if(true_cex == 1) {
+          mode = 1;
+        }else if(true_spip == 1 || true_pip == 1) {
+          mode = 2;
+        }else {
+          mode = -1;
+        }
+        // MACH3LOG_INFO("abs | {}, cex | {}, spip | {}, pip | {}, mode | {}", true_abs, true_cex, true_spip, true_pip, mode);
+        PDSPSamples[TotalEventCounter].Mode = mode;
+
 
         //? redundant?
         PDSPPlottingSamples[TotalEventCounter].TrueKEInt = trueKEInt;
