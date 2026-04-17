@@ -6,7 +6,8 @@
 #include "Samples/SampleHandlerBeamND.h"
 #include "Samples/SampleHandlerBeamNDGAr.h"
 #include "Samples/MaCh3DUNEFactory.h"
-#include "Fitters/MaCh3Factory.h"
+#include "Samples/StructsDUNE.h"
+
 
 namespace py = pybind11;
 
@@ -92,84 +93,49 @@ class MaCh3DunePyBinder : public MaCh3PyBinder {
             );
 
         // ####################################################
-        // Beam ND GAr
+        // Atmospheric
         py::class_<SampleHandlerBeamNDGAr, SampleHandlerBase, SampleHandlerInterface>(m_samples, "SampleHandlerBeamNDGAr")
         // ####################################################
-            .def(py::init([](const std::string& mc_version, 
-                            ParameterHandlerGeneric* xsec_cov) {
+        // Constructor with 2 arguments (no oscillation handler)
+            .def(py::init([](const std::string& mc_version, ParameterHandlerGeneric* xsec_cov) {
                 return new SampleHandlerBeamNDGAr(mc_version, xsec_cov);
             }),
-                "Create SampleHandlerBeamNDGAr",
+                "Create SampleHandlerBeamND gar without oscillation handler",
                 py::arg("mc_version"),
                 py::arg("xsec_cov")
             );
 
+
+
         // ####################################################
-        // Top-level sample factory
-        // ####################################################
-        m_samples.def("MaCh3DuneFactory",
-            [](const std::string& config_file, py::args extra_args)
-                -> std::pair<
-                    std::shared_ptr<ParameterHandlerGeneric>,
-                    std::vector<std::shared_ptr<SampleHandlerBase>>
-                >
-            {
-                // Create manager
+        // Beam ND Cov struct
+        py::class_<BeamNDCov>(m_samples, "BeamNDCov")
+            .def(py::init<>([](const std::string& nd_cov_file_name, bool use_combined ){
+                auto nd_cov_file = M3::Open(nd_cov_file_name, "READ", __FILE__, __LINE__);
 
-                // Because of how MaCh3's setup we need to "spoof" it into thinking we're in the command line
-                // For now I'm not bothering with override
-                std::vector<std::string> args;
-                args.emplace_back("mach3");        // (dummy arg)
-                args.emplace_back(config_file);    // config file
+                // Grab TMatrices
+                auto nd_cov_fhc = nd_cov_file->Get<TMatrixD>("nd_fhc_frac_cov");
+                auto nd_cov_rhc = nd_cov_file->Get<TMatrixD>("nd_rhc_frac_cov");
+                auto nd_cov_all = nd_cov_file->Get<TMatrixD>("nd_all_frac_cov");
 
-                for (auto item : extra_args) {
-                    args.emplace_back(py::cast<std::string>(item));
-                }
-
-                int mock_argc = static_cast<int>(args.size());
-
-                std::vector<char*> mock_argv;
-                mock_argv.reserve(args.size());
-                for (auto& s : args) {
-                    mock_argv.push_back(const_cast<char*>(s.c_str()));
-                }
-
-             
-                auto FitManager = MaCh3ManagerFactory(mock_argc, mock_argv.data());
-
-                // Create parameter handler
-                auto xsec = MaCh3CovarianceFactory<ParameterHandlerGeneric>(
-                    FitManager.get(), "Xsec"
-                );
-
-                if (CheckNodeExists(FitManager->raw(), "General", "OscillationParameters"))
+                // Make sure they exists
+                if (!(nd_cov_fhc && nd_cov_rhc && nd_cov_all))
                 {
-                    auto oscpars = Get<std::vector<double>>(
-                        FitManager->raw()["General"]["OscillationParameters"],
-                        __FILE__, __LINE__
-                    );
-                    xsec->SetGroupOnlyParameters("Osc", oscpars);
+                    MACH3LOG_ERROR("Could not find NDCov objects from file: {}", nd_cov_file_name);
+                    throw MaCh3Exception(__FILE__, __LINE__);
                 }
 
-                // Call existing factory 
-                auto raw_samples = MaCh3DuneSampleFactory(FitManager, xsec);
+                // Voila
+                BeamNDCov beam_nd_cov;
+                beam_nd_cov.NDCov_FHC = nd_cov_fhc;
+                beam_nd_cov.NDCov_RHC = nd_cov_rhc;
+                beam_nd_cov.NDCov_all = nd_cov_all;
+                beam_nd_cov.useCombinedNDCov = use_combined;
+                nd_cov_file->Close();
+                return beam_nd_cov;
+            })
 
-                // Convert to shared_ptr for Python safety
-                std::vector<std::shared_ptr<SampleHandlerBase>> samples;
-                samples.reserve(raw_samples.size());
-
-                for (auto* s : raw_samples) {
-                    samples.emplace_back(std::shared_ptr<SampleHandlerBase>(s));
-                }
-
-                // Move ownership of xsec to shared_ptr
-                std::shared_ptr<ParameterHandlerGeneric> xsec_shared = std::move(xsec);
-
-                return {xsec_shared, samples};
-            },
-            py::arg("config_file"),
-            "Create ParameterHandlerGeneric and DUNE SampleHandlers safely"
-        );   
+        );
     }
 };
 
