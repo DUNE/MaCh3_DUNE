@@ -126,6 +126,7 @@ struct dunemc_plotting { // Store variables just used in plotting (cleared from 
   double lep_tracklengthyz;
   int npi0;
   double rw_ePi0;
+  double Target;
  
   std::vector<int> prim_event = {};
   std::vector<int> prim_trkid = {};
