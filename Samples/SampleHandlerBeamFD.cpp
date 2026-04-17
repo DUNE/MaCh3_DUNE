@@ -36,7 +36,7 @@ void SampleHandlerBeamFD::InititialiseData()
   // ************************************************
   // Reweight MC to match
   Reweight();
-  // set asimov data
+  // set asimov data  
   for (int iSample = 0; iSample < GetNSamples(); iSample++)
   {
     AddData(iSample, GetMCArray(iSample));
