@@ -1,10 +1,10 @@
 #include <memory>
 #include "python/pyMaCh3.h"
 
-#include "SamplesTutorial/SampleHandlerAtm.h"
-#include "SamplesTutorial/SampleHandlerBeamFD.h"
-#include "SamplesTutorial/SampleHandlerBeamND.h"
-#include "SamplesTutorial/SampleHandlerBeamNDGar.h"
+#include "Samples/SampleHandlerAtm.h"
+#include "Samples/SampleHandlerBeamFD.h"
+#include "Samples/SampleHandlerBeamND.h"
+#include "Samples/SampleHandlerBeamNDGAr.h"
 #include "Samples/MaCh3DUNEFactory.h"
 
 namespace py = pybind11;

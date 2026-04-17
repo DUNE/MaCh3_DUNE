@@ -1,9 +1,9 @@
 set(HEADERS
-  SampleHandlerAtm.h
-  SampleHandlerBeamFD.h
-  SampleHandlerBeamND.h
-  SampleHandlerBeamNDGAr.h
-  MaCh3DUNEFactory.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerAtm.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerBeamFD.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerBeamND.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerBeamNDGAr.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/MaCh3DUNEFactory.h
 )
 set(SOURCE_FILES
   SampleHandlerAtm.cpp
