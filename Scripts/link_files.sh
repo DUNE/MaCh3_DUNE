@@ -3,13 +3,8 @@
 # A script to link required files to the proper place i.e. where the sample config files will look for them
 
 MACH3DIR=`pwd`
-<<<<<<< HEAD
 FILESDIR=/home/acarney/scratch/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v3 # Need to update after uncompressing the tar.gz file
 FILESDIR1=/home/acarney/scratch/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v3
-=======
-FILESDIR=/vols/dune/LibanDUNEInputs/
-NDGAR_FILESDIR=/vols/dune/jmm224/data
->>>>>>> origin/dbarrow257/feature/CoreV2.4.2
 
 if [ ! -d "$MACH3DIR/Inputs/DUNE_CAF_files" ]
 then
