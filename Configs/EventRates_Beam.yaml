@@ -3,8 +3,7 @@ General:
   OutputFile: "DuneEventRates.root"
   DUNESamples:
    - "Configs/Samples/SampleHandler_FD_Beam.yaml"
-  #  - "Configs/Samples/SamplePDFDuneND_FHC_CCnumuselec.yaml"
-  #  - "Configs/Samples/SamplePDFDuneND_RHC_CCnumuselec.yaml"
+   - "Configs/Samples/SampleHandler_ND.yaml"
   # Nu-FIT
   OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 1284.9, 2.848] #CUDAProb3
   #OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 1284.9, 2.848,  0.5] #NuFAST
@@ -25,6 +24,8 @@ General:
     XsecStepScale: 0.05
     XsecAtGen: false
     NDCovFile: "Configs/CovObjs/tdr_covs/det_sys_cov.root"
+    # Whether to use `nd_all_frac_cov` in det_sys_cov.root. Default: false
+    UseCombinedNDCov: false
     XsecFix: ["baseline", "density"]
 
   # Shared nuosc objects for all BeamFD samples to reduce binned calculations
@@ -46,11 +47,11 @@ General:
 # LLH Scan settings
 LLHScan:
   # don't make LLH for certain systematic groups
-  #LLHScanSkipVector: []
+  # LLHScanSkipVector: ["b_"]
   # Save individual sample contributions to the LLH
   LLHScanBySample: false
   # Number of points we run LLH scans for each systematic
-  #LLHScanPoints: 50
+  LLHScanPoints: 10
   # Number of points for 2D scan in each direction
   #2DLLHScanPoints: 20
   # Add physical ranges for special params whose priors/errors may not be well well-defined
