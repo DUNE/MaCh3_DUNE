@@ -138,32 +138,8 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("Oscillation Mode Breakdown:");
   
-<<<<<<< HEAD
-  // TFile* outHist = new TFile("TrueCCIndChanReweight.root", "recreate"); // If we want to save the individual channels from the samples, create this file
+  //TFile* outHist = new TFile("PMNSOscDataCC.root", "recreate"); // If we want to save the individual channels from the samples, create this file
 
-  for(auto Sample : DUNEPdfs) {
-    MACH3LOG_INFO("======================");
-    
-    Sample->Reweight();
-    int nOscChannels = Sample->GetNOscChannels();
-
-    for (int iOscChan=0;iOscChan<nOscChannels;iOscChan++) {
-      std::vector< KinematicCut > SelectionVec;
-
-      KinematicCut SelecChannel;
-      SelecChannel.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString("OscillationChannel");
-      SelecChannel.LowerBound = iOscChan;
-      SelecChannel.UpperBound = iOscChan+1;
-      SelectionVec.push_back(SelecChannel);
-      
-      TH1* Hist = Sample->Get1DVarHist(Sample->GetXBinVarName(),SelectionVec);
-      TString HistoName = Form("%s_%s", Sample->GetTitle().c_str(), Sample->GetFlavourName(iOscChan).c_str());
-
-      // Hist->SetName(HistoName); // Set the name of the histograms
-      // Hist->Write(); // Save to file
-
-      MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",Sample->GetTitle(),Sample->GetFlavourName(iOscChan),Hist->Integral());
-=======
   for(auto handler : DUNEPdfs) {
     for (int iSample = 0; iSample < handler->GetNsamples(); iSample++) {
       MACH3LOG_INFO("======================");
@@ -178,16 +154,20 @@ int main(int argc, char * argv[]) {
         SelectionVec.push_back(SelecChannel);
         
         TH1* Hist = handler->Get1DVarHist(iSample, handler->GetXBinVarName(iSample),SelectionVec);
+      
+        // TString HistoName = Form("%s_%s", handler->GetSampleTitle(iSample).c_str(), handler->GetFlavourName(iSample, iOscChan).c_str());
+        // Hist->SetName(HistoName); // Set the name of the histograms
+        // Hist->Write(); // Save to file
+
         MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),handler->GetFlavourName(iSample, iOscChan),Hist->Integral());
       }
 
       TH1* Hist = handler->Get1DVarHist(iSample, handler->GetXBinVarName(iSample));
       MACH3LOG_INFO("{:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),Hist->Integral());
->>>>>>> origin/dbarrow257/feature/CoreV2.4.2
     }
   }
 
-  // outHist->Close(); // Close our individual channel histograms
+  //outHist->Close(); // Close our individual channel histograms
 
   //###############################################################################################################################
   //Make interaction channel breakdown

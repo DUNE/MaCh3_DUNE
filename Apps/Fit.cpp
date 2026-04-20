@@ -34,63 +34,64 @@ int main(int argc, char * argv[]) {
   // std::vector<double> AvgParams(480, 0.0);
   // std::vector<int> Count(480, 0);
 
-  TFile* Osc = TFile::Open("CCIndChanOsc.root"); // Loading in histograms
-  TFile* Unosc = TFile::Open("CCIndChanUnosc.root");
+  // TFile* Osc = TFile::Open("CCIndChanOsc.root"); // Loading in histograms
+  // TFile* Unosc = TFile::Open("CCIndChanUnosc.root");
 
-  TIter next(Osc->GetListOfKeys()); // Get list of different items within oscillated data histograms (48 in total, 12 channels in 4 samples)
-  TKey* key;  // Initialise
-  int ParIndex = 0.0;
-  int KeyIndex = 0.0;
+  // TIter next(Osc->GetListOfKeys()); // Get list of different items within oscillated data histograms (48 in total, 12 channels in 4 samples)
+  // TKey* key;  // Initialise
+  // int ParIndex = 0.0;
+  // int KeyIndex = 0.0;
 
-  for(int i = 0; i < xsec->GetNumParams(); i++){ // For every param in the xsec group
-    if(xsec->IsParFromGroup(i, "EParam")){ // If param is from our energy normalisation parameter group
-      ParIndex = i; // Set the index of first parameter
-      break;
-    }
-  }
-
-  while ((key = (TKey*)next())) { // Go through all keys in sequence
-    if(KeyIndex == 12.0) break;
-    KeyIndex++;
-    auto HistoOsc = Osc->Get<TH1D>(key->GetName()); // Getting names of histograms
-    auto HistoUnosc = Unosc->Get<TH1D>(key->GetName()); 
-    int NumBins = HistoOsc->GetNbinsX(); // Find number of bins (number of energy normalisation parameters for this histogram)
-    for(int j = 1; j <= NumBins; j++) { // For each energy bin, starting from 1 to avoid the overflow bin
-      double BinSizeOsc = HistoOsc->GetBinContent(j); // Get the number of events in specific energy bin
-      double BinSizeUnosc = HistoUnosc->GetBinContent(j);
-      double Param;
-      if(BinSizeUnosc == 0) { // If no unoscillated data, set param to 0
-        Param = 0;
-        xsec->SetPar(ParIndex, Param);
-        //Params.push_back(Param);
-      }
-      else { // If unoscillated data, calculate ratio between these as needed to induce oscillation
-        Param = BinSizeOsc / BinSizeUnosc; 
-        xsec->SetPar(ParIndex, Param);
-        //Params.push_back(Param);
-      } 
-      ParIndex++; // Increment parameter index to keep amending in sequence
-    }
-  }
-  // for(int p = 0; p < 1920; p++){
-  //   int sample = p / 480;
-  //   int channel = (p % 480) / 40;
-  //   int bin = p % 40;
-  //   int Index = channel * 40 + bin;
-  //   AvgParams[Index] += Params[p];
-  //   Count[Index] += 1;
-  // }
-  // for(int i = 0; i < 480; i++){
-  //   AvgParams[i] /= Count[i];
-  //   xsec->SetPar(ParIndex, AvgParams[i]);
-  //   ParIndex++;
+  // for(int i = 0; i < xsec->GetNumParams(); i++){ // For every param in the xsec group
+  //   if(xsec->IsParFromGroup(i, "EParam")){ // If param is from our energy normalisation parameter group
+  //     ParIndex = i; // Set the index of first parameter
+  //     break;
+  //   }
   // }
 
-  for(int k = 0; k < xsec->GetNumParams(); k++){ // For every param in the xsec group
-    if((xsec->GetParProp(k) == 0) && xsec->IsParFromGroup(k, "EParam")){ // If it has a value of 0 and is an energy normalisation parameter
-      xsec->ToggleFixParameter(k); // Fix these params at 0
-    }
-  }
+  // while ((key = (TKey*)next())) { // Go through all keys in sequence
+  //   if(KeyIndex == 12.0) break;
+  //   KeyIndex++;
+  //   auto HistoOsc = Osc->Get<TH1D>(key->GetName()); // Getting names of histograms
+  //   auto HistoUnosc = Unosc->Get<TH1D>(key->GetName()); 
+  //   int NumBins = HistoOsc->GetNbinsX(); // Find number of bins (number of energy normalisation parameters for this histogram)
+  //   for(int j = 1; j <= NumBins; j++) { // For each energy bin, starting from 1 to avoid the overflow bin
+  //     double BinSizeOsc = HistoOsc->GetBinContent(j); // Get the number of events in specific energy bin
+  //     double BinSizeUnosc = HistoUnosc->GetBinContent(j);
+  //     double Param;
+  //     if(BinSizeUnosc == 0) { // If no unoscillated data, set param to 0
+  //       Param = 0;
+  //       xsec->SetPar(ParIndex, Param);
+  //       //Params.push_back(Param);
+  //     }
+  //     else { // If unoscillated data, calculate ratio between these as needed to induce oscillation
+  //       Param = BinSizeOsc / BinSizeUnosc; 
+  //       xsec->SetPar(ParIndex, Param);
+        
+  //       //Params.push_back(Param);
+  //     } 
+  //     ParIndex++; // Increment parameter index to keep amending in sequence
+  //   }
+  // }
+  // // for(int p = 0; p < 1920; p++){
+  // //   int sample = p / 480;
+  // //   int channel = (p % 480) / 40;
+  // //   int bin = p % 40;
+  // //   int Index = channel * 40 + bin;
+  // //   AvgParams[Index] += Params[p];
+  // //   Count[Index] += 1;
+  // // }
+  // // for(int i = 0; i < 480; i++){
+  // //   AvgParams[i] /= Count[i];
+  // //   xsec->SetPar(ParIndex, AvgParams[i]);
+  // //   ParIndex++;
+  // // }
+
+  // for(int k = 0; k < xsec->GetNumParams(); k++){ // For every param in the xsec group
+  //   if((xsec->GetParProp(k) == 0) && xsec->IsParFromGroup(k, "EParam") && xsec->IsParameterFixed(k) == false){ // If it has a value of 0 and is an energy normalisation parameter
+  //     xsec->ToggleFixParameter(k); // Fix these params at 0
+  //   }
+  // }
   
   // #########################################################################
   // Perform reweight, print total integral and set the data
@@ -98,38 +99,30 @@ int main(int argc, char * argv[]) {
   //Some place to store the histograms
   std::vector<TH1*> PredictionHistograms;
   std::vector<std::string> sample_names;
+  std::vector<std::string> MySamples{"FHC_numu", "FHC_nue", "RHC_numu", "RHC_nue"};
 
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
 
-<<<<<<< HEAD
   TFile* PMNSData = TFile::Open("OscPMNSNoNC.root"); // Loading in the oscillated data we want to fit to
-  for (unsigned sample_i = 0 ; sample_i < DUNEPdfs.size() ; ++sample_i) {
+  for (auto handler : DUNEPdfs) {
+    for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
     
-    std::string name = DUNEPdfs[sample_i]->GetTitle();
+    std::string name = handler->GetSampleTitle(iSample);
+    std::cout << name << "\n";
     sample_names.push_back(name);
     TString NameTString = TString(name.c_str());
+    TString MyNameTString = TString(MySamples[iSample].c_str());
     
-    DUNEPdfs[sample_i] -> Reweight();
+    handler->Reweight();
 
-    TString HistName = "hRecoNeutrinoEnergy" + NameTString; // Name the histograms as they appear in PMNSData
+    TString HistName = "hRecoNeutrinoEnergy" + MyNameTString; // Name the histograms as they appear in PMNSData
     TH1D* blarbHist = PMNSData->Get<TH1D>(HistName); // Get the histogram from our data
     TH1D* CloneHist = (TH1D*) blarbHist->Clone(); // Create clone of data
     CloneHist->SetDirectory(nullptr);
 
     PredictionHistograms.push_back(static_cast<TH1*>(CloneHist->Clone(NameTString+"_unosc"))); // Add our data histograms to the DUNE histograms
-    //PredictionHistograms.push_back(static_cast<TH1*>(DUNEPdfs[sample_i]->GetMCHist(DUNEPdfs[sample_i]->GetNDim())->Clone(NameTString+"_unosc"))); // Use this for PMNS data?
-=======
-  for (auto handler : DUNEPdfs) {
-    for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
-    
-      std::string name = handler->GetSampleTitle(iSample);
-      sample_names.push_back(name);
-      TString NameTString = TString(name.c_str());
-      
-      handler->Reweight();
-      PredictionHistograms.push_back(static_cast<TH1*>(handler->GetMCHist(iSample)->Clone(NameTString+"_DataHist")));
->>>>>>> origin/dbarrow257/feature/CoreV2.4.2
+    //PredictionHistograms.push_back(static_cast<TH1*>(handler->GetMCHist(iSample)->Clone(NameTString+"_DataHist")));
 
       if (handler->GetNDim(iSample) == 1){
         handler->AddData(iSample, static_cast<TH1D*>(PredictionHistograms.back()));
@@ -146,21 +139,6 @@ int main(int argc, char * argv[]) {
       MACH3LOG_INFO("{} : {}",name.c_str(),PredictionHistograms.back()->Integral());
       MACH3LOG_INFO("--------------");
     }
-<<<<<<< HEAD
-    
-    else {
-      MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting"); 
-      throw MaCh3Exception(__FILE__ , __LINE__ );
-    } 
-  }
-  
-  //Now print out some event rates, we'll make a nice latex table at some point 
-  for (unsigned iPDF = 0; iPDF < DUNEPdfs.size() ; ++iPDF) {
-    MACH3LOG_INFO("Integrals of nominal hists: ");
-    MACH3LOG_INFO("{} : {}",sample_names[iPDF].c_str(),PredictionHistograms[iPDF]->Integral());
-    MACH3LOG_INFO("--------------");
-=======
->>>>>>> origin/dbarrow257/feature/CoreV2.4.2
   }
   
   //###########################################################################################################

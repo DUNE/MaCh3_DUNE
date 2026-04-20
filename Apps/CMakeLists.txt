@@ -3,6 +3,7 @@ add_custom_target(MaCh3DUNEApps)
 foreach(app
 	EventRates
 	Fit
+	ParamUpdateAndSave
 	Projections
 	PostPredDUNE
 	SigmaVariation
