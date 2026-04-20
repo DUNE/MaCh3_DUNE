@@ -86,8 +86,8 @@ for name in h1s:
     
 
     leg = ROOT.TLegend(0.15, 0.75, 0.35, 0.89)
-    leg.AddEntry(h1, "2D Binning", "l")
-    leg.AddEntry(h2, "3D Binning", "l")
+    leg.AddEntry(h1, "3D y", "l")
+    leg.AddEntry(h2, "3D lep/had", "l")
     leg.Draw()
 
     c.Print(out)

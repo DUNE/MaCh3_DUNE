@@ -18,7 +18,7 @@ public:
   ~SampleHandlerAtm();
 
   /// @brief Enum to identify kinematics
-  enum KinematicTypes{kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kRecoHadronEnergy,kRecoLeptonEnergy,kTrueCosZ,kRecoCosZ,kOscChannel,kMode};
+  enum KinematicTypes{kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kRecoHadronEnergy,kRecoLeptonEnergy,kRecoY,kTrueCosZ,kRecoCosZ,kOscChannel,kMode};
   
 protected:
   /// @brief Initialises object
@@ -96,6 +96,7 @@ protected:
     {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},
     {"RecoHadronEnergy",kRecoHadronEnergy},
     {"RecoLeptonEnergy",kRecoLeptonEnergy},
+    {"RecoY",kRecoY},
     {"TrueCosineZ",kTrueCosZ},
     {"RecoCosineZ",kRecoCosZ},
     {"OscillationChannel",kOscChannel},
@@ -107,6 +108,7 @@ protected:
     {kRecoNeutrinoEnergy,"RecoNeutrinoEnergy"},
     {kRecoHadronEnergy,"RecoHadronEnergy"},
     {kRecoLeptonEnergy,"RecoLeptonEnergy"},
+    {kRecoY,"RecoY"},
     {kTrueCosZ,"TrueCosineZ"},    
     {kRecoCosZ,"RecoCosineZ"},
     {kOscChannel,"OscillationChannel"},

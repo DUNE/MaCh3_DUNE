@@ -1,6 +1,6 @@
 ---
 General:
-  OutputFile: "Default_LLH.root"
+  OutputFile: "y_LLH.root"
 
   DUNESamples:
     - "Configs/Samples/SampleHandler_FD_Atm.yaml"

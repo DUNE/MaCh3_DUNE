@@ -41,6 +41,7 @@ struct dunemc_base { // Store variables used in fitting
   double rw_erec;
   double rw_ehad;
   double rw_elep;
+  double rw_y;
   double rw_etru;
 
   double flux_w;
