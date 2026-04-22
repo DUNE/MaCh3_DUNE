@@ -88,11 +88,12 @@ def plot_mc_hist(sample_handlers: list[samples.SampleHandlerBase], output_file: 
                 mc_pred, bin_edges_x, bin_edges_y = handler.get_mc_hist(n)
                             
                 # 1D hist ()
-
                 if not len(bin_edges_y):
                     plt.hist(bin_edges_x[:-1], bins=bin_edges_x, weights=mc_pred, histtype="step")
                 else:
                     plt.hist2d(bin_edges_x[:-1], bin_edges_y[:-1], [bin_edges_x, bin_edges_y], weights=mc_pred)
+                
+                plt.title(handler.get_sample_title(n));
                 pdf.savefig()
                 plt.close()
     
