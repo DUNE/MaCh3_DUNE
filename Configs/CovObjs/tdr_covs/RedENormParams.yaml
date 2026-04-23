@@ -1,6 +1,7 @@
 Systematics:
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -26,7 +27,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -52,7 +54,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -78,7 +81,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -104,7 +108,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -130,7 +135,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -156,7 +162,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -182,7 +189,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -208,7 +216,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -234,7 +243,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -260,7 +270,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -286,7 +297,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -312,7 +324,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -338,7 +351,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -364,7 +378,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -390,7 +405,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -416,7 +432,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -442,7 +459,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -468,7 +486,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -494,7 +513,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -520,7 +540,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -546,7 +567,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -572,7 +594,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -598,7 +621,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -624,7 +648,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -650,7 +675,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -676,7 +702,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -702,7 +729,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -728,7 +756,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -754,7 +783,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -780,7 +810,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -806,7 +837,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -832,7 +864,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -858,7 +891,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -884,7 +918,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -910,7 +945,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -936,7 +972,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -962,7 +999,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -988,7 +1026,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1014,7 +1053,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1040,7 +1080,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1066,7 +1107,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1092,7 +1134,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1118,7 +1161,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1144,7 +1188,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1170,7 +1215,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1196,7 +1242,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1222,7 +1269,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1248,7 +1296,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1274,7 +1323,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1300,7 +1350,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1326,7 +1377,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1352,7 +1404,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1378,7 +1431,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1404,7 +1458,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1430,7 +1485,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1456,7 +1512,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1482,7 +1539,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1508,7 +1566,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1534,7 +1593,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1560,7 +1620,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1586,7 +1647,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1612,7 +1674,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1638,7 +1701,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1664,7 +1728,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1690,7 +1755,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1716,7 +1782,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1742,7 +1809,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1768,7 +1836,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1794,7 +1863,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1820,7 +1890,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1846,7 +1917,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1872,7 +1944,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1898,7 +1971,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1924,7 +1998,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1950,7 +2025,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -1976,7 +2052,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2002,7 +2079,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2028,7 +2106,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2054,7 +2133,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2080,7 +2160,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2106,7 +2187,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2132,7 +2214,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2158,7 +2241,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2184,7 +2268,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2210,7 +2295,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2236,7 +2322,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2262,7 +2349,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2288,7 +2376,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2314,7 +2403,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2340,7 +2430,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2366,7 +2457,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2392,7 +2484,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2418,7 +2511,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2444,7 +2538,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2470,7 +2565,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2496,7 +2592,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2522,7 +2619,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2548,7 +2646,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2574,7 +2673,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2600,7 +2700,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2626,7 +2727,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2652,7 +2754,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2678,7 +2781,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2704,7 +2808,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2730,7 +2835,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2756,7 +2862,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2782,7 +2889,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2808,7 +2916,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2834,7 +2943,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2860,7 +2970,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2886,7 +2997,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2912,7 +3024,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2938,7 +3051,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2964,7 +3078,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -2990,7 +3105,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3016,7 +3132,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3042,7 +3159,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3068,7 +3186,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3094,7 +3213,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3120,7 +3240,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3146,7 +3267,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3172,7 +3294,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3198,7 +3321,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3224,7 +3348,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3250,7 +3375,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3276,7 +3402,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3302,7 +3429,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3328,7 +3456,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3354,7 +3483,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3380,7 +3510,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3406,7 +3537,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3432,7 +3564,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3458,7 +3591,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3484,7 +3618,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3510,7 +3645,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3536,7 +3672,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3562,7 +3699,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3588,7 +3726,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3614,7 +3753,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3640,7 +3780,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3666,7 +3807,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3692,7 +3834,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3718,7 +3861,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3744,7 +3888,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3770,7 +3915,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3796,7 +3942,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3822,7 +3969,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3848,7 +3996,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3874,7 +4023,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3900,7 +4050,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3926,7 +4077,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3952,7 +4104,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -3978,7 +4131,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4004,7 +4158,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4030,7 +4185,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4056,7 +4212,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4082,7 +4239,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4108,7 +4266,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4134,7 +4293,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4160,7 +4320,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4186,7 +4347,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4212,7 +4374,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4238,7 +4401,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4264,7 +4428,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4290,7 +4455,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4316,7 +4482,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4342,7 +4509,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4368,7 +4536,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4394,7 +4563,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4420,7 +4590,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4446,7 +4617,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4472,7 +4644,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4498,7 +4671,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4524,7 +4698,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4550,7 +4725,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4576,7 +4752,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4602,7 +4779,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4628,7 +4806,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4654,7 +4833,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4680,7 +4860,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4706,7 +4887,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4732,7 +4914,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4758,7 +4941,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4784,7 +4968,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4810,7 +4995,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4836,7 +5022,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4862,7 +5049,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4888,7 +5076,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4914,7 +5103,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4940,7 +5130,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4966,7 +5157,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -4992,7 +5184,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5018,7 +5211,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5044,7 +5238,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5070,7 +5265,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5096,7 +5292,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5122,7 +5319,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5148,7 +5346,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5174,7 +5373,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5200,7 +5400,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5226,7 +5427,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5252,7 +5454,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5278,7 +5481,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5304,7 +5508,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5330,7 +5535,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5356,7 +5562,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5382,7 +5589,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5408,7 +5616,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5434,7 +5643,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5460,7 +5670,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5486,7 +5697,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5512,7 +5724,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5538,7 +5751,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5564,7 +5778,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5590,7 +5805,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5616,7 +5832,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5642,7 +5859,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5668,7 +5886,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5694,7 +5913,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5720,7 +5940,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5746,7 +5967,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5772,7 +5994,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5798,7 +6021,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5824,7 +6048,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5850,7 +6075,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5876,7 +6102,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5902,7 +6129,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5928,7 +6156,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5954,7 +6183,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -5980,7 +6210,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6006,7 +6237,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6032,7 +6264,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6058,7 +6291,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6084,7 +6318,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6110,7 +6345,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6136,7 +6372,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6162,7 +6399,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6188,7 +6426,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6214,7 +6453,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6240,7 +6480,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6266,7 +6507,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6292,7 +6534,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6318,7 +6561,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6344,7 +6588,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6370,7 +6615,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6396,7 +6642,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6422,7 +6669,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6448,7 +6696,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6474,7 +6723,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6500,7 +6750,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6526,7 +6777,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6552,7 +6804,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6578,7 +6831,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6604,7 +6858,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6630,7 +6885,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6656,7 +6912,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6682,7 +6939,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6708,7 +6966,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6734,7 +6993,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6760,7 +7020,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6786,7 +7047,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6812,7 +7074,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6838,7 +7101,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6864,7 +7128,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6890,7 +7155,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6916,7 +7182,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6942,7 +7209,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6968,7 +7236,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -6994,7 +7263,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7020,7 +7290,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7046,7 +7317,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7072,7 +7344,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7098,7 +7371,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7124,7 +7398,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7150,7 +7425,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7176,7 +7452,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7202,7 +7479,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7228,7 +7506,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7254,7 +7533,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7280,7 +7560,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7306,7 +7587,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7332,7 +7614,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7358,7 +7641,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7384,7 +7668,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7410,7 +7695,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7436,7 +7722,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7462,7 +7749,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7488,7 +7776,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7514,7 +7803,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7540,7 +7830,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7566,7 +7857,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7592,7 +7884,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7618,7 +7911,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7644,7 +7938,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7670,7 +7965,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7696,7 +7992,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7722,7 +8019,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7748,7 +8046,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7774,7 +8073,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7800,7 +8100,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7826,7 +8127,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7852,7 +8154,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7878,7 +8181,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7904,7 +8208,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7930,7 +8235,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7956,7 +8262,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -7982,7 +8289,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8008,7 +8316,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8034,7 +8343,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8060,7 +8370,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8086,7 +8397,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8112,7 +8424,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8138,7 +8451,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8164,7 +8478,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8190,7 +8505,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8216,7 +8532,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8242,7 +8559,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8268,7 +8586,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8294,7 +8613,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8320,7 +8640,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8346,7 +8667,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8372,7 +8694,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8398,7 +8721,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8424,7 +8748,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8450,7 +8775,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8476,7 +8802,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8502,7 +8829,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8528,7 +8856,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8554,7 +8883,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8580,7 +8910,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8606,7 +8937,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8632,7 +8964,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8658,7 +8991,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8684,7 +9018,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8710,7 +9045,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8736,7 +9072,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8762,7 +9099,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8788,7 +9126,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8814,7 +9153,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8840,7 +9180,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8866,7 +9207,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8892,7 +9234,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8918,7 +9261,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8944,7 +9288,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8970,7 +9315,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -8996,7 +9342,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9022,7 +9369,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9048,7 +9396,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9074,7 +9423,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9100,7 +9450,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9126,7 +9477,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9152,7 +9504,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9178,7 +9531,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9204,7 +9558,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9230,7 +9585,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9256,7 +9612,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9282,7 +9639,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9308,7 +9666,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9334,7 +9693,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9360,7 +9720,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9386,7 +9747,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9412,7 +9774,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9438,7 +9801,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9464,7 +9828,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9490,7 +9855,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9516,7 +9882,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9542,7 +9909,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9568,7 +9936,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9594,7 +9963,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9620,7 +9990,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9646,7 +10017,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9672,7 +10044,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9698,7 +10071,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9724,7 +10098,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9750,7 +10125,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9776,7 +10152,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9802,7 +10179,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9828,7 +10206,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9854,7 +10233,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9880,7 +10260,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9906,7 +10287,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9932,7 +10314,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9958,7 +10341,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -9984,7 +10368,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10010,7 +10395,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10036,7 +10422,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10062,7 +10449,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10088,7 +10476,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10114,7 +10503,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10140,7 +10530,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10166,7 +10557,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10192,7 +10584,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10218,7 +10611,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10244,7 +10638,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10270,7 +10665,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10296,7 +10692,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10322,7 +10719,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10348,7 +10746,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10374,7 +10773,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10400,7 +10800,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10426,7 +10827,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10452,7 +10854,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10478,7 +10881,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10504,7 +10908,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10530,7 +10935,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10556,7 +10962,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10582,7 +10989,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10608,7 +11016,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10634,7 +11043,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10660,7 +11070,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10686,7 +11097,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10712,7 +11124,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10738,7 +11151,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10764,7 +11178,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10790,7 +11205,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10816,7 +11232,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10842,7 +11259,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10868,7 +11286,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10894,7 +11313,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10920,7 +11340,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10946,7 +11367,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10972,7 +11394,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -10998,7 +11421,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11024,7 +11448,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11050,7 +11475,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11076,7 +11502,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11102,7 +11529,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11128,7 +11556,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11154,7 +11583,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11180,7 +11610,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11206,7 +11637,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11232,7 +11664,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11258,7 +11691,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11284,7 +11718,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11310,7 +11745,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11336,7 +11772,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11362,7 +11799,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11388,7 +11826,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11414,7 +11853,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11440,7 +11880,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11466,7 +11907,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11492,7 +11934,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11518,7 +11961,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11544,7 +11988,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11570,7 +12015,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11596,7 +12042,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11622,7 +12069,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11648,7 +12096,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11674,7 +12123,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11700,7 +12150,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11726,7 +12177,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11752,7 +12204,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11778,7 +12231,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11804,7 +12258,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11830,7 +12285,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11856,7 +12312,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11882,7 +12339,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11908,7 +12366,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11934,7 +12393,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11960,7 +12420,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -11986,7 +12447,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12012,7 +12474,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12038,7 +12501,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12064,7 +12528,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12090,7 +12555,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12116,7 +12582,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12142,7 +12609,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12168,7 +12636,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12194,7 +12663,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12220,7 +12690,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12246,7 +12717,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12272,7 +12744,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12298,7 +12771,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12324,7 +12798,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12350,7 +12825,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12376,7 +12852,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12402,7 +12879,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12428,7 +12906,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
@@ -12454,7 +12933,8 @@ Systematics:
       MCMC: 1.0
     Type: Norm
 - Systematic:
-    SampleNames: FD_*
+    SampleNames:
+    - BeamFD
     Error: 1.0
     FlatPrior: true
     FixParam: false
