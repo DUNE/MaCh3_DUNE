@@ -1,5 +1,5 @@
 ---
-SampleHandlerName: "BeamFD"
+SampleHandlerName: "FD_Beam"
 MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
 BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
 InputFiles:

@@ -180,7 +180,7 @@ int SampleHandlerBeamND::SetupExperimentMC() {
     dunendmcSamples[i].rw_berpaacvwgt = _BeRPA_cvwgt;
     
     //Assume everything is on Argon for now....
-    dunendmcSamples[i].Target = 40;
+    dunendmcSamples[i].Target = kTarget_Ar;
 
     int M3Mode = Modes->GetModeFromGenerator(std::abs(_mode));
     if (!_isCC) M3Mode += 14; //Account for no ability to distinguish CC/NC
@@ -212,7 +212,7 @@ const double* SampleHandlerBeamND::GetPointerToKinematicParameter(const int KinP
     return &(dunendmcSamples[iEvent].mode);
     break;
   case kIsFHC:
-    return &(IsFHC);
+    return &(beamNDSampleDetails[MCSamples[iEvent].NominalSample].isFHC);
     break;
   case kTargetNucleus:
     return &(dunendmcSamples[iEvent].Target);
@@ -268,10 +268,6 @@ void SampleHandlerBeamND::setNDCovMatrix() const {
   std::vector<double> FlatCV(covSize);
   int globalBin = 0;
 
-  /*==========================================================================================================================
-  //DB Do not trust the below code (between the lines of '=') - changed just to compile  
-  */
-  
   for (int iSample = 0; iSample < static_cast<int>(SampleDetails.size()); iSample++) {
     const int nBins = Binning->GetNBins(iSample);
     const int blockSize = nBins;
@@ -296,17 +292,21 @@ void SampleHandlerBeamND::setNDCovMatrix() const {
 
     // Fill flat CV vector and add statistical term to diagonal
     int localBin = 0;
-    for (int iBin = 0; iBin < nBins; iBin++) {
-      const double CV = SampleHandler_data[iBin];
-      FlatCV[globalBin + localBin] = CV;
-      if (CV > 0)
-	WorkCov(globalBin + localBin, globalBin + localBin) += 1.0 / CV;
-      localBin++;
+    const int nXBins = Binning->GetNAxisBins(iSample, 0);
+    const int nYBins = Binning->GetNAxisBins(iSample, 1);
+    for (int xBin = 0; xBin < nXBins; ++xBin) {
+      for (int yBin = 0; yBin < nYBins; ++yBin) {
+        const int idx = Binning->GetGlobalBinSafe(iSample, {xBin, yBin});
+        const double CV = SampleHandler_data[idx];
+        FlatCV[globalBin + localBin] = CV;
+        if (CV > 0) {
+          WorkCov(globalBin + localBin, globalBin + localBin) += 1.0 / CV;
+        }
+        localBin++;
+      }
     }
     globalBin += blockSize;
   }
-
-  //==========================================================================================================================
 
   // Invert the working matrix
   WorkCov.Invert();
@@ -339,19 +339,19 @@ double SampleHandlerBeamND::GetLikelihood() const {
   std::vector<double> FlatData(covSize);
   std::vector<double> FlatMCPred(covSize);
 
-  /*==========================================================================================================================
-  //DB Do not trust the below code (between the lines of '=') - changed just to compile
-  */
-  
-  // 2D -> 1D, iterating over all sub-samples in the same order as setNDCovMatrix
-  for (int iSample = 0; iSample < static_cast<int>(SampleDetails.size()); iSample++) {
-    for (int iBin = 0; iBin < Binning->GetNBins(iSample); iBin++) {
-      FlatData[iBin] = SampleHandler_data[iBin];
-      FlatMCPred[iBin] = SampleHandler_array[iBin];
+  int flatIdx = 0;
+  for (int iSample = 0; iSample < static_cast<int>(SampleDetails.size()); ++iSample) {
+    const int nXBins = Binning->GetNAxisBins(iSample, 0);
+    const int nYBins = Binning->GetNAxisBins(iSample, 1);
+    for (int xBin = 0; xBin < nXBins; ++xBin) {
+      for (int yBin = 0; yBin < nYBins; ++yBin) {
+        const int idx = Binning->GetGlobalBinSafe(iSample, {xBin, yBin});
+        FlatData[flatIdx] = SampleHandler_data[idx];
+        FlatMCPred[flatIdx] = SampleHandler_array[idx];
+        ++flatIdx;
+      }
     }
   }
-
-  //==========================================================================================================================
 
   double negLogL = 0.;
 #ifdef MULTITHREAD

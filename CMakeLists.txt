@@ -127,7 +127,6 @@ SET(MaCh3_FOUND FALSE)
 find_package(MaCh3 2.5.0 EXACT QUIET)
 set(MaCh3_CORE_BRANCH v2.5.0 CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
-option(MaCh3DUNE_Atmos "Whether working with atmospherics or beam oscillations" OFF)
 
 if(NOT MaCh3_FOUND)
   cmessage(STATUS "Didn't find MaCh3, attempting to use built in MaCh3")
@@ -158,12 +157,8 @@ if(NOT MaCh3_FOUND)
   endif()
 
   list(APPEND MaCh3_OPTIONS "NuFastLinear_ENABLED TRUE")
-  if (MaCh3DUNE_Atmos)
-    list(APPEND MaCh3_OPTIONS "CUDAProb3_ENABLED TRUE")
-    list(APPEND MaCh3_OPTIONS "CUDAProb3Linear_ENABLED FALSE")
-  else()
-    list(APPEND MaCh3_OPTIONS "CUDAProb3Linear_ENABLED TRUE")
-  endif()
+  list(APPEND MaCh3_OPTIONS "CUDAProb3_ENABLED TRUE")
+  list(APPEND MaCh3_OPTIONS "CUDAProb3Linear_ENABLED TRUE")
   
   CPMAddPackage(
     NAME MaCh3
