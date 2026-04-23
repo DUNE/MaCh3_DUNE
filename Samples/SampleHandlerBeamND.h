@@ -96,11 +96,6 @@ public:
   double _Q2;
   int _reco_q;
 
-  // configuration 
-  bool iselike;
-  bool isND;
-  double IsFHC;
-
   mutable bool isNDCovSet = false;
   // The ND detector covariance matrix
   BeamNDCov beamNDCov;
