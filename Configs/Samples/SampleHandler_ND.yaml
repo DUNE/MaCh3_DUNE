@@ -28,28 +28,28 @@ ND_FHC_CCnumu:
     splineprefix: "Inputs/DUNE_ND_spline_files/ND_FHC_ger_"
     splinesuffix: "_splines.root"
 
-  SubSamples:
+  OscChannels:
     - Name: "FHC_numu_x_numu"
       LatexName: "FHC_numu_x_numu"
-      mtuplefile: "numu_x_numu_*"
+      mtuplefile: ["numu_x_numu_*"]
       splinefile: "numu_x_numu"
       nutype: 14
       oscnutype: 14
     - Name: "FHC_nue_x_nue"
       LatexName: "FHC_nue_x_nue"
-      mtuplefile: "nue_x_nue"
+      mtuplefile: ["nue_x_nue"]
       splinefile: "nue_x_nue"
       nutype: 12
       oscnutype: 12
     - Name: "FHC_numubar_x_numubar"
       LatexName: "FHC_numubar_x_numubar"
-      mtuplefile: "numubar_x_numubar"
+      mtuplefile: ["numubar_x_numubar"]
       splinefile: "numubar_x_numubar"
       nutype: -14
       oscnutype: -14
     - Name: "FHC_nuebar_x_nuebar"
       LatexName: "FHC_nuebar_x_nuebar"
-      mtuplefile: "nuebar_x_nuebar"
+      mtuplefile: ["nuebar_x_nuebar"]
       splinefile: "nuebar_x_nuebar"
       nutype: -12
       oscnutype: -12
@@ -73,28 +73,28 @@ ND_RHC_CCnumu:
     splineprefix: "Inputs/DUNE_ND_spline_files/ND_RHC_ger_"
     splinesuffix: "_splines.root"
 
-  SubSamples:
+  OscChannels:
     - Name: "RHC_numu_x_numu"
       LatexName: "RHC_numu_x_numu"
-      mtuplefile: "numu_x_numu_*"
+      mtuplefile: ["numu_x_numu_*"]
       splinefile: "numu_x_numu"
       nutype: 14
       oscnutype: 14
     - Name: "RHC_nue_x_nue"
       LatexName: "RHC_nue_x_nue"
-      mtuplefile: "nue_x_nue"
+      mtuplefile: ["nue_x_nue"]
       splinefile: "nue_x_nue"
       nutype: 12
       oscnutype: 12
     - Name: "RHC_numubar_x_numubar"
       LatexName: "RHC_numubar_x_numubar"
-      mtuplefile: "numubar_x_numubar_*"
+      mtuplefile: ["numubar_x_numubar_*"]
       splinefile: "numubar_x_numubar"
       nutype: -14
       oscnutype: -14
     - Name: "RHC_nuebar_x_nuebar"
       LatexName: "RHC_nuebar_x_nuebar"
-      mtuplefile: "nuebar_x_nuebar"
+      mtuplefile: ["nuebar_x_nuebar"]
       splinefile: "nuebar_x_nuebar"
       nutype: -12
       oscnutype: -12
