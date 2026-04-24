@@ -1,0 +1,177 @@
+
+#########################################
+
+DiagMCMC:
+  ExcludedTypes: []
+  ExcludedNames: []
+  nBatches: 20
+  nLags: 10000
+  PlotRelativeToPrior: "false"
+
+
+#########################################
+ProcessMCMC:
+  # Select parameter names to remove (prefix match)
+  ExcludedNames: []
+  # Select parameter groups to remove: Fit, Xsec, Osc
+  ExcludedGroups: []
+  # Legacy parameter block exclusion (not needed here)
+  ExcludedTypes: []
+  # Uncomment to subsample a very large chain
+  #MaxEntries: 10000
+
+  # Additional posterior cuts 
+  Posterior1DCut: ""
+
+  # Basic settings
+  PlotRelativeToPrior: false
+  PrintToPDF: true
+  # All PDSP parameters have flat priors — enable error bands
+  PlotErrorForFlatPrior: true
+  FancyNames: true
+  PlotBinValue: false
+
+  # Correlation related
+  Smoothing: true
+
+  # Functionality 1D
+  MakeCredibleIntervals: true
+  CalcBayesFactor: false
+  CalcSavageDickey: false
+  CalcBipolarPlot: false
+  CalcParameterEvolution: true
+
+  # Functionality 2D
+  PlotCorr: true
+  MakeSubOptimality: ["false", 100]
+  MakeViolin: true
+  MakeCredibleRegions: false
+  GetTrianglePlot: true
+  DiagnoseCovarianceMatrix: false
+  ReweightPrior: false
+  # Enable KS test when comparing two chains (e.g. systematic cross-checks)
+  PerformKStest: true
+
+  # Credible interval levels and colours
+  CredibleIntervals: [0.99, 0.90, 0.68]
+  # kCyan+4, kCyan-2, kCyan-10
+  CredibleIntervalsColours: [436, 430, 422]
+
+  CredibleInSigmas: false
+  CredibleRegions: [0.99, 0.90, 0.68]
+  # kDashed, kSolid, kDotted
+  CredibleRegionStyle: [2, 1, 3]
+  # kGreen-3, kGreen-10, kGreen
+  CredibleRegionColor: [413, 406, 416]
+
+  # Only plot 2D posteriors with |correlation| > this threshold
+  Post2DPlotThreshold: 0.2
+
+  # Number of intervals for covariance stability diagnostic
+  NIntervals: 5
+
+  # Triangle plots — one per signal category (Impure is background correction, excluded)
+  TrianglePlot:
+    - ["Absorption", ["Abs_TrueEBin_Under", "Abs_TrueEBin_0", "Abs_TrueEBin_1",
+                      "Abs_TrueEBin_2", "Abs_TrueEBin_Over", "Abs_Escaping"]]
+    - ["ChargeExchange", ["CEx_TrueEBin_Under", "CEx_TrueEBin_0", "CEx_TrueEBin_1",
+                          "CEx_TrueEBin_2", "CEx_TrueEBin_Over", "CEx_Escaping"]]
+    - ["PionProduction", ["Pion_TrueEBin_Under", "Pion_TrueEBin_0", "Pion_TrueEBin_1",
+                          "Pion_TrueEBin_2", "Pion_TrueEBin_Over", "Pion_Escaping"]]
+
+  # Track MCMC convergence for one energy bin per signal category
+  ParameterEvolution:
+    - ["Abs_TrueEBin_0", 20]
+    - ["CEx_TrueEBin_0", 20]
+    - ["Pion_TrueEBin_0", 20]
+
+  Thinning: [false, 100]
+
+  ReweightPrior: false
+
+  # No custom bin edges needed (parameters defined on [0, 999])
+  #CustomBinEdges:
+
+
+#########################################
+GetPenaltyTerm:
+  # Signal categories + beam impurity background correction separated
+  PenaltySets: ["Signal_Abs", "Signal_CEx", "Signal_Pion", "BkgCorrection"]
+
+  Signal_Abs:
+    - ["Abs_"]
+    - false
+    - "-logL_{Abs}"
+  Signal_CEx:
+    - ["CEx_"]
+    - false
+    - "-logL_{CEx}"
+  Signal_Pion:
+    - ["Pion_"]
+    - false
+    - "-logL_{Pion}"
+  BkgCorrection:
+    - ["Impure_"]
+    - false
+    - "-logL_{Impure}"
+
+
+#########################################
+PlotSigmaVariation:
+  # One representative true-energy bin from each signal category
+  ParamNames: ["Abs_TrueEBin_0", "CEx_TrueEBin_0", "Pion_TrueEBin_0"]
+  # kRed, kBlue, kGreen
+  Coulour: [632, 600, 416]
+
+
+#########################################
+PredictivePlotting:
+  FileTitle: ["Posterior Predictive", "Prior Predictive"]
+  PosteriorColor: [632, 600]  # kRed, kBlue
+
+
+#########################################
+MatrixPlotter:
+  # 3 signal categories + 1 beam impurity background correction
+  Titles: [
+    "Abs",
+    "CEx",
+    "Pion",
+    "BkgImpure",
+  ]
+
+  Abs: [
+    "Abs_TrueEBin_Under",
+    "Abs_TrueEBin_0",
+    "Abs_TrueEBin_1",
+    "Abs_TrueEBin_2",
+    "Abs_TrueEBin_Over",
+    "Abs_Escaping",
+  ]
+
+  CEx: [
+    "CEx_TrueEBin_Under",
+    "CEx_TrueEBin_0",
+    "CEx_TrueEBin_1",
+    "CEx_TrueEBin_2",
+    "CEx_TrueEBin_Over",
+    "CEx_Escaping",
+  ]
+
+  Pion: [
+    "Pion_TrueEBin_Under",
+    "Pion_TrueEBin_0",
+    "Pion_TrueEBin_1",
+    "Pion_TrueEBin_2",
+    "Pion_TrueEBin_Over",
+    "Pion_Escaping",
+  ]
+
+  BkgImpure: [
+    "Impure_TrueEBin_Under",
+    "Impure_TrueEBin_0",
+    "Impure_TrueEBin_1",
+    "Impure_TrueEBin_2",
+    "Impure_TrueEBin_Over",
+    "Impure_Escaping",
+  ]
