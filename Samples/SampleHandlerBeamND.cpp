@@ -212,7 +212,7 @@ const double* SampleHandlerBeamND::GetPointerToKinematicParameter(const int KinP
     return &(dunendmcSamples[iEvent].mode);
     break;
   case kIsFHC:
-    return &(beamNDSampleDetails[MCSamples[iEvent].NominalSample].isFHC);
+    return &(beamNDSampleDetails[MCEvents[iEvent].NominalSample].isFHC);
     break;
   case kTargetNucleus:
     return &(dunendmcSamples[iEvent].Target);
