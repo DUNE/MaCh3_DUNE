@@ -8,7 +8,7 @@ Systematics:
     SampleNames: ["absorption"]
     Error: 0.1 # Need to figure out how to set poisson errors on the normalisation parameters (do we need manual input or can these be calculated by the fitter engine?)
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [0., 1500]
@@ -18,7 +18,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -28,7 +28,7 @@ Systematics:
     SampleNames: ["absorption"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [1500, 1700]
@@ -38,7 +38,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -48,7 +48,7 @@ Systematics:
     SampleNames: ["absorption"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [1700, 1900]
@@ -58,7 +58,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -68,7 +68,7 @@ Systematics:
     SampleNames: ["absorption"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [1900, 2100]
@@ -78,7 +78,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -88,7 +88,7 @@ Systematics:
     SampleNames: ["absorption"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [2100, 999999]
@@ -98,7 +98,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -108,7 +108,7 @@ Systematics:
     SampleNames: ["absorption"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - RecoEndZ: [220, 999]
@@ -117,7 +117,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -127,7 +127,7 @@ Systematics:
     SampleNames: ["charge_exchange"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [0., 1500]
@@ -137,7 +137,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -147,7 +147,7 @@ Systematics:
     SampleNames: ["charge_exchange"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [1500, 1700]
@@ -157,7 +157,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -167,7 +167,7 @@ Systematics:
     SampleNames: ["charge_exchange"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [1700, 1900]
@@ -177,7 +177,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -187,7 +187,7 @@ Systematics:
     SampleNames: ["charge_exchange"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [1900, 2100]
@@ -197,7 +197,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -207,7 +207,7 @@ Systematics:
     SampleNames: ["charge_exchange"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [2100, 999999]
@@ -217,7 +217,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -227,7 +227,7 @@ Systematics:
     SampleNames: ["charge_exchange"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - RecoEndZ: [220, 999]
@@ -236,7 +236,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -246,7 +246,7 @@ Systematics:
     SampleNames: ["pion_production", "single_pion_production"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [0., 1500]
@@ -256,7 +256,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -266,7 +266,7 @@ Systematics:
     SampleNames: ["pion_production", "single_pion_production"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [1500, 1700]
@@ -276,7 +276,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -286,7 +286,7 @@ Systematics:
     SampleNames: ["pion_production", "single_pion_production"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [1700, 1900]
@@ -296,7 +296,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -306,7 +306,7 @@ Systematics:
     SampleNames: ["pion_production", "single_pion_production"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [1900, 2100]
@@ -316,7 +316,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -326,7 +326,7 @@ Systematics:
     SampleNames: ["pion_production", "single_pion_production"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [2100, 999999]
@@ -336,7 +336,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -346,7 +346,7 @@ Systematics:
     SampleNames: ["pion_production", "single_pion_production"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - RecoEndZ: [220, 999]
@@ -355,7 +355,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -365,7 +365,7 @@ Systematics:
     SampleNames: ["IMPURITY"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [0., 1500]
@@ -375,7 +375,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -385,7 +385,7 @@ Systematics:
     SampleNames: ["IMPURITY"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [1500, 1700]
@@ -395,7 +395,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -405,7 +405,7 @@ Systematics:
     SampleNames: ["IMPURITY"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [1700, 1900]
@@ -415,7 +415,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -425,7 +425,7 @@ Systematics:
     SampleNames: ["IMPURITY"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [1900, 2100]
@@ -435,7 +435,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -445,7 +445,7 @@ Systematics:
     SampleNames: ["IMPURITY"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - TrueEInt: [2100, 999999]
@@ -455,7 +455,7 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
 
 - Systematic:
     Names:
@@ -465,7 +465,7 @@ Systematics:
     SampleNames: ["IMPURITY"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 999]
+    ParameterBounds: [0, 10]
     ParameterGroup: Fit
     KinematicCuts:
       - RecoEndZ: [220, 999]
@@ -474,4 +474,4 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 1.
+      MCMC: 0.1
