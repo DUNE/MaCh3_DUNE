@@ -45,15 +45,9 @@ PDSP:
       splinefile: ""
       nutype: 2
       oscnutype: 2
-    - Name: "single_pion_production"
-      LatexName: "spip"
-      mtuplefile: "Tsingle_pion_production"
-      splinefile: ""
-      nutype: 3
-      oscnutype: 3
     - Name: "pion_production"
       LatexName: "pip"
       mtuplefile: "Tpion_production"
       splinefile: ""
-      nutype: 4
-      oscnutype: 4
+      nutype: 3
+      oscnutype: 3
