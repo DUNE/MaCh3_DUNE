@@ -13,7 +13,7 @@ Samples:
   - "BeamFD"
 
 BeamFD:
-  SampleTitle: "BeamFD"
+  SampleTitle: "dummy"
   POT: 3.85e24
 
   Binning:
