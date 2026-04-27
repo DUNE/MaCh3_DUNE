@@ -6,11 +6,13 @@ InputFiles:
   PrepSplineFile: false
 
 Samples:
-  - "ND_FHC_CCnumu"
-  - "ND_RHC_CCnumu"
+  - "BeamND_FHC_CCnumu"
+  - "BeamND_RHC_CCnumu"
 
-ND_FHC_CCnumu:
-  SampleTitle: "ND_FHC_CCnumu"
+BeamND_FHC_CCnumu:
+  SampleTitle: "BeamND_FHC_CCnumu"
+  SampleName: "BeamND_FHC_CCnumu"
+
   POT: 3.85e21
 
   Binning:
@@ -54,8 +56,9 @@ ND_FHC_CCnumu:
       nutype: -12
       oscnutype: -12
 
-ND_RHC_CCnumu:
-  SampleTitle: "ND_RHC_CCnumu"
+BeamND_RHC_CCnumu:
+  SampleTitle: "BeamND_RHC_CCnumu"
+  SampleName: "BeamND_RHC_CCnumu"
   POT: 3.85e21
 
   Binning:

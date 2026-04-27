@@ -211,7 +211,7 @@ Systematics:
     - b_206: 0.115684201527
     - b_207: 0.0449225119598
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.125273361158
     FlatPrior: false
     KinematicCuts:
@@ -447,7 +447,7 @@ Systematics:
     - b_206: 0.19225454413
     - b_207: 0.0990062973645
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0926120290447
     FlatPrior: false
     KinematicCuts:
@@ -683,7 +683,7 @@ Systematics:
     - b_206: 0.245458020019
     - b_207: 0.143216275964
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0804767043985
     FlatPrior: false
     KinematicCuts:
@@ -919,7 +919,7 @@ Systematics:
     - b_206: 0.296697870877
     - b_207: 0.174004493979
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0774468678958
     FlatPrior: false
     KinematicCuts:
@@ -1155,7 +1155,7 @@ Systematics:
     - b_206: 0.337275370348
     - b_207: 0.230033918132
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0801585961159
     FlatPrior: false
     KinematicCuts:
@@ -1391,7 +1391,7 @@ Systematics:
     - b_206: 0.316388741228
     - b_207: 0.191639697344
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0767549557896
     FlatPrior: false
     KinematicCuts:
@@ -1627,7 +1627,7 @@ Systematics:
     - b_206: 0.284644104959
     - b_207: 0.178059095913
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0738976671906
     FlatPrior: false
     KinematicCuts:
@@ -1863,7 +1863,7 @@ Systematics:
     - b_206: 0.233673341851
     - b_207: 0.161303647687
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0753765092052
     FlatPrior: false
     KinematicCuts:
@@ -2099,7 +2099,7 @@ Systematics:
     - b_206: 0.238751454388
     - b_207: 0.14226823113
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0754754390019
     FlatPrior: false
     KinematicCuts:
@@ -2335,7 +2335,7 @@ Systematics:
     - b_206: 0.22096660997
     - b_207: 0.174125657578
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0789796908757
     FlatPrior: false
     KinematicCuts:
@@ -2571,7 +2571,7 @@ Systematics:
     - b_206: 0.221199026401
     - b_207: 0.0770398277935
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0898401873206
     FlatPrior: false
     KinematicCuts:
@@ -2807,7 +2807,7 @@ Systematics:
     - b_206: 0.328022927754
     - b_207: 0.186682257984
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0883663024722
     FlatPrior: false
     KinematicCuts:
@@ -3043,7 +3043,7 @@ Systematics:
     - b_206: 0.464077701822
     - b_207: 0.342133017736
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0863581148799
     FlatPrior: false
     KinematicCuts:
@@ -3279,7 +3279,7 @@ Systematics:
     - b_206: 0.47375439819
     - b_207: 0.344228424365
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0957909278003
     FlatPrior: false
     KinematicCuts:
@@ -3515,7 +3515,7 @@ Systematics:
     - b_206: 0.458427815764
     - b_207: 0.306560345799
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0853907781146
     FlatPrior: false
     KinematicCuts:
@@ -3751,7 +3751,7 @@ Systematics:
     - b_206: 0.390403864245
     - b_207: 0.346165041054
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.118445839742
     FlatPrior: false
     KinematicCuts:
@@ -3987,7 +3987,7 @@ Systematics:
     - b_206: 0.44412800564
     - b_207: 0.350042001097
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.175350220656
     FlatPrior: false
     KinematicCuts:
@@ -4223,7 +4223,7 @@ Systematics:
     - b_206: 0.470196287161
     - b_207: 0.441661594356
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.185646424801
     FlatPrior: false
     KinematicCuts:
@@ -4459,7 +4459,7 @@ Systematics:
     - b_206: 0.299023396874
     - b_207: 0.419980656764
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.347006205066
     FlatPrior: false
     KinematicCuts:
@@ -4695,7 +4695,7 @@ Systematics:
     - b_206: 0.234815818668
     - b_207: 0.130552069614
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.153199620714
     FlatPrior: false
     KinematicCuts:
@@ -4931,7 +4931,7 @@ Systematics:
     - b_206: 0.376277445534
     - b_207: 0.205819528517
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.104531334342
     FlatPrior: false
     KinematicCuts:
@@ -5167,7 +5167,7 @@ Systematics:
     - b_206: 0.43202200719
     - b_207: 0.262931426454
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.103605563829
     FlatPrior: false
     KinematicCuts:
@@ -5403,7 +5403,7 @@ Systematics:
     - b_206: 0.43303235867
     - b_207: 0.257923971717
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.102497513369
     FlatPrior: false
     KinematicCuts:
@@ -5639,7 +5639,7 @@ Systematics:
     - b_206: 0.460939427496
     - b_207: 0.289431977815
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.102943383631
     FlatPrior: false
     KinematicCuts:
@@ -5875,7 +5875,7 @@ Systematics:
     - b_206: 0.484098800243
     - b_207: 0.305904944909
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.101857930208
     FlatPrior: false
     KinematicCuts:
@@ -6111,7 +6111,7 @@ Systematics:
     - b_206: 0.489857831564
     - b_207: 0.298173192695
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0985017454341
     FlatPrior: false
     KinematicCuts:
@@ -6347,7 +6347,7 @@ Systematics:
     - b_206: 0.517054788977
     - b_207: 0.33455255784
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.10266107887
     FlatPrior: false
     KinematicCuts:
@@ -6583,7 +6583,7 @@ Systematics:
     - b_206: 0.50534703478
     - b_207: 0.304812854395
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0950780750528
     FlatPrior: false
     KinematicCuts:
@@ -6819,7 +6819,7 @@ Systematics:
     - b_206: 0.573473927647
     - b_207: 0.385582703413
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0992667829062
     FlatPrior: false
     KinematicCuts:
@@ -7055,7 +7055,7 @@ Systematics:
     - b_206: 0.613513976869
     - b_207: 0.433048361984
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.106433821513
     FlatPrior: false
     KinematicCuts:
@@ -7291,7 +7291,7 @@ Systematics:
     - b_206: 0.636078938239
     - b_207: 0.415175490577
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.102909691851
     FlatPrior: false
     KinematicCuts:
@@ -7527,7 +7527,7 @@ Systematics:
     - b_206: 0.601411908005
     - b_207: 0.351739606073
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0994042176524
     FlatPrior: false
     KinematicCuts:
@@ -7763,7 +7763,7 @@ Systematics:
     - b_206: 0.639016660482
     - b_207: 0.406008694546
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.107849552145
     FlatPrior: false
     KinematicCuts:
@@ -7999,7 +7999,7 @@ Systematics:
     - b_206: 0.675585140353
     - b_207: 0.465086852791
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.132078471898
     FlatPrior: false
     KinematicCuts:
@@ -8235,7 +8235,7 @@ Systematics:
     - b_206: 0.796480817036
     - b_207: 0.369313102192
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.15924116036
     FlatPrior: false
     KinematicCuts:
@@ -8471,7 +8471,7 @@ Systematics:
     - b_206: 0.798072266585
     - b_207: 0.373601981566
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.22479737126
     FlatPrior: false
     KinematicCuts:
@@ -8707,7 +8707,7 @@ Systematics:
     - b_206: 0.63220524523
     - b_207: 0.566109698762
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.215033791076
     FlatPrior: false
     KinematicCuts:
@@ -8943,7 +8943,7 @@ Systematics:
     - b_206: 0.00738810476078
     - b_207: 0.0521763086252
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.594284639504
     FlatPrior: false
     KinematicCuts:
@@ -9179,7 +9179,7 @@ Systematics:
     - b_206: 0.22470049857
     - b_207: 0.310018359601
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0883315241115
     FlatPrior: false
     KinematicCuts:
@@ -9415,7 +9415,7 @@ Systematics:
     - b_206: 0.384898239991
     - b_207: 0.13528912539
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0709513400342
     FlatPrior: false
     KinematicCuts:
@@ -9651,7 +9651,7 @@ Systematics:
     - b_206: 0.482027187381
     - b_207: 0.291107518808
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0795096818781
     FlatPrior: false
     KinematicCuts:
@@ -9887,7 +9887,7 @@ Systematics:
     - b_206: 0.623945335925
     - b_207: 0.389222115419
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0913606273956
     FlatPrior: false
     KinematicCuts:
@@ -10123,7 +10123,7 @@ Systematics:
     - b_206: 0.612756630902
     - b_207: 0.307989316946
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.1145125855
     FlatPrior: false
     KinematicCuts:
@@ -10359,7 +10359,7 @@ Systematics:
     - b_206: 0.57996704016
     - b_207: 0.235446164783
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.148054923254
     FlatPrior: false
     KinematicCuts:
@@ -10595,7 +10595,7 @@ Systematics:
     - b_206: 0.395971902959
     - b_207: 0.68218981284
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.255360042724
     FlatPrior: false
     KinematicCuts:
@@ -10831,7 +10831,7 @@ Systematics:
     - b_206: 0.338247872661
     - b_207: 0.156359207516
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.108389443607
     FlatPrior: false
     KinematicCuts:
@@ -11067,7 +11067,7 @@ Systematics:
     - b_206: 0.703739938224
     - b_207: 0.384683938856
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0983768747454
     FlatPrior: false
     KinematicCuts:
@@ -11303,7 +11303,7 @@ Systematics:
     - b_206: 0.810283864379
     - b_207: 0.436240749758
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.114267462176
     FlatPrior: false
     KinematicCuts:
@@ -11539,7 +11539,7 @@ Systematics:
     - b_206: 0.860348003881
     - b_207: 0.474031464578
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.137986953478
     FlatPrior: false
     KinematicCuts:
@@ -11775,7 +11775,7 @@ Systematics:
     - b_206: 0.89344055461
     - b_207: 0.454590570421
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.152545464064
     FlatPrior: false
     KinematicCuts:
@@ -12011,7 +12011,7 @@ Systematics:
     - b_206: 0.940012776976
     - b_207: 0.571689692175
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.160069302489
     FlatPrior: false
     KinematicCuts:
@@ -12247,7 +12247,7 @@ Systematics:
     - b_206: 0.378141404814
     - b_207: 0.511000908031
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.209431444838
     FlatPrior: false
     KinematicCuts:
@@ -12483,7 +12483,7 @@ Systematics:
     - b_206: 0.240933528623
     - b_207: 0.157531932604
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.1612193214
     FlatPrior: false
     KinematicCuts:
@@ -12719,7 +12719,7 @@ Systematics:
     - b_206: 0.37100206501
     - b_207: 0.235615331781
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.107714786765
     FlatPrior: false
     KinematicCuts:
@@ -12955,7 +12955,7 @@ Systematics:
     - b_206: 0.434964581078
     - b_207: 0.291193616635
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0958234513258
     FlatPrior: false
     KinematicCuts:
@@ -13191,7 +13191,7 @@ Systematics:
     - b_206: 0.460426102541
     - b_207: 0.325561494248
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0999305646731
     FlatPrior: false
     KinematicCuts:
@@ -13427,7 +13427,7 @@ Systematics:
     - b_206: 0.45475471116
     - b_207: 0.313483280811
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.102185750196
     FlatPrior: false
     KinematicCuts:
@@ -13663,7 +13663,7 @@ Systematics:
     - b_206: 0.446903273204
     - b_207: 0.304569488534
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.10312950082
     FlatPrior: false
     KinematicCuts:
@@ -13899,7 +13899,7 @@ Systematics:
     - b_206: 0.449197805475
     - b_207: 0.30371041203
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.106154976254
     FlatPrior: false
     KinematicCuts:
@@ -14135,7 +14135,7 @@ Systematics:
     - b_206: 0.471181745737
     - b_207: 0.329226074073
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.108834546614
     FlatPrior: false
     KinematicCuts:
@@ -14371,7 +14371,7 @@ Systematics:
     - b_206: 0.490748872919
     - b_207: 0.359194371238
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.111352585732
     FlatPrior: false
     KinematicCuts:
@@ -14607,7 +14607,7 @@ Systematics:
     - b_206: 0.44419265679
     - b_207: 0.300817212429
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.110317302578
     FlatPrior: false
     KinematicCuts:
@@ -14843,7 +14843,7 @@ Systematics:
     - b_206: 0.478141932073
     - b_207: 0.341842331407
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.10791622741
     FlatPrior: false
     KinematicCuts:
@@ -15079,7 +15079,7 @@ Systematics:
     - b_206: 0.495770937428
     - b_207: 0.334811201143
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.105977079735
     FlatPrior: false
     KinematicCuts:
@@ -15315,7 +15315,7 @@ Systematics:
     - b_206: 0.509040951455
     - b_207: 0.423980682622
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.126040076925
     FlatPrior: false
     KinematicCuts:
@@ -15551,7 +15551,7 @@ Systematics:
     - b_206: 0.511244939537
     - b_207: 0.398802507481
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.123444801438
     FlatPrior: false
     KinematicCuts:
@@ -15787,7 +15787,7 @@ Systematics:
     - b_206: 0.486539957444
     - b_207: 0.387469724101
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.116662604907
     FlatPrior: false
     KinematicCuts:
@@ -16023,7 +16023,7 @@ Systematics:
     - b_206: 0.434851360049
     - b_207: 0.326503005129
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.146041746228
     FlatPrior: false
     KinematicCuts:
@@ -16259,7 +16259,7 @@ Systematics:
     - b_206: 0.475438914781
     - b_207: 0.355298883291
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.18290662659
     FlatPrior: false
     KinematicCuts:
@@ -16495,7 +16495,7 @@ Systematics:
     - b_206: 0.453408368138
     - b_207: 0.440367615446
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.194623999144
     FlatPrior: false
     KinematicCuts:
@@ -16731,7 +16731,7 @@ Systematics:
     - b_206: 0.388297476226
     - b_207: 0.393465035792
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.365017881095
     FlatPrior: false
     KinematicCuts:
@@ -16967,7 +16967,7 @@ Systematics:
     - b_206: 0.110840899172
     - b_207: 0.0281528904738
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.120635257733
     FlatPrior: false
     KinematicCuts:
@@ -17203,7 +17203,7 @@ Systematics:
     - b_206: 0.216625351796
     - b_207: 0.0675981968748
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0888025452482
     FlatPrior: false
     KinematicCuts:
@@ -17439,7 +17439,7 @@ Systematics:
     - b_206: 0.273766360431
     - b_207: 0.100044974794
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0777255922407
     FlatPrior: false
     KinematicCuts:
@@ -17675,7 +17675,7 @@ Systematics:
     - b_206: 0.327145577738
     - b_207: 0.168405416518
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0740336925141
     FlatPrior: false
     KinematicCuts:
@@ -17911,7 +17911,7 @@ Systematics:
     - b_206: 0.36425903509
     - b_207: 0.189223759379
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.075020282706
     FlatPrior: false
     KinematicCuts:
@@ -18147,7 +18147,7 @@ Systematics:
     - b_206: 0.350457114578
     - b_207: 0.195303648115
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0698300677849
     FlatPrior: false
     KinematicCuts:
@@ -18383,7 +18383,7 @@ Systematics:
     - b_206: 0.306720141047
     - b_207: 0.133035859669
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0650617530281
     FlatPrior: false
     KinematicCuts:
@@ -18619,7 +18619,7 @@ Systematics:
     - b_206: 0.268525437576
     - b_207: 0.0938605915898
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0652173360008
     FlatPrior: false
     KinematicCuts:
@@ -18855,7 +18855,7 @@ Systematics:
     - b_206: 0.231275333311
     - b_207: 0.0667061826798
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.067013857191
     FlatPrior: false
     KinematicCuts:
@@ -19091,7 +19091,7 @@ Systematics:
     - b_206: 0.258448066099
     - b_207: 0.255132247744
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.072106899348
     FlatPrior: false
     KinematicCuts:
@@ -19327,7 +19327,7 @@ Systematics:
     - b_206: 0.301334697815
     - b_207: 0.2500607466
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0822802356682
     FlatPrior: false
     KinematicCuts:
@@ -19563,7 +19563,7 @@ Systematics:
     - b_206: 0.438129458403
     - b_207: 0.12443065684
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0779165821275
     FlatPrior: false
     KinematicCuts:
@@ -19799,7 +19799,7 @@ Systematics:
     - b_206: 0.554922700772
     - b_207: 0.464288511686
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0801278105923
     FlatPrior: false
     KinematicCuts:
@@ -20035,7 +20035,7 @@ Systematics:
     - b_206: 0.55560468966
     - b_207: 0.254711590945
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0983192374144
     FlatPrior: false
     KinematicCuts:
@@ -20271,7 +20271,7 @@ Systematics:
     - b_206: 0.611024508432
     - b_207: 0.425736273494
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0900200657746
     FlatPrior: false
     KinematicCuts:
@@ -20507,7 +20507,7 @@ Systematics:
     - b_206: 0.685278159906
     - b_207: 0.356432470732
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.134035329171
     FlatPrior: false
     KinematicCuts:
@@ -20743,7 +20743,7 @@ Systematics:
     - b_206: 0.81096294728
     - b_207: 0.298011910279
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.210272444664
     FlatPrior: false
     KinematicCuts:
@@ -20979,7 +20979,7 @@ Systematics:
     - b_206: 0.701397747296
     - b_207: 0.533867191389
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.213486017244
     FlatPrior: false
     KinematicCuts:
@@ -21215,7 +21215,7 @@ Systematics:
     - b_206: 0.125978803348
     - b_207: -0.236615415421
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.649167360483
     FlatPrior: false
     KinematicCuts:
@@ -21451,7 +21451,7 @@ Systematics:
     - b_206: 0.392281859563
     - b_207: 0.274222385932
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.108367353345
     FlatPrior: false
     KinematicCuts:
@@ -21687,7 +21687,7 @@ Systematics:
     - b_206: 0.6540776442
     - b_207: 0.429601245028
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0930550373398
     FlatPrior: false
     KinematicCuts:
@@ -21923,7 +21923,7 @@ Systematics:
     - b_206: 0.732484987009
     - b_207: 0.499015318065
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.114330236084
     FlatPrior: false
     KinematicCuts:
@@ -22159,7 +22159,7 @@ Systematics:
     - b_206: 0.744328262657
     - b_207: 0.484179067863
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.128955833776
     FlatPrior: false
     KinematicCuts:
@@ -22395,7 +22395,7 @@ Systematics:
     - b_206: 0.764532421673
     - b_207: 0.485464506562
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.15951467851
     FlatPrior: false
     KinematicCuts:
@@ -22631,7 +22631,7 @@ Systematics:
     - b_206: 0.71845981944
     - b_207: 0.516066431803
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.161724572019
     FlatPrior: false
     KinematicCuts:
@@ -22867,7 +22867,7 @@ Systematics:
     - b_206: 0.514542281845
     - b_207: 0.586543404673
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.236872655124
     FlatPrior: false
     KinematicCuts:
@@ -23103,7 +23103,7 @@ Systematics:
     - b_206: 0.20885088257
     - b_207: -0.0727023611988
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.087955395682
     FlatPrior: false
     KinematicCuts:
@@ -23339,7 +23339,7 @@ Systematics:
     - b_206: 0.531549202024
     - b_207: 0.227519200536
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0691974666559
     FlatPrior: false
     KinematicCuts:
@@ -23575,7 +23575,7 @@ Systematics:
     - b_206: 0.675047861322
     - b_207: 0.40321432518
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.0844609146932
     FlatPrior: false
     KinematicCuts:
@@ -23811,7 +23811,7 @@ Systematics:
     - b_206: 0.648374208689
     - b_207: 0.703793057135
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.128874841305
     FlatPrior: false
     KinematicCuts:
@@ -24047,7 +24047,7 @@ Systematics:
     - b_206: 0.897830834612
     - b_207: 0.309580616162
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.132257068909
     FlatPrior: false
     KinematicCuts:
@@ -24283,7 +24283,7 @@ Systematics:
     - b_206: 0.986622112881
     - b_207: 0.603075465221
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.148582318316
     FlatPrior: false
     KinematicCuts:
@@ -24519,7 +24519,7 @@ Systematics:
     - b_206: 0.523485017964
     - b_207: 0.909211431241
     SampleNames:
-    - ND_*
+    - BeamND*
     Error: 0.193734459966
     FlatPrior: false
     KinematicCuts:
