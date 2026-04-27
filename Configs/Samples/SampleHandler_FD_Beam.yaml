@@ -6,8 +6,8 @@ InputFiles:
   PrepSplineFile: false
 
 NuOsc:
-  NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear_binned.yaml"
-  EqualBinningPerOscChannel: True
+  NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
+  EqualBinningPerOscChannel: false
 
 Samples: [
   "FD_FHC_numu",

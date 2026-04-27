@@ -1190,7 +1190,7 @@ Systematics:
       MCMC: 5.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_LAr_FHC", "BeamFD*"]
+    SampleNames: ["ND_FHC_CCnumu", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
