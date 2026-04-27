@@ -31,31 +31,28 @@ int main(int argc, char * argv[]) {
 
   
   //###############################################################################################################################
-  //Create samplePDFFD objects
-  auto xsec = MaCh3CovarianceFactory<ParameterHandlerGeneric>(FitManager.get(), "Xsec");
-  if (!CheckNodeExists(FitManager->raw(), "General", "OscillationParameters")){
-    MACH3LOG_ERROR("Cannot find OscillationParameters in your config, Variations will not work");
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-
-  auto oscpars = Get<std::vector<double>>(FitManager->raw()["General"]["OscillationParameters"], __FILE__, __LINE__);
-  xsec->SetGroupOnlyParameters("Osc", oscpars);
-  
-
-  auto DUNEPdfs = MaCh3DuneSampleFactory(FitManager, xsec);
-
+  //Create sample handler + parameter_handler objects
+  auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
   
   //###############################################################################################################################
   //Perform reweight and print total integral
 
   MACH3LOG_INFO("=======================================================");
-  for(auto handler: DUNEPdfs){
+  for(auto handler: samples){
     handler->Reweight();
     for (int iSample=0;iSample<handler->GetNSamples();iSample++) {
       MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample)->Integral());
     }
   }
-  
+
+  std::vector<double> oscpars;
+  if (CheckNodeExists(FitManager->raw(), "General", "OscillationParameters")){
+    oscpars = Get<std::vector<double>>(FitManager->raw()["General"]["OscillationParameters"], __FILE__, __LINE__);
+  }
+  else{
+    MACH3LOG_ERROR("Cannot find General:OscillationParameters in config, which is required for variations app. Please add it to your config or use a different app.");
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
   //###############################################################################################################################
   //DB Can't use the core sigma variations as it's entirely set up around the concept of multiple selections per samplePDF object
   //   Thats not the case in the FD code, which has one selection per samplePDF object
@@ -70,12 +67,12 @@ int main(int argc, char * argv[]) {
   TFile* File = TFile::Open(OutputFileName.c_str(),"RECREATE");
 
   MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",
-                xsec->GetName());
+                param_handler->GetName());
 
-  int nPars = xsec->GetNumParams();
+  int nPars = param_handler->GetNumParams();
 
   for (int iPar = 0; iPar < nPars; iPar++) {
-    std::string ParName = xsec->GetParName(iPar);
+    std::string ParName = param_handler->GetParName(iPar);
 
     for (auto const &param : FitManager->raw()["Variations"]) {
 
@@ -88,9 +85,9 @@ int main(int argc, char * argv[]) {
         if (!param["OscParDefault"]) { // if specific default values not
                                         // specified for the parameter then use
                                         // global default ones
-          xsec->SetParameters(oscpars);
+          param_handler->SetParameters(oscpars);
         } else {
-          xsec->SetParameters(
+          param_handler->SetParameters(
               (param["OscParDefault"].as<std::vector<double>>()));
         }
 
@@ -105,9 +102,9 @@ int main(int argc, char * argv[]) {
           double VarVal = valVariations[iSigVar];
 
           MACH3LOG_INFO("\t\tParameter Value : {:<10.7f}", VarVal);
-          xsec->SetParProp(iPar, VarVal);
+          param_handler->SetParProp(iPar, VarVal);
 
-          for (auto handler : DUNEPdfs) {
+          for (auto handler : samples) {
             for (int iSample = 0; iSample < handler->GetNSamples(); iSample++) {
               std::string SampleName = handler->GetSampleTitle(iSample);
 

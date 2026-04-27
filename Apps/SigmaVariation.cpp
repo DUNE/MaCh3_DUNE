@@ -25,21 +25,14 @@ int main(int argc, char * argv[]) {
   std::vector<double> sigmaVariations = {-3, -1, 0, 1, 3};
 
   //###############################################################################################################################
-  //Create samplePDFFD objects
-  auto xsec = MaCh3CovarianceFactory<ParameterHandlerGeneric>(FitManager.get(), "Xsec");
-  if (CheckNodeExists(FitManager->raw(), "General", "OscillationParameters"))
-  {
-    auto oscpars = Get<std::vector<double>>(FitManager->raw()["General"]["OscillationParameters"], __FILE__, __LINE__);
-    xsec->SetGroupOnlyParameters("Osc", oscpars);
-  }
-
-  auto DUNEPdfs = MaCh3DuneSampleFactory(FitManager, xsec);
+  //Create sample handler + parameter_handler objects
+  auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
 
   //###############################################################################################################################
   //Perform reweight and print total integral
 
   MACH3LOG_INFO("=======================================================");
-  for(SampleHandlerBase* handler: DUNEPdfs){
+  for(SampleHandlerBase* handler: samples){
     handler->Reweight();
     for (int iSample=0;iSample<handler->GetNSamples();iSample++) {
       MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample)->Integral());
@@ -59,13 +52,13 @@ int main(int argc, char * argv[]) {
   std::string OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
   TFile* File = TFile::Open(OutputFileName.c_str(),"RECREATE");
   
-  MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",xsec->GetName());
+  MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",param_handler->GetName());
   
-  int nPars = xsec->GetNumParams();
+  int nPars = param_handler->GetNumParams();
   for (int iPar=0;iPar<nPars;iPar++) {
-    std::string ParName = xsec->GetParFancyName(iPar);
-    double VarInit = xsec->GetParInit(iPar);
-    double VarSigma = xsec->GetDiagonalError(iPar);
+    std::string ParName = param_handler->GetParFancyName(iPar);
+    double VarInit = param_handler->GetParInit(iPar);
+    double VarSigma = param_handler->GetDiagonalError(iPar);
     
     MACH3LOG_INFO("\tParameter : {:<30} - Variations around value : {:<10.7f} , in units of 1 Sigma : {:<10.7f}",ParName,VarInit,VarSigma);
 
@@ -75,14 +68,14 @@ int main(int argc, char * argv[]) {
     
     for (size_t iSigVar=0;iSigVar<sigmaVariations.size();iSigVar++) {
       double VarVal = VarInit + sigmaVariations[iSigVar] * VarSigma;
-      if (VarVal < xsec->GetLowerBound(iPar)) VarVal = xsec->GetLowerBound(iPar);
-      if (VarVal > xsec->GetUpperBound(iPar)) VarVal = xsec->GetUpperBound(iPar);
+      if (VarVal < param_handler->GetLowerBound(iPar)) VarVal = param_handler->GetLowerBound(iPar);
+      if (VarVal > param_handler->GetUpperBound(iPar)) VarVal = param_handler->GetUpperBound(iPar);
 
       MACH3LOG_INFO("\t\tVariation {:<5.3f} - Parameter Value : {:<10.7f}",
                     sigmaVariations[iSigVar], VarVal);
-      xsec->SetParProp(iPar, VarVal);
+      param_handler->SetParProp(iPar, VarVal);
 
-      for (auto handler : DUNEPdfs) {
+      for (auto handler : samples) {
         for (int iSample = 0; iSample < handler->GetNSamples(); iSample++) {
           std::string SampleName = handler->GetSampleTitle(iSample);
 
@@ -102,7 +95,7 @@ int main(int argc, char * argv[]) {
       }
     }
 
-    xsec->SetParProp(iPar, VarInit);
+    param_handler->SetParProp(iPar, VarInit);
 
     MACH3LOG_INFO("=======================================================");
   }

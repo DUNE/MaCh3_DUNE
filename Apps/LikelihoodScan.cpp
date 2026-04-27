@@ -29,21 +29,14 @@ int main(int argc, char * argv[]) {
   }
 
   //###############################################################################################################################
-  //Create samplePDFFD objects
-  auto xsec = MaCh3CovarianceFactory<ParameterHandlerGeneric>(FitManager.get(), "Xsec");
-  if (CheckNodeExists(FitManager->raw(), "General", "OscillationParameters"))
-  {
-    auto oscpars = Get<std::vector<double>>(FitManager->raw()["General"]["OscillationParameters"], __FILE__, __LINE__);
-    xsec->SetGroupOnlyParameters("Osc", oscpars);
-  }
-
-  auto DUNEPdfs = MaCh3DuneSampleFactory(FitManager, xsec);
+  //Create sample handler + parameter_handler objects
+  auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
 
   //###############################################################################################################################
   //Perform reweight, print total integral, and set data
 
   std::vector<std::unique_ptr<TH1>> DUNEHists;
-  for(auto handler : DUNEPdfs){
+  for(auto handler : samples){
     for (unsigned iSample = 0; iSample < handler->GetNSamples(); ++iSample) {
       handler->Reweight();
       DUNEHists.push_back(M3::Clone(handler->GetMCHist(iSample)));
@@ -62,11 +55,11 @@ int main(int argc, char * argv[]) {
   //Lets benefit from the core code utilities 
   
   //Add samples to FitterBase
-  for(auto Sample : DUNEPdfs){
+  for(auto Sample : samples){
     MaCh3Fitter->AddSampleHandler(Sample);
   }
 
-  MaCh3Fitter->AddSystObj(xsec.get());
+  MaCh3Fitter->AddSystObj(param_handler.get());
   
   if (do_1d_llhscan) {
     MaCh3Fitter->RunLLHScan();

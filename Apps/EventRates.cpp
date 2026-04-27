@@ -46,26 +46,13 @@ int main(int argc, char * argv[]) {
 
   //###############################################################################################################################
   //Create SampleHandlerBase objects
-  
-  auto xsec = MaCh3CovarianceFactory<ParameterHandlerGeneric>(FitManager.get(), "Xsec");
-  if (CheckNodeExists(FitManager->raw(), "General", "OscillationParameters"))
-  {
-    auto oscpars = Get<std::vector<double>>(FitManager->raw()["General"]["OscillationParameters"], __FILE__, __LINE__);
-    xsec->SetGroupOnlyParameters("Osc", oscpars);
-  }
-
-  auto DUNEPdfs = MaCh3DuneSampleFactory(FitManager, xsec);
-
-  if(DUNEPdfs.empty()){
-    MACH3LOG_ERROR("Cannot find any samples");
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
+  auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
 
   //###############################################################################################################################
   //Perform reweight and print total integral
 
   std::vector<std::unique_ptr<TH1>> DUNEHists;
-  for(auto& handler : DUNEPdfs){
+  for(auto& handler : samples){
     if (!handler){
       MACH3LOG_ERROR("Sample not set up correctly");
       throw MaCh3Exception(__FILE__, __LINE__);
@@ -91,7 +78,7 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("Oscillation Mode Breakdown:");
   
-  for(auto handler : DUNEPdfs) {
+  for(auto handler : samples) {
     for (int iSample = 0; iSample < handler->GetNSamples(); iSample++) {
       MACH3LOG_INFO("======================");
       int nOscChannels = handler->GetNOscChannels(iSample);
@@ -120,7 +107,7 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("Interaction Mode Breakdown:");
 
-  for(auto handler : DUNEPdfs) {
+  for(auto handler : samples) {
     for (int iSample = 0; iSample < handler->GetNSamples(); iSample++) {
       MACH3LOG_INFO("======================");
 
