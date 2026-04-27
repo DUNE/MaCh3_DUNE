@@ -1,5 +1,5 @@
 ---
-SampleHandlerName: "ND_Beam"
+SampleHandlerName: "BeamND"
 MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
 BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
 InputFiles:

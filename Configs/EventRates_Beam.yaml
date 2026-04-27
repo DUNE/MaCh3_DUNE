@@ -3,7 +3,7 @@ General:
   OutputFile: "DuneEventRates.root"
   DUNESamples:
    - "Configs/Samples/SampleHandler_FD_Beam.yaml"
-   - "Configs/Samples/SampleHandler_ND.yaml"
+  #  - "Configs/Samples/SampleHandler_ND.yaml"
   # Nu-FIT
   OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 1284.9, 2.848] #CUDAProb3
   # OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 1284.9, 2.848,  0.5] #NuFAST
@@ -30,7 +30,7 @@ General:
 
   # Shared nuosc objects for all BeamFD samples to reduce binned calculations
   # SharedNuOscillatorObject:
-  #   FD_Beam: "Configs/NuOsc/CUDAProb3Linear_binned.yaml"
+  #   BeamFD: "Configs/NuOsc/CUDAProb3Linear_binned.yaml"
 
   Fitter:
     FitTestLikelihood: false

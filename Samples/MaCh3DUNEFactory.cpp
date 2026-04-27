@@ -4,9 +4,9 @@
 SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, std::unique_ptr<ParameterHandlerGeneric>& param_handler, const std::shared_ptr<OscillationHandler>&  BeamOscillator_, const std::shared_ptr<OscillationHandler>&  AtmOscillator_, BeamNDCov beamNDCov) {
 // ###############################################################
   SampleHandlerBase *Sample;
-  if (SampleType == "FD_Beam") {
+  if (SampleType == "BeamFD") {
     Sample = new SampleHandlerBeamFD(SampleConfig, param_handler.get(), BeamOscillator_);
-  } else if (SampleType == "ND_Beam") {
+  } else if (SampleType == "BeamND") {
     
     if (beamNDCov.NDCov_FHC == nullptr || beamNDCov.NDCov_RHC == nullptr || beamNDCov.NDCov_all == nullptr) {
       MACH3LOG_ERROR("NDCov objects are not defined");

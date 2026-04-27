@@ -1,24 +1,24 @@
 ---
-SampleHandlerName: "FD_Beam"
+SampleHandlerName: "BeamFD"
 MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
 BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
 InputFiles:
   PrepSplineFile: false
 
-NuOsc:
-  NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
-  EqualBinningPerOscChannel: false
+# NuOsc:
+#   NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear_binned.yaml"
+#   EqualBinningPerOscChannel: True
 
 Samples: [
-  "FD_FHC_numu",
-  "FD_FHC_nue",
-  "FD_RHC_numu",
-  "FD_RHC_nue",
+  "BeamFD_FHC_numu",
+  "BeamFD_FHC_nue",
+  "BeamFD_RHC_numu",
+  "BeamFD_RHC_nue",
 ]
 
-FD_FHC_nue: 
+BeamFD_FHC_nue: 
   SampleName: "BeamFD_FHC_nue"
-  SampleTitle: "FD_FHC_nue"
+  SampleTitle: "BeamFD_FHC_nue"
   POT: 1.3628319e+23
 
 
@@ -123,9 +123,9 @@ FD_FHC_nue:
       oscnutype: -16
 
 
-FD_FHC_numu:
+BeamFD_FHC_numu:
   SampleName: "BeamFD_FHC_numu"
-  SampleTitle: "FD_FHC_numu"
+  SampleTitle: "BeamFD_FHC_numu"
   POT: 1.3628319e+23
 
   SelectionCuts:
@@ -228,9 +228,9 @@ FD_FHC_numu:
       oscnutype: -16
 
 
-FD_RHC_nue:
+BeamFD_RHC_nue:
   SampleName: "BeamFD_RHC_nue"
-  SampleTitle: "FD_RHC_nue"
+  SampleTitle: "BeamFD_RHC_nue"
   POT: 1.3628319e+23
 
   SelectionCuts:
@@ -332,8 +332,8 @@ FD_RHC_nue:
       nutype: -12
       oscnutype: -16
 
-FD_RHC_numu:
-  SampleTitle: "FD_RHC_numu"
+BeamFD_RHC_numu:
+  SampleTitle: "BeamFD_RHC_numu"
   SampleName: "BeamFD_RHC_numu"
   POT: 1.3628319e+23
 
