@@ -16,7 +16,7 @@ Samples: [
   "BeamFD_RHC_nue",
 ]
 
-BeamFD_FHC_nue: 
+BeamFD_FHC_nue:
   SampleName: "BeamFD_FHC_nue"
   SampleTitle: "BeamFD_FHC_nue"
   POT: 1.3628319e+23

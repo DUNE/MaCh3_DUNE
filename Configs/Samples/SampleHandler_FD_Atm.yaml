@@ -18,9 +18,9 @@ Samples: [
 
 Atm_nuelike:
   SampleTitle: "nueselec"
-  
+
   Binning:
-    VarStr: ["RecoCosineZ","RecoNeutrinoEnergy"]
+    VarStr: ["RecoCosineZ", "RecoNeutrinoEnergy"]
     VarBins: [[-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1], [0, 0.11, 0.17, 0.26, 0.4, 0.63, 1.03, 1.71, 2.94, 5.48, 1e8]]
     Uniform: true
 
@@ -110,12 +110,12 @@ Atm_nuelike:
 
 Atm_numulike:
   SampleTitle: "numuselec"
-  
+
   Binning:
-    VarStr: ["RecoCosineZ","RecoNeutrinoEnergy"]
+    VarStr: ["RecoCosineZ", "RecoNeutrinoEnergy"]
     VarBins: [[-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1], [0, 0.23, 0.31, 0.47, 0.81, 1.28, 1.99, 3.17, 5.38, 11.54, 1e8]]
-    Uniform: true    
-  
+    Uniform: true
+
   SampleOptions:
     IsELike: 0
 
