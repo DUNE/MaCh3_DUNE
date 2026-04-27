@@ -49,10 +49,10 @@ NDGAr_FHC_numu:
     splineprefix: ""
     splinesuffix: ""
 
-  SubSamples:
+  OscChannels:
     - Name: "FHC_CC_numu_hA"
       LatexName: "FHC_CC_numu_hA"
-      mtuplefile: "hA"
+      mtuplefile: ["hA"]
       splinefile: ""
       nutype: 14
       oscnutype: 14

@@ -6,7 +6,7 @@
 #include "duneanaobj/StandardRecord/StandardRecord.h"
 #pragma GCC diagnostic pop
 
-SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGeneric* xsec_cov_, const std::shared_ptr<OscillationHandler>&  Oscillator_) : SampleHandlerFD(mc_version_, xsec_cov_, Oscillator_) {
+SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGeneric* xsec_cov_, const std::shared_ptr<OscillationHandler>&  Oscillator_) : SampleHandlerBase(mc_version_, xsec_cov_, Oscillator_) {
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
   
@@ -18,14 +18,26 @@ SampleHandlerAtm::~SampleHandlerAtm() {
 
 void SampleHandlerAtm::Init() {
   std::vector<std::string> EnabledSamples = Get<std::vector<std::string>>(SampleManager->raw()["Samples"], __FILE__ , __LINE__);
-  IsELike.resize(GetNsamples());
+  IsELike.resize(GetNSamples());
   
   ExposureScaling = Get<double>(SampleManager->raw()["AnalysisOptions"]["ExposureScaling"],__FILE__,__LINE__);
-  for(int iSample=0;iSample<GetNsamples();iSample++){
+  for(int iSample=0;iSample<GetNSamples();iSample++){
     const std::string TempTitle = EnabledSamples[iSample];
     IsELike[iSample] = Get<int>(SampleManager->raw()[TempTitle]["SampleOptions"]["IsELike"],__FILE__,__LINE__);
   }
-  
+}
+
+// ************************************************
+void SampleHandlerAtm::InititialiseData()
+{
+  // ************************************************
+  // Reweight MC to match
+  Reweight();
+  // set asimov data
+  for (int iSample = 0; iSample < GetNSamples(); iSample++)
+  {
+    AddData(iSample, GetMCArray(iSample));
+  }
 }
 
 void SampleHandlerAtm::SetupSplines() {
@@ -34,8 +46,8 @@ void SampleHandlerAtm::SetupSplines() {
 
 void SampleHandlerAtm::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < dunemcSamples.size(); ++i) {
-    MCSamples[i].total_weight_pointers.push_back(&(dunemcSamples[i].flux_w));
-    MCSamples[i].total_weight_pointers.push_back(&(ExposureScaling));
+    MCEvents[i].total_weight_pointers.push_back(&(dunemcSamples[i].flux_w));
+    MCEvents[i].total_weight_pointers.push_back(&(ExposureScaling));
   }  
 }
 
@@ -48,12 +60,14 @@ int SampleHandlerAtm::SetupExperimentMC() {
   TChain* Chain = new TChain("cafTree");
   std::vector<size_t> FileIndexToSample;
   for (size_t iSample=0;iSample<SampleDetails.size();iSample++) {
-    for (const std::string& Filename : SampleDetails[iSample].mc_files) {
-      FileIndexToSample.push_back(iSample);
-      int ChainAddCheck = Chain->Add(Filename.c_str(), -1);
-      if(ChainAddCheck == 0){
-        MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", Filename);
-        throw MaCh3Exception(__FILE__, __LINE__);
+    for (const std::vector<std::string>& files : SampleDetails[iSample].mc_files) {
+      for (const std::string& filename : files){
+        FileIndexToSample.push_back(iSample);
+        int ChainAddCheck = Chain->Add(filename.c_str(), -1);
+        if(ChainAddCheck == 0){
+          MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", filename);
+          throw MaCh3Exception(__FILE__, __LINE__);
+        }
       }
     }
   }
@@ -119,10 +133,10 @@ int SampleHandlerAtm::SetupExperimentMC() {
     dunemcSamples[iEvent].rw_isCC = sr->mc.nu[0].iscc;
     dunemcSamples[iEvent].Target = kTarget_Ar;
     
-    dunemcSamples[iEvent].rw_etru = static_cast<double>(sr->mc.nu[0].E);
+    dunemcSamples[iEvent].enu_true = static_cast<double>(sr->mc.nu[0].E);
 
     TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.X(),sr->mc.nu[0].momentum.Y(),sr->mc.nu[0].momentum.Z())).Unit();
-    dunemcSamples[iEvent].rw_truecz = -TrueNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
+    dunemcSamples[iEvent].coszenith_true = -TrueNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
 
     dunemcSamples[iEvent].flux_w = sr->mc.nu[0].genweight;
     
@@ -139,65 +153,42 @@ int SampleHandlerAtm::SetupExperimentMC() {
   return iEvent;
 }
 
-void SampleHandlerAtm::SetupFDMC() {
+void SampleHandlerAtm::SetupMC() {
   for(int iEvent = 0 ;iEvent < int(GetNEvents()) ; ++iEvent) {
-    MCSamples[iEvent].rw_etru = &(dunemcSamples[iEvent].rw_etru);
-    MCSamples[iEvent].mode = &(dunemcSamples[iEvent].mode);
-    MCSamples[iEvent].Target = &(dunemcSamples[iEvent].Target);    
-    MCSamples[iEvent].isNC = !dunemcSamples[iEvent].rw_isCC;
-    MCSamples[iEvent].nupdg = &(dunemcSamples[iEvent].nupdg);
-    MCSamples[iEvent].nupdgUnosc = &(dunemcSamples[iEvent].nupdgUnosc);
-    MCSamples[iEvent].NominalSample = dunemcSamples[iEvent].SampleIndex;
+    MCEvents[iEvent].enu_true = dunemcSamples[iEvent].enu_true;
+    MCEvents[iEvent].isNC = !dunemcSamples[iEvent].rw_isCC;
+    MCEvents[iEvent].nupdg = dunemcSamples[iEvent].nupdg;
+    MCEvents[iEvent].nupdgUnosc = dunemcSamples[iEvent].nupdgUnosc;
+    MCEvents[iEvent].NominalSample = dunemcSamples[iEvent].SampleIndex;
     
-    MCSamples[iEvent].rw_truecz = &(dunemcSamples[iEvent].rw_truecz);
+    MCEvents[iEvent].coszenith_true = dunemcSamples[iEvent].coszenith_true;
   }
 }
 
-const double* SampleHandlerAtm::GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent) {
-  double* KinematicValue;
-
+const double* SampleHandlerAtm::GetPointerToKinematicParameter(const int KinPar, int iEvent) const {
   switch (KinPar) {
   case kTrueNeutrinoEnergy:
-    KinematicValue = &(dunemcSamples[iEvent].rw_etru);
-    break;
+    return &(dunemcSamples[iEvent].enu_true);
   case kRecoNeutrinoEnergy:
-    KinematicValue = &(dunemcSamples[iEvent].rw_erec);
-    break;
+    return &(dunemcSamples[iEvent].rw_erec);
   case kTrueCosZ:
-    KinematicValue = &(dunemcSamples[iEvent].rw_truecz);
-    break;
+    return &(dunemcSamples[iEvent].coszenith_true);
   case kRecoCosZ:
-    KinematicValue = &(dunemcSamples[iEvent].rw_theta);
-    break;
+    return &(dunemcSamples[iEvent].rw_theta);
   case kOscChannel:
-    KinematicValue = &(dunemcSamples[iEvent].OscChannelIndex);
-    break;
+    return &(dunemcSamples[iEvent].OscChannelIndex);
   case kMode:
-    KinematicValue = &(dunemcSamples[iEvent].mode);
-    break;
+    return &(dunemcSamples[iEvent].mode);
+  case kTargetNucleus:
+    return &(dunemcSamples[iEvent].Target);
   default:
     MACH3LOG_ERROR("Unknown KinPar: {}",static_cast<int>(KinPar));
     throw MaCh3Exception(__FILE__, __LINE__);
   }
-  
-  return KinematicValue;
 }
 
-const double* SampleHandlerAtm::GetPointerToKinematicParameter(double KinematicVariable, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
-  return GetPointerToKinematicParameter(KinPar,iEvent);
-}
 
-const double* SampleHandlerAtm::GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
-  return GetPointerToKinematicParameter(KinPar,iEvent);
-}
-
-double SampleHandlerAtm::ReturnKinematicParameter(int KinematicVariable, int iEvent) {
+double SampleHandlerAtm::ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const {
   KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
   return *GetPointerToKinematicParameter(KinPar, iEvent);
-}
-
-double SampleHandlerAtm::ReturnKinematicParameter(std::string KinematicParameter, int iEvent) {
-  return *GetPointerToKinematicParameter(KinematicParameter, iEvent);
 }

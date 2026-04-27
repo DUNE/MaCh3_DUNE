@@ -1,20 +1,43 @@
 #ifndef _SampleHandlerBeamNDGAr_h_
 #define _SampleHandlerBeamNDGAr_h_
 
-#include "Samples/SampleHandlerFD.h"
+#include "Samples/SampleHandlerBase.h"
 #include "Samples/StructsDUNE.h"
 #include "Splines/BinnedSplineHandlerDUNE.h"
 
-class SampleHandlerBeamNDGAr : virtual public SampleHandlerFD
+class SampleHandlerBeamNDGAr : virtual public SampleHandlerBase
 {
 public:
   SampleHandlerBeamNDGAr(std::string mc_version, ParameterHandlerGeneric* xsec_cov);
   ~SampleHandlerBeamNDGAr();
 
-  enum KinematicTypes {kTrueNeutrinoEnergy, kMode, kOscChannel, kTrueXPos, kTrueYPos, kTrueZPos, kTrueRad, kTrueLepEnergy,
-    kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted,  kInFDV, kIsCC, kEPi0, kNPi0,
-    kLepTrackLengthYZ};
-  
+  enum KinematicTypes
+  {
+    kTrueNeutrinoEnergy,
+    kMode,
+    kOscChannel,
+    kTrueXPos,
+    kTrueYPos,
+    kTrueZPos,
+    kTrueRad,
+    kTrueLepEnergy,
+    kLepPT,
+    kLepPZ,
+    kLepP,
+    kLepBAngle,
+    kLepTheta,
+    kLepPhi,
+    kTrueQ0,
+    kTrueQ3,
+    kEvent_IsAccepted,
+    kInFDV,
+    kIsCC,
+    kEPi0,
+    kNPi0,
+    kLepTrackLengthYZ,
+    kTargetNucleus
+  };
+
   enum KinematicVecs {kPrim_EVis, kPrim_Momentum, kPrim_EndMomentum, kPrim_TransverseMomentum, 
     kPrim_BAngle, kPrim_BeamAngle, kPrim_IsAccepted, kPrim_IsCurvatureResolved, kPrim_IsDecayed, kPrim_PDG,
     kPrim_IsStoppedInTPC, kPrim_IsStoppedInECal, kPrim_IsStoppedInBarrel, kPrim_IsStoppedInEndCap, kPrim_IsStoppedInGap, 
@@ -28,24 +51,22 @@ protected:
   //Functions required by core
   void Init() override;
   int SetupExperimentMC() override;
-  void SetupFDMC() override;
+  void SetupMC() override;
+
+  /// @brief Initialise data hist (can be overridden)
+  void InititialiseData() override;
+
   void AddAdditionalWeightPointers() override;
   void SetupSplines() override;
 
   void CleanMemoryBeforeFit() override;
   void RegisterFunctionalParameters() override {};
 
-  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, size_t iEvent);
-  const double* GetPointerToKinematicParameter(double KinematicVariable, int iEvent) override;
-  const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent) override;
+  const double* GetPointerToKinematicParameter(const int KinematicVariable, const int iEvent) const override;
 
-  double ReturnKinematicParameter(KinematicTypes KinPar, size_t iEvent); // Extra function to deal with non-doubles
-  double ReturnKinematicParameter(int KinematicVariable, int iEvent) override;
-  double ReturnKinematicParameter(std::string KinematicParameter, int iEvent) override;
+  double ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const override;
 
-  std::vector<double> ReturnKinematicVector(KinematicVecs KinVec, size_t iEvent);
-  std::vector<double> ReturnKinematicVector(int KinematicVector, int iEvent) override;
-  std::vector<double> ReturnKinematicVector(std::string KinematicVector, int iEvent) override;
+  std::vector<double> ReturnKinematicVector(const int KinematicVector, const int iEvent) const override;
 
   std::vector<dunemc_beamndgar> dunendgarmcFitting;
   std::vector<dunemc_plotting> dunendgarmcPlotting;
@@ -179,55 +200,55 @@ protected:
   double edepcrit_threshold;
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
-    {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
-    {"Mode",kMode},
-    {"OscillationChannel",kOscChannel},
-    {"TrueXPos",kTrueXPos},
-    {"TrueYPos",kTrueYPos},
-    {"TrueZPos",kTrueZPos},
-    {"TrueRad",kTrueRad},
-    {"TrueLepEnergy",kTrueLepEnergy},
-    {"LepPT",kLepPT},
-    {"LepPZ",kLepPZ},
-    {"LepTheta",kLepTheta},
-    {"LepPhi",kLepPhi},
-    {"LepP",kLepP},
-    {"LepTrackLengthYZ",kLepTrackLengthYZ},
-    {"LepBAngle",kLepBAngle},
-    {"TrueQ0",kTrueQ0},
-    {"TrueQ3",kTrueQ3},
-    {"Event_IsAccepted",kEvent_IsAccepted},
-    {"InFDV",kInFDV},
-    {"IsCC",kIsCC},
-    {"EPi0",kEPi0},
-    {"NPi0",kNPi0},
-  };
+      {"TrueNeutrinoEnergy", kTrueNeutrinoEnergy},
+      {"Mode", kMode},
+      {"OscillationChannel", kOscChannel},
+      {"TrueXPos", kTrueXPos},
+      {"TrueYPos", kTrueYPos},
+      {"TrueZPos", kTrueZPos},
+      {"TrueRad", kTrueRad},
+      {"TrueLepEnergy", kTrueLepEnergy},
+      {"LepPT", kLepPT},
+      {"LepPZ", kLepPZ},
+      {"LepTheta", kLepTheta},
+      {"LepPhi", kLepPhi},
+      {"LepP", kLepP},
+      {"LepTrackLengthYZ", kLepTrackLengthYZ},
+      {"LepBAngle", kLepBAngle},
+      {"TrueQ0", kTrueQ0},
+      {"TrueQ3", kTrueQ3},
+      {"Event_IsAccepted", kEvent_IsAccepted},
+      {"InFDV", kInFDV},
+      {"IsCC", kIsCC},
+      {"EPi0", kEPi0},
+      {"NPi0", kNPi0},
+      {"TargetNucleus", kTargetNucleus}};
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
-    {kTrueNeutrinoEnergy,"TrueNeutrinoEnergy"},
-    {kMode,"Mode"},
-    {kOscChannel,"OscillationChannel"},
-    {kTrueXPos,"TrueXPos"},
-    {kTrueYPos,"TrueYPos"},
-    {kTrueZPos,"TrueZPos"},
-    {kTrueRad,"TrueRad"},
-    {kTrueLepEnergy,"TrueLepEnergy"},
-    {kLepPT,"LepPT"},
-    {kLepPZ,"LepPZ"},
-    {kLepTheta,"LepTheta"},
-    {kLepPhi,"LepPhi"},
-    {kLepBAngle,"LepBAngle"},
-    {kLepP,"LepP"},
-    {kLepTrackLengthYZ,"LepTrackLengthYZ"},
-    {kTrueQ0,"TrueQ0"},
-    {kTrueQ3,"TrueQ3"},
-    {kEvent_IsAccepted,"Event_IsAccepted"},
-    {kInFDV,"InFDV"},
-    {kIsCC,"IsCC"},
-    {kEPi0,"EPi0"},
-    {kNPi0,"NPi0"},
-  };
-    
+      {kTrueNeutrinoEnergy, "TrueNeutrinoEnergy"},
+      {kMode, "Mode"},
+      {kOscChannel, "OscillationChannel"},
+      {kTrueXPos, "TrueXPos"},
+      {kTrueYPos, "TrueYPos"},
+      {kTrueZPos, "TrueZPos"},
+      {kTrueRad, "TrueRad"},
+      {kTrueLepEnergy, "TrueLepEnergy"},
+      {kLepPT, "LepPT"},
+      {kLepPZ, "LepPZ"},
+      {kLepTheta, "LepTheta"},
+      {kLepPhi, "LepPhi"},
+      {kLepBAngle, "LepBAngle"},
+      {kLepP, "LepP"},
+      {kLepTrackLengthYZ, "LepTrackLengthYZ"},
+      {kTrueQ0, "TrueQ0"},
+      {kTrueQ3, "TrueQ3"},
+      {kEvent_IsAccepted, "Event_IsAccepted"},
+      {kInFDV, "InFDV"},
+      {kIsCC, "IsCC"},
+      {kEPi0, "EPi0"},
+      {kNPi0, "NPi0"},
+      {kTargetNucleus, "TargetNucleus"}};
+
   const std::unordered_map<std::string, int> KinematicVectorsDUNE = {
     {"Prim_EVis",kPrim_EVis},
     {"Prim_Momentum",kPrim_Momentum},

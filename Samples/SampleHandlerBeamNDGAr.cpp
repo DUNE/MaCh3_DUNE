@@ -1,6 +1,6 @@
 #include "SampleHandlerBeamNDGAr.h"
 
-SampleHandlerBeamNDGAr::SampleHandlerBeamNDGAr(std::string mc_version_, ParameterHandlerGeneric* ParHandler_) : SampleHandlerFD(mc_version_, ParHandler_) {
+SampleHandlerBeamNDGAr::SampleHandlerBeamNDGAr(std::string mc_version_, ParameterHandlerGeneric* ParHandler_) : SampleHandlerBase(mc_version_, ParHandler_) {
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
 
@@ -29,11 +29,11 @@ void SampleHandlerBeamNDGAr::Init() {
   TPCInstrumentedRadius = SampleManager->raw()["DetectorVariables"]["TPCInstrumentedRadius"].as<double>();
   ECALSciX0 = SampleManager->raw()["DetectorVariables"]["ECALSciX0"].as<double>();
 
-  beamNDGArSampleDetails.resize(static_cast<size_t>(GetNsamples()));
+  beamNDGArSampleDetails.resize(static_cast<size_t>(GetNSamples()));
   
   auto EnabledSamples = Get<std::vector<std::string>>(SampleManager->raw()["Samples"], __FILE__ , __LINE__);
 
-  for (size_t i = 0; i < static_cast<size_t>(GetNsamples()); i++){
+  for (size_t i = 0; i < static_cast<size_t>(GetNSamples()); i++){
     const auto TempTitle = EnabledSamples[i];
     beamNDGArSampleDetails[i].isFHC = SampleManager->raw()[TempTitle]["DUNESampleBools"]["isFHC"].as<double>();
     beamNDGArSampleDetails[i].iselike = SampleManager->raw()[TempTitle]["DUNESampleBools"]["iselike"].as<bool>();
@@ -48,6 +48,19 @@ void SampleHandlerBeamNDGAr::Init() {
   }
 
   MACH3LOG_INFO("-------------------------------------------------------------------");
+}
+
+// ************************************************
+void SampleHandlerBeamNDGAr::InititialiseData()
+{
+  // ************************************************
+  // Reweight MC to match
+  Reweight();
+  // set asimov data
+  for (int iSample = 0; iSample < GetNSamples(); iSample++)
+  {
+    AddData(iSample, GetMCArray(iSample));
+  }
 }
 
 void SampleHandlerBeamNDGAr::SetupSplines() {
@@ -68,11 +81,11 @@ void SampleHandlerBeamNDGAr::SetupSplines() {
 void SampleHandlerBeamNDGAr::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < dunendgarmcFitting.size(); ++i) {
     MACH3LOG_INFO("pot: {}\nnorm: {}\nberpa: {}\nflux: {}\ngeom: {}", dunendgarmcFitting[i].pot_s, dunendgarmcFitting[i].norm_s, dunendgarmcFitting[i].rw_berpaacvwgt, dunendgarmcFitting[i].flux_w, dunendgarmcPlotting[i].geometric_correction);
-    MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].pot_s));
-    MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].norm_s));
-    MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].rw_berpaacvwgt));
-    MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].flux_w));
-    MCSamples[i].total_weight_pointers.push_back(&(dunendgarmcPlotting[i].geometric_correction));
+    MCEvents[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].pot_s));
+    MCEvents[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].norm_s));
+    MCEvents[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].rw_berpaacvwgt));
+    MCEvents[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].flux_w));
+    MCEvents[i].total_weight_pointers.push_back(&(dunendgarmcPlotting[i].geometric_correction));
   }
 }
 
@@ -289,7 +302,7 @@ bool SampleHandlerBeamNDGAr::IsPrimContained(int id, const std::unordered_map<in
         MACH3LOG_WARN("Particle (pdg {}) which leaves TPC has no stored ecal momentum", pdg);
         return true;
       }
-      double ecalE = std::sqrt(ecalP[0]*ecalP[0] + ecalP[1]*ecalP[1] + ecalP[2]*ecalP[2] + MaCh3Utils::GetMassFromPDG(pdg)*MaCh3Utils::GetMassFromPDG(pdg));
+      double ecalE = std::sqrt(ecalP[0]*ecalP[0] + ecalP[1]*ecalP[1] + ecalP[2]*ecalP[2] + M3::Utils::GetMassFromPDG(pdg)*M3::Utils::GetMassFromPDG(pdg));
 
       std::vector<double> showerstart;
       double a_par, b_par, c_par;
@@ -436,7 +449,7 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
   int pdg = _MCPPDG->at(i_particle);
   if (pdg > 1000000000) return false;
   int charge = GetChargeFromPDG(pdg);
-  double mass = MaCh3Utils::GetMassFromPDG(pdg);
+  double mass = M3::Utils::GetMassFromPDG(pdg);
   double p_x = _MCPStartPX->at(i_particle)/1000.;
   double p_y = _MCPStartPY->at(i_particle)/1000.;
   double p_z = _MCPStartPZ->at(i_particle)/1000.;
@@ -712,43 +725,45 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   // Maps the file index within the TChain (GetTreeNumber()) to its sample index.
   std::vector<size_t> fileIndexToSample;
   for (size_t iSample=0;iSample<SampleDetails.size();iSample++) {
-    for (const std::string& filename : SampleDetails[iSample].mc_files) {
-      MACH3LOG_INFO("Adding FastGArSim file to TChain: {}", filename);
-      // HH: Check whether the file exists, see https://root.cern/doc/master/classTChain.html#a78a896924ac6c7d3691b7e013bcbfb1c
-      int _add_rtn = _data->Add(filename.c_str(), -1);
-      if(_add_rtn == 0){
-        MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", filename);
-        throw MaCh3Exception(__FILE__, __LINE__);
-      }
+    for (const std::vector<std::string>& files : SampleDetails[iSample].mc_files) {
+      for (const std::string& filename : files) {
+        MACH3LOG_INFO("Adding FastGArSim file to TChain: {}", filename);
+        // HH: Check whether the file exists, see https://root.cern/doc/master/classTChain.html#a78a896924ac6c7d3691b7e013bcbfb1c
+        int _add_rtn = _data->Add(filename.c_str(), -1);
+        if(_add_rtn == 0){
+          MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", filename);
+          throw MaCh3Exception(__FILE__, __LINE__);
+        }
 
-      int _add_rtn_geo = _geometry->Add(filename.c_str(), -1);
-      if(_add_rtn_geo == 0){
-        MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", filename);
-        throw MaCh3Exception(__FILE__, __LINE__);
-      }
+        int _add_rtn_geo = _geometry->Add(filename.c_str(), -1);
+        if(_add_rtn_geo == 0){
+          MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", filename);
+          throw MaCh3Exception(__FILE__, __LINE__);
+        }
 
-      // Read Genie file
-      std::string genieFileStr = "";
-      if (filename.find("hA") != std::string::npos) genieFileStr = "Inputs/DUNE_NDGAr_files/GenieTrees/numu_argon_G18_10a_gst.root";
-      else if (filename.find("hN") != std::string::npos) genieFileStr = "Inputs/DUNE_NDGAr_files/GenieTrees/numu_argon_G18_10b_gst.root";
-      else {
-        genieFileStr = "Inputs/DUNE_NDGAr_files/GenieTrees/numu_argon_G18_10a_gst.root";
-        MACH3LOG_WARN("Could not find interaction model in file name. Using GENIE file {}", genieFileStr);
-      }
+        // Read Genie file
+        std::string genieFileStr = "";
+        if (filename.find("hA") != std::string::npos) genieFileStr = "Inputs/DUNE_NDGAr_files/GenieTrees/numu_argon_G18_10a_gst.root";
+        else if (filename.find("hN") != std::string::npos) genieFileStr = "Inputs/DUNE_NDGAr_files/GenieTrees/numu_argon_G18_10b_gst.root";
+        else {
+          genieFileStr = "Inputs/DUNE_NDGAr_files/GenieTrees/numu_argon_G18_10a_gst.root";
+          MACH3LOG_WARN("Could not find interaction model in file name. Using GENIE file {}", genieFileStr);
+        }
 
-      MACH3LOG_INFO("Adding genie file to TChain: {}", genieFileStr);
+        MACH3LOG_INFO("Adding genie file to TChain: {}", genieFileStr);
 
-      int _add_rtn_genie = _genie->Add(genieFileStr.c_str(), -1);
-      if(_add_rtn_genie == 0){
-        MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", genieFileStr);
-        throw MaCh3Exception(__FILE__, __LINE__);
-      }
+        int _add_rtn_genie = _genie->Add(genieFileStr.c_str(), -1);
+        if(_add_rtn_genie == 0){
+          MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", genieFileStr);
+          throw MaCh3Exception(__FILE__, __LINE__);
+        }
 
-      // Each file added (glob patterns may expand to multiple) gets the same sample index.
-      // We query how many files are now in the chain to know how many entries to push.
-      const int nFilesNow = _data->GetListOfFiles()->GetEntries();
-      while(static_cast<int>(fileIndexToSample.size()) < nFilesNow){
-        fileIndexToSample.push_back(iSample);
+        // Each file added (glob patterns may expand to multiple) gets the same sample index.
+        // We query how many files are now in the chain to know how many entries to push.
+        const int nFilesNow = _data->GetListOfFiles()->GetEntries();
+        while(static_cast<int>(fileIndexToSample.size()) < nFilesNow){
+          fileIndexToSample.push_back(iSample);
+        }
       }
     }
   }
@@ -855,7 +870,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     fixCoordinates();
 
     if (i_event % countwidth == 0) {
-      MaCh3Utils::PrintProgressBar(i_event, static_cast<Long64_t>(nEntries));
+      M3::Utils::PrintProgressBar(i_event, static_cast<Long64_t>(nEntries));
     }
 
     const Int_t treeNum = _data->GetTreeNumber();
@@ -866,7 +881,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     const size_t sample_index = fileIndexToSample[static_cast<size_t>(treeNum)];
 
     dunendgarmcFitting[i_event].SampleIndex = static_cast<unsigned int>(sample_index);
-    dunendgarmcFitting[i_event].rw_etru = _Enu;
+    dunendgarmcFitting[i_event].enu_true = _Enu;
     dunendgarmcFitting[i_event].rw_isCC = _isCC;
     dunendgarmcFitting[i_event].nupdg = _nuPDG;
     dunendgarmcFitting[i_event].nupdgUnosc = _nuPDG;
@@ -1043,7 +1058,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
         MACH3LOG_WARN("Particle of pdg {} with momentum {} is uncontained", pdg, std::sqrt(p2));
       }
       if (pdg < 1000000000) {
-        double mass = MaCh3Utils::GetMassFromPDG(pdg);
+        double mass = M3::Utils::GetMassFromPDG(pdg);
         double energy = std::sqrt(p2+mass*mass);
         dunendgarmcPlotting[i_event].prim_tpcedepfrac[prim_index] = ID_to_TPCDep[primID]/energy;
       }
@@ -1059,7 +1074,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
         dunendgarmcPlotting[i_event].npi0 ++;
         if (p2 > pi0_p2) {
           pi0_p2 = p2;
-          double mass = MaCh3Utils::GetMassFromPDG(pdg);
+          double mass = M3::Utils::GetMassFromPDG(pdg);
           dunendgarmcPlotting[i_event].rw_ePi0 = std::sqrt(p2+mass*mass);
         }
       }
@@ -1125,10 +1140,10 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
 #pragma GCC diagnostic push 
 #pragma GCC diagnostic ignored "-Wswitch-enum"
-const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTypes KinematicParameter, size_t iEvent) {
+const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(const int KinematicParameter, const int iEvent) const{
   switch(KinematicParameter) {
     case kTrueNeutrinoEnergy:
-      return &dunendgarmcFitting[iEvent].rw_etru; 
+      return &dunendgarmcFitting[iEvent].enu_true; 
     case kMode:
       return &dunendgarmcFitting[iEvent].mode;
     case kOscChannel:
@@ -1163,6 +1178,8 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
       return &dunendgarmcFitting[iEvent].rw_Q3;
     case kEPi0:
       return &dunendgarmcPlotting[iEvent].rw_ePi0;
+    case kTargetNucleus:
+      return &(dunendgarmcPlotting[iEvent].Target);
     default:
       MACH3LOG_ERROR("Did not recognise Kinematic Parameter {}", static_cast<int>(KinematicParameter));
       throw MaCh3Exception(__FILE__, __LINE__);
@@ -1171,29 +1188,9 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(KinematicTy
 }
 #pragma GCC diagnostic pop
 
-const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(double KinematicVariable, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
-  return GetPointerToKinematicParameter(KinPar,static_cast<size_t>(iEvent));
-}
-
-const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
-  return GetPointerToKinematicParameter(KinPar,static_cast<size_t>(iEvent));
-}
-
-double SampleHandlerBeamNDGAr::ReturnKinematicParameter(int KinematicVariable, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
-  return ReturnKinematicParameter(KinPar,static_cast<size_t>(iEvent));
-}
-
-double SampleHandlerBeamNDGAr::ReturnKinematicParameter(std::string KinematicParameter, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
-  return ReturnKinematicParameter(KinPar,static_cast<size_t>(iEvent));
-}
-
 #pragma GCC diagnostic push 
 #pragma GCC diagnostic ignored "-Wswitch-enum"
-double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, size_t iEvent) {
+double SampleHandlerBeamNDGAr::ReturnKinematicParameter(const int KinPar, const int iEvent) const {
   //HH: Special cases for dealing with non-doubles
   switch(KinPar) {
     case kEvent_IsAccepted:
@@ -1210,7 +1207,7 @@ double SampleHandlerBeamNDGAr::ReturnKinematicParameter(KinematicTypes KinPar, s
 }
 #pragma GCC diagnostic pop
 
-std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(KinematicVecs KinVec, size_t iEvent) {
+std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(const int KinVec, const int iEvent) const {
   switch(KinVec) {
     case kPrim_IsAccepted:
       return std::vector<double>(
@@ -1330,24 +1327,13 @@ std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(KinematicVecs 
   }
 }
 
-std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(int KinematicVector, int iEvent) {
-  KinematicVecs KinVec = static_cast<KinematicVecs>(KinematicVector);
-  return ReturnKinematicVector(KinVec, static_cast<size_t>(iEvent));
-}
 
-std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(std::string KinematicVector, int iEvent) {
-  KinematicVecs KinVec = static_cast<KinematicVecs>(ReturnKinematicVectorFromString(KinematicVector));
-  return ReturnKinematicVector(KinVec, static_cast<size_t>(iEvent));
-}
-
-void SampleHandlerBeamNDGAr::SetupFDMC() {
+void SampleHandlerBeamNDGAr::SetupMC() {
   for(size_t iEvent = 0 ;iEvent < GetNEvents() ; ++iEvent){
-    MCSamples[iEvent].rw_etru = &(dunendgarmcFitting[iEvent].rw_etru);
-    MCSamples[iEvent].mode = &(dunendgarmcFitting[iEvent].mode);
-    MCSamples[iEvent].Target = &(dunendgarmcFitting[iEvent].Target);    
-    MCSamples[iEvent].isNC = !dunendgarmcFitting[iEvent].rw_isCC;
-    MCSamples[iEvent].nupdg = &(dunendgarmcFitting[iEvent].nupdg);
-    MCSamples[iEvent].nupdgUnosc = &(dunendgarmcFitting[iEvent].nupdgUnosc);
-    MCSamples[iEvent].NominalSample = static_cast<int>(dunendgarmcFitting[iEvent].SampleIndex);
+    MCEvents[iEvent].enu_true = dunendgarmcFitting[iEvent].enu_true;
+    MCEvents[iEvent].isNC = !dunendgarmcFitting[iEvent].rw_isCC;
+    MCEvents[iEvent].nupdg = dunendgarmcFitting[iEvent].nupdg;
+    MCEvents[iEvent].nupdgUnosc = dunendgarmcFitting[iEvent].nupdgUnosc;
+    MCEvents[iEvent].NominalSample = static_cast<int>(dunendgarmcFitting[iEvent].SampleIndex);
   }
 }

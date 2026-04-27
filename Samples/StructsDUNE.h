@@ -31,7 +31,7 @@ struct dunemc_base { // Store variables used in fitting
   double pot_s;
   double norm_s;
   
-  int Target; //Target the interaction was on
+  double Target; //Target the interaction was on
   
   int nupdg;
   int nupdgUnosc;
@@ -39,7 +39,7 @@ struct dunemc_base { // Store variables used in fitting
   double OscChannelIndex;
   
   double rw_erec;
-  double rw_etru;
+  double enu_true;
 
   double flux_w;
   double mode;
@@ -50,7 +50,7 @@ struct dunemc_base { // Store variables used in fitting
 
 struct dunemc_atm : public dunemc_base { // Store variables used by SampleHandlerAtm
   double rw_theta;
-  double rw_truecz;
+  double coszenith_true;
 };
 
 struct dunemc_beamfd : public dunemc_base { // Store variables used by SampleHandlerBeamFD
@@ -126,6 +126,7 @@ struct dunemc_plotting { // Store variables just used in plotting (cleared from 
   double lep_tracklengthyz;
   int npi0;
   double rw_ePi0;
+  double Target;
  
   std::vector<int> prim_event = {};
   std::vector<int> prim_trkid = {};

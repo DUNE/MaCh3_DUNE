@@ -20,13 +20,9 @@ int main(int argc, char * argv[]) {
   auto FitManager = MaCh3ManagerFactory(argc, argv);
   auto OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
 
-  ParameterHandlerGeneric* xsec = nullptr;
-
   //####################################################################################
-  //Create samplePDFSKBase Objs
-
-  std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
+  //Create sample handler + parameter_handler objects
+  auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
 
   //Some place to store the histograms
   std::vector<TH1*> PredictionHistograms;
@@ -35,8 +31,8 @@ int main(int argc, char * argv[]) {
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
 
-  for (auto handler : DUNEPdfs) {
-    for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
+  for (auto handler : samples) {
+    for (unsigned iSample = 0; iSample < handler->GetNSamples(); ++iSample) {
     
       std::string name = handler->GetSampleTitle(iSample);
       sample_names.push_back(name);
@@ -71,12 +67,12 @@ int main(int argc, char * argv[]) {
   //Start chain from random position unless continuing a chain
   if(!StartFromPreviousChain){
     if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false)) {
-      xsec->ThrowParameters();
+      param_handler->ThrowParameters();
     }
   }
 
   //Add systematic objects
-  MaCh3Fitter->AddSystObj(xsec);
+  MaCh3Fitter->AddSystObj(param_handler.get());
 
   if (StartFromPreviousChain) {
     std::string PreviousChainPath = FitManager->raw()["General"]["PosFileName"].as<std::string>();
@@ -85,7 +81,7 @@ int main(int argc, char * argv[]) {
   }
   
   //Add samples
-  for(auto Sample : DUNEPdfs){
+  for(auto Sample : samples){
     MaCh3Fitter->AddSampleHandler(Sample);
   }
 
@@ -94,8 +90,8 @@ int main(int argc, char * argv[]) {
   MaCh3Fitter->RunMCMC();
 
   //Writing the memory usage at the end to eventually spot some nasty leak
-  MACH3LOG_WARN("\033[0;31mCurrent Total RAM usage is {:.2f} GB\033[0m", MaCh3Utils::getValue("VmRSS") / 1048576.0);
-  MACH3LOG_WARN("\033[0;31mOut of Total available RAM {:.2f} GB\033[0m", MaCh3Utils::getValue("MemTotal") / 1048576.0);
+  MACH3LOG_WARN("\033[0;31mCurrent Total RAM usage is {:.2f} GB\033[0m", M3::Utils::getValue("VmRSS") / 1048576.0);
+  MACH3LOG_WARN("\033[0;31mOut of Total available RAM {:.2f} GB\033[0m", M3::Utils::getValue("MemTotal") / 1048576.0);
 
   return 0;
 }

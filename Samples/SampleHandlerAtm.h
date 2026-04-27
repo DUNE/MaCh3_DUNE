@@ -2,11 +2,11 @@
 #define _SampleHandlerAtm_h_
 
 #include "Splines/BinnedSplineHandlerDUNE.h"
-#include "Samples/SampleHandlerFD.h"
+#include "Samples/SampleHandlerBase.h"
 
 #include "StructsDUNE.h"
 /// @brief Base class for handling atmospheric samples
-class SampleHandlerAtm : virtual public SampleHandlerFD
+class SampleHandlerAtm : virtual public SampleHandlerBase
 {
 public:
   /// @brief Constructor
@@ -18,11 +18,23 @@ public:
   ~SampleHandlerAtm();
 
   /// @brief Enum to identify kinematics
-  enum KinematicTypes{kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueCosZ,kRecoCosZ,kOscChannel,kMode};
-  
+  enum KinematicTypes
+  {
+    kTrueNeutrinoEnergy,
+    kRecoNeutrinoEnergy,
+    kTrueCosZ,
+    kRecoCosZ,
+    kOscChannel,
+    kMode,
+    kTargetNucleus
+  };
+
 protected:
   /// @brief Initialises object
   void Init();
+
+  /// @brief Initialise data hist (can be overridden)
+  void InititialiseData() override;
 
   /// @brief Function to setup MC from file
   /// @param iSample sample ID
@@ -31,7 +43,7 @@ protected:
 
   /// @brief Tells FD base which variables to point to/be set to
   /// @param iSample Sample ID
-  void SetupFDMC();
+  void SetupMC();
 
   /// @brief Sets up pointers weights for each event (oscillation/xsec/etc.)
   void AddAdditionalWeightPointers();
@@ -57,39 +69,16 @@ protected:
   void applyShifts(int iEvent) {(void)iEvent;}
   
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinPar Kinematic parameter enum val
-  /// @param iSample Sample ID
-  /// @param iEvent Event ID
-  /// @return Pointer to KinPar for a given event
-  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent);
-
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter as double (gets cast -> int)
-  /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Pointer to KinPar for a given event
-  const double* GetPointerToKinematicParameter(double KinematicVariable, int iEvent);
-
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinematicParameter Kinematic parameter name as string (gets cast -> int)
-  /// @param iSample Sample ID
-  /// @param iEvent Event ID
-  /// @return Pointer to KinPar for a given event
-  const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent);
+  const double* GetPointerToKinematicParameter(const int KinematicVariable, const int iEvent) const override;
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter ID as double (gets cast -> int)
-  /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Value of kinematic parameter corresponding for a given event
-  double ReturnKinematicParameter(int KinematicVariable, int iEvent);
-
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinematicParameter Kinematic parameter name as string (gets cast -> int)
-  /// @param iSample Sample ID
-  /// @param iEvent Event ID
-  /// @return Value of kinematic parameter corresponding for a given event
-  double ReturnKinematicParameter(std::string KinematicParameter, int iEvent);
+  double ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const override;
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
@@ -97,7 +86,8 @@ protected:
     {"TrueCosineZ",kTrueCosZ},
     {"RecoCosineZ",kRecoCosZ},
     {"OscillationChannel",kOscChannel},
-    {"Mode",kMode}
+    {"Mode",kMode},
+    {"TargetNucleus", kTargetNucleus}
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -106,7 +96,8 @@ protected:
     {kTrueCosZ,"TrueCosineZ"},    
     {kRecoCosZ,"RecoCosineZ"},
     {kOscChannel,"OscillationChannel"},
-    {kMode,"Mode"}
+    {kMode,"Mode"},
+    {kTargetNucleus, "TargetNucleus"},
   };
   
   /// Array filled with MC samples for each oscillation channel

@@ -8,7 +8,7 @@ class BinnedSplineHandlerDUNE : virtual public BinnedSplineHandler {
   BinnedSplineHandlerDUNE(ParameterHandlerGeneric* xsec_cov, MaCh3Modes *Modes_);
   virtual ~BinnedSplineHandlerDUNE();
   
-  std::vector<std::string> GetTokensFromSplineName(std::string FullSplineName);
+  std::vector<std::string> GetTokensFromSplineName(const std::string& FullSplineName) override final;
 };
 
 #endif
