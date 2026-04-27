@@ -38,15 +38,6 @@ int main(int argc, char * argv[]) {
       MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample)->Integral());
     }
   }
-  
-  //###############################################################################################################################
-  //DB Can't use the core sigma variations as it's entirely set up around the concept of multiple selections per samplePDF object
-  //   Thats not the case in the FD code, which has one selection per samplePDF object
-  //   Consequently have to write out own code
-  
-  // std::vector<std::unique_ptr<ParameterHandlerBase>> CovObjs;
-  // CovObjs.emplace_back(xsec);
-
   MACH3LOG_INFO("=======================================================");
 
   std::string OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
