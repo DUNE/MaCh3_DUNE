@@ -70,14 +70,12 @@ protected:
   
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter as double (gets cast -> int)
-  /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Pointer to KinPar for a given event
   const double* GetPointerToKinematicParameter(const int KinematicVariable, const int iEvent) const override;
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter ID as double (gets cast -> int)
-  /// @param iSample Sample ID
   /// @param iEvent Event ID
   /// @return Value of kinematic parameter corresponding for a given event
   double ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const override;
