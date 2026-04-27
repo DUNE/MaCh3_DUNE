@@ -264,15 +264,6 @@ install(TARGETS MaCh3DUNEAll
   EXPORT mach3dune-targets
   LIBRARY DESTINATION lib/)
 
-# NOW add the python subdirectory - MaCh3_PREFIX is already set
-if(PYTHON_ENABLED)
-  cmessage(STATUS "PYTHON IS ENABLED!!")
-  set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
-  cmessage(STATUS "CMAKE_INSTALL_RPATH is ${CMAKE_INSTALL_RPATH}")
-  set(PYMACH3_PATH ${CMAKE_BINARY_DIR}/python/pyMaCh3)
-  add_subdirectory(python)
-endif()
-
 configure_file(cmake/Templates/setup.MaCh3DUNE.sh.in
   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/setup.MaCh3DUNE.sh" @ONLY)
 install(FILES
@@ -284,15 +275,6 @@ file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/output)
 install(DIRECTORY Inputs DESTINATION ${CMAKE_BINARY_DIR})
 install(DIRECTORY Configs DESTINATION ${CMAKE_BINARY_DIR})
 install(DIRECTORY Utils DESTINATION ${CMAKE_BINARY_DIR})
-
-# NOW add the python subdirectory - MaCh3_PREFIX is already set
-if(PYTHON_ENABLED)
-  cmessage(STATUS "PYTHON IS ENABLED!!")
-  set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
-  cmessage(STATUS "CMAKE_INSTALL_RPATH is ${CMAKE_INSTALL_RPATH}")
-  set(PYMACH3_PATH ${CMAKE_BINARY_DIR}/python/pyMaCh3)
-  add_subdirectory(python)
-endif()
 
 install(EXPORT mach3dune-targets
   FILE MaCh3DUNETargets.cmake
