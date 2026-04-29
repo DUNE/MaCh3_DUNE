@@ -1,0 +1,66 @@
+Sourcing NuOscillator
+Sourcing MaCh3 Core
+Sourcing NuOscillator
+Running DiagMCMC...
+[DiagMCMC.cpp][info] Producing single fit output
+[DiagMCMC.cpp][info] File for study: /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/chain_trimmed_last10M.root
+[Monitor.cpp][info] ##################################
+[Monitor.cpp][info] Welcome to:  
+[Monitor.cpp][info]   __  __        _____ _     ____  
+[Monitor.cpp][info]  |  \/  |      / ____| |   |___ \ 
+[Monitor.cpp][info]  | \  / | __ _| |    | |__   __) |
+[Monitor.cpp][info]  | |\/| |/ _` | |    | '_ \ |__ < 
+[Monitor.cpp][info]  | |  | | (_| | |____| | | |___) |
+[Monitor.cpp][info]  |_|  |_|\__,_|\_____|_| |_|____/ 
+[Monitor.cpp][info] Version: 2.4.2
+[Monitor.cpp][info] ##################################
+[Monitor.cpp][info] Using following CPU:
+[Monitor.cpp][info] model name	: AMD EPYC 9654 96-Core Processor
+[Monitor.cpp][info] cpu MHz		: 1997.071
+[Monitor.cpp][info] Architecture:        x86_64
+[Monitor.cpp][info] L1d cache:           32K
+[Monitor.cpp][info] L1i cache:           32K
+[Monitor.cpp][info] L2 cache:            1024K
+[Monitor.cpp][info] L3 cache:            32768K
+[Monitor.cpp][info] Thread(s) per core:  1
+[Monitor.cpp][info] CPU(s):              192
+[Monitor.cpp][info] With available threads                16
+[MCMCProcessor.cpp][info] Making post-fit processor for: /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/chain_trimmed_last10M.root
+[MCMCProcessor.cpp][info] Loading YAML config from MCMC chain
+[ParameterHandlerUtils.h][error] Null TDirectory passed to GetConfigMacroFromChain
+[error] Find me here: ParameterHandlerUtils.h::392
+Running PlotMCMCDiag on /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/chain_trimmed_last10M_MCMC_Diag.root... XSec
+[PlotMCMCDiag.cpp][info] Processing 1 file(s)
+[PlotMCMCDiag.cpp][info] Adding file /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/chain_trimmed_last10M_MCMC_Diag.root
+[PlotMCMCDiag.cpp][info] Folder : /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/chain_trimmed_last10M_MCMC_Diag.root
+[error] Find me here: PlotMCMCDiag.cpp::349
+[error] Error processing file /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/chain_trimmed_last10M_MCMC_Diag.root : Auto_corr directory not found in file: /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/chain_trimmed_last10M_MCMC_Diag.root
+[error] Find me here: PlotMCMCDiag.cpp::270
+Running ProcessMCMC...
+[ProcessMCMC.cpp][info] Producing single fit output
+[ProcessMCMC.cpp][info] File for study: /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/chain_trimmed_last10M.root with config  /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/TutorialConfigs/TutorialDiagConfig.yaml
+[Monitor.cpp][info] ##################################
+[Monitor.cpp][info] Welcome to:  
+[Monitor.cpp][info]   __  __        _____ _     ____  
+[Monitor.cpp][info]  |  \/  |      / ____| |   |___ \ 
+[Monitor.cpp][info]  | \  / | __ _| |    | |__   __) |
+[Monitor.cpp][info]  | |\/| |/ _` | |    | '_ \ |__ < 
+[Monitor.cpp][info]  | |  | | (_| | |____| | | |___) |
+[Monitor.cpp][info]  |_|  |_|\__,_|\_____|_| |_|____/ 
+[Monitor.cpp][info] Version: 2.4.2
+[Monitor.cpp][info] ##################################
+[Monitor.cpp][info] Using following CPU:
+[Monitor.cpp][info] model name	: AMD EPYC 9654 96-Core Processor
+[Monitor.cpp][info] cpu MHz		: 1997.069
+[Monitor.cpp][info] Architecture:        x86_64
+[Monitor.cpp][info] L1d cache:           32K
+[Monitor.cpp][info] L1i cache:           32K
+[Monitor.cpp][info] L2 cache:            1024K
+[Monitor.cpp][info] L3 cache:            32768K
+[Monitor.cpp][info] Thread(s) per core:  1
+[Monitor.cpp][info] CPU(s):              192
+[Monitor.cpp][info] With available threads                16
+[MCMCProcessor.cpp][info] Making post-fit processor for: /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/chain_trimmed_last10M.root
+[MCMCProcessor.cpp][info] Loading YAML config from MCMC chain
+[ParameterHandlerUtils.h][error] Null TDirectory passed to GetConfigMacroFromChain
+[error] Find me here: ParameterHandlerUtils.h::392

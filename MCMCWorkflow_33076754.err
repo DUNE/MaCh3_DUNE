@@ -1,0 +1,20 @@
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) CCconfig          5) gcc/9.3.0          9)  flexiblas/3.0.4
+  2) gentoo/2020       6) ucx/1.8.0          10) blis/0.8.1
+  3) imkl/2020.1.217   7) libfabric/1.10.1   11) StdEnv/2020
+  4) gcccore/.9.3.0    8) openmpi/4.0.3
+-------------------------------------------------------------------------------
+There are messages associated with the following module(s):
+-------------------------------------------------------------------------------
+
+python/3.9.6:
+   Python wheels built with these versions of python may not support H100
+   GPUs or more recent. We recommend using a version of python provided
+   under StdEnv/2023 Les paquets python construits avec ces versions de
+   python ne sont pas compatibles avec les GPUs H100 ou plus récents. Nous
+   vous recommendons d'utiliser une version de python fournie sous
+   StdEnv/2023
+
+-------------------------------------------------------------------------------

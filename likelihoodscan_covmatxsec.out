@@ -1,0 +1,629 @@
+nohup: ignoring input
+[Monitor.cpp][info] ##################################
+[Monitor.cpp][info] Welcome to:  
+[Monitor.cpp][info]   __  __        _____ _     ____  
+[Monitor.cpp][info]  |  \/  |      / ____| |   |___ \ 
+[Monitor.cpp][info]  | \  / | __ _| |    | |__   __) |
+[Monitor.cpp][info]  | |\/| |/ _` | |    | '_ \ |__ < 
+[Monitor.cpp][info]  | |  | | (_| | |____| | | |___) |
+[Monitor.cpp][info]  |_|  |_|\__,_|\_____|_| |_|____/ 
+[Monitor.cpp][info] Version: 2.4.2
+[Monitor.cpp][info] ##################################
+[Monitor.cpp][info] Using following CPU:
+[Monitor.cpp][info] model name	: AMD EPYC 9135 16-Core Processor
+[Monitor.cpp][info] cpu MHz		: 4334.521
+[Monitor.cpp][info] Architecture:                         x86_64
+[Monitor.cpp][info] L1d cache:                            1.5 MiB (32 instances)
+[Monitor.cpp][info] L1i cache:                            1 MiB (32 instances)
+[Monitor.cpp][info] L2 cache:                             32 MiB (32 instances)
+[Monitor.cpp][info] L3 cache:                             128 MiB (8 instances)
+[Monitor.cpp][info] Thread(s) per core:                   2
+[Monitor.cpp][info] CPU(s):                               64
+[Monitor.cpp][info] With available threads                16
+[Manager.cpp][info] Setting config to be: /scratch/abipeake/March2026/Sunday12thApril_allsystematics_rm_adaptivefit_onaxis_withoutdetsystsconfig_moreadaptive/cfg/loglscan.yaml
+[Manager.cpp][info] Config is now: 
+[Monitor.cpp][info] General:
+[Monitor.cpp][info]   Minuit2:
+[Monitor.cpp][info]     NSteps: 10000000
+[Monitor.cpp][info]     ToleranceLevel: 5e-6
+[Monitor.cpp][info]   OutputFile: likelihoodscan_withcovmatxsec.root
+[Monitor.cpp][info]   DUNESamples:
+[Monitor.cpp][info]     - /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/Onaxis_1Dsmaller_systematics.yaml
+[Monitor.cpp][info]   OscillationParameters: []
+[Monitor.cpp][info]   Systematics:
+[Monitor.cpp][info]     XsecCovFile:
+[Monitor.cpp][info]       - /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/XSecSysts.yml
+[Monitor.cpp][info]     XsecCovName: xsec_cov
+[Monitor.cpp][info]     XsecStepScale: 1.0
+[Monitor.cpp][info]     XsecAtGen: false
+[Monitor.cpp][info]     xsec_var1: TrueNeutrinoEnergy
+[Monitor.cpp][info]     xsec_var2: EnuBias
+[Monitor.cpp][info]     Parameter_fixing_threshold: 1e-50
+[Monitor.cpp][info]   Fitter:
+[Monitor.cpp][info]     FitTestLikelihood: false
+[Monitor.cpp][info]   MCMC:
+[Monitor.cpp][info]     NSteps: 10000000
+[Monitor.cpp][info]     AutoSave: 20000
+[Monitor.cpp][info]     BurnInSteps: 100000
+[Monitor.cpp][info]   ProcessMCMC: No
+[Monitor.cpp][info]   Seed: 0
+[Monitor.cpp][info]   Debug: Yes
+[Monitor.cpp][info]   ThrowMatrixName: 8600000_xsec_cov_throw_matrix
+[Monitor.cpp][info]   ThrowMatrixFile: /scratch/abipeake/March2026/Sunday12thApril_allsystematics_rm_adaptivefit_onaxis_withoutdetsystsconfig_moreadaptive/Sunday12thApril_allsystematics_rm_adaptivefit_onaxis_withoutdetsystsconfig_moreadaptive_adaptive_chain_0_job_0.root
+[Monitor.cpp][info] LLHScan:
+[Monitor.cpp][info]   ParPoints: 50
+[Monitor.cpp][info] AdaptionOptions:
+[Monitor.cpp][info]   Settings:
+[Monitor.cpp][info]     StartThrow: 2000000
+[Monitor.cpp][info]     StartUpdate: 0
+[Monitor.cpp][info]     UpdateStep: 100000
+[Monitor.cpp][info]     EndUpdate: 10000000
+[Monitor.cpp][info]     SaveNIterations: 1
+[Monitor.cpp][info]     OutputFileName: /scratch/abipeake/March2026/Sunday12thApril_allsystematics_rm_adaptivefit_onaxis_withoutdetsystsconfig_moreadaptive/Sunday12thApril_allsystematics_rm_adaptivefit_onaxis_withoutdetsystsconfig_moreadaptive_adaptive_chain_0_job_0.root
+[Monitor.cpp][info]     UseRobbinsMonro: True
+[Monitor.cpp][info]     TargetAcceptance: 0.234
+[Monitor.cpp][info]     TotalRobbinsMonroRestarts: 2
+[Monitor.cpp][info]     AcceptanceRateBatchSize: 10000
+[Monitor.cpp][info]   Covariance:
+[Monitor.cpp][info]     xsec_cov:
+[Monitor.cpp][info]       DoAdaption: False
+[Monitor.cpp][info]       UseExternalMatrix: False
+[Monitor.cpp][info]       PrincipalComponentThreshold: 0.995
+[Monitor.cpp][info] Predictive:
+[Monitor.cpp][info]   PosteriorFiles: /scratch/abipeake/March2026/Sunday12thApril_allsystematics_rm_adaptivefit_onaxis_withoutdetsystsconfig_moreadaptive/Sunday12thApril_allsystematics_rm_adaptivefit_onaxis_withoutdetsystsconfig_moreadaptive_chain_0_job_0.root
+[Monitor.cpp][info]   ThrowDetCov: true
+[Monitor.cpp][info]   FixXSec: false
+[Monitor.cpp][info]   FixFlux: false
+[Monitor.cpp][info]   SamplePosterior: 50
+[ParameterHandlerBase.cpp][info] Constructing instance of ParameterHandler using
+[ParameterHandlerBase.cpp][info] /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/XSecSysts.yml
+[ParameterHandlerBase.cpp][info] as an input
+[ParameterHandlerBase.cpp][info] Principal component analysis but given the threshold for the principal components to be less than 0, or greater than (or equal to) 1. This will not work
+[ParameterHandlerBase.cpp][info] Please specify a number between 0 and 1
+[ParameterHandlerBase.cpp][info] You specified: 
+[ParameterHandlerBase.cpp][info] Am instead calling the usual non-PCA constructor...
+[ParameterTunes.cpp][info] Found 1 tunes:
+[ParameterTunes.cpp][info]   Tune 0 Generated
+[ParameterHandlerBase.cpp][info] Created covariance matrix from files: 
+[ParameterHandlerBase.cpp][info] /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/XSecSysts.yml 
+[ParameterHandlerBase.cpp][info] ----------------
+[ParameterHandlerBase.cpp][info] Found 27 systematics parameters in total
+[ParameterHandlerBase.cpp][info] ----------------
+[ParameterHandlerGeneric.cpp][info] #################################################
+[ParameterHandlerGeneric.cpp][info] Printing ParameterHandlerGeneric:
+[ParameterHandlerGeneric.cpp][info] ============================================================================================================================================================
+[ParameterHandlerGeneric.cpp][info] #     |  Name                                     |  Prior      |  Error      |  Lower      |  Upper      |  StepScale  |  SampleNames          |  Type      
+[ParameterHandlerGeneric.cpp][info] ------------------------------------------------------------------------------------------------------------------------------------------------------------
+[ParameterHandlerGeneric.cpp][info] 0     |  MaCCQE                                   |  0          |  +/- 1.00   |  -9999      |  9999       |  0.4        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 1     |  VecFFCCQEshape                           |  0          |  +/- 1.00   |  0          |  1          |  0.2        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 2     |  CCQEPauliSupViaKF                        |  0          |  +/- 1.00   |  0          |  1          |  0.6        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 3     |  MaCCRES                                  |  -0.36      |  +/- 0.09   |  -9999      |  9999       |  0.4        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 4     |  MvCCRES                                  |  0          |  +/- 1.00   |  -9999      |  9999       |  0.4        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 5     |  AhtBY                                    |  0          |  +/- 1.00   |  -9999      |  9999       |  0.6        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 6     |  BhtBY                                    |  0          |  +/- 1.00   |  -9999      |  9999       |  0.6        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 7     |  CV1uBY                                   |  0          |  +/- 1.00   |  -9999      |  9999       |  0.6        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 8     |  CV2uBY                                   |  0          |  +/- 1.00   |  -9999      |  9999       |  0.6        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 9     |  FrCEx_pi                                 |  0          |  +/- 1.00   |  -9999      |  9999       |  0.6        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 10    |  FrInel_pi                                |  0          |  +/- 1.00   |  -9999      |  9999       |  0.7        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 11    |  FrAbs_pi                                 |  0          |  +/- 1.00   |  -9999      |  9999       |  0.6        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 12    |  FrPiProd_pi                              |  0          |  +/- 1.00   |  -9999      |  9999       |  0.6        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 13    |  FrCEx_N                                  |  0          |  +/- 1.00   |  -9999      |  9999       |  0.6        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 14    |  FrInel_N                                 |  0          |  +/- 1.00   |  -9999      |  9999       |  0.6        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 15    |  FrAbs_N                                  |  0          |  +/- 1.00   |  -9999      |  9999       |  0.6        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 16    |  FrPiProd_N                               |  0          |  +/- 1.00   |  -9999      |  9999       |  0.6        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 17    |  E2p2h_A_nu                               |  0          |  +/- 1.00   |  -1         |  1          |  0.5        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 18    |  E2p2h_B_nu                               |  0          |  +/- 1.00   |  -1         |  1          |  0.2        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 19    |  E2p2h_A_nubar                            |  0          |  +/- 1.00   |  -1         |  1          |  0.2        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 20    |  E2p2h_B_nubar                            |  0          |  +/- 1.00   |  -1         |  1          |  0.2        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 21    |  C12ToAr40_2p2hScaling_nu                 |  0          |  +/- 1.00   |  0          |  1          |  0.1        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 22    |  C12ToAr40_2p2hScaling_nubar              |  0          |  +/- 1.00   |  0          |  1          |  0.1        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 23    |  BeRPA_A                                  |  0          |  +/- 1.00   |  -9999      |  9999       |  0.6        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 24    |  BeRPA_B                                  |  0          |  +/- 1.00   |  -9999      |  9999       |  0.6        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 25    |  BeRPA_D                                  |  0          |  +/- 1.00   |  -9999      |  9999       |  0.6        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] 26    |  nuenuebar_xsec_ratio                     |  1          |  +/- 1.00   |  0          |  1          |  0.1        |  *                    |  Spline    
+[ParameterHandlerGeneric.cpp][info] ============================================================================================================================================================
+[ParameterHandlerGeneric.cpp][info] Normalisation parameters:  0
+[ParameterHandlerGeneric.cpp][info] Spline parameters: 27
+[ParameterHandlerGeneric.cpp][info] =====================================================================================================================================================================
+[ParameterHandlerGeneric.cpp][info] #    |  Name                                     |  Spline Name                              |  Spline Interpolation |  Low Knot Bound       |  Up Knot Bound        | 
+[ParameterHandlerGeneric.cpp][info] ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[ParameterHandlerGeneric.cpp][info] 0    |  MaCCQE                                   |  maqe                                     |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 1    |  VecFFCCQEshape                           |  vecffqeshape                             |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 2    |  CCQEPauliSupViaKF                        |  pauli                                    |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 3    |  MaCCRES                                  |  mares                                    |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 4    |  MvCCRES                                  |  mvres                                    |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 5    |  AhtBY                                    |  ahtby                                    |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 6    |  BhtBY                                    |  bhtby                                    |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 7    |  CV1uBY                                   |  cv1uby                                   |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 8    |  CV2uBY                                   |  cv2uby                                   |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 9    |  FrCEx_pi                                 |  frcexpi                                  |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 10   |  FrInel_pi                                |  frinelpi                                 |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 11   |  FrAbs_pi                                 |  frabspi                                  |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 12   |  FrPiProd_pi                              |  frpiprodpi                               |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 13   |  FrCEx_N                                  |  frcexn                                   |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 14   |  FrInel_N                                 |  frineln                                  |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 15   |  FrAbs_N                                  |  frabsn                                   |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 16   |  FrPiProd_N                               |  frpiprodn                                |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 17   |  E2p2h_A_nu                               |  e2anu                                    |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 18   |  E2p2h_B_nu                               |  e2bnu                                    |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 19   |  E2p2h_A_nubar                            |  e2anubar                                 |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 20   |  E2p2h_B_nubar                            |  e2bnubar                                 |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 21   |  C12ToAr40_2p2hScaling_nu                 |  c12nu                                    |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 22   |  C12ToAr40_2p2hScaling_nubar              |  c12nubar                                 |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 23   |  BeRPA_A                                  |  berpaa                                   |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 24   |  BeRPA_B                                  |  berpab                                   |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 25   |  BeRPA_D                                  |  berpad                                   |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] 26   |  nuenuebar_xsec_ratio                     |  nuexsec                                  |  TSpline3             |  -9999                |  9999                 | 
+[ParameterHandlerGeneric.cpp][info] =====================================================================================================================================================================
+[ParameterHandlerGeneric.cpp][info] Functional parameters: 0
+[ParameterHandlerGeneric.cpp][info] Oscillation parameters: 0
+[ParameterHandlerGeneric.cpp][info] Printing parameter groups
+[ParameterHandlerGeneric.cpp][info] Found 27: Xsec params
+[ParameterHandlerGeneric.cpp][info] Finished
+[ParameterHandlerGeneric.cpp][info] #################################################
+[MaCh3DUNEFactory.cpp][info] cov xsec setup
+[MaCh3DUNEFactory.cpp][info] ------------------------------
+[MaCh3DUNEFactory.cpp][info] xsec parameters loop done
+[ParameterHandlerBase.cpp][info] xsec_cov setStepScale() = 1
+[ParameterHandlerBase.cpp][warning] Defined Global StepScale is 1, while suggested suggested 0.4580312135571031
+[MaCh3DUNEFactory.cpp][info] No SharedNuOscillatorObject for ATM specified, so not creating one
+[MaCh3DUNEFactory.cpp][info] No SharedNuOscillatorObject for Beam specified, so not creating one
+[MaCh3DUNEFactory.cpp][info] -------------------------------------------------------------------
+[MaCh3DUNEFactory.cpp][info] Loading DUNE samples..
+[Manager.cpp][info] Setting config to be: /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/Onaxis_1Dsmaller_systematics.yaml
+[Manager.cpp][info] Config is now: 
+[Monitor.cpp][info] SampleHandlerName: OffAxisND
+[Monitor.cpp][info] SampleType: OffAxisND
+[Monitor.cpp][info] MaCh3ModeConfig: Configs/CovObjs/MaCh3Modes_GENIE.yaml
+[Monitor.cpp][info] BinningFile: Configs/TutorialConfigs/TutorialBinning.yaml
+[Monitor.cpp][info] InputFiles: ~
+[Monitor.cpp][info] CovarianceMatrix: [/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/normalbinning_covmat.root]
+[Monitor.cpp][info] Samples: [OnAxis_numuCC_numode]
+[Monitor.cpp][info] OnAxis_numuCC_numode:
+[Monitor.cpp][info]   SampleTitle: OnAxis_numuCC_numode
+[Monitor.cpp][info]   POT: 1.10e+21
+[Monitor.cpp][info]   is_numode: True
+[Monitor.cpp][info]   SelectionCuts:
+[Monitor.cpp][info]     - KinematicStr: IsCC
+[Monitor.cpp][info]       Bounds: [0.5, 1.5]
+[Monitor.cpp][info]     - KinematicStr: RecoNumu
+[Monitor.cpp][info]       Bounds: [0.9, 1.1]
+[Monitor.cpp][info]     - KinematicStr: RecoNeutrinoEnergy
+[Monitor.cpp][info]       Bounds: [0.1, 9999]
+[Monitor.cpp][info]   Binning:
+[Monitor.cpp][info]     VarStr: [RecoNeutrinoEnergy, ELepRec]
+[Monitor.cpp][info]     VarBins: [[0, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.2, 2.4, 2.6, 2.8, 3, 3.25, 3.5, 3.75, 4, 4.5, 5, 6, 7, 8, 10], [0, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.2, 2.4, 2.6, 2.8, 3, 3.25, 3.5, 3.75, 4, 4.5, 5, 6, 8, 10]]
+[Monitor.cpp][info]     Uniform: true
+[Monitor.cpp][info]   InputFiles:
+[Monitor.cpp][info]     mtupleprefix: /project/rpp-nilic/abipeake/PRISM_CAFs/FHC/
+[Monitor.cpp][info]     mtuplesuffix: _FHC.root
+[Monitor.cpp][info]     splineprefix: /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/OnAxis_numuCC_numode_splines
+[Monitor.cpp][info]     splinesuffix: .root
+[Monitor.cpp][info]   SubSamples:
+[Monitor.cpp][info]     - Name: OnAxis_numuCC_numode1
+[Monitor.cpp][info]       LatexName: On Axis Numu CC Neutrino Mode
+[Monitor.cpp][info]       mtuplefile: CAFv7_0m_13*
+[Monitor.cpp][info]       splinefile: ""
+[SampleHandlerFD.cpp][info] -------------------------------------------------------------------
+[SampleHandlerFD.cpp][info] Creating SampleHandlerFD object
+[Manager.cpp][info] Setting config to be: /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/Onaxis_1Dsmaller_systematics.yaml
+[Manager.cpp][info] Config is now: 
+[Monitor.cpp][info] SampleHandlerName: OffAxisND
+[Monitor.cpp][info] SampleType: OffAxisND
+[Monitor.cpp][info] MaCh3ModeConfig: Configs/CovObjs/MaCh3Modes_GENIE.yaml
+[Monitor.cpp][info] BinningFile: Configs/TutorialConfigs/TutorialBinning.yaml
+[Monitor.cpp][info] InputFiles: ~
+[Monitor.cpp][info] CovarianceMatrix: [/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/normalbinning_covmat.root]
+[Monitor.cpp][info] Samples: [OnAxis_numuCC_numode]
+[Monitor.cpp][info] OnAxis_numuCC_numode:
+[Monitor.cpp][info]   SampleTitle: OnAxis_numuCC_numode
+[Monitor.cpp][info]   POT: 1.10e+21
+[Monitor.cpp][info]   is_numode: True
+[Monitor.cpp][info]   SelectionCuts:
+[Monitor.cpp][info]     - KinematicStr: IsCC
+[Monitor.cpp][info]       Bounds: [0.5, 1.5]
+[Monitor.cpp][info]     - KinematicStr: RecoNumu
+[Monitor.cpp][info]       Bounds: [0.9, 1.1]
+[Monitor.cpp][info]     - KinematicStr: RecoNeutrinoEnergy
+[Monitor.cpp][info]       Bounds: [0.1, 9999]
+[Monitor.cpp][info]   Binning:
+[Monitor.cpp][info]     VarStr: [RecoNeutrinoEnergy, ELepRec]
+[Monitor.cpp][info]     VarBins: [[0, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.2, 2.4, 2.6, 2.8, 3, 3.25, 3.5, 3.75, 4, 4.5, 5, 6, 7, 8, 10], [0, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.2, 2.4, 2.6, 2.8, 3, 3.25, 3.5, 3.75, 4, 4.5, 5, 6, 8, 10]]
+[Monitor.cpp][info]     Uniform: true
+[Monitor.cpp][info]   InputFiles:
+[Monitor.cpp][info]     mtupleprefix: /project/rpp-nilic/abipeake/PRISM_CAFs/FHC/
+[Monitor.cpp][info]     mtuplesuffix: _FHC.root
+[Monitor.cpp][info]     splineprefix: /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/OnAxis_numuCC_numode_splines
+[Monitor.cpp][info]     splinesuffix: .root
+[Monitor.cpp][info]   SubSamples:
+[Monitor.cpp][info]     - Name: OnAxis_numuCC_numode1
+[Monitor.cpp][info]       LatexName: On Axis Numu CC Neutrino Mode
+[Monitor.cpp][info]       mtuplefile: CAFv7_0m_13*
+[Monitor.cpp][info]       splinefile: ""
+[MaCh3Modes.cpp][info] Printing MaCh3 Modes Called: DUNE Interaction modes
+[MaCh3Modes.cpp][info] ========================================================================
+[MaCh3Modes.cpp][info] #     |  Name                 |  FancyName            |  GENIE Modes                   
+[MaCh3Modes.cpp][info] ------------------------------------------------------------------------
+[MaCh3Modes.cpp][info] 0     |  CCQE                 |  CCQE                 |  1                             
+[MaCh3Modes.cpp][info] 1     |  CC1Kaon              |  CC1Kaon              |  2                             
+[MaCh3Modes.cpp][info] 2     |  CCDIS                |  CCDIS                |  3                             
+[MaCh3Modes.cpp][info] 3     |  CCRES                |  CCRES                |  4                             
+[MaCh3Modes.cpp][info] 4     |  CCCOH                |  CCCOH                |  5                             
+[MaCh3Modes.cpp][info] 5     |  CCDiff               |  CCDiff               |  6                             
+[MaCh3Modes.cpp][info] 6     |  CCNuEl               |  CCNuEl               |  7                             
+[MaCh3Modes.cpp][info] 7     |  CCIMD                |  CCIMD                |  8                             
+[MaCh3Modes.cpp][info] 8     |  CCAnuGam             |  CCAnuGam             |  9                             
+[MaCh3Modes.cpp][info] 9     |  CCMEC                |  CCMEC                |  10                            
+[MaCh3Modes.cpp][info] 10    |  CCCOHEL              |  CCCOHEL              |  11                            
+[MaCh3Modes.cpp][info] 11    |  CCIBD                |  CCIBD                |  12                            
+[MaCh3Modes.cpp][info] 12    |  CCGlRES              |  CCGlRES              |  13                            
+[MaCh3Modes.cpp][info] 13    |  CCIMDAnn             |  CCIMDAnn             |  14                            
+[MaCh3Modes.cpp][info] 14    |  NCQE                 |  NCQE                 |  15                            
+[MaCh3Modes.cpp][info] 15    |  NCDIS                |  NCDIS                |  17                            
+[MaCh3Modes.cpp][info] 16    |  NCRES                |  NCRES                |  18                            
+[MaCh3Modes.cpp][info] 17    |  NCCOH                |  NCCOH                |  19                            
+[MaCh3Modes.cpp][info] 18    |  NCDiff               |  NCDiff               |  20                            
+[MaCh3Modes.cpp][info] 19    |  NCNuEl               |  NCNuEl               |  21                            
+[MaCh3Modes.cpp][info] 20    |  NCIMD                |  NCIMD                |  22                            
+[MaCh3Modes.cpp][info] 21    |  NCAnuGam             |  NCAnuGam             |  23                            
+[MaCh3Modes.cpp][info] 22    |  NCMEC                |  NCMEC                |  24                            
+[MaCh3Modes.cpp][info] 23    |  NCCOHEL              |  NCCOHEL              |  25                            
+[MaCh3Modes.cpp][info] 24    |  NCIBD                |  NCIBD                |  26                            
+[MaCh3Modes.cpp][info] 25    |  NCGlRES              |  NCGlRES              |  27                            
+[MaCh3Modes.cpp][info] 26    |  NCIMDAnn             |  NCIMDAnn             |  28                            
+[MaCh3Modes.cpp][info] ========================================================================
+[MaCh3Modes.cpp][info] ==========================
+[MaCh3Modes.cpp][info] GENIE Modes |  Name                          
+[MaCh3Modes.cpp][info] --------------------------
+[MaCh3Modes.cpp][info] 0          |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 1          |  CCQE                          
+[MaCh3Modes.cpp][info] 2          |  CC1Kaon                       
+[MaCh3Modes.cpp][info] 3          |  CCDIS                         
+[MaCh3Modes.cpp][info] 4          |  CCRES                         
+[MaCh3Modes.cpp][info] 5          |  CCCOH                         
+[MaCh3Modes.cpp][info] 6          |  CCDiff                        
+[MaCh3Modes.cpp][info] 7          |  CCNuEl                        
+[MaCh3Modes.cpp][info] 8          |  CCIMD                         
+[MaCh3Modes.cpp][info] 9          |  CCAnuGam                      
+[MaCh3Modes.cpp][info] 10         |  CCMEC                         
+[MaCh3Modes.cpp][info] 11         |  CCCOHEL                       
+[MaCh3Modes.cpp][info] 12         |  CCIBD                         
+[MaCh3Modes.cpp][info] 13         |  CCGlRES                       
+[MaCh3Modes.cpp][info] 14         |  CCIMDAnn                      
+[MaCh3Modes.cpp][info] 15         |  NCQE                          
+[MaCh3Modes.cpp][info] 16         |  UNKNOWN_BAD                   
+[MaCh3Modes.cpp][info] 17         |  NCDIS                         
+[MaCh3Modes.cpp][info] 18         |  NCRES                         
+[MaCh3Modes.cpp][info] 19         |  NCCOH                         
+[MaCh3Modes.cpp][info] 20         |  NCDiff                        
+[MaCh3Modes.cpp][info] 21         |  NCNuEl                        
+[MaCh3Modes.cpp][info] 22         |  NCIMD                         
+[MaCh3Modes.cpp][info] 23         |  NCAnuGam                      
+[MaCh3Modes.cpp][info] 24         |  NCMEC                         
+[MaCh3Modes.cpp][info] 25         |  NCCOHEL                       
+[MaCh3Modes.cpp][info] 26         |  NCIBD                         
+[MaCh3Modes.cpp][info] 27         |  NCGlRES                       
+[MaCh3Modes.cpp][info] 28         |  NCIMDAnn                      
+[MaCh3Modes.cpp][info] ==========================
+[Manager.cpp][warning] Didn't find a TestStatistic specified
+[Manager.cpp][warning] Defaulting to using a Poisson likelihood
+[BinningHandler.cpp][info] Setting up Sample Binning
+[SampleStructs.h][info] 0-Dim Binning: [0.00, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00, 2.20, 2.40, 2.60, 2.80, 3.00, 3.25, 3.50, 3.75, 4.00, 4.50, 5.00, 6.00, 7.00, 8.00, 10.00]
+[SampleStructs.h][info] 1-Dim Binning: [0.00, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00, 2.20, 2.40, 2.60, 2.80, 3.00, 3.25, 3.50, 3.75, 4.00, 4.50, 5.00, 6.00, 8.00, 10.00]
+[SampleHandlerFD.cpp][info] Adding cut on IsCC with bounds 0.5 to 1.5
+[SampleHandlerFD.cpp][info] Adding cut on RecoNumu with bounds 0.9 to 1.1
+[SampleHandlerFD.cpp][info] Adding cut on RecoNeutrinoEnergy with bounds 0.1 to 9999
+[SampleHandlerFD.cpp][info]   Nominal mode weights to apply: 
+[SampleHandlerFD.cpp][info]     - CCQE: 1
+[SampleHandlerFD.cpp][info]     - CC1Kaon: 1
+[SampleHandlerFD.cpp][info]     - CCDIS: 1
+[SampleHandlerFD.cpp][info]     - CCRES: 1
+[SampleHandlerFD.cpp][info]     - CCCOH: 1
+[SampleHandlerFD.cpp][info]     - CCDiff: 1
+[SampleHandlerFD.cpp][info]     - CCNuEl: 1
+[SampleHandlerFD.cpp][info]     - CCIMD: 1
+[SampleHandlerFD.cpp][info]     - CCAnuGam: 1
+[SampleHandlerFD.cpp][info]     - CCMEC: 1
+[SampleHandlerFD.cpp][info]     - CCCOHEL: 1
+[SampleHandlerFD.cpp][info]     - CCIBD: 1
+[SampleHandlerFD.cpp][info]     - CCGlRES: 1
+[SampleHandlerFD.cpp][info]     - CCIMDAnn: 1
+[SampleHandlerFD.cpp][info]     - NCQE: 1
+[SampleHandlerFD.cpp][info]     - NCDIS: 1
+[SampleHandlerFD.cpp][info]     - NCRES: 1
+[SampleHandlerFD.cpp][info]     - NCCOH: 1
+[SampleHandlerFD.cpp][info]     - NCDiff: 1
+[SampleHandlerFD.cpp][info]     - NCNuEl: 1
+[SampleHandlerFD.cpp][info]     - NCIMD: 1
+[SampleHandlerFD.cpp][info]     - NCAnuGam: 1
+[SampleHandlerFD.cpp][info]     - NCMEC: 1
+[SampleHandlerFD.cpp][info]     - NCCOHEL: 1
+[SampleHandlerFD.cpp][info]     - NCIBD: 1
+[SampleHandlerFD.cpp][info]     - NCGlRES: 1
+[SampleHandlerFD.cpp][info]     - NCIMDAnn: 1
+[SampleHandlerBeamOffAxis.cpp][info] -------------------------------------------------------------------
+[SampleHandlerBeamOffAxis.cpp][info] -- subsample[0]: OnAxis_numuCC_numode 
+[SampleHandlerBeamOffAxis.cpp][info] -- -- Adding file to TChain: /project/rpp-nilic/abipeake/PRISM_CAFs/FHC/CAFv7_0m_13*_FHC.root
+[SampleHandlerFD.cpp][info] =============================================
+[SampleHandlerFD.cpp][info] Total number of events is: 1184380
+[SampleHandlerFD.cpp][warning] Didn't find any oscillation params, thus will not enable oscillations
+[SampleHandlerFD.cpp][info] Setting up Sample Binning..
+[SampleHandlerFD.cpp][info] Setting up Splines..
+[SampleHandlerBeamOffAxis.cpp][info] Found 27 splines for this sample so I will create a spline object
+[BinnedSplineHandler.cpp][info] Create SplineModeVecs_Sample
+[BinnedSplineHandler.cpp][info] SplineModeVecs_Sample is of size 27
+[BinnedSplineHandler.cpp][info] SplineModeVecs is of size 1
+[BinnedSplineHandler.cpp][info] Details about sample: OnAxis_numuCC_numode
+[BinnedSplineHandler.cpp][info] 	 Dimension: 3                                  
+[BinnedSplineHandler.cpp][info] 	 nSplineParam: 27                                 
+[BinnedSplineHandler.cpp][info] 	 nOscChan: 1                                  
+[BinnedSplineHandler.cpp][info] Finding binning for:
+[BinnedSplineHandler.cpp][info] /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/OnAxis_numuCC_numode_splines.root
+[BinnedSplineHandler.cpp][info] 0 1 1.25 1.5 1.75 2 2.25 2.5 2.75 3 3.25 3.5 3.75 4 5 6 10 1200 
+[BinnedSplineHandler.cpp][info] 0 0.5 0.75 1 1.25 1.5 1.75 2 2.2 2.4 2.6 2.8 3 3.25 3.5 3.75 4 4.5 5 6 7 8 10 
+[BinnedSplineHandler.cpp][info] 0 0.5 0.75 1 1.25 1.5 1.75 2 2.2 2.4 2.6 2.8 3 3.25 3.5 3.75 4 4.5 5 6 8 10 
+[BinnedSplineHandler.cpp][info] Left PrintBinning now tidying up
+[BinnedSplineHandler.cpp][info] #----------------------------------------------------------------------------------------------------------------------------------#
+[BinnedSplineHandler.cpp][info] Sample OnAxis_numuCC_numode has 1 oscillation channels
+[BinnedSplineHandler.cpp][info] Oscillation channel 0 has 27 systematics
+[BinnedSplineHandler.cpp][info] #----------------------------------------------------------------------------------------------------------------------------------#
+[BinnedSplineHandler.cpp][info] Printing no. of modes affected by each systematic for each oscillation channel
+[BinnedSplineHandler.cpp][info] OscChan: 0	1 1 1 1 1 2 2 2 2 4 4 4 4 6 6 6 6 2 2 2 2 2 2 1 1 1 14 
+[BinnedSplineHandler.cpp][info] #----------------------------------------------------------------------------------------------------------------------------------#
+[BinnedSplineHandler.cpp][info] #----------------------------------------------------------------------------------------------------------------------------------#
+[BinnedSplineHandler.cpp][info] Processing: /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/OnAxis_numuCC_numode_splines.root
+[BinnedSplineHandler.cpp][info] #----------------------------------------------------------------------------------------------------------------------------------#
+[BinnedSplineHandler.cpp][info] Total number of splines loaded: 644028
+[BinnedSplineHandler.cpp][info] Total number of non-flat splines loaded: 29552
+[BinnedSplineHandler.cpp][info] nUniqueSysts: 27
+[BinnedSplineHandler.cpp][info] Spline Index    | Syst Name            | nKnots
+[BinnedSplineHandler.cpp][info] 0               | maqe                 | 7     
+[BinnedSplineHandler.cpp][info] 1               | vecffqeshape         | 7     
+[BinnedSplineHandler.cpp][info] 2               | pauli                | 7     
+[BinnedSplineHandler.cpp][info] 3               | mares                | 7     
+[BinnedSplineHandler.cpp][info] 4               | mvres                | 7     
+[BinnedSplineHandler.cpp][info] 5               | ahtby                | 7     
+[BinnedSplineHandler.cpp][info] 6               | bhtby                | 7     
+[BinnedSplineHandler.cpp][info] 7               | cv1uby               | 7     
+[BinnedSplineHandler.cpp][info] 8               | cv2uby               | 7     
+[BinnedSplineHandler.cpp][info] 9               | frcexpi              | 7     
+[BinnedSplineHandler.cpp][info] 10              | frinelpi             | 7     
+[BinnedSplineHandler.cpp][info] 11              | frabspi              | 7     
+[BinnedSplineHandler.cpp][info] 12              | frpiprodpi           | 7     
+[BinnedSplineHandler.cpp][info] 13              | frcexn               | 7     
+[BinnedSplineHandler.cpp][info] 14              | frineln              | 7     
+[BinnedSplineHandler.cpp][info] 15              | frabsn               | 7     
+[BinnedSplineHandler.cpp][info] 16              | frpiprodn            | 7     
+[BinnedSplineHandler.cpp][info] 17              | e2anu                | 7     
+[BinnedSplineHandler.cpp][info] 18              | e2bnu                | 7     
+[BinnedSplineHandler.cpp][info] 19              | e2anubar             | 7     
+[BinnedSplineHandler.cpp][info] 20              | e2bnubar             | 7     
+[BinnedSplineHandler.cpp][info] 21              | c12nu                | 7     
+[BinnedSplineHandler.cpp][info] 22              | c12nubar             | 7     
+[BinnedSplineHandler.cpp][info] 23              | berpaa               | 7     
+[BinnedSplineHandler.cpp][info] 24              | berpab               | 7     
+[BinnedSplineHandler.cpp][info] 25              | berpad               | 7     
+[BinnedSplineHandler.cpp][info] 26              | nuexsec              | 7     
+[BinnedSplineHandler.cpp][info] Number of combinations of Sample, OscChan, Syst and Mode which have entirely flat response: 614476 / 644028
+[BinnedSplineHandler.cpp][info] Total number of splines loaded: 644028
+[BinnedSplineHandler.cpp][info] Total number of non-flat splines loaded: 29552
+[BinnedSplineHandler.cpp][info] Now transferring splines to a monolith if size 644028
+[SampleHandlerFD.cpp][info] --------------------------------
+[SampleHandlerFD.cpp][info] Setup Far Detector splines
+[BinnedSplineHandler.cpp][info] Cleaning up spline memory
+[SampleHandlerFD.cpp][info] Setting up Normalisation Pointers..
+[SampleHandlerFD.cpp][info] Setting up Functional Pointers..
+[SampleHandlerFD.h][info] Functional shift consuming parameters: [ ContainedMuonEnergyScale ContainedMuonSqrtEnergyScale ContainedMuonInvSqrtEnergyScale TrackedMuonEnergyScale TrackedMuonSqrtEnergyScale TrackedMuonInvSqrtEnergyScale EMEnergyScale EMSqrtEnergyScale EMInvSqrtEnergyScale ChgHadEnergyScale ChgHadSqrtEnergyScale ChgHadInvSqrtEnergyScale NeutronEnergyScale NeutronSqrtEnergyScale NeutronInvSqrtEnergyScale TotalEnergyScale TotalSqrtEnergyScale TotalInvSqrtEnergyScale ], found no matching parameters for sample handler: OffAxisND
+[SampleHandlerFD.h][info] Functional shift consuming parameters: [ MuonEnergyResolution EMEnergyResolution ChgHadEnergyResolution NeutronEnergyResolution ], found no matching parameters for sample handler: OffAxisND
+[SampleHandlerFD.h][info] Functional shift consuming parameters: [ MissingProtonFD ], found no matching parameters for sample handler: OffAxisND
+[SampleHandlerFD.cpp][info] Setting up Additional Weight Pointers..
+[SampleHandlerFD.cpp][info] Setting up Kinematic Map..
+[SampleHandlerFD.cpp][info] Finished loading MC for OffAxisND, it took 62.30s to finish
+[SampleHandlerFD.cpp][info] =======================================================
+[AdaptiveMCMCHandler.cpp][warning] Not using adaption for xsec_cov
+[ParameterHandlerBase.cpp][info] Not using adaptive MCMC for xsec_cov. Checking external matrix options...
+[ParameterHandlerBase.cpp][info] Not using external matrix for xsec_cov
+[LikelihoodScan.cpp][info] Event rate for OnAxis_numuCC_numode : 16223358.43
+[SampleHandlerFD.cpp][info] Adding 2D data histogram: OnAxis_numuCC_numode with 16223358.43 events
+[FitterBase.cpp][info] Adding OffAxisND object, with 1 samples
+[FitterBase.cpp][info] Adding systematic object xsec_cov, with 27 params
+[FitterBase.cpp][warning] [0;31mCurrent Total RAM usage is 1.84 GB[0m
+[FitterBase.cpp][warning] [0;31mOut of Total available RAM 377.47 GB[0m
+[FitterBase.cpp][info] #####Current Setup#####
+[FitterBase.cpp][info] Number of covariances: 1
+[FitterBase.cpp][info] 0: Cov name: xsec_cov, it has 27 params
+[FitterBase.cpp][info] Number of SampleHandlers: 1
+[FitterBase.cpp][info] 0: SampleHandler name: OffAxisND, it has 1 samples
+[FitterBase.cpp][info]    0: Sample name: OnAxis_numuCC_numode, with 1 osc channels
+[FitterBase.cpp][info] Starting RunLLHScan
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  MaCCQE with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  VecFFCCQEshape with 100 steps, from [0.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  CCQEPauliSupViaKF with 100 steps, from [0.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  MaCCRES with 100 steps, from [-0.45 , -0.27], CV = -0.36
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  MvCCRES with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  AhtBY with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  BhtBY with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  CV1uBY with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  CV2uBY with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  FrCEx_pi with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  FrInel_pi with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  FrAbs_pi with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  FrPiProd_pi with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  FrCEx_N with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  FrInel_N with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  FrAbs_N with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  FrPiProd_N with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  E2p2h_A_nu with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  E2p2h_B_nu with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  E2p2h_A_nubar with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  E2p2h_B_nubar with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  C12ToAr40_2p2hScaling_nu with 100 steps, from [0.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  C12ToAr40_2p2hScaling_nubar with 100 steps, from [0.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  BeRPA_A with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  BeRPA_B with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  BeRPA_D with 100 steps, from [-1.00 , 1.00], CV = 0.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] There are no user-defined parameter ranges, so I'll use default param bounds for LLH Scans
+[FitterBase.cpp][info] Scanning  nuenuebar_xsec_ratio with 100 steps, from [0.00 , 1.00], CV = 1.00
+[Monitor.cpp][info] [>                   ]   0/100 (0%)
+[Monitor.cpp][info] [====>               ]  20/100 (20%)
+[Monitor.cpp][info] [========>           ]  40/100 (40%)
+[Monitor.cpp][info] [============>       ]  60/100 (60%)
+[Monitor.cpp][info] [================>   ]  80/100 (80%)
+[FitterBase.cpp][info] 0 steps took 6.98e+02 seconds to complete. (infs / step).
+[FitterBase.cpp][info] 0 steps were accepted.

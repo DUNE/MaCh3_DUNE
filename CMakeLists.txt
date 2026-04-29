@@ -227,6 +227,7 @@ target_compile_options(DUNEMaCh3Warnings INTERFACE
   # -Werror                 # Treat Warnings as Errors
   # -Wextra                 # Enable extra warning flags
   # -Wall                   # Enable all standard warning flags
+  #-Wno-error=suggest-override
   -Wsuggest-override
   -Wshadow                # Warn when a variable declaration shadows one from an outer scope
   -Wuninitialized         # Warn about uninitialized variables
