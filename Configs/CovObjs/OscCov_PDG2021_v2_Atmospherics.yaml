@@ -10,7 +10,7 @@ Systematics:
       ParameterName: sin2th_12
 
 
-    SampleNames: ["FD_*", "ATM"]
+    SampleNames: ["BeamFD_*", "ATM"]
     Error: 0.0129961532770277840
     FlatPrior: false
     ParameterBounds: [0, 1]
@@ -29,7 +29,7 @@ Systematics:
       ParameterName: sin2th_23
 
 
-    SampleNames: ["FD_*", "ATM"]
+    SampleNames: ["BeamFD_*", "ATM"]
     Error: 0.021
     # flip octant around point of maximal disappearance (0.5112)
     # this ensures we move to a parameter value which has the same oscillation probability
@@ -52,7 +52,7 @@ Systematics:
       ParameterName: sin2th_13
 
 
-    SampleNames: ["FD_*", "ATM"]
+    SampleNames: ["BeamFD_*", "ATM"]
     Error: 0.0007
     FlatPrior: false
     ParameterBounds: [0, 1]
@@ -72,7 +72,7 @@ Systematics:
       ParameterName: delm2_12
 
 
-    SampleNames: ["FD_*", "ATM"]
+    SampleNames: ["BeamFD_*", "ATM"]
     Error: 0.0000018
     FlatPrior: false
     ParameterBounds: [-999, 999]
@@ -91,7 +91,7 @@ Systematics:
       ParameterName: delm2_23
 
 
-    SampleNames: ["FD_*", "ATM"]
+    SampleNames: ["BeamFD_*", "ATM"]
     Error: 0.000034
     SpecialProposal:
       FlipParameter: 0.
@@ -112,7 +112,7 @@ Systematics:
       ParameterName: delta_cp
 
 
-    SampleNames: ["FD_*", "ATM"]
+    SampleNames: ["BeamFD_*", "ATM"]
     Error: 6.28331122896200340
     SpecialProposal:
       CircularBounds: [-3.141592, 3.141592]
@@ -134,7 +134,7 @@ Systematics:
       ParameterName: ProdH
 
 
-    SampleNames: ["FD_*", "ATM"]
+    SampleNames: ["BeamFD_*", "ATM"]
     Error: 1.0
     FlatPrior: true
     ParameterBounds: [0, 999]

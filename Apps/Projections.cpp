@@ -55,12 +55,12 @@ std::string ReturnFormattedHistogramNameFromProjection(ProjectionVariable Proj) 
   return ReturnStr;
 }
 
-void WriteTH1Histogram(TH1 *Hist, std::string Name, TDirectory *Dir = nullptr) {
+void WriteTH1Histogram(std::unique_ptr<TH1>& Hist, std::string& Name, TDirectory *Dir = nullptr) {
   if (Dir) Dir->cd();
   Hist->Write(Name.c_str());
 }
 
-void PrintTH1Histogram(TH1 *Hist, std::string OutputName) {
+void PrintTH1Histogram(std::unique_ptr<TH1>& Hist, std::string& OutputName) {
   TCanvas Canv = TCanvas();
   Hist->Draw("COLZ");
   Canv.Print(OutputName.c_str());
@@ -112,26 +112,24 @@ void WriteTHStackHistogram(THStack *Hist, std::string Name, TDirectory *Dir = nu
 }
 
 int main(int argc, char *argv[]) {
-  auto fitMan = MaCh3ManagerFactory(argc, argv);
+  auto FitManager = MaCh3ManagerFactory(argc, argv);
 
   int WeightStyle = 0;
   gStyle->SetPalette(1);
   // ###############################################################################################################################
-  // Create samplePDFFD objects
-
-  ParameterHandlerGeneric *xsec = nullptr;
-
-  std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(fitMan, DUNEPdfs, xsec);
+  //Create sample handler + parameter_handler objects
+  auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
 
   // ###############################################################################################################################
   // Perform reweight and print total integral for sanity check
 
   MACH3LOG_INFO("=================================================");
-  for (auto Sample : DUNEPdfs) {
-    Sample->Reweight();
-    std::string EventRateString = fmt::format("{:.2f}", Sample->GetMCHist(Sample->GetNDim())->Integral());
-    MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetTitle(), EventRateString);
+  for (auto handler : samples) {
+    handler->Reweight();
+    for (int iSample = 0; iSample < handler->GetNSamples(); iSample++) {
+      std::string EventRateString = fmt::format("{:.2f}", handler->GetMCHist(iSample)->Integral());
+      MACH3LOG_INFO("Event rate for {} : {:<5}", handler->GetSampleTitle(iSample), EventRateString);
+    }
   }
 
   // ###############################################################################################################################
@@ -139,10 +137,10 @@ int main(int argc, char *argv[]) {
 
   std::vector<ProjectionVariable> Projections;
 
-  std::string OutputFileName = fitMan->raw()["General"]["OutputFile"].as<std::string>();
+  std::string OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
   TFile *File = TFile::Open(OutputFileName.c_str(), "RECREATE");
 
-  for (auto &ProjectionConfig : fitMan->raw()["Projections"]) {
+  for (auto &ProjectionConfig : FitManager->raw()["Projections"]) {
     std::string VarName = ProjectionConfig["Name"].as<std::string>();
     //JM now a vector of size 1 (for 1d hists) or 2 (for 2d hists)
     std::vector<std::string> VarStrings = ProjectionConfig["VarStrings"].as< std::vector<std::string> >();
@@ -175,7 +173,7 @@ int main(int argc, char *argv[]) {
         }
       }
     }
-    for (auto &KinematicCutConfig: fitMan->raw()["GeneralKinematicCuts"]) {
+    for (auto &KinematicCutConfig: FitManager->raw()["GeneralKinematicCuts"]) {
       std::string KinematicCutName = KinematicCutConfig["Name"].as<std::string>();
       std::string KinematicCutVarString = KinematicCutConfig["VarString"].as<std::string>();
       std::vector<double> KinematicCutRange = KinematicCutConfig["Range"].as< std::vector<double> >();
@@ -278,7 +276,7 @@ int main(int argc, char *argv[]) {
   MACH3LOG_INFO("=================================================");
   MACH3LOG_INFO("Building Projections..");
 
-  TH1* Hist;
+  std::unique_ptr<TH1> Hist;
   THStack* Stack;
 
   for (size_t iProj=0;iProj<Projections.size();iProj++) {
@@ -287,11 +285,7 @@ int main(int argc, char *argv[]) {
 
     std::vector<std::string> ProjectionVar_Str = Projections[iProj].VarStrings;
     int histdim = ProjectionVar_Str.size();
-    TAxis AxisX = TAxis(Projections[iProj].BinEdges[0].size()-1,Projections[iProj].BinEdges[0].data());
-    TAxis AxisY;
-    if (histdim == 2) {AxisY = TAxis(Projections[iProj].BinEdges[1].size()-1,Projections[iProj].BinEdges[1].data());}
-
-    for (auto Sample : DUNEPdfs) {
+    for (auto handler : samples) {
 
       //File->mkdir(Sample->GetName().c_str());
       //TDirectory *dir = File->GetDirectory(Sample->GetName().c_str());
@@ -303,94 +297,96 @@ int main(int argc, char *argv[]) {
         Selection.LowerBound = Projections[iProj].KinematicCuts[iCut].Range[0];
         Selection.UpperBound = Projections[iProj].KinematicCuts[iCut].Range[1];
         
-        if (Sample->IsSubEventVarString(Projections[iProj].KinematicCuts[iCut].VarString)) {
-          Selection.ParamToCutOnIt = Sample->ReturnKinematicVectorFromString(Projections[iProj].KinematicCuts[iCut].VarString);
+        if (handler->IsSubEventVarString(Projections[iProj].KinematicCuts[iCut].VarString)) {
+          Selection.ParamToCutOnIt = handler->ReturnKinematicVectorFromString(Projections[iProj].KinematicCuts[iCut].VarString);
           SubEventSelectionVector.emplace_back(Selection);
         }
         else {
-          Selection.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString(Projections[iProj].KinematicCuts[iCut].VarString);
+          Selection.ParamToCutOnIt = handler->ReturnKinematicParameterFromString(Projections[iProj].KinematicCuts[iCut].VarString);
           EventSelectionVector.emplace_back(Selection);
         }
       }
 
-      std::string outputname;
-      if (histdim==1) {
-        Hist = (TH1*)Sample->Get1DVarHist(ProjectionVar_Str[0],EventSelectionVector,WeightStyle,&AxisX,SubEventSelectionVector);
-        outputname = Sample->GetTitle()+"_"+Projections[iProj].Name;
-        if (Scale1DHistsByBinWidth) Hist->Scale(1.0,"Width");
-      } 
-      else {
-        Hist = (TH1*)Sample->Get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],EventSelectionVector,WeightStyle,&AxisX,&AxisY,SubEventSelectionVector);
-        outputname = Sample->GetTitle()+"_"+Projections[iProj].Name;
-      }
-      Hist->SetTitle(ReturnFormattedHistogramNameFromProjection(Projections[iProj]).c_str());
-      MACH3LOG_INFO("\tSample: {:<20} - Integral: {:<10}",Sample->GetTitle(),Hist->Integral());
-      //PrintTH1Histogram(Hist,outputname+".png");
-      //WriteTH1Histogram(Hist, outputname, dir);
-      WriteTH1Histogram(Hist, outputname);
-
-      for (size_t iCat=0;iCat<Projections[iProj].CategoryCuts.size();iCat++) {
-        MACH3LOG_INFO("\t\tCategory: {:<10} - Name : {:<20}",iCat,Projections[iProj].CategoryCuts[iCat].Name);
-
-        Stack = new THStack(Projections[iProj].CategoryCuts[iCat].Name.c_str(), ReturnFormattedHistogramNameFromProjection(Projections[iProj]).c_str());
-        TLegend *leg = new TLegend(0.6, 0.7, 0.88, 0.88);
-        leg->SetHeader(Projections[iProj].CategoryCuts[iCat].Name.c_str());
-
-        for (size_t iBreak = 0; iBreak < Projections[iProj].CategoryCuts[iCat].Breakdown.size(); iBreak++) {
-
-          TH1 *BreakdownHist = nullptr;
-
-          for (size_t iGroup=0;iGroup<Projections[iProj].CategoryCuts[iCat].Breakdown[iBreak].size();iGroup++) {
-            std::vector< KinematicCut > EventSelectionVector_IncCategory = std::vector< KinematicCut >(EventSelectionVector);
-            std::vector< KinematicCut > SubEventSelectionVector_IncCategory = std::vector< KinematicCut >(SubEventSelectionVector);
-
-            KinematicCut Selection;
-            Selection.LowerBound = Projections[iProj].CategoryCuts[iCat].Breakdown[iBreak][iGroup];
-            Selection.UpperBound = Projections[iProj].CategoryCuts[iCat].Breakdown[iBreak][iGroup]+1;
-
-            if (Sample->IsSubEventVarString(Projections[iProj].CategoryCuts[iCat].VarString)) {
-              Selection.ParamToCutOnIt = Sample->ReturnKinematicVectorFromString(Projections[iProj].CategoryCuts[iCat].VarString);
-              SubEventSelectionVector_IncCategory.emplace_back(Selection);
-            }
-            else {
-              Selection.ParamToCutOnIt = Sample->ReturnKinematicParameterFromString(Projections[iProj].CategoryCuts[iCat].VarString);
-              EventSelectionVector_IncCategory.emplace_back(Selection);
-            }
-
-            if (histdim==1) {
-              Hist = Sample->Get1DVarHist(ProjectionVar_Str[0],EventSelectionVector_IncCategory,WeightStyle,&AxisX,SubEventSelectionVector_IncCategory);
-              if (Scale1DHistsByBinWidth) Hist->Scale(1.0,"Width");
-            }	else {
-              Hist = (TH1*)Sample->Get2DVarHist(ProjectionVar_Str[0],ProjectionVar_Str[1],EventSelectionVector_IncCategory,WeightStyle,&AxisX,&AxisY,SubEventSelectionVector_IncCategory);
-            }
-            Hist->SetFillColor(Projections[iProj].CategoryCuts[iCat].Colours[iBreak]);
-
-            if (BreakdownHist == nullptr) {
-              BreakdownHist = Hist;
-            } else {
-              BreakdownHist->Add(Hist);
-            }
-            leg->AddEntry(Hist, Projections[iProj].CategoryCuts[iCat].CategoryNames[iBreak].c_str(), "f");
-          }
-
-          MACH3LOG_INFO("\t\t\tBreakdown: {:<10} - Integral: {:<10}", iBreak, BreakdownHist->Integral());
-          Stack->Add(BreakdownHist);
-        }
-        // HH: Add the stack to the file
-        TCanvas Canv = TCanvas();
-        Stack->Draw("HIST");
-        leg->Draw();
-        std::string histstackname;
+      for (int iSample = 0; iSample < handler->GetNSamples(); iSample++) {
+        std::string outputname;
         if (histdim==1) {
-          histstackname = Sample->GetTitle()+"_"+ProjectionVar_Str[0]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack";
-        }
+          Hist = handler->Get1DVarHist(iSample, ProjectionVar_Str[0],EventSelectionVector,WeightStyle ,SubEventSelectionVector);
+          outputname = handler->GetSampleTitle(iSample)+"_"+Projections[iProj].Name;
+          if (Scale1DHistsByBinWidth) Hist->Scale(1.0,"Width");
+        } 
         else {
-          histstackname = Sample->GetTitle()+"_"+ProjectionVar_Str[0]+"_"+ProjectionVar_Str[1]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack";
+          Hist = handler->Get2DVarHist(iSample, ProjectionVar_Str[0],ProjectionVar_Str[1],EventSelectionVector,WeightStyle,SubEventSelectionVector);
+          outputname = handler->GetSampleTitle(iSample)+"_"+Projections[iProj].Name;
         }
-        //PrintTHStackHistogram(Stack,histstackname+".png");
-        Canv.Write((histstackname+"_Canvas").c_str());
-        //WriteTHStackHistogram(Stack, histstackname, dir);
-        WriteTHStackHistogram(Stack, histstackname);
+        Hist->SetTitle(ReturnFormattedHistogramNameFromProjection(Projections[iProj]).c_str());
+        MACH3LOG_INFO("\tSample: {:<20} - Integral: {:<10}",handler->GetSampleTitle(iSample),Hist->Integral());
+        //PrintTH1Histogram(Hist,outputname+".png");
+        //WriteTH1Histogram(Hist, outputname, dir);
+        WriteTH1Histogram(Hist, outputname);
+
+        for (size_t iCat=0;iCat<Projections[iProj].CategoryCuts.size();iCat++) {
+          MACH3LOG_INFO("\t\tCategory: {:<10} - Name : {:<20}",iCat,Projections[iProj].CategoryCuts[iCat].Name);
+
+          Stack = new THStack(Projections[iProj].CategoryCuts[iCat].Name.c_str(), ReturnFormattedHistogramNameFromProjection(Projections[iProj]).c_str());
+          TLegend *leg = new TLegend(0.6, 0.7, 0.88, 0.88);
+          leg->SetHeader(Projections[iProj].CategoryCuts[iCat].Name.c_str());
+
+          for (size_t iBreak = 0; iBreak < Projections[iProj].CategoryCuts[iCat].Breakdown.size(); iBreak++) {
+
+            std::unique_ptr<TH1> BreakdownHist = nullptr;
+
+            for (size_t iGroup=0;iGroup<Projections[iProj].CategoryCuts[iCat].Breakdown[iBreak].size();iGroup++) {
+              std::vector< KinematicCut > EventSelectionVector_IncCategory = std::vector< KinematicCut >(EventSelectionVector);
+              std::vector< KinematicCut > SubEventSelectionVector_IncCategory = std::vector< KinematicCut >(SubEventSelectionVector);
+
+              KinematicCut Selection;
+              Selection.LowerBound = Projections[iProj].CategoryCuts[iCat].Breakdown[iBreak][iGroup];
+              Selection.UpperBound = Projections[iProj].CategoryCuts[iCat].Breakdown[iBreak][iGroup]+1;
+
+              if (handler->IsSubEventVarString(Projections[iProj].CategoryCuts[iCat].VarString)) {
+                Selection.ParamToCutOnIt = handler->ReturnKinematicVectorFromString(Projections[iProj].CategoryCuts[iCat].VarString);
+                SubEventSelectionVector_IncCategory.emplace_back(Selection);
+              }
+              else {
+                Selection.ParamToCutOnIt = handler->ReturnKinematicParameterFromString(Projections[iProj].CategoryCuts[iCat].VarString);
+                EventSelectionVector_IncCategory.emplace_back(Selection);
+              }
+
+              if (histdim==1) {
+                Hist = handler->Get1DVarHist(iSample, ProjectionVar_Str[0],EventSelectionVector_IncCategory,WeightStyle,SubEventSelectionVector_IncCategory);
+                if (Scale1DHistsByBinWidth) Hist->Scale(1.0,"Width");
+              }	else {
+                Hist = (std::unique_ptr<TH1>)handler->Get2DVarHist(iSample, ProjectionVar_Str[0],ProjectionVar_Str[1],EventSelectionVector_IncCategory,WeightStyle,SubEventSelectionVector_IncCategory);
+              }
+              Hist->SetFillColor(Projections[iProj].CategoryCuts[iCat].Colours[iBreak]);
+
+              if (BreakdownHist == nullptr) {
+                BreakdownHist = std::move(Hist);
+              } else {
+                BreakdownHist->Add(Hist.get());
+              }
+              leg->AddEntry(Hist.get(), Projections[iProj].CategoryCuts[iCat].CategoryNames[iBreak].c_str(), "f");
+            }
+
+            MACH3LOG_INFO("\t\t\tBreakdown: {:<10} - Integral: {:<10}", iBreak, BreakdownHist->Integral());
+            Stack->Add(BreakdownHist.get());
+          }
+          // HH: Add the stack to the file
+          TCanvas Canv = TCanvas();
+          Stack->Draw("HIST");
+          leg->Draw();
+          std::string histstackname;
+          if (histdim==1) {
+            histstackname = handler->GetSampleTitle(iSample)+"_"+ProjectionVar_Str[0]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack";
+          }
+          else {
+            histstackname = handler->GetSampleTitle(iSample)+"_"+ProjectionVar_Str[0]+"_"+ProjectionVar_Str[1]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack";
+          }
+          //PrintTHStackHistogram(Stack,histstackname+".png");
+          Canv.Write((histstackname+"_Canvas").c_str());
+          //WriteTHStackHistogram(Stack, histstackname, dir);
+          WriteTHStackHistogram(Stack, histstackname);
+        }
 
       }
     }

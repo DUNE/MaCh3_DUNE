@@ -20,13 +20,9 @@ int main(int argc, char * argv[]) {
   auto FitManager = MaCh3ManagerFactory(argc, argv);
   auto OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
 
-  ParameterHandlerGeneric* xsec = nullptr;
-
   //####################################################################################
-  //Create samplePDFSKBase Objs
-
-  std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
+  //Create sample handler + parameter_handler objects
+  auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
 
   //Some place to store the histograms
   std::vector<TH1*> PredictionHistograms;
@@ -35,34 +31,31 @@ int main(int argc, char * argv[]) {
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
 
-  for (unsigned sample_i = 0 ; sample_i < DUNEPdfs.size() ; ++sample_i) {
+  for (auto handler : samples) {
+    for (unsigned iSample = 0; iSample < handler->GetNSamples(); ++iSample) {
     
-    std::string name = DUNEPdfs[sample_i]->GetTitle();
-    sample_names.push_back(name);
-    TString NameTString = TString(name.c_str());
-    
-    DUNEPdfs[sample_i] -> Reweight();
-    PredictionHistograms.push_back(static_cast<TH1*>(DUNEPdfs[sample_i]->GetMCHist(DUNEPdfs[sample_i]->GetNDim())->Clone(NameTString+"_unosc")));
+      std::string name = handler->GetSampleTitle(iSample);
+      sample_names.push_back(name);
+      TString NameTString = TString(name.c_str());
+      
+      handler->Reweight();
+      PredictionHistograms.push_back(static_cast<TH1*>(handler->GetMCHist(iSample)->Clone(NameTString+"_DataHist")));
 
-    if (DUNEPdfs[sample_i]->GetNDim() == 1){
-      DUNEPdfs[sample_i]->AddData(static_cast<TH1D*>(PredictionHistograms[sample_i]));
-    } else if (DUNEPdfs[sample_i]->GetNDim() == 2){
-      DUNEPdfs[sample_i]->AddData(static_cast<TH2D*>(PredictionHistograms[sample_i]));
+      if (handler->GetNDim(iSample) == 1){
+        handler->AddData(iSample, static_cast<TH1D*>(PredictionHistograms.back()));
+      } else if (handler->GetNDim(iSample) == 2){
+        handler->AddData(iSample, static_cast<TH2D*>(PredictionHistograms.back()));
+      }
+      
+      else {
+        MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting"); 
+        throw MaCh3Exception(__FILE__ , __LINE__ );
+      }
+
+      MACH3LOG_INFO("Integrals of nominal hists: ");
+      MACH3LOG_INFO("{} : {}",name.c_str(),PredictionHistograms.back()->Integral());
+      MACH3LOG_INFO("--------------");
     }
-    
-    else {
-      MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting"); 
-      throw MaCh3Exception(__FILE__ , __LINE__ );
-    }
-    
-    
-  }
-  
-  //Now print out some event rates, we'll make a nice latex table at some point 
-  for (unsigned iPDF = 0; iPDF < DUNEPdfs.size() ; ++iPDF) {
-    MACH3LOG_INFO("Integrals of nominal hists: ");
-    MACH3LOG_INFO("{} : {}",sample_names[iPDF].c_str(),PredictionHistograms[iPDF]->Integral());
-    MACH3LOG_INFO("--------------");
   }
   
   //###########################################################################################################
@@ -74,12 +67,12 @@ int main(int argc, char * argv[]) {
   //Start chain from random position unless continuing a chain
   if(!StartFromPreviousChain){
     if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false)) {
-      xsec->ThrowParameters();
+      param_handler->ThrowParameters();
     }
   }
 
   //Add systematic objects
-  MaCh3Fitter->AddSystObj(xsec);
+  MaCh3Fitter->AddSystObj(param_handler.get());
 
   if (StartFromPreviousChain) {
     std::string PreviousChainPath = FitManager->raw()["General"]["PosFileName"].as<std::string>();
@@ -88,7 +81,7 @@ int main(int argc, char * argv[]) {
   }
   
   //Add samples
-  for(auto Sample : DUNEPdfs){
+  for(auto Sample : samples){
     MaCh3Fitter->AddSampleHandler(Sample);
   }
 
@@ -97,8 +90,8 @@ int main(int argc, char * argv[]) {
   MaCh3Fitter->RunMCMC();
 
   //Writing the memory usage at the end to eventually spot some nasty leak
-  MACH3LOG_WARN("\033[0;31mCurrent Total RAM usage is {:.2f} GB\033[0m", MaCh3Utils::getValue("VmRSS") / 1048576.0);
-  MACH3LOG_WARN("\033[0;31mOut of Total available RAM {:.2f} GB\033[0m", MaCh3Utils::getValue("MemTotal") / 1048576.0);
+  MACH3LOG_WARN("\033[0;31mCurrent Total RAM usage is {:.2f} GB\033[0m", M3::Utils::getValue("VmRSS") / 1048576.0);
+  MACH3LOG_WARN("\033[0;31mOut of Total available RAM {:.2f} GB\033[0m", M3::Utils::getValue("MemTotal") / 1048576.0);
 
   return 0;
 }
