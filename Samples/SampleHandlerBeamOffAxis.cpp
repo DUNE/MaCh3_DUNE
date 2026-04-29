@@ -16,6 +16,11 @@ SampleHandlerBeamOffAxis::SampleHandlerBeamOffAxis(
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
 
+  // when this works, set penalty term
+  // BuildRegularisationMatrix(ParHandler);
+  //  static_cast<ParameterHandlerRegularised *>(ParHandler_)->penalty =
+  //  [=](){};
+
   Initialise();
 }
 
@@ -41,7 +46,6 @@ void SampleHandlerBeamOffAxis::Init() {
 
     cvmx = Eigen::Map<Eigen::MatrixXd>(rcvmx->GetMatrixArray(),
                                        rcvmx->GetNrows(), rcvmx->GetNcols());
-    icvmx = cvmx.inverse();
 
     MACH3LOG_INFO("Using ND Covariance Matrix({},{}):", cvmx.rows(),
                   cvmx.cols());
