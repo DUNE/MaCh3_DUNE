@@ -7,7 +7,7 @@ MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
 BinningFile: "Configs/TutorialConfigs/TutorialBinning.yaml"
 
 InputFiles:
-  #CovarianceMatrix: ["bla.root", "NDCovMatrix"]
+  PrepSplineFile: false
 
 Samples: ["OnAxis_numuCC_numode", "OffAxis8m_numuCC_numode"]
 
@@ -28,7 +28,7 @@ OnAxis_numuCC_numode:
     Uniform: true
 
   InputFiles:
-    mtupleprefix: "inputs/ND/FHC/skimmed/CAFv7_0m_"
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
     mtuplesuffix: "_FHC.root"
     splineprefix: ""
     splinesuffix: ""
@@ -55,7 +55,7 @@ OffAxis8m_numuCC_numode:
     Uniform: true
 
   InputFiles:
-    mtupleprefix: "inputs/ND/FHC/skimmed/CAFv7_0m_"
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
     mtuplesuffix: "_FHC.root"
     splineprefix: ""
     splinesuffix: ""

@@ -1,5 +1,5 @@
 void Plot_SigmaVariations2D(
-    const char* filename = "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/eventratetest.root")
+    const char* filename = "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/sigmavar_recovtrue.root")
 {
     TFile *f = TFile::Open(filename);
     if (!f || f->IsZombie()) {
@@ -27,7 +27,7 @@ void Plot_SigmaVariations2D(
     pad2->SetBottomMargin(0.28);
     pad2->SetRightMargin(0.15);
 
-    c->Print("Systematics_2D.pdf[");
+    c->Print("Systematics_2D_20thapril[");
 
     
     TIter parDirIter(f->GetListOfKeys());
@@ -82,7 +82,7 @@ void Plot_SigmaVariations2D(
                 hRatio->SetMaximum(0.996);
                 hRatio->Draw("COLZ");
 
-                c->Print("Systematics_2D.pdf");
+                c->Print("Systematics_2D_20thapril.pdf");
 
                 delete hVar;
                 delete hRatio;
@@ -127,5 +127,5 @@ void Plot_SigmaVariations2D(
         }
     }
 
-    c->Print("Systematics_2D.pdf]");
+    c->Print("Systematics_2D_20thapril.pdf]");
 }

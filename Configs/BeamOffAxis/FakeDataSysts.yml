@@ -2,7 +2,7 @@ Systematics:
 
   - Systematic:
       SampleNames: ["*"]
-      Error: 0.06666666667
+      Error: 1.0 #0.06666666667
       FlatPrior: false
       Names:
         FancyName: MissingProtonFD
@@ -13,5 +13,7 @@ Systematics:
         Generated: 0.0
         PreFitValue: 0.2
       StepScale:
-        MCMC: 0.02
+        MCMC: 0.05
       Type: Functional
+
+      

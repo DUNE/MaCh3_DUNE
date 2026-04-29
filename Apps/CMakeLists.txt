@@ -3,6 +3,8 @@ add_custom_target(MaCh3DUNEApps)
 foreach(app
 	EventRates
 	Fit
+	Fit_fakedata
+	EventRates_scaled
 	# Projections
 	SigmaVariation
 	LikelihoodScan
@@ -20,4 +22,4 @@ foreach(app
     install(TARGETS ${app} DESTINATION ${CMAKE_BINARY_DIR}/bin)
 endforeach(app)
 
-# add_subdirectory(AbiP/Plotting)
+add_subdirectory(AbiP/Plotting)

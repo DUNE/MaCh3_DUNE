@@ -6,19 +6,32 @@ General:
   OutputFile: "test.root"
 
   DUNESamples:
-   - "Configs/BeamOffAxis/Samples/dummy.yaml"
-
+    - "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/Offaxis_1d.yaml"
+    #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/2Dbinning_offaxis.yaml"
+    #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/2Dbinning_testing.yaml"
+    #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/2Dbinning_testing.yaml"
+    #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/1DEnurec.yaml"
+    #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/Onaxis_1Dsmaller_systematics.yaml"
+    #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/Onaxis_1Dsmaller.yaml"
+    #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/2Dbinning_testing.yaml"
+   # - "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/Onaxis_1D.yaml"
+   #- /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/CAFv7_onaxisonly.yaml
 
   OscillationParameters: []
 
   Systematics:
     XsecCovFile:
-      - "Configs/BeamOffAxis/Enu_Enubias_templateparams.yaml"
-      - "Configs/CovObjs/NuWroFakeDataWeight.yaml"
+     # - "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Enu_Enubiasxsec_april2026.yaml"
+      #- Configs/BeamOffAxis/NDDetSysts.yml
+      #- Configs/BeamOffAxis/FluxSysts.yml
+      #- Configs/BeamOffAxis/XSecSysts.yml
+      - "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/FakeDataSysts.yml"
+      - "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Enu_Enubias_templateparams.yaml"
+
 
     XsecCovName: "xsec_cov"
 
-    XsecStepScale: 1.0
+    XsecStepScale: 0.5
 
     XsecAtGen: false
     xsec_var1: "TrueNeutrinoEnergy"
@@ -31,7 +44,7 @@ General:
 
   MCMC:
     NSteps: 8000
-    AutoSave: 5000
+    AutoSave: 20000
     BurnInSteps: 0
 
   ProcessMCMC: No
@@ -43,12 +56,17 @@ LLHScan:
 
 AdaptionOptions:
   Settings:
-    StartThrow: 10000
-    StartUpdate: 1000
-    UpdateStep: 1000
-    EndUpdate: 8000
+    StartThrow: 5000000
+    StartUpdate: 3000000
+    UpdateStep: 100000
+    EndUpdate: 20000000
     SaveNIterations: 1
-    OutputFileName: "adapted.root"
+    OutputFileName: "/scratch/abipeake/March2026/EasterSunday_coarseobservablebinning_robbinsmonroe/EasterSunday_coarseobservablebinning_robbinsmonroe_adaptive_chain_0_job_0.root"
+    UseRobbinsMonro: True # Do we use this along with adaption 
+    TargetAcceptance: 0.234 # Target acceptance rate
+    TotalRobbinsMonroRestarts: 2 # How many times do we restart the Robbins Monro count
+    AcceptanceRateBatchSize: 20000 # How often do we restart the Robbins Monro count
+
 
   Covariance:
     xsec_cov:

@@ -1136,7 +1136,7 @@ def main():
             )
 
             # --- Top pad ---
-            ax_top.set_title(f"{det} — {var}", fontsize=12)
+            ax_top.set_title(f"", fontsize=12)
             ax_top.fill_between(
                 edges[:-1],
                 mean_toys - std_toys,
@@ -1146,8 +1146,8 @@ def main():
                 alpha=0.3,
                 label="±1σ"
             )
-            ax_top.step(edges[:-1], mean_toys, where="post", color="red", lw=1.0, label="Posterior Mean")
-            ax_top.step(edges[:-1], asimov_vals, where="post", color="black", lw=1.0, label="Asimov")
+            ax_top.step(edges[:-1], mean_toys, where="post", color="red", lw=1.0, label="Fit")
+            ax_top.step(edges[:-1], asimov_vals, where="post", color="black", lw=1.0, label="MC")
             ax_top.set_ylabel("Events / bin")
             ax_top.legend(frameon=False)
             ax_top.grid(alpha=0.3)
@@ -1160,10 +1160,10 @@ def main():
             ratio_mean = np.divide(std_toys, mean_toys, out=np.zeros_like(std_toys), where=mean_toys != 0)
             ratio_asimov = np.divide(std_toys, asimov_vals, out=np.zeros_like(std_toys), where=asimov_vals != 0)
             
-            ax_bottom.step(edges[:-1], ratio_mean, where="post", color="red", lw=1.3, label="σ / Posterior Mean")
-            ax_bottom.step(edges[:-1], ratio_asimov, where="post", color="blue", lw=1.3, label="σ / Asimov")
+            ax_bottom.step(edges[:-1], ratio_mean, where="post", color="red", lw=1.3, label="σ / Fit")
+            ax_bottom.step(edges[:-1], ratio_asimov, where="post", color="blue", lw=1.3, label="σ / MC")
             ax_bottom.set_ylabel("Relative σ", fontsize=10)
-            ax_bottom.set_xlabel(var)
+            ax_bottom.set_xlabel("True Neutrino Energy (GeV)")
             ax_bottom.legend(frameon=False, fontsize=8)
             ax_bottom.grid(alpha=0.3)
             

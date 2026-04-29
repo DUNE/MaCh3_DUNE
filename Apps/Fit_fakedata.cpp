@@ -41,7 +41,8 @@ int main(int argc, char * argv[]) {
   
     int idx = xsec->GetParIndex("MissingProtonFD");
 
-    
+    xsec->SetSingleParameter(idx, 0.2);
+    xsec->SetFixParameter(idx);
       
   for (auto handler : DUNEPdfs) {
     for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
@@ -152,7 +153,9 @@ int main(int argc, char * argv[]) {
     }
     std::cout << std::endl;
   }
-   
+   xsec->SetSingleParameter(idx, 0.0);
+  xsec->SetFixParameter(idx);
+
   //Run fit
   MaCh3Fitter->RunMCMC();
 

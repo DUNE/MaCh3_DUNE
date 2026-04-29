@@ -1,0 +1,70 @@
+SampleHandlerName: "OffAxisND"
+
+SampleType: "OffAxisND"
+
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
+
+BinningFile: "Configs/TutorialConfigs/TutorialBinning.yaml"
+
+InputFiles:
+CovarianceMatrix: []
+
+
+Samples: ["OnAxis_numuCC_numode"]
+
+OnAxis_numuCC_numode:
+  SampleTitle: "OnAxis_numuCC_numode"
+
+  POT: 1.10e+21
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+    - KinematicStr: "RecoNumu"
+      Bounds: [0.9, 1.1]
+    # - KinematicStr: "MuonSelected"
+    #   Bounds: [0.9, 1.1]
+    # - KinematicStr: "EhadVeto"
+    #   Bounds: [0.0, 30.0]
+    # - KinematicStr: "TrueXPos"
+    #   Bounds: [-300.0, 300.0]
+    # - KinematicStr: "TrueYPos"
+    #   Bounds: [-100.0, 100.0]
+    # - KinematicStr: "TrueZPos"
+    #   Bounds: [50.0, 350.0]
+    - KinematicStr: "RecoNeutrinoEnergy"
+      Bounds: [0.1, 9999]
+
+  Binning:
+     VarStr: [RecoNeutrinoEnergy, ELepRec]
+     VarBins: [[0.00, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4, 4.5, 5, 6, 7, 8, 10.0, 12.5, 15], [0.00, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4, 5, 6, 7, 8, 10.0, 15]]
+    # VarStr : [ "RecoNeutrinoEnergy", "EL"] 
+    # VarBins: [[0.00, 0.25, 0.5 ,0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75,4,4.5, 5, 6,7, 8,10.0],
+    #           ]
+     Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: "_FHC.root"
+    splineprefix: "OnAxis_numuCC_numode_splines"
+    splinesuffix: ".root"
+
+  SubSamples:
+    - Name: "OnAxis_numuCC_numode1"
+      LatexName: "On Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_0m_13*"
+      splinefile: ""
+    # - Name: "OnAxis_numuCC_numode2"
+    #   LatexName: "On Axis Numu CC Neutrino Mode"
+    #   mtuplefile: "131"
+    #   splinefile: ""
+    # - Name: "OnAxis_numuCC_numode3"
+    #   LatexName: "On Axis Numu CC Neutrino Mode"
+    #   mtuplefile: "132"
+    #   splinefile: ""
+    # - Name: "OnAxis_numuCC_numode"
+    #   LatexName: "On Axis Numu CC Neutrino Mode"
+    #   mtuplefile: "133"
+    #   splinefile: ""
+

@@ -1,4 +1,4 @@
-void Plot_SigmaVariations(const char* filename = "/scratch/abipeake/MaCh3_DUNE_Nov2025/MaCh3_DUNE/eventratetest_template.root") {
+void Plot_SigmaVariations(const char* filename = "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/eventrate_reco1D.root") {
 
     TFile *f = TFile::Open(filename);
     if (!f || f->IsZombie()) { std::cout << "File not found!\n"; return; }
@@ -22,8 +22,8 @@ void Plot_SigmaVariations(const char* filename = "/scratch/abipeake/MaCh3_DUNE_N
         TolIncandescent.push_back(idx);
     }
 
-    std::vector<double> sigmas = {-3, -2, -1,  0, 1, 2 , 3};
-    std::vector<int> sigmaToTol = {0,1, 2, 4, 5, 6};
+    std::vector<double> sigmas = {-3, -2, -1, 0, 1, 2, 3};
+    std::vector<int> sigmaToTol = {0, 1, 2, 3, 4, 5, 6};
 
     std::vector<int> lineColors;
     for (int i : sigmaToTol) lineColors.push_back(TolIncandescent[i]);
@@ -43,7 +43,7 @@ void Plot_SigmaVariations(const char* filename = "/scratch/abipeake/MaCh3_DUNE_N
     pad2->SetTopMargin(0.05);
     pad2->SetBottomMargin(0.28);
 
-    c->Print("SystematicsNuWro.pdf[");
+    c->Print("Systematic_1Denurec.pdf[");
 
     // -----------------------------------------
     // Loop directories
@@ -83,7 +83,7 @@ void Plot_SigmaVariations(const char* filename = "/scratch/abipeake/MaCh3_DUNE_N
 
             for (size_t i = 0; i < sigmas.size(); ++i) {
 
-                TH1 *h = (TH1*)sampleDir->Get(Form("Variation_%d", (int)i));
+                TH1 *h = (TH1*)sampleDir->Get(Form("Variation_%zu", i));
                 if (!h) continue;
 
                 h->SetLineColor(lineColors[i]);
@@ -112,41 +112,64 @@ void Plot_SigmaVariations(const char* filename = "/scratch/abipeake/MaCh3_DUNE_N
             // --------------------------
             if (h0) {
                 pad2->cd();
+                pad2->SetGridy(1);
 
-                for (size_t i = 0; i < sigmas.size(); ++i) {
+                // Draw reference line at y=1 (nominal)
+                TLine *refLine = new TLine(h0->GetXaxis()->GetXmin(), 1.0,
+                                           h0->GetXaxis()->GetXmax(), 1.0);
+                refLine->SetLineStyle(2);
+                refLine->SetLineWidth(2);
+                refLine->SetLineColor(kGray+2);
 
-                    TH1 *h = (TH1*)sampleDir->Get(Form("Variation_%d", (int)i));
-                    if (!h) continue;
+                // Get nominal histogram (Variation_2)
+                TH1 *hNominal = (TH1*)sampleDir->Get("Variation_2");
+                if (!hNominal) {
+                    std::cout << "Could not find Variation_2 (nominal)\n";
+                } else {
+                    // Only plot -1 sigma (i=1), nominal (i=2), and +1 sigma (i=3)
+                    std::vector<size_t> ratioIndices = {1, 2, 3};
 
-                    TH1 *r = (TH1*)h->Clone(Form("ratio_%d", (int)i));
-                    r->Divide(h0);
+                    bool firstRatio = true;
+                    for (size_t idx : ratioIndices) {
 
-                    r->SetLineColor(lineColors[i]);
-                    r->SetLineWidth(2);
+                        TH1 *h = (TH1*)sampleDir->Get(Form("Variation_%zu", idx));
+                        if (!h) continue;
 
-                    r->GetYaxis()->SetTitle("Var/Nom");
-                    r->GetYaxis()->SetTitleSize(0.08);
-                    r->GetYaxis()->SetTitleOffset(0.5);
-                    r->GetYaxis()->SetLabelSize(0.07);
+                        TH1 *r = (TH1*)h->Clone(Form("ratio_%zu", idx));
+                        r->Divide(hNominal);
 
-                    r->GetXaxis()->SetTitleSize(0.10);
-                    r->GetXaxis()->SetLabelSize(0.09);
+                        r->SetLineColor(lineColors[idx]);
+                        r->SetLineWidth(2);
 
-                    r->SetMinimum(0.7);
-                    r->SetMaximum(1.1);
+                        r->GetYaxis()->SetTitle("Variation / Nominal");
+                        r->GetYaxis()->SetTitleSize(0.08);
+                        r->GetYaxis()->SetTitleOffset(0.5);
+                        r->GetYaxis()->SetLabelSize(0.07);
+                        r->GetYaxis()->SetNdivisions(505);
+                        r->GetYaxis()->SetDecimals(kTRUE);
 
-                    if (i == 2) { // nominal
-                        r->Draw("hist");
-                    } else {
-                        r->Draw("hist same");
+                        r->GetXaxis()->SetTitleSize(0.10);
+                        r->GetXaxis()->SetLabelSize(0.09);
+                        r->GetXaxis()->SetNdivisions(510);
+
+                        r->SetMinimum(0.8);
+                        r->SetMaximum(1.5);
+
+                        if (firstRatio) {
+                            r->Draw("hist");
+                            refLine->Draw();
+                            firstRatio = false;
+                        } else {
+                            r->Draw("hist same");
+                        }
                     }
                 }
             }
 
-            c->Print("SystematicsNuWro.pdf");
+            c->Print("Systematic_1Denurec.pdf");
             delete leg;
         }
     }
 
-    c->Print("SystematicsNuwro.pdf]");
+    c->Print("Systematic_1Denurec.pdf]");
 }

@@ -1,17 +1,47 @@
 General:
-  OutputFile: "EventRate.root"
+  OutputFile: "newcovmat.root"
   DUNESamples:
-    - Configs/BeamOffAxis/Samples/CAFv7_skimmed_OnAnd8m.yml
+    #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/OffAxis_2Denuenubias.yaml"
+    - "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/OffAxis_1D_recovstrue.yaml"
+    - "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/Offaxis_1Dtest.yaml"
+    #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/OffAxis_2Denuenubias.yaml"
+   # - "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/OffAxis_2Denuenubias.yaml"
+    #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/Offaxis_1d.yaml"
+    #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/2Dbinning_offaxis.yaml"
+    #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/2Dbinning_testing.yaml"
+    #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/1DEnurec.yaml"
+   #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/2D_Enurecvstrue.yaml"
+    #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/1DEnurec.yaml"
+    # - "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/Onaxis_1Dsmaller.yaml"
+    # - "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/Onaxis_1D.yaml"
+    # - "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/TemplateParameter.yaml"
+    #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/2Dbinning_testing.yaml"
+    #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/TemplateParameter.yaml"
+    #- "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/Onaxis_1D.yaml"
+    #- /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/CAFv7_onaxisonly.yaml
+    #- /scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/CAFv7_onplusoffaxis.yaml
 
   OscillationParameters: []
 
   Systematics:
-    XsecCovFile:
-      # - Configs/BeamOffAxis/FakeDataSysts.yml
-      # - Configs/BeamOffAxis/NDDetSysts.yml
-      # - Configs/BeamOffAxis/FluxSysts.yml
-      - Configs/BeamOffAxis/XSecSysts.yml
+    #XsecCovFile:
+      #- Configs/CovObjs/OscillationModel.yaml
+      #- Configs/BeamOffAxis/FakeDataSysts.yml
+      - Configs/BeamOffAxis/NDDetSysts.yml
+     # - Configs/BeamOffAxis/FluxSysts.yml
+      #- Configs/BeamOffAxis/XSecSysts.yml
+      - "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Enu_Enubias_templateparams.yaml"
 
-    XsecCovName: "xsec_cov"
+  XsecCovName: "xsec_cov"
 
-    XsecStepScale: 1.0
+  XsecStepScale: 1.0
+
+  MCMC:
+    NSteps: 100000
+    AutoSave: 10000
+    BurnInSteps: 0
+
+  ProcessMCMC: No
+  Seed: 0
+  Debug: Yes  
+  
