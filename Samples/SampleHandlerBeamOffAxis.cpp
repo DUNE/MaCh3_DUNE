@@ -37,16 +37,52 @@ void SampleHandlerBeamOffAxis::Init() {
   }
 
   if (SampleManager->raw()["InputFiles"]["CovarianceMatrix"]) {
+    
     auto cvmx_details = Get<std::vector<std::string>>(
         SampleManager->raw()["InputFiles"]["CovarianceMatrix"], __FILE__,
         __LINE__);
 
+    
+
     TFile cvmx_file(cvmx_details[0].c_str(), "READ");
-    auto *rcvmx = cvmx_file.Get<TMatrixD>(cvmx_details[1].c_str());
+    //auto *rcvmx = cvmx_file.Get<TMatrixD>(cvmx_details[1].c_str());
+    auto *rcvmx = cvmx_file.Get<TMatrixT<double>>(cvmx_details[1].c_str());
+    if (!rcvmx) {
+      std::cout << "FAILED to load covariance matrix!" << std::endl;
+      std::cout << "File: " << cvmx_details[0] << std::endl;
+      std::cout << "Object: " << cvmx_details[1] << std::endl;
+
+      MACH3LOG_ERROR("Covariance matrix not found in ROOT file");
+      throw MaCh3Exception(__FILE__, __LINE__);
+  }
 
     cvmx = Eigen::Map<Eigen::MatrixXd>(rcvmx->GetMatrixArray(),
                                        rcvmx->GetNrows(), rcvmx->GetNcols());
 
+
+    std::cout << "cvmx finite: " << cvmx.allFinite() << std::endl;
+    std::cout << "min diagonal: "
+              << cvmx.diagonal().minCoeff() << std::endl;
+    std::cout << "max diagonal: "
+              << cvmx.diagonal().maxCoeff() << std::endl;
+    std::cout << "determinant: "
+              << cvmx.determinant() << std::endl;
+        icvmx = cvmx.inverse();
+    // After loading cvmx, before inverting:
+Eigen::JacobiSVD<Eigen::MatrixXd> svd(cvmx);
+double cond = svd.singularValues()(0) / 
+              svd.singularValues()(svd.singularValues().size()-1);
+
+std::cout << "Condition number: " << cond << std::endl;
+
+if (cond > 1e10) {  // Threshold for near-singularity
+    MACH3LOG_ERROR("Covariance matrix is singular or near-singular!");
+    MACH3LOG_ERROR("Condition number: {}", cond);
+    throw MaCh3Exception(__FILE__, __LINE__);
+}
+
+icvmx = cvmx.inverse();
+        
     MACH3LOG_INFO("Using ND Covariance Matrix({},{}):", cvmx.rows(),
                   cvmx.cols());
     std::stringstream ss;

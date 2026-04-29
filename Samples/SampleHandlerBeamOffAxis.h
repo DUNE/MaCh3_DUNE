@@ -105,38 +105,30 @@ _MaCh3_Safe_Include_Start_ //{
                                                  int iEvent);
 
     double GetLikelihood() const override {
-
-      if (!cvmx.size()) {
+        //std::cout<<"in get likelihood..."<<std::endl;
+      if (!icvmx.size()) {
         return SampleHandlerFD::GetLikelihood();
       }
 
-      // Map allows use of Eigen linear algebra syntax without copying the data
-      // out of the vectors.
+      //Map allows use of Eigen linear algebra syntax without copying the data out of the vectors.
       Eigen::Map<Eigen::VectorXd const> data(SampleHandlerFD_data.data(),
                                              SampleHandlerFD_data.size());
-
       Eigen::Map<Eigen::VectorXd const> mc(SampleHandlerFD_array.data(),
                                            SampleHandlerFD_array.size());
 
-      if (!icvmx.size()) { // this isn't ideal as it uses the mc rate of the
-                           // first
-        // step that it is called for, really it should use the nominal or
-        // reinvert every time, but for now, this is almost certainly fine.
-
-        if (cvmx.rows() != data.size()) {
-          MACH3LOG_ERROR("Covariance matrix ({}x{}) is not correct for "
-                         "data array size: {}",
-                         icvmx.rows(), icvmx.cols(), data.rows());
-          throw MaCh3Exception(__FILE__, __LINE__);
-        }
-
-        cvmx.diagonal() += mc;
-
-        icvmx = cvmx.inverse();
+      if (icvmx.rows() != data.size()) {
+        MACH3LOG_ERROR("Inverse covariance matrix ({}x{}) is not correct for "
+                       "data array size: {}",
+                       icvmx.rows(), icvmx.cols(), data.rows());
+        throw MaCh3Exception(__FILE__, __LINE__);
       }
 
-      double lh = (data - mc).transpose() * icvmx * (data - mc);
+      std::cout << "data has NaN: " << (!data.allFinite()) << std::endl;
+      std::cout << "mc has NaN: " << (!mc.allFinite()) << std::endl;
+      std::cout << "icvmx has NaN: " << (!icvmx.allFinite()) << std::endl;
 
+      double lh = (data - mc).transpose() * icvmx * (data - mc);
+      std::cout<< "llh = " << lh << std::endl;
       return lh;
     }
 
@@ -144,13 +136,13 @@ _MaCh3_Safe_Include_Start_ //{
     // could add prior penalty for regularisation here or could add
     // access ParHandler->
 
+
     std::vector<dune::beamoffaxis::EventInfo> DUNEMCEvents;
 
     std::vector<double> subsample_analysispot;
     std::vector<bool> subsample_is_numode;
 
-    mutable Eigen::MatrixXd cvmx;
-    mutable Eigen::MatrixXd icvmx;
+    Eigen::MatrixXd cvmx, icvmx;
 
     void CleanMemoryBeforeFit() {}
   };

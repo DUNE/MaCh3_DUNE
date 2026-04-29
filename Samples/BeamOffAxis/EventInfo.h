@@ -61,7 +61,7 @@ struct CAFEventInfo {
   } truth;
 
   struct Reconstructed {
-    int is_muonlike;
+    double is_muonlike;
     int muonlike_contained;
     int muonlike_tracker;
 

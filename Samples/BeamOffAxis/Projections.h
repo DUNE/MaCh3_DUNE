@@ -27,7 +27,8 @@ namespace dune::beamoffaxis {
   X(EHadRes)                                                                   \
   X(EEMRes)                                                                    \
   X(EChgHadRes)                                                                \
-  X(ENeutronRes)
+  X(ENeutronRes)                                                               \
+  X(RecoNumu)
 #define X(a) k##a,
 
 /// @brief Enum to identify kinematics
@@ -90,6 +91,8 @@ inline const double *ResolveKinematicEventMember(KinematicTypes KinPar,
     return &ev.varied_res.e_ChgHad;
   case kENeutronRes:
     return &ev.varied_res.e_neutron;
+  case kRecoNumu:
+    return &ev.reco.is_muonlike;
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
     throw MaCh3Exception(__FILE__, __LINE__);
