@@ -30,13 +30,30 @@
 #include <vector>
 #include <ctime>
 #include <TLine.h>
+// MaCh3 includes
+#include "Fitters/MaCh3Factory.h"
 
+#include "Samples/BinningHandler.h"
+#include "Samples/HistogramUtils.h"
 
-#include "Samples/MaCh3DUNEFactory.h"
-#include "Samples/StructsDUNE.h"
+#include "Samples/SampleHandlerBase.h"
+#include "Samples/SampleHandlerFD.h"
+
 #include "Fitters/FitterBase.h"
 #include "Manager/Manager.h"
 #include "Parameters/ParameterHandlerBase.h"
+#include "Parameters/ParameterStructs.h"
+
+#include <iomanip>
+#include <iostream>
+#include <memory>
+#include <vector>
+#include <string>
+#include <cmath>
+#include <algorithm>
+#include <filesystem>
+#include <map>
+
 #include <vector>
 #include <string>
 #include <TH1D.h>
@@ -49,7 +66,7 @@
 #include "TPad.h"
 #include "TKey.h"
 #include "TCollection.h"
-
+#include "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Samples/MaCh3DUNEFactory.h"
 #include <iostream>
 #include <string>
 #include <regex>
@@ -168,7 +185,7 @@ while ((key = (TKey*)nextkey())) {
 
     if (missing) continue;
 
-    std::string sliceLabel = h_event_A_vec[0]->GetTitle();
+    std::string sliceLabel = h_event_A_vec[0]->GetName();
     double xmin = h_event_A_vec[0]->GetBinLowEdge(1);
     double xmax = h_event_A_vec[0]->GetBinLowEdge(h_event_A_vec[0]->GetNbinsX()) +
                   h_event_A_vec[0]->GetBinWidth(h_event_A_vec[0]->GetNbinsX());

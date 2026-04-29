@@ -1,8 +1,16 @@
-#include "Samples/MaCh3DUNEFactory.h"
-#include "Samples/StructsDUNE.h"
+#include "Samples/BinningHandler.h"
+#include "Samples/HistogramUtils.h"
+#include "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Samples/MaCh3DUNEFactory.h"
+#include "Manager/MaCh3Exception.h"
+#include "Manager/MaCh3Logger.h"
+#include "Splines/SplineMonolith.h"
+#include "Samples/SampleHandlerBase.h"
+#include "Samples/SampleHandlerFD.h"
+#include "Fitters/MaCh3Factory.h"
 #include "Fitters/FitterBase.h"
 #include "Manager/Manager.h"
 #include "Parameters/ParameterHandlerBase.h"
+#include "Parameters/ParameterStructs.h"
 
 #include <iomanip>
 #include <iostream>
@@ -14,14 +22,21 @@
 #include <filesystem>
 #include <map>
 
-
 void MakeSpectaVariations(SampleHandlerFD* pdf, const std::string& var,
                           TFile* fout, const std::string& ND_or_FD,
                           const std::string& pdfTitle, int p) {
     // Refresh internal event weights
     (void) pdf->GetMCHist(1);  // calls fill1DHist() internally
     pdf->Reweight();
-    TH1D* h = dynamic_cast<TH1D*>(pdf->Get1DVarHist(var.c_str()));
+    //TH1D* h = dynamic_cast<TH1D*>(pdf->Get1DVarHist(var.c_str()));
+    TH1* h = pdf->Get1DVarHist(
+    0,          // iSample (pick first sample for now)
+    var,        // std::string (NOT var.c_str())
+    {},         // no event cuts
+    0,          // default weight style
+    nullptr,    // default axis
+    {}          // no sub-event cuts
+);
     if (!h) {
         std::cerr << "[WARN] Could not get TH1D for " << var << " from " << pdfTitle << std::endl;
         return;
@@ -64,7 +79,7 @@ int main(int argc, char* argv[]) {
     }
 
     // --- Manager setup
-    auto fitMan = std::make_unique<manager>(argv[1]);
+    auto fitMan = std::make_unique<Manager>(argv[1]);
     auto PosteriorFile = Get<std::string>(fitMan->raw()["Predictive"]["PosteriorFiles"], __FILE__, __LINE__);
     auto burn_in = Get<unsigned int>(fitMan->raw()["General"]["MCMC"]["BurnInSteps"], __FILE__, __LINE__);
     int no_times_sampling_posterior = Get<int>(fitMan->raw()["Predictive"]["SamplePosterior"], __FILE__, __LINE__);
@@ -175,7 +190,7 @@ for (int i = 0; i < nXsecBranches && i < prefitValues.size(); ++i) {
     xsec->SetGroupOnlyParameters("Osc", OscPars);
 
     for (auto& pdf : DUNEPdfs) {
-        std::string pdfTitle = pdf->GetTitle();
+        std::string pdfTitle = pdf->GetName();
         if (pdfTitle.empty()) pdfTitle = "FHC_numu_asimov";
 
         std::string ND_or_FD =
@@ -224,7 +239,7 @@ for (int i = 0; i < nXsecBranches && i < prefitValues.size(); ++i) {
     //     TH1* h_plus = pdf->GetMCHist(1);
     //     if (!h_plus) continue;
 
-    //     std::string pdfTitle = pdf->GetTitle();
+    //     std::string pdfTitle = pdf->GetName();
     //     std::string ND_or_FD =
     //         (pdfTitle.find("ND") != std::string::npos) ? "ND" :
     //         (pdfTitle.find("FD") != std::string::npos) ? "FD" : "Other";
@@ -276,7 +291,7 @@ for (int i = 0; i < nXsecBranches && i < prefitValues.size(); ++i) {
     //         TH1* h_after = pdf->GetMCHist(1);
     //         if (!h_after) continue;
 
-    //         std::string pdfTitle = pdf->GetTitle();
+    //         std::string pdfTitle = pdf->GetName();
     //         std::string ND_or_FD =
     //             (pdfTitle.find("ND") != std::string::npos) ? "ND" :
     //             (pdfTitle.find("FD") != std::string::npos) ? "FD" : "Other";
@@ -310,7 +325,7 @@ for (int i = 0; i < nXsecBranches && i < prefitValues.size(); ++i) {
        xsec->SetGroupOnlyParameters("Xsec", xsec_tmp);
 
         for (auto& pdf : DUNEPdfs) {
-            std::string pdfTitle = pdf->GetTitle();
+            std::string pdfTitle = pdf->GetName();
             std::string ND_or_FD =
                 (pdfTitle.find("ND") != std::string::npos) ? "ND" :
                 (pdfTitle.find("FD") != std::string::npos) ? "FD" : "Other";

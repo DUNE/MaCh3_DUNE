@@ -9,6 +9,7 @@ set(PLOTTING_SOURCES
   PosteriorPredictive_forND.cpp
   Post_xsec_diagnostics_withcorr.cpp
   Post_xsec_2D.cpp
+  PosteriorPredictive_2D.cpp
 )
 
 # Add executables

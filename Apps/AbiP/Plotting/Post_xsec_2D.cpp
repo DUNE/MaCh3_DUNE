@@ -1,8 +1,28 @@
-#include "Samples/MaCh3DUNEFactory.h"
-#include "Samples/SampleHandlerFD.h"
+#include "Samples/BinningHandler.h"
+#include "Samples/HistogramUtils.h"
+// MaCh3 includes
 #include "Fitters/MaCh3Factory.h"
+#include "Manager/MaCh3Exception.h"
+#include "Manager/MaCh3Logger.h"
+#include "Splines/SplineMonolith.h"
+#include "Samples/SampleHandlerBase.h"
+#include "Samples/SampleHandlerFD.h"
+#include "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Samples/MaCh3DUNEFactory.h"
+#include "Fitters/FitterBase.h"
 #include "Manager/Manager.h"
-#include "Parameters/ParameterHandlerGeneric.h"
+#include "Parameters/ParameterHandlerBase.h"
+#include "Parameters/ParameterStructs.h"
+
+#include <iomanip>
+#include <iostream>
+#include <memory>
+#include <vector>
+#include <string>
+#include <cmath>
+#include <algorithm>
+#include <filesystem>
+#include <map>
+
 
 #include "yaml-cpp/yaml.h"
 
@@ -73,8 +93,9 @@ void setRedWhiteBluePalette()
 }
 
 void SetPaletteRainbow() {
-    gStyle->SetPalette(kRainBow);
-    gStyle->SetNumberContours(255);
+      gStyle->SetPalette(kViridis);
+      gStyle->SetNumberContours(100);
+   // gStyle->SetNumberContours(255);
 }
 
 
@@ -493,7 +514,7 @@ TH1D* MakePosteriorPredictiveHist(
     // Update PDF with new weights
     pdf->Reweight();
     // Create a new histogram for this posterior predictive
-    TString histName = Form("posterior_predictive_%s", pdf->GetTitle());
+    TString histName = Form("posterior_predictive_%s", pdf->GetName());
     // Get the PDF histogram
     TH1* h_pdf = pdf->GetMCHist(1);
     if (!h_pdf) {
@@ -501,8 +522,8 @@ TH1D* MakePosteriorPredictiveHist(
         return nullptr;
     }
 
-    TH1D* h_out = new TH1D(Form("posterior_predictive_%s", pdf->GetTitle()),
-                           Form("posterior_predictive_%s", pdf->GetTitle()),
+    TH1D* h_out = new TH1D(Form("posterior_predictive_%s", pdf->GetName()),
+                           Form("posterior_predictive_%s", pdf->GetName()),
                            axis.bins, axis.min, axis.max);
 
 
@@ -993,7 +1014,7 @@ int main(int argc, char* argv[]) {
 
     // Load YAML config
     YAML::Node config = YAML::LoadFile(config_file);
-    auto FitManager = std::make_unique<manager>(config_file);
+    auto FitManager = std::make_unique<Manager>(config_file);
 
     std::cout << "Using " << post->GetName()
               << " with " << post->GetEntries() << " entries." << std::endl;
@@ -1114,7 +1135,16 @@ int main(int argc, char* argv[]) {
     for (auto& pdf : DUNEPdfs) {
 
         std::vector<KinematicCut> SelectionVector;
-        TH2* h = pdf->Get2DVarHist(xsec_var1, xsec_var2, SelectionVector, 0, axisX, axisY);
+        TH2* h = pdf->Get2DVarHist(
+    0,              // iSample (FIX)
+    xsec_var1,
+    xsec_var2,
+    SelectionVector,
+    0,
+    axisX,
+    axisY
+);
+        //TH2* h = pdf->Get2DVarHist(xsec_var1, xsec_var2, SelectionVector, 0, axisX, axisY);
         if (!h) {
             std::cerr << "Warning: get2DVarHist returned null.\n";
             continue;
