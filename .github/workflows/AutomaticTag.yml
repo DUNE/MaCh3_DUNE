@@ -1,0 +1,41 @@
+---
+name: Tag new version
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tag-new-versions:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect and tag version
+        id: tagger
+        uses: salsify/action-detect-and-tag-new-version@v2
+        with:
+          tag-template: "v{VERSION}"
+          version-command: |
+            # I hate regex... BUT we assume that the version is always in the format X.Y.Z 
+            # and that it is on a line containing "MaCh3DUNE_VERSION"
+            sed -nE 's/.*MaCh3DUNE_VERSION\s+([0-9]+\.[0-9]+\.[0-9]+).*/\1/p' CMakeLists.txt
+
+      - name: Create release
+        if: steps.tagger.outputs.tag != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ steps.tagger.outputs.tag }}" \
+              --title "${{ steps.tagger.outputs.tag }}" \
+              --generate-notes
