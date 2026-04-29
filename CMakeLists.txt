@@ -1,7 +1,7 @@
 # CMake version check
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
-SET(MaCh3DUNE_VERSION 1.0.0)
+SET(MaCh3DUNE_VERSION 2.5.0)
 
 # Create project (todo: set configurable CUDA)
 project(MaCh3DUNE VERSION ${MaCh3DUNE_VERSION} LANGUAGES CXX)
