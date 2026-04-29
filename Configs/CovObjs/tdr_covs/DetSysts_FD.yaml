@@ -7,7 +7,7 @@ Systematics:
     Correlations:
     - TotalEScaleFD: 1.0
     - TotalEScaleNotCCNumuFD: 1.0
-    SampleNames: ["FD_*"]
+    SampleNames: ["BeamFD_*"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -32,7 +32,7 @@ Systematics:
     Correlations:
     - TotalEScaleFD: 1.0
     - TotalEScaleNotCCNumuFD: 1.0
-    SampleNames: ["FD_FHC_nue", "FD_RHC_nue"]
+    SampleNames: ["BeamFD_FHC_nue", "BeamFD_RHC_nue"]
     Error: 0.02
     FlatPrior: false
     KinematicCuts:
@@ -55,7 +55,7 @@ Systematics:
     Correlations:
     - TotalEScaleSqrtFD: 1.0
     - TotalEScaleSqrtNotCCNumuFD: 1.0
-    SampleNames: ["FD_*"]
+    SampleNames: ["BeamFD_*"]
     Error: 0.01
     FlatPrior: false
     Names:
@@ -76,7 +76,7 @@ Systematics:
     Correlations:
     - TotalEScaleSqrtFD: 1.0
     - TotalEScaleSqrtNotCCNumuFD: 1.0
-    SampleNames: ["FD_FHC_nue", "FD_RHC_nue"]
+    SampleNames: ["BeamFD_FHC_nue", "BeamFD_RHC_nue"]
     Error: 0.01
     FlatPrior: false
     KinematicCuts:
@@ -99,7 +99,7 @@ Systematics:
     Correlations:
     - TotalEScaleInvSqrtFD: 1.0
     - TotalEScaleInvSqrtNotCCNumuFD: 1.0
-    SampleNames: ["FD_*"]
+    SampleNames: ["BeamFD_*"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -120,7 +120,7 @@ Systematics:
     Correlations:
     - TotalEScaleInvSqrtFD: 1.0
     - TotalEScaleInvSqrtNotCCNumuFD: 1.0
-    SampleNames: ["FD_FHC_nue", "FD_RHC_nue"]
+    SampleNames: ["BeamFD_FHC_nue", "BeamFD_RHC_nue"]
     Error: 0.02
     FlatPrior: false
     KinematicCuts:
@@ -142,7 +142,7 @@ Systematics:
 ##### Particle specific energy uncertainties #####
 
 - Systematic:
-    SampleNames: ["FD_*"]
+    SampleNames: ["BeamFD_*"]
     Error: 0.05
     FlatPrior: false
     Names:
@@ -159,7 +159,7 @@ Systematics:
       MCMC: 18.0
     Type: Functional
 - Systematic:
-    SampleNames: ["FD_*"]
+    SampleNames: ["BeamFD_*"]
     Error: 0.05
     FlatPrior: false
     Names:
@@ -176,7 +176,7 @@ Systematics:
       MCMC: 20.0
     Type: Functional
 - Systematic:
-    SampleNames: ["FD_*"]
+    SampleNames: ["BeamFD_*"]
     Error: 0.05
     FlatPrior: false
     Names:
@@ -193,7 +193,7 @@ Systematics:
       MCMC: 7.0
     Type: Functional
 - Systematic:
-    SampleNames: ["FD_FHC_numu", "FD_RHC_numu"]
+    SampleNames: ["BeamFD_FHC_numu", "BeamFD_RHC_numu"]
     Error: 0.02
     FlatPrior: false
     KinematicCuts:
@@ -212,7 +212,7 @@ Systematics:
       MCMC: 15.0
     Type: Functional
 - Systematic:
-    SampleNames: ["FD_FHC_numu", "FD_RHC_numu"]
+    SampleNames: ["BeamFD_FHC_numu", "BeamFD_RHC_numu"]
     Error: 0.005
     FlatPrior: false
     KinematicCuts:
@@ -231,7 +231,7 @@ Systematics:
       MCMC: 20.0
     Type: Functional
 - Systematic:
-    SampleNames: ["FD_FHC_numu", "FD_RHC_numu"]
+    SampleNames: ["BeamFD_FHC_numu", "BeamFD_RHC_numu"]
     Error: 0.02
     FlatPrior: false
     KinematicCuts:
@@ -250,7 +250,7 @@ Systematics:
       MCMC: 20.0
     Type: Functional
 - Systematic:
-    SampleNames: ["FD_*"]
+    SampleNames: ["BeamFD_*"]
     Error: 0.2
     FlatPrior: false
     Names:
@@ -267,7 +267,7 @@ Systematics:
       MCMC: 6.0
     Type: Functional
 - Systematic:
-    SampleNames: ["FD_*"]
+    SampleNames: ["BeamFD_*"]
     Error: 0.3
     FlatPrior: false
     Names:
@@ -284,7 +284,7 @@ Systematics:
       MCMC: 12.0
     Type: Functional
 - Systematic:
-    SampleNames: ["FD_*"]
+    SampleNames: ["BeamFD_*"]
     Error: 0.3
     FlatPrior: false
     Names:
@@ -304,7 +304,7 @@ Systematics:
     Correlations:
     - EMEScaleFD: 1.0
     - EMEScaleCCNueFD: 1.0
-    SampleNames: ["FD_*"]
+    SampleNames: ["BeamFD_*"]
     Error: 0.025
     FlatPrior: false
     Names:
@@ -324,7 +324,7 @@ Systematics:
     Correlations:
     - EMEScaleFD: 1.0
     - EMEScaleCCNueFD: 1.0
-    SampleNames: ["FD_FHC_nue", "FD_RHC_nue"]
+    SampleNames: ["BeamFD_FHC_nue", "BeamFD_RHC_nue"]
     Error: 0.025
     FlatPrior: false
     KinematicCuts:
@@ -346,7 +346,7 @@ Systematics:
     Correlations:
     - EMEScaleSqrtFD: 1.0
     - EMEScaleSqrtCCNueFD: 1.0
-    SampleNames: ["FD_*"]
+    SampleNames: ["BeamFD_*"]
     Error: 0.025
     FlatPrior: false
     Names:
@@ -366,7 +366,7 @@ Systematics:
     Correlations:
     - EMEScaleSqrtFD: 1.0
     - EMEScaleSqrtCCNueFD: 1.0
-    SampleNames: ["FD_FHC_nue", "FD_RHC_nue"]
+    SampleNames: ["BeamFD_FHC_nue", "BeamFD_RHC_nue"]
     Error: 0.025
     FlatPrior: false
     KinematicCuts:
@@ -388,7 +388,7 @@ Systematics:
     Correlations:
     - EMEScaleInvSqrtFD: 1.0
     - EMEScaleInvSqrtCCNueFD: 1.0
-    SampleNames: ["FD_*"]
+    SampleNames: ["BeamFD_*"]
     Error: 0.025
     FlatPrior: false
     Names:
@@ -408,7 +408,7 @@ Systematics:
     Correlations:
     - EMEScaleInvSqrtFD: 1.0
     - EMEScaleInvSqrtCCNueFD: 1.0
-    SampleNames: ["FD_FHC_nue", "FD_RHC_nue"]
+    SampleNames: ["BeamFD_FHC_nue", "BeamFD_RHC_nue"]
     Error: 0.025
     FlatPrior: false
     KinematicCuts:
@@ -427,7 +427,7 @@ Systematics:
       MCMC: 20.0
     Type: Functional
 - Systematic:
-    SampleNames: ["FD_*"]
+    SampleNames: ["BeamFD_*"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -444,7 +444,7 @@ Systematics:
       MCMC: 20.0
     Type: Functional
 - Systematic:
-    SampleNames: ["FD_FHC_numu", "FD_RHC_numu"]
+    SampleNames: ["BeamFD_FHC_numu", "BeamFD_RHC_numu"]
     Error: 0.02
     FlatPrior: false
     KinematicCuts:
@@ -463,7 +463,7 @@ Systematics:
       MCMC: 9.0
     Type: Functional
 - Systematic:
-    SampleNames: ["FD_*"]
+    SampleNames: ["BeamFD_*"]
     Error: 0.1
     FlatPrior: false
     Names:
@@ -483,7 +483,7 @@ Systematics:
     Correlations:
     - EMResFD: 1.0
     - EMResCCNueFD: 1.0
-    SampleNames: ["FD_*"]
+    SampleNames: ["BeamFD_*"]
     Error: 0.02
     FlatPrior: false
     Names:
@@ -503,7 +503,7 @@ Systematics:
     Correlations:
     - EMResFD: 1.0
     - EMResCCNueFD: 1.0
-    SampleNames: ["FD_FHC_nue", "FD_RHC_nue"]
+    SampleNames: ["BeamFD_FHC_nue", "BeamFD_RHC_nue"]
     Error: 0.02
     FlatPrior: false
     KinematicCuts:
@@ -522,7 +522,7 @@ Systematics:
       MCMC: 22.0
     Type: Functional
 - Systematic:
-    SampleNames: ["FD_FHC_numu", "FD_RHC_numu"]
+    SampleNames: ["BeamFD_FHC_numu", "BeamFD_RHC_numu"]
     Error: 0.01
     FlatPrior: false
     Names:
@@ -539,7 +539,7 @@ Systematics:
       MCMC: 8.0
     Type: Functional
 - Systematic:
-    SampleNames: ["FD_FHC_nue", "FD_RHC_nue"]
+    SampleNames: ["BeamFD_FHC_nue", "BeamFD_RHC_nue"]
     Error: 0.01
     FlatPrior: false
     Names:
@@ -562,14 +562,14 @@ Systematics:
     Correlations:
     - NumuFVFD: 0.5
     - NueFVFD: 0.5
-    SampleNames: ["FD_FHC_numu", "FD_RHC_numu"]
+    SampleNames: ["BeamFD_FHC_numu", "BeamFD_RHC_numu"]
     Error: 0.01
     FlatPrior: false
     Names:
       FancyName: NumuFVFD
       ParameterName: NumuFVFD
     ParameterBounds:
-    - -9999.0
+    - 0.
     - 9999.0
     ParameterGroup: DetSysts
     ParameterValues:
@@ -582,14 +582,14 @@ Systematics:
     Correlations:
     - NumuFVFD: 0.5
     - NueFVFD: 0.5
-    SampleNames: ["FD_FHC_nue", "FHC_RHC_nue"]
+    SampleNames: ["BeamFD_FHC_nue", "FHC_RHC_nue"]
     Error: 0.01
     FlatPrior: false
     Names:
       FancyName: NueFVFD
       ParameterName: NueFVFD
     ParameterBounds:
-    - -9999.0
+    - 0.
     - 9999.0
     ParameterGroup: DetSysts
     ParameterValues:

@@ -12,16 +12,12 @@
 #include <TColor.h>
 #include <TMath.h>
 
-#include "Fitters/mcmc.h"
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/StructsDUNE.h"
+#include "Fitters/MaCh3Factory.h"
 
 int main(int argc, char * argv[]) {
-  if(argc == 1){
-    MACH3LOG_ERROR("Usage: bin/EventRatesDUNEBeam config.cfg");
-    return 1;
-  }
-  manager* FitManager = new manager(argv[1]);
+  auto FitManager = MaCh3ManagerFactory(argc, argv);
 
   //###############################################################################################################################
 
@@ -29,88 +25,71 @@ int main(int argc, char * argv[]) {
   std::vector<double> sigmaVariations = {-3, -1, 0, 1, 3};
 
   //###############################################################################################################################
-  //Create samplePDFFD objects
-  
-  ParameterHandlerGeneric* xsec = nullptr;
-  ParameterHandlerOsc* osc = nullptr;
-
-  std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec, osc);
+  //Create sample handler + parameter_handler objects
+  auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
 
   //###############################################################################################################################
   //Perform reweight and print total integral
 
   MACH3LOG_INFO("=======================================================");
-  for(SampleHandlerFD* Sample: DUNEPdfs){
-    Sample->Reweight();
-    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetTitle(), Sample->Get1DHist()->Integral());
+  for(SampleHandlerBase* handler: samples){
+    handler->Reweight();
+    for (int iSample=0;iSample<handler->GetNSamples();iSample++) {
+      MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample)->Integral());
+    }
   }
-  
-  //###############################################################################################################################
-  //DB Can't use the core sigma variations as it's entirely set up around the concept of multiple selections per samplePDF object
-  //   Thats not the case in the FD code, which has one selection per samplePDF object
-  //   Consequently have to write out own code
-  
-  std::vector<ParameterHandlerBase*> CovObjs;
-  CovObjs.emplace_back(xsec);
-  CovObjs.emplace_back(osc);
-
   MACH3LOG_INFO("=======================================================");
 
   std::string OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
   TFile* File = TFile::Open(OutputFileName.c_str(),"RECREATE");
   
-  for (ParameterHandlerBase* CovObj: CovObjs) {
-    MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",CovObj->GetName());
+  MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",param_handler->GetName());
+  
+  int nPars = param_handler->GetNumParams();
+  for (int iPar=0;iPar<nPars;iPar++) {
+    std::string ParName = param_handler->GetParFancyName(iPar);
+    double VarInit = param_handler->GetParInit(iPar);
+    double VarSigma = param_handler->GetDiagonalError(iPar);
     
-    int nPars = CovObj->GetNumParams();
-    for (int iPar=0;iPar<nPars;iPar++) {
-      std::string ParName = CovObj->GetParFancyName(iPar);
-      double VarInit = CovObj->GetParInit(iPar);
-      double VarSigma = CovObj->GetDiagonalError(iPar);
-      
-      MACH3LOG_INFO("\tParameter : {:<30} - Variations around value : {:<10.7f} , in units of 1 Sigma : {:<10.7f}",ParName,VarInit,VarSigma);
+    MACH3LOG_INFO("\tParameter : {:<30} - Variations around value : {:<10.7f} , in units of 1 Sigma : {:<10.7f}",ParName,VarInit,VarSigma);
 
-      File->cd();
-      File->mkdir(ParName.c_str());
-      File->cd(ParName.c_str());
-      
-      for (size_t iSigVar=0;iSigVar<sigmaVariations.size();iSigVar++) {
-	double VarVal = VarInit + sigmaVariations[iSigVar]*VarSigma;
-	if (VarVal < CovObj->GetLowerBound(iPar)) VarVal = CovObj->GetLowerBound(iPar);
-	if (VarVal > CovObj->GetUpperBound(iPar)) VarVal = CovObj->GetUpperBound(iPar);
-	
-	MACH3LOG_INFO("\t\tVariation {:<5.3f} - Parameter Value : {:<10.7f}",sigmaVariations[iSigVar],VarVal);
-	CovObj->SetParProp(iPar,VarVal);
+    File->cd();
+    File->mkdir(ParName.c_str());
+    File->cd(ParName.c_str());
+    
+    for (size_t iSigVar=0;iSigVar<sigmaVariations.size();iSigVar++) {
+      double VarVal = VarInit + sigmaVariations[iSigVar] * VarSigma;
+      if (VarVal < param_handler->GetLowerBound(iPar)) VarVal = param_handler->GetLowerBound(iPar);
+      if (VarVal > param_handler->GetUpperBound(iPar)) VarVal = param_handler->GetUpperBound(iPar);
 
-	for (size_t iSample=0;iSample<DUNEPdfs.size();iSample++) {
-	  std::string SampleName = DUNEPdfs[iSample]->GetTitle();
-	  
-	  File->cd(ParName.c_str());
-	  if (iSigVar == 0) {
-	    File->mkdir((ParName+"/"+SampleName).c_str());
-	  }
-	  File->cd((ParName+"/"+SampleName).c_str());
-	  
-	  DUNEPdfs[iSample]->Reweight();
-	  TH1* Hist;
-	  if (DUNEPdfs[iSample]->GetNDim() == 1) {
-	    Hist = DUNEPdfs[iSample]->Get1DHist();
-	  } else if (DUNEPdfs[iSample]->GetNDim() == 2) {
-	    Hist = DUNEPdfs[iSample]->Get2DHist();
-	  }
-	  MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}",SampleName,Hist->Integral());
-	  
-	  Hist->Write(Form("Variation_%i",(int)iSigVar));
-	}
+      MACH3LOG_INFO("\t\tVariation {:<5.3f} - Parameter Value : {:<10.7f}",
+                    sigmaVariations[iSigVar], VarVal);
+      param_handler->SetParProp(iPar, VarVal);
+
+      for (auto handler : samples) {
+        for (int iSample = 0; iSample < handler->GetNSamples(); iSample++) {
+          std::string SampleName = handler->GetSampleTitle(iSample);
+
+          File->cd(ParName.c_str());
+          if (iSigVar == 0) {
+            File->mkdir((ParName + "/" + SampleName).c_str());
+          }
+          File->cd((ParName + "/" + SampleName).c_str());
+
+          handler->Reweight();
+          auto Hist = handler->GetMCHist(iSample);
+          MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}", SampleName,
+                        Hist->Integral());
+
+          Hist->Write(Form("Variation_%i", (int)iSigVar));
+        }
       }
-
-      CovObj->SetParProp(iPar,VarInit);
     }
+
+    param_handler->SetParProp(iPar, VarInit);
 
     MACH3LOG_INFO("=======================================================");
   }
 
   File->Close();
-  
 }

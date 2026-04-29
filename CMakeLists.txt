@@ -1,7 +1,7 @@
 # CMake version check
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
-SET(MaCh3DUNE_VERSION 1.0.0)
+SET(MaCh3DUNE_VERSION 1.2.0)
 
 # Create project (todo: set configurable CUDA)
 project(MaCh3DUNE VERSION ${MaCh3DUNE_VERSION} LANGUAGES CXX)
@@ -59,20 +59,9 @@ if(DEFINED ROOT_CXX_STANDARD AND ROOT_CXX_STANDARD GREATER CMAKE_CXX_STANDARD)
 endif()
 
 #=================== DUNEAnaObj
-option(Build_NDGAr "Whether to build ndgar SampleHandler class or all others" OFF)
-
 if(NOT DEFINED DUNE_ANAOBJ_BRANCH)
-  if (Build_NDGAr)
-    set(DUNE_ANAOBJ_BRANCH tag/legacy_ndgar_cafs_2024)
-  else()
-    set(DUNE_ANAOBJ_BRANCH v03_06_00)
-  endif()
-
+  set(DUNE_ANAOBJ_BRANCH v03_06_00)
   set(DUNE_ANAOBJ_BRANCH ${DUNE_ANAOBJ_BRANCH} CACHE STRING "Specify which duneanaobj branch to use")
-endif()
-
-if (Build_NDGAr)
-  add_compile_definitions(BUILD_NDGAR)
 endif()
 
 option(MaCh3_DUNE_USE_SRProxy "Whether to build proxy classes for Standard Record objects" OFF)
@@ -135,10 +124,9 @@ endif()
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
-find_package(MaCh3 2.0.0 EXACT QUIET)
-set(MaCh3_CORE_BRANCH v2.0.0 CACHE STRING "Specify the MaCh3 core branch to use")
+find_package(MaCh3 2.5.0 EXACT QUIET)
+set(MaCh3_CORE_BRANCH v2.5.0 CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
-option(MaCh3DUNE_Atmos "Whether working with atmospherics or beam oscillations" OFF)
 
 if(NOT MaCh3_FOUND)
   cmessage(STATUS "Didn't find MaCh3, attempting to use built in MaCh3")
@@ -169,12 +157,8 @@ if(NOT MaCh3_FOUND)
   endif()
 
   list(APPEND MaCh3_OPTIONS "NuFastLinear_ENABLED TRUE")
-  if (MaCh3DUNE_Atmos)
-    list(APPEND MaCh3_OPTIONS "CUDAProb3_ENABLED TRUE")
-    list(APPEND MaCh3_OPTIONS "CUDAProb3Linear_ENABLED FALSE")
-  else()
-    list(APPEND MaCh3_OPTIONS "CUDAProb3Linear_ENABLED TRUE")
-  endif()
+  list(APPEND MaCh3_OPTIONS "CUDAProb3_ENABLED TRUE")
+  list(APPEND MaCh3_OPTIONS "CUDAProb3Linear_ENABLED TRUE")
   
   CPMAddPackage(
     NAME MaCh3

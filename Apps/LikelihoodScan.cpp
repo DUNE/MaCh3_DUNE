@@ -12,16 +12,12 @@
 #include <TColor.h>
 #include <TMath.h>
 
-#include "Fitters/mcmc.h"
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/StructsDUNE.h"
+#include "Fitters/MaCh3Factory.h"
 
 int main(int argc, char * argv[]) {
-  if(argc == 1){
-    MACH3LOG_ERROR("Usage: bin/EventRatesDUNEBeam config.cfg");
-    return 1;
-  }
-  manager* FitManager = new manager(argv[1]);
+  auto FitManager = MaCh3ManagerFactory(argc, argv);
 
   // 1D scan on by default, and 2D off
   const bool do_1d_llhscan = GetFromManager(FitManager->raw()["General"]["1DLLHScan"], true);
@@ -33,48 +29,37 @@ int main(int argc, char * argv[]) {
   }
 
   //###############################################################################################################################
-  //Create samplePDFFD objects
-  
-  ParameterHandlerGeneric* xsec = nullptr;
-  ParameterHandlerOsc* osc = nullptr;
-  
-  std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec, osc);
+  //Create sample handler + parameter_handler objects
+  auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
 
   //###############################################################################################################################
   //Perform reweight, print total integral, and set data
-  std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
-  for (int i = 0; i < oscpars.size(); i++)
-    osc->SetPar(i, oscpars.at(i));
 
-  std::vector<TH1*> DUNEHists;
-  for(auto Sample : DUNEPdfs){
-    Sample->Reweight();
-    if (Sample->GetNDim() == 1) {
-      DUNEHists.push_back(Sample->Get1DHist());
-    } else if (Sample->GetNDim() == 2) {
-      DUNEHists.push_back(Sample->Get2DHist());
-    }
+  std::vector<std::unique_ptr<TH1>> DUNEHists;
+  for(auto handler : samples){
+    for (unsigned iSample = 0; iSample < handler->GetNSamples(); ++iSample) {
+      handler->Reweight();
+      DUNEHists.push_back(M3::Clone(handler->GetMCHist(iSample)));
+      MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample)->Integral());
 
-    MACH3LOG_INFO("Event rate for {} : {:<5.2f}", Sample->GetTitle(), Sample->Get1DHist()->Integral());
-    if (Sample->GetNDim() == 1) {
-      Sample->AddData((TH1D*)DUNEHists.back());
-    } else if (Sample->GetNDim() == 2) {
-      Sample->AddData((TH2D*)DUNEHists.back());
+      if (handler->GetNDim(iSample) == 1) {
+        handler->AddData(iSample, static_cast<TH1D*>(DUNEHists.back().get()));
+      } else if (handler->GetNDim(iSample) == 2) {
+        handler->AddData(iSample, static_cast<TH2D*>(DUNEHists.back().get()));
+      }
     }
   }
-  std::unique_ptr<FitterBase> MaCh3Fitter = std::make_unique<mcmc>(FitManager);
+  auto MaCh3Fitter = MaCh3FitterFactory(FitManager.get());
 
   //###############################################################################################################################
   //Lets benefit from the core code utilities 
   
   //Add samples to FitterBase
-  for(auto Sample : DUNEPdfs){
+  for(auto Sample : samples){
     MaCh3Fitter->AddSampleHandler(Sample);
   }
 
-  MaCh3Fitter->AddSystObj(osc);
-  MaCh3Fitter->AddSystObj(xsec);
+  MaCh3Fitter->AddSystObj(param_handler.get());
   
   if (do_1d_llhscan) {
     MaCh3Fitter->RunLLHScan();
