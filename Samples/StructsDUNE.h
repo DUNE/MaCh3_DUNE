@@ -127,20 +127,14 @@ struct dunemc_plotting { // Store variables just used in plotting (cleared from 
   int npi0;
   double rw_ePi0;
  
-  std::vector<int> prim_event = {};
-  std::vector<int> prim_trkid = {};
   std::vector<int> prim_pdg = {};
   std::vector<double> prim_evis = {};
-  std::vector<double> prim_theta = {};
   std::vector<double> prim_bangle = {};
   std::vector<double> prim_beamangle = {};
-  std::vector<double> prim_dedx = {};
   std::vector<double> prim_momentum = {};
-  std::vector<double> prim_endmomentum = {};
   std::vector<double> prim_transversemomentum = {};
   std::vector<int> prim_isaccepted = {};
   std::vector<int> prim_iscurvatureresolved = {};
-  std::vector<int> prim_isdecayed = {};
   std::vector<int> prim_isstoppedintpc = {};
   std::vector<int> prim_isstoppedinecal = {};
   std::vector<int> prim_isstoppedingap = {};
@@ -162,7 +156,6 @@ struct dunemc_plotting { // Store variables just used in plotting (cleared from 
   std::vector<double> prim_momresms = {};
   std::vector<double> prim_momresyz = {};
   std::vector<double> prim_momresx = {};
-  std::vector<double> prim_edepcrit = {};
   std::vector<double> prim_tpcedepfrac = {};
   std::vector<double> prim_iscontained = {};
 
@@ -171,12 +164,10 @@ struct dunemc_plotting { // Store variables just used in plotting (cleared from 
   std::vector<double> shower_energy = {};
   std::vector<double> shower_bangle = {};
   std::vector<double> shower_iscontained = {};
+  std::vector<double> shower_isconv = {};
   std::vector<double> shower_cosnorm = {};
 
   std::vector<double> photon_energy = {};
-  std::vector<double> photon_endx = {};
-  std::vector<double> photon_endy = {};
-  std::vector<double> photon_endz = {};
 };
 
 #endif

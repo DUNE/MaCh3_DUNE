@@ -15,14 +15,14 @@ public:
     kLepPT, kLepPZ, kLepP, kLepBAngle, kLepTheta, kLepPhi, kTrueQ0, kTrueQ3, kEvent_IsAccepted,  kInFDV, kIsCC, kEPi0, kNPi0,
     kLepTrackLengthYZ};
   
-  enum KinematicVecs {kPrim_EVis, kPrim_Momentum, kPrim_EndMomentum, kPrim_TransverseMomentum, 
-    kPrim_BAngle, kPrim_BeamAngle, kPrim_IsAccepted, kPrim_IsCurvatureResolved, kPrim_IsDecayed, kPrim_PDG,
+  enum KinematicVecs {kPrim_EVis, kPrim_Momentum, kPrim_TransverseMomentum, 
+    kPrim_BAngle, kPrim_BeamAngle, kPrim_IsAccepted, kPrim_IsCurvatureResolved, kPrim_PDG,
     kPrim_IsStoppedInTPC, kPrim_IsStoppedInECal, kPrim_IsStoppedInBarrel, kPrim_IsStoppedInEndCap, kPrim_IsStoppedInGap, 
     kPrim_IsStoppedInEndGap, kPrim_IsStoppedInBarrelGap, kPrim_IsEscaped, kPrim_NTurns, kPrim_NHits,
     kPrim_TrackLengthYZ, kPrim_MomResMS, kPrim_MomResYZ, kPrim_MomResX, kPrim_StartR2, kPrim_EndR, 
-    kPrim_EndDepth, kPrim_EndX, kPrim_EndY, kPrim_EndZ, kPrim_StartX, kPrim_EDepCrit, kPrim_IsContained, kPrim_TPCEDepFrac,
-    kShower_DCalBoundary, kShower_Energy, kShower_BAngle, kShower_IsContained, kShower_PDG, kShower_CosNorm,
-    kPhoton_Energy, kPhoton_EndX, kPhoton_EndY, kPhoton_EndZ};
+    kPrim_EndDepth, kPrim_EndX, kPrim_EndY, kPrim_EndZ, kPrim_StartX, kPrim_IsContained, kPrim_TPCEDepFrac,
+    kShower_DCalBoundary, kShower_Energy, kShower_BAngle, kShower_IsContained, kShower_IsConv, kShower_PDG, kShower_CosNorm,
+    kPhoton_Energy};
 
 protected:
   //Functions required by core
@@ -58,12 +58,13 @@ protected:
   int GetChargeFromPDG(int pdg);
   bool IsResolvedFromCurvature(dunemc_plotting& plotting_vars, size_t i_anapart, double pixel_spacing_cm);
   double GetCalDepth(double x, double y, double z);
+  int GetCalSegment(double y, double z);
   double GetDCalBoundary(const std::vector<double>& pos, const std::vector<double>& dir, size_t& boundary_index);
-  double DepthToLayer(double depth, double r);
-  double CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers);
+  // double DepthToLayer(double depth, double r);
+  // double CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers);
   bool CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, dunemc_plotting& plotting_vars, double pixel_spacing_cm);
   bool IsPrimContained(int id, const std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, 
-                       const std::unordered_map<int, std::vector<double>>& eID_to_showerstart, const std::unordered_map<int, std::pair<double, double>>& pID_to_EDep,
+                       const std::unordered_map<int, std::vector<double>>& eID_to_showerstart,
                        dunemc_plotting& plotting_vars);
   void EraseDescendants(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID);
   bool IsParticleSelected(const int iSample, const int iEvent, const int iParticle);
@@ -84,15 +85,13 @@ protected:
   std::vector<float> *_MCPStartPX=nullptr;
   std::vector<float> *_MCPStartPY=nullptr;
   std::vector<float> *_MCPStartPZ=nullptr;
-  std::vector<float> *_MCPEndPX=nullptr;
-  std::vector<float> *_MCPEndPY=nullptr;
-  std::vector<float> *_MCPEndPZ=nullptr;
   std::vector<float> *_MCPCalPX=nullptr;
   std::vector<float> *_MCPCalPY=nullptr;
   std::vector<float> *_MCPCalPZ=nullptr;
   std::vector<int> *_MCPPDG=nullptr;
   std::vector<int> *_MCPTrkID=nullptr;
   std::vector<int> *_MCPMotherTrkID=nullptr;
+  std::vector<std::string> *_MCPEndProcess=nullptr;
   std::vector<int> *_TPCHitTrkID=nullptr;
   std::vector<float> *_TPCHitEnergy=nullptr;
   std::vector<float> *_TPCHitX=nullptr;
@@ -100,18 +99,12 @@ protected:
   std::vector<float> *_TPCHitZ=nullptr;
   std::vector<bool> *_TPCHitIsSec=nullptr;
   std::vector<int> *_CalHitTrkID=nullptr;
-  std::vector<int> *_CalHitLayer=nullptr;
   std::vector<float> *_CalHitEnergy=nullptr;
   std::vector<bool> *_CalHitIsSec=nullptr;
   std::vector<float> *_CalHitTime=nullptr;
   std::vector<float> *_CalHitX=nullptr;
   std::vector<float> *_CalHitY=nullptr;
   std::vector<float> *_CalHitZ=nullptr;
-  std::vector<int> *_MuIDHitTrkID=nullptr;
-  std::vector<float> *_MuIDHitEnergy=nullptr;
-  std::vector<float> *_MuIDHitX=nullptr;
-  std::vector<float> *_MuIDHitY=nullptr;
-  std::vector<float> *_MuIDHitZ=nullptr;
 
   // FastGArSim geotree inputs
   double _TPCRad;
@@ -152,12 +145,22 @@ protected:
   double TPCInstrumentedLength;
   double TPCInstrumentedRadius;
   double ECALInnerRadius;
-  double ECALOuterRadius;
+  // double ECALOuterRadius;
+  double ECALOuterFrontRadius;
+  double ECALOuterBackRadius;
   double ECALEndCapStart;
   double ECALEndCapEnd;
   double ECALSciX0;
+  double ECALBarrelForwardDepth;
+  double ECALBarrelBackwardDepth;
+  double ECALEndCapDepth;
+  std::string interaction_model;
   std::vector<std::vector<double>> outerECalP;
   std::vector<std::vector<double>> outerECalA;
+  std::vector<std::vector<double>> dividingPlaneP;
+  std::vector<std::vector<double>> dividingPlaneA;
+  int nECALBackSegments;
+  std::vector<int> ECalBackSegments;
   
   double TPC_centre_x = 0.;
   double TPC_centre_y = 0.;
@@ -167,16 +170,48 @@ protected:
 
   double X0 = 1193; //in cm From Federico's Kalman Filter Paper
 
+  // From external studies: map of pdg to parameters (a, b, c) where contained EM showers have
+  // dwall > a * E^b + c,
+  // where E is the shower energy and dwall is the distance from the shower start point to the nearest calorimeter boundary, along the direction of propagation.
+  const std::unordered_map<int, std::unordered_map<int, std::vector<double>>> threshold_to_containment_params = {
+    {11, 
+      {
+        {10, {0., 0., 0.}},
+        {5, {-0.48799, -1.24424, 11.11682}},
+        {4, {-3.73982, -0.17152, 15.08844}},
+        {3, {-0.97878, -0.53807, 13.42509}},
+        {2, {-0.61235, -0.70057, 14.76052}},
+      }
+    },
+    {22, 
+      {
+        {10, {1.80862, 0.57792, 5.62302}},
+        {5, {-1.20540, -0.43860, 10.74436}},
+        {4, {-0.85370, -0.55366, 11.22175}},
+        {3, {-0.60926, -0.68545, 12.16459}},
+        {2, {-0.58044, -0.75591, 14.11213}},
+      }
+    },
+    {111, 
+      {
+        {10, {1.80862, 0.57792, 5.62302}},
+        {5, {-1.20540, -0.43860, 10.74436}},
+        {4, {-0.85370, -0.55366, 11.22175}},
+        {3, {-0.60926, -0.68545, 12.16459}},
+        {2, {-0.58044, -0.75591, 14.11213}},
+      }
+    },
+  };
+
   //configurable detector parameters
   double B_field;
-  double momentum_resolution_threshold;
+  double energy_resolution_threshold;
   double pixel_spacing;
   double spatial_resolution;
   double adc_sampling_frequency;
   double drift_velocity;
   double downsampling;
-  int crit_layers;
-  double edepcrit_threshold;
+  bool do_geometric_correction;
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
@@ -231,13 +266,11 @@ protected:
   const std::unordered_map<std::string, int> KinematicVectorsDUNE = {
     {"Prim_EVis",kPrim_EVis},
     {"Prim_Momentum",kPrim_Momentum},
-    {"Prim_EndMomentum",kPrim_EndMomentum},
     {"Prim_TransverseMomentum",kPrim_TransverseMomentum},
     {"Prim_BAngle",kPrim_BAngle},
     {"Prim_BeamAngle",kPrim_BeamAngle},
     {"Prim_IsAccepted",kPrim_IsAccepted},
     {"Prim_IsCurvatureResolved",kPrim_IsCurvatureResolved},
-    {"Prim_IsDecayed",kPrim_IsDecayed},
     {"Prim_PDG",kPrim_PDG},
     {"Prim_IsStoppedInTPC",kPrim_IsStoppedInTPC},
     {"Prim_IsStoppedInECal",kPrim_IsStoppedInECal},
@@ -260,25 +293,21 @@ protected:
     {"Prim_EndY",kPrim_EndY},
     {"Prim_EndZ",kPrim_EndZ},
     {"Prim_StartX",kPrim_StartX},
-    {"Prim_EDepCrit",kPrim_EDepCrit},
     {"Prim_TPCEDepFrac",kPrim_TPCEDepFrac},
     {"Prim_IsContained",kPrim_IsContained},
     {"Shower_DCalBoundary",kShower_DCalBoundary},
     {"Shower_Energy",kShower_Energy},
     {"Shower_BAngle",kShower_BAngle},
     {"Shower_IsContained",kShower_IsContained},
+    {"Shower_IsConv",kShower_IsConv},
     {"Shower_PDG",kShower_PDG},
     {"Shower_CosNorm",kShower_CosNorm},
     {"Photon_Energy",kPhoton_Energy},
-    {"Photon_EndX",kPhoton_EndX},
-    {"Photon_EndY",kPhoton_EndY},
-    {"Photon_EndZ",kPhoton_EndZ},
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicVectorsDUNE = {
     {kPrim_EVis,"Prim_EVis"},
     {kPrim_Momentum,"Prim_Momentum"},
-    {kPrim_EndMomentum,"Prim_EndMomentum"},
     {kPrim_TransverseMomentum,"Prim_TransverseMomentum"},
     {kPrim_BAngle,"Prim_BAngle"},
     {kPrim_BeamAngle,"Prim_BeamAngle"},
@@ -306,19 +335,16 @@ protected:
     {kPrim_EndY,"Prim_EndY"},
     {kPrim_EndZ,"Prim_EndZ"},
     {kPrim_StartX,"Prim_StartX"},
-    {kPrim_EDepCrit,"Prim_EDepCrit"},
     {kPrim_TPCEDepFrac,"Prim_TPCEDepFrac"},
     {kPrim_IsContained,"Prim_IsContained"},
     {kShower_DCalBoundary,"Shower_DCalBoundary"},
     {kShower_Energy,"Shower_Energy"},
     {kShower_BAngle,"Shower_BAngle"},
     {kShower_IsContained,"Shower_IsContained"},
+    {kShower_IsConv,"Shower_IsConv"},
     {kShower_PDG,"Shower_PDG"},
     {kShower_CosNorm,"Shower_CosNorm"},
     {kPhoton_Energy,"Photon_Energy"},
-    {kPhoton_EndX,"Photon_EndX"},
-    {kPhoton_EndY,"Photon_EndY"},
-    {kPhoton_EndZ,"Photon_EndZ"},
   };
     
 };

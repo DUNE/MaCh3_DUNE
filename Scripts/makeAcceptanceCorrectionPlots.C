@@ -40,7 +40,19 @@ TH1* rebinHist(TH1* hist) {
   }
   else if (std::string(hist->GetTitle()).find("LepBAngle_vs_EPi0") != std::string::npos) {
     TH2D* hist2D = dynamic_cast<TH2D*>(hist);
-    if (hist2D) return (TH1*)hist2D->Rebin2D(3, 2);
+    if (hist2D) return (TH1*)hist2D->Rebin2D(3, 1);
+  }
+  else if (std::string(hist->GetTitle()).find("LepTheta_EPi0") != std::string::npos) {
+    TH2D* hist2D = dynamic_cast<TH2D*>(hist);
+    if (hist2D) return (TH1*)hist2D->Rebin2D(2, 1);
+  }
+  else if (std::string(hist->GetTitle()).find("LepTheta_Q0") != std::string::npos) {
+    TH2D* hist2D = dynamic_cast<TH2D*>(hist);
+    if (hist2D) return (TH1*)hist2D->Rebin2D(2, 2);
+  }
+  else if (std::string(hist->GetTitle()).find("Lep_Theta_Momentum") != std::string::npos) {
+    TH2D* hist2D = dynamic_cast<TH2D*>(hist);
+    if (hist2D) return (TH1*)hist2D->Rebin2D(2, 2);
   }
   return hist;
 }
@@ -63,7 +75,7 @@ void changeAxisTitle(TAxis* axis) {
   else if (title == "LepBAngle") axis->SetTitle("Lepton Angle to B-Field [  #circ ]");
 }
 
-void makeAcceptanceCorrectionPlots(const char* inputfilename) {
+void makeAcceptanceCorrectionPlots(const char* inputfilename, bool writeToRootFile=false, const char* outputname = "") {
 
   TFile* inputfile = TFile::Open(inputfilename, "READ");
   if (!inputfile || inputfile->IsZombie()) {
@@ -75,15 +87,28 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename) {
   std::string inputfilestring(inputfilename);
   const std::string token = "Projections";
   size_t pos = inputfilestring.find(token);
-  if (pos != std::string::npos) {  // rfind==0 means "prefix at position 0"
-    outputfilename += "AcceptancePlots" + inputfilestring.substr(pos + token.size());
-    const std::string suffix = ".root";
-    outputfilename = outputfilename.substr(0, outputfilename.size() - suffix.size()) + ".pdf";
+  if (outputname[0] == '\0') {
+    if (pos != std::string::npos) {
+      outputfilename += "AcceptancePlots" + inputfilestring.substr(pos + token.size());
+      const std::string suffix = ".root";
+      outputfilename = outputfilename.substr(0, outputfilename.size() - suffix.size()) + ".pdf";
+    }
+    else {
+      outputfilename = "Outputs/acceptance_plots/AcceptancePlots.pdf";
+    }
   }
-  else {
-    outputfilename = "Outputs/acceptance_plots/AcceptancePlots.pdf";
-  }
+  else outputfilename += outputname;
   const char* outputfile = strdup(outputfilename.c_str());
+
+  TFile* outputRootFile = nullptr;
+  if (writeToRootFile) {
+    std::string rootOutputFilename = outputfilename.substr(0, outputfilename.size() - 4) + ".root";
+    outputRootFile = TFile::Open(rootOutputFilename.c_str(), "RECREATE");
+    if (!outputRootFile || outputRootFile->IsZombie()) {
+      std::cerr << "Could not open output ROOT file " << rootOutputFilename << std::endl;
+      return;
+    }
+  }
 
   gStyle->SetOptStat(0);
   TCanvas* canvas = new TCanvas("canvas", "Acceptance Correction Plots", 800, 600);
@@ -101,7 +126,7 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename) {
     TObject* obj = key->ReadObj();
 
     if (!obj->InheritsFrom(TH1::Class())) continue;
-    TH1* rawHist = (TH1*)obj;
+    TH1* rawHist = rebinHist((TH1*)obj);
     std::string histtitle = rawHist->GetTitle();
     std::string histname = key->GetName();
     changeAxisTitle(rawHist->GetXaxis());
@@ -119,7 +144,8 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename) {
       totEntries += rawHist->GetBinContent(rawHist->GetNbinsX()+1);
     }
     else {
-      if (std::string(rawHist->GetTitle()).find("LeptonBAngle_EPi0") != std::string::npos) gPad->SetLogz();
+      if ((std::string(rawHist->GetTitle()).find("LeptonBAngle_EPi0") != std::string::npos) || 
+        (std::string(rawHist->GetTitle()).find("Shower_Energy") != std::string::npos)) gPad->SetLogz();
       rawHist->Draw("COLZ");
       totEntries = rawHist->Integral(0, rawHist->GetNbinsX()+1);
     }
@@ -130,7 +156,13 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename) {
     text.DrawText(0.05,0.05,Form("Entries: %.0f", totEntries));
 
     rawHist->GetXaxis()->SetTitleOffset(1.3);
+
     canvas->Print(outputfile);
+    if (writeToRootFile) {
+      outputRootFile->cd();
+      rawHist->Write(histname.c_str());
+    }
+
     gPad->SetLogz(0);
     std::cout << "Drawn histogram: " << key->GetName() << std::endl;
 
@@ -138,17 +170,15 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename) {
       int accstringpos = histname.find("Accepted_");
       std::string basename = histname.substr(0,accstringpos) + histname.substr(accstringpos+9);
       TH1* acceptedHist = (TH1*)obj;
-      TH1* totalHist = (TH1*)inputfile->Get(basename.c_str());
+      TH1* totalHist = rebinHist((TH1*)inputfile->Get(basename.c_str()));
       if (totalHist) {
-        TH1* acceptedRebinned = rebinHist(acceptedHist);
-        TH1* totalRebinned = rebinHist(totalHist);
-        TH1* acceptanceHist = (TH1*)acceptedRebinned->Clone((basename+" Acceptance").c_str());
-        acceptanceHist->Divide(totalRebinned);
+        TH1* acceptanceHist = (TH1*)acceptedHist->Clone((basename+" Acceptance").c_str());
+        acceptanceHist->Divide(totalHist);
         for(int i_x =0; i_x<acceptanceHist->GetNbinsX(); i_x++){
           for(int i_y = 0; i_y<acceptanceHist->GetNbinsY(); i_y++){
             int binnum = acceptanceHist->GetBin(i_x+1, i_y+1);
             double value = acceptanceHist->GetBinContent(binnum);
-            double denominator = totalRebinned->GetBinContent(binnum);
+            double denominator = totalHist->GetBinContent(binnum);
             if (denominator == 0) acceptanceHist->SetBinContent(binnum, 0);
             else if (value == 0) acceptanceHist->SetBinContent(binnum, 1e-6); 
           }
@@ -160,13 +190,19 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename) {
         if (obj->InheritsFrom(TH1D::Class())) acceptanceHist->Draw("HIST");
         else acceptanceHist->Draw("COLZ");
         acceptanceHist->GetXaxis()->SetTitleOffset(1.3);
+
         canvas->Print(outputfile);
+        if (writeToRootFile) {
+          outputRootFile->cd();
+          acceptanceHist->Write((basename + "_Acceptance").c_str());
+        }
         std::cout << "\nDrawn acceptance histogram: " << acceptanceHist->GetName() << std::endl;
       }
     }
   }
   canvas->Print(Form("%s]", outputfile));
   inputfile->Close();
+  if (writeToRootFile) outputRootFile->Close();
   delete inputfile;
   delete canvas;
 
