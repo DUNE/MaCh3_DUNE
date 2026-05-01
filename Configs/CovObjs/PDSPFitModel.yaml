@@ -4,111 +4,117 @@ Systematics:
     Names:
       FancyName: Abs_TrueEBin_Under
       ParameterName: Abs_TrueEBin_Under
-    
-    SampleNames: ["absorption"]
-    Error: 0.1 # Need to figure out how to set poisson errors on the normalisation parameters (do we need manual input or can these be calculated by the fitter engine?)
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
+    Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [0., 1500]
+      - TrueKEInt: [0., 1500]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: Abs_TrueEBin_0
       ParameterName: Abs_TrueEBin_0
-    
-    SampleNames: ["absorption"]
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1500, 1700]
+      - TrueKEInt: [1500, 1700]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: Abs_TrueEBin_1
       ParameterName: Abs_TrueEBin_1
-    
-    SampleNames: ["absorption"]
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1700, 1900]
+      - TrueKEInt: [1700, 1900]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: Abs_TrueEBin_2
       ParameterName: Abs_TrueEBin_2
-    
-    SampleNames: ["absorption"]
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1900, 2100]
+      - TrueKEInt: [1900, 2100]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: Abs_TrueEBin_Over
       ParameterName: Abs_TrueEBin_Over
-    
-    SampleNames: ["absorption"]
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [2100, 999999]
+      - TrueKEInt: [2100, 999999]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: Abs_Escaping
       ParameterName: Abs_Escaping
-    
-    SampleNames: ["absorption"]
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
       - RecoEndZ: [220, 999]
@@ -117,117 +123,123 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: CEx_TrueEBin_Under
       ParameterName: CEx_TrueEBin_Under
-    
-    SampleNames: ["charge_exchange"]
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [0., 1500]
+      - TrueKEInt: [0., 1500]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: CEx_TrueEBin_0
       ParameterName: CEx_TrueEBin_0
-    
-    SampleNames: ["charge_exchange"]
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1500, 1700]
+      - TrueKEInt: [1500, 1700]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: CEx_TrueEBin_1
       ParameterName: CEx_TrueEBin_1
-    
-    SampleNames: ["charge_exchange"]
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1700, 1900]
+      - TrueKEInt: [1700, 1900]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: CEx_TrueEBin_2
       ParameterName: CEx_TrueEBin_2
-    
-    SampleNames: ["charge_exchange"]
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1900, 2100]
+      - TrueKEInt: [1900, 2100]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: CEx_TrueEBin_Over
       ParameterName: CEx_TrueEBin_Over
-    
-    SampleNames: ["charge_exchange"]
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [2100, 999999]
+      - TrueKEInt: [2100, 999999]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: CEx_Escaping
       ParameterName: CEx_Escaping
-    
-    SampleNames: ["charge_exchange"]
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
       - RecoEndZ: [220, 999]
@@ -236,117 +248,123 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: Pion_TrueEBin_Under
       ParameterName: Pion_TrueEBin_Under
-    
-    SampleNames: ["pion_production", "single_pion_production"]
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [0., 1500]
+      - TrueKEInt: [0., 1500]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: Pion_TrueEBin_0
       ParameterName: Pion_TrueEBin_0
-    
-    SampleNames: ["pion_production", "single_pion_production"]
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1500, 1700]
+      - TrueKEInt: [1500, 1700]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: Pion_TrueEBin_1
       ParameterName: Pion_TrueEBin_1
-    
-    SampleNames: ["pion_production", "single_pion_production"]
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1700, 1900]
+      - TrueKEInt: [1700, 1900]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: Pion_TrueEBin_2
       ParameterName: Pion_TrueEBin_2
-    
-    SampleNames: ["pion_production", "single_pion_production"]
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1900, 2100]
+      - TrueKEInt: [1900, 2100]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: Pion_TrueEBin_Over
       ParameterName: Pion_TrueEBin_Over
-    
-    SampleNames: ["pion_production", "single_pion_production"]
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [2100, 999999]
+      - TrueKEInt: [2100, 999999]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: Pion_Escaping
       ParameterName: Pion_Escaping
-    
-    SampleNames: ["pion_production", "single_pion_production"]
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
       - RecoEndZ: [220, 999]
@@ -355,117 +373,117 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: Impure_TrueEBin_Under
       ParameterName: Impure_TrueEBin_Under
-    
+
     SampleNames: ["IMPURITY"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [0., 1500]
+      - TrueKEInt: [0., 1500]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: Impure_TrueEBin_0
       ParameterName: Impure_TrueEBin_0
-    
+
     SampleNames: ["IMPURITY"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1500, 1700]
+      - TrueKEInt: [1500, 1700]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: Impure_TrueEBin_1
       ParameterName: Impure_TrueEBin_1
-    
+
     SampleNames: ["IMPURITY"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1700, 1900]
+      - TrueKEInt: [1700, 1900]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: Impure_TrueEBin_2
       ParameterName: Impure_TrueEBin_2
-    
+
     SampleNames: ["IMPURITY"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [1900, 2100]
+      - TrueKEInt: [1900, 2100]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: Impure_TrueEBin_Over
       ParameterName: Impure_TrueEBin_Over
-    
+
     SampleNames: ["IMPURITY"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
-      - TrueEInt: [2100, 999999]
+      - TrueKEInt: [2100, 999999]
       - RecoEndZ: [0, 220]
     ParameterValues:
       Generator: 1.
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01
 
 - Systematic:
     Names:
       FancyName: Impure_Escaping
       ParameterName: Impure_Escaping
-    
+
     SampleNames: ["IMPURITY"]
     Error: 0.1
     FlatPrior: true
-    ParameterBounds: [0, 10]
+    ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
       - RecoEndZ: [220, 999]
@@ -474,4 +492,4 @@ Systematics:
       PreFitValue: 1.
     Type: Norm
     StepScale:
-      MCMC: 0.1
+      MCMC: 0.01

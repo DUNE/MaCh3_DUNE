@@ -17,6 +17,8 @@ struct PDSPMCInfo {
   double TrueKEInt = M3::_BAD_DOUBLE_;
   /// Reconstructed Interacting Kinetic Energy
   double RecoKEInt = M3::_BAD_DOUBLE_;
+  /// Reconstructed track length (cm), from track_length_reco
+  double RecoEndZ = M3::_BAD_DOUBLE_;
 
 };
 

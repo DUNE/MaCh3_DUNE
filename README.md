@@ -42,6 +42,38 @@ source build/bin/setup.MaCh3DUNE.sh
 
 This sets everything needed, and needs to be re-sourced on each terminal session when using MaCh3 (Along with any dependancies)
 
+## Running MCMC fit
+```bash
+Fit Configs/FitterConfig_PDSP.yaml
+```
+
+## Processing MCMC Outputs
+```bash
+ProcessMCMC ./Configs/PDSPDiagConfig.yaml Test.root
+```
+
+## Posterior Predictive Analysis
+Once you run MCMC you can produce these toy distributions using following command:
+```bash
+PredictivePDSP Configs/FitterConfig_PDSP.yaml General:OutputFile:PredictiveOutputTest.root
+```
+
+### Plotting Posterior Predictive Distributions
+Once you have generated the posterior predictive toy distributions with PredictivePDSP, you can make fancy plots of them using:
+```bash
+PredictivePlotting ./Configs/PDSPDiagConfig.yaml PredictiveOutputTest.root
+```
+
+### Prior Predictive Distributions
+```bash
+PredictivePDSP ./Configs/FitterConfig_PDSP.yaml General:OutputFile:PriorPredictiveOutputTest.root Predictive:PriorPredictive:True
+```
+
+Finally, we can compare the prior and posterior predictive spectra with the previously used PredictivePlotting macro:
+```bash
+PredictivePlotting ./Configs/PDSPDiagConfig.yaml PredictiveOutputTest.root PriorPredictiveOutputTest.root
+```
+
 ## Event Rates
 
 Once you've got setup you'll then need to setup some symlinks to point to your MC and spline files. You can do this by modifying `scripts/link_files.sh` script. You'll need to change the FILESDIR variable to point to the relevant folder on your machine. The places these files currently live are listed here:
