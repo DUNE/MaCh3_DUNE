@@ -1,0 +1,103 @@
+---
+SampleHandlerName: "BeamND"
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
+BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
+InputFiles:
+  PrepSplineFile: false
+
+Samples:
+  - "BeamND_FHC_CCnumu"
+  - "BeamND_RHC_CCnumu"
+
+BeamND_FHC_CCnumu:
+  SampleTitle: "BeamND_FHC_CCnumu"
+  SampleName: "BeamND_FHC_CCnumu"
+
+  POT: 3.85e21
+
+  Binning:
+    VarStr: ["RecoNeutrinoEnergy", "yRec"]
+    VarBins: [[0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.], [0., 0.1, 0.2, 0.3, 0.4, 0.6, 1.1]]
+    Uniform: true
+
+  DUNESampleBools:
+    isFHC: 1
+    iselike: no
+
+  InputFiles:
+    mtupleprefix: "Inputs/DUNE_ND_CAF_files/ND_FHC_ger_"
+    mtuplesuffix: "_fv_ccinc_q.root"
+    splineprefix: "Inputs/DUNE_ND_spline_files/ND_FHC_ger_"
+    splinesuffix: "_splines.root"
+
+  OscChannels:
+    - Name: "FHC_numu_x_numu"
+      LatexName: "FHC_numu_x_numu"
+      mtuplefile: ["numu_x_numu_*"]
+      splinefile: "numu_x_numu"
+      nutype: 14
+      oscnutype: 14
+    - Name: "FHC_nue_x_nue"
+      LatexName: "FHC_nue_x_nue"
+      mtuplefile: ["nue_x_nue"]
+      splinefile: "nue_x_nue"
+      nutype: 12
+      oscnutype: 12
+    - Name: "FHC_numubar_x_numubar"
+      LatexName: "FHC_numubar_x_numubar"
+      mtuplefile: ["numubar_x_numubar"]
+      splinefile: "numubar_x_numubar"
+      nutype: -14
+      oscnutype: -14
+    - Name: "FHC_nuebar_x_nuebar"
+      LatexName: "FHC_nuebar_x_nuebar"
+      mtuplefile: ["nuebar_x_nuebar"]
+      splinefile: "nuebar_x_nuebar"
+      nutype: -12
+      oscnutype: -12
+
+BeamND_RHC_CCnumu:
+  SampleTitle: "BeamND_RHC_CCnumu"
+  SampleName: "BeamND_RHC_CCnumu"
+  POT: 3.85e21
+
+  Binning:
+    VarStr: ["RecoNeutrinoEnergy", "yRec"]
+    VarBins: [[0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.], [0., 0.1, 0.2, 0.3, 0.4, 0.6, 1.1]]
+    Uniform: true
+
+  DUNESampleBools:
+    isFHC: 0
+    iselike: no
+
+  InputFiles:
+    mtupleprefix: "Inputs/DUNE_ND_CAF_files/ND_RHC_ger_"
+    mtuplesuffix: "_fv_ccinc_q.root"
+    splineprefix: "Inputs/DUNE_ND_spline_files/ND_RHC_ger_"
+    splinesuffix: "_splines.root"
+
+  OscChannels:
+    - Name: "RHC_numu_x_numu"
+      LatexName: "RHC_numu_x_numu"
+      mtuplefile: ["numu_x_numu_*"]
+      splinefile: "numu_x_numu"
+      nutype: 14
+      oscnutype: 14
+    - Name: "RHC_nue_x_nue"
+      LatexName: "RHC_nue_x_nue"
+      mtuplefile: ["nue_x_nue"]
+      splinefile: "nue_x_nue"
+      nutype: 12
+      oscnutype: 12
+    - Name: "RHC_numubar_x_numubar"
+      LatexName: "RHC_numubar_x_numubar"
+      mtuplefile: ["numubar_x_numubar_*"]
+      splinefile: "numubar_x_numubar"
+      nutype: -14
+      oscnutype: -14
+    - Name: "RHC_nuebar_x_nuebar"
+      LatexName: "RHC_nuebar_x_nuebar"
+      mtuplefile: ["nuebar_x_nuebar"]
+      splinefile: "nuebar_x_nuebar"
+      nutype: -12
+      oscnutype: -12

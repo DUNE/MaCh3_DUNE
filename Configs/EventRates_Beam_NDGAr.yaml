@@ -595,7 +595,7 @@ Projections:
   KinematicCuts:
   - Name: IsContained
     VarString: Prim_IsContained
-    Range: [0.,0.5]
+    Range: [0., 0.5]
 
 - Name: LonR_Curvature_UnContained
   VarStrings: ["Prim_NTurns"]
@@ -603,10 +603,10 @@ Projections:
   KinematicCuts:
   - Name: IsCurvatureResolved
     VarString: Prim_IsCurvatureResolved
-    Range: [1.,1.5]
+    Range: [1., 1.5]
   - Name: IsContained
     VarString: Prim_IsContained
-    Range: [0.,0.5]
+    Range: [0., 0.5]
 
 - Name: TPCEDepFrac
   VarStrings: ["Prim_TPCEDepFrac"]
@@ -618,7 +618,7 @@ Projections:
   KinematicCuts:
   - Name: IsContained
     VarString: Prim_IsContained
-    Range: [0.,0.5]
+    Range: [0., 0.5]
 
 - Name: TPCEDepFrac_Curvature_UnContained
   VarStrings: ["Prim_TPCEDepFrac"]
@@ -626,10 +626,10 @@ Projections:
   KinematicCuts:
   - Name: IsCurvatureResolved
     VarString: Prim_IsCurvatureResolved
-    Range: [1.,1.5]
+    Range: [1., 1.5]
   - Name: IsContained
     VarString: Prim_IsContained
-    Range: [0.,0.5]
+    Range: [0., 0.5]
 
 - Name: Shower_DCalBoundary
   VarStrings: ["Shower_DCalBoundary"]

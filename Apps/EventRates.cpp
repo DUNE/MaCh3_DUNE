@@ -16,16 +16,16 @@
 #include "Samples/StructsDUNE.h"
 #include "Fitters/MaCh3Factory.h"
 
-void Write1DHistogramsToFile(std::string OutFileName, std::vector<TH1*> Histograms) {
+void Write1DHistogramsToFile(std::string OutFileName, std::vector<std::unique_ptr<TH1>>& Histograms) {
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutFileName.c_str(), "RECREATE"));
   OutputFile->cd();
-  for(auto Hist : Histograms){
+  for(auto& Hist : Histograms){
     Hist->Write();
   }
   OutputFile->Close();
 }
 
-void Write1DHistogramsToPdf(std::string OutFileName, std::vector<TH1*> Histograms) {
+void Write1DHistogramsToPdf(std::string OutFileName, std::vector<std::unique_ptr<TH1>>& Histograms) {
   //Remove root from end of file
   OutFileName.erase(OutFileName.find('.'));
   OutFileName+=".pdf";
@@ -33,7 +33,7 @@ void Write1DHistogramsToPdf(std::string OutFileName, std::vector<TH1*> Histogram
   auto c1 = std::unique_ptr<TCanvas>(new TCanvas("c1", "c1", 800, 600));
   c1->cd();
   c1->Print(std::string(OutFileName+"[").c_str());
-  for(auto Hist : Histograms){
+  for(auto& Hist : Histograms){
     Hist->Draw("HIST");
     c1->Print(OutFileName.c_str());
   }
@@ -41,25 +41,25 @@ void Write1DHistogramsToPdf(std::string OutFileName, std::vector<TH1*> Histogram
 }
 
 int main(int argc, char * argv[]) {
-  MaCh3Utils::MaCh3Usage(argc, argv);
-  auto fitMan = MaCh3ManagerFactory(argc, argv);
+  M3::Utils::MaCh3Usage(argc, argv);
+  auto FitManager = MaCh3ManagerFactory(argc, argv);
 
   //###############################################################################################################################
-  //Create SampleHandlerFD objects
-  
-  ParameterHandlerGeneric* xsec = nullptr;
-  
-  std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(fitMan, DUNEPdfs, xsec);
+  //Create SampleHandlerBase objects
+  auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
 
   //###############################################################################################################################
   //Perform reweight and print total integral
 
-  std::vector<TH1*> DUNEHists;
-  for(auto handler : DUNEPdfs){
+  std::vector<std::unique_ptr<TH1>> DUNEHists;
+  for(auto& handler : samples){
+    if (!handler){
+      MACH3LOG_ERROR("Sample not set up correctly");
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
     handler->Reweight();
-    for (int iSample=0; iSample<handler->GetNsamples(); iSample++) {
-      DUNEHists.push_back(handler->GetMCHist(iSample));
+    for (int iSample=0; iSample<handler->GetNSamples(); iSample++) {
+      DUNEHists.push_back(M3::Clone(handler->GetMCHist(iSample)));
 
       std::string EventRateString = fmt::format("{:.2f}", handler->GetMCHist(iSample)->Integral());
       MACH3LOG_INFO("Event rate for {} : {:<5}", handler->GetSampleTitle(iSample), EventRateString);
@@ -67,7 +67,7 @@ int main(int argc, char * argv[]) {
     }
   }
 
-  std::string OutFileName = GetFromManager<std::string>(fitMan->raw()["General"]["OutputFile"], "EventRatesOutput.root");
+  std::string OutFileName = GetFromManager<std::string>(FitManager->raw()["General"]["OutputFile"], "EventRatesOutput.root");
   Write1DHistogramsToFile(OutFileName, DUNEHists); 
   Write1DHistogramsToPdf(OutFileName, DUNEHists);
 
@@ -78,8 +78,8 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("Oscillation Mode Breakdown:");
   
-  for(auto handler : DUNEPdfs) {
-    for (int iSample = 0; iSample < handler->GetNsamples(); iSample++) {
+  for(auto handler : samples) {
+    for (int iSample = 0; iSample < handler->GetNSamples(); iSample++) {
       MACH3LOG_INFO("======================");
       int nOscChannels = handler->GetNOscChannels(iSample);
       for (int iOscChan=0;iOscChan<nOscChannels;iOscChan++) {
@@ -91,11 +91,11 @@ int main(int argc, char * argv[]) {
         SelecChannel.UpperBound = iOscChan+1;
         SelectionVec.push_back(SelecChannel);
         
-        TH1* Hist = handler->Get1DVarHist(iSample, handler->GetXBinVarName(iSample),SelectionVec);
+        auto Hist = handler->Get1DVarHist(iSample, handler->GetKinVarName(iSample, 0),SelectionVec);
         MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),handler->GetFlavourName(iSample, iOscChan),Hist->Integral());
       }
 
-      TH1* Hist = handler->Get1DVarHist(iSample, handler->GetXBinVarName(iSample));
+      auto Hist = handler->Get1DVarHist(iSample, handler->GetKinVarName(iSample, 0));
       MACH3LOG_INFO("{:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),Hist->Integral());
     }
   }
@@ -107,8 +107,8 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("Interaction Mode Breakdown:");
 
-  for(auto handler : DUNEPdfs) {
-    for (int iSample = 0; iSample < handler->GetNsamples(); iSample++) {
+  for(auto handler : samples) {
+    for (int iSample = 0; iSample < handler->GetNSamples(); iSample++) {
       MACH3LOG_INFO("======================");
 
       MaCh3Modes* Modes = handler->GetMaCh3Modes();
@@ -122,11 +122,11 @@ int main(int argc, char * argv[]) {
         SelecChannel.UpperBound = iModeChan+1;
         SelectionVec.push_back(SelecChannel);
 
-        TH1* Hist = handler->Get1DVarHist(iSample, handler->GetXBinVarName(iSample),SelectionVec);
+        auto Hist = handler->Get1DVarHist(iSample, handler->GetKinVarName(iSample,0), SelectionVec);
         MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),Modes->GetMaCh3ModeName(iModeChan),Hist->Integral());
       }
 
-      TH1* Hist = handler->Get1DVarHist(iSample, handler->GetXBinVarName(iSample));
+      auto Hist = handler->Get1DVarHist(iSample, handler->GetKinVarName(iSample,0));
       MACH3LOG_INFO("{:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),Hist->Integral());
     }
   }
