@@ -37,70 +37,38 @@ Additional cmake options are available in the [MaCh3-Core README](https://github
 
 Then source the installation of MaCh3:
 ```bash
-source build/bin/setup.MaCh3DUNE.sh
+source setup.sh 
 ```
-
 This sets everything needed, and needs to be re-sourced on each terminal session when using MaCh3 (Along with any dependancies)
 
-## Event Rates
-
-Once you've got setup you'll then need to setup some symlinks to point to your MC and spline files. You can do this by modifying `scripts/link_files.sh` script. You'll need to change the FILESDIR variable to point to the relevant folder on your machine. The places these files currently live are listed here:
-
-Imperial College London lx:
+## Running MCMC fit
 ```bash
-/vols/dune/ljw20/
+Fit Configs/FitterConfig_PDSP.yaml
 ```
 
-FNAL cluster:
+## Processing MCMC Outputs
 ```bash
-/exp/dune/data/users/lwarsame
+ProcessMCMC ./Configs/PDSPDiagConfig.yaml Test.root
 ```
 
-ComputeCanada Cedar:
+## Posterior Predictive Analysis
+Once you run MCMC you can produce these toy distributions using following command:
 ```bash
-/project/rpp-nilic/MaCh3_Inputs
+PredictivePDSP Configs/FitterConfig_PDSP.yaml General:OutputFile:PredictiveOutputTest.root
 ```
 
-NERSC Perlmutter:
+### Plotting Posterior Predictive Distributions
+Once you have generated the posterior predictive toy distributions with PredictivePDSP, you can make fancy plots of them using:
 ```bash
-/pscratch/sd/l/lwarsame
+PredictivePlotting ./Configs/PDSPDiagConfig.yaml PredictiveOutputTest.root
 ```
 
-RAL SCARF:
+### Prior Predictive Distributions
 ```bash
-/work4/ppd/scarf1407
+PredictivePDSP ./Configs/FitterConfig_PDSP.yaml General:OutputFile:PriorPredictiveOutputTest.root Predictive:PriorPredictive:True
 ```
 
-CVMFS:
+Finally, we can compare the prior and posterior predictive spectra with the previously used PredictivePlotting macro:
 ```bash
-/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/Inputs/TDR/v3
+PredictivePlotting ./Configs/PDSPDiagConfig.yaml PredictiveOutputTest.root PriorPredictiveOutputTest.root
 ```
-
-Current (Feburary 2024) FD event rates using DUNE FD TDR Inputs are below (ND is still under-development). These are made using xsec systematics at their prior central value. Oscillation parameter values used here are:
-
-### Oscillation Parameter Values (NuFIT 4.0 NH)
-<div align="center">
-
-|     Parameter     |       Value       |     Unit     |
-|:-----------------:|:-----------------:|:------------:|
-|     sin²θ₁₂       |       0.310       |      -       |
-|     sin²θ₂₃       |       0.582       |      -       |
-|     sin²θ₁₃       |       0.0224      |      -       |
-|     Δm²₃₂         |    7.39 × 10⁻⁵    |     eV²      |
-|     Δm²₁₂         |    2.525 × 10⁻³   |     eV²      |
-|     δCP           |      -2.498       |   radians    |
-
-</div>
-
-### Nominal Integrated Event rates
-
-<div align="center">
-
-|       Type        |     Unoscillated    |     Oscillated    |
-|:-----------------:|:-------------------:|:-----------------:|
-| FHC ν<sub>μ</sub> |     25941.5747      |     8243.9185     |
-| FHC ν<sub>e</sub> |      391.5995       |     1756.9128     |
-| RHC ν<sub>μ</sub> |     12492.6174      |     4379.4037     |
-| RHC ν<sub>e</sub> |      208.8016       |     491.0061      |
-
-</div>

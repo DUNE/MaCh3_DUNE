@@ -10,7 +10,7 @@ class SampleHandlerPDSP : public SampleHandlerFD
   SampleHandlerPDSP(const std::string& config_name, ParameterHandlerGeneric* parameter_handler);
   virtual ~SampleHandlerPDSP();
 
-  enum KinematicTypes {kTrueKEInt, kRecoKEInt, kMode, kOscChannel};
+  enum KinematicTypes {kTrueKEInt, kRecoKEInt, kMode, kOscChannel, kRecoEndZ};
   
   // =============================================
 
@@ -45,7 +45,8 @@ class SampleHandlerPDSP : public SampleHandlerFD
     {"TrueKEInt", kTrueKEInt},
     {"RecoKEInt", kRecoKEInt},
     {"Mode", kMode},
-    {"OscillationChannel", kOscChannel}
+    {"OscillationChannel", kOscChannel},
+    {"RecoEndZ", kRecoEndZ}
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersPDSP = {
@@ -53,9 +54,12 @@ class SampleHandlerPDSP : public SampleHandlerFD
     {kRecoKEInt, "RecoKEInt"},
     {kMode, "Mode"},
     {kOscChannel, "OscillationChannel"},
-
+    {kRecoEndZ, "RecoEndZ"},
   };
 
   // functional parameters, currently have none for the time being
   void RegisterFunctionalParameters() override;
+
+  // Placeholder for nupdg/nupdgUnosc/Target pointers — unused in PDSP but must not be null
+  static const int DummyInt = 0;
 };
