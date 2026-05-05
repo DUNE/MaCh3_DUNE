@@ -115,6 +115,61 @@ struct dunemc_beamndgar : public dunemc_base { // Store variables used by Sample
   double rw_rad;
 };
 
+struct primary_params {
+  int pdg = std::numeric_limits<int>::quiet_NaN();
+
+  double evis = std::numeric_limits<double>::quiet_NaN(); 
+  double bangle = std::numeric_limits<double>::quiet_NaN();
+  double beamangle = std::numeric_limits<double>::quiet_NaN();
+  double momentum = std::numeric_limits<double>::quiet_NaN();
+  double transversemomentum = std::numeric_limits<double>::quiet_NaN();
+
+  int isaccepted = std::numeric_limits<int>::quiet_NaN();
+  int iscurvatureresolved = std::numeric_limits<int>::quiet_NaN();
+  int isstoppedintpc = std::numeric_limits<int>::quiet_NaN();
+  int isstoppedinecal = std::numeric_limits<int>::quiet_NaN();
+  int isstoppedingap = std::numeric_limits<int>::quiet_NaN();
+  int isstoppedinbarrelgap = std::numeric_limits<int>::quiet_NaN();
+  int isstoppedinendgap = std::numeric_limits<int>::quiet_NaN();
+  int isstoppedinbarrel = std::numeric_limits<int>::quiet_NaN();
+  int isstoppedinendcap = std::numeric_limits<int>::quiet_NaN();
+  int isescaped = std::numeric_limits<int>::quiet_NaN();
+  int iscontained = std::numeric_limits<int>::quiet_NaN();
+
+  double startx = std::numeric_limits<double>::quiet_NaN();
+  double startr2 = std::numeric_limits<double>::quiet_NaN();
+  double endr = std::numeric_limits<double>::quiet_NaN();
+  double enddepth = std::numeric_limits<double>::quiet_NaN();
+  double endx = std::numeric_limits<double>::quiet_NaN();
+  double endy = std::numeric_limits<double>::quiet_NaN();
+  double endz = std::numeric_limits<double>::quiet_NaN();
+
+  double nturns = std::numeric_limits<double>::quiet_NaN();
+  double nhits = std::numeric_limits<double>::quiet_NaN();
+  double tracklengthyz = std::numeric_limits<double>::quiet_NaN();
+  double momresms = std::numeric_limits<double>::quiet_NaN();
+  double momresyz = std::numeric_limits<double>::quiet_NaN();
+  double momresx = std::numeric_limits<double>::quiet_NaN();
+
+  double tpcedepfrac = std::numeric_limits<double>::quiet_NaN();
+};
+
+struct shower_params {
+  int pdg = std::numeric_limits<int>::quiet_NaN();
+
+  double dcalboundary = std::numeric_limits<double>::quiet_NaN();
+  double energy = std::numeric_limits<double>::quiet_NaN();
+  double bangle = std::numeric_limits<double>::quiet_NaN();
+  double cosnorm = std::numeric_limits<double>::quiet_NaN();
+
+  int iscontained = std::numeric_limits<int>::quiet_NaN();
+  int isconv = std::numeric_limits<int>::quiet_NaN();
+};
+
+struct photon_params {
+  double energy = std::numeric_limits<double>::quiet_NaN();
+};
+
 struct dunemc_plotting { // Store variables just used in plotting (cleared from memory before a fit)
   bool in_fdv;
   bool is_accepted;
@@ -128,47 +183,9 @@ struct dunemc_plotting { // Store variables just used in plotting (cleared from 
   double rw_ePi0;
   double Target;
  
-  std::vector<int> prim_pdg = {};
-  std::vector<double> prim_evis = {};
-  std::vector<double> prim_bangle = {};
-  std::vector<double> prim_beamangle = {};
-  std::vector<double> prim_momentum = {};
-  std::vector<double> prim_transversemomentum = {};
-  std::vector<int> prim_isaccepted = {};
-  std::vector<int> prim_iscurvatureresolved = {};
-  std::vector<int> prim_isstoppedintpc = {};
-  std::vector<int> prim_isstoppedinecal = {};
-  std::vector<int> prim_isstoppedingap = {};
-  std::vector<int> prim_isstoppedinbarrelgap = {};
-  std::vector<int> prim_isstoppedinendgap = {};
-  std::vector<int> prim_isstoppedinbarrel = {};
-  std::vector<int> prim_isstoppedinendcap = {};
-  std::vector<int> prim_isescaped = {};
-  std::vector<double> prim_startx = {};
-  std::vector<double> prim_startr2 = {};
-  std::vector<double> prim_endr = {};
-  std::vector<double> prim_enddepth = {};
-  std::vector<double> prim_endx = {};
-  std::vector<double> prim_endy = {};
-  std::vector<double> prim_endz = {};
-  std::vector<double> prim_nturns = {};
-  std::vector<double> prim_nhits = {};
-  std::vector<double> prim_tracklengthyz = {};
-  std::vector<double> prim_momresms = {};
-  std::vector<double> prim_momresyz = {};
-  std::vector<double> prim_momresx = {};
-  std::vector<double> prim_tpcedepfrac = {};
-  std::vector<double> prim_iscontained = {};
-
-  std::vector<double> shower_dcalboundary = {};
-  std::vector<double> shower_pdg = {};
-  std::vector<double> shower_energy = {};
-  std::vector<double> shower_bangle = {};
-  std::vector<double> shower_iscontained = {};
-  std::vector<double> shower_isconv = {};
-  std::vector<double> shower_cosnorm = {};
-
-  std::vector<double> photon_energy = {};
+  std::vector<primary_params> prim = {};
+  std::vector<shower_params> shower = {};
+  std::vector<photon_params> photon = {};
 };
 
 #endif

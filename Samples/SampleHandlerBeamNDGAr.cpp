@@ -331,7 +331,7 @@ double SampleHandlerBeamNDGAr::GetDCalBoundary(const std::vector<double>& startp
     norm += dir[j] * dir[j];
   }
   double d = num * std::sqrt(norm) / denom;
-  boundary_index = static_cast<size_t>(_NumCalSides)+2;
+  boundary_index = static_cast<size_t>(_NumCalSides)+dividing_plane_idx-1;
 
   return d / ECALSciX0;
 }
@@ -362,6 +362,10 @@ bool SampleHandlerBeamNDGAr::IsPrimContained(int id, const std::unordered_map<in
         MACH3LOG_WARN("Particle (pdg {}) which leaves TPC has no stored ecal momentum. Depth = {} cm.", pdg, GetCalDepth(endpos[0], endpos[1], endpos[2]));
         return true;
       }
+
+      // We have a shower, so push back into shower_params
+      plotting_vars.shower.push_back(shower_params());
+
       double ecalE = std::sqrt(ecalP[0]*ecalP[0] + ecalP[1]*ecalP[1] + ecalP[2]*ecalP[2] + M3::Utils::GetMassFromPDG(pdg)*M3::Utils::GetMassFromPDG(pdg));
 
       // Now find the shower start point
@@ -373,11 +377,11 @@ bool SampleHandlerBeamNDGAr::IsPrimContained(int id, const std::unordered_map<in
       double pz = _MCPStartPZ->at(idx)/1000.;
       double ptot = std::sqrt(px*px + py*py + pz*pz);
 
-      plotting_vars.shower_energy.push_back(ecalE);
-      plotting_vars.shower_bangle.push_back(acos(px/ptot)*180/M_PI);
-      plotting_vars.shower_pdg.push_back(pdg);
-      if (_MCPEndProcess->at(idx) != "conv") plotting_vars.shower_isconv.push_back(false);
-      else plotting_vars.shower_isconv.push_back(true);
+      plotting_vars.shower.back().energy = ecalE;
+      plotting_vars.shower.back().bangle = acos(px/ptot*180/M_PI);
+      plotting_vars.shower.back().pdg = pdg;
+      if (_MCPEndProcess->at(idx) != "conv") plotting_vars.shower.back().isconv = false;
+      else plotting_vars.shower.back().isconv = true;
 
       // For electrons, start point is the location of the first hit above threshold. This is stored in eID_to_showerstart.
       if (std::abs(pdg) == 11) {
@@ -385,9 +389,7 @@ bool SampleHandlerBeamNDGAr::IsPrimContained(int id, const std::unordered_map<in
         else {
           if (std::abs(GetCalDepth(endpos[0], endpos[1], endpos[2])) == 999)  {
             MACH3LOG_WARN("Electron of energy {} GeV has no hits above threshold and does not stop in the ECal - considered uncontained.", ecalE);
-            plotting_vars.shower_dcalboundary.push_back(std::numeric_limits<double>::quiet_NaN());
-            plotting_vars.shower_iscontained.push_back(false);
-            plotting_vars.shower_cosnorm.push_back(std::numeric_limits<double>::quiet_NaN());
+            plotting_vars.shower.back().iscontained = false;
             return false;
           }
           else showerstart = endpos;
@@ -396,17 +398,14 @@ bool SampleHandlerBeamNDGAr::IsPrimContained(int id, const std::unordered_map<in
       else showerstart = endpos; // For photons and pi0s and enclosed electrons with no hits above threshold, start point is end of trajectory (pair produce/decay)
 
       if (GetCalDepth(showerstart[0], showerstart[1], showerstart[2]) == 999.) {
-        plotting_vars.shower_dcalboundary.push_back(std::numeric_limits<double>::quiet_NaN());
-        plotting_vars.shower_cosnorm.push_back(std::numeric_limits<double>::quiet_NaN());
-
         // End position only good approximator of shower start for photons which pair produce. This is dominant above 20 MeV. Below this energy, showers which 'escape' haven't really - they have just deposited energy by Compton scattering instead, but the photon leaves with some small remaining energy.
         if (ecalE > 0.020) {
-          plotting_vars.shower_iscontained.push_back(false);
+          plotting_vars.shower.back().iscontained = false;
           // MACH3LOG_WARN("Shower of energy {}, pdg {} starts beyond calorimeter boundary - treating as uncontained - startpos ({}, {}, {}), showerstart ({}, {}, {})", ecalE, pdg, startpos[0], startpos[1], startpos[2], showerstart[0], showerstart[1], showerstart[2]);
           return false;
         }
         // Otherwise, isContained remains true
-        plotting_vars.shower_iscontained.push_back(true);
+        plotting_vars.shower.back().iscontained = true;
       }
       else  {
         // Find the parameters governing the containment threshold curve
@@ -433,19 +432,21 @@ bool SampleHandlerBeamNDGAr::IsPrimContained(int id, const std::unordered_map<in
           MACH3LOG_WARN("No boundary found for shower of pdg {}", pdg);
           MACH3LOG_WARN("Start Position ({} {}, {})", showerstart[0], showerstart[1], showerstart[2]);
           MACH3LOG_WARN("Direction ({}, {}, {})", ecalP[0], ecalP[1], ecalP[2]);
-          plotting_vars.shower_cosnorm.push_back(std::numeric_limits<double>::quiet_NaN());
-        }
-        else if (boundary_index < outerECalA.size()) {
-          std::vector<double> normal = outerECalA[boundary_index];
-          double dotProd = ecalP[0]*normal[0] + ecalP[1]*normal[1] + ecalP[2]*normal[2];
-          plotting_vars.shower_cosnorm.push_back(dotProd/ptot);
         }
         else {
-          plotting_vars.shower_cosnorm.push_back(std::numeric_limits<double>::quiet_NaN());
+          std::vector<double> normal;
+          if (boundary_index < outerECalA.size()) {
+            normal = outerECalA[boundary_index];
+          }
+          else {
+            normal = dividingPlaneA[boundary_index-_NumCalSides];
+          }
+          double dotProd = ecalP[0]*normal[0] + ecalP[1]*normal[1] + ecalP[2]*normal[2];
+          plotting_vars.shower.back().cosnorm = dotProd/ptot;
         }
 
-        plotting_vars.shower_dcalboundary.push_back(d_boundary);
-        plotting_vars.shower_iscontained.push_back(isContained);
+        plotting_vars.shower.back().dcalboundary = d_boundary;
+        plotting_vars.shower.back().iscontained = isContained;
       }
     }
     else { // For non-EM showers, need the particle to stop within the calorimeter and not re-interact
@@ -575,28 +576,28 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
   //Fill particle-level kinematic variables with default or actual (if possible at this stage) values
   if (_MCPMotherTrkID->at(i_particle) == 0) {
     double invis_mass = (pdg == 2212 || pdg == 2112) ? mass : 0.; 
-    plotting_vars.prim_evis[i_particle] = std::sqrt(energy*energy - invis_mass*invis_mass); // don't include rest mass energy for p/n
-    plotting_vars.prim_momentum[i_particle] = mom_tot;
-    plotting_vars.prim_transversemomentum[i_particle] = transverse_mom; //momentum transverse to B-field
-    plotting_vars.prim_bangle[i_particle] = acos(p_x/mom_tot)*180/M_PI; //angle to B-field
-    plotting_vars.prim_beamangle[i_particle] = acos(p_beam/mom_tot)*180/M_PI;
+    plotting_vars.prim[i_particle].evis = std::sqrt(energy*energy - invis_mass*invis_mass); // don't include rest mass energy for p/n
+    plotting_vars.prim[i_particle].momentum = mom_tot;
+    plotting_vars.prim[i_particle].transversemomentum = transverse_mom; //momentum transverse to B-field
+    plotting_vars.prim[i_particle].bangle = acos(p_x/mom_tot)*180/M_PI; //angle to B-field
+    plotting_vars.prim[i_particle].beamangle = acos(p_beam/mom_tot)*180/M_PI;
 
-    plotting_vars.prim_startx[i_particle] = start_length;
-    plotting_vars.prim_startr2[i_particle] = start_radius*start_radius;
-    plotting_vars.prim_endr[i_particle] = end_radius;
-    plotting_vars.prim_enddepth[i_particle] = end_ecaldepth;
-    plotting_vars.prim_endx[i_particle] = end_length;
-    plotting_vars.prim_endy[i_particle] = yend-TPC_centre_y;
-    plotting_vars.prim_endz[i_particle] = zend-TPC_centre_z;
+    plotting_vars.prim[i_particle].startx = start_length;
+    plotting_vars.prim[i_particle].startr2 = start_radius*start_radius;
+    plotting_vars.prim[i_particle].endr = end_radius;
+    plotting_vars.prim[i_particle].enddepth = end_ecaldepth;
+    plotting_vars.prim[i_particle].endx = end_length;
+    plotting_vars.prim[i_particle].endy = yend-TPC_centre_y;
+    plotting_vars.prim[i_particle].endz = zend-TPC_centre_z;
 
-    plotting_vars.prim_isstoppedingap[i_particle] = !stops_in_tpc && stops_before_ecal;
-    plotting_vars.prim_isstoppedinbarrelgap[i_particle] = !stops_in_tpc && stops_before_ecal && std::abs(end_length)<=TPCInstrumentedLength; 
-    plotting_vars.prim_isstoppedinendgap[i_particle] = !stops_in_tpc && stops_before_ecal && std::abs(end_length)>TPCInstrumentedLength; 
-    plotting_vars.prim_isstoppedinecal[i_particle] = stops_in_ecal;
-    plotting_vars.prim_isstoppedinbarrel[i_particle] = stops_in_ecal && end_radius>=ECALInnerRadius;
-    plotting_vars.prim_isstoppedinendcap[i_particle] = stops_in_ecal && end_radius<ECALInnerRadius;
-    plotting_vars.prim_isstoppedintpc[i_particle] = stops_in_tpc;
-    plotting_vars.prim_isescaped[i_particle] = stops_beyond_ecal;
+    plotting_vars.prim[i_particle].isstoppedingap = !stops_in_tpc && stops_before_ecal;
+    plotting_vars.prim[i_particle].isstoppedinbarrelgap = !stops_in_tpc && stops_before_ecal && std::abs(end_length)<=TPCInstrumentedLength; 
+    plotting_vars.prim[i_particle].isstoppedinendgap = !stops_in_tpc && stops_before_ecal && std::abs(end_length)>TPCInstrumentedLength; 
+    plotting_vars.prim[i_particle].isstoppedinecal = stops_in_ecal;
+    plotting_vars.prim[i_particle].isstoppedinbarrel = stops_in_ecal && end_radius>=ECALInnerRadius;
+    plotting_vars.prim[i_particle].isstoppedinendcap = stops_in_ecal && end_radius<ECALInnerRadius;
+    plotting_vars.prim[i_particle].isstoppedintpc = stops_in_tpc;
+    plotting_vars.prim[i_particle].isescaped = stops_beyond_ecal;
   }
 
   if (charge == 0) return false;
@@ -701,12 +702,12 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
   double momres_frac = std::sqrt(momres_tottransverse*momres_tottransverse + (sigma_theta*tan_theta)*(sigma_theta*tan_theta));
 
   if (_MCPMotherTrkID->at(i_particle) == 0) {
-    plotting_vars.prim_nturns[i_particle] = nturns*2*M_PI;
-    plotting_vars.prim_nhits[i_particle] = nhits;
-    plotting_vars.prim_tracklengthyz[i_particle] = L_yz;
-    plotting_vars.prim_momresms[i_particle] = momres_ms/transverse_mom;
-    plotting_vars.prim_momresyz[i_particle] = momres_yz/transverse_mom;
-    plotting_vars.prim_momresx[i_particle] = std::abs(sigma_theta*tan_theta);
+    plotting_vars.prim[i_particle].nturns = nturns*2*M_PI;
+    plotting_vars.prim[i_particle].nhits = nhits;
+    plotting_vars.prim[i_particle].tracklengthyz = L_yz;
+    plotting_vars.prim[i_particle].momresms = momres_ms/transverse_mom;
+    plotting_vars.prim[i_particle].momresyz = momres_yz/transverse_mom;
+    plotting_vars.prim[i_particle].momresx = std::abs(sigma_theta*tan_theta);
   }
 
   if(momres_frac*(mom_tot/energy)*(mom_tot/energy) > energy_resolution_threshold) return false;
@@ -1042,8 +1043,10 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
       // Fill particle-level variables
       if (_MCPPDG->at(i_particle) == 22) {
+        // We have a photon so push back into photon_params
+        dunendgarmcPlotting[i_event].photon.push_back(photon_params());
         double photon_energy = std::sqrt(_MCPStartPX->at(i_particle)*_MCPStartPX->at(i_particle) + _MCPStartPY->at(i_particle)*_MCPStartPY->at(i_particle) + _MCPStartPZ->at(i_particle)*_MCPStartPZ->at(i_particle))/1000.;
-        dunendgarmcPlotting[i_event].photon_energy.push_back(photon_energy);
+        dunendgarmcPlotting[i_event].photon.back().energy = photon_energy;
       }
       else if (std::abs(_MCPPDG->at(i_particle)) == 11) {
         eID_to_smallest_t[trkID] = std::numeric_limits<double>::max();
@@ -1084,37 +1087,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
     // Resize vectors for prim-level parameters
     size_t n_prim_in_event = mother_to_daughter_ID[0].size();
-    dunendgarmcPlotting[i_event].prim_pdg.resize(n_prim_in_event, M3::_BAD_INT_);
-    dunendgarmcPlotting[i_event].prim_evis.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_momentum.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_transversemomentum.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_bangle.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_beamangle.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_isaccepted.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].prim_iscurvatureresolved.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].prim_isstoppedintpc.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].prim_isstoppedinecal.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].prim_isstoppedingap.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].prim_isstoppedinbarrelgap.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].prim_isstoppedinendgap.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].prim_isstoppedinbarrel.resize(n_prim_in_event, M3::_BAD_INT_);
-    dunendgarmcPlotting[i_event].prim_isstoppedinendcap.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].prim_isescaped.resize(n_prim_in_event, M3::_BAD_INT_); 
-    dunendgarmcPlotting[i_event].prim_startx.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_startr2.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_endr.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_enddepth.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_endx.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_endy.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_endz.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_nturns.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_nhits.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_tracklengthyz.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_momresms.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_momresyz.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_momresx.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_tpcedepfrac.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
-    dunendgarmcPlotting[i_event].prim_iscontained.resize(n_prim_in_event, M3::_BAD_DOUBLE_); 
+    dunendgarmcPlotting[i_event].prim.resize(n_prim_in_event);
 
     // Loop through primaries
     for (int& primID : mother_to_daughter_ID[0]) {
@@ -1124,7 +1097,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       int pdg = _MCPPDG->at(prim_index);
       if (pdg == 2112 || std::abs(pdg) == 12 || std::abs(pdg) == 14 || std::abs(pdg) == 16) continue;
 
-      dunendgarmcPlotting[i_event].prim_pdg[prim_index] = pdg; 
+      dunendgarmcPlotting[i_event].prim[prim_index].pdg = pdg; 
 
       // Check if primary is resolved from curvature
       bool isCurvatureResolved = false;
@@ -1132,7 +1105,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       if (CurvatureResolutionFilter(primID, mother_to_daughter_ID, ID_to_index, dunendgarmcPlotting[i_event], pixel_spacing_cm)) {
         isCurvatureResolved = true;
       }
-      dunendgarmcPlotting[i_event].prim_iscurvatureresolved[prim_index] = isCurvatureResolved;
+      dunendgarmcPlotting[i_event].prim[prim_index].iscurvatureresolved = isCurvatureResolved;
 
       // Check for containment
       bool isContained = IsPrimContained(primID, mother_to_daughter_ID, ID_to_index, eID_to_showerstart, dunendgarmcPlotting[i_event]);
@@ -1143,8 +1116,8 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
         isPrimAccepted = false;
         isEventAccepted = false;
       }
-      dunendgarmcPlotting[i_event].prim_isaccepted[prim_index] = isPrimAccepted;
-      dunendgarmcPlotting[i_event].prim_iscontained[prim_index] = isContained;
+      dunendgarmcPlotting[i_event].prim[prim_index].isaccepted = isPrimAccepted;
+      dunendgarmcPlotting[i_event].prim[prim_index].iscontained = isContained;
 
       double p_x = _MCPStartPX->at(prim_index)/1000.;
       double p_y = _MCPStartPY->at(prim_index)/1000.;
@@ -1157,13 +1130,13 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       if (pdg < 1000000000) {
         double mass = M3::Utils::GetMassFromPDG(pdg);
         double energy = std::sqrt(p2+mass*mass);
-        dunendgarmcPlotting[i_event].prim_tpcedepfrac[prim_index] = ID_to_TPCDep[primID]/(energy-mass);
+        dunendgarmcPlotting[i_event].prim[prim_index].tpcedepfrac = ID_to_TPCDep[primID]/(energy-mass);
       }
 
       // Get vertex from primary muon start position
       if (pdg == 13 && std::abs((p_x-_PXlep)/_PXlep) < 0.00001 && std::abs((p_y-_PYlep)/_PYlep) < 0.00001 && std::abs((p_z-_PZlep)/_PZlep) < 0.00001) {
         vertex = {_MCPStartX->at(prim_index), _MCPStartY->at(prim_index), _MCPStartZ->at(prim_index)};
-        dunendgarmcPlotting[i_event].lep_tracklengthyz = dunendgarmcPlotting[i_event].prim_tracklengthyz[prim_index];
+        dunendgarmcPlotting[i_event].lep_tracklengthyz = dunendgarmcPlotting[i_event].prim[prim_index].tracklengthyz;
       }
 
       // Get pi0 information 
@@ -1305,107 +1278,98 @@ double SampleHandlerBeamNDGAr::ReturnKinematicParameter(const int KinPar, const 
 #pragma GCC diagnostic pop
 
 std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(const int KinVec, const int iEvent) const {
+  auto extractVector = [](const auto& vec, auto member) {
+    using MemberType = std::decay_t<std::invoke_result_t<decltype(member), decltype(vec[0])>>;
+    std::vector<MemberType> result(vec.size());
+    std::transform(vec.begin(), vec.end(), result.begin(),
+                   [member](const auto& s) { return s.*member; });
+    return result;
+  };
+
+  auto toVecDouble = [&](const auto& vec, auto member) {
+    auto extracted = extractVector(vec, member);
+    return std::vector<double>(extracted.begin(), extracted.end());
+  };
+
   switch(KinVec) {
     case kPrim_IsAccepted:
-      return std::vector<double>(
-        dunendgarmcPlotting[iEvent].prim_isaccepted.begin(),
-        dunendgarmcPlotting[iEvent].prim_isaccepted.end());
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::isaccepted);
     case kPrim_IsCurvatureResolved:
-      return std::vector<double>(
-        dunendgarmcPlotting[iEvent].prim_iscurvatureresolved.begin(),
-        dunendgarmcPlotting[iEvent].prim_iscurvatureresolved.end());
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::iscurvatureresolved);
     case kPrim_PDG:
-      return std::vector<double>(
-        dunendgarmcPlotting[iEvent].prim_pdg.begin(),
-        dunendgarmcPlotting[iEvent].prim_pdg.end());
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::pdg);
     case kPrim_IsStoppedInTPC:
-      return std::vector<double>(
-        dunendgarmcPlotting[iEvent].prim_isstoppedintpc.begin(),
-        dunendgarmcPlotting[iEvent].prim_isstoppedintpc.end());
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::isstoppedintpc);
     case kPrim_IsStoppedInECal:
-      return std::vector<double>(
-        dunendgarmcPlotting[iEvent].prim_isstoppedinecal.begin(),
-        dunendgarmcPlotting[iEvent].prim_isstoppedinecal.end());
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::isstoppedinecal);
     case kPrim_IsStoppedInBarrel:
-      return std::vector<double>(
-        dunendgarmcPlotting[iEvent].prim_isstoppedinbarrel.begin(),
-        dunendgarmcPlotting[iEvent].prim_isstoppedinbarrel.end());
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::isstoppedinbarrel);
     case kPrim_IsStoppedInEndCap:
-      return std::vector<double>(
-        dunendgarmcPlotting[iEvent].prim_isstoppedinendcap.begin(),
-        dunendgarmcPlotting[iEvent].prim_isstoppedinendcap.end());
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::isstoppedinendcap);
     case kPrim_IsStoppedInGap:
-      return std::vector<double>(
-        dunendgarmcPlotting[iEvent].prim_isstoppedingap.begin(),
-        dunendgarmcPlotting[iEvent].prim_isstoppedingap.end());
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::isstoppedingap);
     case kPrim_IsStoppedInEndGap:
-      return std::vector<double>(
-        dunendgarmcPlotting[iEvent].prim_isstoppedinendgap.begin(),
-        dunendgarmcPlotting[iEvent].prim_isstoppedinendgap.end());
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::isstoppedinendgap);
     case kPrim_IsStoppedInBarrelGap:
-      return std::vector<double>(
-        dunendgarmcPlotting[iEvent].prim_isstoppedinbarrelgap.begin(),
-        dunendgarmcPlotting[iEvent].prim_isstoppedinbarrelgap.end());
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::isstoppedinbarrelgap);
     case kPrim_IsEscaped:
-      return std::vector<double>(
-        dunendgarmcPlotting[iEvent].prim_isescaped.begin(),
-        dunendgarmcPlotting[iEvent].prim_isescaped.end());
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::isescaped);
     case kPrim_EVis:
-      return dunendgarmcPlotting[iEvent].prim_evis;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::evis);
     case kPrim_Momentum:
-      return dunendgarmcPlotting[iEvent].prim_momentum;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::momentum);
     case kPrim_TransverseMomentum:
-      return dunendgarmcPlotting[iEvent].prim_transversemomentum;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::transversemomentum);
     case kPrim_BAngle:
-      return dunendgarmcPlotting[iEvent].prim_bangle;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::bangle);
     case kPrim_BeamAngle:
-      return dunendgarmcPlotting[iEvent].prim_beamangle;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::beamangle);
     case kPrim_NTurns:
-      return dunendgarmcPlotting[iEvent].prim_nturns;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::nturns);
     case kPrim_NHits:
-      return dunendgarmcPlotting[iEvent].prim_nhits;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::nhits);
     case kPrim_TrackLengthYZ:
-      return dunendgarmcPlotting[iEvent].prim_tracklengthyz;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::tracklengthyz);
     case kPrim_MomResMS:
-      return dunendgarmcPlotting[iEvent].prim_momresms;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::momresms);
     case kPrim_MomResYZ:
-      return dunendgarmcPlotting[iEvent].prim_momresyz;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::momresyz);
     case kPrim_MomResX:
-      return dunendgarmcPlotting[iEvent].prim_momresx;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::momresx);
     case kPrim_StartR2:
-      return dunendgarmcPlotting[iEvent].prim_startr2;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::startr2);
     case kPrim_EndR:
-      return dunendgarmcPlotting[iEvent].prim_endr;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::endr);
     case kPrim_EndDepth:
-      return dunendgarmcPlotting[iEvent].prim_enddepth;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::enddepth);
     case kPrim_EndX:
-      return dunendgarmcPlotting[iEvent].prim_endx;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::endx);
     case kPrim_EndY:
-      return dunendgarmcPlotting[iEvent].prim_endy;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::endy);
     case kPrim_EndZ:
-      return dunendgarmcPlotting[iEvent].prim_endz;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::endz);
     case kPrim_StartX:
-      return dunendgarmcPlotting[iEvent].prim_startx;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::startx);
     case kPrim_TPCEDepFrac:
-      return dunendgarmcPlotting[iEvent].prim_tpcedepfrac;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::tpcedepfrac);
     case kPrim_IsContained:
-      return dunendgarmcPlotting[iEvent].prim_iscontained;
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::iscontained);
     case kShower_CosNorm:
-      return dunendgarmcPlotting[iEvent].shower_cosnorm;
+      return toVecDouble(dunendgarmcPlotting[iEvent].shower, &shower_params::cosnorm);
     case kShower_PDG:
-      return dunendgarmcPlotting[iEvent].shower_pdg;
+      return toVecDouble(dunendgarmcPlotting[iEvent].shower, &shower_params::pdg);
     case kShower_DCalBoundary:
-      return dunendgarmcPlotting[iEvent].shower_dcalboundary;
+      return toVecDouble(dunendgarmcPlotting[iEvent].shower, &shower_params::dcalboundary);
     case kShower_Energy:
-      return dunendgarmcPlotting[iEvent].shower_energy;
+      return toVecDouble(dunendgarmcPlotting[iEvent].shower, &shower_params::energy);
     case kShower_BAngle:
-      return dunendgarmcPlotting[iEvent].shower_bangle;
+      return toVecDouble(dunendgarmcPlotting[iEvent].shower, &shower_params::bangle);
     case kShower_IsContained:
-      return dunendgarmcPlotting[iEvent].shower_iscontained;
+      return toVecDouble(dunendgarmcPlotting[iEvent].shower, &shower_params::iscontained);
     case kShower_IsConv:
-      return dunendgarmcPlotting[iEvent].shower_isconv;
+      return toVecDouble(dunendgarmcPlotting[iEvent].shower, &shower_params::isconv);
     case kPhoton_Energy:
-      return dunendgarmcPlotting[iEvent].photon_energy;
+      return toVecDouble(dunendgarmcPlotting[iEvent].photon, &photon_params::energy);
     default:
       MACH3LOG_ERROR("Unrecognized Kinematic Vector: {}", static_cast<int>(KinVec));
       throw MaCh3Exception(__FILE__, __LINE__);
