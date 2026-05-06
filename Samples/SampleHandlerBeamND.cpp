@@ -14,6 +14,8 @@ SampleHandlerBeamND::SampleHandlerBeamND(std::string mc_version_, ParameterHandl
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
   
   Initialise();
+
+  downsamplingStep = 1;
 }
 
 SampleHandlerBeamND::~SampleHandlerBeamND() {
