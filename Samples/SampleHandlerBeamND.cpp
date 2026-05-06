@@ -42,6 +42,9 @@ void SampleHandlerBeamND::Init() {
     MACH3LOG_INFO("- iselike: {}", beamNDSampleDetails[i].iselike);
   }
 
+  downsamplingStep = GetFromManager<unsigned int>(SampleManager->raw()["downsamplingStep"], 1);
+  MACH3LOG_INFO("Beam ND downsampling step: {}", downsamplingStep);
+
   MACH3LOG_INFO("-------------------------------------------------------------------");
 }
 
@@ -141,16 +144,17 @@ int SampleHandlerBeamND::SetupExperimentMC() {
   _data->SetBranchAddress("BeRPA_A_cvwgt", &_BeRPA_cvwgt);
 
   size_t nEntries = static_cast<size_t>(_data->GetEntries());
-  size_t countwidth = nEntries / 10;
-  dunendmcSamples.resize(nEntries);
+  size_t nDownsampledEntries = nEntries / downsamplingStep;
+  size_t countwidth = nDownsampledEntries / 10;
+  dunendmcSamples.resize(nDownsampledEntries);
   _data->GetEntry(0);
 
   //FILL DUNE STRUCT
-  for (unsigned int i = 0; i < nEntries; ++i) { // Loop through tree
-    _data->GetEntry(i);
+  for (unsigned int i = 0; i < nDownsampledEntries; ++i) { // Loop through tree
+    _data->GetEntry(i * downsamplingStep);
 
     if (i % countwidth == 0) {
-      M3::Utils::PrintProgressBar(i, static_cast<Long64_t>(nEntries));
+      M3::Utils::PrintProgressBar(i, static_cast<Long64_t>(nDownsampledEntries));
     }
 
     const Int_t treeNum = _data->GetTreeNumber();
@@ -166,7 +170,7 @@ int SampleHandlerBeamND::SetupExperimentMC() {
 
     // POT stuff
     dunendmcSamples[i].norm_s = beamNDSampleDetails[sample_index].norm_s;
-    dunendmcSamples[i].pot_s = beamNDSampleDetails[sample_index].pot_s;
+    dunendmcSamples[i].pot_s = beamNDSampleDetails[sample_index].pot_s * downsamplingStep;
     
     dunendmcSamples[i].rw_erec = _erec;
     dunendmcSamples[i].rw_erec_shifted = _erec;
@@ -193,7 +197,7 @@ int SampleHandlerBeamND::SetupExperimentMC() {
   //_sampleFile->Close();
   _data->Reset();
   delete _data;
-  return static_cast<int>(nEntries);
+  return static_cast<int>(nDownsampledEntries);
   
 }
 

@@ -26,6 +26,9 @@ void SampleHandlerBeamFD::Init() {
     MACH3LOG_INFO("- isFHC: {}", beamFDSampleDetails[i].isFHC);
     MACH3LOG_INFO("- iselike: {}", beamFDSampleDetails[i].iselike);
   }
+
+  downsamplingStep = GetFromManager<unsigned int>(SampleManager->raw()["downsamplingStep"], 1);
+  MACH3LOG_INFO("Beam FD downsampling step: {}", downsamplingStep);
   
   MACH3LOG_INFO("-------------------------------------------------------------------");
 }
@@ -480,8 +483,9 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   _data->SetBranchAddress("vtx_z", &_vtx_z);  
 
   size_t nEntries = static_cast<size_t>(_data->GetEntries());
-  size_t countwidth = nEntries / 5;
-  dunemcSamples.resize(nEntries);
+  size_t nDownsampledEntries = nEntries / downsamplingStep;
+  size_t countwidth = nDownsampledEntries / 5;
+  dunemcSamples.resize(nDownsampledEntries);
   _data->GetEntry(0);
 
   // HH: A map to keep track of negative energies
@@ -494,11 +498,11 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   negative_counts["rw_sum_ehad"] = 0;
   
   //FILL DUNE STRUCT
-  for (unsigned int i = 0; i < nEntries; ++i) { // Loop through tree
-    _data->GetEntry(i);
+  for (unsigned int i = 0; i < nDownsampledEntries; ++i) { // Loop through tree
+    _data->GetEntry(i * downsamplingStep);
 
     if (i % countwidth == 0) {
-      M3::Utils::PrintProgressBar(i, static_cast<Long64_t>(nEntries));
+      M3::Utils::PrintProgressBar(i, static_cast<Long64_t>(nDownsampledEntries));
     }
 
     const size_t sample_index = fileIndexToSample[static_cast<size_t>(_data->GetTreeNumber())];
@@ -510,7 +514,7 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
 
     // POT stuff
     dunemcSamples[i].norm_s = fileIndexToNorm[static_cast<size_t>(_data->GetTreeNumber())][0]; // Norm in sample
-    dunemcSamples[i].pot_s = fileIndexToNorm[static_cast<size_t>(_data->GetTreeNumber())][1]; // POT in sample
+    dunemcSamples[i].pot_s = fileIndexToNorm[static_cast<size_t>(_data->GetTreeNumber())][1] * downsamplingStep; // POT in sample
     
     dunemcSamples[i].rw_cvnnumu = (_cvnnumu);
     dunemcSamples[i].rw_cvnnue = (_cvnnue);
@@ -601,7 +605,7 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   }
   
   delete _data;
-  return static_cast<int>(nEntries);
+  return static_cast<int>(nDownsampledEntries);
 }
 
 const double* SampleHandlerBeamFD::GetPointerToKinematicParameter(const int KinPar, const int iEvent) const {
