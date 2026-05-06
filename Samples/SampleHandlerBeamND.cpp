@@ -45,6 +45,11 @@ void SampleHandlerBeamND::Init() {
   }
 
   downsamplingStep = GetFromManager<unsigned int>(SampleManager->raw()["downsamplingStep"], 1);
+  if (downsamplingStep == 0) {
+    throw MaCh3Exception(__FILE__, __LINE__,
+      "Downsampling step cannot be zero. Please set it to a positive integer in the Beam ND sample config file."
+    );
+  } 
   MACH3LOG_INFO("Beam ND downsampling step: {}", downsamplingStep);
 
   MACH3LOG_INFO("-------------------------------------------------------------------");
@@ -147,6 +152,11 @@ int SampleHandlerBeamND::SetupExperimentMC() {
 
   size_t nEntries = static_cast<size_t>(_data->GetEntries());
   size_t nDownsampledEntries = nEntries / downsamplingStep;
+  if (nDownsampledEntries == 0) {
+    throw MaCh3Exception(__FILE__, __LINE__,
+      "Downsampling step is too large, resulting in zero entries. Please set it to a smaller positive integer in the Beam ND sample config file."
+    );
+  }
   size_t countwidth = nDownsampledEntries / 10;
   dunendmcSamples.resize(nDownsampledEntries);
   _data->GetEntry(0);
