@@ -6,7 +6,7 @@ InputFiles:
   PrepSplineFile: false
 
 # number of events to skip when reading in the files. Default: 1 (no downsampling)
-downsamplingStep: 1
+DownsamplingStep: 1
 
 NuOsc:
   NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"

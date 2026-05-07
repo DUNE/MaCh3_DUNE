@@ -44,7 +44,7 @@ void SampleHandlerBeamND::Init() {
     MACH3LOG_INFO("- iselike: {}", beamNDSampleDetails[i].iselike);
   }
 
-  downsamplingStep = GetFromManager<unsigned int>(SampleManager->raw()["downsamplingStep"], 1);
+  downsamplingStep = GetFromManager<unsigned int>(SampleManager->raw()["DownsamplingStep"], 1);
   if (downsamplingStep == 0) {
     throw MaCh3Exception(__FILE__, __LINE__,
       "Downsampling step cannot be zero. Please set it to a positive integer in the Beam ND sample config file."
