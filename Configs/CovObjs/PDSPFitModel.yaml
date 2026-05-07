@@ -5,7 +5,7 @@ Systematics:
       FancyName: Abs_TrueEBin_Under
       ParameterName: Abs_TrueEBin_Under
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_Abs"]
     Mode: [0]
     Error: 0.1
     FlatPrior: true
@@ -26,7 +26,7 @@ Systematics:
       FancyName: Abs_TrueEBin_0
       ParameterName: Abs_TrueEBin_0
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_Abs"]
     Mode: [0]
     Error: 0.1
     FlatPrior: true
@@ -47,7 +47,7 @@ Systematics:
       FancyName: Abs_TrueEBin_1
       ParameterName: Abs_TrueEBin_1
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_Abs"]
     Mode: [0]
     Error: 0.1
     FlatPrior: true
@@ -68,7 +68,7 @@ Systematics:
       FancyName: Abs_TrueEBin_2
       ParameterName: Abs_TrueEBin_2
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_Abs"]
     Mode: [0]
     Error: 0.1
     FlatPrior: true
@@ -89,7 +89,7 @@ Systematics:
       FancyName: Abs_TrueEBin_Over
       ParameterName: Abs_TrueEBin_Over
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_Abs"]
     Mode: [0]
     Error: 0.1
     FlatPrior: true
@@ -110,7 +110,7 @@ Systematics:
       FancyName: Abs_Escaping
       ParameterName: Abs_Escaping
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_Abs"]
     Mode: [0]
     Error: 0.1
     FlatPrior: true
@@ -130,7 +130,7 @@ Systematics:
       FancyName: CEx_TrueEBin_Under
       ParameterName: CEx_TrueEBin_Under
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_CEx"]
     Mode: [1]
     Error: 0.1
     FlatPrior: true
@@ -151,7 +151,7 @@ Systematics:
       FancyName: CEx_TrueEBin_0
       ParameterName: CEx_TrueEBin_0
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_CEx"]
     Mode: [1]
     Error: 0.1
     FlatPrior: true
@@ -172,7 +172,7 @@ Systematics:
       FancyName: CEx_TrueEBin_1
       ParameterName: CEx_TrueEBin_1
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_CEx"]
     Mode: [1]
     Error: 0.1
     FlatPrior: true
@@ -193,7 +193,7 @@ Systematics:
       FancyName: CEx_TrueEBin_2
       ParameterName: CEx_TrueEBin_2
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_CEx"]
     Mode: [1]
     Error: 0.1
     FlatPrior: true
@@ -214,7 +214,7 @@ Systematics:
       FancyName: CEx_TrueEBin_Over
       ParameterName: CEx_TrueEBin_Over
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_CEx"]
     Mode: [1]
     Error: 0.1
     FlatPrior: true
@@ -235,7 +235,7 @@ Systematics:
       FancyName: CEx_Escaping
       ParameterName: CEx_Escaping
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_CEx"]
     Mode: [1]
     Error: 0.1
     FlatPrior: true
@@ -255,7 +255,7 @@ Systematics:
       FancyName: Pion_TrueEBin_Under
       ParameterName: Pion_TrueEBin_Under
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_Pip"]
     Mode: [2]
     Error: 0.1
     FlatPrior: true
@@ -276,7 +276,7 @@ Systematics:
       FancyName: Pion_TrueEBin_0
       ParameterName: Pion_TrueEBin_0
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_Pip"]
     Mode: [2]
     Error: 0.1
     FlatPrior: true
@@ -297,7 +297,7 @@ Systematics:
       FancyName: Pion_TrueEBin_1
       ParameterName: Pion_TrueEBin_1
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_Pip"]
     Mode: [2]
     Error: 0.1
     FlatPrior: true
@@ -318,7 +318,7 @@ Systematics:
       FancyName: Pion_TrueEBin_2
       ParameterName: Pion_TrueEBin_2
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_Pip"]
     Mode: [2]
     Error: 0.1
     FlatPrior: true
@@ -339,7 +339,7 @@ Systematics:
       FancyName: Pion_TrueEBin_Over
       ParameterName: Pion_TrueEBin_Over
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_Pip"]
     Mode: [2]
     Error: 0.1
     FlatPrior: true
@@ -360,7 +360,7 @@ Systematics:
       FancyName: Pion_Escaping
       ParameterName: Pion_Escaping
 
-    SampleNames: ["PDSP"]
+    SampleNames: ["PDSP_Pip"]
     Mode: [2]
     Error: 0.1
     FlatPrior: true
