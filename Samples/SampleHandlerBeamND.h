@@ -118,6 +118,9 @@ protected:
   int nNDDetectorSystPointers;
   std::unordered_map<std::string, std::vector<double>> norm_map;
 
+  /// @brief Downsampling step (e.g. 10 means only every 10th event is used in the fit). Default is 1 (no downsampling).
+  unsigned int downsamplingStep;
+
   /// @brief Cleanup memory
   void CleanMemoryBeforeFit() override {};
 };
