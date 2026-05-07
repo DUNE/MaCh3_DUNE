@@ -130,7 +130,7 @@ int SampleHandlerPDSP::SetupExperimentMC() {
         }else if(true_pip == 1) {
           mode = 2;
         }else {
-          mode = 0;
+          mode = 999;
         }
         // MACH3LOG_INFO("abs | {}, cex | {}, spip | {}, pip | {}, mode | {}", true_abs, true_cex, true_pip, mode);
         PDSPSamples[TotalEventCounter].Mode = mode;

@@ -2,7 +2,7 @@
 #Global Sample Handler setting
 SampleHandlerName: "PDSP"
 POT: 0
-MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_PDSP.yaml" # do we need to make our own version, or just ignore?
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_PDSP.yaml"
 
 LikelihoodOptions:
   #False means you calculate W2 histogram only during first reweight, advisable for Barlow-Beeston
@@ -13,13 +13,14 @@ BinningFile: "PDSPBinning.yaml"
 InputFiles:
   PrepSplineFile: false
 
-#Settings for a single sample
-Samples: ["PDSP"]
-PDSP:
+#Settings for samples
+Samples: ["PDSP_Abs", "PDSP_CEx", "PDSP_Pip"]
+
+PDSP_Abs:
   SelectionCuts:
     - KinematicStr: "TrueKEInt"
       Bounds: [ 0., 999999 ]
-  SampleTitle: "PDSP"
+  SampleTitle: "PDSP_Abs"
 
   Binning:
     VarStr : [ "RecoKEInt" ]
@@ -27,7 +28,7 @@ PDSP:
     Uniform: True
 
   InputFiles:
-    mtupleprefix: "/home/bhuller/work/analysis_main/analysis_input/root_analysis_input_mc_selected/mc_mc_selected_"
+    mtupleprefix: "/data/dune/common/fit_inputs/analysis_input_regions/root_analysis_input_mc_selected/mc_selected_"
     mtuplesuffix: ".root"
     splineprefix: ""
     splinesuffix: ""
@@ -39,12 +40,50 @@ PDSP:
       splinefile: ""
       nutype: 1
       oscnutype: 1
+
+PDSP_CEx:
+  SelectionCuts:
+    - KinematicStr: "TrueKEInt"
+      Bounds: [ 0., 999999 ]
+  SampleTitle: "PDSP_CEx"
+
+  Binning:
+    VarStr : [ "RecoKEInt" ]
+    VarBins: [[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400]]
+    Uniform: True
+
+  InputFiles:
+    mtupleprefix: "/data/dune/common/fit_inputs/analysis_input_regions/root_analysis_input_mc_selected/mc_selected_"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ""
+
+  SubSamples:
     - Name: "charge_exchange"
       LatexName: "cex"
       mtuplefile: "Tcharge_exchange"
       splinefile: ""
       nutype: 2
       oscnutype: 2
+
+PDSP_Pip:
+  SelectionCuts:
+    - KinematicStr: "TrueKEInt"
+      Bounds: [ 0., 999999 ]
+  SampleTitle: "PDSP_Pip"
+
+  Binning:
+    VarStr : [ "RecoKEInt" ]
+    VarBins: [[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400]]
+    Uniform: True
+
+  InputFiles:
+    mtupleprefix: "/data/dune/common/fit_inputs/analysis_input_regions/root_analysis_input_mc_selected/mc_selected_"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ""
+
+  SubSamples:
     - Name: "pion_production"
       LatexName: "pip"
       mtuplefile: "Tpion_production"
