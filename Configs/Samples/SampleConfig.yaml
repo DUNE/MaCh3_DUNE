@@ -9,6 +9,12 @@ MaCh3ModeConfig: "Configs/SystematicConfigs/MaCh3Modes.yaml"
 # This is the binning file. It contains the binning information for the true neutrino energy for each sample
 BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
 
+# Sets up how oscillations are calculated
+NuOsc:
+  NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
+  EqualBinningPerOscChannel: false
+
+
 # We now define the actual samples being used. This is splt in to 2 parts
 # 1. The sample registery : Samples: [FHCNue, FHCNumu, ...]. This is just a list of the titles of
 #    the samples being used. This means that if you DON'T want to use a sample, you can

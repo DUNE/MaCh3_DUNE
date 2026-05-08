@@ -1,0 +1,11 @@
+Systematics:
+  - Systematic:
+      ParameterGroup: Flux
+      Names:
+        FancyName: ASplineSystematic
+      Error: 0.4
+      ParameterValues: 3.1
+      ParameterBounds: [-999, 9999]
+      Mode: [12]
+      SampleNames: ExampleSample
+      Type: Spline

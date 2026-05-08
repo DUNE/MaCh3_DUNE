@@ -1,0 +1,46 @@
+# This is an example Sample
+SampleName: ExampleSample # <- The name
+MaCh3ModeConfig: "Configs/SystematicConfigs/MaCh3Modes.yaml" # <- The MaCh3 mode config file. This defines what the interaction modes are (CCQE, CC1Kaon, etc.)
+
+BinningFile: "Configs/Samples/BeamParameterBinning.yaml" # <- The binning file. This contains the binning information for the true neutrino energy for each sample
+
+NuOsc:
+  NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
+  EqualBinningPerOscChannel: false
+
+Samples: [
+  "MyExample",
+]
+
+# We can then define the example sample information. This is where we set up the properties of the sample, the input files, etc.
+# For more information on how to set up the sample information, see MaCh3_DUNE/Configs/Samples/SampleConfig.yaml
+MyExample:
+  SampleTitle: "MyExample"
+  POT: 1.4e23
+  
+  DuneSampleBools:
+    iselike: true
+    isFHC: true
+
+  Binning:
+    VarStr: "AKinematicVariable"
+    Uniform: true
+    BinEdges: [1, 2, 3, 5, 8, 13, 21]
+
+  InputFiles:
+    mtupleprefix: "path/to/mtuple/files/example_mtuple_" # <- This is the prefix for the CAF files. (mtuple is a legacy name from T2K)
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ""
+
+  SelectionCuts:
+    - KinematicStr: "TrueXPos"
+      Bounds: [-20.0, 20.0]
+
+  OscChannels:
+    - Name: ExampleSample_numu_x_nutau
+      LatexName: "\\nu_{\\mu} \\rightarrow \\nu_{\\tau}"
+      mtuplefile: ["numu_x_nutau"]
+      splinefile: "numu_x_nutau"
+      nutype: 14
+      oscnutype: 16
