@@ -1,0 +1,60 @@
+# MaCh3 defines "Sample Configs" these are configs that allow you to set up the MC (CAFs) information
+
+# The sample handler name is used to match systematics to MC events in the sample
+SampleHandlerName: "DDASBeamSample"
+
+# This config file sets up what the interaction modes are in MaCh3 (for example CCQE, CC1Kaon, etc.)
+MaCh3ModeConfig: "Configs/SystematicConfigs/MaCh3Modes.yaml"
+
+# This is the binning file. It contains the binning information for the true neutrino energy for each sample
+BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
+
+# We now define the actual samples being used. This is splt in to 2 parts
+# 1. The sample registery : Samples: [FHCNue, FHCNumu, ...]. This is just a list of the titles of
+#    the samples being used. This means that if you DON'T want to use a sample, you can
+#   just not list it here. This is useful if you have a lot of samples but only want to use a few of them.
+
+# 2. The sample information. For Sample A this might look like:
+# FHCNue:
+#   SampleTitle: FHCNue
+#   POT: 1.4e23 <- We defined the POT for the sample. This is used to scale the MC events to the correct number of events for the given POT.
+#   <Cuts> <- Do we want to apply kinematic cuts to the sample?
+#   <Binning Infomation> <- What are we binning in for this sample? 
+#   <Sample specific information> <- Dune specific information about the sample (e.g. is it a FHC is electron-like, etc.)
+#   <Caf file information> <- Paths to input files
+
+# To start with let's look at the Binning Information.
+# All samples are binned in at least ETrue which is defined in the BinningFile (above) but we
+# are free to bin in up to 2 additional variables. For now we'll choose the reconstructed neutrino energy.
+# Binning is then defined as
+
+# Binning:
+#    VarStr:  <- Name of the variable we want to bin in (RecoNeutrinoEnergy, TrueNeutrinoEnergy, CVNNumu, CVNNue, etc.)
+#    Uniform: True <- Do we want to use rectangular bins (True) or non-uniform bins (False)
+#    BinEdges: <- The bin edges we want to use (for example [1,2,3])
+
+# Once we've defined the binning we need to define our sample properties. For now we'll be using an FHC numu->nue sample
+# This is defined in
+# DuneSampleBools:
+#     iselike: <- True the final state lepton is an electron
+#     isFHC: <- True the sample is from a FHC beam
+
+# Finally we need to define the input file information. This is split into 2 parts:
+# ----
+# 1. InputFiles <- This defines general properties of the input files (prefixes/suffixes)
+#       mtupleprefix: "path/to/mtuple/files/mtuple_" <- This is the prefix for the CAF files. (mtuple is a legacy name from T2K)
+#       mtuplesuffix: ".root" <- This is the suffix for the CAF files.
+#       splineprefix: "" <- This is the prefix for the spline files. (if using spline systematics). We'll leave this as ""
+#       splinesuffix:  ".root" <- This is the suffix for the spline files.
+
+# 2. OscChannels
+# CAFs are split into several separate files. Each one representing a different oscillation channel (e.g. numu->numu, numu->nue, etc.).
+# We need to tell MaCh3 to find these files
+# OscChannels:
+#    - Name: <- Name of the sample (for example FHC_numu_x_nue)
+#      LatexName: <- The name in LaTeX format (for plotting)
+#      mtuplefile: <- The name of the CAF file for this sample. this will find a file called <mutpleprefix><mtuplefile><mtuplesuffix> (e.g. path/to/mtuple/files/mtuple_FHC_numu_x_nue.root)
+#      splinefile: <- The name of the spline file for this sample. This will find a file called <splineprefix><splinefile><splinesuffix> (e.g. path/to/spline/files/spline_FHC_numu_x_nue.root)
+#      nutype: <- The INITIAL STATE neutrino type (14=numu, 12=nue, -14=numubar, -12=nuebar)
+#      oscnutype: <- The OSCILLATED neutrino type (14=numu, 12=nue, -14=numubar, -12=nuebar)
+
