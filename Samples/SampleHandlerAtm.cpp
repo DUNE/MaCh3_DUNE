@@ -6,6 +6,7 @@
 #include "duneanaobj/StandardRecord/StandardRecord.h"
 
 #if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)
+
 #include "duneanaobj/StandardRecord/Proxy/SRProxy.h"
 #endif
 
@@ -32,13 +33,16 @@ void SampleHandlerAtm::Init() {
   }
 
   //Define the names of the samples we're performing event selection for
-  EventSelectionNames[kEventSelectionNuE] = "nueselec";
-  EventSelectionNames[kEventSelectionNuMu] = "numuselec";
-  EventSelectionNames[kEventSelectionNC] = "ncselec";  
+  EventSelectionNames[kEventSel_FC_NuE]  = "FC_nueselec";
+  EventSelectionNames[kEventSel_FC_NuMu] = "FC_numuselec";
+  EventSelectionNames[kEventSel_FC_NC]   = "FC_ncselec";
+  EventSelectionNames[kEventSel_PC_NuE]  = "PC_nueselec";
+  EventSelectionNames[kEventSel_PC_NuMu] = "PC_numuselec";
+  EventSelectionNames[kEventSel_PC_NC]   = "PC_ncselec";    
 
   //Create a map between these event selections to the defined samples in the config
   for (int iSelection=0;iSelection<nEventSelections;iSelection++) {
-    EventSelection_to_SampleIndex_Map[iSelection] = kEventSelectionUnknown;
+    EventSelection_to_SampleIndex_Map[iSelection] = kEventSel_Unknown;
     for (size_t iDefinedSample=0;iDefinedSample<SampleDetails.size();iDefinedSample++) {
       if (EventSelectionNames[iSelection] == SampleDetails[iDefinedSample].SampleTitle) {
 	EventSelection_to_SampleIndex_Map[iSelection] = static_cast<int>(iDefinedSample); 
@@ -49,7 +53,7 @@ void SampleHandlerAtm::Init() {
   //Check atleast one of the event selections is in the config
   bool CheckVal = false;
   for (int iSelection=0;iSelection<nEventSelections;iSelection++) {
-    if (EventSelection_to_SampleIndex_Map[iSelection] != kEventSelectionUnknown) {
+    if (EventSelection_to_SampleIndex_Map[iSelection] != kEventSel_Unknown) {
       CheckVal = true;
     }
   }
@@ -107,7 +111,8 @@ int SampleHandlerAtm::SetupExperimentMC() {
   weightsTree->SetBranchAddress("flux_nue",&flux_nue_w);
   weightsTree->SetBranchAddress("flux_numu",&flux_numu_w);
 
-#if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)  
+#if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)
+  std::cout << "Using the Proxy" << std::endl;
   caf::StandardRecordProxy* sr = new caf::StandardRecordProxy(cafTree, "rec");    
 #else  
   caf::StandardRecord* sr = new caf::StandardRecord();
@@ -143,16 +148,21 @@ int SampleHandlerAtm::SetupExperimentMC() {
     int EventNumber = sr->meta.fd_hd.event;
     */
     
-    std::vector<double> CVNScores = std::vector<double>(nEventSelections);
-    CVNScores[kEventSelectionNuE] = sr->common.ixn.pandora[0].nuhyp.cvn.nue;
-    CVNScores[kEventSelectionNuMu] = sr->common.ixn.pandora[0].nuhyp.cvn.numu;
-    CVNScores[kEventSelectionNC] = sr->common.ixn.pandora[0].nuhyp.cvn.nc;    
-    
-    unsigned int SampleIndex = ReturnSampleIdentifier(CVNScores);
-    if (SampleIndex == kEventSelectionUnknown) {
-      continue;
+    std::vector<double> CVNScores = std::vector<double>(nCVN_Scores);
+    CVNScores[kCVN_NuE] = sr->common.ixn.pandora[0].nuhyp.cvn.nue;
+    CVNScores[kCVN_NuMu] = sr->common.ixn.pandora[0].nuhyp.cvn.numu;
+    CVNScores[kCVN_NC] = sr->common.ixn.pandora[0].nuhyp.cvn.nc;    
+
+    double MinDistToWall = 1e8;
+    for (size_t iPart=0;iPart<sr->common.ixn.pandora[0].part.pandora.size();iPart++) {
+      if (sr->common.ixn.pandora[0].part.pandora[iPart].walldist < MinDistToWall) {MinDistToWall = sr->common.ixn.pandora[0].part.pandora[iPart].walldist;}
     }
     
+    int SampleIndex = ReturnSampleIdentifier(CVNScores, MinDistToWall);
+    if (SampleIndex == kEventSel_Unknown) {
+      continue;
+    }
+
     TVector3 RecoNuMomentumVector;
     double RecoENu;
     if (IsELike[SampleIndex]) {
@@ -196,6 +206,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
     currentEvent_FromNuE.enu_true = TrueNeutrinoEnergy;
     currentEvent_FromNuE.coszenith_true = -TrueNuMomentumVector.y(); // +Y in CAF files translates to +Z in typical CosZ
     currentEvent_FromNuE.flux_w = xsec_w*flux_nue_w;
+    currentEvent_FromNuE.MinDistToWall = MinDistToWall;
     
     struct dunemc_atm currentEvent_FromNuMu = currentEvent_FromNuE;
     
@@ -246,6 +257,8 @@ const double* SampleHandlerAtm::GetPointerToKinematicParameter(const int KinPar,
     return &(dunemcSamples[iEvent].mode);
   case kTargetNucleus:
     return &(dunemcSamples[iEvent].Target);
+  case kMinDistToWall:
+    return &(dunemcSamples[iEvent].MinDistToWall);
   default:
     MACH3LOG_ERROR("Unknown KinPar: {}",static_cast<int>(KinPar));
     throw MaCh3Exception(__FILE__, __LINE__);
@@ -258,16 +271,52 @@ double SampleHandlerAtm::ReturnKinematicParameter(const int KinematicVariable, c
   return *GetPointerToKinematicParameter(KinPar, iEvent);
 }
 
-int SampleHandlerAtm::ReturnSampleIdentifier(std::vector<double> CVNScores) {
-  //int IndexWithMaxScore = static_cast<int>(std::distance(CVNScores.begin(), max_element(CVNScores.begin(), CVNScores.end())));
-  //return EventSelection_to_SampleIndex_Map[IndexWithMaxScore];
+int SampleHandlerAtm::ReturnSampleIdentifier(std::vector<double> CVNScores, double MinDistanceToWall) {
 
-  int SampleIndex = EventSelection_to_SampleIndex_Map[kEventSelectionNC];
-  if (CVNScores[kEventSelectionNuMu] > 0.56) {
-    SampleIndex = EventSelection_to_SampleIndex_Map[kEventSelectionNuMu];
-  } else if (CVNScores[kEventSelectionNuE] > 0.55) {
-    SampleIndex = EventSelection_to_SampleIndex_Map[kEventSelectionNuE];
+  /*
+  int EventSelection = kCVN_NC;
+  if (CVNScores[kCVN_NuMu] > 0.56) {
+    EventSelection = kCVN_NuMu;
+  } else if (CVNScores[kCVN_NuE] > 0.55) {
+    EventSelection = kCVN_NuE;
   }
 
+  int SampleIndex = kEventSel_Unknown;  
+  if (EventSelection == kCVN_NuE)  {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NuE]; }
+  if (EventSelection == kCVN_NuMu) {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NuMu];}
+  if (EventSelection == kCVN_NC)   {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NC];  }      
+
+  (void)MinDistanceToWall;
+  */
+
+  bool IsFullyContained = false;
+  
+  if (MinDistanceToWall > 1e6) { //DB: ToDo Work out theoretical maximum
+    return kEventSel_Unknown;
+  } else if (MinDistanceToWall > 10) {
+    IsFullyContained = true;
+  } else {
+    IsFullyContained = false;
+  }
+
+  //int EventSelection = static_cast<int>(std::distance(CVNScores.begin(), max_element(CVNScores.begin(), CVNScores.end())));  
+  int EventSelection = kCVN_NC;
+  if (CVNScores[kCVN_NuMu] > 0.56) {
+    EventSelection = kCVN_NuMu;
+  } else if (CVNScores[kCVN_NuE] > 0.55) {
+    EventSelection = kCVN_NuE;
+  }
+
+  int SampleIndex = kEventSel_Unknown;
+  if (IsFullyContained) {
+    if (EventSelection == kCVN_NuE)  {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NuE]; }
+    if (EventSelection == kCVN_NuMu) {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NuMu];}
+    if (EventSelection == kCVN_NC)   {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NC];  }    
+  } else {
+    if (EventSelection == kCVN_NuE)  {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_PC_NuE]; }
+    if (EventSelection == kCVN_NuMu) {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_PC_NuMu];}
+    if (EventSelection == kCVN_NC)   {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_PC_NC];  }    
+  }
+  
   return SampleIndex;
 }

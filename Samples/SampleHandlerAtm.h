@@ -26,7 +26,8 @@ public:
     kRecoCosZ,
     kOscChannel,
     kMode,
-    kTargetNucleus
+    kTargetNucleus,
+    kMinDistToWall
   };
 
 protected:
@@ -87,7 +88,8 @@ protected:
     {"RecoCosineZ",kRecoCosZ},
     {"OscillationChannel",kOscChannel},
     {"Mode",kMode},
-    {"TargetNucleus", kTargetNucleus}
+    {"TargetNucleus", kTargetNucleus},
+    {"MinDistToWall", kMinDistToWall}    
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -98,6 +100,7 @@ protected:
     {kOscChannel,"OscillationChannel"},
     {kMode,"Mode"},
     {kTargetNucleus, "TargetNucleus"},
+    {kMinDistToWall, "MinDistToWall"}
   };
   
   /// Array filled with MC samples for each oscillation channel
@@ -109,17 +112,27 @@ protected:
   /// Multiplicative scaling to scale from the assumed 400ktyr value in the CAF files
   double ExposureScaling;
 
-  enum EventSelection {
-    kEventSelectionNuE,
-    kEventSelectionNuMu,
-    kEventSelectionNC,
+  enum EventSelectionIndices {
+    kEventSel_Unknown = -1,    
+    kEventSel_FC_NuE,
+    kEventSel_FC_NuMu,
+    kEventSel_FC_NC,
+    kEventSel_PC_NuE,
+    kEventSel_PC_NuMu,
+    kEventSel_PC_NC,    
     nEventSelections,
-    kEventSelectionUnknown
   };
 
-  int ReturnSampleIdentifier(std::vector<double> CVNScores);
+  enum CVNScoreIndices {
+    kCVN_NuE,
+    kCVN_NuMu,
+    kCVN_NC,
+    nCVN_Scores
+  };
+
+  int ReturnSampleIdentifier(std::vector<double> CVNScores, double MinDistanceToWall);
   std::vector<std::string> EventSelectionNames = std::vector<std::string>(nEventSelections);
-  std::vector<int> EventSelection_to_SampleIndex_Map = std::vector<int>(nEventSelections,kEventSelectionUnknown);
+  std::vector<int> EventSelection_to_SampleIndex_Map = std::vector<int>(nEventSelections,kEventSel_Unknown);
 };
 
 #endif
