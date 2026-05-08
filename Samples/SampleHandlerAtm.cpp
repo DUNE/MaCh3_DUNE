@@ -153,17 +153,6 @@ int SampleHandlerAtm::SetupExperimentMC() {
       continue;
     }
     
-    auto& OscillationChannels = SampleDetails[SampleIndex].OscChannels;
-
-    int InteractingPDG = sr->mc.nu[0].pdg;
-
-    int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
-    if (!sr->mc.nu[0].iscc) M3Mode += 14; //Account for no ability to distinguish CC/NC
-    if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
-
-    double TrueNeutrinoEnergy = static_cast<double>(sr->mc.nu[0].E);
-    TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.x,sr->mc.nu[0].momentum.y,sr->mc.nu[0].momentum.z)).Unit();
-    
     TVector3 RecoNuMomentumVector;
     double RecoENu;
     if (IsELike[SampleIndex]) {
@@ -182,6 +171,16 @@ int SampleHandlerAtm::SetupExperimentMC() {
       MACH3LOG_WARN("Skipping entry {}/{} -> Reconstructed Neutrino Energy is NAN",iTreeEntry,nTreeEntries);
       continue;
     }
+
+    auto& OscillationChannels = SampleDetails[SampleIndex].OscChannels;    
+    int InteractingPDG = sr->mc.nu[0].pdg;
+
+    int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
+    if (!sr->mc.nu[0].iscc) M3Mode += 14; //Account for no ability to distinguish CC/NC
+    if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
+
+    double TrueNeutrinoEnergy = static_cast<double>(sr->mc.nu[0].E);
+    TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.x,sr->mc.nu[0].momentum.y,sr->mc.nu[0].momentum.z)).Unit();
 
     struct dunemc_atm currentEvent_FromNuE;
     
