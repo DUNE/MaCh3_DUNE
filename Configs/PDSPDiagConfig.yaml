@@ -3,7 +3,7 @@
 
 DiagMCMC:
   ExcludedTypes: []
-  ExcludedNames: []
+  ExcludedNames: ["Impure_"]
   nBatches: 20
   nLags: 10000
   PlotRelativeToPrior: "false"
@@ -12,7 +12,7 @@ DiagMCMC:
 #########################################
 ProcessMCMC:
   # Select parameter names to remove (prefix match)
-  ExcludedNames: []
+  ExcludedNames: [Impure_]
   # Select parameter groups to remove: Fit, Xsec, Osc
   ExcludedGroups: []
   # Legacy parameter block exclusion (not needed here)
