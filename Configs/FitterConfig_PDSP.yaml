@@ -8,6 +8,9 @@ General:
   ProcessMCMC: No
   Debug: No
   Seed: 0
+  # For a Asimov closure test, start from the prefit CV instead of a random prior throw.
+  # Remove this or set false for a production fit where you want a randomized chain start.
+  StatOnly: true
   Fitter:
     FitTestLikelihood: false
   Minuit2:
@@ -48,12 +51,19 @@ General:
     # KeepFlippingOnReject: True
   Systematics:
     XsecCovName: "xsec_cov"
-    XsecFix: [] # any of these are fixed
+    XsecFix: [
+      "Impure_TrueEBin_Under",
+      "Impure_TrueEBin_0",
+      "Impure_TrueEBin_1",
+      "Impure_TrueEBin_2",
+      "Impure_TrueEBin_Over",
+      "Impure_Escaping",
+    ] # any of these are fixed
     XsecCovFile: ["Configs/CovObjs/PDSPFitModel.yaml",
                   ]
     XsecPCAThreshold: -1
     XsecPCAParams: [-999, -999]
-    XsecStepScale: 0.1
+    XsecStepScale: 1
 
 # Prior/Posterior predictive settings
 Predictive:
@@ -124,10 +134,10 @@ AdaptionOptions:
 #KinemDistribution extra plots to draw
 KinematicDistributionPlots:
 - Name: "True Interacting Kinetic Energy"
-  VarStrings: ["TrueKeInt"]
+  VarStrings: ["TrueKEInt"]
   VarBins: [[40,0,3000]]
   KinematicCuts:
-  - VarString: "TrueKeInt"
+  - VarString: "TrueKEInt"
     Range: [500,3000]
 - Name: "Reconstructed Kinetic Energy"
   VarStrings: ["RecoKEInt"]
