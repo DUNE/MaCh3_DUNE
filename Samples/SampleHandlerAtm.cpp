@@ -4,6 +4,11 @@
 #pragma GCC diagnostic ignored "-Wfloat-conversion"
 //Standard Record includes
 #include "duneanaobj/StandardRecord/StandardRecord.h"
+
+#if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)
+#include "duneanaobj/StandardRecord/Proxy/SRProxy.h"
+#endif
+
 #pragma GCC diagnostic pop
 
 SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGeneric* xsec_cov_, const std::shared_ptr<OscillationHandler>&  Oscillator_) : SampleHandlerBase(mc_version_, xsec_cov_, Oscillator_) {
@@ -56,11 +61,8 @@ void SampleHandlerAtm::Init() {
 }
 
 void SampleHandlerAtm::InititialiseData() {
-  // Reweight MC to match
   Reweight();
-  // set asimov data
-  for (int iSample = 0; iSample < GetNSamples(); iSample++)
-  {
+  for (int iSample = 0; iSample < GetNSamples(); iSample++) {
     AddData(iSample, GetMCArray(iSample));
   }
 }
@@ -82,19 +84,19 @@ int SampleHandlerAtm::SetupExperimentMC() {
 
   std::string fInputFile = "Inputs/Atmospherics/CAFs/caf_new_sum.2.6M_weighted.root";
 
-  TFile *f = TFile::Open(fInputFile.c_str(),"READ");
-  if (!f || f->IsZombie()) {
+  TFile *InputFile = TFile::Open(fInputFile.c_str(),"READ");
+  if (!InputFile || InputFile->IsZombie()) {
     MACH3LOG_ERROR("Could not open input CAF file: {}",fInputFile);
     throw MaCh3Exception(__FILE__, __LINE__);
   }
 
   TTree *cafTree, *weightsTree;
-  f->GetObject("cafTree",cafTree);
+  InputFile->GetObject("cafTree",cafTree);
   if (!cafTree) {
     MACH3LOG_ERROR("Could not find cafTree in input CAF file: {}",fInputFile);
     throw MaCh3Exception(__FILE__, __LINE__);
   }
-  f->GetObject("weights",weightsTree);
+  InputFile->GetObject("weights",weightsTree);
   if (!weightsTree) {
     MACH3LOG_ERROR("Could not find weights tree in input CAF file: {}",fInputFile);
     throw MaCh3Exception(__FILE__, __LINE__);
@@ -104,18 +106,27 @@ int SampleHandlerAtm::SetupExperimentMC() {
   weightsTree->SetBranchAddress("xsec",&xsec_w);
   weightsTree->SetBranchAddress("flux_nue",&flux_nue_w);
   weightsTree->SetBranchAddress("flux_numu",&flux_numu_w);
-  
+
+#if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)  
+  caf::StandardRecordProxy* sr = new caf::StandardRecordProxy(cafTree, "rec");    
+#else  
   caf::StandardRecord* sr = new caf::StandardRecord();
   cafTree->SetBranchStatus("*", 1);
   cafTree->SetBranchAddress("rec", &sr);
+#endif
   
   int nTreeEntries = static_cast<int>(cafTree->GetEntries());
   
   //================================================================================================
 
   for (int iTreeEntry=0;iTreeEntry<nTreeEntries;iTreeEntry++) {
-    cafTree->GetEntry(iTreeEntry);
     weightsTree->GetEntry(iTreeEntry);
+    
+#if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)      
+    cafTree->LoadTree(iTreeEntry);
+#else
+    cafTree->GetEntry(iTreeEntry);
+#endif
 
     if ((iTreeEntry % (nTreeEntries/10))==0) {
       MACH3LOG_INFO("\tProcessing entry: {}/{}",iTreeEntry,nTreeEntries);
@@ -126,6 +137,12 @@ int SampleHandlerAtm::SetupExperimentMC() {
       continue;
     }
 
+    /*
+    int RunNumber = sr->meta.fd_hd.run;
+    int SubRunNumber = sr->meta.fd_hd.subrun;
+    int EventNumber = sr->meta.fd_hd.event;
+    */
+    
     std::vector<double> CVNScores = std::vector<double>(nEventSelections);
     CVNScores[kEventSelectionNuE] = sr->common.ixn.pandora[0].nuhyp.cvn.nue;
     CVNScores[kEventSelectionNuMu] = sr->common.ixn.pandora[0].nuhyp.cvn.numu;
@@ -145,18 +162,18 @@ int SampleHandlerAtm::SetupExperimentMC() {
     if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
 
     double TrueNeutrinoEnergy = static_cast<double>(sr->mc.nu[0].E);
-    TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.X(),sr->mc.nu[0].momentum.Y(),sr->mc.nu[0].momentum.Z())).Unit();
+    TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.x,sr->mc.nu[0].momentum.y,sr->mc.nu[0].momentum.z)).Unit();
     
     TVector3 RecoNuMomentumVector;
     double RecoENu;
     if (IsELike[SampleIndex]) {
       RecoENu = sr->common.ixn.pandora[0].Enu.e_calo;
-      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.heshw.X(),sr->common.ixn.pandora[0].dir.heshw.Y(),sr->common.ixn.pandora[0].dir.heshw.Z())).Unit();
+      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.heshw.x,sr->common.ixn.pandora[0].dir.heshw.y,sr->common.ixn.pandora[0].dir.heshw.z)).Unit();
     } else {
       RecoENu = sr->common.ixn.pandora[0].Enu.lep_calo;
-      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.X(),sr->common.ixn.pandora[0].dir.lngtrk.Y(),sr->common.ixn.pandora[0].dir.lngtrk.Z())).Unit();      
+      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.x,sr->common.ixn.pandora[0].dir.lngtrk.y,sr->common.ixn.pandora[0].dir.lngtrk.z)).Unit();      
     }
-    double RecoCZ = -RecoNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
+    double RecoCZ = -RecoNuMomentumVector.y(); // +Y in CAF files translates to +Z in typical CosZ
     if (std::isnan(RecoCZ)) {
       MACH3LOG_WARN("Skipping entry {}/{} -> Reconstructed Cosine Z is NAN",iTreeEntry,nTreeEntries);
       continue;
@@ -165,10 +182,6 @@ int SampleHandlerAtm::SetupExperimentMC() {
       MACH3LOG_WARN("Skipping entry {}/{} -> Reconstructed Neutrino Energy is NAN",iTreeEntry,nTreeEntries);
       continue;
     }
-
-    int RunNumber = sr->meta.fd_hd.run;
-    int SubRunNumber = sr->meta.fd_hd.subrun;
-    int EventNumber = sr->meta.fd_hd.event;
 
     struct dunemc_atm currentEvent_FromNuE;
     
@@ -182,7 +195,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
     currentEvent_FromNuE.rw_isCC = sr->mc.nu[0].iscc;
     currentEvent_FromNuE.Target = kTarget_Ar;
     currentEvent_FromNuE.enu_true = TrueNeutrinoEnergy;
-    currentEvent_FromNuE.coszenith_true = -TrueNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
+    currentEvent_FromNuE.coszenith_true = -TrueNuMomentumVector.y(); // +Y in CAF files translates to +Z in typical CosZ
     currentEvent_FromNuE.flux_w = xsec_w*flux_nue_w;
     
     struct dunemc_atm currentEvent_FromNuMu = currentEvent_FromNuE;
@@ -192,18 +205,17 @@ int SampleHandlerAtm::SetupExperimentMC() {
     currentEvent_FromNuMu.flux_w = xsec_w*flux_numu_w;
 
     dunemcSamples.emplace_back(std::move(currentEvent_FromNuE));
-    dunemcSamples.emplace_back(std::move(currentEvent_FromNuMu));
-
-    if (RunNumber == 74494002 && EventNumber == 26079) {
-      std::cout << "RunNumber:" << RunNumber << " | SubRunNumber:" << SubRunNumber << " | EventNumber:" << EventNumber << " | RecoENu:" << RecoENu << " | RecoCZ:" << RecoCZ << " | dunemcSamples[i].flux_w:" << currentEvent_FromNuE.flux_w << " | dunemcSamples[iEvent].nupdgUnosc:" << currentEvent_FromNuE.nupdgUnosc << " | dunemcSamples[iEvent].nupdg:" << currentEvent_FromNuE.nupdg << std::endl;
-      std::cout << "RunNumber:" << RunNumber << " | SubRunNumber:" << SubRunNumber << " | EventNumber:" << EventNumber << " | RecoENu:" << RecoENu << " | RecoCZ:" << RecoCZ << " | dunemcSamples[i].flux_w:" << currentEvent_FromNuMu.flux_w << " | dunemcSamples[iEvent].nupdgUnosc:" << currentEvent_FromNuMu.nupdgUnosc << " | dunemcSamples[iEvent].nupdg:" << currentEvent_FromNuMu.nupdg << std::endl;
-    }
-    
+    dunemcSamples.emplace_back(std::move(currentEvent_FromNuMu));    
   }
 
   //================================================================================================
   gErrorIgnoreLevel = CurrErrorLevel;
 
+  delete sr;
+  delete cafTree;
+  delete weightsTree;
+  delete InputFile;
+  
   return static_cast<int>(dunemcSamples.size());
 }
 
