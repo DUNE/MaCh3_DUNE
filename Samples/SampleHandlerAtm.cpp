@@ -25,12 +25,37 @@ void SampleHandlerAtm::Init() {
     const std::string TempTitle = EnabledSamples[iSample];
     IsELike[iSample] = Get<int>(SampleManager->raw()[TempTitle]["SampleOptions"]["IsELike"],__FILE__,__LINE__);
   }
+
+  //Define the names of the samples we're performing event selection for
+  EventSelectionNames[kEventSelectionNuE] = "nueselec";
+  EventSelectionNames[kEventSelectionNuMu] = "numuselec";
+  EventSelectionNames[kEventSelectionNC] = "ncselec";  
+
+  //Create a map between these event selections to the defined samples in the config
+  for (int iSelection=0;iSelection<nEventSelections;iSelection++) {
+    EventSelection_to_SampleIndex_Map[iSelection] = kEventSelectionUnknown;
+    for (size_t iDefinedSample=0;iDefinedSample<SampleDetails.size();iDefinedSample++) {
+      if (EventSelectionNames[iSelection] == SampleDetails[iDefinedSample].SampleTitle) {
+	EventSelection_to_SampleIndex_Map[iSelection] = static_cast<int>(iDefinedSample); 
+      }
+    }
+  }
+
+  //Check atleast one of the event selections is in the config
+  bool CheckVal = false;
+  for (int iSelection=0;iSelection<nEventSelections;iSelection++) {
+    if (EventSelection_to_SampleIndex_Map[iSelection] != kEventSelectionUnknown) {
+      CheckVal = true;
+    }
+  }
+  if (CheckVal == false) {
+    MACH3LOG_ERROR("No Event Selections match Defined Samples from Config");
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  
 }
 
-// ************************************************
-void SampleHandlerAtm::InititialiseData()
-{
-  // ************************************************
+void SampleHandlerAtm::InititialiseData() {
   // Reweight MC to match
   Reweight();
   // set asimov data
@@ -53,48 +78,74 @@ void SampleHandlerAtm::AddAdditionalWeightPointers() {
 
 int SampleHandlerAtm::SetupExperimentMC() {
   int CurrErrorLevel = gErrorIgnoreLevel;
-  gErrorIgnoreLevel = kFatal;
+  gErrorIgnoreLevel = kFatal;  
+
+  std::string fInputFile = "Inputs/Atmospherics/CAFs/caf_new_sum.2.6M_weighted.root";
+
+  TFile *f = TFile::Open(fInputFile.c_str(),"READ");
+  if (!f || f->IsZombie()) {
+    MACH3LOG_ERROR("Could not open input CAF file: {}",fInputFile);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+
+  TTree *cafTree, *weightsTree;
+  f->GetObject("cafTree",cafTree);
+  if (!cafTree) {
+    MACH3LOG_ERROR("Could not find cafTree in input CAF file: {}",fInputFile);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  f->GetObject("weights",weightsTree);
+  if (!weightsTree) {
+    MACH3LOG_ERROR("Could not find weights tree in input CAF file: {}",fInputFile);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+
+  double xsec_w, flux_nue_w, flux_numu_w;
+  weightsTree->SetBranchAddress("xsec",&xsec_w);
+  weightsTree->SetBranchAddress("flux_nue",&flux_nue_w);
+  weightsTree->SetBranchAddress("flux_numu",&flux_numu_w);
   
   caf::StandardRecord* sr = new caf::StandardRecord();
-
-  TChain* Chain = new TChain("cafTree");
-  std::vector<size_t> FileIndexToSample;
-  for (size_t iSample=0;iSample<SampleDetails.size();iSample++) {
-    for (const std::vector<std::string>& files : SampleDetails[iSample].mc_files) {
-      for (const std::string& filename : files){
-        FileIndexToSample.push_back(iSample);
-        int ChainAddCheck = Chain->Add(filename.c_str(), -1);
-        if(ChainAddCheck == 0){
-          MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", filename);
-          throw MaCh3Exception(__FILE__, __LINE__);
-        }
-      }
-    }
-  }
-  int nChainEntries = static_cast<int>(Chain->GetEntries());
+  cafTree->SetBranchStatus("*", 1);
+  cafTree->SetBranchAddress("rec", &sr);
   
-  Chain->SetBranchStatus("*", 1);
-  Chain->SetBranchAddress("rec", &sr);
-
+  int nTreeEntries = static_cast<int>(cafTree->GetEntries());
+  
   //================================================================================================
-  
-  //First set struct length to maximum number of events from the MC
-  dunemcSamples.resize(nChainEntries);
 
-  int iEvent = 0;
-  for (int iChainEntry=0;iChainEntry<nChainEntries;iChainEntry++) {
-    Chain->GetEntry(iChainEntry);
+  for (int iTreeEntry=0;iTreeEntry<nTreeEntries;iTreeEntry++) {
+    cafTree->GetEntry(iTreeEntry);
+    weightsTree->GetEntry(iTreeEntry);
 
-    if ((iChainEntry % (nChainEntries/10))==0) {
-      MACH3LOG_INFO("\tProcessing entry: {}/{}",iChainEntry,nChainEntries);
+    if ((iTreeEntry % (nTreeEntries/10))==0) {
+      MACH3LOG_INFO("\tProcessing entry: {}/{}",iTreeEntry,nTreeEntries);
     }
     
     if(sr->common.ixn.pandora.size() != 1) {
-      MACH3LOG_WARN("Skipping entry {}/{} -> Number of neutrino slices found in event: {}",iChainEntry,nChainEntries,sr->common.ixn.pandora.size());
+      MACH3LOG_TRACE("Skipping entry {}/{} -> Number of neutrino slices found in event: {}",iTreeEntry,nTreeEntries,sr->common.ixn.pandora.size());
       continue;
     }
 
-    const size_t SampleIndex = FileIndexToSample[static_cast<size_t>(Chain->GetTreeNumber())];
+    std::vector<double> CVNScores = std::vector<double>(nEventSelections);
+    CVNScores[kEventSelectionNuE] = sr->common.ixn.pandora[0].nuhyp.cvn.nue;
+    CVNScores[kEventSelectionNuMu] = sr->common.ixn.pandora[0].nuhyp.cvn.numu;
+    CVNScores[kEventSelectionNC] = sr->common.ixn.pandora[0].nuhyp.cvn.nc;    
+    
+    unsigned int SampleIndex = ReturnSampleIdentifier(CVNScores);
+    if (SampleIndex == kEventSelectionUnknown) {
+      continue;
+    }
+    
+    auto& OscillationChannels = SampleDetails[SampleIndex].OscChannels;
+
+    int InteractingPDG = sr->mc.nu[0].pdg;
+
+    int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
+    if (!sr->mc.nu[0].iscc) M3Mode += 14; //Account for no ability to distinguish CC/NC
+    if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
+
+    double TrueNeutrinoEnergy = static_cast<double>(sr->mc.nu[0].E);
+    TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.X(),sr->mc.nu[0].momentum.Y(),sr->mc.nu[0].momentum.Z())).Unit();
     
     TVector3 RecoNuMomentumVector;
     double RecoENu;
@@ -107,50 +158,53 @@ int SampleHandlerAtm::SetupExperimentMC() {
     }
     double RecoCZ = -RecoNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
     if (std::isnan(RecoCZ)) {
-      MACH3LOG_WARN("Skipping entry {}/{} -> Reconstructed Cosine Z is NAN",iChainEntry,nChainEntries);
+      MACH3LOG_WARN("Skipping entry {}/{} -> Reconstructed Cosine Z is NAN",iTreeEntry,nTreeEntries);
       continue;
     }
     if (std::isnan(RecoENu)) {
-      MACH3LOG_WARN("Skipping entry {}/{} -> Reconstructed Neutrino Energy is NAN",iChainEntry,nChainEntries);
+      MACH3LOG_WARN("Skipping entry {}/{} -> Reconstructed Neutrino Energy is NAN",iTreeEntry,nTreeEntries);
       continue;
     }
 
-    dunemcSamples[iEvent].rw_erec = RecoENu;
-    dunemcSamples[iEvent].rw_theta = RecoCZ;
-    
-    auto& OscillationChannels = SampleDetails[SampleIndex].OscChannels;
-    std::string CurrFileName = Chain->GetCurrentFile()->GetName();
-    dunemcSamples[iEvent].SampleIndex = static_cast<unsigned int>(SampleIndex);
-    dunemcSamples[iEvent].nupdgUnosc = GetInitPDGFromFileName(CurrFileName);
-    dunemcSamples[iEvent].nupdg = GetFinalPDGFromFileName(CurrFileName);
-    dunemcSamples[iEvent].OscChannelIndex = static_cast<double>(GetOscChannel(OscillationChannels, dunemcSamples[iEvent].nupdgUnosc, dunemcSamples[iEvent].nupdg));
-    
-    int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
-    if (!sr->mc.nu[0].iscc) M3Mode += 14; //Account for no ability to distinguish CC/NC
-    if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
-    dunemcSamples[iEvent].mode = M3Mode;
-    
-    dunemcSamples[iEvent].rw_isCC = sr->mc.nu[0].iscc;
-    dunemcSamples[iEvent].Target = kTarget_Ar;
-    
-    dunemcSamples[iEvent].enu_true = static_cast<double>(sr->mc.nu[0].E);
+    int RunNumber = sr->meta.fd_hd.run;
+    int SubRunNumber = sr->meta.fd_hd.subrun;
+    int EventNumber = sr->meta.fd_hd.event;
 
-    TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.X(),sr->mc.nu[0].momentum.Y(),sr->mc.nu[0].momentum.Z())).Unit();
-    dunemcSamples[iEvent].coszenith_true = -TrueNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
-
-    dunemcSamples[iEvent].flux_w = sr->mc.nu[0].genweight;
+    struct dunemc_atm currentEvent_FromNuE;
     
-    iEvent += 1;
+    currentEvent_FromNuE.rw_erec = RecoENu;
+    currentEvent_FromNuE.rw_theta = RecoCZ;
+    currentEvent_FromNuE.SampleIndex = SampleIndex;
+    currentEvent_FromNuE.nupdg = InteractingPDG;
+    currentEvent_FromNuE.nupdgUnosc = (InteractingPDG > 0) ? 12 : -12;
+    currentEvent_FromNuE.OscChannelIndex = static_cast<double>(GetOscChannel(OscillationChannels, currentEvent_FromNuE.nupdgUnosc, currentEvent_FromNuE.nupdg));
+    currentEvent_FromNuE.mode = M3Mode;
+    currentEvent_FromNuE.rw_isCC = sr->mc.nu[0].iscc;
+    currentEvent_FromNuE.Target = kTarget_Ar;
+    currentEvent_FromNuE.enu_true = TrueNeutrinoEnergy;
+    currentEvent_FromNuE.coszenith_true = -TrueNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
+    currentEvent_FromNuE.flux_w = xsec_w*flux_nue_w;
+    
+    struct dunemc_atm currentEvent_FromNuMu = currentEvent_FromNuE;
+    
+    currentEvent_FromNuMu.nupdgUnosc = (InteractingPDG > 0) ? 14 : -14;
+    currentEvent_FromNuMu.OscChannelIndex = static_cast<double>(GetOscChannel(OscillationChannels, currentEvent_FromNuMu.nupdgUnosc, currentEvent_FromNuMu.nupdg));
+    currentEvent_FromNuMu.flux_w = xsec_w*flux_numu_w;
+
+    dunemcSamples.emplace_back(std::move(currentEvent_FromNuE));
+    dunemcSamples.emplace_back(std::move(currentEvent_FromNuMu));
+
+    if (RunNumber == 74494002 && EventNumber == 26079) {
+      std::cout << "RunNumber:" << RunNumber << " | SubRunNumber:" << SubRunNumber << " | EventNumber:" << EventNumber << " | RecoENu:" << RecoENu << " | RecoCZ:" << RecoCZ << " | dunemcSamples[i].flux_w:" << currentEvent_FromNuE.flux_w << " | dunemcSamples[iEvent].nupdgUnosc:" << currentEvent_FromNuE.nupdgUnosc << " | dunemcSamples[iEvent].nupdg:" << currentEvent_FromNuE.nupdg << std::endl;
+      std::cout << "RunNumber:" << RunNumber << " | SubRunNumber:" << SubRunNumber << " | EventNumber:" << EventNumber << " | RecoENu:" << RecoENu << " | RecoCZ:" << RecoCZ << " | dunemcSamples[i].flux_w:" << currentEvent_FromNuMu.flux_w << " | dunemcSamples[iEvent].nupdgUnosc:" << currentEvent_FromNuMu.nupdgUnosc << " | dunemcSamples[iEvent].nupdg:" << currentEvent_FromNuMu.nupdg << std::endl;
+    }
+    
   }
 
-  //Now resize to number of events which passed "sensible" cuts
-  dunemcSamples.resize(iEvent);
-
   //================================================================================================
-  delete Chain;
   gErrorIgnoreLevel = CurrErrorLevel;
 
-  return iEvent;
+  return static_cast<int>(dunemcSamples.size());
 }
 
 void SampleHandlerAtm::SetupMC() {
@@ -191,4 +245,18 @@ const double* SampleHandlerAtm::GetPointerToKinematicParameter(const int KinPar,
 double SampleHandlerAtm::ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const {
   KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
   return *GetPointerToKinematicParameter(KinPar, iEvent);
+}
+
+int SampleHandlerAtm::ReturnSampleIdentifier(std::vector<double> CVNScores) {
+  //int IndexWithMaxScore = static_cast<int>(std::distance(CVNScores.begin(), max_element(CVNScores.begin(), CVNScores.end())));
+  //return EventSelection_to_SampleIndex_Map[IndexWithMaxScore];
+
+  int SampleIndex = EventSelection_to_SampleIndex_Map[kEventSelectionNC];
+  if (CVNScores[kEventSelectionNuMu] > 0.56) {
+    SampleIndex = EventSelection_to_SampleIndex_Map[kEventSelectionNuMu];
+  } else if (CVNScores[kEventSelectionNuE] > 0.55) {
+    SampleIndex = EventSelection_to_SampleIndex_Map[kEventSelectionNuE];
+  }
+
+  return SampleIndex;
 }

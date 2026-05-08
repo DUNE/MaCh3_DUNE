@@ -12,9 +12,9 @@ NuOsc:
 AnalysisOptions:
   ExposureScaling: 1.0
 
-Samples: [
-  "Atm_nuelike", "Atm_numulike"
-]
+Samples:
+  - Atm_numulike
+  - Atm_nuelike
 
 Atm_nuelike:
   SampleTitle: "nueselec"

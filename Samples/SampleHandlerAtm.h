@@ -108,6 +108,18 @@ protected:
 
   /// Multiplicative scaling to scale from the assumed 400ktyr value in the CAF files
   double ExposureScaling;
+
+  enum EventSelection {
+    kEventSelectionNuE,
+    kEventSelectionNuMu,
+    kEventSelectionNC,
+    nEventSelections,
+    kEventSelectionUnknown
+  };
+
+  int ReturnSampleIdentifier(std::vector<double> CVNScores);
+  std::vector<std::string> EventSelectionNames = std::vector<std::string>(nEventSelections);
+  std::vector<int> EventSelection_to_SampleIndex_Map = std::vector<int>(nEventSelections,kEventSelectionUnknown);
 };
 
 #endif
