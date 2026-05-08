@@ -2,7 +2,9 @@
 SampleHandlerName: "Atm"
 MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
 BinningFile: "Configs/Samples/AtmosphericParameterBinning.yaml"
+
 InputFiles:
+  FileName: "Inputs/Atmospherics/CAFs/caf_new_sum.2.6M_weighted.root"
   PrepSplineFile: false
 
 NuOsc:
@@ -11,6 +13,7 @@ NuOsc:
 
 AnalysisOptions:
   ExposureScaling: 1.0
+  FCPCSeparation: 10.0
 
 Samples:
   - Atm_FC_numulike

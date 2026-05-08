@@ -6,7 +6,6 @@
 #include "duneanaobj/StandardRecord/StandardRecord.h"
 
 #if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)
-
 #include "duneanaobj/StandardRecord/Proxy/SRProxy.h"
 #endif
 
@@ -32,7 +31,10 @@ void SampleHandlerAtm::Init() {
     IsELike[iSample] = Get<int>(SampleManager->raw()[TempTitle]["SampleOptions"]["IsELike"],__FILE__,__LINE__);
   }
 
-  //Define the names of the samples we're performing event selection for
+  //DB Value used to determine selection criteria for FC and PC separation in function of 'walldist' variable
+  FCPCSeparation = Get<double>(SampleManager->raw()["AnalysisOptions"]["FCPCSeparation"],__FILE__,__LINE__);
+
+  //DB Define the names of the samples we're performing event selection for
   EventSelectionNames[kEventSel_FC_NuE]  = "FC_nueselec";
   EventSelectionNames[kEventSel_FC_NuMu] = "FC_numuselec";
   EventSelectionNames[kEventSel_FC_NC]   = "FC_ncselec";
@@ -40,7 +42,7 @@ void SampleHandlerAtm::Init() {
   EventSelectionNames[kEventSel_PC_NuMu] = "PC_numuselec";
   EventSelectionNames[kEventSel_PC_NC]   = "PC_ncselec";    
 
-  //Create a map between these event selections to the defined samples in the config
+  //DB Create a map between these event selections to the defined samples in the config
   for (int iSelection=0;iSelection<nEventSelections;iSelection++) {
     EventSelection_to_SampleIndex_Map[iSelection] = kEventSel_Unknown;
     for (size_t iDefinedSample=0;iDefinedSample<SampleDetails.size();iDefinedSample++) {
@@ -50,7 +52,7 @@ void SampleHandlerAtm::Init() {
     }
   }
 
-  //Check atleast one of the event selections is in the config
+  //DB Check atleast one of the event selections is in the config
   bool CheckVal = false;
   for (int iSelection=0;iSelection<nEventSelections;iSelection++) {
     if (EventSelection_to_SampleIndex_Map[iSelection] != kEventSel_Unknown) {
@@ -86,23 +88,23 @@ int SampleHandlerAtm::SetupExperimentMC() {
   int CurrErrorLevel = gErrorIgnoreLevel;
   gErrorIgnoreLevel = kFatal;  
 
-  std::string fInputFile = "Inputs/Atmospherics/CAFs/caf_new_sum.2.6M_weighted.root";
+  std::string InputFileName = Get<std::string>(SampleManager->raw()["InputFiles"]["FileName"],__FILE__,__LINE__);
 
-  TFile *InputFile = TFile::Open(fInputFile.c_str(),"READ");
+  TFile *InputFile = TFile::Open(InputFileName.c_str(),"READ");
   if (!InputFile || InputFile->IsZombie()) {
-    MACH3LOG_ERROR("Could not open input CAF file: {}",fInputFile);
+    MACH3LOG_ERROR("Could not open input CAF file: {}",InputFileName);
     throw MaCh3Exception(__FILE__, __LINE__);
   }
 
   TTree *cafTree, *weightsTree;
   InputFile->GetObject("cafTree",cafTree);
   if (!cafTree) {
-    MACH3LOG_ERROR("Could not find cafTree in input CAF file: {}",fInputFile);
+    MACH3LOG_ERROR("Could not find cafTree in input CAF file: {}",InputFileName);
     throw MaCh3Exception(__FILE__, __LINE__);
   }
   InputFile->GetObject("weights",weightsTree);
   if (!weightsTree) {
-    MACH3LOG_ERROR("Could not find weights tree in input CAF file: {}",fInputFile);
+    MACH3LOG_ERROR("Could not find weights tree in input CAF file: {}",InputFileName);
     throw MaCh3Exception(__FILE__, __LINE__);
   }
 
@@ -152,8 +154,11 @@ int SampleHandlerAtm::SetupExperimentMC() {
     CVNScores[kCVN_NuMu] = sr->common.ixn.pandora[0].nuhyp.cvn.numu;
     CVNScores[kCVN_NC] = sr->common.ixn.pandora[0].nuhyp.cvn.nc;    
 
+    //DB Theoretical max value should be ShortestDimensioninAV/2 which is less than 1e4 -- so dummy value of 1e8 is fine
     double MinDistToWall = 1e8;
     for (size_t iPart=0;iPart<sr->common.ixn.pandora[0].part.pandora.size();iPart++) {
+      //DB Info from PG -- ignore any hits associated with HitCollection classified objects
+      if (sr->common.ixn.pandora[0].part.pandora[iPart].origRecoObjType == caf::RecoObjType::kHitCollection) {continue;}
       if (sr->common.ixn.pandora[0].part.pandora[iPart].walldist < MinDistToWall) {MinDistToWall = sr->common.ixn.pandora[0].part.pandora[iPart].walldist;}
     }
     
@@ -271,36 +276,20 @@ double SampleHandlerAtm::ReturnKinematicParameter(const int KinematicVariable, c
 }
 
 int SampleHandlerAtm::ReturnSampleIdentifier(std::vector<double> CVNScores, double MinDistanceToWall) {
-
-  /*
-  int EventSelection = kCVN_NC;
-  if (CVNScores[kCVN_NuMu] > 0.56) {
-    EventSelection = kCVN_NuMu;
-  } else if (CVNScores[kCVN_NuE] > 0.55) {
-    EventSelection = kCVN_NuE;
-  }
-
-  int SampleIndex = kEventSel_Unknown;  
-  if (EventSelection == kCVN_NuE)  {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NuE]; }
-  if (EventSelection == kCVN_NuMu) {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NuMu];}
-  if (EventSelection == kCVN_NC)   {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NC];  }      
-
-  (void)MinDistanceToWall;
-  */
-
   bool IsFullyContained = false;
   
   if (MinDistanceToWall > 1e4 || MinDistanceToWall < 0) { //DB: ToDo Work out theoretical maximum
     return kEventSel_Unknown;
-  } else if (MinDistanceToWall > 10) {
+  } else if (MinDistanceToWall > FCPCSeparation) {
     IsFullyContained = true;
   } else {
     IsFullyContained = false;
   }
 
-  //int EventSelection = static_cast<int>(std::distance(CVNScores.begin(), max_element(CVNScores.begin(), CVNScores.end())));  
+  //int EventSelection = static_cast<int>(std::distance(CVNScores.begin(), max_element(CVNScores.begin(), CVNScores.end())));
+  //DB Not making the 0.55 and 0.56 magic numbers config-read because will eventually move to the argmax style selection (commented out on line above...)
   int EventSelection = kCVN_NC;
-  if (CVNScores[kCVN_NuMu] > 0.56) {
+  if (CVNScores[kCVN_NuMu] > 0.56) { 
     EventSelection = kCVN_NuMu;
   } else if (CVNScores[kCVN_NuE] > 0.55) {
     EventSelection = kCVN_NuE;
