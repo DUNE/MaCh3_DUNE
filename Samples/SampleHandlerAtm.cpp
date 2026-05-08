@@ -112,7 +112,6 @@ int SampleHandlerAtm::SetupExperimentMC() {
   weightsTree->SetBranchAddress("flux_numu",&flux_numu_w);
 
 #if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)
-  std::cout << "Using the Proxy" << std::endl;
   caf::StandardRecordProxy* sr = new caf::StandardRecordProxy(cafTree, "rec");    
 #else  
   caf::StandardRecord* sr = new caf::StandardRecord();
@@ -291,7 +290,7 @@ int SampleHandlerAtm::ReturnSampleIdentifier(std::vector<double> CVNScores, doub
 
   bool IsFullyContained = false;
   
-  if (MinDistanceToWall > 1e6) { //DB: ToDo Work out theoretical maximum
+  if (MinDistanceToWall > 1e4 || MinDistanceToWall < 0) { //DB: ToDo Work out theoretical maximum
     return kEventSel_Unknown;
   } else if (MinDistanceToWall > 10) {
     IsFullyContained = true;
