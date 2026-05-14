@@ -5,7 +5,7 @@
 # We start with the "General" section
 # This contains the bulk of the settings
 General:
-  # The name of the output file. If it already exists, it will be overwritten.
+  # The name of the output file. If it already exists, it will be overwritten so remember to change the name before running!!!
   OutputFile: "MaCh3_Output.root"
 
   # Here we can list the paths to the DUNE sample CONFIG files.
@@ -37,3 +37,8 @@ LLHScan:
 SigmaVar:
   # This will scan at 0, ±1 and ±3 standard deviations from the "nominal" value of each systematic
   SigmaArray: [-3, -1, 0, 1, 3]
+
+# For MCMC
+MCMC:
+  NSteps: 1000 # We'll be running a short chain, so only 1000 steps
+  AutoSave: 10000 # This 
