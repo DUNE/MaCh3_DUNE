@@ -1,0 +1,14 @@
+# Kinematics!
+- TrueNeutrinoEnergy: The true neutrino energy from the MC
+- RecoNeutrinoEnergy: The reconstructed neutrino energy 
+- TrueXPos: The true x position of the interaction vertex in the detector
+- TrueYPos: The true y position of the interaction vertex in the detector
+- TrueZPos: The true z position of the interaction vertex in the detector
+- CVNNumu: CVN numu uncertainty
+- CVNNue: CVN nue uncertainty
+- Mode: The interaction mode
+- OscillationChannel: The oscillation channel
+- IsFHC: Whether the event is from a FHC beam
+- TargetNucleus: The target nucleus
+- IsTrueCCnue: Is the event a true CC nue interaction?
+- IsTrueCCnumu: Is the event a true CC numu interaction?
