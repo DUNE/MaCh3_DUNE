@@ -1,4 +1,33 @@
 FHC_numu:
-    IsFHC: [-0.5, 0.5, 1.5]
-    RecoNeutrinoEnergy: [0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
-    TrueNeutrinoEnergy: [0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
+  IsFHC: [-0.5, 0.5, 1.5]
+  RecoNeutrinoEnergy: [0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
+  TrueNeutrinoEnergy: [0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
+
+NDGAr_FHC_numu:
+  TrueNeutrinoEnergy: [0., 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 4., 4.5, 5.]
+  TrueQ3: {linspace: {nb: 175, low: 0, up: 3.5}}
+  TrueQ0: {linspace: {nb: 150, low: 0, up: 3.}}
+  LepPhi: {linspace: {nb: 90, low: -180., up: 180.}}
+  LepTheta: {linspace: {nb: 90, low: 0., up: 180.}}
+  LepP: {linspace: {nb: 100, low: 0., up: 6.}}
+  LepBAngle: {linspace: {nb: 180, low: 0., up: 180.}}
+  EPi0: [0., 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1., 2., 4.]
+  Prim_BAngle: {linspace: {nb: 90, low: 0., up: 180.}}
+  Prim_Momentum: {linspace: {nb: 200, low: 0., up: 6.}}
+  Prim_TrackLengthYZ: {linspace: {nb: 100, low: 0., up: 500.}}
+  Prim_NTurns: {linspace: {nb: 300, low: 0., up: 3.}}
+  Prim_TPCEDepFrac: {linspace: {nb: 200, low: 0., up: 0.1}}
+  Prim_BeamAngle: {linspace: {nb: 90, low: 0., up: 180.}}
+  Prim_EndDepth: {linspace: {nb: 500, low: 0., up: 100.}}
+  Prim_EndX: {linspace: {nb: 500, low: -500., up: 500.}}
+  Prim_EndR: {linspace: {nb: 500, low: 0., up: 500.}}
+  Prim_EndY: {linspace: {nb: 500, low: -500., up: 500.}}
+  Prim_EndZ: {linspace: {nb: 500, low: -500., up: 500.}}
+  TrueXPos: {linspace: {nb: 150, low: -300., up: 300.}}
+  TrueRad: {linspace: {nb: 150, low: 0., up: 300.}}
+  LepTrackLengthYZ: {linspace: {nb: 100, low: 0., up: 500.}}
+  Shower_PDG: {linspace: {nb: 120, low: 0., up: 120.}}
+  Shower_DCalBoundary: {linspace: {nb: 100, low: 0., up: 30.}}
+  Shower_Energy: {linspace: {nb: 100, low: 0., up: 1.}}
+  Shower_BAngle: {linspace: {nb: 90, low: 0., up: 180.}}
+  Shower_CosNorm: {linspace: {nb: 90, low: 0., up: 1.}}
