@@ -39,8 +39,31 @@ int main(int argc, char * argv[]) {
       TString NameTString = TString(name.c_str());
       
       handler->Reweight();
-      PredictionHistograms.push_back(static_cast<TH1*>(handler->GetMCHist(iSample)->Clone(NameTString+"_DataHist")));
+      
+      
+      TH1* data_hist;
+      bool load_data = GetFromManager(FitManager->raw()["General"]["LoadDataFromFile"], false);
+      if(load_data){
+        auto data_file_name = Get<std::string>(FitManager->raw()["General"]["DataFileName"], __FILE__, __LINE__);
+        auto data_hist_name = Get<std::string>(FitManager->raw()["General"]["DataHistName"], __FILE__, __LINE__);
+        auto data_file = TFile::Open(data_file_name.c_str(), "OPEN");
+        if(!data_file || data_file->IsZombie()){
+          MACH3LOG_ERROR("Cannot find data file {}", data_file_name);
+          throw MaCh3Exception(__FILE__, __LINE__);
+        }
 
+        data_hist = data_file->Get<TH1>(data_hist_name.c_str());
+        if(!data_hist){
+          MACH3LOG_ERROR("Cannot find data histogram: {} in {}", data_hist_name, data_file_name);
+          throw MaCh3Exception(__FILE__, __LINE__);
+        }
+      }
+      else{
+        data_hist = static_cast<TH1*>(handler->GetMCHist(iSample)->Clone(NameTString+"_DataHist"));
+      }
+
+      PredictionHistograms.push_back(data_hist);
+      
       if (handler->GetNDim(iSample) == 1){
         handler->AddData(iSample, static_cast<TH1D*>(PredictionHistograms.back()));
       } else if (handler->GetNDim(iSample) == 2){

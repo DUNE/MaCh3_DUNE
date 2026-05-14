@@ -18,6 +18,13 @@ General:
   SharedNuOscillatorObject:
     BeamFD: "Configs/NuOsc/CUDAProb3Linear_binned.yaml"
 
+
+  # For dealing with Data!
+  LoadDataFromFile: False
+  DataFileName: "" # <- File containing data
+  DataHistName: "" # <- Histogram containing data
+
+  # misc settingws
   Seed: 0
 
   # Now we can look at systematics
