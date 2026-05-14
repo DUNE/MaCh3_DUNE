@@ -178,7 +178,7 @@ void makeSigmaVarPlotsDUNE(TString inputfile)
 
    TCanvas* c0 = new TCanvas("c0","c0",0,0,700,900);
    c0->Divide(1,2);
-   c0->Print("sigmavar.ps[");
+   c0->Print("sigmavar.pdf[");
   
    for(int i=0; i<list->GetEntries(); i++)
    {
@@ -307,10 +307,10 @@ void makeSigmaVarPlotsDUNE(TString inputfile)
 
       c0->Update();
 //      getchar();
-      c0->Print("sigmavar.ps");
+      c0->Print("sigmavar.pdf");
 
    }
 
-   c0->Print("sigmavar.ps]");
+   c0->Print("sigmavar.pdf]");
 
 }
