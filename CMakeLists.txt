@@ -282,6 +282,9 @@ install(EXPORT mach3dune-targets
   DESTINATION ${CMAKE_INSTALL_PREFIX}/
 )
 
+install(DIRECTORY plotting DESTINATION ${CMAKE_BINARY_DIR})
+
+
 include(CMakePackageConfigHelpers)
 configure_package_config_file(
   ${CMAKE_CURRENT_LIST_DIR}/cmake/Templates/MaCh3DUNEConfig.cmake.in ${CMAKE_BINARY_DIR}/MaCh3DUNEConfig.cmake
