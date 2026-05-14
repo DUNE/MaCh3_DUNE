@@ -12,7 +12,7 @@ BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
 # Sets up how oscillations are calculated
 NuOsc:
   NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
-  EqualBinningPerOscChannel: false
+  EqualBinningPerOscChannel: True
 
 # Here you list the samples were going to include and define below. We'll just be using the one sample.
 Samples: ["BeamFD_FHC_numu"]
@@ -25,33 +25,31 @@ BeamFD_FHC_numu:
 ################################################
 
 # To start with let's look at some general information
-  SampleName:  #<- The name we'll give to the sample ("FHC numu" would be a good name for our sample)
-  SampleTitle:  #<- The name that will be used in plots (typically the same as the name)
-  POT:  #<- This is used to scale the MC events to the correct number of events for the given POT
+  SampleTitle: "BeamFD_FHC_Numu" #<- The name that will be used in plots (typically the same as the name)
+  POT: 8.11e+22  #<- This is used to scale the MC events to the correct number of events for the given POT
 
 
 #Now we'll add the selection cuts:
   SelectionCuts:
-    - KinematicStr: "VariableName1" #<- Name of the variable we want a cut on (RecoNeutrinoEnergy, TrueNeutrinoEnergy, CVNNumu, CVNNue, etc.)
-      Bounds: [x,y] #<- Cut range
-    - KinematicStr: "VariableName2"
-      Bounds: [x,y]
-
+    - KinematicStr: "Variable 1" # Change my name to a variable name!
+      Bounds: [lower, upper]     # Add the correct lower/upper bounds!
+    - KinematicStr: "Variable 2" # Change my name to a variable name!
+      Bounds: [lower, upper]     # Add the correct lower/upper bounds!
 
 # Binning Information.
 # All samples are binned in at least ETrue which is defined in the BinningFile (above) but we
 # are free to bin in up to 2 additional variables. For now we'll choose the reconstructed neutrino energy.
 # Binning is then defined as
   Binning:
-    VarStr:  #<- Name of the variable we want to bin in (RecoNeutrinoEnergy, TrueNeutrinoEnergy, CVNNumu, CVNNue, etc.)
-    Uniform: #<- Do we want to use rectangular bins (True) or non-uniform bins (False)
-    BinEdges: #<- The bin edges we want to use (for example [1,2,3])
+    VarStr: "Binning Variable"
+    Uniform: true
+    BinEdges: [] # ADD BIN EDGES HERE
 
 # Once we've defined the binning we need to define our sample properties. For now we'll be using an FHC numu sample
 # This is defined in
-  DuneSampleBools:
-    iselike: #<- Is final state lepton an electron? (True/False)
-    isFHC: #<- Is the sample from a FHC beam (True/False)
+  DUNESampleBools:
+    iselike:  #<- CHANGE ME Is final state lepton an electron? (True/False)
+    isFHC: #<- CHANGE ME Is the sample from a FHC beam (1/0)
 
 # Finally we need to define the input file information. This is split into 2 parts:
 # ----

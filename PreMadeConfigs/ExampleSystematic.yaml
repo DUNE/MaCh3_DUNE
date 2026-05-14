@@ -7,5 +7,5 @@ Systematics:
       ParameterValues: 3.1
       ParameterBounds: [-999, 9999]
       Mode: [12]
-      SampleNames: ExampleSample
+      SampleNames: [ExampleSample]
       Type: Spline

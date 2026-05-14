@@ -6,54 +6,39 @@ Systematics:
   # Now for each systematic we put it under a "Systematic" entry
   - Systematic:
       # We can group parameters with a label (flux, xsec, osc, etc.). For now we'll say this is an xsec parameter
-      ParameterGroup: Xsec  
+      ParameterGroup: Xsec
 
       # MaCh3 can have multiple names for the same systematic.
       Names:
         # We will be using "FancyName"
-        FancyName: #<- Your name here
+        FancyName:  #<- Call me DummyNorm!
       
         # Now we need to define some more  properties of the systematic:
         # These are:
         # This is the prior error
-        Error: # For now let's make this 0.1
+      Error: # For now let's make this 0.1
 
         # This is the central value of the prior gaussian. 
-        Parameter Values: #<- For now let's make this 1.0
-        
+      ParameterValues: 
+        Generated: #<- For now let's make this 1.0
+        PreFitValue: # <- For now let's make this 1.0
+      StepScale:
+        MCMC: # <- Trying running MCMC with different values of me!
         # What are the lower+upper bounds of the parameter. If there is no bound set it to something large (e.g. ±9999)
-        ParameterBounds: #<- As this is a normaliation parameter it's bounded below by 0 so we'll set the range to [0, 9999]
+      ParameterBounds: [lower, upper] #<- As this is a normaliation parameter it's bounded below by 0 so we'll set the range to [0, 9999]
 
         # What modes does it affect? (List) For DUNE modes are the following can be found in: SystematicConfigs/MaCh3Modes.yaml.
         # For example CCQE=0, CC1Kaon=1, ...
-        Mode: #<- For now let's say this systematic only affects CCQE interactions so we'll set the mode to [0] 
+      Mode: [mode list] #<- For now let's say this systematic only affects CCQE interactions so we'll set the mode to [0] 
 
         # This is the list of samples this object effects. We can do something like "MySample*" which
         # will apply to all samples with "MySample" in the name. Or we can do "MySample1, MySample2" to apply to specific samples.
-        SampleNames: #<- We'll just include the name of the sample we created earlier
+      SampleNames: [BeamFD] #<- We'll just include the name of the sample we created earlier
  
-        # Is this a spline, norm of func (shift) parameter?
-        Type: #<- We're implementing a norm, so put norm here
+        # Is this a Spline, Norm or Func (shift) parameter?
+      Type: #<- We're implementing a Norm, so put Norm here (the case matters!)
 
         # Here we can specify specific ranges which this systematic will apply to
         # Let's go with TrueNeutrinoEnergy with a range of [0.5, 1.0]
-        KinematicCuts:
-      #    - <Name of Kinematic>: [lower bound, upper bound] 
-
-      # /// EXTENSION ///
-      # ================================================================================
-      # As an extension you can also add more kinematic cuts. Here are names for the variables you might want to make a cut on:
-      # - TrueNeutrinoEnergy: The true neutrino energy from the MC
-      # - RecoNeutrinoEnergy: The reconstructed neutrino energy 
-      # - TrueXPos: The true x position of the interaction vertex in the detector
-      # - TrueYPos: The true y position of the interaction vertex in the detector
-      # - TrueZPos: The true z position of the interaction vertex in the detector
-      # - CVNNumu: CVN numu uncertainty
-      # - CVNNue: CVN nue uncertainty
-      # - Mode: The interaction mode
-      # - OscillationChannel: The oscillation channel
-      # - IsFHC: Whether the event is from a FHC beam
-      # - TargetNucleus: The target nucleus
-      # - IsTrueCCnue: Is the event a true CC nue interaction?
-      # - IsTrueCCnumu: Is the event a true CC numu interaction?
-      # ================================================================================
+      KinematicCuts:
+        - TrueNeutrinoEnergy: [lower, upper] # <- Now what do we set our cut to?

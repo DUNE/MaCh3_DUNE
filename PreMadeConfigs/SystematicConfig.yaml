@@ -24,7 +24,7 @@ Systematics:
         Generated: 1.0
         PreFitValue: 1.0
       StepScale:
-        MCMC: 0.3
+        MCMC: 0.1
         # What are the lower+upper bounds of the parameter. If there is no bound set it to something large (e.g. ±9999)
       ParameterBounds: [0, 9999] #<- As this is a normaliation parameter it's bounded below by 0 so we'll set the range to [0, 9999]
 
@@ -34,7 +34,7 @@ Systematics:
 
         # This is the list of samples this object effects. We can do something like "MySample*" which
         # will apply to all samples with "MySample" in the name. Or we can do "MySample1, MySample2" to apply to specific samples.
-      SampleNames: [FHC_Numu] #<- We'll just include the name of the sample we created earlier
+      SampleNames: [BeamFD] #<- We'll just include the name of the sample we created earlier
  
         # Is this a spline, norm of func (shift) parameter?
       Type: Norm #<- We're implementing a norm, so put norm here
@@ -43,11 +43,11 @@ Systematics:
         # Let's go with TrueNeutrinoEnergy with a range of [0.5, 1.0]
       KinematicCuts:
         - TrueNeutrinoEnergy:
-          - 0.5
-          - 1.0   #    - <Name of Kinematic>: [lower bound, upper bound] 
+          - 2.0
+          - 3.0   #    - <Name of Kinematic>: [lower bound, upper bound] 
 
       # /// EXTENSION ///
-      # ================================================================================
+      # =====================s===========================================================
       # As an extension you can also add more kinematic cuts. Here are names for the variables you might want to make a cut on:
       # - TrueNeutrinoEnergy: The true neutrino energy from the MC
       # - RecoNeutrinoEnergy: The reconstructed neutrino energy 

@@ -9,36 +9,51 @@ General:
   OutputFile: "MaCh3_Output.root"
 
   # Here we can list the paths to the DUNE sample CONFIG files.
-  DuneSamples: []  
+  DUNESamples: []  
 
   # We can also set the value of the oscillation parameters here
   # For different oscillators we require different sets of parameters. (CUDAProb3 and NuFAST are just 2 pieces of software to calculate oscillation probabilities.)
-  OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 1284.9, 2.848] #CUDAProb3
+  OscillationParameters: [0.307, 0.546, 0.0220, 7.53E-5, 2.536E-3, -1.601, 1284.9, 2.848] #CUDAProb3
   #OscillationParameters: [0.310, 0.582, 0.0224, 7.39E-5, 2.525E-3, -2.498, 1284.9, 2.848,  0.5] #NuFAST
+  SharedNuOscillatorObject:
+    BeamFD: "Configs/NuOsc/CUDAProb3Linear_binned.yaml"
+
+  Seed: 0
 
   # Now we can look at systematics
   Systematics:
-    # For historical reasons we call our systematics "xsec" (despite the fact that they're not necessarily cross-section related)
+    # For historicaly reasons we call our systematics "xsec" (despite the fact that they're not necessarily cross-section related)
     # First we list our systmatic configuration yamls
-    XsecCovFile: []
+    XsecCovFile: ["Configs/SystematicConfigs/OscSystematicConfig.yaml"]
     # This is just a label for MaCh3 to use internally
     XsecCovName: "xsec_cov"
 
-    # This is the step scale used in MCMC. For more information about step scales 
+    # This is the step scale used in MCMC. For more information about scale factors 
     # please read: https://www2.stat.duke.edu/~pdh10/Teaching/564/Sup/mhalgorithm.pdf
-    XsecStepScale: 2.38
-    
+    XsecStepScale: 0.9
+    XsecFix: [ "baseline", "density", "Ye", "prod_height" ]
+
+  FittingAlgorithm: "MR2T2"
+  Fitter:
+    FitTestLikelihood: false
+
+  # For MCMC
+  MCMC:
+    NSteps: 500000 # We'll be running a short chain, so only 1000 steps
+    AutoSave: 10000 # This 
+
+
 # For LLH scans we need these settings
 LLHScan:
   LLHScanBySample: true
-
+  ScanRanges:
+    sin2th_23: [0.35,0.65]
 
 # For Sigma Variations
 SigmaVar:
   # This will scan at 0, ±1 and ±3 standard deviations from the "nominal" value of each systematic
   SigmaArray: [-3, -1, 0, 1, 3]
 
-# For MCMC
-MCMC:
-  NSteps: 1000 # We'll be running a short chain, so only 1000 steps
-  AutoSave: 10000 # This 
+PlotSigmaVariation:
+  ParamNames: ["DummyNorm"]
+  Coulour: [632] #<-Typo in MaCh3 not the config!

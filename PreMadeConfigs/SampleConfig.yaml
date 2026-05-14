@@ -12,7 +12,7 @@ BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
 # Sets up how oscillations are calculated
 NuOsc:
   NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
-  EqualBinningPerOscChannel: false
+  EqualBinningPerOscChannel: True
 
 # Here you list the samples were going to include and define below. We'll just be using the one sample.
 Samples: ["BeamFD_FHC_numu"]
@@ -25,7 +25,6 @@ BeamFD_FHC_numu:
 ################################################
 
 # To start with let's look at some general information
-  SampleName: "BeamFD_FHC_Numu"  #<- The name we'll give to the sample ("BeamFD_FHC_numu" would be a good name for our sample)
   SampleTitle: "BeamFD_FHC_Numu" #<- The name that will be used in plots (typically the same as the name)
   POT: 8.11e+22  #<- This is used to scale the MC events to the correct number of events for the given POT
 
@@ -38,8 +37,8 @@ BeamFD_FHC_numu:
       Bounds: [-550.0, 550.0]
     - KinematicStr: "TrueZPos"
       Bounds: [50.0, 1244.0]
-    - KinematicStr: "CVNNue"
-      Bounds: [0.85, 999.]
+    - KinematicStr: "CVNNumu"
+      Bounds: [0.5, 999]
 
 # Binning Information.
 # All samples are binned in at least ETrue which is defined in the BinningFile (above) but we
