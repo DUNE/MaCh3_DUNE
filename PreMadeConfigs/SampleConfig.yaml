@@ -1,0 +1,159 @@
+# MaCh3 defines "Sample Configs" these are configs that allow you to set up the MC (CAFs) information
+
+# The sample handler name determines which class is used to setup the sample
+SampleHandlerName: "BeamFD"
+
+# This config file sets up what the interaction modes are in MaCh3 (for example CCQE, CC1Kaon, etc.)
+MaCh3ModeConfig: "Configs/SystematicConfigs/MaCh3Modes.yaml"
+
+# This is the binning file. It contains the binning information for the true neutrino energy for each sample
+BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
+
+# Sets up how oscillations are calculated
+NuOsc:
+  NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
+  EqualBinningPerOscChannel: false
+
+# Here you list the samples were going to include and define below. We'll just be using the one sample.
+Samples: ["BeamFD_FHC_numu"]
+
+#Now we start defining this sample
+BeamFD_FHC_numu:
+
+################################################
+# This is where you start filling in information
+################################################
+
+# To start with let's look at some general information
+  SampleName: "BeamFD_FHC_Numu"  #<- The name we'll give to the sample ("BeamFD_FHC_numu" would be a good name for our sample)
+  SampleTitle: "BeamFD_FHC_Numu" #<- The name that will be used in plots (typically the same as the name)
+  POT: 8.11e+22  #<- This is used to scale the MC events to the correct number of events for the given POT
+
+
+#Now we'll add the selection cuts:
+  SelectionCuts:
+    - KinematicStr: "TrueXPos"
+      Bounds: [-310.0, 310.0]
+    - KinematicStr: "TrueYPos"
+      Bounds: [-550.0, 550.0]
+    - KinematicStr: "TrueZPos"
+      Bounds: [50.0, 1244.0]
+    - KinematicStr: "CVNNue"
+      Bounds: [0.85, 999.]
+
+# Binning Information.
+# All samples are binned in at least ETrue which is defined in the BinningFile (above) but we
+# are free to bin in up to 2 additional variables. For now we'll choose the reconstructed neutrino energy.
+# Binning is then defined as
+  Binning:
+    VarStr: "RecoNeutrinoEnergy"
+    Uniform: true
+    BinEdges: [0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
+
+# Once we've defined the binning we need to define our sample properties. For now we'll be using an FHC numu sample
+# This is defined in
+  DUNESampleBools:
+    iselike: false #<- Is final state lepton an electron? (True/False)
+    isFHC: 1 #<- Is the sample from a FHC beam (1/0)
+
+# Finally we need to define the input file information. This is split into 2 parts:
+# ----
+# 1. InputFiles <- This defines general properties of the input files (prefixes/suffixes)
+#       mtupleprefix: "path/to/mtuple/files/mtuple_" <- This is the prefix for the CAF files. (mtuple is a legacy name from T2K)
+#       mtuplesuffix: ".root" <- This is the suffix for the CAF files.
+#       splineprefix: "" <- This is the prefix for the spline files
+#       splinesuffix:  ".root" <- This is the suffix for the spline files.
+
+# This has been filled out for you!
+  InputFiles:
+    mtupleprefix: "Inputs/DUNE_CAF_files/FD_FHC_ger_"
+    mtuplesuffix: "_numuselec.root"
+    splineprefix: ""
+    splinesuffix: ""
+
+# 2. OscChannels
+# CAFs are split into several separate files. Each one representing a different oscillation channel (e.g. numu->numu, numu->nue, etc.).
+# We need to tell MaCh3 to find these files
+# OscChannels:
+#    - Name: <- Name of the sample (for example FHC_numu_x_nue)
+#      LatexName: <- The name in LaTeX format (for plotting)
+#      mtuplefile: <- The name of the CAF file for this sample. this will find a file called <mutpleprefix><mtuplefile><mtuplesuffix> (e.g. path/to/mtuple/files/mtuple_FHC_numu_x_nue.root)
+#      splinefile: <- The name of the spline file for this sample. This will find a file called <splineprefix><splinefile><splinesuffix> (e.g. path/to/spline/files/spline_FHC_numu_x_nue.root)
+#      nutype: <- The INITIAL STATE neutrino type (14=numu, 12=nue, -14=numubar, -12=nuebar)
+#      oscnutype: <- The OSCILLATED neutrino type (14=numu, 12=nue, -14=numubar, -12=nuebar)
+
+# This has been filled out for you!
+  OscChannels:
+    - Name: "FHC_numu_x_numu"
+      LatexName: "FHC_numu_x_numu"
+      mtuplefile: ["numu_x_numu"]
+      splinefile: ""
+      nutype: 14
+      oscnutype: 14
+    - Name: "FHC_nue_x_nue"
+      LatexName: "FHC_nue_x_nue"
+      mtuplefile: ["nue_x_nue"]
+      splinefile: ""
+      nutype: 12
+      oscnutype: 12
+    - Name: "FHC_numubar_x_numubar"
+      LatexName: "FHC_numubar_x_numubar"
+      mtuplefile: ["numubar_x_numubar"]
+      splinefile: "numubar_x_numubar"
+      nutype: -14
+      oscnutype: -14
+    - Name: "FHC_nuebar_x_nuebar"
+      LatexName: "FHC_nuebar_x_nuebar"
+      mtuplefile: ["nuebar_x_nuebar"]
+      splinefile: ""
+      nutype: -12
+      oscnutype: -12
+    - Name: "FHC_numu_x_nue"
+      LatexName: "FHC_numu_x_nue"
+      mtuplefile: ["numu_x_nue"]
+      splinefile: ""
+      nutype: 14
+      oscnutype: 12
+    - Name: "FHC_numubar_x_nuebar"
+      LatexName: "FHC_numubar_x_nuebar"
+      mtuplefile: ["numubar_x_nuebar"]
+      splinefile: ""
+      nutype: -14
+      oscnutype: -12
+    - Name: "FHC_nue_x_numu"
+      LatexName: "FHC_nue_x_numu"
+      mtuplefile: ["nue_x_numu"]
+      splinefile: ""
+      nutype: 12
+      oscnutype: 14
+    - Name: "FHC_nuebar_x_numubar"
+      LatexName: "FHC_nuebar_x_numubar"
+      mtuplefile: ["nuebar_x_numubar"]
+      splinefile: ""
+      nutype: -12
+      oscnutype: -14
+    - Name: "FHC_numu_x_nutau"
+      LatexName: "FHC_numu_x_nutau"
+      mtuplefile: ["numu_x_nutau"]
+      splinefile: ""
+      nutype: 14
+      oscnutype: 16
+    - Name: "FHC_nue_x_nutau"
+      LatexName: "FHC_nue_x_nutau"
+      mtuplefile: ["nue_x_nutau"]
+      splinefile: ""
+      nutype: 12
+      oscnutype: 16
+    - Name: "FHC_numubar_x_nutaubar"
+      LatexName: "FHC_numubar_x_nutaubar"
+      mtuplefile: ["numubar_x_nutaubar"]
+      splinefile: ""
+      nutype: -14
+      oscnutype: -16
+    - Name: "FHC_nuebar_x_nutaubar"
+      LatexName: "FHC_nuebar_x_nutaubar"
+      mtuplefile: ["nuebar_x_nutaubar"]
+      splinefile: ""
+      nutype: -12
+      oscnutype: -16
+
