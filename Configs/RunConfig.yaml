@@ -18,7 +18,7 @@ General:
 
   # Now we can look at systematics
   Systematics:
-    # For historicaly reasons we call our systematics "xsec" (despite the fact that they're not necessarily cross-section related)
+    # For historical reasons we call our systematics "xsec" (despite the fact that they're not necessarily cross-section related)
     # First we list our systmatic configuration yamls
     XsecCovFile: []
     # This is just a label for MaCh3 to use internally
