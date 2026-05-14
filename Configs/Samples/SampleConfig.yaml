@@ -26,7 +26,7 @@ BeamFD_FHC_numu:
 
 # To start with let's look at some general information
   SampleTitle: "BeamFD_FHC_Numu" #<- The name that will be used in plots (typically the same as the name)
-  POT: 8.11e+22  #<- This is used to scale the MC events to the correct number of events for the given POT
+  POT:  #<- This is used to scale the MC events to the correct number of events for the given POT
 
 
 #Now we'll add the selection cuts:
