@@ -24,7 +24,7 @@ General:
     # This is just a label for MaCh3 to use internally
     XsecCovName: "xsec_cov"
 
-    # This is the step scale used in MCMC. For more information about scale factors 
+    # This is the step scale used in MCMC. For more information about step scales 
     # please read: https://www2.stat.duke.edu/~pdh10/Teaching/564/Sup/mhalgorithm.pdf
     XsecStepScale: 2.38
     
