@@ -380,7 +380,8 @@ Systematics:
       FancyName: Impure_TrueEBin_Under
       ParameterName: Impure_TrueEBin_Under
 
-    SampleNames: ["IMPURITY"]
+    SampleNames: ["PDSP"]
+    Mode: [999]
     Error: 0.1
     FlatPrior: true
     ParameterBounds: [0, 2]
@@ -400,7 +401,8 @@ Systematics:
       FancyName: Impure_TrueEBin_0
       ParameterName: Impure_TrueEBin_0
 
-    SampleNames: ["IMPURITY"]
+    SampleNames: ["PDSP"]
+    Mode: [999]
     Error: 0.1
     FlatPrior: true
     ParameterBounds: [0, 2]
@@ -420,7 +422,8 @@ Systematics:
       FancyName: Impure_TrueEBin_1
       ParameterName: Impure_TrueEBin_1
 
-    SampleNames: ["IMPURITY"]
+    SampleNames: ["PDSP"]
+    Mode: [999]
     Error: 0.1
     FlatPrior: true
     ParameterBounds: [0, 2]
@@ -440,7 +443,8 @@ Systematics:
       FancyName: Impure_TrueEBin_2
       ParameterName: Impure_TrueEBin_2
 
-    SampleNames: ["IMPURITY"]
+    SampleNames: ["PDSP"]
+    Mode: [999]
     Error: 0.1
     FlatPrior: true
     ParameterBounds: [0, 2]
@@ -460,7 +464,8 @@ Systematics:
       FancyName: Impure_TrueEBin_Over
       ParameterName: Impure_TrueEBin_Over
 
-    SampleNames: ["IMPURITY"]
+    SampleNames: ["PDSP"]
+    Mode: [999]
     Error: 0.1
     FlatPrior: true
     ParameterBounds: [0, 2]
@@ -480,7 +485,8 @@ Systematics:
       FancyName: Impure_Escaping
       ParameterName: Impure_Escaping
 
-    SampleNames: ["IMPURITY"]
+    SampleNames: ["PDSP"]
+    Mode: [999]
     Error: 0.1
     FlatPrior: true
     ParameterBounds: [0, 2]
