@@ -65,17 +65,13 @@ GetPostfitParamPlots:
     ## define the groups of parameters, should go <block name>: [<plot title>, [<ylim low>, <ylim up>], ["ParamName1", "ParamName2" ...]
     Cross_Section: ["Cross Section", [-1.5, 2.0],   
         [
-            "Norm_Param_0", 
-            "BinnedSplineParam1",
-            "EResLep",
-            "EResTot"
+            "DummyNorm", 
         ]
     ]
 
     Detector_Systematic: ["Detector Systematics", [-1.5, 2.0],   
         [
-            "Norm_Param_1", 
-            "BinnedSplineParam2",
+            "DummyNorm", 
         ]
     ]
 
