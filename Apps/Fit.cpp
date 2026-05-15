@@ -31,21 +31,25 @@ int main(int argc, char * argv[]) {
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
 
+
   for (auto handler : samples) {
     for (unsigned iSample = 0; iSample < handler->GetNSamples(); ++iSample) {
-    
+
       std::string name = handler->GetSampleTitle(iSample);
       sample_names.push_back(name);
       TString NameTString = TString(name.c_str());
-      
+
       handler->Reweight();
-      
-      
+
       TH1* data_hist;
       bool load_data = GetFromManager(FitManager->raw()["General"]["LoadDataFromFile"], false);
       if(load_data){
+      	std::vector<std::string> data_hist_vec = Get<std::vector<std::string>>(FitManager->raw()["General"]["DataHistName"], __FILE__, __LINE__);
         auto data_file_name = Get<std::string>(FitManager->raw()["General"]["DataFileName"], __FILE__, __LINE__);
-        auto data_hist_name = Get<std::string>(FitManager->raw()["General"]["DataHistName"], __FILE__, __LINE__);
+
+      	std::string data_hist_name = data_hist_vec[iSample];
+
+      	MACH3LOG_INFO("Loaded data: {} from {} for {}", data_hist_name, data_file_name, name);
         auto data_file = TFile::Open(data_file_name.c_str(), "OPEN");
         if(!data_file || data_file->IsZombie()){
           MACH3LOG_ERROR("Cannot find data file {}", data_file_name);
@@ -63,15 +67,15 @@ int main(int argc, char * argv[]) {
       }
 
       PredictionHistograms.push_back(data_hist);
-      
+
       if (handler->GetNDim(iSample) == 1){
         handler->AddData(iSample, static_cast<TH1D*>(PredictionHistograms.back()));
       } else if (handler->GetNDim(iSample) == 2){
         handler->AddData(iSample, static_cast<TH2D*>(PredictionHistograms.back()));
       }
-      
+
       else {
-        MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting"); 
+        MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting");
         throw MaCh3Exception(__FILE__ , __LINE__ );
       }
 
@@ -80,7 +84,7 @@ int main(int argc, char * argv[]) {
       MACH3LOG_INFO("--------------");
     }
   }
-  
+
   //###########################################################################################################
   //MCMC
 
@@ -102,13 +106,13 @@ int main(int argc, char * argv[]) {
     MACH3LOG_INFO("MCMC getting starting position from: {}",PreviousChainPath);
     MaCh3Fitter->StartFromPreviousFit(PreviousChainPath);
   }
-  
+
   //Add samples
   for(auto Sample : samples){
     MaCh3Fitter->AddSampleHandler(Sample);
   }
 
-  
+
   //Run fit
   MaCh3Fitter->RunMCMC();
 
