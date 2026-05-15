@@ -21,7 +21,8 @@ SampleHandlerPDSP::~SampleHandlerPDSP() {
 // ************************************************
 void SampleHandlerPDSP::Init() {
 // ************************************************
-
+  MCGlobalScale = GetFromManager<double>(SampleManager->raw()["MCGlobalScale"], 1.0);
+  MACH3LOG_INFO("PDSP MC global scale: {}", MCGlobalScale);
 }
 
 // ************************************************
@@ -33,6 +34,9 @@ void SampleHandlerPDSP::SetupSplines() {
 // ************************************************
 void SampleHandlerPDSP::AddAdditionalWeightPointers() {
 // ************************************************
+  for (auto& sample : MCSamples) {
+    sample.total_weight_pointers.push_back(&MCGlobalScale);
+  }
 }
 
 void SampleHandlerPDSP::CleanMemoryBeforeFit() {
@@ -148,6 +152,78 @@ int SampleHandlerPDSP::SetupExperimentMC() {
     }
   }
   return nEntries;
+}
+
+// ************************************************
+void SampleHandlerPDSP::SetupExperimentData() {
+// ************************************************
+  auto EnabledSamples = SampleManager->raw()["Samples"].as<std::vector<std::string>>();
+
+  for (size_t iSample = 0; iSample < SampleDetails.size(); iSample++) {
+    auto const& SampleSettings = SampleManager->raw()[EnabledSamples[iSample]];
+
+    auto dataPrefix = SampleSettings["InputFiles"]["datafileprefix"].as<std::string>();
+    auto dataSuffix = SampleSettings["InputFiles"]["datafilesuffix"].as<std::string>();
+
+    // Clone MC hist to get identical binning, then clear contents
+    std::string histName = SampleDetails[iSample].SampleTitle + "_DataHist";
+    TH1D* data_hist = static_cast<TH1D*>(GetMCHist(static_cast<int>(iSample))->Clone(histName.c_str()));
+    data_hist->Reset();
+
+    for (auto const& sub : SampleSettings["SubSamples"]) {
+      std::string fullPath = dataPrefix + sub["datafile"].as<std::string>() + dataSuffix;
+
+      MACH3LOG_INFO("-------------------------------------------------------------------");
+      MACH3LOG_INFO("Data input file: {}", fullPath);
+
+      TFile* _dataFile = new TFile(fullPath.c_str(), "READ");
+      if (!_dataFile || _dataFile->IsZombie()) {
+        MACH3LOG_ERROR("Could not open data file: {}", fullPath);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+
+      TTree* _tree = static_cast<TTree*>(_dataFile->Get("FlatTree_VARS"));
+      if (!_tree) {
+        MACH3LOG_ERROR("Could not find \"FlatTree_VARS\" tree in {}", fullPath);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+
+      MACH3LOG_INFO("Found \"FlatTree_VARS\" tree with {} entries", _tree->GetEntries());
+
+      _tree->SetBranchStatus("*", false);
+      double recoKEInt;
+      double recoEndZ;
+      
+      _tree->SetBranchStatus("KE_int_reco", true);
+      _tree->SetBranchAddress("KE_int_reco", &recoKEInt);
+
+      _tree->SetBranchStatus("track_length_reco", true);
+      _tree->SetBranchAddress("track_length_reco", &recoEndZ);
+
+      for (int i = 0; i < static_cast<int>(_tree->GetEntries()); ++i) {
+        _tree->GetEntry(i);
+        data_hist->Fill(recoKEInt);
+      }
+
+      _dataFile->Close();
+      delete _dataFile;
+    }
+
+    MACH3LOG_INFO("Data histogram for {}: integral = {}",
+                  SampleDetails[iSample].SampleTitle, data_hist->Integral());
+
+    // Extract bin contents into a vector so AddData gets a value copy —
+    // avoiding the dangling-pointer issue that arises when AddData(TH1*) stores
+    // the raw pointer internally rather than cloning it.
+    std::vector<double> data_array;
+    data_array.reserve(data_hist->GetNbinsX());
+    for (int iBin = 1; iBin <= data_hist->GetNbinsX(); ++iBin) {
+      data_array.push_back(data_hist->GetBinContent(iBin));
+    }
+    delete data_hist;
+
+    AddData(static_cast<int>(iSample), data_array);
+  }
 }
 
 double SampleHandlerPDSP::ReturnKinematicParameter(KinematicTypes KinPar, int iEvent) {

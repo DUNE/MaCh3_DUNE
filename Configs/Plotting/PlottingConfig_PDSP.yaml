@@ -1,0 +1,76 @@
+ManagerOptions:
+    translationConfig: ""
+    styleConfig: ""
+
+#########################################
+GetPostfitParamPlots:
+
+    defaultOutputName: "PostFitParamPlots"
+
+    plotVertical: false
+
+    colorPalette: "BlackBlueGreen"
+    prefitHistStyle: "redHatchedError"
+    plotLineWidth: 2
+    refLineWidth: 2
+
+    # Normalization parameters are centered at 1.0
+    detParYRange_low : 0.0
+    detParYRange_high: 2.5
+    oscParYRange_low : 0.0
+    oscParYRange_high: 2.5
+
+    # No flux groups in PDSP
+    fluxGroups: []
+
+    # 3 signal categories + beam impurity background correction
+    paramGroups: [
+        "Signal_Absorption",
+        "Signal_ChargeExchange",
+        "Signal_PionProduction",
+        "Bkg_Impurity"
+    ]
+
+    Signal_Absorption: ["Absorption Signal", [0.0, 2.5],
+        [
+            "Abs_TrueEBin_Under",
+            "Abs_TrueEBin_0",
+            "Abs_TrueEBin_1",
+            "Abs_TrueEBin_2",
+            "Abs_TrueEBin_Over",
+            "Abs_Escaping"
+        ]
+    ]
+
+    Signal_ChargeExchange: ["Charge Exchange Signal", [0.0, 2.5],
+        [
+            "CEx_TrueEBin_Under",
+            "CEx_TrueEBin_0",
+            "CEx_TrueEBin_1",
+            "CEx_TrueEBin_2",
+            "CEx_TrueEBin_Over",
+            "CEx_Escaping"
+        ]
+    ]
+
+    Signal_PionProduction: ["Pion Production Signal", [0.0, 2.5],
+        [
+            "Pion_TrueEBin_Under",
+            "Pion_TrueEBin_0",
+            "Pion_TrueEBin_1",
+            "Pion_TrueEBin_2",
+            "Pion_TrueEBin_Over",
+            "Pion_Escaping"
+        ]
+    ]
+
+    Bkg_Impurity: ["Beam Impurity Correction", [0.0, 2.5],
+        [
+            "Impure_TrueEBin_Under",
+            "Impure_TrueEBin_0",
+            "Impure_TrueEBin_1",
+            "Impure_TrueEBin_2",
+            "Impure_TrueEBin_Over",
+            "Impure_Escaping"
+        ]
+    ]

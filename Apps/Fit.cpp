@@ -2,6 +2,8 @@
 #include <chrono>
 #include <iomanip>
 #include <vector>
+#include <algorithm>
+#include <cmath>
 
 #include <TH1D.h>
 #include <THStack.h>
@@ -14,6 +16,59 @@
 
 #include "Fitters/MaCh3Factory.h"
 #include "Samples/MaCh3DUNEFactory.h"
+#include "Samples/SampleHandlerPDSP.h"
+
+namespace {
+void PrintCVClosureCheck(SampleHandlerFD* handler) {
+  MACH3LOG_INFO("-----------------------------------------------------------------------");
+  MACH3LOG_INFO("CV closure check before fitter proposals for {}", handler->GetName());
+  MACH3LOG_INFO("{:<40}{:<12}{:<12}{:<12}{:<12}|",
+                "Sample", "DataInt", "MCInt", "Diff", "MaxBinDiff");
+
+  double totalData = 0.0;
+  double totalMC = 0.0;
+  double totalAbsDiff = 0.0;
+  double globalMaxAbsDiff = 0.0;
+
+  for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
+    const auto data = handler->GetDataArray(static_cast<int>(iSample));
+    const auto mc = handler->GetMCArray(static_cast<int>(iSample));
+
+    if (data.size() != mc.size()) {
+      MACH3LOG_ERROR("CV closure array size mismatch for {}: data={} MC={}",
+                     handler->GetSampleTitle(iSample), data.size(), mc.size());
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+
+    double dataIntegral = 0.0;
+    double mcIntegral = 0.0;
+    double sampleAbsDiff = 0.0;
+    double sampleMaxAbsDiff = 0.0;
+
+    for (size_t iBin = 0; iBin < data.size(); ++iBin) {
+      dataIntegral += data[iBin];
+      mcIntegral += mc[iBin];
+      const double absDiff = std::abs(mc[iBin] - data[iBin]);
+      sampleAbsDiff += absDiff;
+      sampleMaxAbsDiff = std::max(sampleMaxAbsDiff, absDiff);
+    }
+
+    totalData += dataIntegral;
+    totalMC += mcIntegral;
+    totalAbsDiff += sampleAbsDiff;
+    globalMaxAbsDiff = std::max(globalMaxAbsDiff, sampleMaxAbsDiff);
+
+    MACH3LOG_INFO("{:<40}{:<12.6f}{:<12.6f}{:<12.6f}{:<12.6f}|",
+                  handler->GetSampleTitle(iSample), dataIntegral, mcIntegral,
+                  mcIntegral - dataIntegral, sampleMaxAbsDiff);
+  }
+
+  MACH3LOG_INFO("{:<40}{:<12.6f}{:<12.6f}{:<12.6f}{:<12.6f}|",
+                "Total", totalData, totalMC, totalMC - totalData, globalMaxAbsDiff);
+  MACH3LOG_INFO("CV closure summed absolute bin difference: {:.6f}", totalAbsDiff);
+  MACH3LOG_INFO("-----------------------------------------------------------------------");
+}
+}
 
 int main(int argc, char * argv[]) {
 
@@ -28,38 +83,39 @@ int main(int argc, char * argv[]) {
   std::vector<SampleHandlerFD*> DUNEPdfs;
   MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
 
-  //Some place to store the histograms
-  std::vector<TH1*> PredictionHistograms;
   std::vector<std::string> sample_names;
 
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
 
   for (auto handler : DUNEPdfs) {
+    handler->Reweight();
+
+    // Read real data from ROOT files (defined in SampleHandler_PDSP.yaml InputFiles)
+    auto* pdsp = dynamic_cast<SampleHandlerPDSP*>(handler);
+    if (pdsp == nullptr) {
+      MACH3LOG_ERROR("SetupExperimentData is only implemented for SampleHandlerPDSP");
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+    pdsp->SetupExperimentData();
+    PrintCVClosureCheck(handler);
+
     for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
-    
       std::string name = handler->GetSampleTitle(iSample);
       sample_names.push_back(name);
-      TString NameTString = TString(name.c_str());
-      
-      handler->Reweight();
-      PredictionHistograms.push_back(static_cast<TH1*>(handler->GetMCHist(iSample)->Clone(NameTString+"_DataHist")));
-
-      if (handler->GetNDim(iSample) == 1){
-        handler->AddData(iSample, static_cast<TH1D*>(PredictionHistograms.back()));
-      } else if (handler->GetNDim(iSample) == 2){
-        handler->AddData(iSample, static_cast<TH2D*>(PredictionHistograms.back()));
-      }
-      
-      else {
-        MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting"); 
-        throw MaCh3Exception(__FILE__ , __LINE__ );
-      }
-
-      MACH3LOG_INFO("Integrals of nominal hists: ");
-      MACH3LOG_INFO("{} : {}",name.c_str(),PredictionHistograms.back()->Integral());
+      MACH3LOG_INFO("Integrals of nominal MC hists:");
+      MACH3LOG_INFO("{} : {}", name.c_str(), handler->GetMCHist(iSample)->Integral());
       MACH3LOG_INFO("--------------");
     }
+  }
+
+  if (GetFromManager(FitManager->raw()["General"]["CheckCVClosureOnly"], false)) {
+    MACH3LOG_INFO("General.CheckCVClosureOnly is true; stopping before fitter construction.");
+    for (auto Sample : DUNEPdfs) {
+      delete Sample;
+    }
+    delete xsec;
+    return 0;
   }
   
   //###########################################################################################################

@@ -2,6 +2,7 @@
 #Global Sample Handler setting
 SampleHandlerName: "PDSP"
 POT: 0
+MCGlobalScale: 1
 MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_PDSP.yaml"
 
 LikelihoodOptions:
@@ -30,13 +31,16 @@ PDSP_Abs:
   InputFiles:
     mtupleprefix: "/data/dune/common/fit_inputs/analysis_input_regions/root_analysis_input_mc_selected/mc_selected_"
     mtuplesuffix: ".root"
+    datafileprefix: "/data/dune/common/fit_inputs/analysis_input_regions/root_analysis_input_mc_selected/mc_selected_"
+    datafilesuffix: ".root"
     splineprefix: ""
     splinesuffix: ""
 
   SubSamples:
     - Name: "absorption"
       LatexName: "abs"
-      mtuplefile: "Tabsorption"
+      mtuplefile: "Rabsorption"
+      datafile: "Rabsorption"
       splinefile: ""
       nutype: 1
       oscnutype: 1
@@ -55,13 +59,16 @@ PDSP_CEx:
   InputFiles:
     mtupleprefix: "/data/dune/common/fit_inputs/analysis_input_regions/root_analysis_input_mc_selected/mc_selected_"
     mtuplesuffix: ".root"
+    datafileprefix: "/data/dune/common/fit_inputs/analysis_input_regions/root_analysis_input_mc_selected/mc_selected_"
+    datafilesuffix: ".root"
     splineprefix: ""
     splinesuffix: ""
 
   SubSamples:
     - Name: "charge_exchange"
       LatexName: "cex"
-      mtuplefile: "Tcharge_exchange"
+      mtuplefile: "Rcharge_exchange"
+      datafile: "Rcharge_exchange"
       splinefile: ""
       nutype: 2
       oscnutype: 2
@@ -80,13 +87,16 @@ PDSP_Pip:
   InputFiles:
     mtupleprefix: "/data/dune/common/fit_inputs/analysis_input_regions/root_analysis_input_mc_selected/mc_selected_"
     mtuplesuffix: ".root"
+    datafileprefix: "/data/dune/common/fit_inputs/analysis_input_regions/root_analysis_input_mc_selected/mc_selected_"
+    datafilesuffix: ".root"
     splineprefix: ""
     splinesuffix: ""
 
   SubSamples:
     - Name: "pion_production"
       LatexName: "pip"
-      mtuplefile: "Tpion_production"
+      mtuplefile: "Rpion_production"
+      datafile: "Rpion_production"
       splinefile: ""
       nutype: 3
       oscnutype: 3

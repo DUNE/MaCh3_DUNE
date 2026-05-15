@@ -11,7 +11,11 @@ class SampleHandlerPDSP : public SampleHandlerFD
   virtual ~SampleHandlerPDSP();
 
   enum KinematicTypes {kTrueKEInt, kRecoKEInt, kMode, kOscChannel, kRecoEndZ};
-  
+
+  // Read real data from ROOT files and register with AddData(), mirroring SetupExperimentMC().
+  // Call this after Reweight() so the MC histogram binning is available for cloning.
+  void SetupExperimentData();
+
   // =============================================
 
  protected:
@@ -62,4 +66,5 @@ class SampleHandlerPDSP : public SampleHandlerFD
 
   // Placeholder for nupdg/nupdgUnosc/Target pointers — unused in PDSP but must not be null
   static const int DummyInt = 0;
+  double MCGlobalScale = 1.0;
 };
