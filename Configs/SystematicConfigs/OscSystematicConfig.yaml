@@ -43,7 +43,7 @@ Systematics:
       Generated: 0.546
       PreFitValue: 0.546
     StepScale:
-      MCMC: 0.01
+      MCMC: 0.6
     Type: Oscillation
 
 
