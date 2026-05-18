@@ -114,7 +114,11 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
 
                 splines[i]->Refresh();
                 TSpline3* splinePtr = splines[i];
-                currentEventSplines.emplace_back(new TSpline3_redDUNE(splinePtr));   
+                if (splines[i]->IsFlat()) {
+                    currentEventSplines.emplace_back(nullptr);
+                } else {
+                    currentEventSplines.emplace_back(new TSpline3_redDUNE(splinePtr));
+                }
             }
             splinesReduced.emplace_back(std::move(currentEventSplines));
             splineTypes.push_back(RespFuncType::kTSpline3_red);
@@ -125,7 +129,12 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
                    eventIndices[nextEventToFindIdx] == currentEventIdx) {
                 std::vector<TSpline3_redDUNE*> duplicateEventSplines;
                 for (size_t i = 0; i < splines.size(); ++i) {
-                    duplicateEventSplines.emplace_back(new TSpline3_redDUNE(*splinesReduced.back()[i]));
+                    auto* originalSpline = splinesReduced.back()[i];
+                    if (originalSpline == nullptr) {
+                        duplicateEventSplines.emplace_back(nullptr);
+                    } else {
+                        duplicateEventSplines.emplace_back(new TSpline3_redDUNE(*originalSpline));
+                    }
                 }
                 splinesReduced.emplace_back(std::move(duplicateEventSplines));
                 splineTypes.push_back(RespFuncType::kTSpline3_red);
@@ -149,11 +158,6 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
     for (const auto& eventSplines : splinesReduced) {
         std::vector<TResponseFunction_red*> genericEventSplines;
         for (const auto& spline : eventSplines) {
-            if(spline->IsFlat()) { //Filtering out flat splines for better performance
-                delete spline;
-                genericEventSplines.push_back(nullptr);
-                continue;
-            }
             genericEventSplines.push_back(static_cast<TResponseFunction_red*>(spline));
         }
         splinesReducedGeneric.push_back(std::move(genericEventSplines));

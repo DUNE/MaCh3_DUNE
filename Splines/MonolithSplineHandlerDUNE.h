@@ -109,6 +109,15 @@ public:
         fName = "ReusableSpline";
     }
 
+    bool IsFlat() const {
+        for (int i = 0; i < fNp; ++i) {
+            if (std::abs(fPoly[i].Y() - 1.0) > 1e-9) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // Expose the protected BuildCoeff method
     void Refresh() {
         this->BuildCoeff();
