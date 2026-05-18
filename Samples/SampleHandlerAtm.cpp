@@ -286,6 +286,8 @@ int SampleHandlerAtm::SetupExperimentMC() {
   //================================================================================================
   gErrorIgnoreLevel = CurrErrorLevel;
 
+  //Need to clear that static vector to avoid double free errors when exiting the program
+  caf::SRBranchRegistry::clear();
   delete sr;
   delete cafTree;
   delete weightsTree;
