@@ -174,6 +174,8 @@ int SampleHandlerAtm::SetupExperimentMC() {
   
   //================================================================================================
 
+  dunemcSamples.reserve(2 * nTreeEntries);
+
   for (int iTreeEntry=0;iTreeEntry<nTreeEntries;iTreeEntry++) {
     weightsTree->GetEntry(iTreeEntry);
     
@@ -203,12 +205,21 @@ int SampleHandlerAtm::SetupExperimentMC() {
     CVNScores[kCVN_NuMu] = sr->common.ixn.pandora[0].nuhyp.cvn.numu;
     CVNScores[kCVN_NC] = sr->common.ixn.pandora[0].nuhyp.cvn.nc;    
 
-    //DB Theoretical max value should be ShortestDimensioninAV/2 which is less than 1e4 -- so dummy value of 1e8 is fine
+    // Pre-check: If this event cannot pass selection cuts under either Fully Contained or Partially Contained assumption, skip it!
+    if (ReturnSampleIdentifier(CVNScores, 1e8) == kEventSel_Unknown &&
+        ReturnSampleIdentifier(CVNScores, 0.0) == kEventSel_Unknown) {
+      continue;
+    }
+
+    // Now, since the event has a valid candidate classification, we lazy-load and calculate MinDistToWall:
     double MinDistToWall = 1e8;
-    for (size_t iPart=0;iPart<sr->common.ixn.pandora[0].part.pandora.size();iPart++) {
+    auto const& pandora_parts = sr->common.ixn.pandora[0].part.pandora;
+    size_t nParts = pandora_parts.size();
+    for (size_t iPart = 0; iPart < nParts; ++iPart) {
+      auto const& part = pandora_parts[iPart];
       //DB Info from PG -- ignore any hits associated with HitCollection classified objects
-      //if (sr->common.ixn.pandora[0].part.pandora[iPart].origRecoObjType == caf::RecoObjType::kHitCollection) {continue;}
-      //if (sr->common.ixn.pandora[0].part.pandora[iPart].walldist < MinDistToWall) {MinDistToWall = sr->common.ixn.pandora[0].part.pandora[iPart].walldist;}
+      if (part.origRecoObjType == caf::RecoObjType::kHitCollection) {continue;}
+      if (part.walldist < MinDistToWall) {MinDistToWall = part.walldist;}
     }
     
     int SampleIndex = ReturnSampleIdentifier(CVNScores, MinDistToWall);

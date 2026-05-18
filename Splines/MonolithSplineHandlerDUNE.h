@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include "Splines/UnbinnedSplineHandler.h"
 
 struct SplineHeader {
@@ -39,6 +40,14 @@ public:
             Par[i] = new M3::float_t[3];
             double x = -999.99, y = -999.99, b = -999.99, c = -999.99, d = -999.99;
             spline->GetCoeff(i, x, y, b, c, d);
+
+            // Clean up any NaNs or infinities to prevent propagation to event weights
+            if (std::isnan(x) || std::isinf(x)) x = 0.0;
+            if (std::isnan(y) || std::isinf(y)) y = 1.0;
+            if (std::isnan(b) || std::isinf(b)) b = 0.0;
+            if (std::isnan(c) || std::isinf(c)) c = 0.0;
+            if (std::isnan(d) || std::isinf(d)) d = 0.0;
+
             XPos[i]   = x;
             YResp[i]  = y;
             Par[i][0] = b;
@@ -61,6 +70,13 @@ public:
             Par[i][0] = other.Par[i][0];
             Par[i][1] = other.Par[i][1];
             Par[i][2] = other.Par[i][2];
+
+            // Double check values
+            if (std::isnan(XPos[i]) || std::isinf(XPos[i])) XPos[i] = 0.0;
+            if (std::isnan(YResp[i]) || std::isinf(YResp[i])) YResp[i] = 1.0;
+            if (std::isnan(Par[i][0]) || std::isinf(Par[i][0])) Par[i][0] = 0.0;
+            if (std::isnan(Par[i][1]) || std::isinf(Par[i][1])) Par[i][1] = 0.0;
+            if (std::isnan(Par[i][2]) || std::isinf(Par[i][2])) Par[i][2] = 0.0;
         }
     }
 

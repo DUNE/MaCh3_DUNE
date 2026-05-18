@@ -194,6 +194,7 @@ add_library(DUNEMaCh3Warnings INTERFACE)
 
 target_compile_options(DUNEMaCh3Warnings INTERFACE
   -Werror                 # Treat Warnings as Errors
+  -Wno-error=conversion   # Do not treat conversion warnings as errors
   -Wextra                 # Enable extra warning flags
   -Wall                   # Enable all standard warning flags
   -Wshadow                # Warn when a variable declaration shadows one from an outer scope
