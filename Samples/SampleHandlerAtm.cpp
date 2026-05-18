@@ -207,8 +207,8 @@ int SampleHandlerAtm::SetupExperimentMC() {
     double MinDistToWall = 1e8;
     for (size_t iPart=0;iPart<sr->common.ixn.pandora[0].part.pandora.size();iPart++) {
       //DB Info from PG -- ignore any hits associated with HitCollection classified objects
-      if (sr->common.ixn.pandora[0].part.pandora[iPart].origRecoObjType == caf::RecoObjType::kHitCollection) {continue;}
-      if (sr->common.ixn.pandora[0].part.pandora[iPart].walldist < MinDistToWall) {MinDistToWall = sr->common.ixn.pandora[0].part.pandora[iPart].walldist;}
+      //if (sr->common.ixn.pandora[0].part.pandora[iPart].origRecoObjType == caf::RecoObjType::kHitCollection) {continue;}
+      //if (sr->common.ixn.pandora[0].part.pandora[iPart].walldist < MinDistToWall) {MinDistToWall = sr->common.ixn.pandora[0].part.pandora[iPart].walldist;}
     }
     
     int SampleIndex = ReturnSampleIdentifier(CVNScores, MinDistToWall);
@@ -328,7 +328,7 @@ double SampleHandlerAtm::ReturnKinematicParameter(const int KinematicVariable, c
 int SampleHandlerAtm::ReturnSampleIdentifier(std::vector<double> CVNScores, double MinDistanceToWall) {
   bool IsFullyContained = false;
   
-  if (MinDistanceToWall > 1e4 || MinDistanceToWall < 0) { //DB: ToDo Work out theoretical maximum
+  if (MinDistanceToWall < 0) { //DB: ToDo Work out theoretical maximum
     return kEventSel_Unknown;
   } else if (MinDistanceToWall > FCPCSeparation) {
     IsFullyContained = true;
