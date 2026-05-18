@@ -25,6 +25,23 @@ void SampleHandlerAtm::Init() {
     const std::string TempTitle = EnabledSamples[iSample];
     IsELike[iSample] = Get<int>(SampleManager->raw()[TempTitle]["SampleOptions"]["IsELike"],__FILE__,__LINE__);
   }
+
+  // Per-event spline configuration (optional)
+  if (SampleManager->raw()["AnalysisOptions"]["InputFile"]) {
+    fInputFile = Get<std::string>(SampleManager->raw()["AnalysisOptions"]["InputFile"],__FILE__,__LINE__);
+  } else {
+    fInputFile = "";
+  }
+  if (SampleManager->raw()["AnalysisOptions"]["InputSplines"]) {
+    fInputSplines = Get<std::string>(SampleManager->raw()["AnalysisOptions"]["InputSplines"],__FILE__,__LINE__);
+  } else {
+    fInputSplines = "";
+  }
+  if (SampleManager->raw()["AnalysisOptions"]["SampleId"]) {
+    fSampleId = Get<uint>(SampleManager->raw()["AnalysisOptions"]["SampleId"],__FILE__,__LINE__);
+  } else {
+    fSampleId = 0;
+  }
 }
 
 // ************************************************
@@ -41,7 +58,40 @@ void SampleHandlerAtm::InititialiseData()
 }
 
 void SampleHandlerAtm::SetupSplines() {
-  SplineHandler = nullptr;
+  ///@todo move all of the spline setup into core
+  if(ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline) > 0){
+    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline));
+    auto SplineFactory = SplineHandlerFactoryDUNE(ParHandler, Modes.get(), dunemcSamples, fInputSplines, SampleHandlerName);
+
+    SplineHandler = std::move(SplineFactory.GetSplineHandler());
+    if (SplineFactory.GetSplineType() == kBinned){
+      InitialiseSplineObject(); //Running the "normal" initialisation for binned splines
+    }
+    else if (SplineFactory.GetSplineType() == kMonolith){
+      InitialiseSplineObjectPerEvent(); //Running the per-event initialisation
+    }
+    else{
+      MACH3LOG_ERROR("Unknown spline type found when setting up splines for sample {}", SampleHandlerName);
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+  }
+  else{
+    MACH3LOG_INFO("Found no spline for this sample so I will not load or evaluate splines");
+    SplineHandler = nullptr;
+  }
+  
+  return;
+}
+
+void SampleHandlerAtm::InitialiseSplineObjectPerEvent(){
+  auto SplineHandlerDUNE = dynamic_cast<MonolithSplineHandlerDUNE*>(SplineHandler.get());
+  if (!SplineHandlerDUNE){
+    MACH3LOG_ERROR("SplineHandler is not of type MonolithSplineHandlerDUNE for sample {}. Cannot call InitialiseSplineObjectPerEvent.", SampleHandlerName);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  for (size_t i = 0; i < dunemcSamples.size(); ++i) {
+    MCEvents[i].total_weight_pointers.push_back(SplineHandlerDUNE->RetPointer(static_cast<int>(i)));
+  }
 }
 
 void SampleHandlerAtm::AddAdditionalWeightPointers() {
@@ -139,6 +189,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
     dunemcSamples[iEvent].coszenith_true = -TrueNuMomentumVector.Y(); // +Y in CAF files translates to +Z in typical CosZ
 
     dunemcSamples[iEvent].flux_w = sr->mc.nu[0].genweight;
+    dunemcSamples[iEvent].eid = static_cast<uint>(iChainEntry);
     
     iEvent += 1;
   }
