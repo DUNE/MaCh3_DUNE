@@ -2,6 +2,7 @@
 #Global Sample Handler setting
 SampleHandlerName: "PDSP"
 POT: 0
+MCGlobalScale: 1
 MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_PDSP.yaml"
 
 LikelihoodOptions:

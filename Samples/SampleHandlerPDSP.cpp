@@ -21,7 +21,8 @@ SampleHandlerPDSP::~SampleHandlerPDSP() {
 // ************************************************
 void SampleHandlerPDSP::Init() {
 // ************************************************
-
+  MCGlobalScale = GetFromManager<double>(SampleManager->raw()["MCGlobalScale"], 1.0);
+  MACH3LOG_INFO("PDSP MC global scale: {}", MCGlobalScale);
 }
 
 // ************************************************
@@ -33,6 +34,9 @@ void SampleHandlerPDSP::SetupSplines() {
 // ************************************************
 void SampleHandlerPDSP::AddAdditionalWeightPointers() {
 // ************************************************
+  for (auto& sample : MCSamples) {
+    sample.total_weight_pointers.push_back(&MCGlobalScale);
+  }
 }
 
 void SampleHandlerPDSP::CleanMemoryBeforeFit() {
