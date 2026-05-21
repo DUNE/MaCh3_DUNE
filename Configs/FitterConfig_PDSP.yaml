@@ -8,6 +8,8 @@ General:
   ProcessMCMC: No
   Debug: No
   Seed: 0
+  Asimov: false
+  Data: true
   # For a Asimov closure test, start from the prefit CV instead of a random prior throw.
   # Remove this or set false for a production fit where you want a randomized chain start.
   StatOnly: true
