@@ -29,12 +29,7 @@ int main(int argc, char * argv[]) {
   std::vector<TH1*> PredictionHistograms;
   std::vector<std::string> sample_names;
 
-  const bool UseAsimov = GetFromManager(FitManager->raw()["General"]["Asimov"], true);
   const bool UseData = GetFromManager(FitManager->raw()["General"]["Data"], false);
-  if (UseAsimov == UseData) {
-    MACH3LOG_ERROR("Exactly one of General.Asimov or General.Data must be true");
-    throw MaCh3Exception(__FILE__ , __LINE__ );
-  }
 
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
@@ -48,15 +43,15 @@ int main(int argc, char * argv[]) {
       
       handler->Reweight();
       TH1* DataHist = nullptr;
-      if (UseAsimov) {
-        DataHist = static_cast<TH1*>(handler->GetMCHist(iSample)->Clone(NameTString+"_DataHist"));
-      } else {
+      if (UseData) {
         auto* PDSPHandler = dynamic_cast<SampleHandlerPDSP*>(handler);
         if (PDSPHandler == nullptr) {
           MACH3LOG_ERROR("General.Data is currently implemented for PDSP samples only");
           throw MaCh3Exception(__FILE__ , __LINE__ );
         }
         DataHist = PDSPHandler->GetDataHistogramFromInputs(static_cast<int>(iSample));
+      } else {
+        DataHist = static_cast<TH1*>(handler->GetMCHist(iSample)->Clone(NameTString+"_DataHist"));
       }
       PredictionHistograms.push_back(DataHist);
 

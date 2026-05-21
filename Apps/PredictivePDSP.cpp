@@ -14,12 +14,7 @@ int main(int argc, char *argv[]) {
   std::vector<SampleHandlerFD*> DUNEPdfs;
   MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
 
-  const bool UseAsimov = GetFromManager(FitManager->raw()["General"]["Asimov"], true);
   const bool UseData = GetFromManager(FitManager->raw()["General"]["Data"], false);
-  if (UseAsimov == UseData) {
-    MACH3LOG_ERROR("Exactly one of General.Asimov or General.Data must be true");
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
 
   std::vector<TH1*> PredictionHistograms;
   for (auto handler : DUNEPdfs) {
@@ -27,15 +22,15 @@ int main(int argc, char *argv[]) {
     for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
       const std::string name = handler->GetSampleTitle(iSample);
       TH1* DataHist = nullptr;
-      if (UseAsimov) {
-        DataHist = static_cast<TH1*>(handler->GetMCHist(iSample)->Clone((name + "_DataHist").c_str()));
-      } else {
+      if (UseData) {
         auto* PDSPHandler = dynamic_cast<SampleHandlerPDSP*>(handler);
         if (PDSPHandler == nullptr) {
           MACH3LOG_ERROR("General.Data is currently implemented for PDSP samples only");
           throw MaCh3Exception(__FILE__, __LINE__);
         }
         DataHist = PDSPHandler->GetDataHistogramFromInputs(static_cast<int>(iSample));
+      } else {
+        DataHist = static_cast<TH1*>(handler->GetMCHist(iSample)->Clone((name + "_DataHist").c_str()));
       }
       PredictionHistograms.push_back(DataHist);
 
