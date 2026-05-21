@@ -1,5 +1,9 @@
 #include "SampleHandlerPDSP.h"
 
+#include <TFile.h>
+#include <TKey.h>
+#include <TString.h>
+
 const int SampleHandlerPDSP::DummyInt;
 
 // ************************************************
@@ -16,6 +20,72 @@ SampleHandlerPDSP::SampleHandlerPDSP(const std::string& config_name, ParameterHa
 SampleHandlerPDSP::~SampleHandlerPDSP() {
 // ************************************************
 
+}
+
+// ************************************************
+TH1* SampleHandlerPDSP::GetDataHistogramFromInputs(const int Sample) const {
+// ************************************************
+  if (Sample < 0 || Sample >= static_cast<int>(SampleDetails.size())) {
+    MACH3LOG_ERROR("Requested data histogram for invalid sample index {}", Sample);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+
+  const std::string expectedName = SampleDetails[Sample].SampleTitle + "_DataHist";
+
+  std::vector<std::string> candidateNames = {expectedName};
+  if (SampleDetails[Sample].SampleTitle == "PDSP_Abs") {
+    candidateNames.emplace_back("absorption_DataHist");
+  } else if (SampleDetails[Sample].SampleTitle == "PDSP_CEx") {
+    candidateNames.emplace_back("charge_exchange_DataHist");
+  } else if (SampleDetails[Sample].SampleTitle == "PDSP_Pip") {
+    candidateNames.emplace_back("pion_production_DataHist");
+  }
+
+  for (const auto& fileName : SampleDetails[Sample].mc_files) {
+    TFile inputFile(fileName.c_str(), "READ");
+    if (inputFile.IsZombie()) {
+      MACH3LOG_ERROR("Could not open input file while looking for data histogram: {}", fileName);
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+
+    for (const auto& candidateName : candidateNames) {
+      TH1* dataHist = nullptr;
+      inputFile.GetObject(candidateName.c_str(), dataHist);
+      if (dataHist != nullptr) {
+        TH1* clone = static_cast<TH1*>(dataHist->Clone(expectedName.c_str()));
+        clone->SetDirectory(nullptr);
+        MACH3LOG_INFO("Loaded data histogram '{}' from {} for sample '{}'",
+                      candidateName, fileName, SampleDetails[Sample].SampleTitle);
+        return clone;
+      }
+    }
+
+    TIter nextKey(inputFile.GetListOfKeys());
+    while (TKey* key = static_cast<TKey*>(nextKey())) {
+      const TString keyName = key->GetName();
+      if (!keyName.EndsWith("_DataHist")) {
+        continue;
+      }
+
+      TObject* object = key->ReadObj();
+      if (!object->InheritsFrom(TH1::Class())) {
+        delete object;
+        continue;
+      }
+
+      TH1* clone = static_cast<TH1*>(static_cast<TH1*>(object)->Clone(expectedName.c_str()));
+      clone->SetDirectory(nullptr);
+      delete object;
+      MACH3LOG_INFO("Loaded data histogram '{}' from {} for sample '{}'",
+                    keyName.Data(), fileName, SampleDetails[Sample].SampleTitle);
+      return clone;
+    }
+  }
+
+  MACH3LOG_ERROR("Could not find '{}' in the input files for sample '{}'",
+                 expectedName, SampleDetails[Sample].SampleTitle);
+  MACH3LOG_ERROR("Expected each PDSP input to contain a histogram ending in '_DataHist'.");
+  throw MaCh3Exception(__FILE__, __LINE__);
 }
 
 // ************************************************
