@@ -29,7 +29,7 @@ PDSP_Abs:
     Uniform: True
 
   InputFiles:
-    mtupleprefix: "/data/dune/common/new_inputs_test/pdsp_"
+    mtupleprefix: "/data/dune/common/mach3_input/pdsp_"
     mtuplesuffix: ".root"
     splineprefix: ""
     splinesuffix: ""
@@ -54,7 +54,7 @@ PDSP_CEx:
     Uniform: True
 
   InputFiles:
-    mtupleprefix: "/data/dune/common/new_inputs_test/pdsp_"
+    mtupleprefix: "/data/dune/common/mach3_input/pdsp_"
     mtuplesuffix: ".root"
     splineprefix: ""
     splinesuffix: ""
@@ -79,7 +79,7 @@ PDSP_Pip:
     Uniform: True
 
   InputFiles:
-    mtupleprefix: "/data/dune/common/new_inputs_test/pdsp_"
+    mtupleprefix: "/data/dune/common/mach3_input/pdsp_"
     mtuplesuffix: ".root"
     splineprefix: ""
     splinesuffix: ""
