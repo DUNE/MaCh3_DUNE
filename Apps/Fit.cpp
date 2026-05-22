@@ -30,6 +30,12 @@ int main(int argc, char * argv[]) {
   std::vector<std::string> sample_names;
 
   const bool UseData = GetFromManager(FitManager->raw()["General"]["Data"], false);
+  const std::string AsimovTune = GetFromManager<std::string>(
+      FitManager->raw()["General"]["Systematics"]["XsecAsimovTune"], "");
+  if (!UseData && !AsimovTune.empty()) {
+    MACH3LOG_INFO("Generating Asimov data with xsec tune '{}'", AsimovTune);
+    xsec->SetTune(AsimovTune);
+  }
 
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
@@ -70,6 +76,11 @@ int main(int argc, char * argv[]) {
       MACH3LOG_INFO("{} : {}",name.c_str(),PredictionHistograms.back()->Integral());
       MACH3LOG_INFO("--------------");
     }
+  }
+
+  if (!UseData && !AsimovTune.empty()) {
+    MACH3LOG_INFO("Resetting xsec parameters to PreFitValue before fitting");
+    xsec->SetParameters();
   }
   
   //###########################################################################################################

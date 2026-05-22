@@ -55,6 +55,9 @@ General:
   Systematics:
     XsecCovName: "xsec_cov"
     XsecFix: [
+      "Abs_Escaping",
+      "CEx_Escaping",
+      "Pion_Escaping",
       "Impure_TrueEBin_Under",
       "Impure_TrueEBin_0",
       "Impure_TrueEBin_1",
@@ -64,6 +67,10 @@ General:
     ] # any of these are fixed
     XsecCovFile: ["Configs/CovObjs/PDSPFitModel.yaml",
                   ]
+    # Optional fake-data tune for Data: false. For example, set to "Generator"
+    # after editing ParameterValues:Generator in the xsec config to inject a
+    # known Asimov shift while the fit still starts from PreFitValue.
+    XsecAsimovTune: "Generator"
     XsecPCAThreshold: -1
     XsecPCAParams: [-999, -999]
     XsecStepScale: 1

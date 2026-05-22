@@ -15,6 +15,12 @@ int main(int argc, char *argv[]) {
   MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
 
   const bool UseData = GetFromManager(FitManager->raw()["General"]["Data"], false);
+  const std::string AsimovTune = GetFromManager<std::string>(
+      FitManager->raw()["General"]["Systematics"]["XsecAsimovTune"], "");
+  if (!UseData && !AsimovTune.empty()) {
+    MACH3LOG_INFO("Generating predictive Asimov data with xsec tune '{}'", AsimovTune);
+    xsec->SetTune(AsimovTune);
+  }
 
   std::vector<TH1*> PredictionHistograms;
   for (auto handler : DUNEPdfs) {
@@ -45,6 +51,11 @@ int main(int argc, char *argv[]) {
 
       MACH3LOG_INFO("Predictive data seed {} integral: {}", name, DataHist->Integral());
     }
+  }
+
+  if (!UseData && !AsimovTune.empty()) {
+    MACH3LOG_INFO("Resetting xsec parameters to PreFitValue before predictive throws");
+    xsec->SetParameters();
   }
 
   std::unique_ptr<PredictiveThrower> MaCh3Fitter = std::make_unique<PredictiveThrower>(FitManager.get());

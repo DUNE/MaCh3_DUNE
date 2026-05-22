@@ -184,8 +184,8 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       _data->SetBranchStatus("KE_int_reco", true);
       _data->SetBranchAddress("KE_int_reco", &recoKEInt);
 
-      _data->SetBranchStatus("track_length_reco", true);
-      _data->SetBranchAddress("track_length_reco", &recoEndZ);
+      _data->SetBranchStatus("end_z_reco", true);
+      _data->SetBranchAddress("end_z_reco", &recoEndZ);
 
       for (int i = 0; i < _data->GetEntries(); ++i) { // Loop through tree (events)
         _data->GetEntry(i);
