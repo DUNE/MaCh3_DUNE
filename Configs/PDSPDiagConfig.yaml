@@ -3,7 +3,7 @@
 
 DiagMCMC:
   ExcludedTypes: []
-  ExcludedNames: ["Impure_","Abs_Escaping","CEx_Escaping","Pion_Escaping"]
+  ExcludedNames: []
   nBatches: 20
   nLags: 10000
   PlotRelativeToPrior: "false"
@@ -12,7 +12,7 @@ DiagMCMC:
 #########################################
 ProcessMCMC:
   # Select parameter names to remove (prefix match)
-  ExcludedNames: ["Impure_","Abs_Escaping","CEx_Escaping","Pion_Escaping"]
+  ExcludedNames: []
   # Select parameter groups to remove: Fit, Xsec, Osc
   ExcludedGroups: []
   # Legacy parameter block exclusion (not needed here)
@@ -70,7 +70,7 @@ ProcessMCMC:
   # Number of intervals for covariance stability diagnostic
   NIntervals: 5
 
-  # Triangle plots — one per signal category (Impure is background correction, excluded)
+  # Triangle plots — one per signal category (truth-impure background correction excluded)
   TrianglePlot:
     - ["Absorption", ["Abs_TrueEBin_Under", "Abs_TrueEBin_0", "Abs_TrueEBin_1",
                       "Abs_TrueEBin_2", "Abs_TrueEBin_Over", "Abs_Escaping"]]
@@ -113,7 +113,7 @@ GetPenaltyTerm:
   BkgCorrection:
     - ["Impure_"]
     - false
-    - "-logL_{Impure}"
+    - "-logL_{TruthImpure}"
 
 
 #########################################
@@ -137,7 +137,7 @@ MatrixPlotter:
     "Abs",
     "CEx",
     "Pion",
-    "BkgImpure",
+    "BkgTruthImpure",
   ]
 
   Abs: [
@@ -167,7 +167,7 @@ MatrixPlotter:
     "Pion_Escaping",
   ]
 
-  BkgImpure: [
+  BkgTruthImpure: [
     "Impure_TrueEBin_Under",
     "Impure_TrueEBin_0",
     "Impure_TrueEBin_1",

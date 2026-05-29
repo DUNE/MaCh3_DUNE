@@ -383,7 +383,7 @@ Systematics:
     SampleNames: ["PDSP"]
     Mode: [999]
     Error: 0.1
-    FlatPrior: true
+    FlatPrior: false
     ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
@@ -404,7 +404,7 @@ Systematics:
     SampleNames: ["PDSP"]
     Mode: [999]
     Error: 0.1
-    FlatPrior: true
+    FlatPrior: false
     ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
@@ -425,7 +425,7 @@ Systematics:
     SampleNames: ["PDSP"]
     Mode: [999]
     Error: 0.1
-    FlatPrior: true
+    FlatPrior: false
     ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
@@ -446,7 +446,7 @@ Systematics:
     SampleNames: ["PDSP"]
     Mode: [999]
     Error: 0.1
-    FlatPrior: true
+    FlatPrior: false
     ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
@@ -467,7 +467,7 @@ Systematics:
     SampleNames: ["PDSP"]
     Mode: [999]
     Error: 0.1
-    FlatPrior: true
+    FlatPrior: false
     ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
@@ -488,7 +488,7 @@ Systematics:
     SampleNames: ["PDSP"]
     Mode: [999]
     Error: 0.1
-    FlatPrior: true
+    FlatPrior: false
     ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:

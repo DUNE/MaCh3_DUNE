@@ -6,7 +6,7 @@ VDT=/cvmfs/larsoft.opensciencegrid.org/spack-packages/opt/spack/linux-almalinux9
 
 export LD_LIBRARY_PATH=${ROOT628}/lib/root:${VDT}/lib:${LD_LIBRARY_PATH}
 export ROOTSYS=${ROOT628}
-export OMP_NUM_THREADS=1
+export OMP_NUM_THREADS=8
 
 if [ -d build ]; then
     cd build
