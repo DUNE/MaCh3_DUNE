@@ -39,6 +39,8 @@ TH1* SampleHandlerPDSP::GetDataHistogramFromInputs(const int Sample) const {
     candidateNames.emplace_back("charge_exchange_DataHist");
   } else if (SampleDetails[Sample].SampleTitle == "PDSP_Pip") {
     candidateNames.emplace_back("pion_production_DataHist");
+  } else if (SampleDetails[Sample].SampleTitle == "PDSP_Uncategorised") {
+    candidateNames.emplace_back("uncategorised_DataHist");
   }
 
   for (const auto& fileName : SampleDetails[Sample].mc_files) {
