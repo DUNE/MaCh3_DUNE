@@ -60,7 +60,7 @@ endif()
 
 #=================== DUNEAnaObj
 if(NOT DEFINED DUNE_ANAOBJ_BRANCH)
-  set(DUNE_ANAOBJ_BRANCH v03_06_00)
+  set(DUNE_ANAOBJ_BRANCH v03_14_00)
   set(DUNE_ANAOBJ_BRANCH ${DUNE_ANAOBJ_BRANCH} CACHE STRING "Specify which duneanaobj branch to use")
 endif()
 

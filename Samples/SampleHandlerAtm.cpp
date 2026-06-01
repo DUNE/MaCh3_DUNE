@@ -225,8 +225,10 @@ int SampleHandlerAtm::SetupExperimentMC() {
   //================================================================================================
   gErrorIgnoreLevel = CurrErrorLevel;
 
+#if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)  
   //PG Need to clear that static vector to avoid double free errors when exiting the program
   caf::SRBranchRegistry::clear();
+#endif
   
   delete sr;
   delete cafTree;
