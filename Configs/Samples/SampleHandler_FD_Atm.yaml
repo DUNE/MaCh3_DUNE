@@ -18,7 +18,7 @@ Samples:
   - Atm_FC_numulike
   - Atm_FC_nuelike
   - Atm_PC_numulike
-  - Atm_PC_nuelike  
+  - Atm_PC_nuelike
 
 Atm_FC_nuelike:
   SampleTitle: "FC_nueselec"
@@ -76,7 +76,7 @@ Atm_PC_nuelike:
     splinesuffix: ""
 
   OscChannels: "OscChan_12Flavs"
-  
+
 Atm_PC_numulike:
   SampleTitle: "PC_numuselec"
 
