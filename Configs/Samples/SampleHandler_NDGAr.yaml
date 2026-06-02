@@ -7,22 +7,26 @@ InputFiles:
 
 DetectorVariables:
   TPCInstrumentedRadius: 260
+  UsePseudoRadius: false
+  PseudoRadius: 235
   TPCInstrumentedLength: 250
   B_field: 0.5
-  interaction_model: "G4BC"
+  interaction_model: "hA"
   nECALBackSegments: 0
   ECALBarrelForwardDepth: 10.4 # radiation lengths
-  ECALBarrelBackwardDepth: 5.2 # radiation lengths
+  ECALBarrelBackwardDepth: 7.4 # radiation lengths
   ECALEndCapDepth: 10.4 # radiation lengths
   energy_resolution_threshold: 0.05
-  pixel_spacing: 6.
-  spatial_resolution: 2.5
+  pixel_spacing: 6. # mm
+  spatial_resolution: 2.5 # mm
   adc_sampling_frequency: 20.
   drift_velocity: 3.011
-  TPCFidLength: 210
-  TPCFidRadius: 160
+  # Note that for 1t fid mass, need FidRad=200, FidLen=230 or FidRad=220, FidLen=180 for shorter geometry
+  # For a purely acceptance-motivated cut, would use FidRad=160, FidLen=210 for pilot geometry
+  TPCFidRadius: 200
+  TPCFidLength: 230
   ECALSciX0: 0.892453
-  downsampling: 0.0001
+  downsampling: 0.001 
   DoGeometricCorrection: false
 
 Samples: ["NDGAr_FHC_numu"]
@@ -36,14 +40,14 @@ NDGAr_FHC_numu:
   Binning:
     VarStr: "TrueNeutrinoEnergy"
     Uniform: true
-    BinEdges: [0., 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 4., 4.5, 5.]
+    BinEdges: [0., 1., 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 4., 5.]
 
   DUNESampleBools:
     iselike: no
     isFHC: 1
 
   InputFiles:
-    mtupleprefix: "Inputs/DUNE_NDGAr_files/FastGArSim/rad260/len250/bfield0.5/G4BC/"
+    mtupleprefix: "Inputs/DUNE_NDGAr_files/FastGArSim/rad260/len250/bfield0.5/INCL/"
     # mtupleprefix: "Inputs/DUNE_NDGAr_files/hA/3M_BigCal_PbWO4Cal_"
     mtuplesuffix: ".root"
     splineprefix: ""

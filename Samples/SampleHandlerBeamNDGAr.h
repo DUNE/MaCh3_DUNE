@@ -34,6 +34,8 @@ public:
     kIsCC,
     kEPi0,
     kNPi0,
+    kNPipm,
+    kW,
     kLepTrackLengthYZ,
     kTargetNucleus
   };
@@ -42,7 +44,7 @@ public:
     kPrim_BAngle, kPrim_BeamAngle, kPrim_IsAccepted, kPrim_IsCurvatureResolved, kPrim_PDG,
     kPrim_IsStoppedInTPC, kPrim_IsStoppedInECal, kPrim_IsStoppedInBarrel, kPrim_IsStoppedInEndCap, kPrim_IsStoppedInGap, 
     kPrim_IsStoppedInEndGap, kPrim_IsStoppedInBarrelGap, kPrim_IsEscaped, kPrim_NTurns, kPrim_NHits,
-    kPrim_TrackLengthYZ, kPrim_MomResMS, kPrim_MomResYZ, kPrim_MomResX, kPrim_StartR2, kPrim_EndR, 
+    kPrim_TrackLengthYZ, kPrim_MomResMS, kPrim_MomResYZ, kPrim_MomResX, kPrim_ThetaRes, kPrim_StartR2, kPrim_EndR, 
     kPrim_EndDepth, kPrim_EndX, kPrim_EndY, kPrim_EndZ, kPrim_StartX, kPrim_IsContained, kPrim_TPCEDepFrac,
     kShower_DCalBoundary, kShower_Energy, kShower_BAngle, kShower_IsContained, kShower_IsConv, kShower_PDG, kShower_CosNorm,
     kPhoton_Energy};
@@ -88,7 +90,6 @@ protected:
                        const std::unordered_map<int, std::vector<double>>& eID_to_showerstart,
                        dunemc_plotting& plotting_vars);
   void EraseDescendants(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID);
-  bool IsParticleSelected(const int iSample, const int iEvent, const int iParticle);
   void FillGeoVars();
 
   double _BeRPA_cvwgt = 1;
@@ -153,6 +154,7 @@ protected:
   double _PXlep;
   double _PYlep;
   double _PZlep;
+  double _W;
   int _nuPDG;
   bool _isCC;
   int _npip;
@@ -165,6 +167,8 @@ protected:
   double TPCFidRadius;
   double TPCInstrumentedLength;
   double TPCInstrumentedRadius;
+  bool use_pseudo_radius = false;
+  double PseudoRadius;
   double ECALInnerRadius;
   // double ECALOuterRadius;
   double ECALOuterFrontRadius;
@@ -198,28 +202,26 @@ protected:
     {11, 
       {
         {10, {0., 0., 0.}},
-        {5, {-0.48799, -1.24424, 11.11682}},
-        {4, {-3.73982, -0.17152, 15.08844}},
-        {3, {-0.97878, -0.53807, 13.42509}},
+        {5, {-0.63500, -0.85600, 11.26700}},
+        {4, {-6.60584, -0.09300, 17.96531}},
+        {3, {-1.04412, -0.50116, 13.48368}},
         {2, {-0.61235, -0.70057, 14.76052}},
       }
     },
     {22, 
       {
-        {10, {1.80862, 0.57792, 5.62302}},
-        {5, {-1.20540, -0.43860, 10.74436}},
-        {4, {-0.85370, -0.55366, 11.22175}},
-        {3, {-0.60926, -0.68545, 12.16459}},
-        {2, {-0.58044, -0.75591, 14.11213}},
+        {10, {1.88983, 0.50000, 5.56489}},
+        {5, {-0.81906, -0.55406, 10.36628}},
+        {4, {-0.60863, -0.66362, 10.97785}},
+        {3, {-0.44344, -0.79181, 11.98634}},
       }
     },
     {111, 
       {
-        {10, {1.80862, 0.57792, 5.62302}},
-        {5, {-1.20540, -0.43860, 10.74436}},
-        {4, {-0.85370, -0.55366, 11.22175}},
-        {3, {-0.60926, -0.68545, 12.16459}},
-        {2, {-0.58044, -0.75591, 14.11213}},
+        {10, {1.88983, 0.50000, 5.56489}},
+        {5, {-0.81906, -0.55406, 10.36628}},
+        {4, {-0.60863, -0.66362, 10.97785}},
+        {3, {-0.44344, -0.79181, 11.98634}},
       }
     },
   };
@@ -257,6 +259,8 @@ protected:
       {"IsCC", kIsCC},
       {"EPi0", kEPi0},
       {"NPi0", kNPi0},
+      {"NPipm", kNPipm},
+      {"W", kW},
       {"TargetNucleus", kTargetNucleus}};
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -282,6 +286,8 @@ protected:
       {kIsCC, "IsCC"},
       {kEPi0, "EPi0"},
       {kNPi0, "NPi0"},
+      {kNPipm, "NPipm"},
+      {kW, "W"},
       {kTargetNucleus, "TargetNucleus"}};
 
   const std::unordered_map<std::string, int> KinematicVectorsDUNE = {
@@ -307,6 +313,7 @@ protected:
     {"Prim_MomResMS",kPrim_MomResMS},
     {"Prim_MomResYZ",kPrim_MomResYZ},
     {"Prim_MomResX",kPrim_MomResX},
+    {"Prim_ThetaRes",kPrim_ThetaRes},
     {"Prim_StartR2",kPrim_StartR2},
     {"Prim_EndR",kPrim_EndR},
     {"Prim_EndDepth",kPrim_EndDepth},
@@ -349,6 +356,7 @@ protected:
     {kPrim_MomResMS,"Prim_MomResMS"},
     {kPrim_MomResYZ,"Prim_MomResYZ"},
     {kPrim_MomResX,"Prim_MomResX"},
+    {kPrim_ThetaRes,"Prim_ThetaRes"},
     {kPrim_StartR2,"Prim_StartR2"},
     {kPrim_EndR,"Prim_EndR"},
     {kPrim_EndDepth,"Prim_EndDepth"},

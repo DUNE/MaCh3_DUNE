@@ -150,6 +150,7 @@ struct primary_params {
   double momresms = std::numeric_limits<double>::quiet_NaN();
   double momresyz = std::numeric_limits<double>::quiet_NaN();
   double momresx = std::numeric_limits<double>::quiet_NaN();
+  double theta_res = std::numeric_limits<double>::quiet_NaN();
 
   double tpcedepfrac = std::numeric_limits<double>::quiet_NaN();
 };
@@ -179,7 +180,9 @@ struct dunemc_plotting { // Store variables just used in plotting (cleared from 
   double rw_lep_theta;
   double rw_lep_bangle;
   double lep_tracklengthyz;
+  double w;
   int npi0;
+  int npipm;
   double rw_ePi0;
   double Target;
  

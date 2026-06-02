@@ -33,6 +33,13 @@ void SampleHandlerBeamNDGAr::Init() {
   ECALEndCapDepth = SampleManager->raw()["DetectorVariables"]["ECALEndCapDepth"].as<double>();
   interaction_model = SampleManager->raw()["DetectorVariables"]["interaction_model"].as<std::string>();
 
+  if (SampleManager->raw()["DetectorVariables"]["UsePseudoRadius"]) {
+    use_pseudo_radius = SampleManager->raw()["DetectorVariables"]["UsePseudoRadius"].as<bool>();
+    if (use_pseudo_radius) {
+      PseudoRadius = SampleManager->raw()["DetectorVariables"]["PseudoRadius"].as<double>();
+    }
+  }
+
   beamNDGArSampleDetails.resize(static_cast<size_t>(GetNSamples()));
   
   auto EnabledSamples = Get<std::vector<std::string>>(SampleManager->raw()["Samples"], __FILE__ , __LINE__);
@@ -84,7 +91,7 @@ void SampleHandlerBeamNDGAr::SetupSplines() {
 
 void SampleHandlerBeamNDGAr::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < dunendgarmcFitting.size(); ++i) {
-    MACH3LOG_INFO("pot: {}\nnorm: {}\nberpa: {}\nflux: {}\ngeom: {}", dunendgarmcFitting[i].pot_s, dunendgarmcFitting[i].norm_s, dunendgarmcFitting[i].rw_berpaacvwgt, dunendgarmcFitting[i].flux_w, dunendgarmcPlotting[i].geometric_correction);
+    // MACH3LOG_INFO("pot: {}\nnorm: {}\nberpa: {}\nflux: {}\ngeom: {}", dunendgarmcFitting[i].pot_s, dunendgarmcFitting[i].norm_s, dunendgarmcFitting[i].rw_berpaacvwgt, dunendgarmcFitting[i].flux_w, dunendgarmcPlotting[i].geometric_correction);
     MCEvents[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].pot_s));
     MCEvents[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].norm_s));
     MCEvents[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].rw_berpaacvwgt));
@@ -98,6 +105,7 @@ void SampleHandlerBeamNDGAr::CleanMemoryBeforeFit() {
 }
 
 bool SampleHandlerBeamNDGAr::isCoordOnTrack(int charge, double ycoord, double zcoord, double centre_circle_y, double centre_circle_z, double theta_start, double theta_spanned) {
+
   double theta_coord = atan2(ycoord - centre_circle_y, zcoord - centre_circle_z);
   bool iscoordinTPC = (ycoord - TPC_centre_y)*(ycoord - TPC_centre_y)+(zcoord - TPC_centre_z)*(zcoord - TPC_centre_z) < TPCInstrumentedRadius*TPCInstrumentedRadius;
   bool iscoordinarc;
@@ -378,7 +386,7 @@ bool SampleHandlerBeamNDGAr::IsPrimContained(int id, const std::unordered_map<in
       double ptot = std::sqrt(px*px + py*py + pz*pz);
 
       plotting_vars.shower.back().energy = ecalE;
-      plotting_vars.shower.back().bangle = acos(px/ptot*180/M_PI);
+      plotting_vars.shower.back().bangle = acos(px/ptot)*180/M_PI;
       plotting_vars.shower.back().pdg = pdg;
       if (_MCPEndProcess->at(idx) != "conv") plotting_vars.shower.back().isconv = false;
       else plotting_vars.shower.back().isconv = true;
@@ -539,6 +547,7 @@ double SampleHandlerBeamNDGAr::GetCalDepth(double x, double y, double z) {
 // }
 
 bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_vars, size_t i_particle, double pixel_spacing_cm){
+
   // Get particle properties from Anatree
   double xstart = _MCPStartX->at(i_particle);
   double ystart = _MCPStartY->at(i_particle);
@@ -708,6 +717,7 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
     plotting_vars.prim[i_particle].momresms = momres_ms/transverse_mom;
     plotting_vars.prim[i_particle].momresyz = momres_yz/transverse_mom;
     plotting_vars.prim[i_particle].momresx = std::abs(sigma_theta*tan_theta);
+    plotting_vars.prim[i_particle].theta_res = std::abs(sigma_theta);
   }
 
   if(momres_frac*(mom_tot/energy)*(mom_tot/energy) > energy_resolution_threshold) return false;
@@ -776,8 +786,8 @@ void SampleHandlerBeamNDGAr::FillGeoVars() {
     throw MaCh3Exception(__FILE__, __LINE__);
   }
   if (TPCInstrumentedRadius != _TPCRad) {
-    MACH3LOG_ERROR("TPC radius specified in config does not match the input file");
-    throw MaCh3Exception(__FILE__, __LINE__);
+      MACH3LOG_ERROR("TPC radius specified in config does not match the input file");
+      throw MaCh3Exception(__FILE__, __LINE__);
   }
   if (TPCInstrumentedLength != _TPCLen/2.) {
     MACH3LOG_ERROR("TPC length specified in config {} does not match the input file {}", TPCInstrumentedLength, _TPCLen/2.);
@@ -807,6 +817,19 @@ void SampleHandlerBeamNDGAr::FillGeoVars() {
   if (ECALEndCapEnd > maxECALEndCapEnd) {
     MACH3LOG_ERROR("ECAL end cap depth in config ({} cm) cannot be larger than depth in sample ({} cm).", ECALEndCapEnd, maxECALEndCapEnd);
     throw MaCh3Exception(__FILE__, __LINE__);
+  }
+
+  // Check pseudo radius is reasonable if use_pseudo_radius is true
+  if (use_pseudo_radius) {
+    if (PseudoRadius > TPCInstrumentedRadius) {
+      MACH3LOG_ERROR("Pseudo radius ({}) cannot be larger than TPC radius ({}).", PseudoRadius, TPCInstrumentedRadius);
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+    if (PseudoRadius < TPCFidRadius) {
+      MACH3LOG_ERROR("Pseudo radius ({}) cannot be smaller than fiducial radius ({}).", PseudoRadius, TPCInstrumentedRadius);
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+    else TPCInstrumentedRadius = PseudoRadius;
   }
 
   ECalBackSegments = {};
@@ -869,10 +892,11 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
         // Read Genie file
         std::string genieFileStr = "Inputs/DUNE_NDGAr_files/FastGArSim/genie_inputs/";
-        if (interaction_model == "hA") genieFileStr += "numu_argon_G18_10a_gst.root";
-        else if (interaction_model == "hN") genieFileStr += "numu_argon_G18_10b_gst.root";
-        else if (interaction_model == "INCL") genieFileStr += "numu_argon_G18_10c_gst.root";
-        else if (interaction_model == "G4BC") genieFileStr += "numu_argon_G18_10d_gst.root";
+        if (interaction_model == "hA") genieFileStr += "G18_hA/numu_argon_G18_10a_gst.root";
+        else if (interaction_model == "hN") genieFileStr += "G18_hN/numu_argon_G18_10b_gst.root";
+        else if (interaction_model == "INCL") genieFileStr += "G18_INCL/numu_argon_G18_10c_gst.root";
+        else if (interaction_model == "G4BC") genieFileStr += "G18_G4BC/numu_argon_G18_10d_gst.root";
+        else if (interaction_model == "AR23") genieFileStr += "AR23/numu_argon_AR23.root";
         else {
           MACH3LOG_ERROR("{} is not an availble interaction model.", interaction_model);
           throw MaCh3Exception(__FILE__, __LINE__);
@@ -897,6 +921,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   }
 
   _data->SetBranchStatus("*", 0);
+  _geometry->SetBranchStatus("*", 0);
   _genie->SetBranchStatus("*", 0);
 
   auto readBranch = [&](TTree* tree, const char* name, void* addr) {
@@ -958,6 +983,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   readBranch(_genie, "pyv", &_PYnu);
   readBranch(_genie, "pzv", &_PZnu);
   readBranch(_genie, "neu", &_nuPDG);
+  readBranch(_genie, "W", &_W);
   readBranch(_genie, "El", &_Elep);
   readBranch(_genie, "pxl", &_PXlep);
   readBranch(_genie, "pyl", &_PYlep);
@@ -980,7 +1006,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   int numCC = 0;
   int num_in_fdv = 0;
 
-  for (unsigned int i_event = 0; i_event < nEntries; ++i_event) { 
+  for (unsigned int i_event = 0; i_event < nEntries; ++i_event) {
     if (i_event != 0) clearBranchVectors();
     _data->GetEntry(i_event);
     _genie->GetEntry(_EventID);
@@ -1012,11 +1038,14 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     dunendgarmcFitting[i_event].norm_s = 1.;
     dunendgarmcFitting[i_event].pot_s = beamNDGArSampleDetails[sample_index].pot/(downsampling*1e21);
     dunendgarmcFitting[i_event].flux_w = 1.;
+    dunendgarmcPlotting[i_event].w = _W;
 
     int M3Mode = Modes->GetModeFromGenerator(std::abs(_neut_code));
     if (!_isCC) M3Mode += 14; //Account for no ability to distinguish CC/NC
     if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
     dunendgarmcFitting[i_event].mode = M3Mode;
+
+    if (!_isCC) continue; // Only want CC events - AR23 sample includes NC
 
     std::vector<double> vertex = {M3::_BAD_DOUBLE_, M3::_BAD_DOUBLE_, M3::_BAD_DOUBLE_};
 
@@ -1029,6 +1058,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     size_t n_particles = _MCPTrkID->size();
     dunendgarmcPlotting[i_event].rw_ePi0 = 0.; 
     dunendgarmcPlotting[i_event].npi0 = 0; 
+    dunendgarmcPlotting[i_event].npipm = 0; 
 
     // const int tot_ecal_layers = std::max(_NBarrelHG+_NBarrelHG, _NEndCapHG+_NEndCapLG);
 
@@ -1148,6 +1178,10 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
           dunendgarmcPlotting[i_event].rw_ePi0 = std::sqrt(p2+mass*mass);
         }
       }
+      // Get pipm information
+      if (std::abs(pdg) == 211) {
+        dunendgarmcPlotting[i_event].npipm ++;
+      }
     }
     if (vertex[0] == M3::_BAD_DOUBLE_) MACH3LOG_ERROR("No vertex found for event {}.", i_event);
 
@@ -1250,6 +1284,8 @@ const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(const int K
       return &dunendgarmcPlotting[iEvent].rw_ePi0;
     case kTargetNucleus:
       return &(dunendgarmcPlotting[iEvent].Target);
+    case kW:
+      return &(dunendgarmcPlotting[iEvent].w);
     default:
       MACH3LOG_ERROR("Did not recognise Kinematic Parameter {}", static_cast<int>(KinematicParameter));
       throw MaCh3Exception(__FILE__, __LINE__);
@@ -1271,6 +1307,8 @@ double SampleHandlerBeamNDGAr::ReturnKinematicParameter(const int KinPar, const 
       return static_cast<double>(dunendgarmcPlotting[iEvent].in_fdv);
     case kNPi0:
       return static_cast<double>(dunendgarmcPlotting[iEvent].npi0);
+    case kNPipm:
+      return static_cast<double>(dunendgarmcPlotting[iEvent].npipm);
     default:
       return *GetPointerToKinematicParameter(KinPar, iEvent);
   }
@@ -1336,6 +1374,8 @@ std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(const int KinV
       return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::momresyz);
     case kPrim_MomResX:
       return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::momresx);
+    case kPrim_ThetaRes:
+      return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::theta_res);
     case kPrim_StartR2:
       return toVecDouble(dunendgarmcPlotting[iEvent].prim, &primary_params::startr2);
     case kPrim_EndR:
