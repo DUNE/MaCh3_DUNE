@@ -40,6 +40,7 @@ int main(int argc, char * argv[]) {
     for (unsigned iSample = 0; iSample < handler->GetNSamples(); ++iSample) {
       handler->Reweight();
       DUNEHists.push_back(M3::Clone(handler->GetMCHist(iSample)));
+
       MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample)->Integral());
 
       if (handler->GetNDim(iSample) == 1) {
