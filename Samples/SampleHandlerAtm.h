@@ -124,6 +124,7 @@ protected:
     nEventSelections,
   };
 
+  /// Enums to define ordering of the CVN scores from the CAF files
   enum CVNScoreIndices {
     kCVN_NuE,
     kCVN_NuMu,
