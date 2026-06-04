@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run Super Linter
-        uses: github/super-linter@v7
+        uses: github/super-linter@b807e99ddd37e444d189cfd2c2ca1274d8ae8ef1
         continue-on-error: true
         env:
           LINTER_RULES_PATH: .github/linters
