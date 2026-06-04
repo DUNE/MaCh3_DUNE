@@ -112,6 +112,7 @@ protected:
   /// Multiplicative scaling to scale from the assumed 400ktyr value in the CAF files
   double ExposureScaling;
 
+  /// Enums to define event selections
   enum EventSelectionIndices {
     kEventSel_Unknown = -1,    
     kEventSel_FC_NuE,
