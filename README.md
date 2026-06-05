@@ -104,3 +104,41 @@ You can also vary one systematic exactly:
 ```bash
 ./Scripts/run_pdsp_generator_consistency.py --parameter Abs_TrueEBin_0=1.5
 ```
+
+## PDSP fit performance scan
+To scan injected cross-section normalisations and estimate where fit recovery
+starts to degrade, use:
+```bash
+./Scripts/run_pdsp_fit_performance_scan.py --process Abs --process CEx --process Pion
+```
+By default this scans `Generator = 1.1, 1.2, ..., 2.0` for each requested
+process and runs the fit stage only. It then compares each varied parameter's
+posterior mean against the injected value after burn-in and writes:
+```text
+PDSPFitPerformanceScan/performance_summary.csv
+PDSPFitPerformanceScan/safe_region_summary.csv
+```
+The default degradation criterion is `abs((posterior_mean - injected) /
+injected) > 0.10`. Change this with `--tolerance`, for example:
+```bash
+./Scripts/run_pdsp_fit_performance_scan.py --process Abs --tolerance 0.05
+```
+To include the nominal `Generator = 1.0` point explicitly:
+```bash
+./Scripts/run_pdsp_fit_performance_scan.py --include-nominal --process Abs
+```
+To run the full predictive plotting chain at every scan point:
+```bash
+./Scripts/run_pdsp_fit_performance_scan.py --workflow full --process Abs
+```
+To visualise degradation versus injected normalisation after the scan:
+```bash
+./Scripts/plot_pdsp_fit_performance_scan.py
+```
+This reads `PDSPFitPerformanceScan/performance_summary.csv` and writes one plot
+per scanned process or parameter under `PDSPFitPerformanceScan/plots/`, with
+injected `Generator` normalisation on the x-axis and relative discrepancy on the
+y-axis. Vertical error bars show `posterior_rms / injected`, i.e. the posterior
+width on the same relative scale. If the top-level summary CSV is missing or
+does not contain the requested target, the plotter rebuilds it from the
+per-point `*_recovery.csv` files.
