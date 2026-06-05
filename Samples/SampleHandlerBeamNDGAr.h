@@ -46,7 +46,7 @@ public:
     kPrim_IsStoppedInEndGap, kPrim_IsStoppedInBarrelGap, kPrim_IsEscaped, kPrim_NTurns, kPrim_NHits,
     kPrim_TrackLengthYZ, kPrim_MomResMS, kPrim_MomResYZ, kPrim_MomResX, kPrim_ThetaRes, kPrim_StartR2, kPrim_EndR, 
     kPrim_EndDepth, kPrim_EndX, kPrim_EndY, kPrim_EndZ, kPrim_StartX, kPrim_IsContained, kPrim_TPCEDepFrac,
-    kShower_DCalBoundary, kShower_Energy, kShower_BAngle, kShower_IsContained, kShower_IsConv, kShower_PDG, kShower_CosNorm,
+    kShower_DCalBoundary, kShower_Energy, kShower_BAngle, kShower_IsContained, kShower_PDG, kShower_CosNorm,
     kPhoton_Energy};
 
 protected:
@@ -86,47 +86,61 @@ protected:
   // double DepthToLayer(double depth, double r);
   // double CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers);
   bool CurvatureResolutionFilter(int id, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, dunemc_plotting& plotting_vars, double pixel_spacing_cm);
-  bool IsPrimContained(int id, const std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, 
-                       const std::unordered_map<int, std::vector<double>>& eID_to_showerstart,
-                       dunemc_plotting& plotting_vars);
+  bool IsPrimContained(int id, const std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, 
+                       size_t>& ID_to_index, dunemc_plotting& plotting_vars);
   void EraseDescendants(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID);
   void FillGeoVars();
 
   double _BeRPA_cvwgt = 1;
   
-  // FastGArSim anatree inputs
-  int _EventID;
+  // Reduced anatree inputs
   void clearBranchVectors();
   void fixCoordinates();
-  std::vector<float> *_MCPStartX=nullptr;
-  std::vector<float> *_MCPStartY=nullptr;
-  std::vector<float> *_MCPStartZ=nullptr;
-  std::vector<float> *_MCPEndX=nullptr;
-  std::vector<float> *_MCPEndY=nullptr;
-  std::vector<float> *_MCPEndZ=nullptr;
-  std::vector<float> *_MCPStartPX=nullptr;
-  std::vector<float> *_MCPStartPY=nullptr;
-  std::vector<float> *_MCPStartPZ=nullptr;
-  std::vector<float> *_MCPCalPX=nullptr;
-  std::vector<float> *_MCPCalPY=nullptr;
-  std::vector<float> *_MCPCalPZ=nullptr;
-  std::vector<int> *_MCPPDG=nullptr;
-  std::vector<int> *_MCPTrkID=nullptr;
-  std::vector<int> *_MCPMotherTrkID=nullptr;
-  std::vector<std::string> *_MCPEndProcess=nullptr;
-  std::vector<int> *_TPCHitTrkID=nullptr;
-  std::vector<float> *_TPCHitEnergy=nullptr;
-  std::vector<float> *_TPCHitX=nullptr;
-  std::vector<float> *_TPCHitY=nullptr;
-  std::vector<float> *_TPCHitZ=nullptr;
-  std::vector<bool> *_TPCHitIsSec=nullptr;
-  std::vector<int> *_CalHitTrkID=nullptr;
-  std::vector<float> *_CalHitEnergy=nullptr;
-  std::vector<bool> *_CalHitIsSec=nullptr;
-  std::vector<float> *_CalHitTime=nullptr;
-  std::vector<float> *_CalHitX=nullptr;
-  std::vector<float> *_CalHitY=nullptr;
-  std::vector<float> *_CalHitZ=nullptr;
+
+  // Event-level variables
+  int _EventID;
+  int _neut_code;
+  float _Enu;
+  float _LepPX;
+  float _LepPY;
+  float _LepPZ;
+  float _EHad;
+  float _Q0;
+  float _Q3;
+  int _NPiP;
+  int _NPiM;
+  int _NPi0;
+  float _EPi0;
+  float _W;
+  float _VtxX;
+  float _VtxY;
+  float _VtxZ;
+
+  // Shower-level variables
+  std::vector<int>* _ShowerTrkID = {};
+  std::vector<float>* _ShowerPX = {};
+  std::vector<float>* _ShowerPY = {};
+  std::vector<float>* _ShowerPZ = {};
+  std::vector<float>* _ShowerStartX = {};
+  std::vector<float>* _ShowerStartY = {};
+  std::vector<float>* _ShowerStartZ = {};
+  std::vector<float>* _ShowerETrue = {};
+  std::vector<float>* _ShowerEDep = {};
+
+  // MCP-level variables
+  std::vector<int>* _MCPTrkID = {};
+  std::vector<int>* _MCPMotherTrkID = {};
+  std::vector<int>* _MCPPDG = {};
+  std::vector<float>* _MCPStartX = {};
+  std::vector<float>* _MCPStartY = {};
+  std::vector<float>* _MCPStartZ = {};
+  std::vector<float>* _MCPEndX = {};
+  std::vector<float>* _MCPEndY = {};
+  std::vector<float>* _MCPEndZ = {};
+  std::vector<int>* _MCPIsReinteracting = {};
+  std::vector<float>* _MCPStartPX = {};
+  std::vector<float>* _MCPStartPY = {};
+  std::vector<float>* _MCPStartPZ = {};
 
   // FastGArSim geotree inputs
   double _TPCRad;
@@ -145,23 +159,6 @@ protected:
   int _NEndCapHG;
   int _NEndCapLG;
 
-  // Genie inputs
-  double _Enu;
-  double _PXnu;
-  double _PYnu;
-  double _PZnu;
-  double _Elep;
-  double _PXlep;
-  double _PYlep;
-  double _PZlep;
-  double _W;
-  int _nuPDG;
-  bool _isCC;
-  int _npip;
-  int _npim;
-  int _npi0;
-  int _neut_code;
-
   // TPC dimensions
   double TPCFidLength;
   double TPCFidRadius;
@@ -170,7 +167,6 @@ protected:
   bool use_pseudo_radius = false;
   double PseudoRadius;
   double ECALInnerRadius;
-  // double ECALOuterRadius;
   double ECALOuterFrontRadius;
   double ECALOuterBackRadius;
   double ECALEndCapStart;
@@ -327,7 +323,6 @@ protected:
     {"Shower_Energy",kShower_Energy},
     {"Shower_BAngle",kShower_BAngle},
     {"Shower_IsContained",kShower_IsContained},
-    {"Shower_IsConv",kShower_IsConv},
     {"Shower_PDG",kShower_PDG},
     {"Shower_CosNorm",kShower_CosNorm},
     {"Photon_Energy",kPhoton_Energy},
@@ -370,7 +365,6 @@ protected:
     {kShower_Energy,"Shower_Energy"},
     {kShower_BAngle,"Shower_BAngle"},
     {kShower_IsContained,"Shower_IsContained"},
-    {kShower_IsConv,"Shower_IsConv"},
     {kShower_PDG,"Shower_PDG"},
     {kShower_CosNorm,"Shower_CosNorm"},
     {kPhoton_Energy,"Photon_Energy"},

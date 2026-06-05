@@ -164,7 +164,6 @@ struct shower_params {
   double cosnorm = std::numeric_limits<double>::quiet_NaN();
 
   int iscontained = std::numeric_limits<int>::quiet_NaN();
-  int isconv = std::numeric_limits<int>::quiet_NaN();
 };
 
 struct photon_params {

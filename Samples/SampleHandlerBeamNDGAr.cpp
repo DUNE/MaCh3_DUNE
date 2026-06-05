@@ -344,18 +344,17 @@ double SampleHandlerBeamNDGAr::GetDCalBoundary(const std::vector<double>& startp
   return d / ECALSciX0;
 }
 
-bool SampleHandlerBeamNDGAr::IsPrimContained(int id, const std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index,
-                                             const std::unordered_map<int, std::vector<double>>& eID_to_showerstart, dunemc_plotting& plotting_vars) {
-  size_t idx = ID_to_index.at(id);
-  int pdg = _MCPPDG->at(idx);
+bool SampleHandlerBeamNDGAr::IsPrimContained(int id, const std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, size_t>& ID_to_index, dunemc_plotting& plotting_vars) {
+  size_t mcp_idx = ID_to_index.at(id);
+  int pdg = _MCPPDG->at(mcp_idx);
 
   // Don't require containment of secondary neutrons/neutrinos/nuclei
   if ((std::abs(pdg) == 2112) || (std::abs(pdg) == 12) || (std::abs(pdg) ==14) || (std::abs(pdg) == 16) || (std::abs(pdg) > 1000000000)) return true;
 
-  const std::vector<double> startpos = {_MCPStartX->at(idx), _MCPStartY->at(idx), _MCPStartZ->at(idx)};
-  const std::vector<double> endpos = {_MCPEndX->at(idx), _MCPEndY->at(idx), _MCPEndZ->at(idx)};
+  const std::vector<double> startpos = {_MCPStartX->at(mcp_idx), _MCPStartY->at(mcp_idx), _MCPStartZ->at(mcp_idx)};
+  const std::vector<double> endpos = {_MCPEndX->at(mcp_idx), _MCPEndY->at(mcp_idx), _MCPEndZ->at(mcp_idx)};
 
-  bool leavesTPC = (GetCalDepth(startpos[0], startpos[1], startpos[2]) == -999.) && (GetCalDepth(endpos[0], endpos[1], endpos[2]) != -999.);
+  bool leavesTPC = (GetCalDepth(startpos[0], startpos[1], startpos[2]) == -999. && startpos[0] < ECALEndCapStart) && (GetCalDepth(endpos[0], endpos[1], endpos[2]) != -999.);
 
   // Only check for containment particles which leave the TPC - otherwise move on to secondaries
   if (leavesTPC) {
@@ -363,53 +362,64 @@ bool SampleHandlerBeamNDGAr::IsPrimContained(int id, const std::unordered_map<in
 
     // First deal with EM showers. Have identified region of [ecalP, D_wall] space with resolution better than different thresholds in external studies.
     if ((std::abs(pdg) == 22) || (std::abs(pdg) == 11) || (std::abs(pdg) == 111)) {
-      // Get momentum at the point of ecal entry
-      const std::vector<double> ecalP = {_MCPCalPX->at(idx)/1000., _MCPCalPY->at(idx)/1000., _MCPCalPZ->at(idx)/1000.};
-      if (std::isnan(ecalP[0])) {
-        // These shouldn't exist in priciple - should only be particles which end in the ECal without making a step there - shower not recorded for plots but considered contained
-        MACH3LOG_WARN("Particle (pdg {}) which leaves TPC has no stored ecal momentum. Depth = {} cm.", pdg, GetCalDepth(endpos[0], endpos[1], endpos[2]));
+
+      // Get index of shower
+      size_t shower_idx;
+      auto shower_idx_it = std::find(_ShowerTrkID->begin(), _ShowerTrkID->end(), id);
+      if (shower_idx_it == _ShowerTrkID->end()) {
+        // This should never happen
+        MACH3LOG_WARN("EM particle (pdg {}) which leaves TPC has no associated shower index. Start = {}, {}, {}. End = {}, {}, {}. Treating as contained.", pdg, startpos[0], startpos[1], startpos[2], endpos[0], endpos[1], endpos[2]);
         return true;
       }
+      else {
+        shower_idx = static_cast<size_t>(std::distance(_ShowerTrkID->begin(), shower_idx_it));
+      }
+
+      // Check we have a recorded ShowerP
+      if (std::isnan(_ShowerPX->at(shower_idx))) {
+          // These should be very rare in priciple - should only be particles which move from TPC to ECal but don't make a step in at least one
+        MACH3LOG_WARN("Particle (pdg {}) which leaves TPC has no stored ecal momentum. Depth = {} cm. Considered contained", pdg, GetCalDepth(endpos[0], endpos[1], endpos[2]));
+        return true;
+      }
+      std::vector<double> showerP = {_ShowerPX->at(shower_idx), _ShowerPY->at(shower_idx), _ShowerPZ->at(shower_idx)};
 
       // We have a shower, so push back into shower_params
       plotting_vars.shower.push_back(shower_params());
 
-      double ecalE = std::sqrt(ecalP[0]*ecalP[0] + ecalP[1]*ecalP[1] + ecalP[2]*ecalP[2] + M3::Utils::GetMassFromPDG(pdg)*M3::Utils::GetMassFromPDG(pdg));
-
-      // Now find the shower start point
-      std::vector<double> showerstart;
-      double a_par, b_par, c_par;
-
-      double px = _MCPStartPX->at(idx)/1000.;
-      double py = _MCPStartPY->at(idx)/1000.;
-      double pz = _MCPStartPZ->at(idx)/1000.;
+      double px = _MCPStartPX->at(mcp_idx);
+      double py = _MCPStartPY->at(mcp_idx);
+      double pz = _MCPStartPZ->at(mcp_idx);
       double ptot = std::sqrt(px*px + py*py + pz*pz);
 
-      plotting_vars.shower.back().energy = ecalE;
+      plotting_vars.shower.back().energy = _ShowerETrue->at(shower_idx);
       plotting_vars.shower.back().bangle = acos(px/ptot)*180/M_PI;
       plotting_vars.shower.back().pdg = pdg;
-      if (_MCPEndProcess->at(idx) != "conv") plotting_vars.shower.back().isconv = false;
-      else plotting_vars.shower.back().isconv = true;
 
-      // For electrons, start point is the location of the first hit above threshold. This is stored in eID_to_showerstart.
+
+      // Now find the shower start point
+      std::vector<double> showerstart = {_ShowerStartX->at(shower_idx), _ShowerStartY->at(shower_idx), _ShowerStartZ->at(shower_idx)};
+      double a_par, b_par, c_par;
+
       if (std::abs(pdg) == 11) {
-        if (eID_to_showerstart.find(id) != eID_to_showerstart.end()) showerstart = eID_to_showerstart.at(id);
-        else {
+        if (std::isnan(showerstart[0])) {
           if (std::abs(GetCalDepth(endpos[0], endpos[1], endpos[2])) == 999)  {
-            MACH3LOG_WARN("Electron of energy {} GeV has no hits above threshold and does not stop in the ECal - considered uncontained.", ecalE);
+            MACH3LOG_WARN("Electron of energy {} GeV has no hits above threshold and does not stop in the ECal - considered uncontained.", _ShowerETrue->at(shower_idx));
             plotting_vars.shower.back().iscontained = false;
             return false;
           }
-          else showerstart = endpos;
+          else {
+            // MACH3LOG_WARN("Electron of energy {} GeV has no hits above threshold but does stop in the ECal - considered contained.", _ShowerETrue->at(shower_idx));
+            plotting_vars.shower.back().iscontained = true;
+            return true;
+          }
         }
       }
-      else showerstart = endpos; // For photons and pi0s and enclosed electrons with no hits above threshold, start point is end of trajectory (pair produce/decay)
 
       if (GetCalDepth(showerstart[0], showerstart[1], showerstart[2]) == 999.) {
         // End position only good approximator of shower start for photons which pair produce. This is dominant above 20 MeV. Below this energy, showers which 'escape' haven't really - they have just deposited energy by Compton scattering instead, but the photon leaves with some small remaining energy.
-        if (ecalE > 0.020) {
+        if (_ShowerETrue->at(shower_idx) > 0.020) {
           plotting_vars.shower.back().iscontained = false;
-          // MACH3LOG_WARN("Shower of energy {}, pdg {} starts beyond calorimeter boundary - treating as uncontained - startpos ({}, {}, {}), showerstart ({}, {}, {})", ecalE, pdg, startpos[0], startpos[1], startpos[2], showerstart[0], showerstart[1], showerstart[2]);
+          // MACH3LOG_WARN("Shower of energy {}, pdg {} starts beyond calorimeter boundary - treating as uncontained - startpos ({}, {}, {}), showerstart ({}, {}, {})", _ShowerETrue->at(shower_idx), pdg, startpos[0], startpos[1], startpos[2], showerstart[0], showerstart[1], showerstart[2]);
           return false;
         }
         // Otherwise, isContained remains true
@@ -430,16 +440,16 @@ bool SampleHandlerBeamNDGAr::IsPrimContained(int id, const std::unordered_map<in
 
         // Get D_wall
         size_t boundary_index = 999;
-        double d_boundary = GetDCalBoundary(showerstart, ecalP, boundary_index);
+        double d_boundary = GetDCalBoundary(showerstart, showerP, boundary_index);
 
         // Check if contained (above the containment threshold curve)
-        isContained = d_boundary >= a_par * std::pow(ecalE, b_par) + c_par;
+        isContained = d_boundary >= a_par * std::pow(_ShowerETrue->at(shower_idx), b_par) + c_par;
 
         // Fill shower-level kinpars
         if (boundary_index == 999) {
           MACH3LOG_WARN("No boundary found for shower of pdg {}", pdg);
           MACH3LOG_WARN("Start Position ({} {}, {})", showerstart[0], showerstart[1], showerstart[2]);
-          MACH3LOG_WARN("Direction ({}, {}, {})", ecalP[0], ecalP[1], ecalP[2]);
+          MACH3LOG_WARN("Direction ({}, {}, {})", showerP[0], showerP[1], showerP[2]);
         }
         else {
           std::vector<double> normal;
@@ -449,7 +459,7 @@ bool SampleHandlerBeamNDGAr::IsPrimContained(int id, const std::unordered_map<in
           else {
             normal = dividingPlaneA[boundary_index-_NumCalSides];
           }
-          double dotProd = ecalP[0]*normal[0] + ecalP[1]*normal[1] + ecalP[2]*normal[2];
+          double dotProd = showerP[0]*normal[0] + showerP[1]*normal[1] + showerP[2]*normal[2];
           plotting_vars.shower.back().cosnorm = dotProd/ptot;
         }
 
@@ -457,14 +467,9 @@ bool SampleHandlerBeamNDGAr::IsPrimContained(int id, const std::unordered_map<in
         plotting_vars.shower.back().iscontained = isContained;
       }
     }
-    else { // For non-EM showers, need the particle to stop within the calorimeter and not re-interact
+    else { // For non-EM showers, need the particle to stop within the calorimeter and not re-interact if proton/pion/kaon
       isContained = GetCalDepth(endpos[0], endpos[1], endpos[2]) != 999.;
-      std::string end_process = _MCPEndProcess->at(idx);
-
-      // For protons, not re-interacting means the end process is 'hIoni'
-      if (pdg == 2212) isContained = isContained && (end_process == "hIoni");
-      // For everything else, not re-interacting means the end process is 'Decay'
-      else if (std::abs(pdg) == 211 || std::abs(pdg) == 321) isContained = isContained && (end_process == "Decay");
+      if (pdg == 2212 || std::abs(pdg) == 211 || std::abs(pdg) == 321) isContained = isContained && !_MCPIsReinteracting->at(mcp_idx);
     }
     // No need to check secondaries if uncontained - just return false
     if (!isContained) return false;
@@ -472,7 +477,7 @@ bool SampleHandlerBeamNDGAr::IsPrimContained(int id, const std::unordered_map<in
   // Check secondaries - if any are uncontained, just return false
   auto& daughters = mother_to_daughter_ID.at(id); 
   for (int daughterID : daughters) {
-    if (!IsPrimContained(daughterID, mother_to_daughter_ID, ID_to_index, eID_to_showerstart, plotting_vars)) return false;
+    if (!IsPrimContained(daughterID, mother_to_daughter_ID, ID_to_index, plotting_vars)) return false;
   }
 
   return true; // No daughters are uncontained, so return true
@@ -513,39 +518,6 @@ double SampleHandlerBeamNDGAr::GetCalDepth(double x, double y, double z) {
   return projected_r - ECALInnerRadius; // give depth relative to barrel
 }
 
-// Calculate the layer from the depth. Barrel: 8x0.673cm, 34x1.142cm. Endcap: 6x0.673cm, 36x1.142cm.
-// double SampleHandlerBeamNDGAr::DepthToLayer(double depth, double r) {
-//   int n_thin_layers;
-//   if (r < ECALInnerRadius) n_thin_layers = _NEndCapHG;
-//   else n_thin_layers = _NBarrelHG;
-
-//   double hg_width = _HGAbsWidth+_HGSciWidth+_HGBoardWidth;
-//   double lg_width = _LGAbsWidth+_LGSciWidth;
-
-//   double layer;
-//   if (depth < static_cast<double>(n_thin_layers)*hg_width) {
-//     layer = static_cast<int>(depth/hg_width) + 1;
-//   } else {
-//     layer = static_cast<int>((depth-static_cast<double>(n_thin_layers)*hg_width)/lg_width) + 1 + n_thin_layers;
-//   }
-
-//   return layer;
-// }
-
-// double SampleHandlerBeamNDGAr::CalcEDepCal(int motherID, std::unordered_map<int, std::vector<int>>& mother_to_daughter_ID, const std::unordered_map<int, std::vector<double>>& ID_to_ECalDep, const int tot_layers) {
-//   auto it = mother_to_daughter_ID.find(motherID);
-//   double EDepCrit = 0.;
-//   if (it != mother_to_daughter_ID.end()) {
-//     for (int i_layer=tot_layers-crit_layers; i_layer<tot_layers; i_layer++) {
-//       EDepCrit += ID_to_ECalDep.at(motherID)[static_cast<size_t>(i_layer)];
-//     }
-//     for (int daughterID : it->second) {
-//       EDepCrit += CalcEDepCal(daughterID, mother_to_daughter_ID, ID_to_ECalDep, tot_layers);
-//     }
-//   }
-//   return EDepCrit;
-// }
-
 bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_vars, size_t i_particle, double pixel_spacing_cm){
 
   // Get particle properties from Anatree
@@ -561,9 +533,9 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
   if (pdg > 1000000000) return false;
   int charge = GetChargeFromPDG(pdg);
   double mass = M3::Utils::GetMassFromPDG(pdg);
-  double p_x = _MCPStartPX->at(i_particle)/1000.;
-  double p_y = _MCPStartPY->at(i_particle)/1000.;
-  double p_z = _MCPStartPZ->at(i_particle)/1000.;
+  double p_x = _MCPStartPX->at(i_particle);
+  double p_y = _MCPStartPY->at(i_particle);
+  double p_z = _MCPStartPZ->at(i_particle);
   double p_beam = p_x*BeamDirection[0] + p_y*BeamDirection[1] + p_z*BeamDirection[2];
 
   double energy = std::sqrt(p_x*p_x + p_y*p_y + p_z*p_z + mass*mass);
@@ -725,59 +697,31 @@ bool SampleHandlerBeamNDGAr::IsResolvedFromCurvature(dunemc_plotting& plotting_v
 }
 
 void SampleHandlerBeamNDGAr::clearBranchVectors() {
+  // Shower-level variables
+  _ShowerTrkID->clear();
+  _ShowerPX->clear();
+  _ShowerPY->clear();
+  _ShowerPZ->clear();
+  _ShowerStartX->clear();
+  _ShowerStartY->clear();
+  _ShowerStartZ->clear();
+  _ShowerETrue->clear();
+  _ShowerEDep->clear();
+
+  // MCP-level variables
+  _MCPTrkID->clear();
+  _MCPMotherTrkID->clear();
+  _MCPPDG->clear();
   _MCPStartX->clear();
   _MCPStartY->clear();
   _MCPStartZ->clear();
   _MCPEndX->clear();
   _MCPEndY->clear();
   _MCPEndZ->clear();
+  _MCPIsReinteracting->clear();
   _MCPStartPX->clear();
   _MCPStartPY->clear();
   _MCPStartPZ->clear();
-  _MCPCalPX->clear();
-  _MCPCalPY->clear();
-  _MCPCalPZ->clear();
-  _MCPPDG->clear();
-  _MCPTrkID->clear();
-  _MCPMotherTrkID->clear();
-  _MCPEndProcess->clear();
-  _TPCHitTrkID->clear();
-  _TPCHitIsSec->clear();
-  _TPCHitEnergy->clear();
-  _TPCHitX->clear();
-  _TPCHitY->clear();
-  _TPCHitZ->clear();
-  _CalHitTrkID->clear();
-  _CalHitEnergy->clear();
-  _CalHitIsSec->clear();
-  _CalHitTime->clear();
-  _CalHitX->clear();
-  _CalHitY->clear();
-  _CalHitZ->clear();
-}
-
-// FastGArSim output has beam x, Genie has beam z but left handed coordinate system. This code uses beam z but right handed coordinate system
-void SampleHandlerBeamNDGAr::fixCoordinates() {
-  auto switchCoords = [&](float& xcoord, float& zcoord) {
-    float tmp = xcoord;
-    xcoord = -zcoord;
-    zcoord = tmp;
-  };
-
-  for (size_t i = 0; i < _MCPStartX->size(); i++) {
-    switchCoords(_MCPStartX->at(i), _MCPStartZ->at(i));
-    switchCoords(_MCPEndX->at(i), _MCPEndZ->at(i));
-    switchCoords(_MCPStartPX->at(i), _MCPStartPZ->at(i));
-    switchCoords(_MCPCalPX->at(i), _MCPCalPZ->at(i));
-  }
-  for (size_t i = 0; i < _TPCHitX->size(); i++) {
-    switchCoords(_TPCHitX->at(i), _TPCHitZ->at(i));
-  }
-  for (size_t i = 0; i < _CalHitX->size(); i++) {
-    switchCoords(_CalHitX->at(i), _CalHitZ->at(i));
-  }
-  _PXnu = -_PXnu;
-  _PXlep = -_PXlep;
 }
 
 void SampleHandlerBeamNDGAr::FillGeoVars() {
@@ -870,13 +814,12 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
   TChain* _data = new TChain("AnaTree");
   TChain* _geometry = new TChain("GeoTree");
-  TChain* _genie = new TChain("gst");
   // Maps the file index within the TChain (GetTreeNumber()) to its sample index.
   std::vector<size_t> fileIndexToSample;
   for (size_t iSample=0;iSample<SampleDetails.size();iSample++) {
     for (const std::vector<std::string>& files : SampleDetails[iSample].mc_files) {
       for (const std::string& filename : files) {
-        MACH3LOG_INFO("Adding FastGArSim file to TChain: {}", filename);
+        MACH3LOG_INFO("Adding input file to TChain: {}", filename);
         // HH: Check whether the file exists, see https://root.cern/doc/master/classTChain.html#a78a896924ac6c7d3691b7e013bcbfb1c
         int _add_rtn = _data->Add(filename.c_str(), -1);
         if(_add_rtn == 0){
@@ -887,26 +830,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
         int _add_rtn_geo = _geometry->Add(filename.c_str(), -1);
         if(_add_rtn_geo == 0){
           MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", filename);
-          throw MaCh3Exception(__FILE__, __LINE__);
-        }
-
-        // Read Genie file
-        std::string genieFileStr = "Inputs/DUNE_NDGAr_files/FastGArSim/genie_inputs/";
-        if (interaction_model == "hA") genieFileStr += "G18_hA/numu_argon_G18_10a_gst.root";
-        else if (interaction_model == "hN") genieFileStr += "G18_hN/numu_argon_G18_10b_gst.root";
-        else if (interaction_model == "INCL") genieFileStr += "G18_INCL/numu_argon_G18_10c_gst.root";
-        else if (interaction_model == "G4BC") genieFileStr += "G18_G4BC/numu_argon_G18_10d_gst.root";
-        else if (interaction_model == "AR23") genieFileStr += "AR23/numu_argon_AR23.root";
-        else {
-          MACH3LOG_ERROR("{} is not an availble interaction model.", interaction_model);
-          throw MaCh3Exception(__FILE__, __LINE__);
-        }
-
-        MACH3LOG_INFO("Adding genie file to TChain: {}", genieFileStr);
-
-        int _add_rtn_genie = _genie->Add(genieFileStr.c_str(), -1);
-        if(_add_rtn_genie == 0){
-          MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", genieFileStr);
           throw MaCh3Exception(__FILE__, __LINE__);
         }
 
@@ -922,7 +845,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 
   _data->SetBranchStatus("*", 0);
   _geometry->SetBranchStatus("*", 0);
-  _genie->SetBranchStatus("*", 0);
 
   auto readBranch = [&](TTree* tree, const char* name, void* addr) {
     tree->SetBranchStatus(name, 1);
@@ -930,35 +852,46 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   };
 
   readBranch(_data, "eventID", &_EventID);
-  readBranch(_data, "startX", &_MCPStartX);
-  readBranch(_data, "startY", &_MCPStartY);
-  readBranch(_data, "startZ", &_MCPStartZ);
-  readBranch(_data, "endX", &_MCPEndX);
-  readBranch(_data, "endY", &_MCPEndY);
-  readBranch(_data, "endZ", &_MCPEndZ);
-  readBranch(_data, "startPX", &_MCPStartPX);
-  readBranch(_data, "startPY", &_MCPStartPY);
-  readBranch(_data, "startPZ", &_MCPStartPZ);
-  readBranch(_data, "ecalPX", &_MCPCalPX);
-  readBranch(_data, "ecalPY", &_MCPCalPY);
-  readBranch(_data, "ecalPZ", &_MCPCalPZ);
-  readBranch(_data, "pdgCode", &_MCPPDG);
-  readBranch(_data, "trackID", &_MCPTrkID);
-  readBranch(_data, "motherID", &_MCPMotherTrkID);
-  readBranch(_data, "endProcess", &_MCPEndProcess);
-  readBranch(_data, "tpcHitTrackID", &_TPCHitTrkID);
-  readBranch(_data, "tpcHitEdep", &_TPCHitEnergy);
-  readBranch(_data, "tpcHitX", &_TPCHitX);
-  readBranch(_data, "tpcHitY", &_TPCHitY);
-  readBranch(_data, "tpcHitZ", &_TPCHitZ);
-  readBranch(_data, "tpcHitIsSec", &_TPCHitIsSec);
-  readBranch(_data, "ecalHitTrackID", &_CalHitTrkID);
-  readBranch(_data, "ecalHitEdep", &_CalHitEnergy);
-  readBranch(_data, "ecalHitIsSec", &_CalHitIsSec);
-  readBranch(_data, "ecalHitTime", &_CalHitTime);
-  readBranch(_data, "ecalHitX", &_CalHitX);
-  readBranch(_data, "ecalHitY", &_CalHitY);
-  readBranch(_data, "ecalHitZ", &_CalHitZ);
+  readBranch(_data, "Enu", &_Enu);
+  readBranch(_data, "LepPX", &_LepPX);
+  readBranch(_data, "LepPY", &_LepPY);
+  readBranch(_data, "LepPZ", &_LepPZ);
+  readBranch(_data, "EHad", &_EHad);
+  readBranch(_data, "Q0", &_Q0);
+  readBranch(_data, "Q3", &_Q3);
+  readBranch(_data, "NPiP", &_NPiP);
+  readBranch(_data, "NPiM", &_NPiM);
+  readBranch(_data, "NPi0", &_NPi0);
+  readBranch(_data, "EPi0", &_EPi0);
+  readBranch(_data, "W", &_W);
+  readBranch(_data, "VtxX", &_VtxX);
+  readBranch(_data, "VtxY", &_VtxY);
+  readBranch(_data, "VtxZ", &_VtxZ);
+  readBranch(_data, "NeutCode", &_neut_code);
+
+  readBranch(_data, "MCPID", &_MCPTrkID);
+  readBranch(_data, "MCPMotherID", &_MCPMotherTrkID);
+  readBranch(_data, "MCPPDG", &_MCPPDG);
+  readBranch(_data, "MCPStartX", &_MCPStartX);
+  readBranch(_data, "MCPStartY", &_MCPStartY);
+  readBranch(_data, "MCPStartZ", &_MCPStartZ);
+  readBranch(_data, "MCPEndX", &_MCPEndX);
+  readBranch(_data, "MCPEndY", &_MCPEndY);
+  readBranch(_data, "MCPEndZ", &_MCPEndZ);
+  readBranch(_data, "MCPPX", &_MCPStartPX);
+  readBranch(_data, "MCPPY", &_MCPStartPY);
+  readBranch(_data, "MCPPZ", &_MCPStartPZ);
+  readBranch(_data, "MCPIsReinteracting", &_MCPIsReinteracting);
+
+  readBranch(_data, "ShowerID", &_ShowerTrkID);
+  readBranch(_data, "ShowerPX", &_ShowerPX);
+  readBranch(_data, "ShowerPY", &_ShowerPY);
+  readBranch(_data, "ShowerPZ", &_ShowerPZ);
+  readBranch(_data, "ShowerStartX", &_ShowerStartX);
+  readBranch(_data, "ShowerStartY", &_ShowerStartY);
+  readBranch(_data, "ShowerStartZ", &_ShowerStartZ);
+  readBranch(_data, "ShowerETrue", &_ShowerETrue);
+  readBranch(_data, "ShowerEDep", &_ShowerEDep);
 
   readBranch(_geometry, "gar_tpc_radius", &_TPCRad);
   readBranch(_geometry, "gar_tpc_length", &_TPCLen);
@@ -978,29 +911,12 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   _geometry->GetEntry(0);
   FillGeoVars();
 
-  readBranch(_genie, "Ev", &_Enu);
-  readBranch(_genie, "pxv", &_PXnu);
-  readBranch(_genie, "pyv", &_PYnu);
-  readBranch(_genie, "pzv", &_PZnu);
-  readBranch(_genie, "neu", &_nuPDG);
-  readBranch(_genie, "W", &_W);
-  readBranch(_genie, "El", &_Elep);
-  readBranch(_genie, "pxl", &_PXlep);
-  readBranch(_genie, "pyl", &_PYlep);
-  readBranch(_genie, "pzl", &_PZlep);
-  readBranch(_genie, "cc", &_isCC);
-  readBranch(_genie, "nfpip", &_npip);
-  readBranch(_genie, "nfpim", &_npim);
-  readBranch(_genie, "nfpi0", &_npi0);
-  readBranch(_genie, "neut_code", &_neut_code);
-
   size_t nEntries = static_cast<size_t>(downsampling*static_cast<double>(_data->GetEntries()));
   size_t countwidth = nEntries / 50;
 
   dunendgarmcFitting.resize(nEntries);
   dunendgarmcPlotting.resize(nEntries);
   _data->GetEntry(0);
-  _genie->GetEntry(0);
 
   double pixel_spacing_cm = pixel_spacing/10; //convert to cm
   int numCC = 0;
@@ -1009,10 +925,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   for (unsigned int i_event = 0; i_event < nEntries; ++i_event) {
     if (i_event != 0) clearBranchVectors();
     _data->GetEntry(i_event);
-    _genie->GetEntry(_EventID);
-
-    // FastGArSim output has a different coordinate system to the genie file and this code. This is fixed here.
-    fixCoordinates();
 
     if (i_event % countwidth == 0) {
       M3::Utils::PrintProgressBar(i_event, static_cast<Long64_t>(nEntries));
@@ -1025,42 +937,76 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     }
     const size_t sample_index = fileIndexToSample[static_cast<size_t>(treeNum)];
 
+    // Fill event-level variables
     dunendgarmcFitting[i_event].SampleIndex = static_cast<unsigned int>(sample_index);
     dunendgarmcFitting[i_event].enu_true = _Enu;
-    dunendgarmcFitting[i_event].rw_isCC = _isCC;
-    dunendgarmcFitting[i_event].nupdg = _nuPDG;
-    dunendgarmcFitting[i_event].nupdgUnosc = _nuPDG;
+    dunendgarmcFitting[i_event].rw_isCC = 1;
+    dunendgarmcFitting[i_event].nupdg = 14;
+    dunendgarmcFitting[i_event].nupdgUnosc = 14;
     dunendgarmcFitting[i_event].OscChannelIndex = static_cast<double>(GetOscChannel(SampleDetails[sample_index].OscChannels, dunendgarmcFitting[i_event].nupdgUnosc, dunendgarmcFitting[i_event].nupdg));
     dunendgarmcFitting[i_event].rw_berpaacvwgt = _BeRPA_cvwgt;
     dunendgarmcFitting[i_event].Target = 40; // Assume everything is Argon
-    dunendgarmcFitting[i_event].rw_Q0 = _Enu - _Elep;
-    dunendgarmcFitting[i_event].rw_Q3 = std::sqrt((_PXnu-_PXlep)*(_PXnu-_PXlep) + (_PYnu-_PYlep)*(_PYnu-_PYlep) + (_PZnu-_PZlep)*(_PZnu-_PZlep));
+    dunendgarmcFitting[i_event].rw_Q0 = _Q0;
+    dunendgarmcFitting[i_event].rw_Q3 = _Q3;
     dunendgarmcFitting[i_event].norm_s = 1.;
     dunendgarmcFitting[i_event].pot_s = beamNDGArSampleDetails[sample_index].pot/(downsampling*1e21);
     dunendgarmcFitting[i_event].flux_w = 1.;
     dunendgarmcPlotting[i_event].w = _W;
+    dunendgarmcPlotting[i_event].rw_ePi0 = _EPi0; 
+    dunendgarmcPlotting[i_event].npi0 = _NPi0; 
+    dunendgarmcPlotting[i_event].npipm = _NPiP + _NPiM;
+    dunendgarmcFitting[i_event].rw_vtx_x = _VtxX;
+    dunendgarmcFitting[i_event].rw_vtx_y = _VtxY;
+    dunendgarmcFitting[i_event].rw_vtx_z = _VtxZ;
+
+    // Find lepton kinematic variables
+    double lep_momentum = std::sqrt(_LepPX*_LepPX + _LepPY*_LepPY + _LepPZ*_LepPZ);
+    double lep_mass = M3::Utils::GetMassFromPDG(13);
+    double lep_energy = std::sqrt(lep_momentum*lep_momentum + lep_mass*lep_mass);
+    double lep_pBeam = (_LepPY*BeamDirection[1] + _LepPZ*BeamDirection[2]);
+    double lep_pB = _LepPX;
+    double lep_pPerp = (_LepPY*BeamDirection[2] - _LepPZ*BeamDirection[1]);
+    double lep_beamangle = acos(lep_pBeam/lep_momentum)*180/M_PI; //Angle to beam 
+    double lep_bangle = acos(lep_pB/lep_momentum)*180/M_PI; //Angle to B-field
+    double lep_perpangle = acos(lep_pPerp/lep_momentum)*180/M_PI; //Angle to axis perpendicular to beam and B
+    double lep_phi = atan2(lep_pPerp, lep_pB)*180/M_PI;
+
+    dunendgarmcFitting[i_event].rw_lep_pX = _LepPX;
+    dunendgarmcFitting[i_event].rw_lep_pY = _LepPY;
+    dunendgarmcFitting[i_event].rw_lep_pZ = _LepPZ;
+    dunendgarmcFitting[i_event].rw_LepE = lep_energy;
+    dunendgarmcPlotting[i_event].rw_lep_theta = lep_beamangle;
+    dunendgarmcPlotting[i_event].rw_lep_phi = lep_phi;
+    dunendgarmcPlotting[i_event].rw_lep_bangle = lep_bangle;
+    dunendgarmcPlotting[i_event].rw_lep_p = lep_momentum;
+    dunendgarmcFitting[i_event].rw_lep_pT = std::sqrt(lep_momentum*lep_momentum - lep_pBeam*lep_pBeam); 
+
+    double radius = std::sqrt(_VtxY*_VtxY + _VtxZ*_VtxZ); //find radius of interaction vertex
+    dunendgarmcFitting[i_event].rw_rad = radius;
+
+    if(std::abs(_VtxX) <= TPCFidLength && radius<=TPCFidRadius){
+      num_in_fdv++;
+      dunendgarmcPlotting[i_event].in_fdv = 1;
+    } else{
+      dunendgarmcPlotting[i_event].in_fdv = 0;
+    }
+    numCC++;
+
+    // Perform 'geometric correction' if do_geometric_correction set to true
+    dunendgarmcPlotting[i_event].geometric_correction = 1.;
+    if (do_geometric_correction) {
+      if ((lep_bangle < 45 || lep_bangle > 135) && lep_momentum > 0.3) dunendgarmcPlotting[i_event].geometric_correction = 0.;
+      else if ((lep_perpangle < 45 || lep_perpangle > 135) && lep_momentum > 0.3) dunendgarmcPlotting[i_event].geometric_correction = 2.;
+    }
 
     int M3Mode = Modes->GetModeFromGenerator(std::abs(_neut_code));
-    if (!_isCC) M3Mode += 14; //Account for no ability to distinguish CC/NC
     if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
     dunendgarmcFitting[i_event].mode = M3Mode;
 
-    if (!_isCC) continue; // Only want CC events - AR23 sample includes NC
-
-    std::vector<double> vertex = {M3::_BAD_DOUBLE_, M3::_BAD_DOUBLE_, M3::_BAD_DOUBLE_};
-
+    // Declare maps
     std::unordered_map<int, std::vector<int>> mother_to_daughter_ID;
     std::unordered_map<int, size_t> ID_to_index;
-    // std::unordered_map<int, std::vector<double>> ID_to_ECalDep; // particle track ID -> total energy deposited in each ecal layer
-    std::unordered_map<int, double> eID_to_smallest_t;
-    std::unordered_map<int, std::vector<double>> eID_to_showerstart; // electron track ID -> shower start position (x, y, z)
-    std::unordered_map<int, double> ID_to_TPCDep;
     size_t n_particles = _MCPTrkID->size();
-    dunendgarmcPlotting[i_event].rw_ePi0 = 0.; 
-    dunendgarmcPlotting[i_event].npi0 = 0; 
-    dunendgarmcPlotting[i_event].npipm = 0; 
-
-    // const int tot_ecal_layers = std::max(_NBarrelHG+_NBarrelHG, _NEndCapHG+_NEndCapLG);
 
     // Fill maps
     for (size_t i_particle=0; i_particle<n_particles; i_particle++) {
@@ -1071,49 +1017,16 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       mother_to_daughter_ID[motherID].push_back(trkID);
       mother_to_daughter_ID[trkID]; //Ensure all particles are added to the map (even if no secondaries)
 
-      // Fill particle-level variables
+      // Fill photon-level variables
       if (_MCPPDG->at(i_particle) == 22) {
         // We have a photon so push back into photon_params
         dunendgarmcPlotting[i_event].photon.push_back(photon_params());
-        double photon_energy = std::sqrt(_MCPStartPX->at(i_particle)*_MCPStartPX->at(i_particle) + _MCPStartPY->at(i_particle)*_MCPStartPY->at(i_particle) + _MCPStartPZ->at(i_particle)*_MCPStartPZ->at(i_particle))/1000.;
+        double photon_energy = std::sqrt(_MCPStartPX->at(i_particle)*_MCPStartPX->at(i_particle) + _MCPStartPY->at(i_particle)*_MCPStartPY->at(i_particle) + _MCPStartPZ->at(i_particle)*_MCPStartPZ->at(i_particle));
         dunendgarmcPlotting[i_event].photon.back().energy = photon_energy;
       }
-      else if (std::abs(_MCPPDG->at(i_particle)) == 11) {
-        eID_to_smallest_t[trkID] = std::numeric_limits<double>::max();
-      }
-    }
-
-    // Fill map from particle ID to ECal deposited energy
-    for (size_t i_calhit=0; i_calhit<_CalHitTrkID->size(); i_calhit++) {
-      int dep_trkid = _CalHitTrkID->at(i_calhit);
-      if (dep_trkid <= 0) continue;
-      double dep_energy = _CalHitEnergy->at(i_calhit)/1000.;
-      // double dep_depth = GetCalDepth(_CalHitX->at(i_calhit), _CalHitY->at(i_calhit), _CalHitZ->at(i_calhit));
-      // ID_to_ECalDep[dep_trkid][static_cast<size_t>(dep_layer)] += dep_energy;
-
-      // Also store the position of first hit above energy threshold for electrons/positrons
-      bool dep_issec = _CalHitIsSec->at(i_calhit);
-      double energy_threshold = 0.0005;
-      if ((dep_energy > energy_threshold) && (!dep_issec) && (std::abs(_MCPPDG->at(ID_to_index.at(dep_trkid))) == 11)) {
-        double time = _CalHitTime->at(i_calhit);
-        if (time < eID_to_smallest_t.at(dep_trkid)) {
-          eID_to_smallest_t[dep_trkid] = time;
-          eID_to_showerstart[dep_trkid] = {_CalHitX->at(i_calhit), _CalHitY->at(i_calhit), _CalHitZ->at(i_calhit)};
-        }
-      }
-    }
-
-    // Fill map from particle ID to TPC deposited energy
-    for (size_t i_tpchit=0; i_tpchit<_TPCHitTrkID->size(); i_tpchit++) {
-      int trkid = _TPCHitTrkID->at(i_tpchit);
-      if (trkid <= 0) continue;
-      double dep_energy = _TPCHitEnergy->at(i_tpchit)/1000.;
-      if (!_TPCHitIsSec->at(i_tpchit)) ID_to_TPCDep[trkid] += dep_energy;
     }
 
     bool isEventAccepted = true;
-    double pi0_p2 = 0.;
-    // double mu_p2 = 0.;
 
     // Resize vectors for prim-level parameters
     size_t n_prim_in_event = mother_to_daughter_ID[0].size();
@@ -1122,10 +1035,10 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     // Loop through primaries
     for (int& primID : mother_to_daughter_ID[0]) {
 
-      // Do not require the reconstruction of neutrons and neutrinos
+      // Do not require the reconstruction of neutrons, nuclear fragments, and neutrinos
       size_t prim_index = ID_to_index[primID];
       int pdg = _MCPPDG->at(prim_index);
-      if (pdg == 2112 || std::abs(pdg) == 12 || std::abs(pdg) == 14 || std::abs(pdg) == 16) continue;
+      if (pdg == 2112 || std::abs(pdg) == 12 || std::abs(pdg) == 14 || std::abs(pdg) == 16 || pdg > 1000000000) continue;
 
       dunendgarmcPlotting[i_event].prim[prim_index].pdg = pdg; 
 
@@ -1135,10 +1048,9 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
       if (CurvatureResolutionFilter(primID, mother_to_daughter_ID, ID_to_index, dunendgarmcPlotting[i_event], pixel_spacing_cm)) {
         isCurvatureResolved = true;
       }
-      dunendgarmcPlotting[i_event].prim[prim_index].iscurvatureresolved = isCurvatureResolved;
 
       // Check for containment
-      bool isContained = IsPrimContained(primID, mother_to_daughter_ID, ID_to_index, eID_to_showerstart, dunendgarmcPlotting[i_event]);
+      bool isContained = IsPrimContained(primID, mother_to_daughter_ID, ID_to_index, dunendgarmcPlotting[i_event]);
 
       // Primary is accepted if contained or curvature resolved
       bool isPrimAccepted = true;
@@ -1146,89 +1058,28 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
         isPrimAccepted = false;
         isEventAccepted = false;
       }
-      dunendgarmcPlotting[i_event].prim[prim_index].isaccepted = isPrimAccepted;
-      dunendgarmcPlotting[i_event].prim[prim_index].iscontained = isContained;
 
-      double p_x = _MCPStartPX->at(prim_index)/1000.;
-      double p_y = _MCPStartPY->at(prim_index)/1000.;
-      double p_z = _MCPStartPZ->at(prim_index)/1000.;
+      dunendgarmcPlotting[i_event].prim[prim_index].iscurvatureresolved = isCurvatureResolved;
+      dunendgarmcPlotting[i_event].prim[prim_index].iscontained = isContained;
+      dunendgarmcPlotting[i_event].prim[prim_index].isaccepted = isPrimAccepted;
+
+      double p_x = _MCPStartPX->at(prim_index);
+      double p_y = _MCPStartPY->at(prim_index);
+      double p_z = _MCPStartPZ->at(prim_index);
       double p2 = p_x*p_x + p_y*p_y + p_z*p_z;
 
       if (!isContained && p2 < 0.0001) {
         MACH3LOG_WARN("Particle of pdg {} with momentum {} is uncontained", pdg, std::sqrt(p2));
       }
-      if (pdg < 1000000000) {
-        double mass = M3::Utils::GetMassFromPDG(pdg);
-        double energy = std::sqrt(p2+mass*mass);
-        dunendgarmcPlotting[i_event].prim[prim_index].tpcedepfrac = ID_to_TPCDep[primID]/(energy-mass);
-      }
 
-      // Get vertex from primary muon start position
-      if (pdg == 13 && std::abs((p_x-_PXlep)/_PXlep) < 0.00001 && std::abs((p_y-_PYlep)/_PYlep) < 0.00001 && std::abs((p_z-_PZlep)/_PZlep) < 0.00001) {
-        vertex = {_MCPStartX->at(prim_index), _MCPStartY->at(prim_index), _MCPStartZ->at(prim_index)};
+      // Get primary muon track length
+      double mass = M3::Utils::GetMassFromPDG(pdg);
+      double energy = std::sqrt(p2+mass*mass);
+      if (pdg == 13 && energy == lep_energy) {
         dunendgarmcPlotting[i_event].lep_tracklengthyz = dunendgarmcPlotting[i_event].prim[prim_index].tracklengthyz;
       }
-
-      // Get pi0 information 
-      if(pdg == 111) {
-        dunendgarmcPlotting[i_event].npi0 ++;
-        if (p2 > pi0_p2) {
-          pi0_p2 = p2;
-          double mass = M3::Utils::GetMassFromPDG(pdg);
-          dunendgarmcPlotting[i_event].rw_ePi0 = std::sqrt(p2+mass*mass);
-        }
-      }
-      // Get pipm information
-      if (std::abs(pdg) == 211) {
-        dunendgarmcPlotting[i_event].npipm ++;
-      }
     }
-    if (vertex[0] == M3::_BAD_DOUBLE_) MACH3LOG_ERROR("No vertex found for event {}.", i_event);
-
-    dunendgarmcFitting[i_event].rw_lep_pX = _PXlep;
-    dunendgarmcFitting[i_event].rw_lep_pY = _PYlep;
-    dunendgarmcFitting[i_event].rw_lep_pZ = _PZlep;
-    dunendgarmcFitting[i_event].rw_LepE = _Elep;
     dunendgarmcPlotting[i_event].is_accepted = isEventAccepted;
-    dunendgarmcFitting[i_event].rw_vtx_x = vertex[0]-TPC_centre_x;
-    dunendgarmcFitting[i_event].rw_vtx_y = vertex[1]-TPC_centre_y;
-    dunendgarmcFitting[i_event].rw_vtx_z = vertex[2]-TPC_centre_z;
-
-    // Find lepton kinematic variables
-    double lep_momentum = std::sqrt(_PXlep*_PXlep + _PYlep*_PYlep + _PZlep*_PZlep);
-    double lep_pBeam = (_PYlep*BeamDirection[1] + _PZlep*BeamDirection[2]);
-    double lep_pB = _PXlep;
-    double lep_pPerp = (_PYlep*BeamDirection[2] - _PZlep*BeamDirection[1]);
-    double lep_beamangle = acos(lep_pBeam/lep_momentum)*180/M_PI; //Angle to beam 
-    double lep_bangle = acos(lep_pB/lep_momentum)*180/M_PI; //Angle to B-field
-    double lep_perpangle = acos(lep_pPerp/lep_momentum)*180/M_PI; //Angle to axis perpendicular to beam and B
-    double lep_phi = atan2(lep_pPerp, lep_pB)*180/M_PI;
-
-    dunendgarmcPlotting[i_event].rw_lep_theta = lep_beamangle;
-    dunendgarmcPlotting[i_event].rw_lep_phi = lep_phi;
-    dunendgarmcPlotting[i_event].rw_lep_bangle = lep_bangle;
-    dunendgarmcPlotting[i_event].rw_lep_p = lep_momentum;
-    dunendgarmcFitting[i_event].rw_lep_pT = std::sqrt(lep_momentum*lep_momentum - lep_pBeam*lep_pBeam); 
-
-    double radius = std::sqrt((vertex[1]-TPC_centre_y)*(vertex[1]-TPC_centre_y) 
-                              + (vertex[2]-TPC_centre_z)*(vertex[2]-TPC_centre_z)); //find radius of interaction vertex
-    dunendgarmcFitting[i_event].rw_rad = radius;
-
-    if(std::abs(vertex[0] - TPC_centre_x) <= TPCFidLength && radius<=TPCFidRadius){
-      num_in_fdv++;
-      dunendgarmcPlotting[i_event].in_fdv = 1;
-    } else{
-      dunendgarmcPlotting[i_event].in_fdv = 0;
-    }
-    if(_isCC) numCC++;
-
-    // Perform 'geometric correction' if do_geometric_correction set to true
-    dunendgarmcPlotting[i_event].geometric_correction = 1.;
-    if (do_geometric_correction) {
-      if ((lep_bangle < 45 || lep_bangle > 135) && lep_momentum > 0.3) dunendgarmcPlotting[i_event].geometric_correction = 0.;
-      else if ((lep_perpangle < 45 || lep_perpangle > 135) && lep_momentum > 0.3) dunendgarmcPlotting[i_event].geometric_correction = 2.;
-    }
-
   }
   MACH3LOG_INFO("nEntries = {}, numCC = {}, numFDV = {}", nEntries, numCC, num_in_fdv);
 
@@ -1236,8 +1087,6 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
   delete _data;
   _geometry->Reset();
   delete _geometry;
-  _genie->Reset();
-  delete _genie;
 
   return static_cast<int>(nEntries);
 }
@@ -1406,8 +1255,6 @@ std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(const int KinV
       return toVecDouble(dunendgarmcPlotting[iEvent].shower, &shower_params::bangle);
     case kShower_IsContained:
       return toVecDouble(dunendgarmcPlotting[iEvent].shower, &shower_params::iscontained);
-    case kShower_IsConv:
-      return toVecDouble(dunendgarmcPlotting[iEvent].shower, &shower_params::isconv);
     case kPhoton_Energy:
       return toVecDouble(dunendgarmcPlotting[iEvent].photon, &photon_params::energy);
     default:

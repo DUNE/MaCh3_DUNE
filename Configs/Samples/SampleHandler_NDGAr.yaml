@@ -16,17 +16,17 @@ DetectorVariables:
   ECALBarrelForwardDepth: 10.4 # radiation lengths
   ECALBarrelBackwardDepth: 7.4 # radiation lengths
   ECALEndCapDepth: 10.4 # radiation lengths
-  energy_resolution_threshold: 0.05
+  energy_resolution_threshold: 0.05 # fractional
   pixel_spacing: 6. # mm
   spatial_resolution: 2.5 # mm
-  adc_sampling_frequency: 20.
+  adc_sampling_frequency: 20. # MHz
   drift_velocity: 3.011
   # Note that for 1t fid mass, need FidRad=200, FidLen=230 or FidRad=220, FidLen=180 for shorter geometry
   # For a purely acceptance-motivated cut, would use FidRad=160, FidLen=210 for pilot geometry
   TPCFidRadius: 200
   TPCFidLength: 230
   ECALSciX0: 0.892453
-  downsampling: 0.001 
+  downsampling: 1.
   DoGeometricCorrection: false
 
 Samples: ["NDGAr_FHC_numu"]
@@ -47,8 +47,8 @@ NDGAr_FHC_numu:
     isFHC: 1
 
   InputFiles:
-    mtupleprefix: "Inputs/DUNE_NDGAr_files/FastGArSim/rad260/len250/bfield0.5/INCL/"
-    # mtupleprefix: "Inputs/DUNE_NDGAr_files/hA/3M_BigCal_PbWO4Cal_"
+    mtupleprefix: "Inputs/DUNE_NDGAr_files/FastGArSim/rad260/len250/bfield0.5/hA/reduced/"
+    # mtupleprefix: "/vols/dune/jmm224/dune/AcceptanceAnalysis/outputs/test"
     mtuplesuffix: ".root"
     splineprefix: ""
     splinesuffix: ""
