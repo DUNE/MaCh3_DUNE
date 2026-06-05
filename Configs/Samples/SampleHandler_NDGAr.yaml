@@ -26,7 +26,7 @@ DetectorVariables:
   TPCFidRadius: 200
   TPCFidLength: 230
   ECALSciX0: 0.892453
-  downsampling: 0.001 
+  downsampling: 1
   DoGeometricCorrection: false
 
 Samples: ["NDGAr_FHC_numu"]
@@ -47,7 +47,7 @@ NDGAr_FHC_numu:
     isFHC: 1
 
   InputFiles:
-    mtupleprefix: "Inputs/DUNE_NDGAr_files/FastGArSim/rad260/len250/bfield0.5/INCL/"
+    mtupleprefix: "Inputs/DUNE_NDGAr_files/FastGArSim/rad260/len250/bfield0.5/hA/"
     # mtupleprefix: "Inputs/DUNE_NDGAr_files/hA/3M_BigCal_PbWO4Cal_"
     mtuplesuffix: ".root"
     splineprefix: ""

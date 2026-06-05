@@ -400,7 +400,10 @@ bool SampleHandlerBeamNDGAr::IsPrimContained(int id, const std::unordered_map<in
             plotting_vars.shower.back().iscontained = false;
             return false;
           }
-          else showerstart = endpos;
+          else {
+            plotting_vars.shower.back().iscontained = true;
+            return true;
+          }
         }
       }
       else showerstart = endpos; // For photons and pi0s and enclosed electrons with no hits above threshold, start point is end of trajectory (pair produce/decay)
