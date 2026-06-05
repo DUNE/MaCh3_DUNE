@@ -132,7 +132,9 @@ protected:
     nCVN_Scores
   };
 
+  /// Cut value to separate Fully Contained and Partially Contained events
   double FCPCSeparation;
+  
   int ReturnSampleIdentifier(std::vector<double> CVNScores, double MinDistanceToWall);
   std::vector<std::string> EventSelectionNames = std::vector<std::string>(nEventSelections);
   std::vector<int> EventSelection_to_SampleIndex_Map = std::vector<int>(nEventSelections,kEventSel_Unknown);
