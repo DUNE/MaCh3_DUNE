@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
 import csv
 import json
 import shutil
@@ -156,6 +157,74 @@ def write_combined_summary(output_dir: Path, rows: list[dict[str, object]], tole
         writer.writerows(safe_rows)
 
 
+def run_scan_case(
+    *,
+    target: str,
+    target_type: str,
+    value: float,
+    fit_template: list[str],
+    xsec_template: list[str],
+    output_dir: Path,
+    apps: dict[str, Path | str],
+    diag_config: Path,
+    workflow: str,
+    extra_args: list[str],
+    no_summarise: bool,
+    root_exe: str,
+    burn_in: int,
+    tolerance: float,
+    dry_run: bool,
+) -> tuple[dict[str, object], list[dict[str, object]]]:
+    label = f"{target}_scan_{value_label(value)}"
+    process_values = {target: value} if target_type == "process" else {}
+    parameter_values = {target: value} if target_type == "parameter" else {}
+    manifest = run_case(
+        label=label,
+        fit_template=fit_template,
+        xsec_template=xsec_template,
+        output_dir=output_dir,
+        apps=apps,
+        diag_config=diag_config,
+        workflow=workflow,
+        process_values=process_values,
+        parameter_values=parameter_values,
+        extra_args=extra_args,
+        dry_run=dry_run,
+    )
+    manifest["scan_target"] = target
+    manifest["scan_target_type"] = target_type
+    manifest["injected_value"] = value
+
+    recovery_rows: list[dict[str, object]] = []
+    if no_summarise or manifest["status"] not in ("ok", "dry-run"):
+        return manifest, recovery_rows
+
+    case_dir = output_dir / label
+    recovery_csv = case_dir / f"{label}_recovery.csv"
+    summary_result = run_recovery_summary(
+        root_exe=root_exe,
+        fit_output=Path(str(manifest["fit_output"])),
+        xsec_config=Path(str(manifest["xsec_config"])),
+        output_csv=recovery_csv,
+        label=label,
+        targets=[target],
+        burn_in=burn_in,
+        tolerance=tolerance,
+        log_file=case_dir / f"{label}_recovery.log",
+        dry_run=dry_run,
+    )
+    manifest["recovery_summary"] = str(recovery_csv)
+    manifest["recovery_stage"] = summary_result
+    if summary_result["status"] == "ok":
+        for row in read_recovery_rows(recovery_csv):
+            row["scan_target"] = target
+            row["injected_value"] = value
+            row["status"] = manifest["status"]
+            recovery_rows.append(row)
+
+    return manifest, recovery_rows
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Scan injected PDSP Generator normalisations up to 2x and summarise fit recovery."
@@ -176,6 +245,8 @@ def main() -> int:
                         help="Also include injected value 1.0 in the scan.")
     parser.add_argument("--workflow", choices=["fit", "full"], default="fit",
                         help="Use 'fit' for recovery scans, or 'full' to also make predictive plots.")
+    parser.add_argument("--jobs", type=int, default=1,
+                        help="Number of local scan points to run concurrently.")
     parser.add_argument("--burn-in", type=int, default=10000)
     parser.add_argument("--tolerance", type=float, default=0.10,
                         help="Allowed absolute relative bias before a point is marked failed.")
@@ -219,57 +290,60 @@ def main() -> int:
     recovery_rows: list[dict[str, object]] = []
     scan_targets = [(target, "process") for target in targets] + [(parameter, "parameter") for parameter in parameters]
 
-    for target, target_type in scan_targets:
-        for value in values:
-            label = f"{target}_scan_{value_label(value)}"
-            process_values = {target: value} if target_type == "process" else {}
-            parameter_values = {target: value} if target_type == "parameter" else {}
-            manifest = run_case(
-                label=label,
+    tasks = [(target, target_type, value) for target, target_type in scan_targets for value in values]
+    if args.jobs < 1:
+        raise ValueError("--jobs must be at least 1")
+
+    if args.jobs == 1:
+        for target, target_type, value in tasks:
+            manifest, rows = run_scan_case(
+                target=target,
+                target_type=target_type,
+                value=value,
                 fit_template=fit_template,
                 xsec_template=xsec_template,
                 output_dir=output_dir,
                 apps=apps,
                 diag_config=diag_config,
                 workflow=args.workflow,
-                process_values=process_values,
-                parameter_values=parameter_values,
                 extra_args=args.extra_arg,
-                dry_run=args.dry_run,
-            )
-            manifest["scan_target"] = target
-            manifest["scan_target_type"] = target_type
-            manifest["injected_value"] = value
-            manifests.append(manifest)
-            print(f"{label}: {manifest['status']} -> {manifest['fit_output']}")
-
-            if args.no_summarise:
-                continue
-            if manifest["status"] not in ("ok", "dry-run"):
-                continue
-
-            case_dir = output_dir / label
-            recovery_csv = case_dir / f"{label}_recovery.csv"
-            summary_result = run_recovery_summary(
+                no_summarise=args.no_summarise,
                 root_exe=root_exe,
-                fit_output=Path(str(manifest["fit_output"])),
-                xsec_config=Path(str(manifest["xsec_config"])),
-                output_csv=recovery_csv,
-                label=label,
-                targets=[target],
                 burn_in=args.burn_in,
                 tolerance=args.tolerance,
-                log_file=case_dir / f"{label}_recovery.log",
                 dry_run=args.dry_run,
             )
-            manifest["recovery_summary"] = str(recovery_csv)
-            manifest["recovery_stage"] = summary_result
-            if summary_result["status"] == "ok":
-                for row in read_recovery_rows(recovery_csv):
-                    row["scan_target"] = target
-                    row["injected_value"] = value
-                    row["status"] = manifest["status"]
-                    recovery_rows.append(row)
+            manifests.append(manifest)
+            recovery_rows.extend(rows)
+            print(f"{manifest['label']}: {manifest['status']} -> {manifest['fit_output']}")
+    else:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as executor:
+            futures = [
+                executor.submit(
+                    run_scan_case,
+                    target=target,
+                    target_type=target_type,
+                    value=value,
+                    fit_template=fit_template,
+                    xsec_template=xsec_template,
+                    output_dir=output_dir,
+                    apps=apps,
+                    diag_config=diag_config,
+                    workflow=args.workflow,
+                    extra_args=args.extra_arg,
+                    no_summarise=args.no_summarise,
+                    root_exe=root_exe,
+                    burn_in=args.burn_in,
+                    tolerance=args.tolerance,
+                    dry_run=args.dry_run,
+                )
+                for target, target_type, value in tasks
+            ]
+            for future in concurrent.futures.as_completed(futures):
+                manifest, rows = future.result()
+                manifests.append(manifest)
+                recovery_rows.extend(rows)
+                print(f"{manifest['label']}: {manifest['status']} -> {manifest['fit_output']}")
 
     with (output_dir / "manifest.json").open("w", encoding="utf-8") as handle:
         json.dump(manifests, handle, indent=2, sort_keys=True)
