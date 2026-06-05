@@ -128,6 +128,10 @@ To include the nominal `Generator = 1.0` point explicitly:
 ```bash
 ./Scripts/run_pdsp_fit_performance_scan.py --include-nominal --process Abs
 ```
+To run several scan points concurrently on the local machine:
+```bash
+./Scripts/run_pdsp_fit_performance_scan.py --jobs 4 --process Abs --process CEx --process Pion
+```
 To run the full predictive plotting chain at every scan point:
 ```bash
 ./Scripts/run_pdsp_fit_performance_scan.py --workflow full --process Abs
