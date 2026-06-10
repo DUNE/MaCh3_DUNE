@@ -1,0 +1,671 @@
+# SampleHandlerName: "OffAxisND"
+
+# SampleType: "OffAxisND"
+
+# MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
+
+# BinningFile: "Configs/TutorialConfigs/TutorialBinning.yaml"
+
+# InputFiles:
+#   #CovarianceMatrix: ["bla.root", "NDCovMatrix"]
+
+# Samples: ["OffAxis0m_numuCC_numode","OffAxis1.75m_numuCC_numode","OffAxis2m_numuCC_numode","OffAxis4m_numuCC_numode","OffAxis5.75m_numuCC_numode","OffAxis8m_numuCC_numode","OffAxis9.75m_numuCC_numode","OffAxis12m_numuCC_numode","OffAxis13.75m_numuCC_numode","OffAxis16m_numuCC_numode","OffAxis17.75m_numuCC_numode","OffAxis20m_numuCC_numode","OffAxis21.75m_numuCC_numode","OffAxis24m_numuCC_numode","OffAxis25.75m_numuCC_numode","OffAxis26.25m_numuCC_numode","OffAxis28m_numuCC_numode","OffAxis28.25m_numuCC_numode","OffAxis28.5m_numuCC_numode"]
+
+# OffAxis0m_numuCC_numode:
+#   SampleTitle: "OnAxis_numuCC_numode"
+
+#   POT: 3.24e+19
+#   is_numode: True
+
+#   SelectionCuts:
+#     - KinematicStr: "IsCC"
+#       Bounds: [0.5,1.5]
+
+#   Binning:
+#     VarStr : [ "RecoNeutrinoEnergy", "ELepRec" ]
+#     VarBins: [[0.0000, 0.1364, 0.2727, 0.4091, 0.5455, 0.6818, 0.8182, 0.9545, 1.0909, 1.2273, 1.3636, 1.5000, 1.6364, 1.7727, 1.9091, 2.0455, 2.1818, 2.3182, 2.4545, 2.5909, 2.7273, 2.8636, 3.0000, 3.1,3.2,3.3,3.4,3.5,4, 5, 6, 10.0],
+#               [0.0000, 0.1364, 0.2727, 0.4091, 0.5455, 0.6818, 0.8182, 0.9545, 1.0909, 1.2273, 1.3636, 1.5000, 1.6364, 1.7727, 1.9091, 2.0455, 2.1818, 2.3182, 2.4545, 2.5909, 2.7273, 2.8636, 3.0000, 5, 6, 10.0]]
+#     Uniform: true
+
+#   InputFiles:
+#     mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+#     mtuplesuffix: ".root"
+#     splineprefix: ""
+#     splinesuffix: ".root"
+
+#   SubSamples:
+#     - Name: "OnAxis_numuCC_numode1"
+#       LatexName: "On Axis Numu CC Neutrino Mode"
+#       mtuplefile: "CAFv7_0m_13*"
+#       splinefile: ""
+
+# OffAxis1.75m_numuCC_numode:
+#   SampleTitle: "OffAxis1.75m_numuCC_numode"
+
+#   POT: 3.24e+19
+#   is_numode: True
+
+#   SelectionCuts:
+#     - KinematicStr: "IsCC"
+#       Bounds: [0.5,1.5]
+
+#   Binning:
+#     VarStr : [ "RecoNeutrinoEnergy" ]
+#     VarBins: [[0.0000, 0.1364, 0.2727, 0.4091, 0.5455, 0.6818, 0.8182, 0.9545, 1.0909, 1.2273, 1.3636, 1.5000, 1.6364, 1.7727, 1.9091, 2.0455, 2.1818, 2.3182, 2.4545, 2.5909, 2.7273, 2.8636, 3.0000, 3.1,3.2,3.3,3.4,3.5,4, 5, 6, 10.0]]
+#     Uniform: true
+
+#   InputFiles:
+#     mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+#     mtuplesuffix: ".root"
+#     splineprefix: ""
+#     splinesuffix: ".root"
+
+#   SubSamples:
+#     - Name: "OnAxis_numuCC_numode1"
+#       LatexName: "On Axis Numu CC Neutrino Mode"
+#       mtuplefile: "CAFv7_1.75m_1*"
+#       splinefile: ""
+
+# OffAxis2m_numuCC_numode:
+#   SampleTitle: "OffAxis2m_numuCC_numode"
+
+#   POT: 3.24e+19
+#   is_numode: True
+
+#   SelectionCuts:
+#     - KinematicStr: "IsCC"
+#       Bounds: [0.5,1.5]
+
+#   Binning:
+#     VarStr: [ "RecoNeutrinoEnergy" ]
+#     VarBins: [[0.0,0.15, 0.325,0.5,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0,3.2,3.4,3.6,3.8,4.0,4.25,4.5,4.75,5.2,5.4,5.6,5.8,6.0,6.5,7,7.5,8,8.5,9,10]]
+#     Uniform: true
+
+#   InputFiles:
+#     mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+#     mtuplesuffix: ".root"
+#     splineprefix: ""
+#     splinesuffix: ".root"
+
+#   SubSamples:
+#     - Name: "OffAxis2m_numuCC_numode"
+#       LatexName: "2 m Off Axis Numu CC Neutrino Mode"
+#       mtuplefile: "CAFv7_2m_*"
+#       splinefile: ""
+
+# OffAxis4m_numuCC_numode:
+#   SampleTitle: "OffAxis4m_numuCC_numode"
+
+#   POT: 3.24e+19
+#   is_numode: True
+
+#   SelectionCuts:
+#     - KinematicStr: "IsCC"
+#       Bounds: [0.5,1.5]
+
+#   Binning:
+#     VarStr: [ "RecoNeutrinoEnergy" ]
+#     VarBins: [[0.0,0.15, 0.325,0.5,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0,3.2,3.4,3.6,3.8,4.0,4.25,4.5,4.75,5.2,5.4,5.6,5.8,6.0,6.5,7,7.5,8,8.5,9,10]]
+#     Uniform: true
+
+#   InputFiles:
+#     mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+#     mtuplesuffix: ".root"
+#     splineprefix: ""
+#     splinesuffix: ".root"
+
+#   SubSamples:
+#     - Name: "OffAxis4m_numuCC_numode"
+#       LatexName: "4 m Off Axis Numu CC Neutrino Mode"
+#       mtuplefile: "CAFv7_4m_*"
+#       splinefile: ""
+
+
+# OffAxis5.75m_numuCC_numode:
+#   SampleTitle: "OffAxis4m_numuCC_numode"
+
+#   POT: 3.24e+19
+#   is_numode: True
+
+#   SelectionCuts:
+#     - KinematicStr: "IsCC"
+#       Bounds: [0.5,1.5]
+
+#   Binning:
+#     VarStr: [ "RecoNeutrinoEnergy" ]
+#     VarBins: [[0.0,0.15, 0.325,0.5,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0,3.2,3.4,3.6,3.8,4.0,4.25,4.5,4.75,5.2,5.4,5.6,5.8,6.0,6.5,7,7.5,8,8.5,9,10]]
+#     Uniform: true
+
+#   InputFiles:
+#     mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+#     mtuplesuffix: ".root"
+#     splineprefix: ""
+#     splinesuffix: ".root"
+
+#   SubSamples:
+#     - Name: "OffAxis5.75m_numuCC_numode"
+#       LatexName: "5.75 m Off Axis Numu CC Neutrino Mode"
+#       mtuplefile: "CAFv7_5.75m_*"
+#       splinefile: ""
+# OffAxis8m_numuCC_numode:
+# OffAxis9.75m_numuCC_numode:
+# OffAxis12m_numuCC_numode:
+# OffAxis13.75m_numuCC_numode:
+# OffAxis16m_numuCC_numode:
+# OffAxis17.75m_numuCC_numode:
+# OffAxis20m_numuCC_numode:
+# OffAxis21.75m_numuCC_numode:
+# OffAxis24m_numuCC_numode:
+# OffAxis25.75m_numuCC_numode:
+# OffAxis26.25m_numuCC_numode:
+# OffAxis28m_numuCC_numode:
+# OffAxis28.25m_numuCC_numode:
+# OffAxis28.5m_numuCC_numode:
+
+SampleHandlerName: "OffAxisND"
+
+SampleType: "OffAxisND"
+
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
+
+BinningFile: "Configs/TutorialConfigs/TutorialBinning.yaml"
+
+# NuOsc:
+#   NuOscConfigFile: "Configs/NuOsc/NuFASTLinear.yaml"
+#   EqualBinningPerOscChannel: true
+
+
+InputFiles:
+  #CovarianceMatrix: ["bla.root", "NDCovMatrix"]
+
+Samples: ["OffAxis0m_numuCC_numode","OffAxis1.75m_numuCC_numode","OffAxis2m_numuCC_numode","OffAxis4m_numuCC_numode","OffAxis5.75m_numuCC_numode","OffAxis8m_numuCC_numode","OffAxis9.75m_numuCC_numode","OffAxis12m_numuCC_numode","OffAxis13.75m_numuCC_numode","OffAxis16m_numuCC_numode","OffAxis17.75m_numuCC_numode","OffAxis20m_numuCC_numode","OffAxis21.75m_numuCC_numode","OffAxis24m_numuCC_numode","OffAxis25.75m_numuCC_numode","OffAxis26.25m_numuCC_numode","OffAxis28.25m_numuCC_numode","OffAxis28.5m_numuCC_numode"]
+
+OffAxis0m_numuCC_numode:
+  SampleTitle: "OffAxis0m_numuCC_numode"
+
+  POT: 5.5e+20
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr : [ "RecoNeutrinoEnergy"]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.2, 3.4, 3.6, 3.8, 4.0, 4.5, 5.0, 6.0, 7, 8, 9, 10]]
+    Uniform: True
+
+  InputFiles:
+    mtupleprefix: ""
+    mtuplesuffix: ""
+    splineprefix: ""
+    splinesuffix: ".root"
+
+  SubSamples:
+  - Name: "OnAxis_numuCC_numode1"
+    LatexName: "On Axis Numu CC Neutrino Mode"
+    mtuplefile: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/CAFv7_0m_13*_FHC.root"
+    splinefile: ""
+    nutype: 14
+    oscnutype: 14
+
+
+OffAxis1.75m_numuCC_numode:
+  SampleTitle: "OffAxis1.75m_numuCC_numode"
+
+  POT: 3.24e+19
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr : [ "RecoNeutrinoEnergy" ]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.2, 3.4, 3.6, 3.8, 4.0, 4.5, 5.0, 6.0, 7, 8, 9, 10]]
+    Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ".root"
+
+  SubSamples:
+    - Name: "OnAxis_numuCC_numode1"
+      LatexName: "On Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_1.75m_0*"
+      splinefile: ""
+
+OffAxis2m_numuCC_numode:
+  SampleTitle: "OffAxis2m_numuCC_numode"
+
+  POT: 3.24e+19
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr: [ "RecoNeutrinoEnergy" ]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.2, 3.4, 3.6, 3.8, 4.0, 4.5, 5.0, 6.0, 7, 8, 9, 10]]
+    Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ".root"
+
+  SubSamples:
+    - Name: "OffAxis2m_numuCC_numode"
+      LatexName: "2 m Off Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_2m_subset1*"
+      splinefile: ""
+
+OffAxis4m_numuCC_numode:
+  SampleTitle: "OffAxis4m_numuCC_numode"
+
+  POT: 3.24e+19
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr: [ "RecoNeutrinoEnergy" ]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.2, 3.4, 3.6, 3.8, 4.0, 4.5, 5.0, 6.0, 7, 8, 9, 10]]
+    Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ".root"
+
+  SubSamples:
+    - Name: "OffAxis4m_numuCC_numode"
+      LatexName: "4 m Off Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_4m_subset2*"
+      splinefile: ""
+
+OffAxis5.75m_numuCC_numode:
+  SampleTitle: "OffAxis5.75m_numuCC_numode"
+
+  POT: 3.24e+19
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr: [ "RecoNeutrinoEnergy" ]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.2, 3.4, 3.6, 3.8, 4.0, 4.5, 5.0, 6.0, 7, 8, 9, 10]]
+    Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ".root"
+
+  SubSamples:
+    - Name: "OffAxis5.75m_numuCC_numode"
+      LatexName: "5.75 m Off Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_5.75m_0*"
+      splinefile: ""
+
+OffAxis8m_numuCC_numode:
+  SampleTitle: "OffAxis8m_numuCC_numode"
+
+  POT: 3.24e+19
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr: [ "RecoNeutrinoEnergy" ]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.2, 3.4, 3.6, 3.8, 4.0, 4.5, 5, 5.5, 6.0, 8, 10]]
+    Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ".root"
+
+  SubSamples:
+    - Name: "OffAxis8m_numuCC_numode"
+      LatexName: "8 m Off Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_8m_subset1*"
+      splinefile: ""
+
+OffAxis9.75m_numuCC_numode:
+  SampleTitle: "OffAxis9.75m_numuCC_numode"
+
+  POT: 3.24e+19
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr: [ "RecoNeutrinoEnergy" ]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.5, 4.0, 4.5, 5, 6.0, 8, 10]]
+    Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ".root"
+
+  SubSamples:
+    - Name: "OffAxis9.75m_numuCC_numode"
+      LatexName: "9.75 m Off Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_9.75m_0*"
+      splinefile: ""
+
+OffAxis12m_numuCC_numode:
+  SampleTitle: "OffAxis12m_numuCC_numode"
+
+  POT: 3.24e+19
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr: [ "RecoNeutrinoEnergy" ]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.5, 4.0, 4.5, 5, 6.0, 8, 10]]
+    Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ".root"
+
+  SubSamples:
+    - Name: "OffAxis12m_numuCC_numode"
+      LatexName: "12 m Off Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_12m_subset*"
+      splinefile: ""
+
+OffAxis13.75m_numuCC_numode:
+  SampleTitle: "OffAxis13.75m_numuCC_numode"
+
+  POT: 3.24e+19
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr: [ "RecoNeutrinoEnergy" ]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.5, 4.0, 4.5, 5, 6.0, 8, 10]]
+    Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ".root"
+
+  SubSamples:
+    - Name: "OffAxis13.75m_numuCC_numode"
+      LatexName: "13.75 m Off Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_13.75m_*"
+      splinefile: ""
+
+OffAxis16m_numuCC_numode:
+  SampleTitle: "OffAxis16m_numuCC_numode"
+
+  POT: 3.24e+19
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr: [ "RecoNeutrinoEnergy" ]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.5, 4.0, 4.5, 5, 6.0, 8, 10]]
+    Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ".root"
+
+  SubSamples:
+    - Name: "OffAxis16m_numuCC_numode"
+      LatexName: "16 m Off Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_16m_subset*"
+      splinefile: ""
+
+OffAxis17.75m_numuCC_numode:
+  SampleTitle: "OffAxis17.75m_numuCC_numode"
+
+  POT: 3.24e+19
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr: [ "RecoNeutrinoEnergy" ]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.5, 4.0, 4.5, 5, 6.0, 8, 10]]
+    Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ".root"
+
+  SubSamples:
+    - Name: "OffAxis17.75m_numuCC_numode"
+      LatexName: "17.75 m Off Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_17.75m_0*"
+      splinefile: ""
+
+OffAxis20m_numuCC_numode:
+  SampleTitle: "OffAxis20m_numuCC_numode"
+
+  POT: 3.24e+19
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr: [ "RecoNeutrinoEnergy" ]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.5, 4.0, 5, 6.0, 8, 10]]
+    Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ".root"
+
+  SubSamples:
+    - Name: "OffAxis20m_numuCC_numode"
+      LatexName: "20 m Off Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_20m_subset*"
+      splinefile: ""
+
+OffAxis21.75m_numuCC_numode:
+  SampleTitle: "OffAxis21.75m_numuCC_numode"
+
+  POT: 3.24e+19
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr: [ "RecoNeutrinoEnergy" ]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.5, 4.0,  5, 6.0, 8, 10]]
+    Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ".root"
+
+  SubSamples:
+    - Name: "OffAxis21.75m_numuCC_numode"
+      LatexName: "21.75 m Off Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_21.75m_*"
+      splinefile: ""
+
+OffAxis24m_numuCC_numode:
+  SampleTitle: "OffAxis24m_numuCC_numode"
+
+  POT: 3.24e+19
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr: [ "RecoNeutrinoEnergy" ]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.5, 4.0, 5, 6.0, 8, 10]]
+    Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ".root"
+
+  SubSamples:
+    - Name: "OffAxis24m_numuCC_numode"
+      LatexName: "24 m Off Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_24m_subset28"
+      splinefile: ""
+
+OffAxis25.75m_numuCC_numode:
+  SampleTitle: "OffAxis25.75m_numuCC_numode"
+
+  POT: 3.24e+19
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr: [ "RecoNeutrinoEnergy" ]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.5, 4.0,  5, 6.0, 8, 10]]
+    Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ""
+
+  SubSamples:
+    - Name: "OffAxis25.75m_numuCC_numode"
+      LatexName: "25.75 m Off Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_25.75m_*"
+      splinefile: ""
+
+OffAxis26.25m_numuCC_numode:
+  SampleTitle: "OffAxis26.25m_numuCC_numode"
+
+  POT: 3.24e+19
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr: [ "RecoNeutrinoEnergy" ]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.5, 4.0,  5, 6.0, 8, 10]]
+    Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ".root"
+
+  SubSamples:
+    - Name: "OffAxis26.25m_numuCC_numode"
+      LatexName: "26.25 m Off Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_26.25m_*"
+      splinefile: ""
+
+
+OffAxis28.25m_numuCC_numode:
+  SampleTitle: "OffAxis28.25m_numuCC_numode"
+
+  POT: 3.24e+19
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr: [ "RecoNeutrinoEnergy" ]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.5, 4.0,  5, 6.0, 8, 10]]
+    Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ""
+
+  SubSamples:
+    - Name: "OffAxis28.25m_numuCC_numode"
+      LatexName: "28.25 m Off Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_28.25m_*"
+      splinefile: ""
+
+OffAxis28.5m_numuCC_numode:
+  SampleTitle: "OffAxis28.5m_numuCC_numode"
+
+  POT: 3.24e+19
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr: [ "RecoNeutrinoEnergy" ]
+    VarBins: [[0, 0.15, 0.325, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.5, 4.0, 5, 6.0, 8, 10]]
+    Uniform: true
+
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ".root"
+
+  SubSamples:
+    - Name: "OffAxis28.5m_numuCC_numode"
+      LatexName: "28.5 m Off Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_28.5m_*"
+      splinefile: ""
