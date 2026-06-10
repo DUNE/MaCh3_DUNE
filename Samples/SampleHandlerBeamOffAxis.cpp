@@ -9,20 +9,30 @@
 
 namespace dune::beamoffaxis {
 
-SampleHandlerBeamOffAxis::SampleHandlerBeamOffAxis(
+  SampleHandlerBeamOffAxis::SampleHandlerBeamOffAxis(
     std::string mc_version_, ParameterHandlerGeneric *ParHandler_,
     const std::shared_ptr<OscillationHandler> &Oscillator_)
     : SampleHandlerFD(mc_version_, ParHandler_, Oscillator_) {
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
-
-  // when this works, set penalty term
-  // BuildRegularisationMatrix(ParHandler);
-  //  static_cast<ParameterHandlerRegularised *>(ParHandler_)->penalty =
-  //  [=](){};
-
   Initialise();
 }
+
+
+// SampleHandlerBeamOffAxis::SampleHandlerBeamOffAxis(
+//     std::string mc_version_, ParameterHandlerGeneric *ParHandler_,
+//     const std::shared_ptr<OscillationHandler> &Oscillator_)
+//     : SampleHandlerFD(mc_version_, ParHandler_, Oscillator_) {
+//   KinematicParameters = &KinematicParametersDUNE;
+//   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
+
+//   // when this works, set penalty term
+//   // BuildRegularisationMatrix(ParHandler);
+//   //  static_cast<ParameterHandlerRegularised *>(ParHandler_)->penalty =
+//   //  [=](){};
+
+//   Initialise();
+// }
 
 void SampleHandlerBeamOffAxis::Init() {
   subsample_analysispot.resize(GetNsamples());
@@ -37,52 +47,16 @@ void SampleHandlerBeamOffAxis::Init() {
   }
 
   if (SampleManager->raw()["InputFiles"]["CovarianceMatrix"]) {
-    
     auto cvmx_details = Get<std::vector<std::string>>(
         SampleManager->raw()["InputFiles"]["CovarianceMatrix"], __FILE__,
         __LINE__);
 
-    
-
     TFile cvmx_file(cvmx_details[0].c_str(), "READ");
-    //auto *rcvmx = cvmx_file.Get<TMatrixD>(cvmx_details[1].c_str());
-    auto *rcvmx = cvmx_file.Get<TMatrixT<double>>(cvmx_details[1].c_str());
-    if (!rcvmx) {
-      std::cout << "FAILED to load covariance matrix!" << std::endl;
-      std::cout << "File: " << cvmx_details[0] << std::endl;
-      std::cout << "Object: " << cvmx_details[1] << std::endl;
-
-      MACH3LOG_ERROR("Covariance matrix not found in ROOT file");
-      throw MaCh3Exception(__FILE__, __LINE__);
-  }
+    auto *rcvmx = cvmx_file.Get<TMatrixD>(cvmx_details[1].c_str());
 
     cvmx = Eigen::Map<Eigen::MatrixXd>(rcvmx->GetMatrixArray(),
                                        rcvmx->GetNrows(), rcvmx->GetNcols());
 
-
-    std::cout << "cvmx finite: " << cvmx.allFinite() << std::endl;
-    std::cout << "min diagonal: "
-              << cvmx.diagonal().minCoeff() << std::endl;
-    std::cout << "max diagonal: "
-              << cvmx.diagonal().maxCoeff() << std::endl;
-    std::cout << "determinant: "
-              << cvmx.determinant() << std::endl;
-        icvmx = cvmx.inverse();
-    // After loading cvmx, before inverting:
-Eigen::JacobiSVD<Eigen::MatrixXd> svd(cvmx);
-double cond = svd.singularValues()(0) / 
-              svd.singularValues()(svd.singularValues().size()-1);
-
-std::cout << "Condition number: " << cond << std::endl;
-
-if (cond > 1e10) {  // Threshold for near-singularity
-    MACH3LOG_ERROR("Covariance matrix is singular or near-singular!");
-    MACH3LOG_ERROR("Condition number: {}", cond);
-    throw MaCh3Exception(__FILE__, __LINE__);
-}
-
-icvmx = cvmx.inverse();
-        
     MACH3LOG_INFO("Using ND Covariance Matrix({},{}):", cvmx.rows(),
                   cvmx.cols());
     std::stringstream ss;
@@ -221,6 +195,10 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
     TChain MetaChain("meta");
     TChain CAFChain("cafTree");
     for (const std::string &filename : SampleDetails[iSubSample].mc_files) {
+      if (filename.empty()) {
+        MACH3LOG_INFO("-- -- Skipping empty filename entry");
+        continue;
+    }
       MACH3LOG_INFO("-- -- Adding file to TChain: {}", filename);
       if (!CAFChain.Add(filename.c_str(), -1)) {
         MACH3LOG_ERROR("Could not add file {} to TChain, please check the file "
@@ -315,5 +293,148 @@ void SampleHandlerBeamOffAxis::SetupFDMC() {
     iEvent++;
   }
 }
+
+void SampleHandlerBeamOffAxis::BuildRegularisationMatrix(
+    ParameterHandlerRegularised *RegParHandler, double lambda) {
+
+  MACH3LOG_INFO("Building Regularisation matrix "
+                "with penalty term = {}", lambda);
+
+  struct TemplateParameterBins { //struct for each template parameter (Etrue,enubias)
+    int index;
+    double enu_lo, enu_hi;
+    double enubias_lo, enubias_hi;
+  };
+
+  std::vector<TemplateParameterBins> template_parameters; //vector of all the template parameters
+
+  auto normPars = RegParHandler->GetNormParsFromSampleName(SampleHandlerName); //find them all
+  for (auto const &np : normPars) {
+    if (!RegParHandler->IsParFromGroup(np.index, "Xsec")) continue;
+
+    double enu_lo = -1e10, enu_hi = 1e10;
+    double enubias_lo = -1e10, enubias_hi = 1e10;
+
+    for (size_t iVar = 0; iVar < np.KinematicVarStr.size(); ++iVar) {
+      if (np.KinematicVarStr[iVar] == "TrueNeutrinoEnergy") {
+        enu_lo = np.Selection[iVar][0][0];
+        enu_hi = np.Selection[iVar][0][1];
+      } else if (np.KinematicVarStr[iVar] == "Enubias") {
+        enubias_lo = np.Selection[iVar][0][0];
+        enubias_hi = np.Selection[iVar][0][1];
+      }
+    }
+
+    template_parameters.push_back({np.index, enu_lo, enu_hi, enubias_lo, enubias_hi});
+  }
+
+  if (template_parameters.empty()) {
+    MACH3LOG_WARN("BuildRegularisationMatrix: no Xsec Norm parameters found, "
+                  "regularisation will be zero");
+    return;
+  }
+
+  MACH3LOG_INFO("  Found {} Xsec Normalisation parameters", template_parameters.size());
+
+  auto round6 = [](double x) { return std::round(x * 1e6) / 1e6; };
+
+  std::set<double> enu_edges_set, enubias_edges_set;
+  for (auto const &p : template_parameters) {
+    enu_edges_set.insert(round6(p.enu_lo));
+    enubias_edges_set.insert(round6(p.enubias_lo));
+  }
+
+  std::vector<double> enu_edges(enu_edges_set.begin(), enu_edges_set.end());
+  std::vector<double> enubias_edges(enubias_edges_set.begin(), enubias_edges_set.end());
+
+  int nEnu     = int(enu_edges.size());
+  int nEnubias = int(enubias_edges.size());
+
+  MACH3LOG_INFO("  Found {} True Neutrino Energy bins and {} Enubias bins", nEnu, nEnubias);
+
+  auto edge_index = [&](std::vector<double> const &edges, double val) {
+    auto it = std::lower_bound(edges.begin(), edges.end(), round6(val));
+    if (it == edges.end()) {
+      MACH3LOG_ERROR("Could not find bin edge {} in sorted edges", val);
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+    return int(std::distance(edges.begin(), it));
+  };
+
+  struct IndexOfTemplateParam { int index, iEnuTrue, iEnuTruebias; };
+  std::vector<IndexOfTemplateParam> indexed;
+  indexed.reserve(template_parameters.size());
+
+  for (auto const &p : template_parameters) {
+    indexed.push_back({p.index,
+                       edge_index(enu_edges,     p.enu_lo),
+                       edge_index(enubias_edges, p.enubias_lo)});
+  }
+
+  // Build first-difference penalty matrix R = D^T D
+  int nTotal = RegParHandler->GetNumParams();
+  Eigen::MatrixXd R = Eigen::MatrixXd::Zero(nTotal, nTotal);
+
+  std::map<std::pair<int,int>, int> bin_to_global;
+  for (auto const &ip : indexed) {
+    bin_to_global[{ip.iEnuTrue, ip.iEnuTruebias}] = ip.index;
+  }
+
+  int n_pairs = 0;
+  for (int iEnuTruebias = 0; iEnuTruebias < nEnubias; ++iEnuTruebias) {
+    for (int iEnuTrue = 0; iEnuTrue < nEnu - 1; ++iEnuTrue) {
+      auto it_lo = bin_to_global.find({iEnuTrue,     iEnuTruebias});
+      auto it_hi = bin_to_global.find({iEnuTrue + 1, iEnuTruebias});
+
+      if (it_lo == bin_to_global.end() || it_hi == bin_to_global.end()) continue;
+
+      int gi = it_lo->second;
+      int gj = it_hi->second;
+
+      R(gi, gi) += 1.0;
+      R(gj, gj) += 1.0;
+      R(gi, gj) -= 1.0;
+      R(gj, gi) -= 1.0;
+      ++n_pairs;
+    }
+  }
+
+  
+RegParHandler->SetPenalty(
+    [R = std::move(R), lambda, nTotal](std::vector<double> const &propVal) {
+      std::size_t counter = 0;
+        Eigen::VectorXd shift(nTotal);
+        for (int i = 0; i < nTotal; ++i) {
+            shift(i) = propVal[i] - 1.0;
+        }
+        double penalty = 0.5 * lambda * double(shift.transpose() * R * shift);
+        ++counter;
+        if (counter % 100000 == 0) {
+            MACH3LOG_INFO(
+                "Regularisation penalty at call {} = {:.4f}",
+                counter, penalty);
+        }
+        //MACH3LOG_INFO("Regularisation penalty = {:.4f}", pen);
+        return penalty;
+    });
+}
+
+
+
+//SampleHandlerBeamOffAxis::SampleHandlerBeamOffAxis(
+//     std::string mc_version_, ParameterHandlerGeneric *ParHandler_,
+//     const std::shared_ptr<OscillationHandler> &Oscillator_)
+//     : SampleHandlerFD(mc_version_, ParHandler_, Oscillator_) {
+//   KinematicParameters = &KinematicParametersDUNE;
+//   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
+
+//   // Uncomment now that BuildRegularisationMatrix is implemented
+//   if (auto *regHandler =
+//           dynamic_cast<ParameterHandlerRegularised *>(ParHandler_)) {
+//     BuildRegularisationMatrix(regHandler);
+//   }
+
+//   Initialise();
+// }
 
 } // namespace dune::beamoffaxis

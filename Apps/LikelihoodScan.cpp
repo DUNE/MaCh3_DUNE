@@ -38,7 +38,10 @@ int main(int argc, char * argv[]) {
 
   //###############################################################################################################################
   //Perform reweight, print total integral, and set data
+  int idx = xsec->GetParIndex("MissingProtonFD");
 
+  //xsec->SetSingleParameter(idx, 0.2);
+  //xsec->SetFixParameter(idx);
   std::vector<TH1*> DUNEHists;
   for(auto handler : DUNEPdfs){
     for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
@@ -67,6 +70,7 @@ int main(int argc, char * argv[]) {
   
   if (do_1d_llhscan) {
     MaCh3Fitter->RunLLHScan();
+    MaCh3Fitter->GetStepScaleBasedOnLLHScan();
   }
   if (do_2d_llhscan) {
     MaCh3Fitter->Run2DLLHScan();

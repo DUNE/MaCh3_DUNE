@@ -513,7 +513,7 @@ TH1D* MakePosteriorPredictiveHist(
     // Create a new histogram for this posterior predictive
     TString histName = Form("posterior_predictive_%s", pdf->GetName());
     // Get the PDF histogram
-    TH1* h_pdf = pdf->GetMCHist(1);
+    TH1* h_pdf = pdf->GetMCHist(0);
     if (!h_pdf) {
         std::cerr << "PDF has no 1D histogram!" << std::endl;
         return nullptr;
@@ -1202,15 +1202,35 @@ int main(int argc, char* argv[]) {
 
 
     // Setup xsec branch reading
+    // int nParams = 0;
+    // TObjArray* branches = post->GetListOfBranches();
+    // for (int i = 0; i < branches->GetEntries(); ++i) {
+    //     std::string name = branches->At(i)->GetName();
+    //     if (name.rfind("param_", 0) == 0) {
+    //         int idx = std::stoi(name.substr(5));
+    //         nParams = std::max(nParams, idx + 1);
+    //     }
+    // }
+
+    // Count nParams
     int nParams = 0;
     TObjArray* branches = post->GetListOfBranches();
-    for (int i = 0; i < branches->GetEntries(); ++i) {
-        std::string name = branches->At(i)->GetName();
-        if (name.rfind("xsec_", 0) == 0) {
-            int idx = std::stoi(name.substr(5));
-            nParams = std::max(nParams, idx + 1);
+for (int i = 0; i < branches->GetEntries(); ++i) {
+    std::string name = branches->At(i)->GetName();
+    if (name.rfind("param_", 0) == 0) {  // changed from "xsec_"
+        std::string suffix = name.substr(6);  // changed from 5
+        try {
+            size_t pos;
+            int idx = std::stoi(suffix, &pos);
+            if (pos == suffix.size()) {
+                nParams = std::max(nParams, idx + 1);
+            }
+        } catch (const std::invalid_argument&) {
+            std::cout << "[Info] Skipping non-numeric param branch: " << name << "\n";
         }
     }
+}
+std::cout << "[Info] Found " << nParams << " param_* parameters\n";
 
     std::vector<double> xsec_vals(nParams, 0.0);
     std::vector<double*> xsec_ptrs(nParams);
@@ -1219,7 +1239,7 @@ int main(int argc, char* argv[]) {
     post->SetBranchStatus("*", 0);
     // Enable ALL xsec_* for predictive sampling correctness
     for (int i = 0; i < nParams; ++i) {
-        std::string bname = "xsec_" + std::to_string(i);
+        std::string bname = "param_" + std::to_string(i);
         post->SetBranchStatus(bname.c_str(), 1);
         post->SetBranchAddress(bname.c_str(), xsec_ptrs[i]);
     }
@@ -1267,18 +1287,19 @@ int main(int argc, char* argv[]) {
     int nSamples = 1000; // how many random samples
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<Long64_t> dis(0, nEntries-1);
+    
     //int burnIn = 0.1 * nEntries;
     int burnIn = FitManager->raw()["General"]["MCMC"]["BurnInSteps"].as<int>();
+    std::uniform_int_distribution<Long64_t> dis(burnIn, nEntries-1);
 
     if(burnIn < 1000){
         std::cout << "BurnInSteps not set in config or looks to small..." << std::endl;
-       int burnIn = 0.2 * nEntries;
+       burnIn = 0.2 * nEntries;
     }
     std::vector<PosteriorSample> posteriorSamples;
     posteriorSamples.reserve(nSamples);
 
-    for (int i = burnIn; i < nSamples; ++i) {
+    for (int i = 0; i < nSamples; ++i){
         Long64_t idx = dis(gen);
         post->GetEntry(idx);
 

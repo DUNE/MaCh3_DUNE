@@ -12,6 +12,7 @@ foreach(app
 	SplineMaker
 	# SigmaVarTutorial
 	MakeCovarianceMatrix
+	RegularisationImpact
       )
 
     add_executable(${app} ${app}.cpp)

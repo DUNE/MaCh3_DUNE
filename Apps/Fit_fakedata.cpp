@@ -14,6 +14,10 @@
 
 #include "Fitters/MaCh3Factory.h"
 #include "Samples/MaCh3DUNEFactory.h"
+#include "Parameters/ParameterHandlerRegularised.h"
+#include "Samples/SampleHandlerBeamOffAxis.h"
+#include "Samples/SampleHandlerBeamOffAxis.h"
+using dune::beamoffaxis::SampleHandlerBeamOffAxis;
 
 int main(int argc, char * argv[]) {
 
@@ -27,7 +31,20 @@ int main(int argc, char * argv[]) {
 
   std::vector<SampleHandlerFD*> DUNEPdfs;
   MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
-
+  if (auto* xsecReg = dynamic_cast<ParameterHandlerRegularised*>(xsec)) {
+    if (FitManager->raw()["General"]["BeamOffAxisRegularisation"]) {
+        double lambda = FitManager->raw()["General"]["BeamOffAxisRegularisation"]["Lambda"].as<double>();
+        for (auto* handler : DUNEPdfs) {
+            if (auto* boaHandler = dynamic_cast<SampleHandlerBeamOffAxis*>(handler)) {
+                boaHandler->BuildRegularisationMatrix(xsecReg, lambda);
+            }
+        }
+    } else {
+        MACH3LOG_WARN("No BeamOffAxisRegularisation config found, skipping regularisation");
+    }
+} else {
+    MACH3LOG_ERROR("xsec is not a ParameterHandlerRegularised - regularisation will not be applied");
+}
   //Some place to store the histograms
   std::vector<TH1*> PredictionHistograms;
   std::vector<std::string> sample_names;
@@ -75,8 +92,10 @@ int main(int argc, char * argv[]) {
     // xsec->ToggleFixParameter("MissingProtonFD");
     // xsec->SetPar(mpeIdx,0.2);
     
-  //xsec->SetPar(xsec->GetParIndex("MissingProtonFD"), 0);
-  //xsec->ToggleFixParameter("MissingProtonFD");
+
+  std::cout<< "Reset Missing Proton Syst before fit"<< std::endl;
+  xsec->SetPar(xsec->GetParIndex("MissingProtonFD"), 0);
+  xsec->ToggleFixParameter("MissingProtonFD");
    for (unsigned iPDF = 0; iPDF < DUNEPdfs.size() ; ++iPDF) {
     MACH3LOG_INFO("Integrals of nominal hists: ");
     MACH3LOG_INFO("{} : {}",sample_names[iPDF].c_str(),PredictionHistograms[iPDF]->Integral());
@@ -105,8 +124,6 @@ int main(int argc, char * argv[]) {
     }
   }
  
-    
-
   //Add systematic objects
   MaCh3Fitter->AddSystObj(xsec);
   
@@ -153,8 +170,19 @@ int main(int argc, char * argv[]) {
     }
     std::cout << std::endl;
   }
-   xsec->SetSingleParameter(idx, 0.0);
+  std::cout<< "Set Fake data syst to 0 and fix before fit, new integrals are:" << std::endl;
+  xsec->SetSingleParameter(idx, 0.0);
   xsec->SetFixParameter(idx);
+ 
+   for (unsigned iPDF = 0; iPDF < DUNEPdfs.size(); ++iPDF) {
+  DUNEPdfs[iPDF]->Reweight();
+  MACH3LOG_INFO("Integrals after reset to 0:");
+  for (unsigned iSample = 0; iSample < DUNEPdfs[iPDF]->GetNsamples(); ++iSample) {
+    MACH3LOG_INFO("{} : {}", DUNEPdfs[iPDF]->GetSampleTitle(iSample),
+                  DUNEPdfs[iPDF]->GetMCHist(iSample)->Integral());
+  }
+  MACH3LOG_INFO("--------------");
+}
 
   //Run fit
   MaCh3Fitter->RunMCMC();

@@ -1,150 +1,94 @@
 #pragma once
 
 #include "Splines/BinnedSplineHandlerDUNE.h"
-
 #include "Samples/SampleHandlerFD.h"
-
 #include "Samples/BeamOffAxis/EventInfo.h"
 #include "Samples/BeamOffAxis/Projections.h"
 #include "Samples/BeamOffAxis/Utility.h"
+#include "Parameters/ParameterHandlerRegularised.h"
 
 _MaCh3_Safe_Include_Start_ //{
 #include "Eigen/Dense"
-    _MaCh3_Safe_Include_End_ //}
+_MaCh3_Safe_Include_End_ //}
 
-    namespace dune::beamoffaxis {
+namespace dune::beamoffaxis {
 
-  /// @brief Base class for handling FD Beam samples
-  class SampleHandlerBeamOffAxis : public SampleHandlerFD {
-  public:
-    /// @brief SampleHandler FD beam Constructor
-    /// @param mc_version Config Name
-    /// @param xsec_cov Cross-section covariance matrix
-    /// @param osc_cov Oscillation covariance matrix
-    /// @param Oscillator_ Shared Oscillation Handler object
-    SampleHandlerBeamOffAxis(
-        std::string mc_version, ParameterHandlerGeneric *xsec_cov,
-        const std::shared_ptr<OscillationHandler> &Oscillator);
+class SampleHandlerBeamOffAxis : public SampleHandlerFD {
+public:
+  SampleHandlerBeamOffAxis(
+      std::string mc_version, ParameterHandlerGeneric *xsec_cov,
+      const std::shared_ptr<OscillationHandler> &Oscillator);
 
-    /// @brief destructor
-    ~SampleHandlerBeamOffAxis() {}
+  ~SampleHandlerBeamOffAxis() {}
 
-    std::vector<double> ReturnKinematicParameterBinning(
-        const int iSubSample,
-        const std::string &KinematicParameter) const override {
-      return SampleHandlerFD::ReturnKinematicParameterBinning(
-          iSubSample, KinematicParameter);
+  void BuildRegularisationMatrix(ParameterHandlerRegularised *ParHandler, double lambda);
+
+  std::vector<double> ReturnKinematicParameterBinning(
+      const int iSubSample,
+      const std::string &KinematicParameter) const override {
+    return SampleHandlerFD::ReturnKinematicParameterBinning(
+        iSubSample, KinematicParameter);
+  }
+
+  friend std::vector<std::vector<std::vector<std::vector<std::unique_ptr<TH1>>>>>
+  GetBinnedWeights(SampleHandlerBeamOffAxis &sample, int iSubSample,
+                   std::vector<std::string> ParamNames,
+                   std::vector<std::vector<int>> ParamModes,
+                   std::vector<double> TrueEBins);
+
+  std::vector<dune::beamoffaxis::EventInfo> DUNEMCEvents;
+  std::vector<double> subsample_analysispot;
+  std::vector<bool> subsample_is_numode;
+
+  mutable Eigen::MatrixXd cvmx;
+  mutable Eigen::MatrixXd icvmx;
+
+  void CleanMemoryBeforeFit() {}
+
+protected:
+  void Init() override;
+  int SetupExperimentMC() override;
+  void SetupFDMC() override;
+  void AddAdditionalWeightPointers() override;
+  void SetupSplines() override;
+  void RegisterFunctionalParameters() override;
+  void ResetShifts(int iEvent) override;
+  void FinaliseShifts(int iEvent) override;
+
+  double ReturnKinematicParameter(dune::beamoffaxis::KinematicTypes KinPar, int iEvent);
+  double ReturnKinematicParameter(int KinematicVariable, int iEvent);
+  double ReturnKinematicParameter(std::string KinematicParameter, int iEvent);
+
+  const double *GetPointerToKinematicParameter(dune::beamoffaxis::KinematicTypes KinPar, int iEvent);
+  const double *GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent);
+  const double *GetPointerToKinematicParameter(double KinematicVariable, int iEvent);
+
+  double GetLikelihood() const override {
+    if (!cvmx.size()) {
+      return SampleHandlerFD::GetLikelihood();
     }
 
-    friend std::vector<
-        std::vector<std::vector<std::vector<std::unique_ptr<TH1>>>>>
-    GetBinnedWeights(SampleHandlerBeamOffAxis &sample, int iSubSample,
-                     std::vector<std::string> ParamNames,
-                     std::vector<std::vector<int>> ParamModes,
-                     std::vector<double> TrueEBins);
+    Eigen::Map<Eigen::VectorXd const> data(SampleHandlerFD_data.data(),
+                                           SampleHandlerFD_data.size());
+    Eigen::Map<Eigen::VectorXd const> mc(SampleHandlerFD_array.data(),
+                                         SampleHandlerFD_array.size());
 
-  protected:
-    /// @brief Initialises object
-    void Init() override;
-
-    /// @brief Function to setup MC from file
-    /// @return Total number of events
-    int SetupExperimentMC() override;
-
-    /// @brief Tells FD base which variables to point to/be set to
-    void SetupFDMC() override;
-
-    void AddAdditionalWeightPointers() override;
-    void SetupSplines() override;
-    void RegisterFunctionalParameters() override;
-    void ResetShifts(int iEvent) override;
-    void FinaliseShifts(int iEvent) override;
-
-    /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-    /// @param KinematicVariable Kinematic parameter Type
-    /// @param iEvent Event ID
-    /// @return Value of kinematic parameter corresponding for a given event
-    double ReturnKinematicParameter(dune::beamoffaxis::KinematicTypes KinPar,
-                                    int iEvent);
-
-    /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-    /// @param KinematicVariable Kinematic parameter ID as int
-    /// @param iEvent Event ID
-    /// @return Value of kinematic parameter corresponding for a given event
-    double ReturnKinematicParameter(int KinematicVariable, int iEvent);
-
-    /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-    /// @param KinematicParameter Kinematic parameter name as string (gets cast
-    /// -> int)
-    /// @param iEvent Event ID
-    /// @return Value of kinematic parameter corresponding for a given event
-    double ReturnKinematicParameter(std::string KinematicParameter, int iEvent);
-
-    /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-    /// @param KinPar Kinematic Parameter Type
-    /// @param iEvent Event ID
-    /// @return Pointer to KinPar for a given event
-    const double *
-    GetPointerToKinematicParameter(dune::beamoffaxis::KinematicTypes KinPar,
-                                   int iEvent);
-
-    /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-    /// @param KinematicParameter Kinematic parameter name as string (gets cast
-    /// -> int)
-    /// @param iEvent Event ID
-    /// @return Pointer to KinPar for a given event
-    const double *GetPointerToKinematicParameter(std::string KinematicParameter,
-                                                 int iEvent);
-
-    /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-    /// @param KinematicVariable Kinematic parameter as double (gets cast ->
-    /// int)
-    /// @param iEvent Event ID
-    /// @return Pointer to KinPar for a given event
-    const double *GetPointerToKinematicParameter(double KinematicVariable,
-                                                 int iEvent);
-
-    double GetLikelihood() const override {
-        //std::cout<<"in get likelihood..."<<std::endl;
-      if (!icvmx.size()) {
-        return SampleHandlerFD::GetLikelihood();
-      }
-
-      //Map allows use of Eigen linear algebra syntax without copying the data out of the vectors.
-      Eigen::Map<Eigen::VectorXd const> data(SampleHandlerFD_data.data(),
-                                             SampleHandlerFD_data.size());
-      Eigen::Map<Eigen::VectorXd const> mc(SampleHandlerFD_array.data(),
-                                           SampleHandlerFD_array.size());
-
-      if (icvmx.rows() != data.size()) {
-        MACH3LOG_ERROR("Inverse covariance matrix ({}x{}) is not correct for "
+    if (!icvmx.size()) {
+      if (cvmx.rows() != data.size()) {
+        MACH3LOG_ERROR("Covariance matrix ({}x{}) is not correct for "
                        "data array size: {}",
                        icvmx.rows(), icvmx.cols(), data.rows());
         throw MaCh3Exception(__FILE__, __LINE__);
       }
-
-      std::cout << "data has NaN: " << (!data.allFinite()) << std::endl;
-      std::cout << "mc has NaN: " << (!mc.allFinite()) << std::endl;
-      std::cout << "icvmx has NaN: " << (!icvmx.allFinite()) << std::endl;
-
-      double lh = (data - mc).transpose() * icvmx * (data - mc);
-      std::cout<< "llh = " << lh << std::endl;
-      return lh;
+      cvmx.diagonal() += mc;
+      icvmx = cvmx.inverse();
     }
 
-    // consider additional regularisation hook?
-    // could add prior penalty for regularisation here or could add
-    // access ParHandler->
+    double lh =  (data - mc).transpose() * icvmx * (data - mc);
 
+    return SampleHandlerFD::GetLikelihood() + lh; //return sample likelihood contribution as well
+  }
 
-    std::vector<dune::beamoffaxis::EventInfo> DUNEMCEvents;
+}; 
 
-    std::vector<double> subsample_analysispot;
-    std::vector<bool> subsample_is_numode;
-
-    Eigen::MatrixXd cvmx, icvmx;
-
-    void CleanMemoryBeforeFit() {}
-  };
-
-} // namespace dune::beamoffaxis
+} 

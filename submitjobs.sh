@@ -228,7 +228,7 @@ WALLTIME=$(echo "${SEC_PER_STEP} * ${NSTEPS} + 1800" | bc)  # 1800 = 30 min setu
 
 # Optional: Cap max walltime to 8 hours (28800 sec) for better scheduling
 #MAX_WALLTIME=28800  #86400 #28800 #86400 #28800
-MAX_WALLTIME=432000 #432000 #172800  # 24 hours
+MAX_WALLTIME=172800 #432000 #432000 #172800  # 24 hours
 if (( $(echo "$WALLTIME > $MAX_WALLTIME" | bc -l) )); then
   echo "⚠️  Walltime capped at 8 hours to improve queue time"
  WALLTIME=$MAX_WALLTIME
@@ -486,7 +486,7 @@ for ((i = 0 ; i < $NCHAINS ; i++)); do
       #echo "This job will wait for job with name: ${OldJobName} with PID: "${PrevJobPID}""
       PrevJobPID=$(squeue -u liban --format="%.18i %.9P %.60j %.8u %.8T %.10M %.9l %.6D %R" | grep "${OldJobName}" | awk '{print $1}')
       if [[ -n "$PrevJobPID" ]]; then
-        qsubopt="--account=def-nilic --time=${WALLTIME_CC} --cpus-per-task=${NTHREADS} --mem=${RAMMB}M --dependency=afterany:${PrevJobPID}"
+        qsubopt="--account=rpp-dune --time=${WALLTIME_CC} --cpus-per-task=${NTHREADS} --mem=${RAMMB}M --dependency=afterany:${PrevJobPID}"
         echo "This job will wait for job with name: ${OldJobName} with PID: ${PrevJobPID}"
       else
   echo "⚠️  No previous job found for ${OldJobName}; submitting without dependency"
