@@ -33,11 +33,15 @@ def get_impacts_fig(impacts, pulls, num_offset=0):
   
   metric_range = max(max_metric - nominal_metric,  nominal_metric - min_metric)
   axs[2].set_xlim(-1.1*metric_range, 1.1*metric_range)
-  #axs[2].set_xlabel(r"$\Delta (n_{\text{IO}} / n_{\text{NO}})$")
-  axs[2].set_xlabel(r"$\Delta \delta_{\text{CP}}$")
-  #axs[2].set_xticks([-metric_range*1.1, 0, metric_range*1.1])
   
-  axs[2].text(0, -0.5, r"$\hat{\delta}_{\text{CP}} = %0.2f$" % nominal_metric, ha="center", va="bottom", fontsize=18)
+  #axs[2].set_xlabel(r"$\Delta \delta_{\text{CP}}$")
+  metric_label = impacts["metric_definition"]["type"]
+  if impacts["metric_definition"]["param"] is not None:
+    metric_label += f"({impacts['metric_definition']['param']})"
+  axs[2].set_xlabel(rf"$\Delta${metric_label}", fontsize=18)
+  
+  #axs[2].text(0, -0.5, r"$\hat{\delta}_{\text{CP}} = %0.2f$" % nominal_metric, ha="center", va="bottom", fontsize=18)
+  axs[2].text(0, -0.5, rf"{metric_label}$ = %0.2f$" % nominal_metric, ha="center", va="bottom", fontsize=18)
   
   for x in [-2, -1, 0, 1, 2]:
     axs[1].axvline(x, color="lightgray", linestyle="--")
@@ -79,7 +83,7 @@ def make_impact_plot(impacts, pulls, save_path=None):
   systs = list(pulls.keys())
   
   with PdfPages(save_path) as pdf:
-    for i in range(0, len(impacts), 15):
+    for i in range(0, len(systs), 15):
       pulls_subset = {systs[j]: pulls[systs[j]] for j in ordering[i:i+15]}
       impacts_subset = {
         "metric_definition": impacts["metric_definition"],
@@ -91,21 +95,7 @@ def make_impact_plot(impacts, pulls, save_path=None):
       
       fig = get_impacts_fig(impacts_subset, pulls_subset, num_offset=i)
       pdf.savefig(fig)
-      plt.close(fig)
-      
-    pulls_subset = {systs[j]: pulls[systs[j]] for j in ordering[i+15:]}
-    impacts_subset = {
-      "metric_definition": impacts["metric_definition"],
-      "metric_values": {
-        "nominal": impacts["metric_values"]["nominal"],
-        "variations": {systs[j]: variations[systs[j]] for j in ordering[i+15:]}
-      }
-    }
-      
-    fig = get_impacts_fig(impacts_subset, pulls_subset, num_offset=i)
-    pdf.savefig(fig)
-    plt.close(fig)
-    
+      plt.close(fig)    
       
 def main(impacts_path, pull_paths, save_path="impacts.pdf"):
   with open(impacts_path, "r") as f:

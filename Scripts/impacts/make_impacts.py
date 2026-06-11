@@ -10,7 +10,6 @@ def main(chain_path, metric_type, metric_param=None, save_path="impacts.json", b
   config = ChainConfig(chain_path)
 
   rdf_all = ROOT.RDataFrame("posteriors", chain_path)
-  ROOT.RDF.Experimental.AddProgressBar(rdf_all)
   rdf = rdf_all.Filter(f"step > {burn_in}")
 
   rdf_nominal = rdf.Define("weight", "1.0")
@@ -18,7 +17,7 @@ def main(chain_path, metric_type, metric_param=None, save_path="impacts.json", b
     "nominal": getattr(metrics, metric_type)(rdf_nominal, metric_param)
   }
 
-  for syst in config.systematics[:20]:
+  for syst in config.systematics[:]:
     mu, sigma = syst["PreFitValue"], syst["Error"]
     mu_up = syst["PreFitValue"] + sigma
     mu_down = syst["PreFitValue"] - sigma
@@ -30,6 +29,8 @@ def main(chain_path, metric_type, metric_param=None, save_path="impacts.json", b
     metrics_pointers[syst["FancyName"]+"_up"] = getattr(metrics, metric_type)(rdf_up, metric_param)
     metrics_pointers[syst["FancyName"]+"_down"] = getattr(metrics, metric_type)(rdf_down, metric_param)
 
+  print("Evaluating metrics...")
+  ROOT.RDF.Experimental.AddProgressBar(rdf_all)
   metrics_values = {k: v.GetValue() for k, v in metrics_pointers.items()}
 
   metric_definition = {
@@ -44,7 +45,7 @@ def main(chain_path, metric_type, metric_param=None, save_path="impacts.json", b
       "variations": {}
     },
   }
-  for syst in config.systematics[:20]:
+  for syst in config.systematics[:]:
     output["metric_values"]["variations"][syst["FancyName"]] = {
       "up": metrics_values[syst["FancyName"]+"_up"],
       "down": metrics_values[syst["FancyName"]+"_down"],
@@ -63,7 +64,7 @@ if __name__ == "__main__":
   parser.add_argument("--burn-in", type=int, default=0)
   args = parser.parse_args()
 
-  ROOT.EnableImplicitMT(16)
+  ROOT.EnableImplicitMT()
   #chain_path = "/home/vol04/scarf1534/Liban/AnaChains/FD_Fit_1000_ktmwyr_dcp_mpi2/HaddedChains/FD_Fit_1000_ktmwyr_dcp_mpi2.root"
   main(args.chain_path, args.metric_type, args.metric_param, args.save_path, args.burn_in)
 
