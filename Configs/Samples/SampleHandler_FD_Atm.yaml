@@ -15,7 +15,7 @@ AnalysisOptions:
 
   # Value (in cm) to separate fully contained (FC) and partially contained (PC) samples. This places a cut on the minimum distance to the TPC wall from all space points in an event.
   # Events are considered FC if all space points are further away from the TPC face than this value.
-  FCPCSeparation: 10.0 
+  FCPCSeparation: 10.0
 
 Samples:
   - Atm_FC_numulike
