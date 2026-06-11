@@ -2,8 +2,9 @@
 SampleHandlerName: "Atm"
 MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
 BinningFile: "Configs/Samples/AtmosphericParameterBinning.yaml"
+
 InputFiles:
-  PrepSplineFile: false
+  FileName: "Inputs/Atmospherics/CAFs/caf_new_sum.2.6M_weighted.root"
 
 NuOsc:
   NuOscConfigFile: "Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml"
@@ -12,12 +13,18 @@ NuOsc:
 AnalysisOptions:
   ExposureScaling: 1.0
 
-Samples: [
-  "Atm_nuelike", "Atm_numulike"
-]
+  # Value (in cm) to separate fully contained (FC) and partially contained (PC) samples. This places a cut on the minimum distance to the TPC wall from all space points in an event.
+  # Events are considered FC if all space points are further away from the TPC face than this value.
+  FCPCSeparation: 10.0
 
-Atm_nuelike:
-  SampleTitle: "nueselec"
+Samples:
+  - Atm_FC_numulike
+  - Atm_FC_nuelike
+  - Atm_PC_numulike
+  - Atm_PC_nuelike
+
+Atm_FC_nuelike:
+  SampleTitle: "FC_nueselec"
 
   Binning:
     VarStr: ["RecoCosineZ", "RecoNeutrinoEnergy"]
@@ -33,83 +40,10 @@ Atm_nuelike:
     splineprefix: ""
     splinesuffix: ""
 
-  OscChannels:
-    - Name: "nue_x_nue"
-      LatexName: "nue_x_nue"
-      mtuplefile: ["nue_x_nue"]
-      splinefile: "nue_x_nue"
-      nutype: 12
-      oscnutype: 12
-    - Name: "nue_x_numu"
-      LatexName: "nue_x_numu"
-      mtuplefile: ["nue_x_numu"]
-      splinefile: "nue_x_numu"
-      nutype: 12
-      oscnutype: 14
-    - Name: "nue_x_nutau"
-      LatexName: "nue_x_nutau"
-      mtuplefile: ["nue_x_nutau"]
-      splinefile: "nue_x_nutau"
-      nutype: 12
-      oscnutype: 16
-    - Name: "numu_x_nue"
-      LatexName: "numu_x_nue"
-      mtuplefile: ["numu_x_nue"]
-      splinefile: "numu_x_nue"
-      nutype: 14
-      oscnutype: 12
-    - Name: "numu_x_numu"
-      LatexName: "numu_x_numu"
-      mtuplefile: ["numu_x_numu"]
-      splinefile: "numu_x_numu"
-      nutype: 14
-      oscnutype: 14
-    - Name: "numu_x_nutau"
-      LatexName: "numu_x_nutau"
-      mtuplefile: ["numu_x_nutau"]
-      splinefile: "numu_x_nutau"
-      nutype: 14
-      oscnutype: 16
-    - Name: "nuebar_x_nuebar"
-      LatexName: "nuebar_x_nuebar"
-      mtuplefile: ["nuebar_x_nuebar"]
-      splinefile: "nuebar_x_nuebar"
-      nutype: -12
-      oscnutype: -12
-    - Name: "nuebar_x_numubar"
-      LatexName: "nuebar_x_numubar"
-      mtuplefile: ["nuebar_x_numubar"]
-      splinefile: "nuebar_x_numubar"
-      nutype: -12
-      oscnutype: -14
-    - Name: "nuebar_x_nutaubar"
-      LatexName: "nuebar_x_nutaubar"
-      mtuplefile: ["nuebar_x_nutaubar"]
-      splinefile: "nuebar_x_nutaubar"
-      nutype: -12
-      oscnutype: -16
-    - Name: "numubar_x_nuebar"
-      LatexName: "numubar_x_nuebar"
-      mtuplefile: ["numubar_x_nuebar"]
-      splinefile: "numubar_x_nuebar"
-      nutype: -14
-      oscnutype: -12
-    - Name: "numubar_x_numubar"
-      LatexName: "numubar_x_numubar"
-      mtuplefile: ["numubar_x_numubar"]
-      splinefile: "numubar_x_numubar"
-      nutype: -14
-      oscnutype: -14
-    - Name: "numubar_x_nutaubar"
-      LatexName: "numubar_x_nutaubar"
-      mtuplefile: ["numubar_x_nutaubar"]
-      splinefile: "numubar_x_nutaubar"
-      samplevecno: 11
-      nutype: -14
-      oscnutype: -16
+  OscChannels: "OscChan_12Flavs"
 
-Atm_numulike:
-  SampleTitle: "numuselec"
+Atm_FC_numulike:
+  SampleTitle: "FC_numuselec"
 
   Binning:
     VarStr: ["RecoCosineZ", "RecoNeutrinoEnergy"]
@@ -125,7 +59,48 @@ Atm_numulike:
     splineprefix: ""
     splinesuffix: ""
 
-  OscChannels:
+  OscChannels: "OscChan_12Flavs"
+
+Atm_PC_nuelike:
+  SampleTitle: "PC_nueselec"
+
+  Binning:
+    VarStr: ["RecoCosineZ", "RecoNeutrinoEnergy"]
+    VarBins: [[-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1], [0, 0.11, 0.17, 0.26, 0.4, 0.63, 1.03, 1.71, 2.94, 5.48, 1e8]]
+    Uniform: true
+
+  SampleOptions:
+    IsELike: 1
+
+  InputFiles:
+    mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"
+    mtuplesuffix: "_nueselec.root"
+    splineprefix: ""
+    splinesuffix: ""
+
+  OscChannels: "OscChan_12Flavs"
+
+Atm_PC_numulike:
+  SampleTitle: "PC_numuselec"
+
+  Binning:
+    VarStr: ["RecoCosineZ", "RecoNeutrinoEnergy"]
+    VarBins: [[-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1], [0, 0.23, 0.31, 0.47, 0.81, 1.28, 1.99, 3.17, 5.38, 11.54, 1e8]]
+    Uniform: true
+
+  SampleOptions:
+    IsELike: 0
+
+  InputFiles:
+    mtupleprefix: "Inputs/Atmospherics/CAFs/atm_hd"
+    mtuplesuffix: "_numuselec.root"
+    splineprefix: ""
+    splinesuffix: ""
+
+  OscChannels: "OscChan_12Flavs"
+
+OscChannels:
+  OscChan_12Flavs:
     - Name: "nue_x_nue"
       LatexName: "nue_x_nue"
       mtuplefile: ["nue_x_nue"]

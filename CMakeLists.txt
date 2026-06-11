@@ -60,7 +60,7 @@ endif()
 
 #=================== DUNEAnaObj
 if(NOT DEFINED DUNE_ANAOBJ_BRANCH)
-  set(DUNE_ANAOBJ_BRANCH v03_06_00)
+  set(DUNE_ANAOBJ_BRANCH v03_14_00)
   set(DUNE_ANAOBJ_BRANCH ${DUNE_ANAOBJ_BRANCH} CACHE STRING "Specify which duneanaobj branch to use")
 endif()
 
@@ -124,8 +124,8 @@ endif()
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
-find_package(MaCh3 2.5.0 EXACT QUIET)
-set(MaCh3_CORE_BRANCH v2.5.0 CACHE STRING "Specify the MaCh3 core branch to use")
+find_package(MaCh3 2.5.1 EXACT QUIET)
+set(MaCh3_CORE_BRANCH v2.5.1 CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 
 if(NOT MaCh3_FOUND)
@@ -239,6 +239,13 @@ endif()
 
 ################################# Build MaCh3 ##################################
 add_library(MaCh3DUNECompilerOptions INTERFACE)
+
+if(MaCh3_DUNE_USE_SRProxy)
+  target_compile_definitions(MaCh3DUNECompilerOptions INTERFACE MaCh3_DUNE_USE_SRProxy=1)
+else()
+  target_compile_definitions(MaCh3DUNECompilerOptions INTERFACE MaCh3_DUNE_USE_SRProxy=0)
+endif()
+
 set_target_properties(MaCh3DUNECompilerOptions PROPERTIES EXPORT_NAME CompilerOptions)
 
 target_include_directories(MaCh3DUNECompilerOptions
