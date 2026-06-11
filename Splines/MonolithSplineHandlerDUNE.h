@@ -29,7 +29,7 @@ class MonolithSplineHandlerDUNE : virtual public UnbinnedSplineHandler {
 //Forced to write a new version as the M3 core one deleted the splines it is passed................
 class TSpline3_redDUNE : public TSpline3_red {
 public:
-    TSpline3_redDUNE(const TSpline3* spline) : TSpline3_red() {
+    TSpline3_redDUNE(TSpline3* spline) : TSpline3_red() {
         nPoints = spline->GetNp();
         Par = new M3::float_t*[nPoints];
         XPos = new M3::float_t[nPoints];
