@@ -122,6 +122,14 @@ protected:
   /// Sample ID for filtering events from the combined CAF file
   uint fSampleId;
 
+  /// Path to the input CAF file (for per-event spline mode)
+  std::string fInputFile;
+  /// Path to the input spline file (for per-event spline mode)
+  std::string fInputSplines;
+  /// Sample ID for filtering events from the combined CAF file
+  uint fSampleId;
+  
+  /// Enums to define event selections
   enum EventSelectionIndices {
     kEventSel_Unknown = -1,    
     kEventSel_FC_NuE,
@@ -133,6 +141,7 @@ protected:
     nEventSelections,
   };
 
+  /// Enums to define ordering of the CVN scores from the CAF files
   enum CVNScoreIndices {
     kCVN_NuE,
     kCVN_NuMu,
@@ -140,7 +149,9 @@ protected:
     nCVN_Scores
   };
 
+  /// Cut value to separate Fully Contained and Partially Contained events
   double FCPCSeparation;
+  
   int ReturnSampleIdentifier(std::vector<double> CVNScores, double MinDistanceToWall);
   std::vector<std::string> EventSelectionNames = std::vector<std::string>(nEventSelections);
   std::vector<int> EventSelection_to_SampleIndex_Map = std::vector<int>(nEventSelections,kEventSel_Unknown);
