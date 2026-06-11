@@ -121,13 +121,6 @@ protected:
   std::string fInputSplines;
   /// Sample ID for filtering events from the combined CAF file
   uint fSampleId;
-
-  /// Path to the input CAF file (for per-event spline mode)
-  std::string fInputFile;
-  /// Path to the input spline file (for per-event spline mode)
-  std::string fInputSplines;
-  /// Sample ID for filtering events from the combined CAF file
-  uint fSampleId;
   
   /// Enums to define event selections
   enum EventSelectionIndices {
