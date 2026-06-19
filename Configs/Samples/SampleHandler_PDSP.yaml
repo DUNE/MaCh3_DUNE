@@ -15,12 +15,12 @@ InputFiles:
   PrepSplineFile: false
 
 #Settings for samples
-Samples: ["PDSP_Abs", "PDSP_CEx", "PDSP_Pip", "PDSP_Uncategorised"]
+Samples: ["PDSP_Abs", "PDSP_CEx", "PDSP_Pip", "PDSP_Unc", "PDSP_Esc"]
 
 PDSP_Abs:
   SelectionCuts:
-    - KinematicStr: "TrueKEInt"
-      Bounds: [ 0., 999999 ]
+    - KinematicStr: "RecoEndZ"
+      Bounds: [ 30, 220 ]
   SampleTitle: "PDSP_Abs"
 
   Binning:
@@ -44,13 +44,14 @@ PDSP_Abs:
 
 PDSP_CEx:
   SelectionCuts:
-    - KinematicStr: "TrueKEInt"
-      Bounds: [ 0., 999999 ]
+    - KinematicStr: "RecoEndZ"
+      Bounds: [ 30, 220 ]
   SampleTitle: "PDSP_CEx"
 
   Binning:
-    VarStr : [ "RecoKEInt" ]
-    VarBins: [[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400]]
+    VarStr : [ "RecoKEInt", "RecoKEIni" ]
+    VarBins: [[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400],
+              [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400]]
     Uniform: True
 
   InputFiles:
@@ -69,13 +70,14 @@ PDSP_CEx:
 
 PDSP_Pip:
   SelectionCuts:
-    - KinematicStr: "TrueKEInt"
-      Bounds: [ 0., 999999 ]
+    - KinematicStr: "RecoEndZ"
+      Bounds: [ 30, 220 ]
   SampleTitle: "PDSP_Pip"
 
   Binning:
-    VarStr : [ "RecoKEInt" ]
-    VarBins: [[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400]]
+    VarStr : [ "RecoKEInt", "RecoKEIni" ]
+    VarBins: [[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400],
+              [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400]]
     Uniform: True
 
   InputFiles:
@@ -92,27 +94,54 @@ PDSP_Pip:
       nutype: 3
       oscnutype: 3
 
-PDSP_Uncategorised:
+PDSP_Unc:
   SelectionCuts:
-    - KinematicStr: "TrueKEInt"
-      Bounds: [ 0., 999999 ]
-  SampleTitle: "PDSP_Uncategorised"
+    - KinematicStr: "RecoEndZ"
+      Bounds: [ 30, 220 ]
+  SampleTitle: "PDSP_Unc"
 
   Binning:
-    VarStr : [ "RecoKEInt" ]
-    VarBins: [[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400]]
+    VarStr : [ "RecoKEInt", "RecoKEIni" ]
+    VarBins: [[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400],
+              [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400]]
     Uniform: True
 
   InputFiles:
-    mtupleprefix: "/data/dune/common/mach3_input_new_selection/pdsp_"
+    mtupleprefix: "/data/dune/common/fit_inputs/analysis_input_regions/root_analysis_input_mc_selected/mc_selected_"
     mtuplesuffix: ".root"
     splineprefix: ""
     splinesuffix: ""
 
   SubSamples:
     - Name: "uncategorised"
-      LatexName: "uncategorised"
-      mtuplefile: "Runcategorised"
+      LatexName: "unc"
+      mtuplefile: "Tuncategorised"
+      splinefile: ""
+      nutype: 4
+      oscnutype: 4
+
+PDSP_Esc:
+  SelectionCuts:
+    - KinematicStr: "RecoEndZ"
+      Bounds: [ 220, 999 ]
+  SampleTitle: "PDSP_Esc"
+
+  Binning:
+    VarStr : [ "RecoKEInt", "RecoKEIni" ]
+    VarBins: [[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400],
+              [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400]]
+    Uniform: True
+
+  InputFiles:
+    mtupleprefix: "/data/dune/common/fit_inputs/analysis_input_regions/root_analysis_input_mc_selected/mc_selected_"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ""
+
+  SubSamples:
+    - Name: "escaping"
+      LatexName: "esc"
+      mtuplefile: "Tescaping"
       splinefile: ""
       nutype: 4
       oscnutype: 4
