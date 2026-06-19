@@ -162,13 +162,22 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       _data->SetBranchStatus("*", false);
       
       // Truth variables
+      double trueKEIni;
       double trueKEInt;
+      double trueEndZ;
       bool true_abs;
       bool true_cex;
       bool true_pip;
+      bool true_decay;
+
+      _data->SetBranchStatus("KE_init_reco", true);
+      _data->SetBranchAddress("KE_init_reco", &trueKEIni);
 
       _data->SetBranchStatus("KE_int_true", true);
       _data->SetBranchAddress("KE_int_true", &trueKEInt);
+
+      _data->SetBranchStatus("track_length_true", true);
+      _data->SetBranchAddress("track_length_true", &trueEndZ);
 
       _data->SetBranchStatus("exclusive_process_absorption", true);
       _data->SetBranchAddress("exclusive_process_absorption", &true_abs);
@@ -179,10 +188,17 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       _data->SetBranchStatus("exclusive_process_pion_production", true);
       _data->SetBranchAddress("exclusive_process_pion_production", &true_pip);
 
+      _data->SetBranchStatus("exclusive_process_decay", true);
+      _data->SetBranchAddress("exclusive_process_decay", &true_decay);
+
       // Reco variables
+      double recoKEIni;
       double recoKEInt;
       double recoEndZ;
 
+      _data->SetBranchStatus("KE_init_reco", true);
+      _data->SetBranchAddress("KE_init_reco", &recoKEInt);
+      
       _data->SetBranchStatus("KE_int_reco", true);
       _data->SetBranchAddress("KE_int_reco", &recoKEInt);
 
@@ -194,17 +210,26 @@ int SampleHandlerPDSP::SetupExperimentMC() {
 
         PDSPSampleMetaData[TotalEventCounter].SampleIndex = static_cast<int>(iSample);
 
+        PDSPSamples[TotalEventCounter].TrueKEIni = trueKEIni;
         PDSPSamples[TotalEventCounter].TrueKEInt = trueKEInt;
+        PDSPSamples[TotalEventCounter].TrueEndZ = trueEndZ;
+        PDSPSamples[TotalEventCounter].RecoKEIni = recoKEIni;
         PDSPSamples[TotalEventCounter].RecoKEInt = recoKEInt;
         PDSPSamples[TotalEventCounter].RecoEndZ = recoEndZ;
 
+
+        bool isPion = true_abs == 1 || true_cex == 1 || true_pip == 1 || true_decay == 1
         int mode;
-        if(true_abs == 1) {
+        if(trueEndZ > 220 && isPion) {
+          mode = 4; // escaping pions
+        }else if(true_abs == 1) {
           mode = 0;
         }else if(true_cex == 1) {
           mode = 1;
         }else if(true_pip == 1) {
           mode = 2;
+        }else if(true_decay == 1) {
+          mode = 3;
         }else {
           mode = 999;
         }
@@ -213,7 +238,9 @@ int SampleHandlerPDSP::SetupExperimentMC() {
 
 
         //? redundant?
+        PDSPPlottingSamples[TotalEventCounter].TrueKEIni = trueKEIni;
         PDSPPlottingSamples[TotalEventCounter].TrueKEInt = trueKEInt;
+        PDSPPlottingSamples[TotalEventCounter].RecoKEIni = recoKEIni;
         PDSPPlottingSamples[TotalEventCounter].RecoKEInt = recoKEInt;
 
         TotalEventCounter++;
@@ -243,14 +270,20 @@ double SampleHandlerPDSP::ReturnKinematicParameter(std::string KinematicParamete
 
 const double* SampleHandlerPDSP::GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent) {
   switch (KinPar) {
+    case kTrueKEIni:
+      return &PDSPSamples[iEvent].TrueKEIni;
     case kTrueKEInt:
       return &PDSPSamples[iEvent].TrueKEInt;
+    case kRecoKEIni:
+      return &PDSPSamples[iEvent].RecoKEIni;
     case kRecoKEInt:
       return &PDSPSamples[iEvent].RecoKEInt;
     case kMode: // required to work with SampleHandlerFD
       return &PDSPSamples[iEvent].Mode;
     case kOscChannel: // required to work with SampleHandlerFD
       return &PDSPSamples[iEvent].OscillationChannel;
+    case kTrueEndZ:
+      return &PDSPSamples[iEvent].TrueEndZ;
     case kRecoEndZ:
       return &PDSPSamples[iEvent].RecoEndZ;
     default:
