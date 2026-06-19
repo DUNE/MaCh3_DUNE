@@ -140,9 +140,27 @@ PDSP_Esc:
     splinesuffix: ""
 
   SubSamples:
-    - Name: "escaping"
-      LatexName: "esc"
-      mtuplefile: "Tescaping"
+    - Name: "absorption"
+      LatexName: "abs"
+      mtuplefile: "Tabsorption"
       splinefile: ""
-      nutype: 5
-      oscnutype: 5
+      nutype: 1
+      oscnutype: 1
+    - Name: "charge_exchange"
+      LatexName: "cex"
+      mtuplefile: "Tcharge_exchange"
+      splinefile: ""
+      nutype: 2
+      oscnutype: 2
+    - Name: "pion_production"
+      LatexName: "pip"
+      mtuplefile: "Tpion_production"
+      splinefile: ""
+      nutype: 3
+      oscnutype: 3
+    - Name: "uncategorised"
+      LatexName: "unc"
+      mtuplefile: "Tuncategorised"
+      splinefile: ""
+      nutype: 4
+      oscnutype: 4
