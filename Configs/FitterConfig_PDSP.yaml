@@ -8,7 +8,10 @@ General:
   ProcessMCMC: No
   Debug: No
   Seed: 0
-  # For a Asimov closure test, start from the prefit CV instead of a random prior throw.
+  # If false, the fit uses the nominal MC prediction as Asimov data.
+  # If true, the fit loads *_DataHist from the configured sample input files.
+  Data: true
+  # For a nominal closure test, start from the prefit CV instead of a random prior throw.
   # Remove this or set false for a production fit where you want a randomized chain start.
   StatOnly: true
   Fitter:
@@ -51,16 +54,13 @@ General:
     # KeepFlippingOnReject: True
   Systematics:
     XsecCovName: "xsec_cov"
-    XsecFix: [
-      "Impure_TrueEBin_Under",
-      "Impure_TrueEBin_0",
-      "Impure_TrueEBin_1",
-      "Impure_TrueEBin_2",
-      "Impure_TrueEBin_Over",
-      "Impure_Escaping",
-    ] # any of these are fixed
+    XsecFix: [] # any of these are fixed
     XsecCovFile: ["Configs/CovObjs/PDSPFitModel.yaml",
                   ]
+    # Optional fake-data tune for Data: false. For example, set to "Generator"
+    # after editing ParameterValues:Generator in the xsec config to inject a
+    # known Asimov shift while the fit still starts from PreFitValue.
+    XsecAsimovTune: "Generator"
     XsecPCAThreshold: -1
     XsecPCAParams: [-999, -999]
     XsecStepScale: 1
