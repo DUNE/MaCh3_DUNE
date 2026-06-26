@@ -37,7 +37,11 @@ struct MetaData {
 
 struct PDSPMCPlottingInfo {
   /// True Interacting Kinetic Energy
+  double TrueKEIni = M3::_BAD_DOUBLE_;
+  /// True Interacting Kinetic Energy
   double TrueKEInt = M3::_BAD_DOUBLE_;
+  /// Reconstructed Interacting Kinetic Energy
+  double RecoKEIni = M3::_BAD_DOUBLE_;
   /// Reconstructed Interacting Kinetic Energy
   double RecoKEInt = M3::_BAD_DOUBLE_;
 };
