@@ -1306,7 +1306,7 @@ Systematics:
     SampleNames: ["PDSP"]
     Mode: [999]
     Error: 0.1
-    FlatPrior: false
+    FlatPrior: true
     ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
@@ -1702,7 +1702,7 @@ Systematics:
     SampleNames: ["PDSP"]
     Mode: [999]
     Error: 0.1
-    FlatPrior: false
+    FlatPrior: true
     ParameterBounds: [0, 2]
     ParameterGroup: Fit
     KinematicCuts:
@@ -1964,7 +1964,7 @@ Systematics:
       ParameterName: TrueImpure-Init_Over-End_Over
 
     SampleNames: ["PDSP"]
-    Mode: [1]
+    Mode: [999]
     Error: 0.1
     FlatPrior: true
     ParameterBounds: [0, 2]
