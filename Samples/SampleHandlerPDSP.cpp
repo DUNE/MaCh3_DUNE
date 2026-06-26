@@ -170,8 +170,8 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       bool true_pip;
       bool true_decay;
 
-      _data->SetBranchStatus("KE_init_reco", true);
-      _data->SetBranchAddress("KE_init_reco", &trueKEIni);
+      _data->SetBranchStatus("KE_init_true", true);
+      _data->SetBranchAddress("KE_init_true", &trueKEIni);
 
       _data->SetBranchStatus("KE_int_true", true);
       _data->SetBranchAddress("KE_int_true", &trueKEInt);
