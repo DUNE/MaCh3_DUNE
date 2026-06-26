@@ -11,6 +11,8 @@ class SampleHandlerPDSP : public SampleHandlerFD
   virtual ~SampleHandlerPDSP();
 
   enum KinematicTypes {kTrueKEIni, kTrueKEInt, kRecoKEIni, kRecoKEInt, kMode, kOscChannel, kTrueEndZ, kRecoEndZ};
+
+  TH1* GetDataHistogramFromInputs(const int Sample) const;
   
   // =============================================
 
