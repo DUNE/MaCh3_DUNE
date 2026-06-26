@@ -218,7 +218,7 @@ int SampleHandlerPDSP::SetupExperimentMC() {
         PDSPSamples[TotalEventCounter].RecoEndZ = recoEndZ;
 
 
-        bool isPion = true_abs == 1 || true_cex == 1 || true_pip == 1 || true_decay == 1
+        bool isPion = true_abs == 1 || true_cex == 1 || true_pip == 1 || true_decay == 1;
         int mode;
         if(trueEndZ > 220 && isPion) {
           mode = 4; // escaping pions
