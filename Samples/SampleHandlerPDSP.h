@@ -10,9 +10,7 @@ class SampleHandlerPDSP : public SampleHandlerFD
   SampleHandlerPDSP(const std::string& config_name, ParameterHandlerGeneric* parameter_handler);
   virtual ~SampleHandlerPDSP();
 
-  enum KinematicTypes {kTrueKEInt, kRecoKEInt, kMode, kOscChannel, kRecoEndZ};
-
-  TH1* GetDataHistogramFromInputs(const int Sample) const;
+  enum KinematicTypes {kTrueKEIni, kTrueKEInt, kRecoKEIni, kRecoKEInt, kMode, kOscChannel, kTrueEndZ, kRecoEndZ};
   
   // =============================================
 
@@ -44,19 +42,25 @@ class SampleHandlerPDSP : public SampleHandlerFD
   std::vector<PDSPMCPlottingInfo> PDSPPlottingSamples;
 
   const std::unordered_map<std::string, int> KinematicParametersPDSP = {
+    {"TrueKEIni", kTrueKEIni},
     {"TrueKEInt", kTrueKEInt},
+    {"RecoKEIni", kRecoKEIni},
     {"RecoKEInt", kRecoKEInt},
     {"Mode", kMode},
     {"OscillationChannel", kOscChannel},
+    {"TrueEndZ", kTrueEndZ},
     {"RecoEndZ", kRecoEndZ}
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersPDSP = {
+    {kTrueKEIni, "TrueKEIni"},
     {kTrueKEInt, "TrueKEInt"},
+    {kRecoKEIni, "RecoKEIni"},
     {kRecoKEInt, "RecoKEInt"},
     {kMode, "Mode"},
     {kOscChannel, "OscillationChannel"},
-    {kRecoEndZ, "RecoEndZ"},
+    {kTrueEndZ, "TrueEndZ"},
+    {kRecoEndZ, "RecoEndZ"}
   };
 
   // functional parameters, currently have none for the time being
