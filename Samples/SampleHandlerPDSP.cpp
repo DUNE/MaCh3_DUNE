@@ -197,7 +197,7 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       double recoEndZ;
 
       _data->SetBranchStatus("KE_init_reco", true);
-      _data->SetBranchAddress("KE_init_reco", &recoKEInt);
+      _data->SetBranchAddress("KE_init_reco", &recoKEIni);
       
       _data->SetBranchStatus("KE_int_reco", true);
       _data->SetBranchAddress("KE_int_reco", &recoKEInt);
