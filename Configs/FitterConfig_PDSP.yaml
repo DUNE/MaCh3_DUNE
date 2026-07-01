@@ -10,7 +10,7 @@ General:
   Seed: 0
   # If false, the fit uses the nominal MC prediction as Asimov data.
   # If true, the fit loads *_DataHist from the configured sample input files.
-  Data: true
+  Data: false
   # For a nominal closure test, start from the prefit CV instead of a random prior throw.
   # Remove this or set false for a production fit where you want a randomized chain start.
   StatOnly: true
@@ -55,7 +55,7 @@ General:
   Systematics:
     XsecCovName: "xsec_cov"
     XsecFix: [] # any of these are fixed
-    XsecCovFile: ["Configs/CovObjs/PDSPFitModel.yaml",
+    XsecCovFile: ["Configs/CovObjs/PDSPFitModel_Impure_init.yaml",
                   ]
     # Optional fake-data tune for Data: false. For example, set to "Generator"
     # after editing ParameterValues:Generator in the xsec config to inject a
@@ -63,7 +63,7 @@ General:
     XsecAsimovTune: "Generator"
     XsecPCAThreshold: -1
     XsecPCAParams: [-999, -999]
-    XsecStepScale: 1
+    XsecStepScale: 15
 
 # Prior/Posterior predictive settings
 Predictive:
@@ -97,10 +97,28 @@ LLHScan:
   # Number of points for 2D scan in each direction
   #2DLLHScanPoints: 20
   # Add parameters to scan over in LLHMap
-  LLHParameters: ['Abs_TrueEBin_0'] # example LLH scan, should expand to add more if needed.
+  # LLHParameters: ['TrueAbs-Init_Under-End_Under', 'TrueAbs-Init_0-End_Under', 'TrueAbs-Init_0-End_0',
+  #                 'TrueAbs-Init_1-End_Under', 'TrueAbs-Init_1-End_0', 'TrueAbs-Init_1-End_1',
+  #                 'TrueAbs-Init_2-End_Under', 'TrueAbs-Init_2-End_0', 'TrueAbs-Init_2-End_1', 'TrueAbs-Init_2-End_2',
+  #                 'TrueAbs-Init_Over-End_Under', 'TrueAbs-Init_Over-End_0', 'TrueAbs-Init_Over-End_1',
+  #                 'TrueAbs-Init_Over-End_2', 'TrueAbs-Init_Over-End_Over'] # example LLH scan, should expand to add more if needed.
   # Add physical ranges for special params whose priors/errors may not be well well-defined
-  ScanRanges:
-    Abs_TrueEBin_0: [0, 10]
+  # ScanRanges:
+  #   TrueAbs-Init_Under-End_Under: [0, 4]
+  #   TrueAbs-Init_0-End_Under: [0, 4]
+  #   TrueAbs-Init_0-End_0: [0, 4]
+  #   TrueAbs-Init_1-End_Under: [0, 4]
+  #   TrueAbs-Init_1-End_0: [0, 4]
+  #   TrueAbs-Init_1-End_1: [0, 4]
+  #   TrueAbs-Init_2-End_Under: [0, 4]
+  #   TrueAbs-Init_2-End_0: [0, 4]
+  #   TrueAbs-Init_2-End_1: [0, 4]
+  #   TrueAbs-Init_2-End_2: [0, 4]
+  #   TrueAbs-Init_Over-End_Under: [0, 4]
+  #   TrueAbs-Init_Over-End_0: [0, 4]
+  #   TrueAbs-Init_Over-End_1: [0, 4]
+  #   TrueAbs-Init_Over-End_2: [0, 4]
+  #   TrueAbs-Init_Over-End_Over: [0, 4]
 
 SigmaVar:
   # Values of sigma you want to perform, it must contain 0!
@@ -133,12 +151,15 @@ AdaptionOptions:
 
 #KinemDistribution extra plots to draw
 KinematicDistributionPlots:
+- Name: "True Initial Kinetic Energy"
+  VarStrings: ["TrueKEIni"]
+  VarBins: [[50,0,3000]]
 - Name: "True Interacting Kinetic Energy"
   VarStrings: ["TrueKEInt"]
-  VarBins: [[40,0,3000]]
-  KinematicCuts:
-  - VarString: "TrueKEInt"
-    Range: [500,3000]
-- Name: "Reconstructed Kinetic Energy"
+  VarBins: [[50,0,3000]]
+- Name: "Reconstructed Initial Kinetic Energy"
+  VarStrings: ["RecoKEIni"]
+  VarBins: [[50,0,3000]]
+- Name: "Reconstructed Interacting Kinetic Energy"
   VarStrings: ["RecoKEInt"]
   VarBins: [[50,0,3000]]
