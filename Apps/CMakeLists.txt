@@ -6,6 +6,7 @@ foreach(app
 	ParamUpdateAndSave
 	Projections
 	PostPredDUNE
+	RecoTrueComp
 	SigmaVariation
 	LikelihoodScan
 	Variations

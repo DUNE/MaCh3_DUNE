@@ -55,16 +55,13 @@ int main(int argc, char * argv[]) {
   //###############################################################################################################################
   //Perform reweight and print total integral
 
-  // std::vector<double> Params;
-  // std::vector<double> AvgParams(480, 0.0);
-  // std::vector<int> Count(480, 0);
-
-  // TFile* Osc = TFile::Open("TrueIndChanOsc.root"); // Loading in histograms
-  // TFile* Unosc = TFile::Open("TrueIndChanUnosc.root");
+  // TFile* Osc = TFile::Open("EventRates/CCIndChanOsc.root"); // Loading in histograms
+  // TFile* Unosc = TFile::Open("EventRates/CCIndChanUnosc.root");
 
   // TIter next(Osc->GetListOfKeys()); // Get list of different items within oscillated data histograms (48 in total, 12 channels in 4 samples)
   // TKey* key;  // Initialise
   // int ParIndex = 0.0;
+  // int KeyIndex = 0.0;
 
   // for(int i = 0; i < xsec->GetNumParams(); i++){ // For every param in the xsec group
   //   if(xsec->IsParFromGroup(i, "EParam")){ // If param is from our energy normalisation parameter group
@@ -73,7 +70,20 @@ int main(int argc, char * argv[]) {
   //   }
   // }
 
+  // for (int i = 0; i < 36; i++) {
+  //   key = (TKey*) next();
+  // }
+
+  // TFile* PostFile = TFile::Open("FHCnumuReg/RegVal1.0FHCnumuLB_Process.root");
+  // auto HPDVal = PostFile->Get<TVectorT<double>>("Means_HPD");
+  // for (int i = 0; i < HPDVal->GetNrows(); i++) {
+  //   xsec->SetPar(ParIndex, (*HPDVal)[i]); 
+  //   ParIndex++; 
+  // }
+
   // while ((key = (TKey*)next())) { // Go through all keys in sequence
+  //   if(KeyIndex == 12.0) break;
+  //   KeyIndex++;
   //   auto HistoOsc = Osc->Get<TH1D>(key->GetName()); // Getting names of histograms
   //   auto HistoUnosc = Unosc->Get<TH1D>(key->GetName()); 
   //   int NumBins = HistoOsc->GetNbinsX(); // Find number of bins (number of energy normalisation parameters for this histogram)
@@ -83,29 +93,14 @@ int main(int argc, char * argv[]) {
   //     double Param;
   //     if(BinSizeUnosc == 0) { // If no unoscillated data, set param to 0
   //       Param = 0;
-  //       //xsec->SetPar(ParIndex, Param);
-  //       Params.push_back(Param);
+  //       xsec->SetPar(ParIndex, Param);
   //     }
   //     else { // If unoscillated data, calculate ratio between these as needed to induce oscillation
   //       Param = BinSizeOsc / BinSizeUnosc; 
-  //       //xsec->SetPar(ParIndex, Param);
-  //       Params.push_back(Param);
+  //       xsec->SetPar(ParIndex, Param);
   //     } 
-  //     //ParIndex++; // Increment parameter index to keep amending in sequence
+  //     ParIndex++; // Increment parameter index to keep amending in sequence
   //   }
-  // }
-  // for(int p = 0; p < 1920; p++){
-  //   int sample = p / 480;
-  //   int channel = (p % 480) / 40;
-  //   int bin = p % 40;
-  //   int Index = channel * 40 + bin;
-  //   AvgParams[Index] += Params[p];
-  //   Count[Index] += 1;
-  // }
-  // for(int i = 0; i < 480; i++){
-  //   AvgParams[i] /= Count[i];
-  //   xsec->SetPar(ParIndex, AvgParams[i]);
-  //   ParIndex++;
   // }
 
   // for(int k = 0; k < xsec->GetNumParams(); k++){ // For every param in the xsec group
@@ -113,7 +108,6 @@ int main(int argc, char * argv[]) {
   //     xsec->ToggleFixParameter(k); // Fix these params at 0
   //   }
   // }
-
 
   std::vector<TH1*> DUNEHists;
   for(auto handler : DUNEPdfs){
@@ -138,7 +132,7 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("Oscillation Mode Breakdown:");
   
-  //TFile* outHist = new TFile("PMNSOscDataCC.root", "recreate"); // If we want to save the individual channels from the samples, create this file
+  TFile* outHist = new TFile("FHCsTwentyIndChanUnosc.root", "recreate"); // If we want to save the individual channels from the samples, create this file
 
   for(auto handler : DUNEPdfs) {
     for (int iSample = 0; iSample < handler->GetNsamples(); iSample++) {
@@ -154,10 +148,11 @@ int main(int argc, char * argv[]) {
         SelectionVec.push_back(SelecChannel);
         
         TH1* Hist = handler->Get1DVarHist(iSample, handler->GetXBinVarName(iSample),SelectionVec);
-      
-        // TString HistoName = Form("%s_%s", handler->GetSampleTitle(iSample).c_str(), handler->GetFlavourName(iSample, iOscChan).c_str());
-        // Hist->SetName(HistoName); // Set the name of the histograms
-        // Hist->Write(); // Save to file
+        //TH1* Hist = handler->Get2DVarHist(iSample, "TrueNeutrinoEnergy", "RecoNeutrinoEnergy");
+        
+        TString HistoName = Form("%s_%s", handler->GetSampleTitle(iSample).c_str(), handler->GetFlavourName(iSample, iOscChan).c_str());
+        Hist->SetName(HistoName); // Set the name of the histograms
+        Hist->Write(); // Save to file
 
         MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),handler->GetFlavourName(iSample, iOscChan),Hist->Integral());
       }
@@ -167,7 +162,7 @@ int main(int argc, char * argv[]) {
     }
   }
 
-  //outHist->Close(); // Close our individual channel histograms
+  outHist->Close(); // Close our individual channel histograms
 
   //###############################################################################################################################
   //Make interaction channel breakdown

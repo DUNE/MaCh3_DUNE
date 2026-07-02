@@ -30,23 +30,46 @@ int main(int argc, char * argv[]) {
   // #########################################################################
   // Load in and create all relevant energy parameters
 
-  // std::vector<double> Params;
-  // std::vector<double> AvgParams(480, 0.0);
-  // std::vector<int> Count(480, 0);
+  TFile* Osc = TFile::Open("EventRates/FHCsTwentyIndChanOsc.root"); // Loading in histograms
+  TFile* Unosc = TFile::Open("EventRates/FHCsTwentyIndChanUnosc.root");
 
-  // TFile* Osc = TFile::Open("CCIndChanOsc.root"); // Loading in histograms
-  // TFile* Unosc = TFile::Open("CCIndChanUnosc.root");
+  TIter next(Osc->GetListOfKeys()); // Get list of different items within oscillated data histograms (48 in total, 12 channels in 4 samples)
+  TKey* key;  // Initialise
 
-  // TIter next(Osc->GetListOfKeys()); // Get list of different items within oscillated data histograms (48 in total, 12 channels in 4 samples)
-  // TKey* key;  // Initialise
-  // int ParIndex = 0.0;
-  // int KeyIndex = 0.0;
+  std::vector<std::string> KeyNames;
+  std::vector<int> SelectedKeys = {0, 13, 2, 15, 16, 17, 6, 7, 20, 9, 22, 11};
+  int ParIndex = 0;
+  //int KeyIndex = 0;
 
-  // for(int i = 0; i < xsec->GetNumParams(); i++){ // For every param in the xsec group
-  //   if(xsec->IsParFromGroup(i, "EParam")){ // If param is from our energy normalisation parameter group
-  //     ParIndex = i; // Set the index of first parameter
-  //     break;
-  //   }
+  for(int i = 0; i < xsec->GetNumParams(); i++){ // For every param in the xsec group
+    if(xsec->IsParFromGroup(i, "EParam")){ // If param is from our energy normalisation parameter group
+      ParIndex = i; // Set the index of first parameter
+      break;
+    }
+  }
+
+  while((key = (TKey*)next())) {
+    KeyNames.push_back(key->GetName()); 
+  }
+
+  //for (int index = 0; index < 12; index++) {
+  for (int index : SelectedKeys) {
+    const std::string& name = KeyNames[index];
+    auto HistoOsc = Osc->Get<TH1D>(name.c_str()); // Getting names of histograms
+    auto HistoUnosc = Unosc->Get<TH1D>(name.c_str()); 
+    int NumBins = HistoOsc->GetNbinsX();
+    for(int j = 1; j <= NumBins; j++) { // For each energy bin, starting from 1 to avoid the overflow bin
+      double BinSizeOsc = HistoOsc->GetBinContent(j); // Get the number of events in specific energy bin
+      double BinSizeUnosc = HistoUnosc->GetBinContent(j);
+      double Param = (BinSizeUnosc == 0.0 ? 0.0 : BinSizeOsc/BinSizeUnosc);
+      xsec->SetPar(ParIndex, Param);
+      if (BinSizeUnosc == 0.0) xsec->ToggleFixParameter(ParIndex);
+      ParIndex++; // Increment parameter index to keep amending in sequence
+    }
+  }
+
+  // for (int i = 0; i < 12; i++) {
+  //   key = (TKey*) next();
   // }
 
   // while ((key = (TKey*)next())) { // Go through all keys in sequence
@@ -62,30 +85,15 @@ int main(int argc, char * argv[]) {
   //     if(BinSizeUnosc == 0) { // If no unoscillated data, set param to 0
   //       Param = 0;
   //       xsec->SetPar(ParIndex, Param);
-  //       //Params.push_back(Param);
+  //       xsec->ToggleFixParameter(ParIndex);
   //     }
   //     else { // If unoscillated data, calculate ratio between these as needed to induce oscillation
   //       Param = BinSizeOsc / BinSizeUnosc; 
   //       xsec->SetPar(ParIndex, Param);
-        
-  //       //Params.push_back(Param);
   //     } 
   //     ParIndex++; // Increment parameter index to keep amending in sequence
   //   }
   // }
-  // // for(int p = 0; p < 1920; p++){
-  // //   int sample = p / 480;
-  // //   int channel = (p % 480) / 40;
-  // //   int bin = p % 40;
-  // //   int Index = channel * 40 + bin;
-  // //   AvgParams[Index] += Params[p];
-  // //   Count[Index] += 1;
-  // // }
-  // // for(int i = 0; i < 480; i++){
-  // //   AvgParams[i] /= Count[i];
-  // //   xsec->SetPar(ParIndex, AvgParams[i]);
-  // //   ParIndex++;
-  // // }
 
   // for(int k = 0; k < xsec->GetNumParams(); k++){ // For every param in the xsec group
   //   if((xsec->GetParProp(k) == 0) && xsec->IsParFromGroup(k, "EParam") && xsec->IsParameterFixed(k) == false){ // If it has a value of 0 and is an energy normalisation parameter
@@ -99,24 +107,24 @@ int main(int argc, char * argv[]) {
   //Some place to store the histograms
   std::vector<TH1*> PredictionHistograms;
   std::vector<std::string> sample_names;
-  std::vector<std::string> MySamples{"FHC_numu", "FHC_nue", "RHC_numu", "RHC_nue"};
+  std::vector<std::string> MySamples{"FHC_numu", "FHC_nue"}; 
 
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
 
-  TFile* PMNSData = TFile::Open("OscPMNSNoNC.root"); // Loading in the oscillated data we want to fit to
+  TFile* PMNSData = TFile::Open("EventRates/FHCsTwentyOsc.root"); // Loading in the oscillated data we want to fit to
   for (auto handler : DUNEPdfs) {
     for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
     
     std::string name = handler->GetSampleTitle(iSample);
-    std::cout << name << "\n";
     sample_names.push_back(name);
     TString NameTString = TString(name.c_str());
     TString MyNameTString = TString(MySamples[iSample].c_str());
     
     handler->Reweight();
 
-    TString HistName = "hRecoNeutrinoEnergy" + MyNameTString; // Name the histograms as they appear in PMNSData
+    TString HistName = "hFD_" + MyNameTString;
+    //TString HistName = "hRecoNeutrinoEnergy" + MyNameTString; // Name the histograms as they appear in PMNSData
     TH1D* blarbHist = PMNSData->Get<TH1D>(HistName); // Get the histogram from our data
     TH1D* CloneHist = (TH1D*) blarbHist->Clone(); // Create clone of data
     CloneHist->SetDirectory(nullptr);
