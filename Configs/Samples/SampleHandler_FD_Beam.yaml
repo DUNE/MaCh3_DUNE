@@ -11,117 +11,118 @@ NuOsc:
 
 Samples: [
   "FD_FHC_numu",
-  # "FD_FHC_nue",
-  # "FD_RHC_numu",
-  # "FD_RHC_nue",
+  "FD_FHC_nue",
+  #"FD_RHC_numu",
+  #"FD_RHC_nue"
 ]
 
-# FD_FHC_nue: 
-#   SampleTitle: "FD_FHC_nue"
-#   POT: 1.3628319e+23
+FD_FHC_nue: 
+  SampleTitle: "FD_FHC_nue"
+  POT: 1.3628319e+23
+
+  SelectionCuts:
+    - KinematicStr: "TrueXPos"
+      Bounds: [-310.0, 310.0]
+    - KinematicStr: "TrueYPos"
+      Bounds: [-550.0, 550.0]
+    - KinematicStr: "TrueZPos"
+      Bounds: [50.0, 1244.0]
+    - KinematicStr: "CVNNue"
+      Bounds: [0.85, 999.]
+    - KinematicStr: "Mode"
+      Bounds: [-1, 13.5]
+
+  Binning:
+    VarStr: "RecoNeutrinoEnergy"
+    Uniform: true
+    #BinEdges: [0.00, 0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00, 2.25, 2.50, 2.75, 3.00, 3.25, 3.50, 3.75, 4.00, 4.25, 4.50, 4.75, 5.00, 5.25, 5.50, 5.75, 6.00, 6.25, 6.50, 6.75, 7.00, 7.25, 7.50, 7.75, 8.00, 8.25, 8.50, 8.75, 9.00, 9.25, 9.50, 9.75, 10.00]  
+    # Up to 20/30
+    BinEdges: [0.0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0, 3.25, 3.5, 3.75, 4.0, 4.25, 4.5, 4.75, 5.0, 5.25, 5.5, 5.75, 6.0, 6.25, 6.5, 6.75, 7.0, 7.25, 7.5, 7.75, 8.0, 8.25, 8.5, 8.75, 9.0, 9.25, 9.5, 9.75, 10.0, 10.25, 10.5, 10.75, 11.0, 11.25, 11.5, 11.75, 12.0, 12.25, 12.5, 12.75, 13.0, 13.25, 13.5, 13.75, 14.0, 14.25, 14.5, 14.75, 15.0, 15.25, 15.5, 15.75, 16.0, 16.25, 16.5, 16.75, 17.0, 17.25, 17.5, 17.75, 18.0, 18.25, 18.5, 18.75, 19.0, 19.25, 19.5, 19.75, 20.0]
+
+  DUNESampleBools:
+    iselike: yes
+    isFHC: 1
+
+  InputFiles:
+    mtupleprefix: "Inputs/DUNE_CAF_files/FD_FHC_ger_"
+    mtuplesuffix: "_nueselec.root"
+    splineprefix: "Inputs/DUNE_spline_files/FD_FHC_ger_"
+    splinesuffix: "_nueselec_splines.root"
 
 
-  # SelectionCuts:
-  #   - KinematicStr: "TrueXPos"
-  #     Bounds: [-310.0, 310.0]
-  #   - KinematicStr: "TrueYPos"
-  #     Bounds: [-550.0, 550.0]
-  #   - KinematicStr: "TrueZPos"
-  #     Bounds: [50.0, 1244.0]
-  #   - KinematicStr: "CVNNue"
-  #     Bounds: [0.85, 999.]
-  #   - KinematicStr: "Mode"
-  #     Bounds: [-1, 13.5]
-
-#   Binning:
-#     VarStr: "RecoNeutrinoEnergy"
-#     Uniform: true
-#     BinEdges: [0.00, 0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00, 2.25, 2.50, 2.75, 3.00, 3.25, 3.50, 3.75, 4.00, 4.25, 4.50, 4.75, 5.00, 5.25, 5.50, 5.75, 6.00, 6.25, 6.50, 6.75, 7.00, 7.25, 7.50, 7.75, 8.00, 8.25, 8.50, 8.75, 9.00, 9.25, 9.50, 9.75, 10.00]  
-
-#   DUNESampleBools:
-#     iselike: yes
-#     isFHC: 1
-
-#   InputFiles:
-#     mtupleprefix: "Inputs/DUNE_CAF_files/FD_FHC_ger_"
-#     mtuplesuffix: "_nueselec.root"
-#     splineprefix: "Inputs/DUNE_spline_files/FD_FHC_ger_"
-#     splinesuffix: "_nueselec_splines.root"
-
-
-#   SubSamples:
-#     - Name: "FHC_numu_x_numu"
-#       LatexName: "FHC_numu_x_numu"
-#       mtuplefile: "numu_x_numu"
-#       splinefile: "numu_x_numu"
-#       nutype: 14
-#       oscnutype: 14
-#     - Name: "FHC_nue_x_nue"
-#       LatexName: "FHC_nue_x_nue"
-#       mtuplefile: "nue_x_nue"
-#       splinefile: "nue_x_nue"
-#       nutype: 12
-#       oscnutype: 12
-#     - Name: "FHC_numubar_x_numubar"
-#       LatexName: "FHC_numubar_x_numubar"
-#       mtuplefile: "numubar_x_numubar"
-#       splinefile: "numubar_x_numubar"
-#       nutype: -14
-#       oscnutype: -14
-#     - Name: "FHC_nuebar_x_nuebar"
-#       LatexName: "FHC_nuebar_x_nuebar"
-#       mtuplefile: "nuebar_x_nuebar"
-#       splinefile: "nuebar_x_nuebar"
-#       nutype: -12
-#       oscnutype: -12
-#     - Name: "FHC_numu_x_nue"
-#       LatexName: "FHC_numu_x_nue"
-#       mtuplefile: "numu_x_nue"
-#       splinefile: "numu_x_nue"
-#       nutype: 14
-#       oscnutype: 12
-#     - Name: "FHC_numubar_x_nuebar"
-#       LatexName: "FHC_numubar_x_nuebar"
-#       mtuplefile: "numubar_x_nuebar"
-#       splinefile: "numubar_x_nuebar"
-#       nutype: -14
-#       oscnutype: -12
-#     - Name: "FHC_nue_x_numu"
-#       LatexName: "FHC_nue_x_numu"
-#       mtuplefile: "nue_x_numu"
-#       splinefile: "nue_x_numu"
-#       nutype: 12
-#       oscnutype: 14
-#     - Name: "FHC_nuebar_x_numubar"
-#       LatexName: "FHC_nuebar_x_numubar"
-#       mtuplefile: "nuebar_x_numubar"
-#       splinefile: "nuebar_x_numubar"
-#       nutype: -12
-#       oscnutype: -14
-#     - Name: "FHC_numu_x_nutau"
-#       LatexName: "FHC_numu_x_nutau"
-#       mtuplefile: "numu_x_nutau"
-#       splinefile: "numu_x_nutau"
-#       nutype: 14
-#       oscnutype: 16
-#     - Name: "FHC_nue_x_nutau"
-#       LatexName: "FHC_nue_x_nutau"
-#       mtuplefile: "nue_x_nutau"
-#       splinefile: "nue_x_nutau"
-#       nutype: 12
-#       oscnutype: 16
-#     - Name: "FHC_numubar_x_nutaubar"
-#       LatexName: "FHC_numubar_x_nutaubar"
-#       mtuplefile: "numubar_x_nutaubar"
-#       splinefile: "numubar_x_nutaubar"
-#       nutype: -14
-#       oscnutype: -16
-#     - Name: "FHC_nuebar_x_nutaubar"
-#       LatexName: "FHC_nuebar_x_nutaubar"
-#       mtuplefile: "nuebar_x_nutaubar"
-#       splinefile: "nuebar_x_nutaubar"
-#       nutype: -12
-#       oscnutype: -16
+  SubSamples:
+    - Name: "FHC_numu_x_numu"
+      LatexName: "FHC_numu_x_numu"
+      mtuplefile: "numu_x_numu"
+      splinefile: "numu_x_numu"
+      nutype: 14
+      oscnutype: 14
+    - Name: "FHC_nue_x_nue"
+      LatexName: "FHC_nue_x_nue"
+      mtuplefile: "nue_x_nue"
+      splinefile: "nue_x_nue"
+      nutype: 12
+      oscnutype: 12
+    - Name: "FHC_numubar_x_numubar"
+      LatexName: "FHC_numubar_x_numubar"
+      mtuplefile: "numubar_x_numubar"
+      splinefile: "numubar_x_numubar"
+      nutype: -14
+      oscnutype: -14
+    - Name: "FHC_nuebar_x_nuebar"
+      LatexName: "FHC_nuebar_x_nuebar"
+      mtuplefile: "nuebar_x_nuebar"
+      splinefile: "nuebar_x_nuebar"
+      nutype: -12
+      oscnutype: -12
+    - Name: "FHC_numu_x_nue"
+      LatexName: "FHC_numu_x_nue"
+      mtuplefile: "numu_x_nue"
+      splinefile: "numu_x_nue"
+      nutype: 14
+      oscnutype: 12
+    - Name: "FHC_numubar_x_nuebar"
+      LatexName: "FHC_numubar_x_nuebar"
+      mtuplefile: "numubar_x_nuebar"
+      splinefile: "numubar_x_nuebar"
+      nutype: -14
+      oscnutype: -12
+    - Name: "FHC_nue_x_numu"
+      LatexName: "FHC_nue_x_numu"
+      mtuplefile: "nue_x_numu"
+      splinefile: "nue_x_numu"
+      nutype: 12
+      oscnutype: 14
+    - Name: "FHC_nuebar_x_numubar"
+      LatexName: "FHC_nuebar_x_numubar"
+      mtuplefile: "nuebar_x_numubar"
+      splinefile: "nuebar_x_numubar"
+      nutype: -12
+      oscnutype: -14
+    - Name: "FHC_numu_x_nutau"
+      LatexName: "FHC_numu_x_nutau"
+      mtuplefile: "numu_x_nutau"
+      splinefile: "numu_x_nutau"
+      nutype: 14
+      oscnutype: 16
+    - Name: "FHC_nue_x_nutau"
+      LatexName: "FHC_nue_x_nutau"
+      mtuplefile: "nue_x_nutau"
+      splinefile: "nue_x_nutau"
+      nutype: 12
+      oscnutype: 16
+    - Name: "FHC_numubar_x_nutaubar"
+      LatexName: "FHC_numubar_x_nutaubar"
+      mtuplefile: "numubar_x_nutaubar"
+      splinefile: "numubar_x_nutaubar"
+      nutype: -14
+      oscnutype: -16
+    - Name: "FHC_nuebar_x_nutaubar"
+      LatexName: "FHC_nuebar_x_nutaubar"
+      mtuplefile: "nuebar_x_nutaubar"
+      splinefile: "nuebar_x_nutaubar"
+      nutype: -12
+      oscnutype: -16
 
 
 FD_FHC_numu:
@@ -139,11 +140,28 @@ FD_FHC_numu:
       Bounds: [0.5, 999]
     - KinematicStr: "Mode"
       Bounds: [-1, 13.5]
+    # - KinematicStr: "TrueNeutrinoEnergy"
+    #   Bounds: [0.0, 20.0]
 
   Binning:
     VarStr: "RecoNeutrinoEnergy"
     Uniform: true
-    BinEdges: [0.00, 0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00, 2.25, 2.50, 2.75, 3.00, 3.25, 3.50, 3.75, 4.00, 4.25, 4.50, 4.75, 5.00, 5.25, 5.50, 5.75, 6.00, 6.25, 6.50, 6.75, 7.00, 7.25, 7.50, 7.75, 8.00, 8.25, 8.50, 8.75, 9.00, 9.25, 9.50, 9.75, 10.00]  
+    # 0 - 10 in 0.25
+    #BinEdges: [0.00, 0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00, 2.25, 2.50, 2.75, 3.00, 3.25, 3.50, 3.75, 4.00, 4.25, 4.50, 4.75, 5.00, 5.25, 5.50, 5.75, 6.00, 6.25, 6.50, 6.75, 7.00, 7.25, 7.50, 7.75, 8.00, 8.25, 8.50, 8.75, 9.00, 9.25, 9.50, 9.75, 10.00]  
+    # 0 - 20/30 in 0.25
+    BinEdges: [0.0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0, 3.25, 3.5, 3.75, 4.0, 4.25, 4.5, 4.75, 5.0, 5.25, 5.5, 5.75, 6.0, 6.25, 6.5, 6.75, 7.0, 7.25, 7.5, 7.75, 8.0, 8.25, 8.5, 8.75, 9.0, 9.25, 9.5, 9.75, 10.0, 10.25, 10.5, 10.75, 11.0, 11.25, 11.5, 11.75, 12.0, 12.25, 12.5, 12.75, 13.0, 13.25, 13.5, 13.75, 14.0, 14.25, 14.5, 14.75, 15.0, 15.25, 15.5, 15.75, 16.0, 16.25, 16.5, 16.75, 17.0, 17.25, 17.5, 17.75, 18.0, 18.25, 18.5, 18.75, 19.0, 19.25, 19.5, 19.75, 20.0] #, 20.25, 20.5, 20.75, 21.0, 21.25, 21.5, 21.75, 22.0, 22.25, 22.5, 22.75, 23.0, 23.25, 23.5, 23.75, 24.0, 24.25, 24.5, 24.75, 25.0, 25.25, 25.5, 25.75, 26.0, 26.25, 26.5, 26.75, 27.0, 27.25, 27.5, 27.75, 28.0, 28.25, 28.5, 28.75, 29.0, 29.25, 29.5, 29.75, 30.0]
+    # 0 - 30 in 0.125
+    #BinEdges: [0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.125, 1.25, 1.375, 1.5, 1.625, 1.75, 1.875, 2.0, 2.125, 2.25, 2.375, 2.5, 2.625, 2.75, 2.875, 3.0, 3.125, 3.25, 3.375, 3.5, 3.625, 3.75, 3.875, 4.0, 4.125, 4.25, 4.375, 4.5, 4.625, 4.75, 4.875, 5.0, 5.125, 5.25, 5.375, 5.5, 5.625, 5.75, 5.875, 6.0, 6.125, 6.25, 6.375, 6.5, 6.625, 6.75, 6.875, 7.0, 7.125, 7.25, 7.375, 7.5, 7.625, 7.75, 7.875, 8.0, 8.125, 8.25, 8.375, 8.5, 8.625, 8.75, 8.875, 9.0, 9.125, 9.25, 9.375, 9.5, 9.625, 9.75, 9.875, 10.0, 10.125, 10.25, 10.375, 10.5, 10.625, 10.75, 10.875, 11.0, 11.125, 11.25, 11.375, 11.5, 11.625, 11.75, 11.875, 12.0, 12.125, 12.25, 12.375, 12.5, 12.625, 12.75, 12.875, 13.0, 13.125, 13.25, 13.375, 13.5, 13.625, 13.75, 13.875, 14.0, 14.125, 14.25, 14.375, 14.5, 14.625, 14.75, 14.875, 15.0, 15.125, 15.25, 15.375, 15.5, 15.625, 15.75, 15.875, 16.0, 16.125, 16.25, 16.375, 16.5, 16.625, 16.75, 16.875, 17.0, 17.125, 17.25, 17.375, 17.5, 17.625, 17.75, 17.875, 18.0, 18.125, 18.25, 18.375, 18.5, 18.625, 18.75, 18.875, 19.0, 19.125, 19.25, 19.375, 19.5, 19.625, 19.75, 19.875, 20.0, 20.125, 20.25, 20.375, 20.5, 20.625, 20.75, 20.875, 21.0, 21.125, 21.25, 21.375, 21.5, 21.625, 21.75, 21.875, 22.0, 22.125, 22.25, 22.375, 22.5, 22.625, 22.75, 22.875, 23.0, 23.125, 23.25, 23.375, 23.5, 23.625, 23.75, 23.875, 24.0, 24.125, 24.25, 24.375, 24.5, 24.625, 24.75, 24.875, 25.0, 25.125, 25.25, 25.375, 25.5, 25.625, 25.75, 25.875, 26.0, 26.125, 26.25, 26.375, 26.5, 26.625, 26.75, 26.875, 27.0, 27.125, 27.25, 27.375, 27.5, 27.625, 27.75, 27.875, 28.0, 28.125, 28.25, 28.375, 28.5, 28.625, 28.75, 28.875, 29.0, 29.125, 29.25, 29.375, 29.5, 29.625, 29.75, 29.875, 30.0]
+    # 0 - 10 in 0.125
+    #BinEdges: [0.000, 0.125, 0.250, 0.375, 0.500, 0.625, 0.750, 0.875, 1.000, 1.125, 1.250, 1.375, 1.500, 1.625, 1.750, 1.875, 2.000, 2.125, 2.250, 2.375, 2.500, 2.625, 2.750, 2.875, 3.000, 3.125, 3.250, 3.375, 3.500, 3.625, 3.750, 3.875, 4.000, 4.125, 4.250, 4.375, 4.500, 4.625, 4.750, 4.875, 5.000, 5.125, 5.250, 5.375, 5.500, 5.625, 5.750, 5.875, 6.000, 6.125, 6.250, 6.375, 6.500, 6.625, 6.750, 6.875, 7.000, 7.125, 7.250, 7.375, 7.500, 7.625, 7.750, 7.875, 8.000, 8.125, 8.250, 8.375, 8.500, 8.625, 8.750, 8.875, 9.000, 9.125, 9.250, 9.375, 9.500, 9.625, 9.750, 9.875, 10.000]
+    # 0 - 10 in 0.0625
+    #BinEdges: [0.0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625, 1.125, 1.1875, 1.25, 1.3125, 1.375, 1.4375, 1.5, 1.5625, 1.625, 1.6875, 1.75, 1.8125, 1.875, 1.9375, 2.0, 2.0625, 2.125, 2.1875, 2.25, 2.3125, 2.375, 2.4375, 2.5, 2.5625, 2.625, 2.6875, 2.75, 2.8125, 2.875, 2.9375, 3.0, 3.0625, 3.125, 3.1875, 3.25, 3.3125, 3.375, 3.4375, 3.5, 3.5625, 3.625, 3.6875, 3.75, 3.8125, 3.875, 3.9375, 4.0, 4.0625, 4.125, 4.1875, 4.25, 4.3125, 4.375, 4.4375, 4.5, 4.5625, 4.625, 4.6875, 4.75, 4.8125, 4.875, 4.9375, 5.0, 5.0625, 5.125, 5.1875, 5.25, 5.3125, 5.375, 5.4375, 5.5, 5.5625, 5.625, 5.6875, 5.75, 5.8125, 5.875, 5.9375, 6.0, 6.0625, 6.125, 6.1875, 6.25, 6.3125, 6.375, 6.4375, 6.5, 6.5625, 6.625, 6.6875, 6.75, 6.8125, 6.875, 6.9375, 7.0, 7.0625, 7.125, 7.1875, 7.25, 7.3125, 7.375, 7.4375, 7.5, 7.5625, 7.625, 7.6875, 7.75, 7.8125, 7.875, 7.9375, 8.0, 8.0625, 8.125, 8.1875, 8.25, 8.3125, 8.375, 8.4375, 8.5, 8.5625, 8.625, 8.6875, 8.75, 8.8125, 8.875, 8.9375, 9.0, 9.0625, 9.125, 9.1875, 9.25, 9.3125, 9.375, 9.4375, 9.5, 9.5625, 9.625, 9.6875, 9.75, 9.8125, 9.875, 9.9375, 10.0]
+
+
+    # VarStr: "TrueNeutrinoEnergy"
+    # Uniform: true
+    # BinEdges: [0.00, 0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00, 2.25, 2.50, 2.75, 3.00, 3.25, 3.50, 3.75, 4.00, 4.25, 4.50, 4.75, 5.00, 5.25, 5.50, 5.75, 6.00, 6.25, 6.50, 6.75, 7.00, 7.25, 7.50, 7.75, 8.00, 8.25, 8.50, 8.75, 9.00, 9.25, 9.50, 9.75, 10.00]  
+
 
   DUNESampleBools:
     iselike: no
@@ -244,7 +262,7 @@ FD_FHC_numu:
 #     - KinematicStr: "CVNNue"
 #       Bounds: [0.85, 999]
 #     - KinematicStr: "Mode"
-#     Bounds: [-1, 13.5]
+#       Bounds: [-1, 13.5]
 
 #   Binning:
 #     VarStr: "RecoNeutrinoEnergy"

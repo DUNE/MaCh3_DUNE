@@ -10,7 +10,7 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
 
   (void)beamNDCov;
   
-  if (SampleType == "BeamFD") {
+  if (SampleType == "BeamFD") { // Add in other sample names as needed if want to run on individual samples
     Sample = new SampleHandlerBeamFD(SampleConfig, xsec, BeamOscillator_);
   } else if (SampleType == "BeamND") {
     
@@ -92,6 +92,8 @@ void MakeMaCh3DuneInstance(std::unique_ptr<Manager>& FitManager, std::vector<Sam
 
   xsec->SetParameters();
   xsec->SetStepScale(FitManager->raw()["General"]["Systematics"]["XsecStepScale"].as<double>());
+  xsec->SetRegVal(FitManager->raw()["General"]["Systematics"]["XsecRegValue"].as<double>());
+  MACH3LOG_INFO("Regularisation value changed to {}", FitManager->raw()["General"]["Systematics"]["XsecRegValue"].as<double>());
 
   if(CheckNodeExists(FitManager->raw(), "General", "OscillationParameters")){
     std::vector<double> oscpars = FitManager->raw()["General"]["OscillationParameters"].as<std::vector<double>>();
