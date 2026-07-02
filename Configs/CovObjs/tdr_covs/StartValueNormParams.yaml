@@ -2,7 +2,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -29,7 +29,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -56,7 +56,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -83,7 +83,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -110,7 +110,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -137,7 +137,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -164,7 +164,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -191,7 +191,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -218,7 +218,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -245,7 +245,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -272,7 +272,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -299,7 +299,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -326,7 +326,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -353,7 +353,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -380,7 +380,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -407,7 +407,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -434,7 +434,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -461,7 +461,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -488,7 +488,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -515,7 +515,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -542,7 +542,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -569,7 +569,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -596,7 +596,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -623,7 +623,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -650,7 +650,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -677,7 +677,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -704,7 +704,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -731,7 +731,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -758,7 +758,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -785,7 +785,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -812,7 +812,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -839,7 +839,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -866,7 +866,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -893,7 +893,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -920,7 +920,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -947,7 +947,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -974,7 +974,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1001,7 +1001,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1028,7 +1028,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1055,7 +1055,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1082,7 +1082,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -1109,7 +1109,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -1136,7 +1136,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -1163,7 +1163,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1190,7 +1190,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1217,7 +1217,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -1244,7 +1244,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -1271,7 +1271,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1298,7 +1298,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1325,7 +1325,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -1352,7 +1352,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -1379,7 +1379,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1406,7 +1406,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -1433,7 +1433,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1460,7 +1460,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1487,7 +1487,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1514,7 +1514,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -1541,7 +1541,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1568,7 +1568,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1595,7 +1595,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1622,7 +1622,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -1649,7 +1649,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -1676,7 +1676,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1703,7 +1703,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1730,7 +1730,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1757,7 +1757,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -1784,7 +1784,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1811,7 +1811,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1838,7 +1838,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -1865,7 +1865,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1892,7 +1892,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -1919,7 +1919,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1946,7 +1946,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -1973,7 +1973,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -2000,7 +2000,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2027,7 +2027,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -2054,7 +2054,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2081,7 +2081,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2108,7 +2108,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -2135,7 +2135,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -2162,7 +2162,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2189,7 +2189,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2216,7 +2216,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2243,7 +2243,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2270,7 +2270,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2297,7 +2297,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2324,7 +2324,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2351,7 +2351,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2378,7 +2378,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2405,7 +2405,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2432,7 +2432,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2459,7 +2459,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2486,7 +2486,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2513,7 +2513,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2540,7 +2540,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2567,7 +2567,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2594,7 +2594,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2621,7 +2621,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2648,7 +2648,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2675,7 +2675,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2702,7 +2702,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2729,7 +2729,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2756,7 +2756,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2783,7 +2783,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2810,7 +2810,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2837,7 +2837,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2864,7 +2864,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2891,7 +2891,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2918,7 +2918,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2945,7 +2945,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2972,7 +2972,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -2999,7 +2999,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -3026,7 +3026,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -3053,7 +3053,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -3080,7 +3080,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -3107,7 +3107,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -3134,7 +3134,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -3161,7 +3161,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -3188,7 +3188,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -3215,7 +3215,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -3242,7 +3242,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3269,7 +3269,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3296,7 +3296,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3323,7 +3323,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3350,7 +3350,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3377,7 +3377,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3404,7 +3404,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3431,7 +3431,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3458,7 +3458,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3485,7 +3485,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3512,7 +3512,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3539,7 +3539,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3566,7 +3566,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3593,7 +3593,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3620,7 +3620,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3647,7 +3647,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3674,7 +3674,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3701,7 +3701,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3728,7 +3728,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3755,7 +3755,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3782,7 +3782,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3809,7 +3809,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3836,7 +3836,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3863,7 +3863,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3890,7 +3890,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3917,7 +3917,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3944,7 +3944,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3971,7 +3971,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -3998,7 +3998,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4025,7 +4025,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -4052,7 +4052,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -4079,7 +4079,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -4106,7 +4106,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -4133,7 +4133,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -4160,7 +4160,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -4187,7 +4187,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -4214,7 +4214,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -4241,7 +4241,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -4268,7 +4268,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -4295,7 +4295,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -4322,7 +4322,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -4349,7 +4349,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4376,7 +4376,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4403,7 +4403,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4430,7 +4430,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4457,7 +4457,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4484,7 +4484,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4511,7 +4511,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4538,7 +4538,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4565,7 +4565,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4592,7 +4592,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4619,7 +4619,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4646,7 +4646,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4673,7 +4673,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4700,7 +4700,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4727,7 +4727,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4754,7 +4754,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4781,7 +4781,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4808,7 +4808,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4835,7 +4835,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4862,7 +4862,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4889,7 +4889,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4916,7 +4916,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4943,7 +4943,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4970,7 +4970,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -4997,7 +4997,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5024,7 +5024,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5051,7 +5051,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5078,7 +5078,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5105,7 +5105,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5132,7 +5132,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5159,7 +5159,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5186,7 +5186,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5213,7 +5213,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5240,7 +5240,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5267,7 +5267,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5294,7 +5294,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5321,7 +5321,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5348,7 +5348,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5375,7 +5375,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5402,7 +5402,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -5429,7 +5429,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -5456,7 +5456,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -5483,7 +5483,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -5510,7 +5510,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5537,7 +5537,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -5564,7 +5564,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5591,7 +5591,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -5618,7 +5618,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -5645,7 +5645,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5672,7 +5672,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5699,7 +5699,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -5726,7 +5726,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5753,7 +5753,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5780,7 +5780,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5807,7 +5807,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5834,7 +5834,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -5861,7 +5861,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5888,7 +5888,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5915,7 +5915,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5942,7 +5942,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -5969,7 +5969,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -5996,7 +5996,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -6023,7 +6023,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6050,7 +6050,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6077,7 +6077,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -6104,7 +6104,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6131,7 +6131,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6158,7 +6158,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -6185,7 +6185,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -6212,7 +6212,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6239,7 +6239,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -6266,7 +6266,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -6293,7 +6293,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6320,7 +6320,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -6347,7 +6347,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -6374,7 +6374,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -6401,7 +6401,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -6428,7 +6428,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6455,7 +6455,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6482,7 +6482,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -6509,7 +6509,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6536,7 +6536,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6563,7 +6563,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6590,7 +6590,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6617,7 +6617,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6644,7 +6644,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6671,7 +6671,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6698,7 +6698,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6725,7 +6725,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6752,7 +6752,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6779,7 +6779,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6806,7 +6806,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6833,7 +6833,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6860,7 +6860,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6887,7 +6887,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6914,7 +6914,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6941,7 +6941,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6968,7 +6968,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -6995,7 +6995,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7022,7 +7022,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7049,7 +7049,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7076,7 +7076,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7103,7 +7103,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7130,7 +7130,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7157,7 +7157,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7184,7 +7184,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7211,7 +7211,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7238,7 +7238,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7265,7 +7265,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7292,7 +7292,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7319,7 +7319,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7346,7 +7346,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7373,7 +7373,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7400,7 +7400,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7427,7 +7427,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7454,7 +7454,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7481,7 +7481,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7508,7 +7508,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7535,7 +7535,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7562,7 +7562,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7589,7 +7589,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7616,7 +7616,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7643,7 +7643,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7670,7 +7670,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7697,7 +7697,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7724,7 +7724,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7751,7 +7751,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7778,7 +7778,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7805,7 +7805,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7832,7 +7832,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7859,7 +7859,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7886,7 +7886,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7913,7 +7913,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7940,7 +7940,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7967,7 +7967,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -7994,7 +7994,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8021,7 +8021,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8048,7 +8048,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8075,7 +8075,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8102,7 +8102,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8129,7 +8129,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8156,7 +8156,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8183,7 +8183,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8210,7 +8210,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8237,7 +8237,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8264,7 +8264,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8291,7 +8291,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8318,7 +8318,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8345,7 +8345,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8372,7 +8372,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8399,7 +8399,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8426,7 +8426,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8453,7 +8453,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8480,7 +8480,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8507,7 +8507,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8534,7 +8534,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8561,7 +8561,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8588,7 +8588,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8615,7 +8615,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8642,7 +8642,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -8669,7 +8669,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8696,7 +8696,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8723,7 +8723,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8750,7 +8750,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8777,7 +8777,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8804,7 +8804,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8831,7 +8831,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8858,7 +8858,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8885,7 +8885,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8912,7 +8912,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8939,7 +8939,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8966,7 +8966,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -8993,7 +8993,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9020,7 +9020,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9047,7 +9047,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9074,7 +9074,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9101,7 +9101,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9128,7 +9128,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9155,7 +9155,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9182,7 +9182,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9209,7 +9209,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9236,7 +9236,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9263,7 +9263,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9290,7 +9290,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9317,7 +9317,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9344,7 +9344,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9371,7 +9371,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9398,7 +9398,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9425,7 +9425,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9452,7 +9452,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9479,7 +9479,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9506,7 +9506,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9533,7 +9533,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9560,7 +9560,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9587,7 +9587,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9614,7 +9614,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9641,7 +9641,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9668,7 +9668,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9695,7 +9695,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9722,7 +9722,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -9749,7 +9749,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -9776,7 +9776,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9803,7 +9803,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9830,7 +9830,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9857,7 +9857,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9884,7 +9884,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9911,7 +9911,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9938,7 +9938,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9965,7 +9965,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -9992,7 +9992,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10019,7 +10019,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10046,7 +10046,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10073,7 +10073,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10100,7 +10100,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10127,7 +10127,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10154,7 +10154,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10181,7 +10181,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10208,7 +10208,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10235,7 +10235,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10262,7 +10262,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10289,7 +10289,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10316,7 +10316,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10343,7 +10343,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10370,7 +10370,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10397,7 +10397,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10424,7 +10424,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10451,7 +10451,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10478,7 +10478,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10505,7 +10505,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10532,7 +10532,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10559,7 +10559,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10586,7 +10586,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10613,7 +10613,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10640,7 +10640,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10667,7 +10667,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10694,7 +10694,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10721,7 +10721,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10748,7 +10748,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10775,7 +10775,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10802,7 +10802,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -10829,7 +10829,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10856,7 +10856,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10883,7 +10883,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10910,7 +10910,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10937,7 +10937,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10964,7 +10964,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -10991,7 +10991,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11018,7 +11018,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11045,7 +11045,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11072,7 +11072,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11099,7 +11099,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11126,7 +11126,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11153,7 +11153,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11180,7 +11180,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11207,7 +11207,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11234,7 +11234,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11261,7 +11261,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11288,7 +11288,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11315,7 +11315,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11342,7 +11342,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11369,7 +11369,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11396,7 +11396,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11423,7 +11423,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11450,7 +11450,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11477,7 +11477,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11504,7 +11504,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11531,7 +11531,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11558,7 +11558,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11585,7 +11585,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11612,7 +11612,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11639,7 +11639,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11666,7 +11666,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11693,7 +11693,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11720,7 +11720,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11747,7 +11747,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11774,7 +11774,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11801,7 +11801,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11828,7 +11828,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11855,7 +11855,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11882,7 +11882,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -11909,7 +11909,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -11936,7 +11936,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11963,7 +11963,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -11990,7 +11990,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -12017,7 +12017,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12044,7 +12044,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -12071,7 +12071,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -12098,7 +12098,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -12125,7 +12125,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12152,7 +12152,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12179,7 +12179,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -12206,7 +12206,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12233,7 +12233,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12260,7 +12260,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12287,7 +12287,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -12314,7 +12314,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12341,7 +12341,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -12368,7 +12368,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12395,7 +12395,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12422,7 +12422,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -12449,7 +12449,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12476,7 +12476,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12503,7 +12503,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -12530,7 +12530,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12557,7 +12557,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12584,7 +12584,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12611,7 +12611,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12638,7 +12638,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -12665,7 +12665,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12692,7 +12692,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -12719,7 +12719,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12746,7 +12746,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -12773,7 +12773,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -12800,7 +12800,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12827,7 +12827,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -12854,7 +12854,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
@@ -12881,7 +12881,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -12908,7 +12908,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: true
       KinematicCuts:
@@ -12935,7 +12935,7 @@ Systematics:
   - Systematic:
       SampleNames:
         - BeamFD
-      Error: 1
+      Error: 0.1
       FlatPrior: true
       FixParam: false
       KinematicCuts:
