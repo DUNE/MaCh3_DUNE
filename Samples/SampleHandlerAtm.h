@@ -55,7 +55,8 @@ protected:
   /// @brief Cleanup memory
   void CleanMemoryBeforeFit() override {};
 
-  void RegisterFunctionalParameters() override {};
+  /// @brief Register Functional Parameters
+  void RegisterFunctionalParameters();
   
   //DB functions which could be initialised to do something which is non-trivial
   
@@ -138,6 +139,15 @@ protected:
   int ReturnSampleIdentifier(std::vector<double> CVNScores, double MinDistanceToWall);
   std::vector<std::string> EventSelectionNames = std::vector<std::string>(nEventSelections);
   std::vector<int> EventSelection_to_SampleIndex_Map = std::vector<int>(nEventSelections,kEventSel_Unknown);
+
+  /// DB Flux uncertainties
+  void ResetShifts(int iEvent) override;
+  
+  enum AtmHondaFluxEnum {kAtmHondaFluxLowEnergy,kAtmHondaFluxHighEnergy,nAtmHondaFluxSplines};
+  std::vector<TSpline3*> AtmHondaFluxUncertaintySplines = std::vector<TSpline3*>(nAtmHondaFluxSplines);
+  float AtmHondaFluxUncertaintyEnergySplit;
+
+  void HondaFluxUncertainty(const double* par, size_t iEvent);
 };
 
 #endif

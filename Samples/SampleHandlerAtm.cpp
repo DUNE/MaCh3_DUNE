@@ -34,6 +34,18 @@ void SampleHandlerAtm::Init() {
   //DB Value used to determine selection criteria for FC and PC separation in function of 'walldist' variable
   FCPCSeparation = Get<double>(SampleManager->raw()["AnalysisOptions"]["FCPCSeparation"],__FILE__,__LINE__);
 
+  //DB Read-in splines to deal with Honda Model Energy uncertainties
+  TString HondaModelFluxUncertaintiesInputFile = SampleManager->raw()["AtmFluxUncertainties"]["InputFileName"].as<std::string>().c_str();
+  TFile* AtmHondaFluxUncertaintySplineFile = TFile::Open(HondaModelFluxUncertaintiesInputFile);
+  if (!AtmHondaFluxUncertaintySplineFile || AtmHondaFluxUncertaintySplineFile->IsZombie()) {
+    MACH3LOG_ERROR("Did not find file: {}",HondaModelFluxUncertaintiesInputFile);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  AtmHondaFluxUncertaintyEnergySplit = SampleManager->raw()["AtmFluxUncertainties"]["EnergySplit"].as<float>();
+  AtmHondaFluxUncertaintySplines[kAtmHondaFluxLowEnergy] = AtmHondaFluxUncertaintySplineFile->Get<TSpline3>(SampleManager->raw()["AtmFluxUncertainties"]["LowEnergySplineName"].as<std::string>().c_str());
+  AtmHondaFluxUncertaintySplines[kAtmHondaFluxHighEnergy] = AtmHondaFluxUncertaintySplineFile->Get<TSpline3>(SampleManager->raw()["AtmFluxUncertainties"]["HighEnergySplineName"].as<std::string>().c_str());
+  AtmHondaFluxUncertaintySplineFile->Close();
+  
   //DB Define the names of the samples we're performing event selection for
   EventSelectionNames[kEventSel_FC_NuE]  = "FC_nueselec";
   EventSelectionNames[kEventSel_FC_NuMu] = "FC_numuselec";
@@ -66,6 +78,18 @@ void SampleHandlerAtm::Init() {
   
 }
 
+void SampleHandlerAtm::RegisterFunctionalParameters() {
+  MACH3LOG_INFO("Registering functional parameters");
+  
+  RegisterIndividualFunctionalParameter("HondaFlux_TotalUncertainty_Below1GeV",
+                                        kAtmHondaFluxLowEnergy,
+                                        [this](const double * par, std::size_t iEvent) { this->HondaFluxUncertainty(par, iEvent); });
+  
+  RegisterIndividualFunctionalParameter("HondaFlux_TotalUncertainty_Above1GeV",
+                                        kAtmHondaFluxHighEnergy,
+                                        [this](const double * par, std::size_t iEvent) { this->HondaFluxUncertainty(par, iEvent); });
+}
+
 void SampleHandlerAtm::InititialiseData() {
   Reweight();
   for (int iSample = 0; iSample < GetNSamples(); iSample++) {
@@ -80,6 +104,7 @@ void SampleHandlerAtm::SetupSplines() {
 void SampleHandlerAtm::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < dunemcSamples.size(); ++i) {
     MCEvents[i].total_weight_pointers.push_back(&(dunemcSamples[i].flux_w));
+    MCEvents[i].total_weight_pointers.push_back(&(dunemcSamples[i].atmflux_w));    
     MCEvents[i].total_weight_pointers.push_back(&(ExposureScaling));
   }  
 }
@@ -127,7 +152,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
 
   for (int iTreeEntry=0;iTreeEntry<nTreeEntries;iTreeEntry++) {
     weightsTree->GetEntry(iTreeEntry);
-    
+
 #if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)      
     cafTree->LoadTree(iTreeEntry);
 #else
@@ -196,8 +221,16 @@ int SampleHandlerAtm::SetupExperimentMC() {
     double TrueNeutrinoEnergy = static_cast<double>(sr->mc.nu[0].E);
     TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.x,sr->mc.nu[0].momentum.y,sr->mc.nu[0].momentum.z)).Unit();
 
-    struct dunemc_atm currentEvent_FromNuE;
+    double HondaFluxUncertaintyFactor = 0;
+    if (TrueNeutrinoEnergy < AtmHondaFluxUncertaintyEnergySplit) {
+      HondaFluxUncertaintyFactor = AtmHondaFluxUncertaintySplines[kAtmHondaFluxLowEnergy]->Eval(TrueNeutrinoEnergy);
+    } else {
+      HondaFluxUncertaintyFactor = AtmHondaFluxUncertaintySplines[kAtmHondaFluxHighEnergy]->Eval(TrueNeutrinoEnergy);
+    }
     
+    struct dunemc_atm currentEvent_FromNuE;
+
+    currentEvent_FromNuE.HondaFluxUncertaintyFactor = HondaFluxUncertaintyFactor;
     currentEvent_FromNuE.rw_erec = RecoENu;
     currentEvent_FromNuE.rw_theta = RecoCZ;
     currentEvent_FromNuE.SampleIndex = SampleIndex;
@@ -210,6 +243,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
     currentEvent_FromNuE.enu_true = TrueNeutrinoEnergy;
     currentEvent_FromNuE.coszenith_true = -TrueNuMomentumVector.y(); // +Y in CAF files translates to +Z in typical CosZ
     currentEvent_FromNuE.flux_w = xsec_w*flux_nue_w;
+    currentEvent_FromNuE.atmflux_w = 1.0;
     currentEvent_FromNuE.MinDistToWall = MinDistToWall;
     
     struct dunemc_atm currentEvent_FromNuMu = currentEvent_FromNuE;
@@ -250,6 +284,14 @@ void SampleHandlerAtm::SetupMC() {
   }
 }
 
+void SampleHandlerAtm::HondaFluxUncertainty(const double* DialValue, size_t iEvent) {
+  dunemcSamples[iEvent].atmflux_w *= (1.0+(*DialValue)*dunemcSamples[iEvent].HondaFluxUncertaintyFactor);
+}
+
+void SampleHandlerAtm::ResetShifts(int iEvent) {
+  dunemcSamples[iEvent].atmflux_w = 1.0;
+}
+
 const double* SampleHandlerAtm::GetPointerToKinematicParameter(const int KinPar, int iEvent) const {
   switch (KinPar) {
   case kTrueNeutrinoEnergy:
@@ -273,7 +315,6 @@ const double* SampleHandlerAtm::GetPointerToKinematicParameter(const int KinPar,
     throw MaCh3Exception(__FILE__, __LINE__);
   }
 }
-
 
 double SampleHandlerAtm::ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const {
   KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);

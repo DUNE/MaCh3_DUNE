@@ -17,6 +17,12 @@ AnalysisOptions:
   # Events are considered FC if all space points are further away from the TPC face than this value.
   FCPCSeparation: 10.0
 
+AtmFluxUncertainties:
+  InputFileName: "Inputs/Atmospherics/HondaFluxTotalUncertaintySplines.root"
+  EnergySplit: 1.0 #In GeV/C
+  LowEnergySplineName: "HondaTotalUncertainty_EnergyBin_0"
+  HighEnergySplineName: "HondaTotalUncertainty_EnergyBin_1"
+
 Samples:
   - Atm_FC_numulike
   - Atm_FC_nuelike
