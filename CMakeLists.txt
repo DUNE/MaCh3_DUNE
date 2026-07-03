@@ -175,7 +175,7 @@ set(MaCh3_FOUND FALSE)
 find_package(MaCh3  QUIET)
 set(
 	MaCh3_CORE_BRANCH
-	hwallace/feature/more_python_bindings
+	v2.5.1
 	CACHE
 		STRING
 		"Specify the MaCh3 core branch to use"
