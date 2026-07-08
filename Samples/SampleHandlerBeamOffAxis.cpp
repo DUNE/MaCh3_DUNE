@@ -213,12 +213,14 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
     auto sample_evs = ReadEvents(CAFChain);
 
     // fix up any analysis specific information
+    int n_contained = 0, n_tracked = 0, n_muon_neither = 0, n_not_muon = 0;
     for (auto &ev : sample_evs) {
 
       ev.subsample = iSubSample;
       ev.is_numode = subsample_is_numode[iSubSample];
 
       ev.weights.pot = subsample_analysispot[iSubSample] / subsample_cafpot;
+     // std::cout<< "pot scaling = " << ev.weights.pot << std::endl;
 
       ev.truth.mach3_mode =
           Modes->GetModeFromGenerator(std::abs(ev.truth.generator_mode));
@@ -237,7 +239,21 @@ int SampleHandlerBeamOffAxis::SetupExperimentMC() {
             GetFluxVariationRatios(ev.truth.nu.pdg, ev.truth.nu.e,
                                    ev.truth.vtx.off_axis_pos_m, true);
       }
+      // Add this block at the end of the loop body:
+    if (std::abs(ev.truth.lep.pdg) == 13) {
+        if (ev.reco.muonlike_contained)       n_contained++;
+        else if (ev.reco.muonlike_tracker)    n_tracked++;
+        else                                   n_muon_neither++;
+    } else {
+        n_not_muon++;
     }
+    }
+    // After the loop, print the results:
+MACH3LOG_INFO("Subsample [{}] muon classification:", iSubSample);
+MACH3LOG_INFO("  true muon + contained:  {}", n_contained);
+MACH3LOG_INFO("  true muon + tracked:    {}", n_tracked);
+MACH3LOG_INFO("  true muon + neither:    {}", n_muon_neither);
+MACH3LOG_INFO("  not true muon (pdg!=13): {}", n_not_muon);
 
     DUNEMCEvents.reserve(DUNEMCEvents.size() + CAFChain.GetEntries());
     std::copy(sample_evs.begin(), sample_evs.end(),
