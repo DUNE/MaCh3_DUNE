@@ -72,18 +72,45 @@ ProcessMCMC:
 
   # Triangle plots — one per signal category (truth-impure background correction excluded)
   TrianglePlot:
-    - ["Absorption", ["Abs_TrueEBin_Under", "Abs_TrueEBin_0", "Abs_TrueEBin_1",
-                      "Abs_TrueEBin_2", "Abs_TrueEBin_Over", "Abs_Escaping"]]
-    - ["ChargeExchange", ["CEx_TrueEBin_Under", "CEx_TrueEBin_0", "CEx_TrueEBin_1",
-                          "CEx_TrueEBin_2", "CEx_TrueEBin_Over", "CEx_Escaping"]]
-    - ["PionProduction", ["Pion_TrueEBin_Under", "Pion_TrueEBin_0", "Pion_TrueEBin_1",
-                          "Pion_TrueEBin_2", "Pion_TrueEBin_Over", "Pion_Escaping"]]
+    - ["Absorption", ["TrueAbs-Init_Under-End_Under", "TrueAbs-Init_0-End_Under", "TrueAbs-Init_1-End_Under", "TrueAbs-Init_2-End_Under", "TrueAbs-Init_Over-End_Under",
+                      "TrueAbs-Init_0-End_0", "TrueAbs-Init_1-End_0", "TrueAbs-Init_2-End_0", "TrueAbs-Init_Over-End_0",
+                      "TrueAbs-Init_1-End_1", "TrueAbs-Init_2-End_1", "TrueAbs-Init_Over-End_1",
+                      "TrueAbs-Init_2-End_2", "TrueAbs-Init_Over-End_2",
+                      "TrueAbs-Init_Over-End_Over"]]
+    - ["ChargeExchange", ["TrueCEx-Init_Under-End_Under", "TrueCEx-Init_0-End_Under", "TrueCEx-Init_1-End_Under", "TrueCEx-Init_2-End_Under", "TrueCEx-Init_Over-End_Under",
+                      "TrueCEx-Init_0-End_0", "TrueCEx-Init_1-End_0", "TrueCEx-Init_2-End_0", "TrueCEx-Init_Over-End_0",
+                      "TrueCEx-Init_1-End_1", "TrueCEx-Init_2-End_1", "TrueCEx-Init_Over-End_1",
+                      "TrueCEx-Init_2-End_2", "TrueCEx-Init_Over-End_2",
+                      "TrueCEx-Init_Over-End_Over"]]
+    - ["PionProduction", ["TruePip-Init_Under-End_Under", "TruePip-Init_0-End_Under", "TruePip-Init_1-End_Under", "TruePip-Init_2-End_Under", "TruePip-Init_Over-End_Under",
+                      "TruePip-Init_0-End_0", "TruePip-Init_1-End_0", "TruePip-Init_2-End_0", "TruePip-Init_Over-End_0",
+                      "TruePip-Init_1-End_1", "TruePip-Init_2-End_1", "TruePip-Init_Over-End_1",
+                      "TruePip-Init_2-End_2", "TruePip-Init_Over-End_2",
+                      "TruePip-Init_Over-End_Over"]]
+    - ["PionDecay", ["TrueDecay-Init_Under-End_Under", "TrueDecay-Init_0-End_Under", "TrueDecay-Init_1-End_Under", "TrueDecay-Init_2-End_Under", "TrueDecay-Init_Over-End_Under",
+                      "TrueDecay-Init_0-End_0", "TrueDecay-Init_1-End_0", "TrueDecay-Init_2-End_0", "TrueDecay-Init_Over-End_0",
+                      "TrueDecay-Init_1-End_1", "TrueDecay-Init_2-End_1", "TrueDecay-Init_Over-End_1",
+                      "TrueDecay-Init_2-End_2", "TrueDecay-Init_Over-End_2",
+                      "TrueDecay-Init_Over-End_Over"]]
+    - ["EscapingPion", ["TrueEsc-Init_Under-End_Under", "TrueEsc-Init_0-End_Under", "TrueEsc-Init_1-End_Under", "TrueEsc-Init_2-End_Under", "TrueEsc-Init_Over-End_Under",
+                      "TrueEsc-Init_0-End_0", "TrueEsc-Init_1-End_0", "TrueEsc-Init_2-End_0", "TrueEsc-Init_Over-End_0",
+                      "TrueEsc-Init_1-End_1", "TrueEsc-Init_2-End_1", "TrueEsc-Init_Over-End_1",
+                      "TrueEsc-Init_2-End_2", "TrueEsc-Init_Over-End_2",
+                      "TrueEsc-Init_Over-End_Over"]]
+    - ["Impurity", ["TrueImpure-Init_Under-End_Under", "TrueImpure-Init_0-End_Under", "TrueImpure-Init_1-End_Under", "TrueImpure-Init_2-End_Under", "TrueImpure-Init_Over-End_Under",
+                      "TrueImpure-Init_0-End_0", "TrueImpure-Init_1-End_0", "TrueImpure-Init_2-End_0", "TrueImpure-Init_Over-End_0",
+                      "TrueImpure-Init_1-End_1", "TrueImpure-Init_2-End_1", "TrueImpure-Init_Over-End_1",
+                      "TrueImpure-Init_2-End_2", "TrueImpure-Init_Over-End_2",
+                      "TrueImpure-Init_Over-End_Over"]]
+    # - ["Impurity", ["TrueImpure-Init_Under", "TrueImpure-Init_0", "TrueImpure-Init_1", "TrueImpure-Init_2", "TrueImpure-Init_Over"]]
+    # - ["Impurity", ["TrueImpure"]]
 
   # Track MCMC convergence for one energy bin per signal category
   ParameterEvolution:
-    - ["Abs_TrueEBin_0", 20]
-    - ["CEx_TrueEBin_0", 20]
-    - ["Pion_TrueEBin_0", 20]
+    - ["TrueAbs-Init_Over-End_1", 20]
+    - ["TrueCEx-Init_Over-End_1", 20]
+    - ["TruePip-Init_Over-End_1", 20]
+    - ["TrueEsc-Init_Over-End_1", 20]
 
   Thinning: [false, 100]
 
@@ -96,22 +123,30 @@ ProcessMCMC:
 #########################################
 GetPenaltyTerm:
   # Signal categories + beam impurity background correction separated
-  PenaltySets: ["Signal_Abs", "Signal_CEx", "Signal_Pion", "BkgCorrection"]
+  PenaltySets: ["Signal_Abs", "Signal_CEx", "Signal_Pion", "Signal_Escape", "Signal_Decay", "BkgCorrection"]
 
   Signal_Abs:
-    - ["Abs_"]
+    - ["TrueAbs-"]
     - false
     - "-logL_{Abs}"
   Signal_CEx:
-    - ["CEx_"]
+    - ["TrueCEx-"]
     - false
     - "-logL_{CEx}"
   Signal_Pion:
-    - ["Pion_"]
+    - ["TruePip-"]
     - false
-    - "-logL_{Pion}"
+    - "-logL_{Pip}"
+  Signal_Escape:
+    - ["TrueEsc-"]
+    - false
+    - "-logL_{Esc}"
+  Signal_Decay:
+    - ["TrueDecay-"]
+    - false
+    - "-logL_{Decay}"
   BkgCorrection:
-    - ["Impure_"]
+    - ["TrueImpure-"]
     - false
     - "-logL_{TruthImpure}"
 
@@ -119,7 +154,7 @@ GetPenaltyTerm:
 #########################################
 PlotSigmaVariation:
   # One representative true-energy bin from each signal category
-  ParamNames: ["Abs_TrueEBin_0", "CEx_TrueEBin_0", "Pion_TrueEBin_0"]
+  ParamNames: ["TrueAbs-Init_Over-End_1", "TrueCEx-Init_Over-End_1", "TruePip-Init_Over-End_1", "TrueEsc-Init_Over-End_1"]
   # kRed, kBlue, kGreen
   Coulour: [632, 600, 416]
 
@@ -137,41 +172,67 @@ MatrixPlotter:
     "Abs",
     "CEx",
     "Pion",
+    "Decay",
+    "Escaping",
     "BkgTruthImpure",
   ]
 
   Abs: [
-    "Abs_TrueEBin_Under",
-    "Abs_TrueEBin_0",
-    "Abs_TrueEBin_1",
-    "Abs_TrueEBin_2",
-    "Abs_TrueEBin_Over",
-    "Abs_Escaping",
+    "TrueAbs-Init_Under-End_Under", "TrueAbs-Init_0-End_Under", "TrueAbs-Init_1-End_Under", "TrueAbs-Init_2-End_Under", "TrueAbs-Init_Over-End_Under",
+    "TrueAbs-Init_0-End_0", "TrueAbs-Init_1-End_0", "TrueAbs-Init_2-End_0", "TrueAbs-Init_Over-End_0",
+    "TrueAbs-Init_1-End_1", "TrueAbs-Init_2-End_1", "TrueAbs-Init_Over-End_1",
+    "TrueAbs-Init_2-End_2", "TrueAbs-Init_Over-End_2",
+    "TrueAbs-Init_Over-End_Over"
   ]
 
   CEx: [
-    "CEx_TrueEBin_Under",
-    "CEx_TrueEBin_0",
-    "CEx_TrueEBin_1",
-    "CEx_TrueEBin_2",
-    "CEx_TrueEBin_Over",
-    "CEx_Escaping",
+    "TrueCEx-Init_Under-End_Under", "TrueCEx-Init_0-End_Under", "TrueCEx-Init_1-End_Under", "TrueCEx-Init_2-End_Under", "TrueCEx-Init_Over-End_Under",
+    "TrueCEx-Init_0-End_0", "TrueCEx-Init_1-End_0", "TrueCEx-Init_2-End_0", "TrueCEx-Init_Over-End_0",
+    "TrueCEx-Init_1-End_1", "TrueCEx-Init_2-End_1", "TrueCEx-Init_Over-End_1",
+    "TrueCEx-Init_2-End_2", "TrueCEx-Init_Over-End_2",
+    "TrueCEx-Init_Over-End_Over"
   ]
 
   Pion: [
-    "Pion_TrueEBin_Under",
-    "Pion_TrueEBin_0",
-    "Pion_TrueEBin_1",
-    "Pion_TrueEBin_2",
-    "Pion_TrueEBin_Over",
-    "Pion_Escaping",
+    "TruePip-Init_Under-End_Under", "TruePip-Init_0-End_Under", "TruePip-Init_1-End_Under", "TruePip-Init_2-End_Under", "TruePip-Init_Over-End_Under",
+    "TruePip-Init_0-End_0", "TruePip-Init_1-End_0", "TruePip-Init_2-End_0", "TruePip-Init_Over-End_0",
+    "TruePip-Init_1-End_1", "TruePip-Init_2-End_1", "TruePip-Init_Over-End_1",
+    "TruePip-Init_2-End_2", "TruePip-Init_Over-End_2",
+    "TruePip-Init_Over-End_Over"
+  ]
+
+  Decay : [
+    "TrueDecay-Init_Under-End_Under", "TrueDecay-Init_0-End_Under", "TrueDecay-Init_1-End_Under", "TrueDecay-Init_2-End_Under", "TrueDecay-Init_Over-End_Under",
+    "TrueDecay-Init_0-End_0", "TrueDecay-Init_1-End_0", "TrueDecay-Init_2-End_0", "TrueDecay-Init_Over-End_0",
+    "TrueDecay-Init_1-End_1", "TrueDecay-Init_2-End_1", "TrueDecay-Init_Over-End_1",
+    "TrueDecay-Init_2-End_2", "TrueDecay-Init_Over-End_2",
+    "TrueDecay-Init_Over-End_Over"
+  ]
+
+  Escaping: [
+    "TrueEsc-Init_Under-End_Under", "TrueEsc-Init_0-End_Under", "TrueEsc-Init_1-End_Under", "TrueEsc-Init_2-End_Under", "TrueEsc-Init_Over-End_Under",
+    "TrueEsc-Init_0-End_0", "TrueEsc-Init_1-End_0", "TrueEsc-Init_2-End_0", "TrueEsc-Init_Over-End_0",
+    "TrueEsc-Init_1-End_1", "TrueEsc-Init_2-End_1", "TrueEsc-Init_Over-End_1",
+    "TrueEsc-Init_2-End_2", "TrueEsc-Init_Over-End_2",
+    "TrueEsc-Init_Over-End_Over"
   ]
 
   BkgTruthImpure: [
-    "Impure_TrueEBin_Under",
-    "Impure_TrueEBin_0",
-    "Impure_TrueEBin_1",
-    "Impure_TrueEBin_2",
-    "Impure_TrueEBin_Over",
-    "Impure_Escaping",
+    "TrueImpure-Init_Under-End_Under", "TrueImpure-Init_0-End_Under", "TrueImpure-Init_1-End_Under", "TrueImpure-Init_2-End_Under", "TrueImpure-Init_Over-End_Under",
+    "TrueImpure-Init_0-End_0", "TrueImpure-Init_1-End_0", "TrueImpure-Init_2-End_0", "TrueImpure-Init_Over-End_0",
+    "TrueImpure-Init_1-End_1", "TrueImpure-Init_2-End_1", "TrueImpure-Init_Over-End_1",
+    "TrueImpure-Init_2-End_2", "TrueImpure-Init_Over-End_2",
+    "TrueImpure-Init_Over-End_Over"
   ]
+
+  # BkgTruthImpure: [
+  #   "TrueImpure-Init_Under",
+  #   "TrueImpure-Init_0",
+  #   "TrueImpure-Init_1",
+  #   "TrueImpure-Init_2",
+  #   "TrueImpure-Init_Over"
+  # ]
+
+  # BkgTruthImpure: [
+  #   "TrueImpure"
+  # ]
