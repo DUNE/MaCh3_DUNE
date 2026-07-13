@@ -97,11 +97,7 @@ ProcessMCMC:
                       "TrueEsc-Init_1-End_1", "TrueEsc-Init_2-End_1", "TrueEsc-Init_Over-End_1",
                       "TrueEsc-Init_2-End_2", "TrueEsc-Init_Over-End_2",
                       "TrueEsc-Init_Over-End_Over"]]
-    - ["Impurity", ["TrueImpure-Init_Under-End_Under", "TrueImpure-Init_0-End_Under", "TrueImpure-Init_1-End_Under", "TrueImpure-Init_2-End_Under", "TrueImpure-Init_Over-End_Under",
-                      "TrueImpure-Init_0-End_0", "TrueImpure-Init_1-End_0", "TrueImpure-Init_2-End_0", "TrueImpure-Init_Over-End_0",
-                      "TrueImpure-Init_1-End_1", "TrueImpure-Init_2-End_1", "TrueImpure-Init_Over-End_1",
-                      "TrueImpure-Init_2-End_2", "TrueImpure-Init_Over-End_2",
-                      "TrueImpure-Init_Over-End_Over"]]
+    - ["Impurity", ["TrueImpure-Init_Under", "TrueImpure-Init_0", "TrueImpure-Init_1", "TrueImpure-Init_2", "TrueImpure-Init_Over"]]
 
   # Track MCMC convergence for one energy bin per signal category
   ParameterEvolution:
@@ -216,9 +212,9 @@ MatrixPlotter:
   ]
 
   BkgTruthImpure: [
-    "TrueImpure-Init_Under-End_Under", "TrueImpure-Init_0-End_Under", "TrueImpure-Init_1-End_Under", "TrueImpure-Init_2-End_Under", "TrueImpure-Init_Over-End_Under",
-    "TrueImpure-Init_0-End_0", "TrueImpure-Init_1-End_0", "TrueImpure-Init_2-End_0", "TrueImpure-Init_Over-End_0",
-    "TrueImpure-Init_1-End_1", "TrueImpure-Init_2-End_1", "TrueImpure-Init_Over-End_1",
-    "TrueImpure-Init_2-End_2", "TrueImpure-Init_Over-End_2",
-    "TrueImpure-Init_Over-End_Over"
+    "TrueImpure-Init_Under",
+    "TrueImpure-Init_0",
+    "TrueImpure-Init_1",
+    "TrueImpure-Init_2",
+    "TrueImpure-Init_Over"
   ]

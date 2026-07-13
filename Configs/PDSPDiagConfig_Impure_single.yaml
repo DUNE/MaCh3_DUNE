@@ -97,11 +97,7 @@ ProcessMCMC:
                       "TrueEsc-Init_1-End_1", "TrueEsc-Init_2-End_1", "TrueEsc-Init_Over-End_1",
                       "TrueEsc-Init_2-End_2", "TrueEsc-Init_Over-End_2",
                       "TrueEsc-Init_Over-End_Over"]]
-    - ["Impurity", ["TrueImpure-Init_Under-End_Under", "TrueImpure-Init_0-End_Under", "TrueImpure-Init_1-End_Under", "TrueImpure-Init_2-End_Under", "TrueImpure-Init_Over-End_Under",
-                      "TrueImpure-Init_0-End_0", "TrueImpure-Init_1-End_0", "TrueImpure-Init_2-End_0", "TrueImpure-Init_Over-End_0",
-                      "TrueImpure-Init_1-End_1", "TrueImpure-Init_2-End_1", "TrueImpure-Init_Over-End_1",
-                      "TrueImpure-Init_2-End_2", "TrueImpure-Init_Over-End_2",
-                      "TrueImpure-Init_Over-End_Over"]]
+    - ["Impurity", ["TrueImpure"]]
 
   # Track MCMC convergence for one energy bin per signal category
   ParameterEvolution:
@@ -109,6 +105,7 @@ ProcessMCMC:
     - ["TrueCEx-Init_Over-End_1", 20]
     - ["TruePip-Init_Over-End_1", 20]
     - ["TrueEsc-Init_Over-End_1", 20]
+    - ["TrueImpure", 20]
 
   Thinning: [false, 100]
 
@@ -144,7 +141,7 @@ GetPenaltyTerm:
     - false
     - "-logL_{Decay}"
   BkgCorrection:
-    - ["TrueImpure-"]
+    - ["TrueImpure"]
     - false
     - "-logL_{TruthImpure}"
 
@@ -216,9 +213,5 @@ MatrixPlotter:
   ]
 
   BkgTruthImpure: [
-    "TrueImpure-Init_Under-End_Under", "TrueImpure-Init_0-End_Under", "TrueImpure-Init_1-End_Under", "TrueImpure-Init_2-End_Under", "TrueImpure-Init_Over-End_Under",
-    "TrueImpure-Init_0-End_0", "TrueImpure-Init_1-End_0", "TrueImpure-Init_2-End_0", "TrueImpure-Init_Over-End_0",
-    "TrueImpure-Init_1-End_1", "TrueImpure-Init_2-End_1", "TrueImpure-Init_Over-End_1",
-    "TrueImpure-Init_2-End_2", "TrueImpure-Init_Over-End_2",
-    "TrueImpure-Init_Over-End_Over"
+    "TrueImpure"
   ]
