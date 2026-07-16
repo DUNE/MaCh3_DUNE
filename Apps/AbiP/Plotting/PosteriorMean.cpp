@@ -64,7 +64,16 @@ void setRedWhiteBluePalette() {
     TColor::CreateGradientColorTable(nRGBs, stops, red, green, blue, nColors);
     gStyle->SetNumberContours(nColors);
 }
-
+void setOrangePalette() {
+    const Int_t nRGBs = 5;
+    Double_t stops[nRGBs] = { 0.00, 0.25, 0.50, 0.75, 1.00 };
+    Double_t red[nRGBs]   = { 1.00, 1.00, 0.95, 0.85, 0.55 };
+    Double_t green[nRGBs] = { 0.98, 0.75, 0.50, 0.25, 0.00 };
+    Double_t blue[nRGBs]  = { 0.92, 0.35, 0.10, 0.00, 0.00 };
+    const Int_t nColors = 255;
+    TColor::CreateGradientColorTable(nRGBs, stops, red, green, blue, nColors);
+    gStyle->SetNumberContours(nColors);
+}
 // -------------------------
 // Helper: get latest non-empty posteriors tree
 // -------------------------
@@ -223,31 +232,55 @@ int main(int argc, char* argv[]) {
     h_xsecvar_eventratehist->GetXaxis()->SetTitle(xsec_var1.c_str());
     h_xsecvar_eventratehist->GetYaxis()->SetTitle(xsec_var2.c_str());
 
+    // // --- Setup posterior parameter reading ---
+    // int nParams = 0;
+    // TObjArray* branches = post->GetListOfBranches();
+    // for (int i = 0; i < branches->GetEntries(); ++i) {
+    //     std::string name = branches->At(i)->GetName();
+    //     if (name.rfind("param_", 0) == 0) {
+    //         std::string suffix = name.substr(6);
+    //         try {
+    //             size_t pos;
+    //             int idx = std::stoi(suffix, &pos);
+    //             if (pos == suffix.size())
+    //                 nParams = std::max(nParams, idx + 1);
+    //         } catch (const std::invalid_argument&) {
+    //             std::cout << "[Info] Skipping non-numeric param branch: " << name << "\n";
+    //         }
+    //     }
+    // }
+    // std::cout << "[Info] Found " << nParams << " param_* parameters\n";
+
+    // std::vector<double> xsec_vals(nParams, 0.0);
+    // post->SetBranchStatus("*", 0);
+    // for (int i = 0; i < nParams; ++i) {
+    //     std::string bname = "param_" + std::to_string(i);
+    //     post->SetBranchStatus(bname.c_str(), 1);
+    //     post->SetBranchAddress(bname.c_str(), &xsec_vals[i]);
+    // }
+
     // --- Setup posterior parameter reading ---
+    // Only read the param_N branches that correspond to parameters defined
+    // in templateparams.yaml (i.e. those present in binDefs).
     int nParams = 0;
-    TObjArray* branches = post->GetListOfBranches();
-    for (int i = 0; i < branches->GetEntries(); ++i) {
-        std::string name = branches->At(i)->GetName();
-        if (name.rfind("param_", 0) == 0) {
-            std::string suffix = name.substr(6);
-            try {
-                size_t pos;
-                int idx = std::stoi(suffix, &pos);
-                if (pos == suffix.size())
-                    nParams = std::max(nParams, idx + 1);
-            } catch (const std::invalid_argument&) {
-                std::cout << "[Info] Skipping non-numeric param branch: " << name << "\n";
-            }
-        }
+    for (const auto& bin : binDefs) {
+        nParams = std::max(nParams, bin.index + 1);
     }
-    std::cout << "[Info] Found " << nParams << " param_* parameters\n";
+    std::cout << "[Info] Restricting to " << binDefs.size()
+              << " parameters from templateparams.yaml (param_0 .. param_"
+              << nParams - 1 << ")\n";
 
     std::vector<double> xsec_vals(nParams, 0.0);
     post->SetBranchStatus("*", 0);
-    for (int i = 0; i < nParams; ++i) {
-        std::string bname = "param_" + std::to_string(i);
+    for (const auto& bin : binDefs) {
+        std::string bname = "param_" + std::to_string(bin.index);
+        if (!post->GetBranch(bname.c_str())) {
+            std::cerr << "[Warning] Branch " << bname
+                      << " not found in tree, skipping.\n";
+            continue;
+        }
         post->SetBranchStatus(bname.c_str(), 1);
-        post->SetBranchAddress(bname.c_str(), &xsec_vals[i]);
+        post->SetBranchAddress(bname.c_str(), &xsec_vals[bin.index]);
     }
 
     // --- Compute posterior mean and stddev per bin ---
@@ -314,17 +347,20 @@ int main(int argc, char* argv[]) {
     c->Print(pdfOut.c_str());
     c->Clear();
 
-    h_mean->GetZaxis()->SetRangeUser(0.5, 1.5);
+    h_mean->GetZaxis()->SetRangeUser(0.0, 4.0);
     h_mean->SetTitle("Posterior post-fit mean");
     h_mean->Draw("COLZ");
     c->Print(pdfOut.c_str());
     c->Clear();
 
-    h_stddev->GetZaxis()->SetRangeUser(0.0, 0.5);
+    // With:
+    setOrangePalette();                              // <-- switch palette
+    h_stddev->GetZaxis()->SetRangeUser(0.0, 0.45);
     h_stddev->SetTitle("Posterior post-fit std dev");
     h_stddev->Draw("COLZ");
     c->Print(pdfOut.c_str());
     c->Clear();
+    setRedWhiteBluePalette();                        // <-- restore for any later plots
 
     c->Print((pdfOut + "]").c_str());  // close PDF
 

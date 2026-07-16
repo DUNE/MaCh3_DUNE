@@ -161,9 +161,9 @@ std::vector<EventInfo> ReadEvents(TTree &tree) {
 
     ev.reco.e_proton = std::max(0.0, *eRecoP);
     ev.reco.e_neutron = std::max(0.0, *eRecoN);
-    ev.reco.e_pi0 = std::max(0.0, *eRecoPip);
-    ev.reco.e_piplus = std::max(0.0, *eRecoPim);
-    ev.reco.e_piminus = std::max(0.0, *eRecoPi0);
+    ev.reco.e_pi0 = std::max(0.0, *eRecoPi0);
+    ev.reco.e_piplus = std::max(0.0, *eRecoPip);
+    ev.reco.e_piminus = std::max(0.0, *eRecoPim);
 
     ev.reco.e_lep = ev.reco.e_lep;
     ev.reco.e_had = ev.reco.e_had;
@@ -174,8 +174,16 @@ std::vector<EventInfo> ReadEvents(TTree &tree) {
     ev.varied_res.e_lep = ev.reco.e_lep - ev.truth.lep.e;
     ev.varied_res.e_had =
         (ev.reco.enu - ev.reco.e_lep) - (ev.truth.nu.e - ev.truth.lep.e);
+    
+    double recoHad = ev.reco.enu - ev.reco.e_lep;
+      double trueHad = ev.truth.nu.e - ev.truth.lep.e;
 
-    ev.varied_res.e_EM = (ev.reco.e_pi0 - ev.truth.had.e_pi0);
+      if (trueHad > 0.) {
+          ev.varied_res.e_had_ratio = (recoHad - trueHad) / trueHad;
+      } else {
+          ev.varied_res.e_had_ratio = -999.;
+      }
+          ev.varied_res.e_EM = (ev.reco.e_pi0 - ev.truth.had.e_pi0);
     if (std::abs(ev.truth.lep.pdg) == 11) {
       ev.varied_res.e_EM += ev.varied_res.e_lep;
     }
@@ -189,6 +197,8 @@ std::vector<EventInfo> ReadEvents(TTree &tree) {
     ev.syst.sqrt_e.pi0 = std::sqrt(std::max(0.0, ev.reco.e_pi0));
     ev.syst.sqrt_e.piplus = std::sqrt(std::max(0.0, ev.reco.e_piplus));
     ev.syst.sqrt_e.piminus = std::sqrt(std::max(0.0, ev.reco.e_piminus));
+    ev.syst.sqrt_e.lep = std::sqrt(std::max(0.0, ev.reco.e_lep));
+    ev.syst.sqrt_e.had = std::sqrt(std::max(0.0, ev.reco.e_had));
   }
 
   return events;

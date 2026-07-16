@@ -10,6 +10,7 @@ inline double EnergyScaleVariation(double const *par_vals, double e,
                                    double sqrte) {
   double e_prime =
       e * ((1 + par_vals[0]) + (par_vals[1] * sqrte)) + (par_vals[2] * sqrte);
+    
   return (e_prime < 0) ? 0 : e_prime - e;
 }
 
@@ -127,6 +128,13 @@ void CalculateVariedCompositeQuantities(EventInfo &ev) {
                  (varreco.e_piplus - ev.truth.had.e_piplus) +
                  (varreco.e_piminus - ev.truth.had.e_piminus);
   res.e_neutron = varreco.e_neutron - ev.truth.had.e_neutron;
+
+  double trueHad = ev.truth.nu.e - ev.truth.lep.e;
+  if (trueHad > 0.) {
+    res.e_had_ratio = (res.e_had) / trueHad;   // res.e_had is already (varied recoHad - trueHad)
+  } else {
+    res.e_had_ratio = -999.;
+  }
 
   ev.varied_truth.enurec_hadavailable_missed =
       std::max(0.0,

@@ -75,6 +75,7 @@ struct dunemc_beamfd : public dunemc_base { // Store variables used by SampleHan
   double rw_cvnnue;
   double rw_cvnnumu_shifted;
   double rw_cvnnue_shifted;
+  double eHad_truth_nom;
 
   double rw_vtx_x;
   double rw_vtx_y;
@@ -88,7 +89,19 @@ struct dunemc_beamfd : public dunemc_base { // Store variables used by SampleHan
   double rw_sum_ehad_sqrt;
   double rw_trueccnue;
   double rw_trueccnumu;
-};
+  double enu_bias;
+
+
+  double varied_enu_rec_hadavailable_missed ;
+  double varied_reco_enu;      
+  double varied_reco_e_had ;   
+  double varied_reco_e_proton; 
+
+
+
+  double LepE_truth_nom;   // ADD
+  double Ev_truth_nom;     // ADD
+ };
 
 struct dunemc_beamnd : public dunemc_base { // Store variables used by SampleHandlerBeamND
   double rw_erec_shifted;

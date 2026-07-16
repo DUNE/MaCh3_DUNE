@@ -89,6 +89,7 @@ struct EventInfo : public CAFEventInfo {
 
     double e_lep;
     double e_had;
+    double e_had_ratio;
 
     double e_EM, e_ChgHad, e_neutron;
 

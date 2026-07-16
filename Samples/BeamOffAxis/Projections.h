@@ -25,6 +25,7 @@ namespace dune::beamoffaxis {
   X(ENuRes)                                                                    \
   X(ELepRes)                                                                   \
   X(EHadRes)                                                                   \
+  X(EHadRes_ratio)                                                                   \
   X(EEMRes)                                                                    \
   X(EChgHadRes)                                                                \
   X(ENeutronRes)                                                               \
@@ -85,6 +86,8 @@ inline const double *ResolveKinematicEventMember(KinematicTypes KinPar,
     return &ev.varied_res.e_lep;
   case kEHadRes:
     return &ev.varied_res.e_had;
+  case kEHadRes_ratio:
+    return &ev.varied_res.e_had_ratio;
   case kEEMRes:
     return &ev.varied_res.e_EM;
   case kEChgHadRes:

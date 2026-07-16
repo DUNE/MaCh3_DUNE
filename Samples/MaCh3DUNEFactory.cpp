@@ -3,7 +3,7 @@
 #ifdef BUILD_NDGAR
 #include "Samples/SampleHandlerBeamNDGAr.h"
 #else
-// #include "Samples/SampleHandlerBeamFD.h"
+#include "Samples/SampleHandlerBeamFD.h"
 // #include "Samples/SampleHandlerBeamND.h"
 #include "Samples/SampleHandlerBeamOffAxis.h"
 // #include "Samples/SampleHandlerAtm.h"
@@ -29,9 +29,7 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
 
   #else // NORMAL DUNE BUILD
 
-    // if (SampleType == "BeamFD") {
-    //   Sample = new SampleHandlerBeamFD(SampleConfig, xsec, BeamOscillator_);
-    // }
+    
     // else if (SampleType == "BeamND") {
 
     //   if (NDCov_FHC == nullptr || NDCov_RHC == nullptr) {
@@ -48,6 +46,9 @@ SampleHandlerFD* GetMaCh3DuneInstance(std::string SampleType, std::string Sample
     // else
     if (SampleType == "OffAxisND") {
       Sample = new dune::beamoffaxis::SampleHandlerBeamOffAxis(SampleConfig, xsec, nullptr);
+    }
+    else if (SampleType == "BeamFD") {
+      Sample = new SampleHandlerBeamFD(SampleConfig, xsec, BeamOscillator_);
     }
     // else if (SampleType == "Atm") {
     //   Sample = new SampleHandlerAtm(SampleConfig, xsec, AtmOscillator_);

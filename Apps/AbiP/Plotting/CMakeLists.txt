@@ -12,6 +12,8 @@ set(PLOTTING_SOURCES
   PosteriorPredictive_2D.cpp
   PosteriorPredictive_2Dnew.cpp
   PosteriorMean.cpp
+  PosteriorPredictive_forND_allsysts.cpp
+  PosteriorPredictive_subsamples.cpp
 )
 
 # Add executables
