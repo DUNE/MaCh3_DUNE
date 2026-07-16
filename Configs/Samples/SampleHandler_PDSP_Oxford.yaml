@@ -29,7 +29,7 @@ PDSP_Abs:
     Uniform: True
 
   InputFiles:
-    mtupleprefix: "/data/dune/common/mach3_input_new_selection/pdsp_"
+    mtupleprefix: "/data/dune/common/pdsp_2GeV_analysis_inputs/mach3_input/pdsp_"
     mtuplesuffix: ".root"
     splineprefix: ""
     splinesuffix: ""
@@ -55,7 +55,7 @@ PDSP_CEx:
     Uniform: True
 
   InputFiles:
-    mtupleprefix: "/data/dune/common/mach3_input_new_selection/pdsp_"
+    mtupleprefix: "/data/dune/common/pdsp_2GeV_analysis_inputs/mach3_input/pdsp_"
     mtuplesuffix: ".root"
     splineprefix: ""
     splinesuffix: ""
@@ -81,7 +81,7 @@ PDSP_Pip:
     Uniform: True
 
   InputFiles:
-    mtupleprefix: "/data/dune/common/mach3_input_new_selection/pdsp_"
+    mtupleprefix: "/data/dune/common/pdsp_2GeV_analysis_inputs/mach3_input/pdsp_"
     mtuplesuffix: ".root"
     splineprefix: ""
     splinesuffix: ""
@@ -107,7 +107,7 @@ PDSP_Unc:
     Uniform: True
 
   InputFiles:
-    mtupleprefix: "/data/dune/common/mach3_input_new_selection/pdsp_"
+    mtupleprefix: "/data/dune/common/pdsp_2GeV_analysis_inputs/mach3_input/pdsp_"
     mtuplesuffix: ".root"
     splineprefix: ""
     splinesuffix: ""
@@ -133,7 +133,7 @@ PDSP_Esc:
     Uniform: True
 
   InputFiles:
-    mtupleprefix: "/data/dune/common/mach3_input_new_selection/pdsp_"
+    mtupleprefix: "/data/dune/common/pdsp_2GeV_analysis_inputs/mach3_input/pdsp_"
     mtuplesuffix: ".root"
     splineprefix: ""
     splinesuffix: ""
