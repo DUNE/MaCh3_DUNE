@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Samples/SampleStructs.h"
+
 /// @brief class holding basic information about MC
 struct PDSPMCInfo {
   /// @brief Constructor
@@ -12,6 +14,8 @@ struct PDSPMCInfo {
   double Mode = M3::_BAD_INT_;
   /// Apparently is a MaCh3 required variable (but will be unused.)
   double OscillationChannel = M3::_BAD_INT_;
+  /// ProtoDUNE-SP interactions are on argon.
+  double Target = kTarget_Ar;
 
   /// True Initial Kinetic Energy
   double TrueKEIni = M3::_BAD_DOUBLE_;

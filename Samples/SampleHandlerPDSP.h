@@ -10,7 +10,7 @@ class SampleHandlerPDSP : virtual public SampleHandlerBase
   SampleHandlerPDSP(const std::string& config_name, ParameterHandlerGeneric* parameter_handler);
   virtual ~SampleHandlerPDSP();
 
-  enum KinematicTypes {kTrueKEIni, kTrueKEInt, kRecoKEIni, kRecoKEInt, kMode, kOscChannel, kTrueEndZ, kRecoEndZ};
+  enum KinematicTypes {kTrueKEIni, kTrueKEInt, kRecoKEIni, kRecoKEInt, kMode, kOscChannel, kTargetNucleus, kTrueEndZ, kRecoEndZ};
 
   TH1* GetDataHistogramFromInputs(const int Sample) const;
   
@@ -51,6 +51,7 @@ class SampleHandlerPDSP : virtual public SampleHandlerBase
     {"RecoKEInt", kRecoKEInt},
     {"Mode", kMode},
     {"OscillationChannel", kOscChannel},
+    {"TargetNucleus", kTargetNucleus},
     {"TrueEndZ", kTrueEndZ},
     {"RecoEndZ", kRecoEndZ}
   };
@@ -62,6 +63,7 @@ class SampleHandlerPDSP : virtual public SampleHandlerBase
     {kRecoKEInt, "RecoKEInt"},
     {kMode, "Mode"},
     {kOscChannel, "OscillationChannel"},
+    {kTargetNucleus, "TargetNucleus"},
     {kTrueEndZ, "TrueEndZ"},
     {kRecoEndZ, "RecoEndZ"}
   };

@@ -6,6 +6,51 @@
 Fit Configs/FitterConfig_PDSP.yaml
 ```
 
+### Enabling Data Inputs
+
+By default the PDSP fit uses the nominal MC prediction as Asimov data. To fit
+data histograms stored in the PDSP input ROOT files, enable:
+
+```yaml
+General:
+  Data: true
+```
+
+or override it at runtime:
+
+```bash
+Fit Configs/FitterConfig_PDSP.yaml General:Data:true
+```
+
+When `General:Data:true` is set, `SampleHandlerPDSP` looks through each input
+ROOT file listed for the sample and loads a histogram ending in `_DataHist`.
+The preferred histogram name is the sample title plus `_DataHist`, for example:
+
+```text
+PDSP_Abs_DataHist
+PDSP_CEx_DataHist
+PDSP_Pip_DataHist
+```
+
+### Asimov Tunes and MC Scale
+
+Use `XsecAsimovTune` when you want to generate an Asimov data set from the MC
+with a known cross-section tune injected before the fit starts. This is useful
+for closure tests and generator-consistency checks, where the fake data are
+generated with one set of parameter values and the fit then tries to recover
+them from the configured prefit values.
+
+The PDSP sample handler also supports a global MC normalization factor:
+
+```yaml
+MCGlobalScale: 1.0
+```
+
+This scale is read from the sample-handler config and applied as an additional
+event weight to every PDSP MC event. Keep it at `1.0` for nominal running, or
+change it when the input MC needs a common exposure or normalization
+correction.
+
 ## Processing MCMC Outputs
 
 ```bash
@@ -22,7 +67,8 @@ PredictivePDSP Configs/FitterConfig_PDSP.yaml General:OutputFile:PredictiveOutpu
 
 ### Plotting Posterior Predictive Distributions
 
-Once you have generated the posterior predictive toy distributions with PredictivePDSP, you can make fancy plots of them using:
+Once you have generated the posterior predictive toy distributions with
+PredictivePDSP, you can make fancy plots of them using:
 
 ```bash
 PredictivePlotting ./Configs/PDSPDiagConfig.yaml PredictiveOutputTest.root
@@ -31,7 +77,9 @@ PredictivePlotting ./Configs/PDSPDiagConfig.yaml PredictiveOutputTest.root
 ### Prior Predictive Distributions
 
 ```bash
-PredictivePDSP ./Configs/FitterConfig_PDSP.yaml General:OutputFile:PriorPredictiveOutputTest.root Predictive:PriorPredictive:True
+PredictivePDSP ./Configs/FitterConfig_PDSP.yaml \
+  General:OutputFile:PriorPredictiveOutputTest.root \
+  Predictive:PriorPredictive:True
 ```
 
 Finally, we can compare the prior and posterior predictive spectra with the previously used PredictivePlotting macro:

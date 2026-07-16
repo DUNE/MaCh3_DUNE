@@ -289,6 +289,8 @@ const double* SampleHandlerPDSP::GetPointerToKinematicParameter(KinematicTypes K
       return &PDSPSamples[iEvent].Mode;
     case kOscChannel:
       return &PDSPSamples[iEvent].OscillationChannel;
+    case kTargetNucleus:
+      return &PDSPSamples[iEvent].Target;
     case kTrueEndZ:
       return &PDSPSamples[iEvent].TrueEndZ;
     case kRecoEndZ:

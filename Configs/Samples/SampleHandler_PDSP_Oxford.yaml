@@ -34,10 +34,10 @@ PDSP_Abs:
     splineprefix: ""
     splinesuffix: ""
 
-  SubSamples:
+  OscChannels:
     - Name: "absorption"
       LatexName: "abs"
-      mtuplefile: "Rabsorption"
+      mtuplefile: ["Rabsorption"]
       splinefile: ""
       nutype: 1
       oscnutype: 1
@@ -60,10 +60,10 @@ PDSP_CEx:
     splineprefix: ""
     splinesuffix: ""
 
-  SubSamples:
+  OscChannels:
     - Name: "charge_exchange"
       LatexName: "cex"
-      mtuplefile: "Rcharge_exchange"
+      mtuplefile: ["Rcharge_exchange"]
       splinefile: ""
       nutype: 2
       oscnutype: 2
@@ -86,10 +86,10 @@ PDSP_Pip:
     splineprefix: ""
     splinesuffix: ""
 
-  SubSamples:
+  OscChannels:
     - Name: "pion_production"
       LatexName: "pip"
-      mtuplefile: "Rpion_production"
+      mtuplefile: ["Rpion_production"]
       splinefile: ""
       nutype: 3
       oscnutype: 3
@@ -112,10 +112,10 @@ PDSP_Unc:
     splineprefix: ""
     splinesuffix: ""
 
-  SubSamples:
+  OscChannels:
     - Name: "uncategorised"
       LatexName: "unc"
-      mtuplefile: "Runcategorised"
+      mtuplefile: ["Runcategorised"]
       splinefile: ""
       nutype: 4
       oscnutype: 4
@@ -138,28 +138,28 @@ PDSP_Esc:
     splineprefix: ""
     splinesuffix: ""
 
-  SubSamples:
+  OscChannels:
     - Name: "absorption"
       LatexName: "abs"
-      mtuplefile: "Rabsorption"
+      mtuplefile: ["Rabsorption"]
       splinefile: ""
       nutype: 1
       oscnutype: 1
     - Name: "charge_exchange"
       LatexName: "cex"
-      mtuplefile: "Rcharge_exchange"
+      mtuplefile: ["Rcharge_exchange"]
       splinefile: ""
       nutype: 2
       oscnutype: 2
     - Name: "pion_production"
       LatexName: "pip"
-      mtuplefile: "Rpion_production"
+      mtuplefile: ["Rpion_production"]
       splinefile: ""
       nutype: 3
       oscnutype: 3
     - Name: "uncategorised"
       LatexName: "unc"
-      mtuplefile: "Runcategorised"
+      mtuplefile: ["Runcategorised"]
       splinefile: ""
       nutype: 4
       oscnutype: 4
