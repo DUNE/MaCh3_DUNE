@@ -66,7 +66,7 @@
 #include "TPad.h"
 #include "TKey.h"
 #include "TCollection.h"
-#include "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Samples/MaCh3DUNEFactory.h"
+#include "Samples/MaCh3DUNEFactory.h"
 #include <iostream>
 #include <string>
 #include <regex>

@@ -7,7 +7,7 @@
 #include "Splines/SplineMonolith.h"
 #include "Samples/SampleHandlerBase.h"
 #include "Samples/SampleHandlerFD.h"
-#include "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Samples/MaCh3DUNEFactory.h"
+#include "Samples/MaCh3DUNEFactory.h"
 #include "Fitters/FitterBase.h"
 #include "Manager/Manager.h"
 #include "Parameters/ParameterHandlerBase.h"
@@ -225,8 +225,8 @@ std::string AddTimestampToFilename(const std::string& baseName) {
 //     return result;
 // }
 
-BinningResult extract_2D_bins_from_yaml(const std::string& yaml_file, 
-                                        const std::string& xsecvar1, 
+BinningResult extract_2D_bins_from_yaml(const std::string& yaml_file,
+                                        const std::string& xsecvar1,
                                         const std::string& xsecvar2) {
     BinningResult result;
     std::set<double> q0_set;
@@ -1292,7 +1292,7 @@ TH2D* h_stddev_noBottom = new TH2D(
 
     setRedWhiteBluePalette();
 
-    
+
      setRedWhiteBluePalette();
     h_mean->Write("xsec_param_mean");
     h_stddev->Write("xsec_param_stddev");
@@ -1304,7 +1304,7 @@ TH2D* h_stddev_noBottom = new TH2D(
     setRedWhiteBluePalette();
 
 
-    
+
 
     // Samlple Posterior
 

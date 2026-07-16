@@ -16,23 +16,9 @@ namespace dune::beamoffaxis {
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
   Initialise();
+
+  unweighted_mc = GetUnweightedMCRate();
 }
-
-
-// SampleHandlerBeamOffAxis::SampleHandlerBeamOffAxis(
-//     std::string mc_version_, ParameterHandlerGeneric *ParHandler_,
-//     const std::shared_ptr<OscillationHandler> &Oscillator_)
-//     : SampleHandlerFD(mc_version_, ParHandler_, Oscillator_) {
-//   KinematicParameters = &KinematicParametersDUNE;
-//   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
-
-//   // when this works, set penalty term
-//   // BuildRegularisationMatrix(ParHandler);
-//   //  static_cast<ParameterHandlerRegularised *>(ParHandler_)->penalty =
-//   //  [=](){};
-
-//   Initialise();
-// }
 
 void SampleHandlerBeamOffAxis::Init() {
   subsample_analysispot.resize(GetNsamples());
@@ -139,6 +125,41 @@ void SampleHandlerBeamOffAxis::RegisterFunctionalParameters() {
 
   RegisterIndividualFunctionalParameter(DUNEMCEvents, "MissingProtonFD",
                                         MissingProtonFD);
+}
+
+Eigen::VectorXd SampleHandlerBeamOffAxis::GetUnweightedMCRate() {
+  Eigen::VectorXd mc = Eigen::VectorXd::Zero(Binning->GetNBins());
+
+  for (int sample_i = 0; sample_i < GetNsamples(); ++sample_i) {
+    const int ndim = GetNDim(sample_i);
+
+    if (ndim == 1) {
+      auto mc_hist = Get1DVarHist(sample_i, GetXBinVarName(sample_i), StoredSelection[sample_i], 1);
+      if (!mc_hist) throw MaCh3Exception(__FILE__, __LINE__);
+
+      for (int i = 0; i < mc_hist->GetNbinsX(); ++i) {
+        const int global_bin = Binning->GetGlobalBinSafe(sample_i, {i});
+        mc(global_bin) = mc_hist->GetBinContent(i + 1);
+      }
+    } else if (ndim == 2) {
+      auto mc_hist = Get2DVarHist(sample_i, GetXBinVarName(sample_i), GetYBinVarName(sample_i),
+                                        StoredSelection[sample_i], 1);
+      if (!mc_hist) throw MaCh3Exception(__FILE__, __LINE__);
+
+      for (int j = 0; j < mc_hist->GetNbinsY(); ++j) {
+        for (int i = 0; i < mc_hist->GetNbinsX(); ++i) {
+          const int global_bin = Binning->GetGlobalBinSafe(sample_i, {i, j});
+          mc(global_bin) = mc_hist->GetBinContent(i + 1, j + 1);
+        }
+      }
+    } else {
+      MACH3LOG_ERROR("GetUnweightedMCRate: sample {} has {} dimensions, only 1D or 2D supported",
+                     sample_i, ndim);
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+  }
+
+  return mc;
 }
 
 void SampleHandlerBeamOffAxis::ResetShifts(int iEvent) {
@@ -415,7 +436,7 @@ void SampleHandlerBeamOffAxis::BuildRegularisationMatrix(
     }
   }
 
-  
+
 RegParHandler->SetPenalty(
     [R = std::move(R), lambda, nTotal](std::vector<double> const &propVal) {
       std::size_t counter = 0;
@@ -434,23 +455,5 @@ RegParHandler->SetPenalty(
         return penalty;
     });
 }
-
-
-
-//SampleHandlerBeamOffAxis::SampleHandlerBeamOffAxis(
-//     std::string mc_version_, ParameterHandlerGeneric *ParHandler_,
-//     const std::shared_ptr<OscillationHandler> &Oscillator_)
-//     : SampleHandlerFD(mc_version_, ParHandler_, Oscillator_) {
-//   KinematicParameters = &KinematicParametersDUNE;
-//   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
-
-//   // Uncomment now that BuildRegularisationMatrix is implemented
-//   if (auto *regHandler =
-//           dynamic_cast<ParameterHandlerRegularised *>(ParHandler_)) {
-//     BuildRegularisationMatrix(regHandler);
-//   }
-
-//   Initialise();
-// }
 
 } // namespace dune::beamoffaxis

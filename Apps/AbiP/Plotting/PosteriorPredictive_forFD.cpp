@@ -1,6 +1,6 @@
 #include "Samples/BinningHandler.h"
 #include "Samples/HistogramUtils.h"
-#include "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Samples/MaCh3DUNEFactory.h"
+#include "Samples/MaCh3DUNEFactory.h"
 #include "Manager/MaCh3Exception.h"
 #include "Manager/MaCh3Logger.h"
 #include "Splines/SplineMonolith.h"
@@ -216,7 +216,7 @@ for (int i = 0; i < nXsecBranches && i < prefitValues.size(); ++i) {
 
         pdf->Reweight();  // refresh weights for Reco
         MakeSpectaVariations(pdf, "Enubias", fOut, ND_or_FD, pdfTitle, -1);
-        
+
 
         fOut->cd();
     }

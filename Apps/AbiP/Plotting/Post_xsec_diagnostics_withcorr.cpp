@@ -3,7 +3,7 @@
 #include "Fitters/MaCh3Factory.h"
 #include "Samples/SampleHandlerBase.h"
 #include "Samples/SampleHandlerFD.h"
-#include "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Samples/MaCh3DUNEFactory.h"
+#include "Samples/MaCh3DUNEFactory.h"
 #include "Manager/MaCh3Exception.h"
 #include "Manager/MaCh3Logger.h"
 #include "Splines/SplineMonolith.h"
@@ -222,8 +222,8 @@ std::string AddTimestampToFilename(const std::string& baseName) {
 //     return result;
 // }
 
-BinningResult extract_2D_bins_from_yaml(const std::string& yaml_file, 
-                                        const std::string& xsecvar1, 
+BinningResult extract_2D_bins_from_yaml(const std::string& yaml_file,
+                                        const std::string& xsecvar1,
                                         const std::string& xsecvar2) {
     BinningResult result;
     std::set<double> q0_set;
@@ -1287,7 +1287,7 @@ std::cout << "[Info] Found " << nParams << " param_* parameters\n";
     int nSamples = 1000; // how many random samples
     std::random_device rd;
     std::mt19937 gen(rd());
-    
+
     //int burnIn = 0.1 * nEntries;
     int burnIn = FitManager->raw()["General"]["MCMC"]["BurnInSteps"].as<int>();
     std::uniform_int_distribution<Long64_t> dis(burnIn, nEntries-1);
@@ -1415,7 +1415,7 @@ std::cout << "[Info] Found " << nParams << " param_* parameters\n";
         }
     }
 
-    
+
     c_master->Print((pdfOut + "[").c_str());  // open PDF
 
     c_master->Clear();
