@@ -1,4 +1,4 @@
-
+---
 #########################################
 
 DiagMCMC:
@@ -20,7 +20,7 @@ ProcessMCMC:
   # Uncomment to subsample a very large chain
   #MaxEntries: 10000
 
-  # Additional posterior cuts 
+  # Additional posterior cuts
   Posterior1DCut: ""
 
   # Basic settings
@@ -112,8 +112,6 @@ ProcessMCMC:
 
   Thinning: [false, 100]
 
-  ReweightPrior: false
-
   # No custom bin edges needed (parameters defined on [0, 999])
   #CustomBinEdges:
 
@@ -199,7 +197,7 @@ MatrixPlotter:
     "TruePip-Init_Over-End_Over"
   ]
 
-  Decay : [
+  Decay: [
     "TrueDecay-Init_Under-End_Under", "TrueDecay-Init_0-End_Under", "TrueDecay-Init_1-End_Under", "TrueDecay-Init_2-End_Under", "TrueDecay-Init_Over-End_Under",
     "TrueDecay-Init_0-End_0", "TrueDecay-Init_1-End_0", "TrueDecay-Init_2-End_0", "TrueDecay-Init_Over-End_0",
     "TrueDecay-Init_1-End_1", "TrueDecay-Init_2-End_1", "TrueDecay-Init_Over-End_1",

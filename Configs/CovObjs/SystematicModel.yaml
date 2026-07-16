@@ -1,3 +1,4 @@
+---
 Systematics:
 
 - Systematic:
@@ -6,7 +7,7 @@ Systematics:
     Error: 0.11
     FlatPrior: false
     FixParam: false
-    Mode: [ 1 ]
+    Mode: [1]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     TargetNuclei: [40]
@@ -27,7 +28,7 @@ Systematics:
     Error: 0.18
     FlatPrior: false
     FixParam: false
-    Mode: [ 1 ]
+    Mode: [1]
     ParameterBounds: [0, 999.]
     ParameterGroup: Xsec
     TargetNuclei: [40]
@@ -48,7 +49,7 @@ Systematics:
     Error: 0.40
     FlatPrior: false
     FixParam: false
-    Mode: [ 1 ]
+    Mode: [1]
 
     ParameterBounds: [0, 9999.]
     ParameterGroup: Xsec

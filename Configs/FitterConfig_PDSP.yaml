@@ -1,8 +1,7 @@
+---
 General:
   OutputFile: "Test.root"
-  DUNESamples:  [
-    "Configs/Samples/SampleHandler_PDSP_Oxford.yaml"
-  ]
+  DUNESamples: ["Configs/Samples/SampleHandler_PDSP_Oxford.yaml"]
   OscillationParameters: []
   FittingAlgorithm: "MR2T2"
   ProcessMCMC: No
@@ -56,7 +55,7 @@ General:
     XsecCovName: "xsec_cov"
     XsecFix: [] # any of these are fixed
     XsecCovFile: ["Configs/CovObjs/PDSPFitModel_Impure_init.yaml",
-                  ]
+]
     # Optional fake-data tune for Data: false. For example, set to "Generator"
     # after editing ParameterValues:Generator in the xsec config to inject a
     # known Asimov shift while the fit still starts from PreFitValue.
@@ -86,7 +85,7 @@ Predictive:
   # Whether to print distribution of number of events in every bin, useful only for debug
   DebugHistograms: true
 
-# LLH Scan settings  
+# LLH Scan settings
 LLHScan:
   # don't make LLH for certain systematic groups
   #LLHScanSkipVector: []
@@ -126,9 +125,9 @@ SigmaVar:
   # name of params you want to skip
   SkipVector: []
 
-  # Allows to overwrite default 1,3 sigma range, useful for cross-fitter comparison
+  # Allows to overwrite default 1, 3 sigma range, useful for cross-fitter comparison
   CustomRange:
-    Abs_TrueEBin_0: { "-3": 0.25, "-1": 0.5, "1": 1.25, "3": 1.5 }
+    Abs_TrueEBin_0: {"-3": 0.25, "-1": 0.5, "1": 1.25, "3": 1.5}
 
 AdaptionOptions:
   Settings:
@@ -153,13 +152,13 @@ AdaptionOptions:
 KinematicDistributionPlots:
 - Name: "True Initial Kinetic Energy"
   VarStrings: ["TrueKEIni"]
-  VarBins: [[50,0,3000]]
+  VarBins: [[50, 0, 3000]]
 - Name: "True Interacting Kinetic Energy"
   VarStrings: ["TrueKEInt"]
-  VarBins: [[50,0,3000]]
+  VarBins: [[50, 0, 3000]]
 - Name: "Reconstructed Initial Kinetic Energy"
   VarStrings: ["RecoKEIni"]
-  VarBins: [[50,0,3000]]
+  VarBins: [[50, 0, 3000]]
 - Name: "Reconstructed Interacting Kinetic Energy"
   VarStrings: ["RecoKEInt"]
-  VarBins: [[50,0,3000]]
+  VarBins: [[50, 0, 3000]]
