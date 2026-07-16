@@ -10,22 +10,20 @@
 int main(int argc, char *argv[]) {
   auto FitManager = MaCh3ManagerFactory(argc, argv);
 
-  ParameterHandlerGeneric* xsec = nullptr;
-  std::vector<SampleHandlerFD*> DUNEPdfs;
-  MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
+  auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
 
   const bool UseData = GetFromManager(FitManager->raw()["General"]["Data"], false);
   const std::string AsimovTune = GetFromManager<std::string>(
       FitManager->raw()["General"]["Systematics"]["XsecAsimovTune"], "");
   if (!UseData && !AsimovTune.empty()) {
     MACH3LOG_INFO("Generating predictive Asimov data with xsec tune '{}'", AsimovTune);
-    xsec->SetTune(AsimovTune);
+    param_handler->SetTune(AsimovTune);
   }
 
   std::vector<TH1*> PredictionHistograms;
-  for (auto handler : DUNEPdfs) {
+  for (auto handler : samples) {
     handler->Reweight();
-    for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
+    for (unsigned iSample = 0; iSample < handler->GetNSamples(); ++iSample) {
       const std::string name = handler->GetSampleTitle(iSample);
       TH1* DataHist = nullptr;
       if (UseData) {
@@ -55,22 +53,21 @@ int main(int argc, char *argv[]) {
 
   if (!UseData && !AsimovTune.empty()) {
     MACH3LOG_INFO("Resetting xsec parameters to PreFitValue before predictive throws");
-    xsec->SetParameters();
+    param_handler->SetParameters();
   }
 
   std::unique_ptr<PredictiveThrower> MaCh3Fitter = std::make_unique<PredictiveThrower>(FitManager.get());
-  MaCh3Fitter->AddSystObj(xsec);
-  for (auto Sample : DUNEPdfs) {
+  MaCh3Fitter->AddSystObj(param_handler.get());
+  for (auto Sample : samples) {
     MaCh3Fitter->AddSampleHandler(Sample);
   }
 
   MaCh3Fitter->ProduceToys();
   MaCh3Fitter->RunPredictiveAnalysis();
 
-  for (auto Sample : DUNEPdfs) {
+  for (auto Sample : samples) {
     delete Sample;
   }
-  delete xsec;
 
   return 0;
 }

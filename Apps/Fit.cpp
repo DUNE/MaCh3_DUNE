@@ -34,7 +34,7 @@ int main(int argc, char * argv[]) {
       FitManager->raw()["General"]["Systematics"]["XsecAsimovTune"], "");
   if (!UseData && !AsimovTune.empty()) {
     MACH3LOG_INFO("Generating Asimov data with xsec tune '{}'", AsimovTune);
-    xsec->SetTune(AsimovTune);
+    param_handler->SetTune(AsimovTune);
   }
 
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
@@ -80,7 +80,7 @@ int main(int argc, char * argv[]) {
 
   if (!UseData && !AsimovTune.empty()) {
     MACH3LOG_INFO("Resetting xsec parameters to PreFitValue before fitting");
-    xsec->SetParameters();
+    param_handler->SetParameters();
   }
   
   //###########################################################################################################

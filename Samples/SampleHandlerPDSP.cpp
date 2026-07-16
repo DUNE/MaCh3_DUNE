@@ -4,11 +4,9 @@
 #include <TKey.h>
 #include <TString.h>
 
-const int SampleHandlerPDSP::DummyInt;
-
 // ************************************************
 SampleHandlerPDSP::SampleHandlerPDSP(const std::string& config_name, ParameterHandlerGeneric* parameter_handler)
-                                             : SampleHandlerFD(config_name, parameter_handler) {
+                                             : SampleHandlerBase(config_name, parameter_handler) {
 // ************************************************
   KinematicParameters = &KinematicParametersPDSP;
   ReversedKinematicParameters = &ReversedKinematicParametersPDSP;
@@ -43,44 +41,46 @@ TH1* SampleHandlerPDSP::GetDataHistogramFromInputs(const int Sample) const {
     candidateNames.emplace_back("uncategorised_DataHist");
   }
 
-  for (const auto& fileName : SampleDetails[Sample].mc_files) {
-    TFile inputFile(fileName.c_str(), "READ");
-    if (inputFile.IsZombie()) {
-      MACH3LOG_ERROR("Could not open input file while looking for data histogram: {}", fileName);
-      throw MaCh3Exception(__FILE__, __LINE__);
-    }
+  for (const auto& fileGroup : SampleDetails[Sample].mc_files) {
+    for (const auto& fileName : fileGroup) {
+      TFile inputFile(fileName.c_str(), "READ");
+      if (inputFile.IsZombie()) {
+        MACH3LOG_ERROR("Could not open input file while looking for data histogram: {}", fileName);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
 
-    for (const auto& candidateName : candidateNames) {
-      TH1* dataHist = nullptr;
-      inputFile.GetObject(candidateName.c_str(), dataHist);
-      if (dataHist != nullptr) {
-        TH1* clone = static_cast<TH1*>(dataHist->Clone(expectedName.c_str()));
+      for (const auto& candidateName : candidateNames) {
+        TH1* dataHist = nullptr;
+        inputFile.GetObject(candidateName.c_str(), dataHist);
+        if (dataHist != nullptr) {
+          TH1* clone = static_cast<TH1*>(dataHist->Clone(expectedName.c_str()));
+          clone->SetDirectory(nullptr);
+          MACH3LOG_INFO("Loaded data histogram '{}' from {} for sample '{}'",
+                        candidateName, fileName, SampleDetails[Sample].SampleTitle);
+          return clone;
+        }
+      }
+
+      TIter nextKey(inputFile.GetListOfKeys());
+      while (TKey* key = static_cast<TKey*>(nextKey())) {
+        const TString keyName = key->GetName();
+        if (!keyName.EndsWith("_DataHist")) {
+          continue;
+        }
+
+        TObject* object = key->ReadObj();
+        if (!object->InheritsFrom(TH1::Class())) {
+          delete object;
+          continue;
+        }
+
+        TH1* clone = static_cast<TH1*>(static_cast<TH1*>(object)->Clone(expectedName.c_str()));
         clone->SetDirectory(nullptr);
+        delete object;
         MACH3LOG_INFO("Loaded data histogram '{}' from {} for sample '{}'",
-                      candidateName, fileName, SampleDetails[Sample].SampleTitle);
+                      keyName.Data(), fileName, SampleDetails[Sample].SampleTitle);
         return clone;
       }
-    }
-
-    TIter nextKey(inputFile.GetListOfKeys());
-    while (TKey* key = static_cast<TKey*>(nextKey())) {
-      const TString keyName = key->GetName();
-      if (!keyName.EndsWith("_DataHist")) {
-        continue;
-      }
-
-      TObject* object = key->ReadObj();
-      if (!object->InheritsFrom(TH1::Class())) {
-        delete object;
-        continue;
-      }
-
-      TH1* clone = static_cast<TH1*>(static_cast<TH1*>(object)->Clone(expectedName.c_str()));
-      clone->SetDirectory(nullptr);
-      delete object;
-      MACH3LOG_INFO("Loaded data histogram '{}' from {} for sample '{}'",
-                    keyName.Data(), fileName, SampleDetails[Sample].SampleTitle);
-      return clone;
     }
   }
 
@@ -106,8 +106,17 @@ void SampleHandlerPDSP::SetupSplines() {
 // ************************************************
 void SampleHandlerPDSP::AddAdditionalWeightPointers() {
 // ************************************************
-  for (auto& sample : MCSamples) {
+  for (auto& sample : MCEvents) {
     sample.total_weight_pointers.push_back(&MCGlobalScale);
+  }
+}
+
+// ************************************************
+void SampleHandlerPDSP::InititialiseData() {
+// ************************************************
+  Reweight();
+  for (int iSample = 0; iSample < GetNSamples(); ++iSample) {
+    AddData(iSample, GetMCArray(iSample));
   }
 }
 
@@ -123,8 +132,10 @@ int SampleHandlerPDSP::SetupExperimentMC() {
   TChain* _Chain = new TChain("FlatTree_VARS");
   for(size_t iSample = 0; iSample < SampleDetails.size(); iSample++)
   {
-    for (const std::string& filename : SampleDetails[iSample].mc_files) {
-      _Chain->Add(filename.c_str());
+    for (const auto& fileGroup : SampleDetails[iSample].mc_files) {
+      for (const auto& filename : fileGroup) {
+        _Chain->Add(filename.c_str());
+      }
     }
   }
 
@@ -144,7 +155,7 @@ int SampleHandlerPDSP::SetupExperimentMC() {
     // loop over all samples in a file
     for(size_t iFile = 0; iFile < SampleDetails[iSample].mc_files.size(); iFile++)
     {
-      auto fileName = SampleDetails[iSample].mc_files[iFile];
+      for (const auto& fileName : SampleDetails[iSample].mc_files[iFile]) {
       MACH3LOG_INFO("-------------------------------------------------------------------");
       MACH3LOG_INFO("input file: {}", fileName);
 
@@ -248,27 +259,23 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       _sampleFile->Close();
       delete _sampleFile;
       MACH3LOG_INFO("Initialised file: {}/{}", iFile, iSample);
+      }
     }
   }
   return nEntries;
 }
 
-double SampleHandlerPDSP::ReturnKinematicParameter(KinematicTypes KinPar, int iEvent) {
+double SampleHandlerPDSP::ReturnKinematicParameter(KinematicTypes KinPar, int iEvent) const {
   const double* paramPointer = GetPointerToKinematicParameter(KinPar, iEvent);
   return *paramPointer;
 }
 
-double SampleHandlerPDSP::ReturnKinematicParameter(int KinematicVariable, int iEvent) {
+double SampleHandlerPDSP::ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const {
   KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
   return ReturnKinematicParameter(KinPar, iEvent);
 }
 
-double SampleHandlerPDSP::ReturnKinematicParameter(std::string KinematicParameter, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
-  return ReturnKinematicParameter(KinPar, iEvent);
-}
-
-const double* SampleHandlerPDSP::GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent) {
+const double* SampleHandlerPDSP::GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent) const {
   switch (KinPar) {
     case kTrueKEIni:
       return &PDSPSamples[iEvent].TrueKEIni;
@@ -278,9 +285,9 @@ const double* SampleHandlerPDSP::GetPointerToKinematicParameter(KinematicTypes K
       return &PDSPSamples[iEvent].RecoKEIni;
     case kRecoKEInt:
       return &PDSPSamples[iEvent].RecoKEInt;
-    case kMode: // required to work with SampleHandlerFD
+    case kMode:
       return &PDSPSamples[iEvent].Mode;
-    case kOscChannel: // required to work with SampleHandlerFD
+    case kOscChannel:
       return &PDSPSamples[iEvent].OscillationChannel;
     case kTrueEndZ:
       return &PDSPSamples[iEvent].TrueEndZ;
@@ -292,25 +299,14 @@ const double* SampleHandlerPDSP::GetPointerToKinematicParameter(KinematicTypes K
   }
 }
 
-const double* SampleHandlerPDSP::GetPointerToKinematicParameter(double KinematicVariable, int iEvent) {
+const double* SampleHandlerPDSP::GetPointerToKinematicParameter(const int KinematicVariable, const int iEvent) const {
   KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
   return GetPointerToKinematicParameter(KinPar, iEvent);
 }
 
-const double* SampleHandlerPDSP::GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter));
-  return GetPointerToKinematicParameter(KinPar, iEvent);
-}
-
-void SampleHandlerPDSP::SetupFDMC() {
+void SampleHandlerPDSP::SetupMC() {
   for (unsigned int iEvent = 0; iEvent < GetNEvents(); ++iEvent) {
-    MCSamples[iEvent].NominalSample = PDSPSampleMetaData[iEvent].SampleIndex;
-    // mode pointer used by CalcNormsBins for Mode-based parameter matching
-    MCSamples[iEvent].mode = &PDSPSamples[iEvent].Mode;
-    // nupdg/nupdgUnosc/Target are unused in PDSP but must not be null pointers
-    MCSamples[iEvent].nupdg      = &DummyInt;
-    MCSamples[iEvent].nupdgUnosc = &DummyInt;
-    MCSamples[iEvent].Target     = &DummyInt;
+    MCEvents[iEvent].NominalSample = PDSPSampleMetaData[iEvent].SampleIndex;
   }
 }
 

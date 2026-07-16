@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Samples/SampleHandlerFD.h"
+#include "Samples/SampleHandlerBase.h"
 #include "StructsPDSP.h"
 #include <random>
 
-class SampleHandlerPDSP : public SampleHandlerFD
+class SampleHandlerPDSP : virtual public SampleHandlerBase
 {
  public:
   SampleHandlerPDSP(const std::string& config_name, ParameterHandlerGeneric* parameter_handler);
@@ -24,20 +24,21 @@ class SampleHandlerPDSP : public SampleHandlerFD
 
   int SetupExperimentMC() override;
 
+  void SetupMC() override;
+
+  void InititialiseData() override;
+
   void CleanMemoryBeforeFit() override;
 
   void AddAdditionalWeightPointers() override;
 
-  double ReturnKinematicParameter(KinematicTypes KinPar, int iEvent);
-  double ReturnKinematicParameter(int KinematicVariable, int iEvent) override;
-  double ReturnKinematicParameter(std::string KinematicParameter, int iEvent) override;
+  double ReturnKinematicParameter(KinematicTypes KinPar, int iEvent) const;
+  double ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const override;
   
-  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent);
-  const double* GetPointerToKinematicParameter(double KinematicVariable, int iEvent) override;
-  const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent) override;
+  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent) const;
+  const double* GetPointerToKinematicParameter(const int KinematicVariable, const int iEvent) const override;
 
-  void SetupFDMC() override;
-  void CalcWeightFunc(int iEvent) override {return; (void)iEvent;}
+  void CalcWeightFunc(const int iEvent) override {return; (void)iEvent;}
 
   std::vector<MetaData> PDSPSampleMetaData;
   std::vector<PDSPMCInfo> PDSPSamples;
@@ -68,7 +69,5 @@ class SampleHandlerPDSP : public SampleHandlerFD
   // functional parameters, currently have none for the time being
   void RegisterFunctionalParameters() override;
 
-  // Placeholder for nupdg/nupdgUnosc/Target pointers — unused in PDSP but must not be null
-  static const int DummyInt = 0;
-  double MCGlobalScale = 1.0;
+  M3::float_t MCGlobalScale = 1.0;
 };
