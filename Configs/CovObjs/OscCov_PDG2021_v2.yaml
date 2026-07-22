@@ -118,7 +118,7 @@ Systematics:
       CircularBounds: [-3.141592, 3.141592]
     FlatPrior: true
     # It has special treatment as it is continuous param
-    ParameterBounds: [-999, 999]
+    ParameterBounds: [-3.141592, 3.141592]
     ParameterGroup: Osc
     ParameterValues:
       Generated: -1.601
