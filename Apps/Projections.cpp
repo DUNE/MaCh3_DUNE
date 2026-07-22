@@ -117,22 +117,14 @@ int main(int argc, char *argv[]) {
   int WeightStyle = 0;
   gStyle->SetPalette(1);
   // ###############################################################################################################################
-  // Create samplePDFFD objects
-
-  auto xsec = MaCh3CovarianceFactory<ParameterHandlerGeneric>(FitManager.get(), "Xsec");
-  if (CheckNodeExists(FitManager->raw(), "General", "OscillationParameters"))
-  {
-    auto oscpars = Get<std::vector<double>>(FitManager->raw()["General"]["OscillationParameters"], __FILE__, __LINE__);
-    xsec->SetGroupOnlyParameters("Osc", oscpars);
-  }
-
-  auto DUNEPdfs = MaCh3DuneSampleFactory(FitManager, xsec);
+  //Create sample handler + parameter_handler objects
+  auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
 
   // ###############################################################################################################################
   // Perform reweight and print total integral for sanity check
 
   MACH3LOG_INFO("=================================================");
-  for (auto handler : DUNEPdfs) {
+  for (auto handler : samples) {
     handler->Reweight();
     for (int iSample = 0; iSample < handler->GetNSamples(); iSample++) {
       std::string EventRateString = fmt::format("{:.2f}", handler->GetMCHist(iSample)->Integral());
@@ -293,7 +285,7 @@ int main(int argc, char *argv[]) {
 
     std::vector<std::string> ProjectionVar_Str = Projections[iProj].VarStrings;
     int histdim = ProjectionVar_Str.size();
-    for (auto handler : DUNEPdfs) {
+    for (auto handler : samples) {
 
       //File->mkdir(Sample->GetName().c_str());
       //TDirectory *dir = File->GetDirectory(Sample->GetName().c_str());

@@ -1,7 +1,7 @@
 # CMake version check
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
-set(MaCh3DUNE_VERSION 1.0.0)
+SET(MaCh3DUNE_VERSION 1.2.0)
 
 # Create project (todo: set configurable CUDA)
 project(MaCh3DUNE VERSION ${MaCh3DUNE_VERSION} LANGUAGES CXX)
@@ -75,14 +75,8 @@ endif()
 
 # =================== DUNEAnaObj
 if(NOT DEFINED DUNE_ANAOBJ_BRANCH)
-	set(DUNE_ANAOBJ_BRANCH v03_06_00)
-	set(
-		DUNE_ANAOBJ_BRANCH
-		${DUNE_ANAOBJ_BRANCH}
-		CACHE
-			STRING
-			"Specify which duneanaobj branch to use"
-	)
+  set(DUNE_ANAOBJ_BRANCH v03_14_00)
+  set(DUNE_ANAOBJ_BRANCH ${DUNE_ANAOBJ_BRANCH} CACHE STRING "Specify which duneanaobj branch to use")
 endif()
 
 option(MaCh3_DUNE_USE_SRProxy
@@ -171,20 +165,10 @@ endif()
 
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
-set(MaCh3_FOUND FALSE)
-find_package(MaCh3  QUIET)
-set(
-	MaCh3_CORE_BRANCH
-	v2.5.1
-	CACHE
-		STRING
-		"Specify the MaCh3 core branch to use"
-)
+SET(MaCh3_FOUND FALSE)
+find_package(MaCh3 2.5.1 EXACT QUIET)
+set(MaCh3_CORE_BRANCH v2.5.1 CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
-option(MaCh3DUNE_Atmos
-	"Whether working with atmospherics or beam oscillations"
-	OFF
-)
 
 if(NOT MaCh3_FOUND)
 	cmessage(STATUS "Didn't find MaCh3, attempting to use built in MaCh3")
@@ -193,45 +177,17 @@ if(NOT MaCh3_FOUND)
 		set(MaCh3_GPU_ENABLED ON)
 	endif()
 
-	if(NOT DEFINED MaCh3_DEBUG_ENABLED)
-		set(MaCh3_DEBUG_ENABLED FALSE)
-	endif()
-
-	if(NOT DEFINED MaCh3_MULTITHREAD_ENABLED)
-		set(MaCh3_MULTITHREAD_ENABLED TRUE)
-	endif()
-
-	# Options list construction
-	set(MaCh3_OPTIONS
-		"MaCh3_GPU_ENABLED ${MaCh3_GPU_ENABLED}"
-		"MaCh3_DEBUG_ENABLED ${MaCh3_DEBUG_ENABLED}"
-		"MaCh3_MULTITHREAD_ENABLED ${MaCh3_MULTITHREAD_ENABLED}"
-		"MaCh3_CORE_BRANCH ${MaCh3_CORE_BRANCH}"
-	)
-
-	# Add LOG_LEVEL if defined
-	if(LOG_LEVEL)
-		list(APPEND MaCh3_OPTIONS "LOG_LEVEL ${LOG_LEVEL}")
-	endif()
-
-	list(APPEND MaCh3_OPTIONS "NuFastLinear_ENABLED TRUE")
-	if(MaCh3DUNE_Atmos)
-		list(APPEND MaCh3_OPTIONS "CUDAProb3_ENABLED TRUE")
-		list(APPEND MaCh3_OPTIONS "CUDAProb3Linear_ENABLED FALSE")
-	else()
-		list(APPEND MaCh3_OPTIONS "CUDAProb3Linear_ENABLED TRUE")
-	endif()
-
-	CPMAddPackage(
-		NAME
-		MaCh3
-		GIT_TAG
-		${MaCh3_CORE_BRANCH}
-		GITHUB_REPOSITORY
-		mach3-software/MaCh3
-		OPTIONS
-		${MaCh3_OPTIONS}
-	)
+  list(APPEND MaCh3_OPTIONS "NuFastLinear_ENABLED TRUE")
+  list(APPEND MaCh3_OPTIONS "CUDAProb3_ENABLED TRUE")
+  list(APPEND MaCh3_OPTIONS "CUDAProb3Linear_ENABLED TRUE")
+  
+  CPMAddPackage(
+    NAME MaCh3
+    GIT_TAG ${MaCh3_CORE_BRANCH}
+    GITHUB_REPOSITORY mach3-software/MaCh3
+    OPTIONS
+    ${MaCh3_OPTIONS}
+  )
 else()
 	##KS: This ensure that all executables that are in core will be moved
 	file(GLOB MaCh3Exe $ENV{MaCh3_ROOT}/Diagnostics/*)
@@ -308,9 +264,14 @@ endif()
 
 ################################# Build MaCh3 ##################################
 add_library(MaCh3DUNECompilerOptions INTERFACE)
-set_target_properties(MaCh3DUNECompilerOptions
-	PROPERTIES EXPORT_NAME CompilerOptions
-)
+
+if(MaCh3_DUNE_USE_SRProxy)
+  target_compile_definitions(MaCh3DUNECompilerOptions INTERFACE MaCh3_DUNE_USE_SRProxy=1)
+else()
+  target_compile_definitions(MaCh3DUNECompilerOptions INTERFACE MaCh3_DUNE_USE_SRProxy=0)
+endif()
+
+set_target_properties(MaCh3DUNECompilerOptions PROPERTIES EXPORT_NAME CompilerOptions)
 
 target_include_directories(MaCh3DUNECompilerOptions
 	INTERFACE
@@ -387,31 +348,10 @@ if(NOT DEFINED MaCh3_PREFIX OR MaCh3_PREFIX STREQUAL "")
 	cmessage(STATUS "Set MaCh3_PREFIX: ${MaCh3_PREFIX}")
 endif()
 
-# NOW add the python subdirectory - MaCh3_PREFIX is already set
-if(PYTHON_ENABLED)
-	cmessage(STATUS "PYTHON IS ENABLED!!")
-	set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
-	cmessage(STATUS "CMAKE_INSTALL_RPATH is ${CMAKE_INSTALL_RPATH}")
-	set(PYMACH3_PATH ${CMAKE_BINARY_DIR}/python/pyMaCh3)
-	add_subdirectory(python)
-endif()
-
-
-install(
-	TARGETS MaCh3DUNEAll
-	EXPORT mach3dune-targets
-	LIBRARY DESTINATION lib/
-)
-
-configure_file(
-	cmake/Templates/setup.MaCh3DUNE.sh.in
-	"${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/setup.MaCh3DUNE.sh"
-	@ONLY
-)
-install(
-	FILES "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/setup.MaCh3DUNE.sh"
-	DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-)
+configure_file(cmake/Templates/setup.MaCh3DUNE.sh.in
+  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/setup.MaCh3DUNE.sh" @ONLY)
+install(FILES
+  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/setup.MaCh3DUNE.sh" DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/output)
 
