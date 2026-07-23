@@ -21,14 +21,8 @@ int main(int argc, char * argv[]) {
   auto OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
 
   //####################################################################################
-  //Create samplePDFSKBase Objs
-  auto xsec = MaCh3CovarianceFactory<ParameterHandlerGeneric>(FitManager.get(), "Xsec");
-  if (CheckNodeExists(FitManager->raw(), "General", "OscillationParameters")){
-    auto oscpars = Get<std::vector<double>>(FitManager->raw()["General"]["OscillationParameters"], __FILE__, __LINE__);
-    xsec->SetGroupOnlyParameters("Osc", oscpars);
-  }
-
-  auto DUNEPdfs = MaCh3DuneSampleFactory(FitManager, xsec);
+  //Create sample handler + parameter_handler objects
+  auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
 
   //Some place to store the histograms
   std::vector<TH1*> PredictionHistograms;
@@ -37,7 +31,7 @@ int main(int argc, char * argv[]) {
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
 
-  for (auto handler : DUNEPdfs) {
+  for (auto handler : samples) {
     for (unsigned iSample = 0; iSample < handler->GetNSamples(); ++iSample) {
     
       std::string name = handler->GetSampleTitle(iSample);
@@ -73,12 +67,12 @@ int main(int argc, char * argv[]) {
   //Start chain from random position unless continuing a chain
   if(!StartFromPreviousChain){
     if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false)) {
-      xsec->ThrowParameters();
+      param_handler->ThrowParameters();
     }
   }
 
   //Add systematic objects
-  MaCh3Fitter->AddSystObj(xsec.get());
+  MaCh3Fitter->AddSystObj(param_handler.get());
 
   if (StartFromPreviousChain) {
     std::string PreviousChainPath = FitManager->raw()["General"]["PosFileName"].as<std::string>();
@@ -87,7 +81,7 @@ int main(int argc, char * argv[]) {
   }
   
   //Add samples
-  for(auto Sample : DUNEPdfs){
+  for(auto Sample : samples){
     MaCh3Fitter->AddSampleHandler(Sample);
   }
 

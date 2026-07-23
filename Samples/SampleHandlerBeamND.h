@@ -106,11 +106,6 @@ protected:
   double _Q2;
   int _reco_q;
 
-  // configuration 
-  bool iselike;
-  bool isND;
-  double IsFHC;
-
   mutable bool isNDCovSet = false;
   // The ND detector covariance matrix
   BeamNDCov beamNDCov;
@@ -122,6 +117,9 @@ protected:
   std::vector<const double*> NDDetectorSystPointers;
   int nNDDetectorSystPointers;
   std::unordered_map<std::string, std::vector<double>> norm_map;
+
+  /// @brief Downsampling step (e.g. 10 means only every 10th event is used in the fit). Default is 1 (no downsampling).
+  unsigned int downsamplingStep;
 
   /// @brief Cleanup memory
   void CleanMemoryBeforeFit() override {};

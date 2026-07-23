@@ -18,5 +18,5 @@
 
 /// @brief Factory function that generates MaCh3 DUNE instance including configured samples
 /// @param fitMan Configuration Manager
-/// @param param_handler Cross-section covariance matrix
-std::vector<SampleHandlerBase*> MaCh3DuneSampleFactory(std::unique_ptr<Manager> &FitManager, std::unique_ptr<ParameterHandlerGeneric> &param_handler);
+/// @returns parameter handler and vector of sample handler
+std::pair<std::unique_ptr<ParameterHandlerGeneric>, std::vector<SampleHandlerBase*>> MaCh3DuneFactory(std::unique_ptr<Manager> &FitManager);

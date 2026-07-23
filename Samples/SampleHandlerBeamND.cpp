@@ -14,6 +14,8 @@ SampleHandlerBeamND::SampleHandlerBeamND(std::string mc_version_, ParameterHandl
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
   
   Initialise();
+
+  downsamplingStep = 1;
 }
 
 SampleHandlerBeamND::~SampleHandlerBeamND() {
@@ -41,6 +43,14 @@ void SampleHandlerBeamND::Init() {
     MACH3LOG_INFO("- isFHC: {}", beamNDSampleDetails[i].isFHC);
     MACH3LOG_INFO("- iselike: {}", beamNDSampleDetails[i].iselike);
   }
+
+  downsamplingStep = GetFromManager<unsigned int>(SampleManager->raw()["DownsamplingStep"], 1);
+  if (downsamplingStep == 0) {
+    throw MaCh3Exception(__FILE__, __LINE__,
+      "Downsampling step cannot be zero. Please set it to a positive integer in the Beam ND sample config file."
+    );
+  } 
+  MACH3LOG_INFO("Beam ND downsampling step: {}", downsamplingStep);
 
   MACH3LOG_INFO("-------------------------------------------------------------------");
 }
@@ -141,16 +151,22 @@ int SampleHandlerBeamND::SetupExperimentMC() {
   _data->SetBranchAddress("BeRPA_A_cvwgt", &_BeRPA_cvwgt);
 
   size_t nEntries = static_cast<size_t>(_data->GetEntries());
-  size_t countwidth = nEntries / 10;
-  dunendmcSamples.resize(nEntries);
+  size_t nDownsampledEntries = nEntries / downsamplingStep;
+  if (nDownsampledEntries == 0) {
+    throw MaCh3Exception(__FILE__, __LINE__,
+      "Downsampling step is too large, resulting in zero entries. Please set it to a smaller positive integer in the Beam ND sample config file."
+    );
+  }
+  size_t countwidth = nDownsampledEntries / 10;
+  dunendmcSamples.resize(nDownsampledEntries);
   _data->GetEntry(0);
 
   //FILL DUNE STRUCT
-  for (unsigned int i = 0; i < nEntries; ++i) { // Loop through tree
-    _data->GetEntry(i);
+  for (unsigned int i = 0; i < nDownsampledEntries; ++i) { // Loop through tree
+    _data->GetEntry(i * downsamplingStep);
 
     if (i % countwidth == 0) {
-      M3::Utils::PrintProgressBar(i, static_cast<Long64_t>(nEntries));
+      M3::Utils::PrintProgressBar(i, static_cast<Long64_t>(nDownsampledEntries));
     }
 
     const Int_t treeNum = _data->GetTreeNumber();
@@ -166,7 +182,7 @@ int SampleHandlerBeamND::SetupExperimentMC() {
 
     // POT stuff
     dunendmcSamples[i].norm_s = beamNDSampleDetails[sample_index].norm_s;
-    dunendmcSamples[i].pot_s = beamNDSampleDetails[sample_index].pot_s;
+    dunendmcSamples[i].pot_s = beamNDSampleDetails[sample_index].pot_s * downsamplingStep;
     
     dunendmcSamples[i].rw_erec = _erec;
     dunendmcSamples[i].rw_erec_shifted = _erec;
@@ -180,7 +196,7 @@ int SampleHandlerBeamND::SetupExperimentMC() {
     dunendmcSamples[i].rw_berpaacvwgt = _BeRPA_cvwgt;
     
     //Assume everything is on Argon for now....
-    dunendmcSamples[i].Target = 40;
+    dunendmcSamples[i].Target = kTarget_Ar;
 
     int M3Mode = Modes->GetModeFromGenerator(std::abs(_mode));
     if (!_isCC) M3Mode += 14; //Account for no ability to distinguish CC/NC
@@ -193,7 +209,7 @@ int SampleHandlerBeamND::SetupExperimentMC() {
   //_sampleFile->Close();
   _data->Reset();
   delete _data;
-  return static_cast<int>(nEntries);
+  return static_cast<int>(nDownsampledEntries);
   
 }
 
@@ -212,7 +228,7 @@ const double* SampleHandlerBeamND::GetPointerToKinematicParameter(const int KinP
     return &(dunendmcSamples[iEvent].mode);
     break;
   case kIsFHC:
-    return &(IsFHC);
+    return &(beamNDSampleDetails[MCEvents[iEvent].NominalSample].isFHC);
     break;
   case kTargetNucleus:
     return &(dunendmcSamples[iEvent].Target);
@@ -268,10 +284,6 @@ void SampleHandlerBeamND::setNDCovMatrix() const {
   std::vector<double> FlatCV(covSize);
   int globalBin = 0;
 
-  /*==========================================================================================================================
-  //DB Do not trust the below code (between the lines of '=') - changed just to compile  
-  */
-  
   for (int iSample = 0; iSample < static_cast<int>(SampleDetails.size()); iSample++) {
     const int nBins = Binning->GetNBins(iSample);
     const int blockSize = nBins;
@@ -296,17 +308,21 @@ void SampleHandlerBeamND::setNDCovMatrix() const {
 
     // Fill flat CV vector and add statistical term to diagonal
     int localBin = 0;
-    for (int iBin = 0; iBin < nBins; iBin++) {
-      const double CV = SampleHandler_data[iBin];
-      FlatCV[globalBin + localBin] = CV;
-      if (CV > 0)
-	WorkCov(globalBin + localBin, globalBin + localBin) += 1.0 / CV;
-      localBin++;
+    const int nXBins = Binning->GetNAxisBins(iSample, 0);
+    const int nYBins = Binning->GetNAxisBins(iSample, 1);
+    for (int xBin = 0; xBin < nXBins; ++xBin) {
+      for (int yBin = 0; yBin < nYBins; ++yBin) {
+        const int idx = Binning->GetGlobalBinSafe(iSample, {xBin, yBin});
+        const double CV = SampleHandler_data[idx];
+        FlatCV[globalBin + localBin] = CV;
+        if (CV > 0) {
+          WorkCov(globalBin + localBin, globalBin + localBin) += 1.0 / CV;
+        }
+        localBin++;
+      }
     }
     globalBin += blockSize;
   }
-
-  //==========================================================================================================================
 
   // Invert the working matrix
   WorkCov.Invert();
@@ -339,19 +355,19 @@ double SampleHandlerBeamND::GetLikelihood() const {
   std::vector<double> FlatData(covSize);
   std::vector<double> FlatMCPred(covSize);
 
-  /*==========================================================================================================================
-  //DB Do not trust the below code (between the lines of '=') - changed just to compile
-  */
-  
-  // 2D -> 1D, iterating over all sub-samples in the same order as setNDCovMatrix
-  for (int iSample = 0; iSample < static_cast<int>(SampleDetails.size()); iSample++) {
-    for (int iBin = 0; iBin < Binning->GetNBins(iSample); iBin++) {
-      FlatData[iBin] = SampleHandler_data[iBin];
-      FlatMCPred[iBin] = SampleHandler_array[iBin];
+  int flatIdx = 0;
+  for (int iSample = 0; iSample < static_cast<int>(SampleDetails.size()); ++iSample) {
+    const int nXBins = Binning->GetNAxisBins(iSample, 0);
+    const int nYBins = Binning->GetNAxisBins(iSample, 1);
+    for (int xBin = 0; xBin < nXBins; ++xBin) {
+      for (int yBin = 0; yBin < nYBins; ++yBin) {
+        const int idx = Binning->GetGlobalBinSafe(iSample, {xBin, yBin});
+        FlatData[flatIdx] = SampleHandler_data[idx];
+        FlatMCPred[flatIdx] = SampleHandler_array[idx];
+        ++flatIdx;
+      }
     }
   }
-
-  //==========================================================================================================================
 
   double negLogL = 0.;
 #ifdef MULTITHREAD

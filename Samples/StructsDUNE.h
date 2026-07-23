@@ -51,6 +51,8 @@ struct dunemc_base { // Store variables used in fitting
 struct dunemc_atm : public dunemc_base { // Store variables used by SampleHandlerAtm
   double rw_theta;
   double coszenith_true;
+
+  double MinDistToWall;
 };
 
 struct dunemc_beamfd : public dunemc_base { // Store variables used by SampleHandlerBeamFD

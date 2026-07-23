@@ -4,9 +4,6 @@
 SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, std::unique_ptr<ParameterHandlerGeneric>& param_handler, const std::shared_ptr<OscillationHandler>&  BeamOscillator_, const std::shared_ptr<OscillationHandler>&  AtmOscillator_, BeamNDCov beamNDCov) {
 // ###############################################################
   SampleHandlerBase *Sample;
-
-  (void)beamNDCov;
-  
   if (SampleType == "BeamFD") {
     Sample = new SampleHandlerBeamFD(SampleConfig, param_handler.get(), BeamOscillator_);
   } else if (SampleType == "BeamND") {
@@ -15,13 +12,6 @@ SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string Samp
       MACH3LOG_ERROR("NDCov objects are not defined");
       throw MaCh3Exception(__FILE__, __LINE__);
     }
-    
-    // TMatrixD* NDCov = nullptr;
-    // manager* tempSampleManager = new manager(SampleConfig.c_str());
-    // int isFHC = tempSampleManager->raw()["DUNESampleBools"]["isFHC"].as<int>();
-    // if(isFHC) {NDCov = NDCov_FHC;}
-    // else {NDCov = NDCov_RHC;}
-    
     Sample = new SampleHandlerBeamND(SampleConfig, param_handler.get(), beamNDCov); 
   } else if (SampleType == "Atm") {
     Sample = new SampleHandlerAtm(SampleConfig, param_handler.get(), AtmOscillator_);
@@ -142,4 +132,22 @@ std::vector<SampleHandlerBase *> MaCh3DuneSampleFactory(std::unique_ptr<Manager>
   }
 
   return DUNEPdfs;
+}
+
+std::pair<std::unique_ptr<ParameterHandlerGeneric>, std::vector<SampleHandlerBase*>> MaCh3DuneFactory(std::unique_ptr<Manager> &FitManager) {
+  /// Generates a MaCh3 DUNE instance
+  auto param_handler = MaCh3CovarianceFactory<ParameterHandlerGeneric>(FitManager.get(), "Xsec");
+ 
+  if (CheckNodeExists(FitManager->raw(), "General", "OscillationParameters")){
+    auto oscpars = Get<std::vector<double>>(FitManager->raw()["General"]["OscillationParameters"], __FILE__, __LINE__);
+    param_handler->SetGroupOnlyParameters("Osc", oscpars);
+  }  
+
+  auto samples = MaCh3DuneSampleFactory(FitManager, param_handler);
+
+  if(samples.empty()){
+    MACH3LOG_WARN("Cannot find any samples, doing prior-only fit");
+  }
+
+  return {std::move(param_handler), samples};
 }
