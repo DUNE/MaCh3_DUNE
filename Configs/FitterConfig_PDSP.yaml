@@ -62,10 +62,12 @@ General:
     XsecAsimovTune: "Generator"
     XsecPCAThreshold: -1
     XsecPCAParams: [-999, -999]
-    XsecStepScale: 15
+    XsecStepScale: 1
 
 # Prior/Posterior predictive settings
 Predictive:
+  # Must differ from PosteriorFile: PredictiveThrower recreates this file.
+  OutputFile: "PredictiveOutputTest.root"
   # Number of throws from MCMC you want to perform (aim for something like 2k/5k)
   Ntoy: 1000
   #Use Full LLH or only sample contribution based on discussion with Asher we almost always only want the sample likelihood

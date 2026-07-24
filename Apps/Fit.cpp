@@ -19,7 +19,6 @@
 int main(int argc, char * argv[]) {
 
   auto FitManager = MaCh3ManagerFactory(argc, argv);
-  auto OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
 
   //####################################################################################
   //Create sample handler + parameter_handler objects
@@ -36,9 +35,6 @@ int main(int argc, char * argv[]) {
     MACH3LOG_INFO("Generating Asimov data with xsec tune '{}'", AsimovTune);
     param_handler->SetTune(AsimovTune);
   }
-
-  auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
-  OutputFile->cd();
 
   for (auto handler : samples) {
     for (unsigned iSample = 0; iSample < handler->GetNSamples(); ++iSample) {

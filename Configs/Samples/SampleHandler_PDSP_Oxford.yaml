@@ -9,7 +9,7 @@ LikelihoodOptions:
   UpdateW2: true
   TestStatistic: "Poisson"
 
-BinningFile: "PDSPBinning.yaml"
+BinningFile: "Configs/Samples/PDSPBinning.yaml"
 InputFiles:
   PrepSplineFile: false
 
