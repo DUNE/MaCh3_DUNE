@@ -1,4 +1,4 @@
-set(HEADERS BinnedSplineHandlerDUNE.h
+set(HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/BinnedSplineHandlerDUNE.h
 )
 
 add_library(SplinesDUNE SHARED

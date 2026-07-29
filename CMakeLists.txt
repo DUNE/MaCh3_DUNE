@@ -267,6 +267,49 @@ set_target_properties(MaCh3DUNEAll PROPERTIES EXPORT_NAME All)
 target_link_libraries(MaCh3DUNEAll INTERFACE SamplesDUNE SplinesDUNE MaCh3DUNECompilerOptions)
 add_library(MaCh3DUNE::All ALIAS MaCh3DUNEAll)
 
+if(NOT DEFINED MaCh3_PREFIX OR MaCh3_PREFIX STREQUAL "")
+    # Try to detect if MaCh3 was fetched by CPM
+    if(EXISTS "${CMAKE_BINARY_DIR}/_deps/mach3-src")
+        set(MaCh3_PREFIX "${CMAKE_BINARY_DIR}/_deps/mach3-src")
+        cmessage(STATUS "Detected CPM-fetched MaCh3: ${MaCh3_PREFIX}")
+    # Try to get from MaCh3 package config
+    elseif(DEFINED MaCh3_DIR)
+        get_filename_component(MaCh3_PREFIX "${MaCh3_DIR}" DIRECTORY)
+        get_filename_component(MaCh3_PREFIX "${MaCh3_PREFIX}" DIRECTORY)
+        cmessage(STATUS "Detected installed MaCh3 from MaCh3_DIR: ${MaCh3_PREFIX}")
+    # Try to get from target properties
+    elseif(TARGET MaCh3::All)
+        get_target_property(MACH3_INCLUDE_DIRS MaCh3::All INTERFACE_INCLUDE_DIRECTORIES)
+        if(MACH3_INCLUDE_DIRS)
+            list(GET MACH3_INCLUDE_DIRS 0 FIRST_INCLUDE_DIR)
+            get_filename_component(MaCh3_PREFIX "${FIRST_INCLUDE_DIR}" DIRECTORY)
+            cmessage(STATUS "Detected MaCh3 from target include dirs: ${MaCh3_PREFIX}")
+        endif()
+    endif()
+    
+    # Final validation
+    if(NOT DEFINED MaCh3_PREFIX OR MaCh3_PREFIX STREQUAL "")
+        cmessage(FATAL_ERROR "Could not determine MaCh3_PREFIX. Please set it manually with -DMaCh3_PREFIX=<path>")
+    endif()
+    
+    if(NOT EXISTS "${MaCh3_PREFIX}")
+        cmessage(FATAL_ERROR "MaCh3_PREFIX does not exist: ${MaCh3_PREFIX}")
+    endif()
+    
+    # Cache it for use in subdirectories
+    set(MaCh3_PREFIX "${MaCh3_PREFIX}" CACHE PATH "MaCh3 installation or source directory" FORCE)
+    cmessage(STATUS "Set MaCh3_PREFIX: ${MaCh3_PREFIX}")
+endif()
+
+
+if(PYTHON_ENABLED)
+	cmessage(STATUS "PYTHON IS ENABLED!!")
+	set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
+	cmessage(STATUS "CMAKE_INSTALL_RPATH is ${CMAKE_INSTALL_RPATH}")
+	set(PYMACH3_PATH ${CMAKE_BINARY_DIR}/python/pyMaCh3)
+	add_subdirectory(python)
+endif()
+
 install(TARGETS MaCh3DUNEAll
   EXPORT mach3dune-targets
   LIBRARY DESTINATION lib/)
