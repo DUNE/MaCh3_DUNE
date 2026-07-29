@@ -91,5 +91,5 @@ int main(int argc, char * argv[]) {
     MACH3LOG_INFO("=======================================================");
   }
 
-  File->Close();
+  return 0;
 }
