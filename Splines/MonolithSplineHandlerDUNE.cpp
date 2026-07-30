@@ -5,6 +5,7 @@
 #include "TTreeReaderArray.h"
 #include "TTreeReaderValue.h"
 
+// Delegating constructor: extracts spline data from file before initializing base class
 MonolithSplineHandlerDUNE::MonolithSplineHandlerDUNE(
     const std::vector<SplineParameter>& splinePars, 
     const std::vector<uint>& eventIndices, 
@@ -13,51 +14,53 @@ MonolithSplineHandlerDUNE::MonolithSplineHandlerDUNE(
 {
 }
 
+// Internal constructor that passes processed response functions to UnbinnedSplineHandler
 MonolithSplineHandlerDUNE::MonolithSplineHandlerDUNE(
     std::pair<std::vector<std::vector<TResponseFunction_red*> >, std::vector<RespFuncType>> initParams)
 : UnbinnedSplineHandler(initParams.first, initParams.second)
 {
 }
 
+// Main initialization method: loads event-by-event spline response curves from a monolith ROOT file
 std::pair<std::vector<std::vector<TResponseFunction_red*> >, std::vector<RespFuncType>> 
 MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
     const std::vector<SplineParameter>& splinePars,
     const std::vector<uint>& eventIndices,
     const std::string& spline_filename) {
-    TFile *f = TFile::Open(spline_filename.c_str(),"READ");
+
+    TFile *f = TFile::Open(spline_filename.c_str(), "READ");
     if (!f || f->IsZombie()) {
-        MACH3LOG_ERROR("Could not open spline file: {}",spline_filename);
+        MACH3LOG_ERROR("Could not open spline file: {}", spline_filename);
         throw MaCh3Exception(__FILE__, __LINE__);
     }
 
+    // Retrieve systematic parameter headers (knot positions, central values, etc.)
     std::vector<struct SplineHeader> fileSplinePars = 
         MonolithSplineHandlerDUNE::GetSplineParametersFromFile(f, "systsHeader");
 
-    //Make a nice printout of available splines in the file under the form of an array
+    // Print summary table of available systematic splines in the input file
     MACH3LOG_INFO("Available splines in file: {}", spline_filename);
-        MACH3LOG_INFO("╔══════════════════════════════════════════════════════════════════════════════╗");
-        MACH3LOG_INFO("║ {:^76} ║", "Spline Parameters from File");
-        MACH3LOG_INFO("╠══════════════════════════════════════════════════════════════════════════════╣");
-        MACH3LOG_INFO("║ {:<40} │ {:>10} │ {:>10} │ {:>8} ║", "Name", "CV", "Knots", "IsCor");
-        MACH3LOG_INFO("╠══════════════════════════════════════════════════════════════════════════════╣");
-        for (const auto& param : fileSplinePars) {
-            MACH3LOG_INFO("║ {:<40} │ {:>10.3f} │ {:>10} │ {:>8} ║", 
-                          param.name, param.cv, param.knots.size(), 
-                          param.isCorrection ? "true" : "false");
-        }
-        MACH3LOG_INFO("╚══════════════════════════════════════════════════════════════════════════════╝");
-        MACH3LOG_INFO("Total number of splines in file: {}", fileSplinePars.size());
+    MACH3LOG_INFO("╔══════════════════════════════════════════════════════════════════════════════╗");
+    MACH3LOG_INFO("║ {:^76} ║", "Spline Parameters from File");
+    MACH3LOG_INFO("╠══════════════════════════════════════════════════════════════════════════════╣");
+    MACH3LOG_INFO("║ {:<40} │ {:>10} │ {:>10} │ {:>8} ║", "Name", "CV", "Knots", "IsCor");
+    MACH3LOG_INFO("╠══════════════════════════════════════════════════════════════════════════════╣");
+    for (const auto& param : fileSplinePars) {
+        MACH3LOG_INFO("║ {:<40} │ {:>10.3f} │ {:>10} │ {:>8} ║", 
+                      param.name, param.cv, param.knots.size(), 
+                      param.isCorrection ? "true" : "false");
+    }
+    MACH3LOG_INFO("╚══════════════════════════════════════════════════════════════════════════════╝");
+    MACH3LOG_INFO("Total number of splines in file: {}", fileSplinePars.size());
 
-
+    // Set up tree reader for event-by-event weight variations
     const std::string treeName = "SystWeights";
     TTreeReader reader(treeName.c_str(), f);
-
-    //List all available branches (spline names) in the tree
 
     std::vector<TTreeReaderArray<double>> splineValuesPtrs;
     std::vector<ReusableSpline*> splines;
     
-    //Iterate over spline parameters and print their names
+    // Verify required branches exist and bind tree reader arrays for each requested parameter
     for (const SplineParameter& splineParam : splinePars) {
         std::string desiredSplineName = splineParam.name;
         if (!reader.GetTree()->GetBranch(desiredSplineName.c_str())) {
@@ -74,7 +77,6 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
         }
         const SplineHeader& header = *it;
 
-
         TTreeReaderArray<double> splineValues(reader, desiredSplineName.c_str());
         splineValuesPtrs.emplace_back(std::move(splineValues));
         splines.emplace_back(new ReusableSpline(header.knots));
@@ -90,17 +92,19 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
     const size_t totalEvents = eventIndices.size();
     size_t lastPrintPercent = 0;
 
+    // Sequential scan through the TTree matching requested event indices
     while (reader.Next()) {
         if (nextEventToFindIdx >= eventIndices.size()) {
             break;
         }
         if (currentEventIdx == eventIndices[nextEventToFindIdx]) {
-            // Process the splines for this event
+            // Process weight variations for all parameters for the current event
             std::vector<TSpline3_redDUNE*> currentEventSplines;
             for (size_t i = 0; i < splines.size(); ++i) {
                 const auto& splineValues = splineValuesPtrs[i];
                 std::vector<double> values;
                 for (auto& val : splineValues) {
+                    // Replace invalid values with 1.0 (unit weight) to prevent unphysical calculations
                     if (std::isnan(val)) {
                         MACH3LOG_WARN("NaN detected in spline values for parameter {} at event index {} - replacing with 1.0 (flat spline)", 
                                       splinePars[i].name, currentEventIdx);
@@ -111,8 +115,9 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
                 }
                 
                 splines[i]->SetVariationWeights(values);
+                splines[i]->Refresh(); // Recompute cubic spline polynomial coefficients
 
-                splines[i]->Refresh();
+                // Optimization: store nullptr for flat splines to bypass evaluation during fits
                 TSpline3* splinePtr = splines[i];
                 if (splines[i]->IsFlat()) {
                     currentEventSplines.emplace_back(nullptr);
@@ -123,7 +128,7 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
             splinesReduced.emplace_back(std::move(currentEventSplines));
             splineTypes.push_back(RespFuncType::kTSpline3_red);
             
-            // Handle duplicates: advance to next different event index or end
+            // Handle duplicate event entries by cloning reduced spline objects
             ++nextEventToFindIdx;
             while (nextEventToFindIdx < eventIndices.size() && 
                    eventIndices[nextEventToFindIdx] == currentEventIdx) {
@@ -141,7 +146,7 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
                 ++nextEventToFindIdx;
             }
 
-            // Print progress bar every 5%
+            // Periodically log loading progress
             size_t currentPercent = (nextEventToFindIdx * 100) / totalEvents;
             if (currentPercent >= lastPrintPercent + 5 || nextEventToFindIdx == totalEvents) {
                 M3::Utils::PrintProgressBar(nextEventToFindIdx, totalEvents);
@@ -151,9 +156,10 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
         ++currentEventIdx;
     }
     
-    std::cout << std::endl; // New line after progress bar
+    std::cout << std::endl;
     MACH3LOG_INFO("Total number of events processed for splines: {}", splinesReduced.size());
     
+    // Upcast concrete TSpline3_redDUNE pointers to abstract TResponseFunction_red base pointers
     std::vector<std::vector<TResponseFunction_red*> > splinesReducedGeneric;
     for (const auto& eventSplines : splinesReduced) {
         std::vector<TResponseFunction_red*> genericEventSplines;
@@ -164,9 +170,9 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
     }
 
     return std::make_pair(splinesReducedGeneric, splineTypes);
-
 }
 
+// Reads the 'systsHeader' tree to extract systematic parameter metadata (names, knots, central values)
 std::vector<struct SplineHeader> MonolithSplineHandlerDUNE::GetSplineParametersFromFile(TFile *f, const std::string& treeName) {
     std::vector<struct SplineHeader> splineParams;
     TTreeReader reader(treeName.c_str(), f);
@@ -186,15 +192,13 @@ std::vector<struct SplineHeader> MonolithSplineHandlerDUNE::GetSplineParametersF
         splineParams.push_back(param);
     }
     return splineParams;
-    
 }
 
 MonolithSplineHandlerDUNE::~MonolithSplineHandlerDUNE() {
 }
 
+// Stub implementation for file-based initialization (currently unsupported)
 void MonolithSplineHandlerDUNE::InitFromFile(std::string &spline_filename) {
-    // TODO: Implement MonolithSplineHandlerDUNE::InitFromFile to load spline data from file.
-    // This method is currently a stub and should not be used in production code.
     MACH3LOG_ERROR("MonolithSplineHandlerDUNE::InitFromFile is not implemented. Requested file: {}", spline_filename);
     throw MaCh3Exception(__FILE__, __LINE__);
 }
