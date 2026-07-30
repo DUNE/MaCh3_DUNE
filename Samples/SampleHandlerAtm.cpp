@@ -339,7 +339,7 @@ double SampleHandlerAtm::ReturnKinematicParameter(const int KinematicVariable, c
 int SampleHandlerAtm::ReturnSampleIdentifier(std::vector<double> CVNScores, double MinDistanceToWall) {
   bool IsFullyContained = false;
   
-  if (MinDistanceToWall < 0) { //DB: ToDo Work out theoretical maximum
+  if (MinDistanceToWall > 1e4 || MinDistanceToWall < 0) { //DB: ToDo Work out theoretical maximum
     return kEventSel_Unknown;
   } else if (MinDistanceToWall > FCPCSeparation) {
     IsFullyContained = true;
