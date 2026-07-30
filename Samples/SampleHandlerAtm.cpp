@@ -42,11 +42,6 @@ void SampleHandlerAtm::Init() {
   } else {
     fInputSplines = "";
   }
-  if (SampleManager->raw()["AnalysisOptions"]["SampleId"]) {
-    fSampleId = Get<uint>(SampleManager->raw()["AnalysisOptions"]["SampleId"],__FILE__,__LINE__);
-  } else {
-    fSampleId = 0;
-  }
 
   //DB Value used to determine selection criteria for FC and PC separation in function of 'walldist' variable
   FCPCSeparation = Get<double>(SampleManager->raw()["AnalysisOptions"]["FCPCSeparation"],__FILE__,__LINE__);
