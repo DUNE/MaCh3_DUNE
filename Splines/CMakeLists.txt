@@ -1,6 +1,6 @@
-set(HEADERS BinnedSplineHandlerDUNE.h 
-            MonolithSplineHandlerDUNE.h
-            SplineHandlerFactoryDUNE.h
+set(HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/BinnedSplineHandlerDUNE.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/MonolithSplineHandlerDUNE.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/SplineHandlerFactoryDUNE.h
 )
 
 add_library(SplinesDUNE SHARED
