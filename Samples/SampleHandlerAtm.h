@@ -115,8 +115,6 @@ protected:
   /// Multiplicative scaling to scale from the assumed 400ktyr value in the CAF files
   double ExposureScaling;
 
-  /// Path to the input CAF file (for per-event spline mode)
-  std::string fInputFile;
   /// Path to the input spline file (for per-event spline mode)
   std::string fInputSplines;
   

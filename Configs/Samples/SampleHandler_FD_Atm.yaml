@@ -14,7 +14,6 @@ AnalysisOptions:
   ExposureScaling: 1.0
   FCPCSeparation: 10.0
   # Per-event spline configuration
-  InputFile: "/exp/dune/data/users/pgranger/caf_new_sum_2.6M_wsampleid.root"
   InputSplines: "/exp/dune/data/users/pgranger/merged_new_systs_wmec_wheader.root"
   SampleId: 0
 

@@ -32,11 +32,6 @@ void SampleHandlerAtm::Init() {
   }
 
   // Per-event spline configuration (optional)
-  if (SampleManager->raw()["AnalysisOptions"]["InputFile"]) {
-    fInputFile = Get<std::string>(SampleManager->raw()["AnalysisOptions"]["InputFile"],__FILE__,__LINE__);
-  } else {
-    fInputFile = "";
-  }
   if (SampleManager->raw()["AnalysisOptions"]["InputSplines"]) {
     fInputSplines = Get<std::string>(SampleManager->raw()["AnalysisOptions"]["InputSplines"],__FILE__,__LINE__);
   } else {
