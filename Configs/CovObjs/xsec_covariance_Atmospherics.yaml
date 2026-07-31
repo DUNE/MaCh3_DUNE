@@ -46,7 +46,9 @@ Systematics:
         ParameterName: AhtBY
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: AhtBY
 
   - Systematic:
@@ -62,7 +64,9 @@ Systematics:
         ParameterName: BhtBY
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: BhtBY
 
   - Systematic:
@@ -78,7 +82,9 @@ Systematics:
         ParameterName: CV1uBY
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: CV1uBY
 
   - Systematic:
@@ -94,7 +100,9 @@ Systematics:
         ParameterName: CV2uBY
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: CV2uBY
 
   - Systematic:
@@ -110,7 +118,9 @@ Systematics:
         ParameterName: EtaNCEL
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: EtaNCEL
 
   - Systematic:
@@ -126,7 +136,9 @@ Systematics:
         ParameterName: FrAbs_N
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: FrAbs_N
 
   - Systematic:
@@ -142,7 +154,9 @@ Systematics:
         ParameterName: FrAbs_pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: FrAbs_pi
 
   - Systematic:
@@ -158,7 +172,9 @@ Systematics:
         ParameterName: FrCEx_N
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: FrCEx_N
 
   - Systematic:
@@ -174,7 +190,9 @@ Systematics:
         ParameterName: FrCEx_pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: FrCEx_pi
 
   - Systematic:
@@ -190,7 +208,9 @@ Systematics:
         ParameterName: FrInel_N
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: FrInel_N
 
   - Systematic:
@@ -206,7 +226,9 @@ Systematics:
         ParameterName: FrInel_pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: FrInel_pi
 
   - Systematic:
@@ -222,7 +244,9 @@ Systematics:
         ParameterName: FrPiProd_N
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: FrPiProd_N
 
   - Systematic:
@@ -238,7 +262,9 @@ Systematics:
         ParameterName: FrPiProd_pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: FrPiProd_pi
 
   - Systematic:
@@ -254,7 +280,9 @@ Systematics:
         ParameterName: MFP_N
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: MFP_N
 
   - Systematic:
@@ -270,7 +298,9 @@ Systematics:
         ParameterName: MFP_pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: MFP_pi
 
   - Systematic:
@@ -286,7 +316,9 @@ Systematics:
         ParameterName: MaCCRES
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: MaCCRES
 
   - Systematic:
@@ -302,7 +334,9 @@ Systematics:
         ParameterName: MaNCEL
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: MaNCEL
 
   - Systematic:
@@ -318,7 +352,9 @@ Systematics:
         ParameterName: MaNCRES
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: MaNCRES
 
   - Systematic:
@@ -334,7 +370,9 @@ Systematics:
         ParameterName: MvCCRES
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: MvCCRES
 
   - Systematic:
@@ -350,7 +388,9 @@ Systematics:
         ParameterName: MvNCRES
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: MvNCRES
 
   - Systematic:
@@ -366,7 +406,9 @@ Systematics:
         ParameterName: NonRESBGvbarnCC1pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: NonRESBGvbarnCC1pi
 
   - Systematic:
@@ -382,7 +424,9 @@ Systematics:
         ParameterName: NonRESBGvbarnCC2pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: NonRESBGvbarnCC2pi
 
   - Systematic:
@@ -398,7 +442,9 @@ Systematics:
         ParameterName: NonRESBGvbarnNC1pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: NonRESBGvbarnNC1pi
 
   - Systematic:
@@ -414,7 +460,9 @@ Systematics:
         ParameterName: NonRESBGvbarnNC2pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: NonRESBGvbarnNC2pi
 
   - Systematic:
@@ -430,7 +478,9 @@ Systematics:
         ParameterName: NonRESBGvbarpCC1pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: NonRESBGvbarpCC1pi
 
   - Systematic:
@@ -446,7 +496,9 @@ Systematics:
         ParameterName: NonRESBGvbarpCC2pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: NonRESBGvbarpCC2pi
 
   - Systematic:
@@ -462,7 +514,9 @@ Systematics:
         ParameterName: NonRESBGvbarpNC1pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: NonRESBGvbarpNC1pi
 
   - Systematic:
@@ -478,7 +532,9 @@ Systematics:
         ParameterName: NonRESBGvbarpNC2pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: NonRESBGvbarpNC2pi
 
   - Systematic:
@@ -494,7 +550,9 @@ Systematics:
         ParameterName: NonRESBGvnCC1pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: NonRESBGvnCC1pi
 
   - Systematic:
@@ -510,7 +568,9 @@ Systematics:
         ParameterName: NonRESBGvnCC2pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: NonRESBGvnCC2pi
 
   - Systematic:
@@ -526,7 +586,9 @@ Systematics:
         ParameterName: NonRESBGvnNC1pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: NonRESBGvnNC1pi
 
   - Systematic:
@@ -542,7 +604,9 @@ Systematics:
         ParameterName: NonRESBGvnNC2pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: NonRESBGvnNC2pi
 
   - Systematic:
@@ -558,7 +622,9 @@ Systematics:
         ParameterName: NonRESBGvpCC1pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: NonRESBGvpCC1pi
 
   - Systematic:
@@ -574,7 +640,9 @@ Systematics:
         ParameterName: NonRESBGvpCC2pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: NonRESBGvpCC2pi
 
   - Systematic:
@@ -590,7 +658,9 @@ Systematics:
         ParameterName: NonRESBGvpNC1pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: NonRESBGvpNC1pi
 
   - Systematic:
@@ -606,7 +676,9 @@ Systematics:
         ParameterName: NonRESBGvpNC2pi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: NonRESBGvpNC2pi
 
   - Systematic:
@@ -622,7 +694,9 @@ Systematics:
         ParameterName: RDecBR1eta
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: RDecBR1eta
 
   - Systematic:
@@ -638,7 +712,9 @@ Systematics:
         ParameterName: RDecBR1gamma
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: RDecBR1gamma
 
   - Systematic:
@@ -654,7 +730,9 @@ Systematics:
         ParameterName: Theta_Delta2Npi
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: Theta_Delta2Npi
 
   - Systematic:
@@ -670,7 +748,9 @@ Systematics:
         ParameterName: VecFFCCQEshape
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: VecFFCCQEshape
 
   - Systematic:
@@ -686,7 +766,9 @@ Systematics:
         ParameterName: ZExpA1CCQE
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: ZExpA1CCQE
 
   - Systematic:
@@ -702,7 +784,9 @@ Systematics:
         ParameterName: ZExpA2CCQE
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: ZExpA2CCQE
 
   - Systematic:
@@ -718,7 +802,9 @@ Systematics:
         ParameterName: ZExpA3CCQE
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: ZExpA3CCQE
 
   - Systematic:
@@ -734,7 +820,9 @@ Systematics:
         ParameterName: ZExpA4CCQE
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: ZExpA4CCQE
 
   - Systematic:
@@ -750,7 +838,9 @@ Systematics:
         ParameterName: DecayAng2MEC
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: DecayAng2MEC
 
   - Systematic:
@@ -766,7 +856,9 @@ Systematics:
         ParameterName: DecayAngMEC
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: DecayAngMEC
 
   - Systematic:
@@ -782,7 +874,9 @@ Systematics:
         ParameterName: DecayAngMECVariationResponse
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: DecayAngMECVariationResponse
 
   - Systematic:
@@ -798,7 +892,9 @@ Systematics:
         ParameterName: EnergyDependence_CCMEC
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: EnergyDependence_CCMEC
 
   - Systematic:
@@ -814,7 +910,9 @@ Systematics:
         ParameterName: FracDelta_CCMEC
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: FracDelta_CCMEC
 
   - Systematic:
@@ -830,7 +928,9 @@ Systematics:
         ParameterName: FracPN_CCMEC
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: FracPN_CCMEC
 
   - Systematic:
@@ -846,7 +946,9 @@ Systematics:
         ParameterName: XSecShape_CCMEC
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: XSecShape_CCMEC
 
   - Systematic:
@@ -862,7 +964,9 @@ Systematics:
         ParameterName: XSecShape_CCMEC_Empirical
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: XSecShape_CCMEC_Empirical
 
   - Systematic:
@@ -878,7 +982,9 @@ Systematics:
         ParameterName: XSecShape_CCMEC_Martini
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: XSecShape_CCMEC_Martini
 
   - Systematic:
@@ -894,7 +1000,9 @@ Systematics:
         ParameterName: Fakedial
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: Fakedial
 
   - Systematic:
@@ -910,7 +1018,9 @@ Systematics:
         ParameterName: b1
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: b1
 
   - Systematic:
@@ -926,7 +1036,9 @@ Systematics:
         ParameterName: b2
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: b2
 
   - Systematic:
@@ -942,7 +1054,9 @@ Systematics:
         ParameterName: b3
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: b3
 
   - Systematic:
@@ -958,7 +1072,9 @@ Systematics:
         ParameterName: b4
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: b4
 
   - Systematic:
@@ -974,7 +1090,9 @@ Systematics:
         ParameterName: C12ToAr40_2p2hScaling_nu
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: C12ToAr40_2p2hScaling_nu
 
   - Systematic:
@@ -990,7 +1108,9 @@ Systematics:
         ParameterName: C12ToAr40_2p2hScaling_nubar
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: C12ToAr40_2p2hScaling_nubar
 
   - Systematic:
@@ -1006,7 +1126,9 @@ Systematics:
         ParameterName: nuenuebar_xsec_ratio
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: nuenuebar_xsec_ratio
 
   - Systematic:
@@ -1022,7 +1144,9 @@ Systematics:
         ParameterName: nuenumu_xsec_ratio
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: nuenumu_xsec_ratio
 
   - Systematic:
@@ -1038,7 +1162,9 @@ Systematics:
         ParameterName: MaRes_ResCode0
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: MaRes_ResCode0
 
   - Systematic:
@@ -1054,7 +1180,9 @@ Systematics:
         ParameterName: MaRes_ResCode1
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: MaRes_ResCode1
 
   - Systematic:
@@ -1070,7 +1198,9 @@ Systematics:
         ParameterName: MvRes_ResCode0
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: MvRes_ResCode0
 
   - Systematic:
@@ -1086,7 +1216,9 @@ Systematics:
         ParameterName: MvRes_ResCode1
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: MvRes_ResCode1
 
   - Systematic:
@@ -1102,7 +1234,9 @@ Systematics:
         ParameterName: nucleus_radius
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: nucleus_radius
 
   - Systematic:
@@ -1118,5 +1252,7 @@ Systematics:
         ParameterName: surface_thickness
       Error: 1.0
       SplineInformation:
-        <<: *default_spline
+        Type: PerEvent
+        Mode:
+          - 0
         SplineName: surface_thickness

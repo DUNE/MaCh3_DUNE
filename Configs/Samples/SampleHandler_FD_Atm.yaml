@@ -14,8 +14,14 @@ AnalysisOptions:
   ExposureScaling: 1.0
   FCPCSeparation: 10.0
   # Per-event spline configuration
-  InputSplines: "/exp/dune/data/users/pgranger/merged_new_systs_wmec_wheader.root"
+  InputSplines: "Inputs/Atmospherics/Splines/merged_new_systs_wmec_wheader.root"
   SampleId: 0
+
+InputFilesDefaults: &input_files_defaults
+  mtupleprefix: ""
+  mtuplesuffix: ""
+  splineprefix: ""
+  splinesuffix: ""
 
 Samples:
   - Atm_FC_numulike
@@ -31,6 +37,7 @@ Atm_FC_nuelike:
     Uniform: true
   SampleOptions:
     IsELike: 1
+  InputFiles: *input_files_defaults
   OscChannels: "OscChan_12Flavs"
 
 Atm_FC_numulike:
@@ -41,6 +48,7 @@ Atm_FC_numulike:
     Uniform: true
   SampleOptions:
     IsELike: 0
+  InputFiles: *input_files_defaults
   OscChannels: "OscChan_12Flavs"
 
 Atm_PC_nuelike:
@@ -51,6 +59,7 @@ Atm_PC_nuelike:
     Uniform: true
   SampleOptions:
     IsELike: 1
+  InputFiles: *input_files_defaults
   OscChannels: "OscChan_12Flavs"
 
 Atm_PC_numulike:
@@ -61,6 +70,7 @@ Atm_PC_numulike:
     Uniform: true
   SampleOptions:
     IsELike: 0
+  InputFiles: *input_files_defaults
   OscChannels: "OscChan_12Flavs"
 
 OscChannels:
