@@ -1,7 +1,7 @@
 ---
 General:
   OutputFile: "Test.root"
-  DUNESamples: ["Configs/Samples/SampleHandler_PDSP_Oxford.yaml"]
+  DUNESamples: ["Configs/Samples/SampleHandler_PDSP.yaml"]
   OscillationParameters: []
   FittingAlgorithm: "MR2T2"
   ProcessMCMC: No
