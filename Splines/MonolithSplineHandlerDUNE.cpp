@@ -1,5 +1,7 @@
 #include "MonolithSplineHandlerDUNE.h"
 
+#include <map>
+
 #include "TFile.h"
 #include "TTreeReader.h"
 #include "TTreeReaderArray.h"
@@ -92,6 +94,8 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
     const size_t totalEvents = eventIndices.size();
     size_t lastPrintPercent = 0;
 
+    std::map<std::string, size_t> nanCounts;
+
     // Sequential scan through the TTree matching requested event indices
     while (reader.Next()) {
         if (nextEventToFindIdx >= eventIndices.size()) {
@@ -106,8 +110,12 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
                 for (auto& val : splineValues) {
                     // Replace invalid values with 1.0 (unit weight) to prevent unphysical calculations
                     if (std::isnan(val)) {
-                        MACH3LOG_WARN("NaN detected in spline values for parameter {} at event index {} - replacing with 1.0 (flat spline)", 
-                                      splinePars[i].name, currentEventIdx);
+                        const std::string& paramName = splinePars[i].name;
+                        if (nanCounts[paramName] == 0) {
+                            MACH3LOG_WARN("First NaN detected in spline values for parameter {} at event index {} - replacing with 1.0 (flat spline). Further NaNs for this parameter will be counted quietly.", 
+                                          paramName, currentEventIdx);
+                        }
+                        nanCounts[paramName]++;
                         values.push_back(1.0);
                     } else {
                         values.push_back(val);
@@ -158,6 +166,13 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(
     
     std::cout << std::endl;
     MACH3LOG_INFO("Total number of events processed for splines: {}", splinesReduced.size());
+
+    if (!nanCounts.empty()) {
+        MACH3LOG_WARN("Summary of NaN spline values replaced with 1.0 (flat spline):");
+        for (const auto& [paramName, count] : nanCounts) {
+            MACH3LOG_WARN("  - {}: {} NaN values replaced", paramName, count);
+        }
+    }
     
     // Upcast concrete TSpline3_redDUNE pointers to abstract TResponseFunction_red base pointers
     std::vector<std::vector<TResponseFunction_red*> > splinesReducedGeneric;
