@@ -1,15 +1,19 @@
 set(HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/BinnedSplineHandlerDUNE.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/MonolithSplineHandlerDUNE.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/SplineHandlerFactoryDUNE.h
 )
 
 add_library(SplinesDUNE SHARED
     BinnedSplineHandlerDUNE.cpp
+    MonolithSplineHandlerDUNE.cpp
+    SplineHandlerFactoryDUNE.cpp
 )
 
 set_target_properties(SplinesDUNE PROPERTIES
     PUBLIC_HEADER "${HEADERS}"
     EXPORT_NAME SplinesDUNE)
 
-target_link_libraries(SplinesDUNE MaCh3::All MaCh3DUNECompilerOptions)
+target_link_libraries(SplinesDUNE MaCh3::All MaCh3DUNECompilerOptions ROOT::TreePlayer)
 
 target_include_directories(SplinesDUNE PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../>

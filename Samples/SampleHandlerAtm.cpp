@@ -31,6 +31,13 @@ void SampleHandlerAtm::Init() {
     IsELike[iSample] = Get<int>(SampleManager->raw()[TempTitle]["SampleOptions"]["IsELike"],__FILE__,__LINE__);
   }
 
+  // Per-event spline configuration (optional)
+  if (SampleManager->raw()["AnalysisOptions"]["InputSplines"]) {
+    fInputSplines = Get<std::string>(SampleManager->raw()["AnalysisOptions"]["InputSplines"],__FILE__,__LINE__);
+  } else {
+    fInputSplines = "";
+  }
+
   //DB Value used to determine selection criteria for FC and PC separation in function of 'walldist' variable
   FCPCSeparation = Get<double>(SampleManager->raw()["AnalysisOptions"]["FCPCSeparation"],__FILE__,__LINE__);
 
@@ -63,7 +70,6 @@ void SampleHandlerAtm::Init() {
     MACH3LOG_ERROR("No Event Selections match Defined Samples from Config");
     throw MaCh3Exception(__FILE__, __LINE__);
   }
-  
 }
 
 void SampleHandlerAtm::InititialiseData() {
@@ -74,7 +80,40 @@ void SampleHandlerAtm::InititialiseData() {
 }
 
 void SampleHandlerAtm::SetupSplines() {
-  SplineHandler = nullptr;
+  ///@todo move all of the spline setup into core
+  if(ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline) > 0){
+    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline));
+    auto SplineFactory = SplineHandlerFactoryDUNE(ParHandler, Modes.get(), dunemcSamples, fInputSplines, SampleHandlerName);
+
+    SplineHandler = std::move(SplineFactory.GetSplineHandler());
+    if (SplineFactory.GetSplineType() == kBinned){
+      InitialiseSplineObject(); //Running the "normal" initialisation for binned splines
+    }
+    else if (SplineFactory.GetSplineType() == kMonolith){
+      InitialiseSplineObjectPerEvent(); //Running the per-event initialisation
+    }
+    else{
+      MACH3LOG_ERROR("Unknown spline type found when setting up splines for sample {}", SampleHandlerName);
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+  }
+  else{
+    MACH3LOG_INFO("Found no spline for this sample so I will not load or evaluate splines");
+    SplineHandler = nullptr;
+  }
+  
+  return;
+}
+
+void SampleHandlerAtm::InitialiseSplineObjectPerEvent(){
+  auto SplineHandlerDUNE = dynamic_cast<MonolithSplineHandlerDUNE*>(SplineHandler.get());
+  if (!SplineHandlerDUNE){
+    MACH3LOG_ERROR("SplineHandler is not of type MonolithSplineHandlerDUNE for sample {}. Cannot call InitialiseSplineObjectPerEvent.", SampleHandlerName);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  for (size_t i = 0; i < dunemcSamples.size(); ++i) {
+    MCEvents[i].total_weight_pointers.push_back(SplineHandlerDUNE->RetPointer(static_cast<int>(i)));
+  }
 }
 
 void SampleHandlerAtm::AddAdditionalWeightPointers() {
@@ -125,6 +164,8 @@ int SampleHandlerAtm::SetupExperimentMC() {
   
   //================================================================================================
 
+  dunemcSamples.reserve(2 * nTreeEntries);
+
   for (int iTreeEntry=0;iTreeEntry<nTreeEntries;iTreeEntry++) {
     weightsTree->GetEntry(iTreeEntry);
     
@@ -154,12 +195,21 @@ int SampleHandlerAtm::SetupExperimentMC() {
     CVNScores[kCVN_NuMu] = sr->common.ixn.pandora[0].nuhyp.cvn.numu;
     CVNScores[kCVN_NC] = sr->common.ixn.pandora[0].nuhyp.cvn.nc;    
 
-    //DB Theoretical max value should be ShortestDimensioninAV/2 which is less than 1e4 -- so dummy value of 1e8 is fine
+    // Pre-check: If this event cannot pass selection cuts under either Fully Contained or Partially Contained assumption, skip it!
+    if (ReturnSampleIdentifier(CVNScores, 1e8) == kEventSel_Unknown &&
+        ReturnSampleIdentifier(CVNScores, 0.0) == kEventSel_Unknown) {
+      continue;
+    }
+
+    // Now, since the event has a valid candidate classification, we lazy-load and calculate MinDistToWall:
     double MinDistToWall = 1e8;
-    for (size_t iPart=0;iPart<sr->common.ixn.pandora[0].part.pandora.size();iPart++) {
+    auto const& pandora_parts = sr->common.ixn.pandora[0].part.pandora;
+    size_t nParts = pandora_parts.size();
+    for (size_t iPart = 0; iPart < nParts; ++iPart) {
+      auto const& part = pandora_parts[iPart];
       //DB Info from PG -- ignore any hits associated with HitCollection classified objects
-      if (sr->common.ixn.pandora[0].part.pandora[iPart].origRecoObjType == caf::RecoObjType::kHitCollection) {continue;}
-      if (sr->common.ixn.pandora[0].part.pandora[iPart].walldist < MinDistToWall) {MinDistToWall = sr->common.ixn.pandora[0].part.pandora[iPart].walldist;}
+      if (part.origRecoObjType == caf::RecoObjType::kHitCollection) {continue;}
+      if (part.walldist < MinDistToWall) {MinDistToWall = part.walldist;}
     }
     
     int SampleIndex = ReturnSampleIdentifier(CVNScores, MinDistToWall);
@@ -211,6 +261,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
     currentEvent_FromNuE.coszenith_true = -TrueNuMomentumVector.y(); // +Y in CAF files translates to +Z in typical CosZ
     currentEvent_FromNuE.flux_w = xsec_w*flux_nue_w;
     currentEvent_FromNuE.MinDistToWall = MinDistToWall;
+    currentEvent_FromNuE.eid = static_cast<uint>(iTreeEntry);
     
     struct dunemc_atm currentEvent_FromNuMu = currentEvent_FromNuE;
     
