@@ -32,7 +32,6 @@ class SampleHandlerPDSP : virtual public SampleHandlerBase
 
   void AddAdditionalWeightPointers() override;
 
-  double ReturnKinematicParameter(KinematicTypes KinPar, int iEvent) const;
   double ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const override;
   
   const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent) const;
@@ -71,5 +70,5 @@ class SampleHandlerPDSP : virtual public SampleHandlerBase
   // functional parameters, currently have none for the time being
   void RegisterFunctionalParameters() override;
 
-  M3::float_t MCGlobalScale = 1.0;
+  M3::float_t MCGlobalScale;
 };

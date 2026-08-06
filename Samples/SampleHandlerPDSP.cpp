@@ -6,7 +6,7 @@
 
 // ************************************************
 SampleHandlerPDSP::SampleHandlerPDSP(const std::string& config_name, ParameterHandlerGeneric* parameter_handler)
-                                             : SampleHandlerBase(config_name, parameter_handler) {
+    : SampleHandlerBase(config_name, parameter_handler), MCGlobalScale(1.0) {
 // ************************************************
   KinematicParameters = &KinematicParametersPDSP;
   ReversedKinematicParameters = &ReversedKinematicParametersPDSP;
@@ -265,14 +265,8 @@ int SampleHandlerPDSP::SetupExperimentMC() {
   return nEntries;
 }
 
-double SampleHandlerPDSP::ReturnKinematicParameter(KinematicTypes KinPar, int iEvent) const {
-  const double* paramPointer = GetPointerToKinematicParameter(KinPar, iEvent);
-  return *paramPointer;
-}
-
 double SampleHandlerPDSP::ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
-  return ReturnKinematicParameter(KinPar, iEvent);
+  return *GetPointerToKinematicParameter(KinematicVariable, iEvent);
 }
 
 const double* SampleHandlerPDSP::GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent) const {
