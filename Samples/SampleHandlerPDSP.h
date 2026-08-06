@@ -33,8 +33,7 @@ class SampleHandlerPDSP : virtual public SampleHandlerBase
   void AddAdditionalWeightPointers() override;
 
   double ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const override;
-  
-  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent) const;
+
   const double* GetPointerToKinematicParameter(const int KinematicVariable, const int iEvent) const override;
 
   void CalcWeightFunc(const int iEvent) override {return; (void)iEvent;}

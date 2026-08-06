@@ -266,11 +266,12 @@ int SampleHandlerPDSP::SetupExperimentMC() {
 }
 
 double SampleHandlerPDSP::ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const {
-  return *GetPointerToKinematicParameter(KinematicVariable, iEvent);
+  KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
+  return *GetPointerToKinematicParameter(KinPar, iEvent);
 }
 
-const double* SampleHandlerPDSP::GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent) const {
-  switch (KinPar) {
+const double* SampleHandlerPDSP::GetPointerToKinematicParameter(const int KinPar, const int iEvent) const {
+  switch(KinPar) {
     case kTrueKEIni:
       return &PDSPSamples[iEvent].TrueKEIni;
     case kTrueKEInt:
@@ -290,14 +291,9 @@ const double* SampleHandlerPDSP::GetPointerToKinematicParameter(KinematicTypes K
     case kRecoEndZ:
       return &PDSPSamples[iEvent].RecoEndZ;
     default:
-      MACH3LOG_ERROR("Unrecognized Kinematic Parameter type: {}", static_cast<int>(KinPar));
+      MACH3LOG_ERROR("Unrecognized Kinematic Parameter type: {}", KinPar);
       throw MaCh3Exception(__FILE__, __LINE__);
   }
-}
-
-const double* SampleHandlerPDSP::GetPointerToKinematicParameter(const int KinematicVariable, const int iEvent) const {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(std::round(KinematicVariable));
-  return GetPointerToKinematicParameter(KinPar, iEvent);
 }
 
 void SampleHandlerPDSP::SetupMC() {
