@@ -14,3 +14,5 @@ nohup.out
 *.txt
 *.log
 .cache/
+__pycache__/
+*.py[cod]

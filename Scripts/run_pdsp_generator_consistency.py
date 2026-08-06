@@ -167,7 +167,7 @@ def make_run_config(fit_lines: list[str], xsec_config: Path, output_file: Path) 
     lines = replace_simple_key(lines, "Data", "false")
     lines = replace_simple_key(lines, "StatOnly", "true")
     lines = replace_xsec_cov_file(lines, xsec_config)
-    lines = replace_simple_key(lines, "XsecAsimovTune", '"Generator"', indent="    ")
+    lines = replace_simple_key(lines, "XsecTune", '"Generator"', indent="    ")
     return lines
 
 
