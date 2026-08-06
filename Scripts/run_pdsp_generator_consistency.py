@@ -216,7 +216,7 @@ def resolve_apps() -> dict[str, Path | str]:
     return {
         "Fit": app_path("Fit"),
         "ProcessMCMC": app_path("ProcessMCMC"),
-        "PredictivePDSP": app_path("PredictivePDSP"),
+        "Predictive": app_path("Predictive"),
         "PredictivePlotting": app_path("PredictivePlotting"),
     }
 
@@ -283,7 +283,7 @@ def run_case(
             (
                 "posterior_predictive",
                 [
-                    str(apps["PredictivePDSP"]),
+                    str(apps["Predictive"]),
                     str(fit_path),
                     f"General:OutputFile:{posterior_output}",
                     f"Predictive:PosteriorFile:{fit_output}",
@@ -295,7 +295,7 @@ def run_case(
             (
                 "prior_predictive",
                 [
-                    str(apps["PredictivePDSP"]),
+                    str(apps["Predictive"]),
                     str(fit_path),
                     f"General:OutputFile:{prior_output}",
                     f"Predictive:PosteriorFile:{fit_output}",
@@ -362,7 +362,7 @@ def main() -> int:
     parser.add_argument("--diag-config", default=DEFAULT_DIAG_CONFIG, type=Path)
     parser.add_argument("--output-dir", default=Path("PDSPGeneratorConsistency"), type=Path)
     parser.add_argument("--workflow", choices=["fit", "full"], default="full",
-                        help="Use 'fit' for only Fit, or 'full' for Fit plus ProcessMCMC/PredictivePDSP/PredictivePlotting")
+                        help="Use 'fit' for only Fit, or 'full' for Fit plus ProcessMCMC/Predictive/PredictivePlotting")
     parser.add_argument("--set", dest="process_sets", action="append", default=[], type=parse_assignment,
                         metavar="PROCESS=VALUE", help="Set Generator for every systematic in PROCESS")
     parser.add_argument("--parameter", action="append", default=[], type=parse_assignment,

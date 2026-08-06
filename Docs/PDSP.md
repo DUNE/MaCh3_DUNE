@@ -62,13 +62,13 @@ ProcessMCMC ./Configs/PDSPDiagConfig.yaml Test.root
 Once you run MCMC you can produce these toy distributions using following command:
 
 ```bash
-PredictivePDSP Configs/FitterConfig_PDSP.yaml General:OutputFile:PredictiveOutputTest.root
+Predictive Configs/FitterConfig_PDSP.yaml General:OutputFile:PredictiveOutputTest.root
 ```
 
 ### Plotting Posterior Predictive Distributions
 
 Once you have generated the posterior predictive toy distributions with
-PredictivePDSP, you can make fancy plots of them using:
+Predictive, you can make fancy plots of them using:
 
 ```bash
 PredictivePlotting ./Configs/PDSPDiagConfig.yaml PredictiveOutputTest.root
@@ -77,7 +77,7 @@ PredictivePlotting ./Configs/PDSPDiagConfig.yaml PredictiveOutputTest.root
 ### Prior Predictive Distributions
 
 ```bash
-PredictivePDSP ./Configs/FitterConfig_PDSP.yaml \
+Predictive ./Configs/FitterConfig_PDSP.yaml \
   General:OutputFile:PriorPredictiveOutputTest.root \
   Predictive:PriorPredictive:True
 ```
@@ -97,7 +97,7 @@ To run process-level varied checks, use:
 ```
 
 By default this runs the full result chain for each setting: `Fit`,
-`ProcessMCMC`, posterior `PredictivePDSP`, prior `PredictivePDSP`, and
+`ProcessMCMC`, posterior `Predictive`, prior `Predictive`, and
 `PredictivePlotting`. It writes copied configs, ROOT outputs, logs, per-case
 manifests, and a summary table under `PDSPGeneratorConsistency/`. The source
 `Configs/CovObjs/PDSPFitModel.yaml` is not modified.

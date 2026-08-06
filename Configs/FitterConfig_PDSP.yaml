@@ -1,7 +1,7 @@
 ---
 General:
-  # PredictivePDSP output; this must differ from Predictive.PosteriorFile.
-  OutputFile: "PredictiveOutputTest.root"
+  # Predictive output; this must differ from Predictive.PosteriorFile.
+  OutputFile: "Test.root"
   DUNESamples: ["Configs/Samples/SampleHandler_PDSP.yaml"]
   OscillationParameters: []
   FittingAlgorithm: "MR2T2"
