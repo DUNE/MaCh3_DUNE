@@ -1,6 +1,7 @@
 ---
 General:
-  OutputFile: "Test.root"
+  # PredictivePDSP output; this must differ from Predictive.PosteriorFile.
+  OutputFile: "PredictiveOutputTest.root"
   DUNESamples: ["Configs/Samples/SampleHandler_PDSP.yaml"]
   OscillationParameters: []
   FittingAlgorithm: "MR2T2"
@@ -30,9 +31,9 @@ General:
 
   MCMC:
     # Number of MCMC steps that will be performed
-    NSteps: 200000
+    NSteps: 20000
     #KS: Sets how frequent (number of steps) you want to autosave your chain, if you autosave rarely chain will be slightly faster, if you job wall is small you might want more frequent autosave to reduce number of lost steps
-    AutoSave: 20000
+    AutoSave: 2000
 
     # Example Delayed Rejection settings [use FittingAlgorithm=DelayedMR2T2]
     PrintSummary: False
@@ -66,8 +67,6 @@ General:
 
 # Prior/Posterior predictive settings
 Predictive:
-  # Must differ from PosteriorFile: PredictiveThrower recreates this file.
-  OutputFile: "PredictiveOutputTest.root"
   # Number of throws from MCMC you want to perform (aim for something like 2k/5k)
   Ntoy: 1000
   #Use Full LLH or only sample contribution based on discussion with Asher we almost always only want the sample likelihood

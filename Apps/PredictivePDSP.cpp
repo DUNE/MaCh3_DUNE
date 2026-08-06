@@ -14,9 +14,8 @@ int main(int argc, char *argv[]) {
 
   const std::string PosteriorFile = Get<std::string>(
       FitManager->raw()["Predictive"]["PosteriorFile"], __FILE__, __LINE__);
-  const std::string PredictiveOutputFile = GetFromManager<std::string>(
-      FitManager->raw()["Predictive"]["OutputFile"],
-      "PredictiveOutput.root", __FILE__, __LINE__);
+  const std::string PredictiveOutputFile = Get<std::string>(
+      FitManager->raw()["General"]["OutputFile"], __FILE__, __LINE__);
   if (PredictiveOutputFile == PosteriorFile) {
     MACH3LOG_ERROR("Predictive output file '{}' must differ from posterior input file '{}'",
                    PredictiveOutputFile, PosteriorFile);
@@ -26,12 +25,10 @@ int main(int argc, char *argv[]) {
   const bool PriorPredictive = Get<bool>(
       FitManager->raw()["Predictive"]["PriorPredictive"], __FILE__, __LINE__);
   if (!PriorPredictive) {
-    std::unique_ptr<TFile> PosteriorInput(TFile::Open(PosteriorFile.c_str(), "READ"));
-    TTree* PosteriorTree = PosteriorInput && !PosteriorInput->IsZombie()
-        ? PosteriorInput->Get<TTree>("posteriors")
-        : nullptr;
-    if (!PosteriorInput || PosteriorInput->IsZombie() ||
-        PosteriorInput->TestBit(TFile::kRecovered)) {
+    std::unique_ptr<TFile> PosteriorInput(
+        M3::Open(PosteriorFile, "READ", __FILE__, __LINE__));
+    TTree* PosteriorTree = PosteriorInput->Get<TTree>("posteriors");
+    if (PosteriorInput->TestBit(TFile::kRecovered)) {
       MACH3LOG_ERROR("Posterior input '{}' is incomplete, still open, or required ROOT recovery",
                      PosteriorFile);
       MACH3LOG_ERROR("Wait for the fit process to finish and close the file before running predictive throws");
