@@ -60,7 +60,7 @@ General:
     # Optional fake-data tune for Data: false. For example, set to "Generator"
     # after editing ParameterValues:Generator in the xsec config to inject a
     # known Asimov shift while the fit still starts from PreFitValue.
-    XsecAsimovTune: "Generator"
+    XsecTune: "Generator"
     XsecPCAThreshold: -1
     XsecPCAParams: [-999, -999]
     XsecStepScale: 1

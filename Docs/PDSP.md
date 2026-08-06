@@ -34,7 +34,7 @@ PDSP_Pip_DataHist
 
 ### Asimov Tunes and MC Scale
 
-Use `XsecAsimovTune` when you want to generate an Asimov data set from the MC
+Use `XsecTune` when you want to generate an Asimov data set from the MC
 with a known cross-section tune injected before the fit starts. This is useful
 for closure tests and generator-consistency checks, where the fake data are
 generated with one set of parameter values and the fit then tries to recover

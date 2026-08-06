@@ -142,11 +142,10 @@ std::vector<SampleHandlerBase *> MaCh3DuneSampleFactory(std::unique_ptr<Manager>
 
   const bool UseData = GetFromManager(FitManager->raw()["General"]["Data"], false);
   const std::string AsimovTune = GetFromManager<std::string>(
-      FitManager->raw()["General"]["Systematics"]["XsecAsimovTune"], "");
+      FitManager->raw()["General"]["Systematics"]["XsecTune"], "");
 
   if (!UseData && !AsimovTune.empty()) {
-    MACH3LOG_INFO("Generating Asimov data with xsec tune '{}'", AsimovTune);
-    param_handler->SetTune(AsimovTune);
+    MACH3LOG_INFO("Generating Asimov data with configured xsec tune '{}'", AsimovTune);
   }
 
   for (auto* handler : DUNEPdfs) {
