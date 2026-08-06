@@ -51,7 +51,7 @@ struct dunemc_base { // Store variables used in fitting
 struct dunemc_atm : public dunemc_base { // Store variables used by SampleHandlerAtm
   double rw_theta;
   double coszenith_true;
-
+  uint eid; //Event ID in the original CAF file (for per-event spline loading)
   double MinDistToWall;
 };
 

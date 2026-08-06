@@ -1,7 +1,7 @@
 #ifndef _SampleHandlerAtm_h_
 #define _SampleHandlerAtm_h_
 
-#include "Splines/BinnedSplineHandlerDUNE.h"
+#include "Splines/SplineHandlerFactoryDUNE.h"
 #include "Samples/SampleHandlerBase.h"
 
 #include "StructsDUNE.h"
@@ -51,6 +51,9 @@ protected:
 
   /// @brief Sets up splines 
   void SetupSplines();
+
+  /// @brief Initialise per-event spline weight pointers (for MonolithSplineHandler)
+  void InitialiseSplineObjectPerEvent();
 
   /// @brief Cleanup memory
   void CleanMemoryBeforeFit() override {};
@@ -112,6 +115,9 @@ protected:
   /// Multiplicative scaling to scale from the assumed 400ktyr value in the CAF files
   double ExposureScaling;
 
+  /// Path to the input spline file (for per-event spline mode)
+  std::string fInputSplines;
+  
   /// Enums to define event selections
   enum EventSelectionIndices {
     kEventSel_Unknown = -1,    
