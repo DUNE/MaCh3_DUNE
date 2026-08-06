@@ -14,7 +14,6 @@
 
 #include "Fitters/MaCh3Factory.h"
 #include "Samples/MaCh3DUNEFactory.h"
-#include "Samples/SampleHandlerPDSP.h"
 
 int main(int argc, char * argv[]) {
 
@@ -24,61 +23,6 @@ int main(int argc, char * argv[]) {
   //Create sample handler + parameter_handler objects
   auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
 
-  //Some place to store the histograms
-  std::vector<TH1*> PredictionHistograms;
-  std::vector<std::string> sample_names;
-
-  const bool UseData = GetFromManager(FitManager->raw()["General"]["Data"], false);
-  const std::string AsimovTune = GetFromManager<std::string>(
-      FitManager->raw()["General"]["Systematics"]["XsecAsimovTune"], "");
-  if (!UseData && !AsimovTune.empty()) {
-    MACH3LOG_INFO("Generating Asimov data with xsec tune '{}'", AsimovTune);
-    param_handler->SetTune(AsimovTune);
-  }
-
-  for (auto handler : samples) {
-    for (unsigned iSample = 0; iSample < handler->GetNSamples(); ++iSample) {
-    
-      std::string name = handler->GetSampleTitle(iSample);
-      sample_names.push_back(name);
-      TString NameTString = TString(name.c_str());
-      
-      handler->Reweight();
-      TH1* DataHist = nullptr;
-      if (UseData) {
-        auto* PDSPHandler = dynamic_cast<SampleHandlerPDSP*>(handler);
-        if (PDSPHandler == nullptr) {
-          MACH3LOG_ERROR("General.Data is currently implemented for PDSP samples only");
-          throw MaCh3Exception(__FILE__ , __LINE__ );
-        }
-        DataHist = PDSPHandler->GetDataHistogramFromInputs(static_cast<int>(iSample));
-      } else {
-        DataHist = static_cast<TH1*>(handler->GetMCHist(iSample)->Clone(NameTString+"_DataHist"));
-      }
-      PredictionHistograms.push_back(DataHist);
-
-      if (handler->GetNDim(iSample) == 1){
-        handler->AddData(iSample, PredictionHistograms.back());
-      } else if (handler->GetNDim(iSample) == 2){
-        handler->AddData(iSample, PredictionHistograms.back());
-      }
-      
-      else {
-        MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting"); 
-        throw MaCh3Exception(__FILE__ , __LINE__ );
-      }
-
-      MACH3LOG_INFO("Integrals of nominal hists: ");
-      MACH3LOG_INFO("{} : {}",name.c_str(),PredictionHistograms.back()->Integral());
-      MACH3LOG_INFO("--------------");
-    }
-  }
-
-  if (!UseData && !AsimovTune.empty()) {
-    MACH3LOG_INFO("Resetting xsec parameters to PreFitValue before fitting");
-    param_handler->SetParameters();
-  }
-  
   //###########################################################################################################
   //MCMC
 
