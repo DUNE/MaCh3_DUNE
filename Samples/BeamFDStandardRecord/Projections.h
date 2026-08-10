@@ -17,8 +17,6 @@ namespace dune::beamfd {
   X(OscillationChannel)                                                        \
   X(IsCC)                                                                      \
   X(Mode)                                                                      \
-  X(ELepRec)                                                                   \
-  X(EHadRec)                                                                   \
   X(RecoNeutrinoEnergy)
 
 #define X(a) k##a,
@@ -51,12 +49,8 @@ inline const double *ResolveKinematicEventMember(KinematicTypes KinPar,
   case kMode:
     return &ev.truth.mach3_mode;
 
-  case kELepRec:
-    return &ev.reco.e_lep;
-  case kEHadRec:
-    return &ev.reco.e_had;
   case kRecoNeutrinoEnergy:
-    return &ev.reco.enu;
+    return &ev.reco.e_nu;
 
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
