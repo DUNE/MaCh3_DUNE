@@ -102,7 +102,7 @@ CPMAddPackage(
   DOWNLOAD_ONLY     YES
 )
 add_library(duneanasel_all INTERFACE)
-target_include_directories(duneanasel_all INTERFACE ${duneanasel_SOURCE})
+target_include_directories(duneanasel_all INTERFACE ${duneanasel_SOURCE_DIR})
 add_library(duneanasel::all ALIAS duneanasel_all)
 
 ##################################  MaCh3  ######################################
