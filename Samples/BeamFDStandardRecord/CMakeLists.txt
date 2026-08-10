@@ -24,7 +24,7 @@ target_include_directories(SampleHandlerBeamFDStandardRecord PUBLIC
 install(TARGETS SampleHandlerBeamFDStandardRecord
   EXPORT mach3dune-targets
   LIBRARY DESTINATION lib/
-  PUBLIC_HEADER DESTINATION include/Samples)
+  PUBLIC_HEADER DESTINATION include/Samples/BeamFDStandardRecord)
 
 target_link_libraries(SampleHandlerBeamFDStandardRecord PUBLIC SplinesDUNE SystematicsDUNE MaCh3::All MaCh3DUNECompilerOptions)
 target_link_libraries(SampleHandlerBeamFDStandardRecord PRIVATE duneanaobj::StandardRecord duneanasel::all DUNEMaCh3Warnings ROOT::TreePlayer)
