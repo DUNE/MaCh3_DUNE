@@ -86,6 +86,15 @@ else()
   fetchduneanaobj(${DUNE_ANAOBJ_BRANCH})
 endif()
 
+include(FetchContent)
+FetchContent_Declare(
+  duneanafluxtools
+  GIT_REPOSITORY https://github.com/luketpickering/duneanafluxtools.git
+  GIT_TAG        main
+)
+SET(duneanafluxtools_USE_DUNEANAOBJ OFF)
+FetchContent_MakeAvailable(duneanafluxtools)
+
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
@@ -224,6 +233,7 @@ install(TARGETS MaCh3DUNECompilerOptions
   EXPORT mach3dune-targets
   LIBRARY DESTINATION lib/)
 
+add_subdirectory(Systematics)
 add_subdirectory(Splines)
 add_subdirectory(Samples)
 add_subdirectory(Apps)
