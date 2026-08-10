@@ -57,19 +57,6 @@ protected:
   void AddAdditionalWeightPointers();
   void SetupSplines();
 
-	// === HH: Functional parameters ===
-  enum FuncParEnum {kTotalEScale, kTotalEScaleNotCCNumu,
-    kTotalEScaleSqrt, kTotalEScaleSqrtNotCCNumu,
-    kTotalEScaleInvSqrt, kTotalEScaleInvSqrtNotCCNumu,
-    kHadEScale, kHadEScaleSqrt, kHadEScaleInvSqrt,
-    kMuEScale, kMuEScaleSqrt, kMuEScaleInvSqrt,
-    kNEScale, kNEScaleSqrt, kNEScaleInvSqrt,
-    kEMEScale, kEMEScaleCCNue,
-    kEMEScaleSqrt, kEMEScaleSqrtCCNue,
-    kEMEScaleInvSqrt, kEMEScaleInvSqrtCCNue,
-    kHadRes, kMuRes, kNRes, kEMRes, kEMResCCNue,
-	kRecoCVNNumu, kRecoCVNNue
-  };
   void RegisterFunctionalParameters() override;
   void ResetShifts(int iEvent) override;
 
