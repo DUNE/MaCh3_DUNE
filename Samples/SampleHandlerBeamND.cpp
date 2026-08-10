@@ -7,12 +7,12 @@ SampleHandlerBeamND::SampleHandlerBeamND(std::string mc_version_, ParameterHandl
     MACH3LOG_ERROR("You've passed me a nullptr to a ND covarince matrix... ");
     throw MaCh3Exception(__FILE__, __LINE__);
   }
-  
+
   beamNDCov = beamNDCov_;
 
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
-  
+
   Initialise();
 
   downsamplingStep = 1;
@@ -23,7 +23,7 @@ SampleHandlerBeamND::~SampleHandlerBeamND() {
 
 void SampleHandlerBeamND::Init() {
   beamNDSampleDetails.resize(GetNSamples());
-  
+
   auto EnabledSamples = Get<std::vector<std::string>>(SampleManager->raw()["Samples"], __FILE__ , __LINE__);
 
   for (int i = 0; i < GetNSamples(); i++){
@@ -32,7 +32,7 @@ void SampleHandlerBeamND::Init() {
     beamNDSampleDetails[i].iselike = SampleManager->raw()[TempTitle]["DUNESampleBools"]["iselike"].as<bool>();
     beamNDSampleDetails[i].pot = SampleManager->raw()[TempTitle]["POT"].as<double>();
 
-    if (beamNDSampleDetails[i].isFHC) { 
+    if (beamNDSampleDetails[i].isFHC) {
       beamNDSampleDetails[i].norm_s = (1e21/1.905e21);
     } else {
       beamNDSampleDetails[i].norm_s = (1e21/1.5e21);
@@ -44,12 +44,12 @@ void SampleHandlerBeamND::Init() {
     MACH3LOG_INFO("- iselike: {}", beamNDSampleDetails[i].iselike);
   }
 
-  downsamplingStep = GetFromManager<unsigned int>(SampleManager->raw()["DownsamplingStep"], 1);
+  downsamplingStep = GetFromManager<unsigned int>(SampleManager->raw()["DownsamplingStep"], 1, __FILE__ , __LINE__);
   if (downsamplingStep == 0) {
     throw MaCh3Exception(__FILE__, __LINE__,
       "Downsampling step cannot be zero. Please set it to a positive integer in the Beam ND sample config file."
     );
-  } 
+  }
   MACH3LOG_INFO("Beam ND downsampling step: {}", downsamplingStep);
 
   MACH3LOG_INFO("-------------------------------------------------------------------");
@@ -95,7 +95,7 @@ void SampleHandlerBeamND::AddAdditionalWeightPointers() {
 int SampleHandlerBeamND::SetupExperimentMC() {
 
   // dunemc_base *duneobj = &(dunendmcSamples[iSample]);
-  
+
   MACH3LOG_INFO("-------------------------------------------------------------------");
 
   TChain* _data = new TChain("caf");
@@ -183,7 +183,7 @@ int SampleHandlerBeamND::SetupExperimentMC() {
     // POT stuff
     dunendmcSamples[i].norm_s = beamNDSampleDetails[sample_index].norm_s;
     dunendmcSamples[i].pot_s = beamNDSampleDetails[sample_index].pot_s * downsamplingStep;
-    
+
     dunendmcSamples[i].rw_erec = _erec;
     dunendmcSamples[i].rw_erec_shifted = _erec;
     dunendmcSamples[i].rw_erec_lep = _erec_lep;
@@ -194,7 +194,7 @@ int SampleHandlerBeamND::SetupExperimentMC() {
     dunendmcSamples[i].rw_isCC = _isCC;
     dunendmcSamples[i].rw_reco_q = _reco_q;
     dunendmcSamples[i].rw_berpaacvwgt = _BeRPA_cvwgt;
-    
+
     //Assume everything is on Argon for now....
     dunendmcSamples[i].Target = kTarget_Ar;
 
@@ -202,19 +202,19 @@ int SampleHandlerBeamND::SetupExperimentMC() {
     if (!_isCC) M3Mode += 14; //Account for no ability to distinguish CC/NC
     if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
     dunendmcSamples[i].mode = M3Mode;
-    
+
     dunendmcSamples[i].flux_w = 1.0;
   }
-  
+
   //_sampleFile->Close();
   _data->Reset();
   delete _data;
   return static_cast<int>(nDownsampledEntries);
-  
+
 }
 
 
-const double* SampleHandlerBeamND::GetPointerToKinematicParameter(const int KinPar, const int iEvent) const{  
+const double* SampleHandlerBeamND::GetPointerToKinematicParameter(const int KinPar, const int iEvent) const{
   switch(KinPar){
   case kTrueNeutrinoEnergy:
     return &(dunendmcSamples[iEvent].enu_true);
@@ -235,7 +235,7 @@ const double* SampleHandlerBeamND::GetPointerToKinematicParameter(const int KinP
   default:
     MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
     throw MaCh3Exception(__FILE__, __LINE__);
-  }  
+  }
 }
 
 
@@ -248,7 +248,7 @@ double SampleHandlerBeamND::ReturnKinematicParameter(const int KinematicVariable
 void SampleHandlerBeamND::SetupMC() {
   // dunemc_base *duneobj = &(dunendmcSamples[iSample]);
   // FarDetectorCoreInfo *fdobj = &(MCEvents[iSample]);
-  
+
   for (unsigned int iEvent = 0; iEvent < GetNEvents(); ++iEvent) {
     MCEvents[iEvent].enu_true = dunendmcSamples[iEvent].enu_true;
     MCEvents[iEvent].isNC = !(dunendmcSamples[iEvent].rw_isCC);

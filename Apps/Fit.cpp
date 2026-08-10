@@ -33,11 +33,11 @@ int main(int argc, char * argv[]) {
 
   for (auto handler : samples) {
     for (unsigned iSample = 0; iSample < handler->GetNSamples(); ++iSample) {
-    
+
       std::string name = handler->GetSampleTitle(iSample);
       sample_names.push_back(name);
       TString NameTString = TString(name.c_str());
-      
+
       handler->Reweight();
       PredictionHistograms.push_back(static_cast<TH1*>(handler->GetMCHist(iSample)->Clone(NameTString+"_DataHist")));
 
@@ -46,9 +46,9 @@ int main(int argc, char * argv[]) {
       } else if (handler->GetNDim(iSample) == 2){
         handler->AddData(iSample, static_cast<TH2D*>(PredictionHistograms.back()));
       }
-      
+
       else {
-        MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting"); 
+        MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting");
         throw MaCh3Exception(__FILE__ , __LINE__ );
       }
 
@@ -57,16 +57,16 @@ int main(int argc, char * argv[]) {
       MACH3LOG_INFO("--------------");
     }
   }
-  
+
   //###########################################################################################################
   //MCMC
 
   auto MaCh3Fitter = MaCh3FitterFactory(FitManager.get());
 
-  bool StartFromPreviousChain = GetFromManager(FitManager->raw()["General"]["StartFromPos"], false);
+  bool StartFromPreviousChain = GetFromManager(FitManager->raw()["General"]["StartFromPos"], false, __FILE__, __LINE__);
   //Start chain from random position unless continuing a chain
   if(!StartFromPreviousChain){
-    if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false)) {
+    if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false, __FILE__, __LINE__)) {
       param_handler->ThrowParameters();
     }
   }
@@ -79,13 +79,13 @@ int main(int argc, char * argv[]) {
     MACH3LOG_INFO("MCMC getting starting position from: {}",PreviousChainPath);
     MaCh3Fitter->StartFromPreviousFit(PreviousChainPath);
   }
-  
+
   //Add samples
   for(auto Sample : samples){
     MaCh3Fitter->AddSampleHandler(Sample);
   }
 
-  
+
   //Run fit
   MaCh3Fitter->RunMCMC();
 
