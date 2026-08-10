@@ -95,6 +95,16 @@ FetchContent_Declare(
 SET(duneanafluxtools_USE_DUNEANAOBJ OFF)
 FetchContent_MakeAvailable(duneanafluxtools)
 
+CPMAddPackage(
+  NAME duneanasel
+  GITHUB_REPOSITORY DUNE/duneanasel
+  GIT_TAG           main
+  DOWNLOAD_ONLY     YES
+)
+add_library(duneanasel_all INTERFACE)
+target_include_directories(duneanasel_all INTERFACE ${duneanasel_SOURCE})
+add_library(duneanasel::all ALIAS duneanasel_all)
+
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)

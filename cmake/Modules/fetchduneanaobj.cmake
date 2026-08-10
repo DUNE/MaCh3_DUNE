@@ -11,6 +11,7 @@ macro(fetchduneanaobj DUNE_ANAOBJ_BRANCH)
   # Check if population has already been performed
   FetchContent_GetProperties(duneanaobj)
   if(NOT duneanaobj_POPULATED)
+    cmake_policy(SET CMP0169 OLD)
     # Fetch the content using previously declared details
     FetchContent_Populate(duneanaobj)
 
@@ -63,5 +64,6 @@ macro(fetchduneanaobj DUNE_ANAOBJ_BRANCH)
   )
 
   add_library(duneanaobj::StandardRecord ALIAS duneanaobj_StandardRecord)
+  add_library(duneanaobj::all ALIAS duneanaobj_StandardRecord)
 
 endmacro()

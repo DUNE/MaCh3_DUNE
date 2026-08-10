@@ -1,6 +1,9 @@
+add_subdirectory(BeamFDStandardRecord)
+
 set(HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerAtm.h
   ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerBeamFD.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerBeamFDStandardRecord.h
   ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerBeamND.h
   ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerBeamNDGAr.h
   ${CMAKE_CURRENT_SOURCE_DIR}/MaCh3DUNEFactory.h
@@ -21,7 +24,7 @@ set_target_properties(SamplesDUNE PROPERTIES
   PUBLIC_HEADER "${HEADERS}"
   EXPORT_NAME SamplesDUNE)
 
-target_link_libraries(SamplesDUNE PUBLIC SplinesDUNE MaCh3::All MaCh3DUNECompilerOptions)
+target_link_libraries(SamplesDUNE PUBLIC SplinesDUNE SampleHandlerBeamFDStandardRecord MaCh3::All MaCh3DUNECompilerOptions)
 target_link_libraries(SamplesDUNE PRIVATE duneanaobj::StandardRecord DUNEMaCh3Warnings)
 
 target_include_directories(SamplesDUNE PUBLIC

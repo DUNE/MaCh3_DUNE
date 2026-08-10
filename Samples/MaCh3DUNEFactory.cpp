@@ -2,6 +2,7 @@
 
 // DUNE Handlers
 #include "Samples/SampleHandlerBeamFD.h"
+#include "Samples/BeamFDStandardRecord/SampleHandlerBeamFDStandardRecord.h"
 #include "Samples/SampleHandlerBeamND.h"
 #include "Samples/SampleHandlerBeamNDGAr.h"
 #include "Samples/SampleHandlerAtm.h"
@@ -12,6 +13,8 @@ SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string Samp
   SampleHandlerBase *Sample;
   if (SampleType == "BeamFD") {
     Sample = new SampleHandlerBeamFD(SampleConfig, param_handler.get(), BeamOscillator_);
+  } else if (SampleType == "BeamFDStandardRecord") {
+    Sample = new dune::beamfd::SampleHandlerBeamFDStandardRecord(SampleConfig, param_handler.get(), BeamOscillator_);
   } else if (SampleType == "BeamND") {
 
     if (beamNDCov.NDCov_FHC == nullptr || beamNDCov.NDCov_RHC == nullptr || beamNDCov.NDCov_all == nullptr) {
