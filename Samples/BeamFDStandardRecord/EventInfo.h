@@ -20,10 +20,13 @@ struct CAFEventInfo {
   } truth;
 
   struct Reconstructed {
-    double enu;
 
-    double e_lep;
-    double e_had;
+    enum ESample { kRejected = 0, kNuMuCCLike, kNuECCLike, kNCLike };
+    int sample;
+
+    double e_nu;
+
+    std::array<double, 3> vtx_pos_cm;
 
   } reco;
 };
