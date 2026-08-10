@@ -3,7 +3,6 @@ add_subdirectory(BeamFDStandardRecord)
 set(HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerAtm.h
   ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerBeamFD.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerBeamFDStandardRecord.h
   ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerBeamND.h
   ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerBeamNDGAr.h
   ${CMAKE_CURRENT_SOURCE_DIR}/MaCh3DUNEFactory.h
