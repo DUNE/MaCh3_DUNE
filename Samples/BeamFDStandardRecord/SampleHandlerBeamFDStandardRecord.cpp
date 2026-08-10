@@ -23,18 +23,7 @@ SampleHandlerBeamFDStandardRecord::SampleHandlerBeamFDStandardRecord(
   Initialise();
 }
 
-void SampleHandlerBeamFDStandardRecord::Init() {
-  subsample_analysispot.resize(GetNSamples());
-  subsample_is_numode.resize(GetNSamples());
-
-  for (int iSubSample = 0; iSubSample < GetNSamples(); iSubSample++) {
-    auto const &sample_conf = SampleManager->raw()[GetSampleTitle(iSubSample)];
-    subsample_analysispot[iSubSample] =
-        Get<double>(sample_conf["POT"], __FILE__, __LINE__);
-    subsample_is_numode[iSubSample] =
-        Get<bool>(sample_conf["is_numode"], __FILE__, __LINE__);
-  }
-}
+void SampleHandlerBeamFDStandardRecord::Init() {}
 
 void SampleHandlerBeamFDStandardRecord::SetupSplines() {
   if (!ParHandler) {
@@ -76,7 +65,7 @@ void SampleHandlerBeamFDStandardRecord::RegisterFunctionalParameters() {
         [](std::vector<double> const &par_vals, EventInfo &ev) {
           for (size_t i = 0; i < par_vals.size(); ++i) {
             ev.syst.flux.total_weight *=
-                1 + (par_vals[i] * ev.syst.flux.focussing_ratio[i]);
+                1 + (par_vals[i] * ev.syst.flux.focussing_weights[i]);
           }
         });
 
@@ -85,7 +74,7 @@ void SampleHandlerBeamFDStandardRecord::RegisterFunctionalParameters() {
         [](std::vector<double> const &par_vals, EventInfo &ev) {
           for (size_t i = 0; i < par_vals.size(); ++i) {
             ev.syst.flux.total_weight *=
-                1 + (par_vals[i] * ev.syst.flux.hadprod_ratio[i]);
+                1 + (par_vals[i] * ev.syst.flux.hadprod_weights[i]);
           }
         });
   }
@@ -114,58 +103,153 @@ int SampleHandlerBeamFDStandardRecord::SetupExperimentMC() {
   bool do_flux_systematics =
       ParHandler && ParHandler->GetNumParFromGroup("Flux");
 
-  for (int iSubSample = 0; iSubSample < int(SampleDetails.size());
-       iSubSample++) {
-    MACH3LOG_INFO("-- subsample[{}]: {} ", iSubSample,
-                  SampleDetails[iSubSample].SampleTitle);
+  std::vector<std::array<float, 2>> RecoSampleRanges;
 
-    TChain MetaChain("meta");
-    TChain CAFChain("cafTree");
-    for (auto const &osc_channel_filenames :
-         SampleDetails[iSubSample].mc_files) {
-      for (const std::string &filename : osc_channel_filenames) {
-        if (filename.empty()) {
-          MACH3LOG_INFO("-- -- Skipping empty filename entry");
+  auto sample_name = Get<std::vector<std::string>>(
+      SampleManager->raw()["Samples"], __FILE__, __LINE__);
+
+  for (int i = 0; i < GetNSamples(); i++) {
+    auto first_cut = Get<YAML::Node>(
+        SampleManager->raw()[sample_name[i]]["SelectionCuts"][0], __FILE__,
+        __LINE__);
+    auto kinstr =
+        Get<std::string>(first_cut["KinematicStr"], __FILE__, __LINE__);
+
+    if (kinstr == ReversedKinematicParametersDUNE.at(kRecoSample)) {
+      RecoSampleRanges.push_back(
+          Get<std::array<float, 2>>(first_cut["Bounds"], __FILE__, __LINE__));
+    } else {
+      MACH3LOG_ERROR("Expected to only find a single Selection cut cutting on "
+                     "{}. But found a cut on {}",
+                     ReversedKinematicParametersDUNE.at(kRecoSample), kinstr);
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+  }
+
+  std::map<std::string, std::vector<std::pair<std::string, float>>>
+      input_mc_event_descriptors;
+
+  for (auto const &file_descriptor :
+       SampleManager->raw()["InputFiles"]["MCEvents"]) {
+
+    auto tag = Get<std::string>(file_descriptor["Tag"], __FILE__, __LINE__);
+    auto file_location =
+        Get<std::string>(file_descriptor["FileLocation"], __FILE__, __LINE__);
+    auto downsamplefraction = GetFromManager<float>(
+        file_descriptor["DownsampleFraction"], 0.0, __FILE__, __LINE__);
+
+    input_mc_event_descriptors[tag].push_back(
+        std::make_pair(file_location, downsamplefraction));
+
+    MACH3LOG_INFO("-- Found input event descriptor: Tag: {}, FileLocation: {}, "
+                  "DownsampleFraction: {}",
+                  tag, file_location, downsamplefraction);
+  }
+
+  for (auto const &[tag, input_files] : input_mc_event_descriptors) {
+
+    float tag_pot =
+        Get<float>(SampleManager->raw()["POT"][tag], __FILE__, __LINE__);
+    size_t tag_id = mc_tags.size();
+    mc_tags.push_back(MCTag{tag, tag_pot});
+
+    bool is_numode = tag.find("numode") != std::string::npos;
+
+    float tag_input_pot = 0;
+
+    for (auto const &[filename, downsamplefraction] : input_files) {
+      if (filename.empty()) {
+        MACH3LOG_INFO("-- -- Skipping empty filename entry");
+        continue;
+      }
+      TChain MetaChain("cafmaker/meta");
+      MACH3LOG_INFO("-- -- Adding file descriptor to Meta TChain: {}",
+                    filename);
+      if (!MetaChain.Add(filename.c_str(), -1)) {
+        MACH3LOG_ERROR("Could not add file {} to TChain, please check the file "
+                       "exists and is readable",
+                       filename);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+
+      float file_descriptor_pot = GetPOT(MetaChain);
+      tag_input_pot += file_descriptor_pot * (1 - downsamplefraction);
+      MACH3LOG_INFO(
+          "-- -- Read {:.3G} input POT (with downsample weight of: {:.2f})",
+          file_descriptor_pot, (1 - downsamplefraction));
+    }
+
+    MACH3LOG_INFO("-- Read {:.3G} total POT for tag: {}, which has analysis "
+                  "POT of {:.3G}",
+                  tag_input_pot, tag, tag_pot);
+
+    for (auto const &[filename, downsamplefraction] : input_files) {
+      if (filename.empty()) {
+        MACH3LOG_INFO("-- -- Skipping empty filename entry");
+        continue;
+      }
+
+      TChain CAFChain("cafmaker/cafTree");
+      MACH3LOG_INFO("-- -- Adding file descriptor to cafTree TChain: {}",
+                    filename);
+      if (!CAFChain.Add(filename.c_str(), -1)) {
+        MACH3LOG_ERROR("Could not add file {} to TChain, please check the file "
+                       "exists and is readable",
+                       filename);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+
+      auto sample_evs = ReadEvents(CAFChain, downsamplefraction);
+      MACH3LOG_INFO(
+          "-- -- Read: {}/{} events (with downsample fraction of: {:.2f})",
+          sample_evs.size(), CAFChain.GetEntries(), downsamplefraction);
+
+      // fix up any analysis specific information
+      for (auto &ev : sample_evs) {
+
+        ev.tag_id = tag_id;
+        ev.is_numode = is_numode;
+
+        ev.sample = -1;
+        for (size_t i = 0; i < RecoSampleRanges.size(); ++i) {
+          if ((ev.reco.sample > RecoSampleRanges[i][0]) &&
+              (ev.reco.sample < RecoSampleRanges[i][1])) {
+            ev.sample = int(i);
+          }
+        }
+
+        if (ev.sample < 0) {
           continue;
         }
-        MACH3LOG_INFO("-- -- Adding file to TChain: {}", filename);
-        if (!CAFChain.Add(filename.c_str(), -1)) {
-          MACH3LOG_ERROR(
-              "Could not add file {} to TChain, please check the file "
-              "exists and is readable",
-              filename);
-          throw MaCh3Exception(__FILE__, __LINE__);
+
+        ev.truth.mach3_mode =
+            Modes->GetModeFromGenerator(std::abs(ev.truth.generator_mode));
+        if (!ev.truth.is_cc) {
+          // Account for no ability to distinguish CC/NC
+          ev.truth.mach3_mode += 14;
         }
-        MetaChain.Add(filename.c_str(), -1);
+        if (ev.truth.mach3_mode > 15) {
+          // Account for no NCSingleKaon
+          ev.truth.mach3_mode -= 1;
+        }
+
+        ev.weights.pot = tag_pot / tag_input_pot;
+
+        ev.syst.flux.total_weight = 1;
+        if (do_flux_systematics) {
+          // do stuff here
+        }
+
+        DUNEMCEvents.emplace_back(std::move(ev));
       }
     }
-
-    double subsample_cafpot = GetPOT(MetaChain);
-    auto sample_evs = ReadEvents(CAFChain);
-
-    // fix up any analysis specific information
-    for (auto &ev : sample_evs) {
-
-      ev.subsample = iSubSample;
-      ev.is_numode = subsample_is_numode[iSubSample];
-
-      ev.weights.pot = subsample_analysispot[iSubSample] / subsample_cafpot;
-
-      ev.syst.flux.total_weight = 1;
-      if (do_flux_systematics) {
-        // do stuff here
-      }
-    }
-
-    DUNEMCEvents.reserve(DUNEMCEvents.size() + sample_evs.size());
-    std::copy(sample_evs.begin(), sample_evs.end(),
-              std::back_inserter(DUNEMCEvents));
   }
 
   return int(DUNEMCEvents.size());
 }
 
 void SampleHandlerBeamFDStandardRecord::SetupMC() {
+
   size_t iEvent = 0;
   for (auto const &ev : DUNEMCEvents) {
     MCEvents[iEvent].isNC = !ev.truth.is_cc;
@@ -174,7 +258,7 @@ void SampleHandlerBeamFDStandardRecord::SetupMC() {
     MCEvents[iEvent].nupdg = ev.truth.nu.pdg;
     MCEvents[iEvent].nupdgUnosc = ev.truth.nu.pdg_unosc;
 
-    MCEvents[iEvent].NominalSample = ev.subsample;
+    MCEvents[iEvent].NominalSample = ev.sample;
 
     iEvent++;
   }
@@ -192,7 +276,7 @@ void SampleHandlerBeamFDStandardRecord::InititialiseData() {
 const double *SampleHandlerBeamFDStandardRecord::GetPointerToKinematicParameter(
     int KinematicVariable, int iEvent) const {
   KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
-  return GetPointerToKinematicParameter(KinPar, iEvent);
+  return ResolveKinematicEventMember(KinPar, DUNEMCEvents[iEvent]);
 }
 
 double SampleHandlerBeamFDStandardRecord::ReturnKinematicParameter(

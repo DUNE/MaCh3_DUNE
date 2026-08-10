@@ -1,0 +1,76 @@
+---
+SampleHandlerName: "BeamFDStandardRecord"
+
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
+BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
+
+InputFiles:
+  PrepSplineFile: false
+  MCEvents:
+    - Tag: numode_nonswap
+      FileLocation: "Inputs/DUNE_CAF_files/fardet-vd_mc_list-merge_physics_cafmaker_dunevd10kt_1x8x6_3view_30deg_runreco-nuenergy_geov3_root-tuple_merged_skip000000_lim000060_final_20241024T024241.root"
+    # If set to greater than 0, then events are skipped during reading with
+    #   probability DownsampleFraction
+      DownsampleFraction: 0.5
+    # uncomment this if you just want to run with all the files
+    # - tag: "fhc_nonswap"
+    #   file_location: "Inputs/DUNE_CAF_files/fardet-vd_mc_list-merge_physics_cafmaker_dunevd10kt_1x8x6_3view_30deg_runreco-nuenergy_geov3_root-tuple_merged_skip*.root"}
+
+NuOsc:
+  NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
+  EqualBinningPerOscChannel: false
+
+Samples: [
+  BeamFD_numode_CCNumuLike,
+]
+
+POT:
+  numode_nonswap: 1.36E23
+
+BeamFD_numode_CCNumuLike:
+  SampleName: BeamFD_numode_CCNumuLike
+  SampleTitle: BeamFD_numode_CCNumuLike
+
+  MCEventsTags: [ numode_nonswap, ]
+
+  SelectionCuts:
+    # enum Sample { kRejected = 0, kNuMuCCLike, kNuECCLike, kNCLike };
+    - KinematicStr: RecoSample
+      Bounds: [0.5, 1.5]
+
+  Binning:
+    VarStr: RecoNeutrinoEnergy
+    Uniform: true
+    BinEdges: [0., 0.5, 1., 1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
+
+  InputFiles:
+    mtupleprefix: ""
+    mtuplesuffix: ""
+    splineprefix: ""
+    splinesuffix: ""
+
+  OscChannels:
+    - Name: "RHC_numu_x_numu"
+      LatexName: "RHC_numu_x_numu"
+      mtuplefile: [""]
+      splinefile: ""
+      nutype: 14
+      oscnutype: 14
+    - Name: "RHC_nue_x_nue"
+      LatexName: "RHC_nue_x_nue"
+      mtuplefile: [""]
+      splinefile: ""
+      nutype: 12
+      oscnutype: 12
+    - Name: "RHC_numubar_x_numubar"
+      LatexName: "RHC_numubar_x_numubar"
+      mtuplefile: [""]
+      splinefile: ""
+      nutype: -14
+      oscnutype: -14
+    - Name: "RHC_nuebar_x_nuebar"
+      LatexName: "RHC_nuebar_x_nuebar"
+      mtuplefile: [""]
+      splinefile: ""
+      nutype: -12
+      oscnutype: -12

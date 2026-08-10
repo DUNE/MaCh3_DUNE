@@ -16,8 +16,23 @@ public:
   ~SampleHandlerBeamFDStandardRecord() {}
 
   std::vector<dune::beamfd::EventInfo> DUNEMCEvents;
-  std::vector<double> subsample_analysispot;
-  std::vector<bool> subsample_is_numode;
+
+  struct MCTag {
+    std::string name;
+    float POT;
+  };
+  std::vector<MCTag> mc_tags;
+
+  int GetTagIndex(std::string const &tag){
+    int index = 0;
+    for(auto const &t : mc_tags){
+      if(t.name == tag){
+        return index;
+      }
+      index++;
+    }
+    return -1;
+  }
 
   void CleanMemoryBeforeFit() {}
 

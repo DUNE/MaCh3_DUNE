@@ -2,8 +2,8 @@
 
 #include "Samples/BeamFDStandardRecord/EventInfo.h"
 
-#include "Manager/MaCh3Logger.h"
 #include "Manager/MaCh3Exception.h"
+#include "Manager/MaCh3Logger.h"
 
 #include <string>
 #include <unordered_map>
@@ -15,8 +15,10 @@ namespace dune::beamfd {
 #define LIST_OF_VARIABLES                                                      \
   X(TrueNeutrinoEnergy)                                                        \
   X(OscillationChannel)                                                        \
+  X(TargetNucleus)                                                        \
   X(IsCC)                                                                      \
   X(Mode)                                                                      \
+  X(RecoSample)                                                                \
   X(RecoNeutrinoEnergy)
 
 #define X(a) k##a,
@@ -44,11 +46,16 @@ inline const double *ResolveKinematicEventMember(KinematicTypes KinPar,
     return &ev.truth.nu.e;
   case kOscillationChannel:
     return &ev.truth.mach3_mode;
+  case kTargetNucleus:
+    return &ev.truth.tgt_a;
   case kIsCC:
     return &ev.truth.is_cc;
   case kMode:
     return &ev.truth.mach3_mode;
 
+
+  case kRecoSample:
+    return &ev.reco.sample;
   case kRecoNeutrinoEnergy:
     return &ev.reco.e_nu;
 

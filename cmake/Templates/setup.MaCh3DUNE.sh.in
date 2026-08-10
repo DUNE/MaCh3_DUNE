@@ -72,3 +72,7 @@ if [ -f "${MACH3DUNE_ROOT}/bin/setup.MaCh3.sh" ]; then
   echo "Sourcing MaCh3 Core"
   source "${MACH3DUNE_ROOT}/bin/setup.MaCh3.sh"
 fi
+
+if [ -z "${duneanafluxtools_ROOT}" ]; then
+  export duneanafluxtools_ROOT=${MACH3DUNE_ROOT}
+fi

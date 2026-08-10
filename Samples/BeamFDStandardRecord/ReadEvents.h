@@ -6,7 +6,7 @@
 
 namespace dune::beamfd {
 
-double GetPOT(TTree &);
-std::vector<EventInfo> ReadEvents(TTree &);
+float GetPOT(TTree &);
+std::vector<EventInfo> ReadEvents(TTree &, float downsamplefraction = 0);
 
 } // namespace dune::beamfd
