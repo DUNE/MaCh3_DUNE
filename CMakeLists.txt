@@ -73,9 +73,10 @@ endif()
 include(FetchContent)
 FetchContent_Declare(
   duneanafluxtools
-  GIT_REPOSITORY https://github.com/luketpickering/duneanafluxtools.git
-  GIT_TAG        main
+  GIT_REPOSITORY https://github.com/DUNE/duneanafluxtools.git
+  GIT_TAG        v0.9.0
 )
+# we don't need to build the caf interface
 SET(duneanafluxtools_USE_DUNEANAOBJ OFF)
 FetchContent_MakeAvailable(duneanafluxtools)
 
