@@ -89,7 +89,9 @@ add_library(duneanasel::all ALIAS duneanasel_all)
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
-find_package(MaCh3 2.6.0 EXACT QUIET)
+# don't find mach3 core from a previous build in this directory or sad times occur
+LIST(APPEND CMAKE_IGNORE_PATH ${CMAKE_CURRENT_BINARY_DIR})
+find_package(MaCh3 2.6.0 CONFIG EXACT QUIET)
 set(MaCh3_CORE_BRANCH v2.6.0 CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 
