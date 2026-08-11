@@ -16,7 +16,7 @@ General:
   Systematics:
     XsecCovFile:
       - "Configs/CovObjs/OscCov_PDG2021_v2.yaml"
-      # - "Configs/CovObjs/BeamParameters2026.yaml"
+      - "Configs/CovObjs/BeamParameters2026.yaml"
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.05
 
