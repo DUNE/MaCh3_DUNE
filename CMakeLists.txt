@@ -39,6 +39,9 @@ file(
 )
 include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 
+#=================== ROOT
+find_package(ROOT 6 REQUIRED)
+
 #=================== DUNEAnaObj
 if(NOT DEFINED DUNE_ANAOBJ_BRANCH)
   set(DUNE_ANAOBJ_BRANCH v03_14_00)

@@ -1,7 +1,5 @@
 macro(fetchduneanaobj DUNE_ANAOBJ_BRANCH)
 
-  find_package(ROOT 6 REQUIRED)
-
   include(FetchContent)
   FetchContent_Declare(
     duneanaobj
