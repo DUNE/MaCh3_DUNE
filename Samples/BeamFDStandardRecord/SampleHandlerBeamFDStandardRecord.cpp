@@ -237,7 +237,10 @@ int SampleHandlerBeamFDStandardRecord::SetupExperimentMC() {
 
         ev.syst.flux.total_weight = 1;
         if (do_flux_systematics) {
-          // do stuff here
+          std::tie(ev.syst.flux.focussing_weights,
+                   ev.syst.flux.hadprod_weights) =
+              syst::GetFluxVariationWeights(ev.truth.nu.pdg_unosc,
+                                            ev.truth.nu.e, true, is_numode);
         }
 
         DUNEMCEvents.emplace_back(std::move(ev));
