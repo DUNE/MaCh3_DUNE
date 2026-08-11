@@ -42,21 +42,21 @@ int main(int argc, char * argv[]) {
 
   std::string OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
   TFile* File = TFile::Open(OutputFileName.c_str(),"RECREATE");
-  
+
   MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",param_handler->GetName());
-  
+
   int nPars = param_handler->GetNumParams();
   for (int iPar=0;iPar<nPars;iPar++) {
     std::string ParName = param_handler->GetParFancyName(iPar);
-    double VarInit = param_handler->GetParInit(iPar);
+    double VarInit = param_handler->GetParPreFit(iPar);
     double VarSigma = param_handler->GetDiagonalError(iPar);
-    
+
     MACH3LOG_INFO("\tParameter : {:<30} - Variations around value : {:<10.7f} , in units of 1 Sigma : {:<10.7f}",ParName,VarInit,VarSigma);
 
     File->cd();
     File->mkdir(ParName.c_str());
     File->cd(ParName.c_str());
-    
+
     for (size_t iSigVar=0;iSigVar<sigmaVariations.size();iSigVar++) {
       double VarVal = VarInit + sigmaVariations[iSigVar] * VarSigma;
       if (VarVal < param_handler->GetLowerBound(iPar)) VarVal = param_handler->GetLowerBound(iPar);

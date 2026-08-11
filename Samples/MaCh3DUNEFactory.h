@@ -10,12 +10,6 @@
 #include "Samples/SampleHandlerBase.h"
 #include "Fitters/MaCh3Factory.h"
 
-// DUNE Handlers
-#include "Samples/SampleHandlerBeamFD.h"
-#include "Samples/SampleHandlerBeamND.h"
-#include "Samples/SampleHandlerBeamNDGAr.h"
-#include "Samples/SampleHandlerAtm.h"
-
 /// @brief Factory function that generates MaCh3 DUNE instance including configured samples
 /// @param fitMan Configuration Manager
 /// @returns parameter handler and vector of sample handler

@@ -78,7 +78,7 @@ SplineHandlerFactoryDUNE::SplineHandlerFactoryDUNE(ParameterHandlerGeneric* xsec
                 for(uint i = 0; i < samplePars.size(); ++i) {
                     splineWeightPtrs[i] = xsec_params->RetPointer(samplePars[i].index);
                 }
-                monolith->setSplinePointers(splineWeightPtrs);
+                monolith->SetSplinePointers(splineWeightPtrs);
 
                 fSplineHandler = std::move(monolith);
                 break;

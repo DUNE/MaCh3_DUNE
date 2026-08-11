@@ -20,8 +20,8 @@ int main(int argc, char * argv[]) {
   auto FitManager = MaCh3ManagerFactory(argc, argv);
 
   // 1D scan on by default, and 2D off
-  const bool do_1d_llhscan = GetFromManager(FitManager->raw()["General"]["1DLLHScan"], true);
-  const bool do_2d_llhscan = GetFromManager(FitManager->raw()["General"]["2DLLHScan"], false);
+  const bool do_1d_llhscan = GetFromManager(FitManager->raw()["General"]["1DLLHScan"], true, __FILE__, __LINE__);
+  const bool do_2d_llhscan = GetFromManager(FitManager->raw()["General"]["2DLLHScan"], false, __FILE__, __LINE__);
 
   if (!do_1d_llhscan && !do_2d_llhscan) {
     MACH3LOG_ERROR("Neither 1D or 2D llhscan enabled");
@@ -52,15 +52,15 @@ int main(int argc, char * argv[]) {
   auto MaCh3Fitter = MaCh3FitterFactory(FitManager.get());
 
   //###############################################################################################################################
-  //Lets benefit from the core code utilities 
-  
+  //Lets benefit from the core code utilities
+
   //Add samples to FitterBase
   for(auto Sample : samples){
     MaCh3Fitter->AddSampleHandler(Sample);
   }
 
   MaCh3Fitter->AddSystObj(param_handler.get());
-  
+
   if (do_1d_llhscan) {
     MaCh3Fitter->RunLLHScan();
   }

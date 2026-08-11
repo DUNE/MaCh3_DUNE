@@ -67,8 +67,8 @@ int main(int argc, char * argv[]) {
     }
   }
 
-  std::string OutFileName = GetFromManager<std::string>(FitManager->raw()["General"]["OutputFile"], "EventRatesOutput.root");
-  Write1DHistogramsToFile(OutFileName, DUNEHists); 
+  std::string OutFileName = GetFromManager<std::string>(FitManager->raw()["General"]["OutputFile"], "EventRatesOutput.root", __FILE__, __LINE__);
+  Write1DHistogramsToFile(OutFileName, DUNEHists);
   Write1DHistogramsToPdf(OutFileName, DUNEHists);
 
   //###############################################################################################################################
@@ -77,7 +77,7 @@ int main(int argc, char * argv[]) {
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("========================================================================");
   MACH3LOG_INFO("Oscillation Mode Breakdown:");
-  
+
   for(auto handler : samples) {
     for (int iSample = 0; iSample < handler->GetNSamples(); iSample++) {
       MACH3LOG_INFO("======================");
@@ -90,7 +90,7 @@ int main(int argc, char * argv[]) {
         SelecChannel.LowerBound = iOscChan;
         SelecChannel.UpperBound = iOscChan+1;
         SelectionVec.push_back(SelecChannel);
-        
+
         auto Hist = handler->Get1DVarHist(iSample, handler->GetKinVarName(iSample, 0),SelectionVec);
         MACH3LOG_INFO("{:<20} : {:<20} : {:<20.2f}",handler->GetSampleTitle(iSample),handler->GetFlavourName(iSample, iOscChan),Hist->Integral());
       }
