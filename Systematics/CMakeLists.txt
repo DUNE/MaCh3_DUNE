@@ -26,3 +26,8 @@ install(TARGETS SystematicsDUNE
   PUBLIC_HEADER DESTINATION include/Samples)
 
 add_library(MACH3DUNE::SystematicsDUNE ALIAS SystematicsDUNE)
+
+add_executable(DumpBeamSystematicRatios DumpBeamSystematicRatios.cpp)
+target_link_libraries(DumpBeamSystematicRatios SystematicsDUNE ROOT::Hist)
+
+install(TARGETS DumpBeamSystematicRatios DESTINATION bin)
