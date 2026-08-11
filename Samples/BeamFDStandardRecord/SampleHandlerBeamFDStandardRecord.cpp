@@ -65,7 +65,7 @@ void SampleHandlerBeamFDStandardRecord::RegisterFunctionalParameters() {
         [](std::vector<double> const &par_vals, EventInfo &ev) {
           for (size_t i = 0; i < par_vals.size(); ++i) {
             ev.syst.flux.total_weight *=
-                1 + (par_vals[i] * ev.syst.flux.focussing_weights[i]);
+                1 + (par_vals[i] * (ev.syst.flux.focussing_weights[i] - 1));
           }
         });
 
@@ -74,7 +74,7 @@ void SampleHandlerBeamFDStandardRecord::RegisterFunctionalParameters() {
         [](std::vector<double> const &par_vals, EventInfo &ev) {
           for (size_t i = 0; i < par_vals.size(); ++i) {
             ev.syst.flux.total_weight *=
-                1 + (par_vals[i] * ev.syst.flux.hadprod_weights[i]);
+                1 + (par_vals[i] * (ev.syst.flux.hadprod_weights[i] - 1));
           }
         });
   }
