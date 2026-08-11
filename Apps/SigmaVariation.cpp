@@ -12,84 +12,36 @@
 #include <TColor.h>
 #include <TMath.h>
 
-#include "Samples/MaCh3DUNEFactory.h"
-#include "Samples/StructsDUNE.h"
 #include "Fitters/MaCh3Factory.h"
+#include "Samples/MaCh3DUNEFactory.h"
 
 int main(int argc, char * argv[]) {
+
   auto FitManager = MaCh3ManagerFactory(argc, argv);
+  auto OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
 
-  //###############################################################################################################################
-
-  //DB Sigma variations in units of each parameters Sigma
-  std::vector<double> sigmaVariations = {-3, -1, 0, 1, 3};
-
-  //###############################################################################################################################
+  //####################################################################################
   //Create sample handler + parameter_handler objects
   auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
 
-  //###############################################################################################################################
-  //Perform reweight and print total integral
+  //###########################################################################################################
+  //MCMC
 
-  MACH3LOG_INFO("=======================================================");
-  for(SampleHandlerBase* handler: samples){
-    handler->Reweight();
-    for (int iSample=0;iSample<handler->GetNSamples();iSample++) {
-      MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample)->Integral());
-    }
+  auto MaCh3Fitter = std::make_unique<MR2T2>(FitManager.get());
+
+  //Add systematic objects
+  MaCh3Fitter->AddSystObj(param_handler.get());
+
+  //Add samples
+  for(auto Sample : samples){
+    MaCh3Fitter->AddSampleHandler(Sample);
   }
-  MACH3LOG_INFO("=======================================================");
 
-  std::string OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
-  TFile* File = TFile::Open(OutputFileName.c_str(),"RECREATE");
+  MaCh3Fitter->RunSigmaVar();
 
-  MACH3LOG_INFO("Starting Variations for covarianceBase Object: {}",param_handler->GetName());
-
-  int nPars = param_handler->GetNumParams();
-  for (int iPar=0;iPar<nPars;iPar++) {
-    std::string ParName = param_handler->GetParFancyName(iPar);
-    double VarInit = param_handler->GetParPreFit(iPar);
-    double VarSigma = param_handler->GetDiagonalError(iPar);
-
-    MACH3LOG_INFO("\tParameter : {:<30} - Variations around value : {:<10.7f} , in units of 1 Sigma : {:<10.7f}",ParName,VarInit,VarSigma);
-
-    File->cd();
-    File->mkdir(ParName.c_str());
-    File->cd(ParName.c_str());
-
-    for (size_t iSigVar=0;iSigVar<sigmaVariations.size();iSigVar++) {
-      double VarVal = VarInit + sigmaVariations[iSigVar] * VarSigma;
-      if (VarVal < param_handler->GetLowerBound(iPar)) VarVal = param_handler->GetLowerBound(iPar);
-      if (VarVal > param_handler->GetUpperBound(iPar)) VarVal = param_handler->GetUpperBound(iPar);
-
-      MACH3LOG_INFO("\t\tVariation {:<5.3f} - Parameter Value : {:<10.7f}",
-                    sigmaVariations[iSigVar], VarVal);
-      param_handler->SetParProp(iPar, VarVal);
-
-      for (auto handler : samples) {
-        for (int iSample = 0; iSample < handler->GetNSamples(); iSample++) {
-          std::string SampleName = handler->GetSampleTitle(iSample);
-
-          File->cd(ParName.c_str());
-          if (iSigVar == 0) {
-            File->mkdir((ParName + "/" + SampleName).c_str());
-          }
-          File->cd((ParName + "/" + SampleName).c_str());
-
-          handler->Reweight();
-          auto Hist = handler->GetMCHist(iSample);
-          MACH3LOG_INFO("\t\t\tSample : {:<30} - Integral : {:<10}", SampleName,
-                        Hist->Integral());
-
-          Hist->Write(Form("Variation_%i", (int)iSigVar));
-        }
-      }
-    }
-
-    param_handler->SetParProp(iPar, VarInit);
-
-    MACH3LOG_INFO("=======================================================");
-  }
+  //Writing the memory usage at the end to eventually spot some nasty leak
+  MACH3LOG_WARN("\033[0;31mCurrent Total RAM usage is {:.2f} GB\033[0m", M3::Utils::getValue("VmRSS") / 1048576.0);
+  MACH3LOG_WARN("\033[0;31mOut of Total available RAM {:.2f} GB\033[0m", M3::Utils::getValue("MemTotal") / 1048576.0);
 
   return 0;
 }

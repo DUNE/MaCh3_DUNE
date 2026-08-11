@@ -70,12 +70,32 @@ else()
   fetchduneanaobj(${DUNE_ANAOBJ_BRANCH})
 endif()
 
+include(FetchContent)
+FetchContent_Declare(
+  duneanafluxtools
+  GIT_REPOSITORY https://github.com/DUNE/duneanafluxtools.git
+  GIT_TAG        v0.9.0
+)
+# we don't need to build the caf interface
+SET(duneanafluxtools_USE_DUNEANAOBJ OFF)
+FetchContent_MakeAvailable(duneanafluxtools)
+
+CPMAddPackage(
+  NAME duneanasel
+  GITHUB_REPOSITORY DUNE/duneanasel
+  GIT_TAG           main
+  DOWNLOAD_ONLY     YES
+)
+add_library(duneanasel_all INTERFACE)
+target_include_directories(duneanasel_all INTERFACE ${duneanasel_SOURCE_DIR})
+add_library(duneanasel::all ALIAS duneanasel_all)
+
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
 # don't find mach3 core from a previous build in this directory or sad times occur
 LIST(APPEND CMAKE_IGNORE_PATH ${CMAKE_CURRENT_BINARY_DIR})
-find_package(MaCh3 2.6.0 EXACT QUIET)
+find_package(MaCh3 2.6.0 CONFIG EXACT QUIET)
 set(MaCh3_CORE_BRANCH v2.6.0 CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 
@@ -203,13 +223,13 @@ set_target_properties(MaCh3DUNECompilerOptions PROPERTIES EXPORT_NAME CompilerOp
 target_include_directories(MaCh3DUNECompilerOptions
   INTERFACE
   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/Apps>
-  $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
   $<INSTALL_INTERFACE:include>)
 
 install(TARGETS MaCh3DUNECompilerOptions
   EXPORT mach3dune-targets
   LIBRARY DESTINATION lib/)
 
+add_subdirectory(Systematics)
 add_subdirectory(Splines)
 add_subdirectory(Samples)
 add_subdirectory(Apps)
@@ -277,6 +297,7 @@ file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/output)
 install(DIRECTORY Inputs DESTINATION ${CMAKE_BINARY_DIR})
 install(DIRECTORY Configs DESTINATION ${CMAKE_BINARY_DIR})
 install(DIRECTORY Utils DESTINATION ${CMAKE_BINARY_DIR})
+install(DIRECTORY plotting DESTINATION ${CMAKE_BINARY_DIR})
 
 install(EXPORT mach3dune-targets
   FILE MaCh3DUNETargets.cmake
