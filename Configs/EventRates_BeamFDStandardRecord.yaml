@@ -33,6 +33,16 @@ General:
   Seed: 0
   Debug: No
 
+SigmaVar:
+  # whether to separate by mach3 mode
+  PlotByMode: false
+  # whether to seaparate by osc channel
+  PlotByChannel: false
+  # list of parameters to skip, can include glob patterns e.g: MyParamPrefix_*
+  # SkipVector: [sin2th_12, sin2th_23, sin2th_13, delm2_12, delm2_23, delta_cp]
+  # parameter values
+  SigmaArray: [-1,-0.5,0,0.5,1]
+
 # LLH Scan settings
 LLHScan:
   # don't make LLH for certain systematic groups
