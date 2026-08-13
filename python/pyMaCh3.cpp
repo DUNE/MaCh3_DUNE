@@ -1,5 +1,8 @@
 #include <memory>
+#include <vector>
 #include "python/pyMaCh3.h"
+
+#include <pybind11/stl.h> // needed for std::vector<SampleHandlerBase*> <-> python list conversion
 
 #include "Samples/SampleHandlerAtm.h"
 #include "Samples/SampleHandlerBeamFD.h"
@@ -135,6 +138,94 @@ class MaCh3DunePyBinder : public MaCh3PyBinder {
                 return beam_nd_cov;
             })
 
+        );
+
+        // ####################################################
+        // Factory function: GetMaCh3DuneInstance
+        // ####################################################
+        m_samples.def("GetMaCh3DuneInstance",
+            [](const std::string& SampleType,
+               const std::string& SampleConfig,
+               ParameterHandlerGeneric* param_handler,
+               OscillationHandler* BeamOscillator_,
+               OscillationHandler* AtmOscillator_,
+               BeamNDCov beamNDCov) -> SampleHandlerBase* {
+
+                // GetMaCh3DuneInstance takes std::unique_ptr<ParameterHandlerGeneric>&,
+                // so wrap the raw (Python-owned) pointer in a real unique_ptr, call
+                // the function, then release it so we don't double-delete the
+                // object when this local goes out of scope.
+                std::unique_ptr<ParameterHandlerGeneric> param_handler_ptr(param_handler);
+
+                std::shared_ptr<OscillationHandler> beam_osc_ptr;
+                if (BeamOscillator_ != nullptr) {
+                    beam_osc_ptr = std::shared_ptr<OscillationHandler>(BeamOscillator_, [](OscillationHandler*){});
+                }
+
+                std::shared_ptr<OscillationHandler> atm_osc_ptr;
+                if (AtmOscillator_ != nullptr) {
+                    atm_osc_ptr = std::shared_ptr<OscillationHandler>(AtmOscillator_, [](OscillationHandler*){});
+                }
+
+                SampleHandlerBase* Sample;
+                try {
+                    Sample = GetMaCh3DuneInstance(
+                        SampleType, SampleConfig, param_handler_ptr,
+                        beam_osc_ptr, atm_osc_ptr, beamNDCov);
+                } catch (...) {
+                    param_handler_ptr.release(); // ownership stays with the caller/Python side
+                    throw;
+                }
+
+                param_handler_ptr.release(); // ownership stays with the caller/Python side
+
+                return Sample;
+            },
+            "Create a MaCh3 DUNE SampleHandler instance based on SampleType "
+            "(one of \"BeamFD\", \"BeamND\", \"Atm\", \"BeamNDGAr\")",
+            py::arg("SampleType"),
+            py::arg("SampleConfig"),
+            py::arg("param_handler"),
+            py::arg("BeamOscillator") = nullptr,
+            py::arg("AtmOscillator") = nullptr,
+            py::arg("beamNDCov") = BeamNDCov(),
+            py::return_value_policy::take_ownership
+        );
+
+        // ####################################################
+        // Factory function: MaCh3DuneSampleFactory
+        // ####################################################
+        m_samples.def("MaCh3DuneSampleFactory",
+            [](Manager* fit_manager, ParameterHandlerGeneric* param_handler) -> std::vector<SampleHandlerBase*> {
+
+                // Same ownership trick as GetMaCh3DuneInstance: MaCh3DuneSampleFactory
+                // takes std::unique_ptr<Manager>& and std::unique_ptr<ParameterHandlerGeneric>&,
+                // but Python owns these objects as raw pointers. Wrap them temporarily,
+                // call the factory, then release before returning so Python retains
+                // ownership and nothing gets double-freed.
+                std::unique_ptr<Manager> fit_manager_ptr(fit_manager);
+                std::unique_ptr<ParameterHandlerGeneric> param_handler_ptr(param_handler);
+
+                std::vector<SampleHandlerBase*> result;
+                try {
+                    result = MaCh3DuneSampleFactory(fit_manager_ptr, param_handler_ptr);
+                } catch (...) {
+                    fit_manager_ptr.release();
+                    param_handler_ptr.release();
+                    throw;
+                }
+
+                fit_manager_ptr.release();
+                param_handler_ptr.release();
+
+                return result;
+            },
+            "Build the vector of DUNE SampleHandlers described by General:DUNESamples "
+            "in the fit Manager config, using the given parameter handler for systematics "
+            "and oscillation parameters",
+            py::arg("fit_manager"),
+            py::arg("param_handler"),
+            py::return_value_policy::take_ownership
         );
     }
 };
