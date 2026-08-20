@@ -12,6 +12,7 @@ Doc
 Inputs/Atmospherics/CAFs
 nohup.out
 *.txt
+!CMakeLists.txt
 *.log
 .cache/
 __pycache__/

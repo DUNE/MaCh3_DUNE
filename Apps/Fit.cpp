@@ -28,10 +28,10 @@ int main(int argc, char * argv[]) {
 
   auto MaCh3Fitter = MaCh3FitterFactory(FitManager.get());
 
-  bool StartFromPreviousChain = GetFromManager(FitManager->raw()["General"]["StartFromPos"], false);
+  bool StartFromPreviousChain = GetFromManager(FitManager->raw()["General"]["StartFromPos"], false, __FILE__, __LINE__);
   //Start chain from random position unless continuing a chain
   if(!StartFromPreviousChain){
-    if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false)) {
+    if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false, __FILE__, __LINE__)) {
       param_handler->ThrowParameters();
     }
   }
@@ -44,13 +44,13 @@ int main(int argc, char * argv[]) {
     MACH3LOG_INFO("MCMC getting starting position from: {}",PreviousChainPath);
     MaCh3Fitter->StartFromPreviousFit(PreviousChainPath);
   }
-  
+
   //Add samples
   for(auto Sample : samples){
     MaCh3Fitter->AddSampleHandler(Sample);
   }
 
-  
+
   //Run fit
   MaCh3Fitter->RunMCMC();
 

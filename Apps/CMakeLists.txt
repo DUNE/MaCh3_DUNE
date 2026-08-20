@@ -9,9 +9,9 @@ foreach(app
 	Variations
 	Predictive
       )
-      
+
     add_executable(${app} ${app}.cpp)
-    target_link_libraries(${app} SamplesDUNE MaCh3DUNE::All Minuit)
+    target_link_libraries(${app} SamplesDUNE MaCh3DUNE::All ROOT::Minuit)
 
     add_dependencies(MaCh3DUNEApps ${app})
 
