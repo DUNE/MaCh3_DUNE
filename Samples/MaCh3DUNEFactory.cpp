@@ -141,40 +141,6 @@ std::vector<SampleHandlerBase *> MaCh3DuneSampleFactory(std::unique_ptr<Manager>
     DUNEPdfs[Sample_i] = sample;
   }
 
-  const bool UseData = GetFromManager(FitManager->raw()["General"]["Data"], false, __FILE__, __LINE__);
-  const std::string AsimovTune = GetFromManager<std::string>(
-      FitManager->raw()["General"]["Systematics"]["XsecTune"], "", __FILE__, __LINE__);
-
-  if (!UseData && !AsimovTune.empty()) {
-    MACH3LOG_INFO("Generating Asimov data with configured xsec tune '{}'", AsimovTune);
-  }
-
-  for (auto* handler : DUNEPdfs) {
-    handler->Reweight();
-    for (int iSample = 0; iSample < handler->GetNSamples(); ++iSample) {
-      std::unique_ptr<TH1> DataHist;
-      if (UseData) {
-        auto* PDSPHandler = dynamic_cast<SampleHandlerPDSP*>(handler);
-        if (PDSPHandler == nullptr) {
-          MACH3LOG_ERROR("General.Data is currently implemented for PDSP samples only");
-          throw MaCh3Exception(__FILE__, __LINE__);
-        }
-        DataHist.reset(PDSPHandler->GetDataHistogramFromInputs(iSample));
-      } else {
-        const std::string Name = handler->GetSampleTitle(iSample) + "_DataHist";
-        DataHist.reset(static_cast<TH1*>(handler->GetMCHist(iSample)->Clone(Name.c_str())));
-      }
-      handler->AddData(iSample, DataHist.get());
-      MACH3LOG_INFO("Data histogram {} integral: {}",
-                    handler->GetSampleTitle(iSample), DataHist->Integral());
-    }
-  }
-
-  if (!UseData && !AsimovTune.empty()) {
-    MACH3LOG_INFO("Resetting xsec parameters to PreFitValue");
-    param_handler->SetParameters();
-  }
-
   return DUNEPdfs;
 }
 

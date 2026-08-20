@@ -14,14 +14,63 @@
 
 #include "Fitters/MaCh3Factory.h"
 #include "Samples/MaCh3DUNEFactory.h"
+#include "Samples/SampleHandlerPDSP.h"
 
 int main(int argc, char * argv[]) {
 
   auto FitManager = MaCh3ManagerFactory(argc, argv);
+  auto OutputFileName = FitManager->raw()["General"]["OutputFile"].as<std::string>();
 
   //####################################################################################
   //Create sample handler + parameter_handler objects
   auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
+
+  //Some place to store the histograms
+  std::vector<TH1*> PredictionHistograms;
+  std::vector<std::string> sample_names;
+
+  auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
+  OutputFile->cd();
+
+  const bool UseData = GetFromManager(
+      FitManager->raw()["General"]["Data"], false, __FILE__, __LINE__);
+
+  for (auto handler : samples) {
+    for (unsigned iSample = 0; iSample < handler->GetNSamples(); ++iSample) {
+
+      std::string name = handler->GetSampleTitle(iSample);
+      sample_names.push_back(name);
+      TString NameTString = TString(name.c_str());
+
+      handler->Reweight();
+      if (UseData) {
+        auto* PDSPHandler = dynamic_cast<SampleHandlerPDSP*>(handler);
+        if (PDSPHandler == nullptr) {
+          MACH3LOG_ERROR("General.Data is currently implemented for PDSP samples only");
+          throw MaCh3Exception(__FILE__, __LINE__);
+        }
+        PredictionHistograms.push_back(PDSPHandler->GetDataHistogramFromInputs(iSample));
+      } else {
+        PredictionHistograms.push_back(
+            static_cast<TH1*>(handler->GetMCHist(iSample)->Clone(NameTString+"_DataHist")));
+      }
+
+      if (handler->GetNDim(iSample) == 1){
+        handler->AddData(iSample, static_cast<TH1D*>(PredictionHistograms.back()));
+      } else if (handler->GetNDim(iSample) == 2){
+        handler->AddData(iSample, static_cast<TH2D*>(PredictionHistograms.back()));
+      }
+
+      else {
+        MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting");
+        throw MaCh3Exception(__FILE__ , __LINE__ );
+      }
+
+      MACH3LOG_INFO("Integrals of nominal hists: ");
+      MACH3LOG_INFO("{} : {}",name.c_str(),PredictionHistograms.back()->Integral());
+      MACH3LOG_INFO("--------------");
+    }
+  }
 
   //###########################################################################################################
   //MCMC
