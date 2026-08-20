@@ -93,7 +93,7 @@ TH1* SampleHandlerPDSP::GetDataHistogramFromInputs(const int Sample) const {
 // ************************************************
 void SampleHandlerPDSP::Init() {
 // ************************************************
-  MCGlobalScale = GetFromManager<double>(SampleManager->raw()["MCGlobalScale"], 1.0);
+  MCGlobalScale = GetFromManager<double>(SampleManager->raw()["MCGlobalScale"], 1.0, __FILE__, __LINE__);
   MACH3LOG_INFO("PDSP MC global scale: {}", MCGlobalScale);
 }
 

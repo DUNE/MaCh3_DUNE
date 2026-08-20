@@ -35,6 +35,10 @@ General:
     #KS: Sets how frequent (number of steps) you want to autosave your chain, if you autosave rarely chain will be slightly faster, if you job wall is small you might want more frequent autosave to reduce number of lost steps
     AutoSave: 2000
 
+    # Disable multicanonical/umbrella sampling for the standard PDSP fit.
+    Multicanonical:
+      Enabled: false
+
     # Example Delayed Rejection settings [use FittingAlgorithm=DelayedMR2T2]
     PrintSummary: False
     # Delayed rejection MCMC
