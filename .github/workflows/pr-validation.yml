@@ -60,4 +60,5 @@ jobs:
           image: mach3-ci-alma9
           options: "-v /cvmfs:/cvmfs:ro"
           run: |
+            source build/bin/setup.MaCh3DUNE.sh
             ./Docs/test_EventRates.sh
