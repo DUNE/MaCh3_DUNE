@@ -24,9 +24,6 @@ jobs:
             --file Docs/MaCh3DockerFiles/${{ matrix.os }}/Dockerfile \
             --tag mach3-ci-${{ matrix.os }} \
             --build-arg MACH3_DUNE_VERSION=${{ github.event.pull_request.head.sha }} \
-            # CK: tried to use build cache but couldn't get it working with the current setup, so disabled for now
-            # --cache-from type=gha,scope=${{ matrix.os }} \ 
-            # --cache-to type=gha,mode=max,scope=${{ matrix.os }} \
             --load \
             .
         
@@ -52,6 +49,12 @@ jobs:
             old_output: CIValidations/CIOutputs/BeamEventRates.txt
             new_output: CIValidations/CIOutputs/BeamEventRates_New.txt
 
+          - name: Full Beam Event Rate Validation
+            test_exe: EventRates
+            test_exe_args: Configs/EventRates_Beam.yaml
+            old_output: Docs/EventRates_Beam.log
+            new_output: Docs/EventRates_Beam_New.log
+
     steps:
       - uses: actions/checkout@v4
 
@@ -73,6 +76,8 @@ jobs:
           options: "-v /cvmfs:/cvmfs:ro"
           run: |
             source build/bin/setup.MaCh3DUNE.sh
+            ./Scripts/link_files.sh
+
             build/bin/${{ matrix.test_exe }} ${{ matrix.test_exe_args }} > ${{ matrix.new_output }}
 
             diff ${{matrix.old_output}} ${{matrix.new_output}} > diff_output.txt
