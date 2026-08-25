@@ -28,8 +28,8 @@ jobs:
           build-args: |
             MACH3_DUNE_VERSION=${{ github.head_ref }}
           load: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=${{ matrix.os }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.os }}
         
       - name: Save image
         run: docker save mach3-ci-${{ matrix.os }} | gzip > ${{ matrix.os }}-image.tar.gz
