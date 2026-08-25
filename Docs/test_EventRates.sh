@@ -2,7 +2,7 @@
 
 set -x
 
-./build/bin/$EventRates CIValidations/CIInputs/CIFitConfig.yaml | grep '^\['"$EventRates"'\.cpp\]' | tee CIValidations/CIOutputs/BeamEventRates_New.txt
+./build/bin/EventRates CIValidations/CIInputs/CIFitConfig.yaml | grep '^\['"EventRates"'\.cpp\]' | tee CIValidations/CIOutputs/BeamEventRates_New.txt
 
 diff CIValidations/CIOutputs/BeamEventRates.txt CIValidations/CIOutputs/BeamEventRates_New.txt > diff_output.txt
 DIFF_EXIT=$?

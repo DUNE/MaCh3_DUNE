@@ -9,50 +9,42 @@ permissions:
   packages: read
 
 jobs:
-  build-ubuntu:
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [Ubuntu22.04, Ubuntu25.10, Alma9]
+          
     steps:
       - uses: actions/checkout@v4
-      - name: Build Ubuntu image
+      - name: Build ${{ matrix.os }} image
         run: |
           docker build \
-            --file Docs/MaCh3DockerFiles/Ubuntu22.04/Dockerfile \
-            --tag mach3-ubuntu-ci \
+            --file Docs/MaCh3DockerFiles/${{matrix.os}}/Dockerfile \
+            --tag mach3-ci-${{ matrix.os }} \
             --build-arg MACH3_DUNE_VERSION="${{ github.head_ref }}" \
             .
 
       - name: Save image
-        run: docker save mach3-ubuntu-ci | gzip > ubuntu-image.tar.gz
+        run: docker save mach3-ci-${{ matrix.os }} | gzip > ${{ matrix.os }}-image.tar.gz
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ubuntu-image
-          path: ubuntu-image.tar.gz
-
-  build-alma9:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build Alma9 image
-        run: |
-          docker build \
-            --file Docs/MaCh3DockerFiles/Alma9/Dockerfile \
-            --tag mach3-alma9-ci \
-            --build-arg MACH3_DUNE_VERSION="${{ github.head_ref }}" \
-            .
+          name: ${{ matrix.os }}-image
+          path: ${{ matrix.os }}-image.tar.gz
 
   ci-validations:
     runs-on: ubuntu-latest
-    needs: build-ubuntu
+    needs: build
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/download-artifact@v4
         with:
-          name: ubuntu-image
+          name: Alma9-image
 
       - name: Load image
-        run: gunzip -c ubuntu-image.tar.gz | docker load
+        run: gunzip -c Alma9-image.tar.gz | docker load
 
       - name: Mount CVMFS
         uses: cvmfs-contrib/github-action-cvmfs@v4
@@ -63,5 +55,5 @@ jobs:
         run: |
           docker run --rm \
             -v /cvmfs:/cvmfs:ro \
-            mach3-ubuntu-ci \
+            mach3-ci-Alma9 \
             ./Docs/test_EventRates.sh
