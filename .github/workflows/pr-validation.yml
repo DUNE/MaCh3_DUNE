@@ -52,8 +52,8 @@ jobs:
           - name: Full Beam Event Rate Validation
             test_exe: EventRates
             test_exe_args: Configs/EventRates_Beam.yaml
-            old_output: Docs/EventRates_Beam.log
-            new_output: Docs/EventRates_Beam_New.log
+            old_output: Docs/EventRates_Beam_downsamplingStep_10.log.log
+            new_output: Docs/EventRates_Beam_downsamplingStep_10_New.log.log
 
     steps:
       - uses: actions/checkout@v4
@@ -77,6 +77,7 @@ jobs:
           run: |
             source build/bin/setup.MaCh3DUNE.sh
             ./Scripts/link_files.sh
+            sed -i 's/DownsamplingStep: 1/DownsamplingStep: 10/g' Configs/Samples/SamplerHandler*.yaml
 
             build/bin/${{ matrix.test_exe }} ${{ matrix.test_exe_args }} > ${{ matrix.new_output }}
 
