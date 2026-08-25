@@ -19,17 +19,15 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build ${{ matrix.os }} image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: Docs/MaCh3DockerFiles/${{matrix.os}}/Dockerfile
-          push: false
-          tags: mach3-ci-${{ matrix.os }}
-          build-args: |
-            MACH3_DUNE_VERSION=${{ github.head_ref }}
-          load: true
-          cache-from: type=gha,scope=${{ matrix.os }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.os }}
+        run: |
+          docker buildx build \
+            --file Docs/MaCh3DockerFiles/${{ matrix.os }}/Dockerfile \
+            --tag mach3-ci-${{ matrix.os }} \
+            --build-arg MACH3_DUNE_VERSION=${{ github.head_ref }} \
+            --cache-from type=gha,scope=${{ matrix.os }} \
+            --cache-to type=gha,mode=max,scope=${{ matrix.os }} \
+            --load \
+            .
         
       - name: Save image
         run: docker save mach3-ci-${{ matrix.os }} | gzip > ${{ matrix.os }}-image.tar.gz
