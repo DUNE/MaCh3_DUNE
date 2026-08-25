@@ -1,19 +1,18 @@
-FROM rootproject/root:6.30.02-alma9 AS mach3_build
+FROM rootproject/root:6.38.00-ubuntu25.10 AS mach3_dune_build
 
 LABEL maintainer="The MaCh3 Collaboration"
-LABEL website="https://mach3-software.github.io/MaCh3/"
-LABEL compiler="GNU 11.4.1"
-LABEL root_version="v6.30.02"
-LABEL org.opencontainers.image.description="Official MaCh3 container"
+LABEL website="https://dune.github.io/MaCh3_DUNE/"
+LABEL compiler="GNU 15.2.0"
+LABEL root_version="v6.38.00"
+LABEL org.opencontainers.image.description="Official MaCh3 DUNE container"
 
 # install required packages
-RUN git clone https://github.com/dpiparo/vdt.git /opt/vdt && \
-    cd /opt/vdt && \
-    cmake . && make install
+RUN apt update && apt upgrade -y
+RUN apt install -y --no-install-recommends nlohmann-json3-dev
 
 # install some common packages, can install more on demand
-RUN dnf install -y \
-    vim nano
+RUN apt install -y --no-install-recommends \
+   vim nano    
 
 # --- MaCh3 DUNE build ---
 
