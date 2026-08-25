@@ -1,0 +1,62 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches: [develop]
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  build-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Ubuntu image
+        run: |
+          docker build \
+            --file Docs/MaCh3DockerFiles/Ubuntu22.04/Dockerfile \
+            --tag mach3-ubuntu-ci \
+            --build-arg MACH3_DUNE_VERSION="${{ github.head_ref }}" \
+            .
+
+      - name: Save image
+        run: docker save mach3-ubuntu-ci | gzip > ubuntu-image.tar.gz
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ubuntu-image
+          path: ubuntu-image.tar.gz
+
+  build-alma9:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Alma9 image
+        run: |
+          docker build \
+            --file Docs/MaCh3DockerFiles/Alma9/Dockerfile \
+            --tag mach3-alma9-ci \
+            --build-arg MACH3_DUNE_VERSION="${{ github.head_ref }}" \
+            .
+
+  ci-validations:
+    runs-on: ubuntu-latest
+    needs: build-ubuntu
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: ubuntu-image
+
+      - name: Load image
+        run: gunzip -c ubuntu-image.tar.gz | docker load
+
+      - name: Run validations
+        run: |
+          docker run --rm \
+            -v /cvmfs:/cvmfs:ro \
+            mach3-ubuntu-ci \
+            bash -lc './run-ci-validations.sh'
