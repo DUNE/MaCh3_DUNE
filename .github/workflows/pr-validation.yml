@@ -23,7 +23,7 @@ jobs:
           docker buildx build \
             --file Docs/MaCh3DockerFiles/${{ matrix.os }}/Dockerfile \
             --tag mach3-ci-${{ matrix.os }} \
-            --build-arg MACH3_DUNE_VERSION=${{ github.head_ref }} \
+            --build-arg MACH3_DUNE_VERSION=${{ github.sha }} \
             --cache-from type=gha,scope=${{ matrix.os }} \
             --cache-to type=gha,mode=max,scope=${{ matrix.os }} \
             --load \
