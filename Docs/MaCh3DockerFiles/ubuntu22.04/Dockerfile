@@ -26,9 +26,9 @@ ENV MACH3_DUNE_INSTALL_DIR=${MACH3_DUNE_WORK_DIR}/build
 ARG MACH3_DUNE_BUILD_ARGS
 
 RUN git clone https://github.com/DUNE/MaCh3_DUNE.git ${MACH3_DUNE_WORK_DIR} && \
+    cd ${MACH3_DUNE_WORK_DIR} && \
     git fetch origin ${MACH3_DUNE_VERSION} && \
     git checkout ${MACH3_DUNE_VERSION} && \
-    cd ${MACH3_DUNE_WORK_DIR} && \
     mkdir -p ${MACH3_DUNE_INSTALL_DIR} && \
     cd ${MACH3_DUNE_INSTALL_DIR} && \
     cmake ../ ${MACH3_DUNE_BUILD_ARGS} && \
