@@ -16,15 +16,19 @@ jobs:
         os: [ubuntu22.04, ubuntu25.10, alma9]
           
     steps:
-      - uses: actions/checkout@v4
       - name: Build ${{ matrix.os }} image
-        run: |
-          docker build \
-            --file Docs/MaCh3DockerFiles/${{matrix.os}}/Dockerfile \
-            --tag mach3-ci-${{ matrix.os }} \
-            --build-arg MACH3_DUNE_VERSION="${{ github.head_ref }}" \
-            .
-
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Docs/MaCh3DockerFiles/${{matrix.os}}/Dockerfile
+          push: false
+          tags: mach3-ci-${{ matrix.os }}
+          build-args: |
+            MACH3_DUNE_VERSION=${{ github.head_ref }}
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+        
       - name: Save image
         run: docker save mach3-ci-${{ matrix.os }} | gzip > ${{ matrix.os }}-image.tar.gz
 
@@ -44,7 +48,7 @@ jobs:
           name: Alma9-image
 
       - name: Load image
-        run: gunzip -c Alma9-image.tar.gz | docker load
+        run: gunzip -c alma9-image.tar.gz | docker load
 
       - name: Mount CVMFS
         uses: cvmfs-contrib/github-action-cvmfs@v4
