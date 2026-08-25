@@ -55,9 +55,9 @@ jobs:
         with:
           cvmfs_repositories: dune.osgstorage.org
 
-      - name: Run validations
-        run: |
-          docker run --rm \
-            -v /cvmfs:/cvmfs:ro \
-            mach3-ci-alma9 \
+      - uses: addnab/docker-run-action@v3
+        with:
+          image: mach3-ci-alma9
+          options: "-v /cvmfs:/cvmfs:ro"
+          run: |
             ./Docs/test_EventRates.sh
