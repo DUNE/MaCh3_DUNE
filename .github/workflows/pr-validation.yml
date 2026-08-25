@@ -54,9 +54,14 @@ jobs:
       - name: Load image
         run: gunzip -c ubuntu-image.tar.gz | docker load
 
+      - name: Mount CVMFS
+        uses: cvmfs-contrib/github-action-cvmfs@v4
+        with:
+          cvmfs_repositories: dune.osgstorage.org
+
       - name: Run validations
         run: |
           docker run --rm \
             -v /cvmfs:/cvmfs:ro \
             mach3-ubuntu-ci \
-            bash -lc './run-ci-validations.sh'
+            bash  'Docs/test_EventRates.sh'
