@@ -64,4 +64,4 @@ jobs:
           docker run --rm \
             -v /cvmfs:/cvmfs:ro \
             mach3-ubuntu-ci \
-            bash  'Docs/test_EventRates.sh'
+            bash ../Docs/test_EventRates.sh
