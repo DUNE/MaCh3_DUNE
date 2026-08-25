@@ -11,6 +11,9 @@ RUN git clone https://github.com/dpiparo/vdt.git /opt/vdt && \
     cd /opt/vdt && \
     cmake . && make install
 
+RUN dnf install -y \
+    diffutils
+
 # install some common packages, can install more on demand
 RUN dnf install -y \
     vim nano
