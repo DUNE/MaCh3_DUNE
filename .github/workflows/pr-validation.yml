@@ -77,7 +77,7 @@ jobs:
           run: |
             source build/bin/setup.MaCh3DUNE.sh
             ./Scripts/link_files.sh
-            sed -i 's/DownsamplingStep: 1/DownsamplingStep: 10/g' Configs/Samples/SamplerHandler*.yaml
+            sed -i 's/DownsamplingStep: 1/DownsamplingStep: 10/g' Configs/Samples/SampleHandler*.yaml
 
             build/bin/${{ matrix.test_exe }} ${{ matrix.test_exe_args }} > ${{ matrix.new_output }}
 
