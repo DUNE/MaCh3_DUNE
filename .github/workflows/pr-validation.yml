@@ -72,7 +72,10 @@ jobs:
           cvmfs_repositories: dune.osgstorage.org
 
       - name: test CVMFS Mount
-        run: ls /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v3/
+        run: |
+          ls /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v3/
+          DUNE_2023_FD_CAFs
+
 
       - uses: addnab/docker-run-action@v3
         with:
@@ -88,7 +91,8 @@ jobs:
 
             sed -i 's/DownsamplingStep: 1/DownsamplingStep: 10/g' Configs/Samples/SampleHandler*.yaml
 
-            build/bin/${{ matrix.test_exe }} ${{ matrix.test_exe_args }} } | grep '^\['"${{matrix.test_exe}}"'\.cpp\]' | tee ${{matrix.new_output}}
+            build/bin/${{ matrix.test_exe }} ${{ matrix.test_exe_args }} } > full_output.txt 
+            cat full_output.txt | grep '^\['"${{matrix.test_exe}}"'\.cpp\]' > ${{matrix.new_output}}
 
             diff ${{matrix.old_output}} ${{matrix.new_output}} > diff_output.txt
             DIFF_EXIT=$?
