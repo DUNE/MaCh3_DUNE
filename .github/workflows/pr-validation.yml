@@ -88,7 +88,7 @@ jobs:
 
             sed -i 's/DownsamplingStep: 1/DownsamplingStep: 10/g' Configs/Samples/SampleHandler*.yaml
 
-            build/bin/${{ matrix.test_exe }} ${{ matrix.test_exe_args }} > ${{ matrix.new_output }}
+            build/bin/${{ matrix.test_exe }} ${{ matrix.test_exe_args }} } | grep '^\['"${{matrix.test_exe}}"'\.cpp\]' | tee ${{matrix.new_output}}
 
             diff ${{matrix.old_output}} ${{matrix.new_output}} > diff_output.txt
             DIFF_EXIT=$?
