@@ -1,0 +1,254 @@
+[EventRates.cpp][info] Event rate for BeamFD_FHC_numu : 8263.78
+[EventRates.cpp][info] Event rate for BeamFD_FHC_nue : 1776.70
+[EventRates.cpp][info] Event rate for BeamFD_RHC_numu : 4363.52
+[EventRates.cpp][info] Event rate for BeamFD_RHC_nue : 492.04
+[EventRates.cpp][info] Event rate for BeamND_FHC_CCnumu : 68216783.24
+[EventRates.cpp][info] Event rate for BeamND_RHC_CCnumu : 27773916.19
+[EventRates.cpp][info] ========================================================================
+[EventRates.cpp][info] ========================================================================
+[EventRates.cpp][info] Oscillation Mode Breakdown:
+[EventRates.cpp][info] ======================
+[EventRates.cpp][info] BeamFD_FHC_numu      : FHC_numu_x_numu      : 7622.13             
+[EventRates.cpp][info] BeamFD_FHC_numu      : FHC_nue_x_nue        : 8.49                
+[EventRates.cpp][info] BeamFD_FHC_numu      : FHC_numubar_x_numubar : 558.85              
+[EventRates.cpp][info] BeamFD_FHC_numu      : FHC_nuebar_x_nuebar  : 0.84                
+[EventRates.cpp][info] BeamFD_FHC_numu      : FHC_numu_x_nue       : 7.63                
+[EventRates.cpp][info] BeamFD_FHC_numu      : FHC_numubar_x_nuebar : 0.05                
+[EventRates.cpp][info] BeamFD_FHC_numu      : FHC_nue_x_numu       : 8.67                
+[EventRates.cpp][info] BeamFD_FHC_numu      : FHC_nuebar_x_numubar : 0.68                
+[EventRates.cpp][info] BeamFD_FHC_numu      : FHC_numu_x_nutau     : 49.90               
+[EventRates.cpp][info] BeamFD_FHC_numu      : FHC_nue_x_nutau      : 0.14                
+[EventRates.cpp][info] BeamFD_FHC_numu      : FHC_numubar_x_nutaubar : 6.40                
+[EventRates.cpp][info] BeamFD_FHC_numu      : FHC_nuebar_x_nutaubar : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : 8263.78             
+[EventRates.cpp][info] ======================
+[EventRates.cpp][info] BeamFD_FHC_nue       : FHC_numu_x_numu      : 90.67               
+[EventRates.cpp][info] BeamFD_FHC_nue       : FHC_nue_x_nue        : 220.52              
+[EventRates.cpp][info] BeamFD_FHC_nue       : FHC_numubar_x_numubar : 6.99                
+[EventRates.cpp][info] BeamFD_FHC_nue       : FHC_nuebar_x_nuebar  : 33.20               
+[EventRates.cpp][info] BeamFD_FHC_nue       : FHC_numu_x_nue       : 1370.63             
+[EventRates.cpp][info] BeamFD_FHC_nue       : FHC_numubar_x_nuebar : 14.11               
+[EventRates.cpp][info] BeamFD_FHC_nue       : FHC_nue_x_numu       : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : FHC_nuebar_x_numubar : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : FHC_numu_x_nutau     : 35.37               
+[EventRates.cpp][info] BeamFD_FHC_nue       : FHC_nue_x_nutau      : 0.10                
+[EventRates.cpp][info] BeamFD_FHC_nue       : FHC_numubar_x_nutaubar : 5.11                
+[EventRates.cpp][info] BeamFD_FHC_nue       : FHC_nuebar_x_nutaubar : 0.01                
+[EventRates.cpp][info] BeamFD_FHC_nue       : 1776.70             
+[EventRates.cpp][info] ======================
+[EventRates.cpp][info] BeamFD_RHC_numu      : RHC_numu_x_numu      : 1607.55             
+[EventRates.cpp][info] BeamFD_RHC_numu      : RHC_nue_x_nue        : 3.33                
+[EventRates.cpp][info] BeamFD_RHC_numu      : RHC_numubar_x_numubar : 2712.35             
+[EventRates.cpp][info] BeamFD_RHC_numu      : RHC_nuebar_x_nuebar  : 0.83                
+[EventRates.cpp][info] BeamFD_RHC_numu      : RHC_numu_x_nue       : 0.61                
+[EventRates.cpp][info] BeamFD_RHC_numu      : RHC_numubar_x_nuebar : 0.36                
+[EventRates.cpp][info] BeamFD_RHC_numu      : RHC_nue_x_numu       : 2.43                
+[EventRates.cpp][info] BeamFD_RHC_numu      : RHC_nuebar_x_numubar : 1.92                
+[EventRates.cpp][info] BeamFD_RHC_numu      : RHC_numu_x_nutau     : 18.03               
+[EventRates.cpp][info] BeamFD_RHC_numu      : RHC_nue_x_nutau      : 0.05                
+[EventRates.cpp][info] BeamFD_RHC_numu      : RHC_numubar_x_nutaubar : 16.04               
+[EventRates.cpp][info] BeamFD_RHC_numu      : RHC_nuebar_x_nutaubar : 0.02                
+[EventRates.cpp][info] BeamFD_RHC_numu      : 4363.52             
+[EventRates.cpp][info] ======================
+[EventRates.cpp][info] BeamFD_RHC_nue       : RHC_numu_x_numu      : 23.66               
+[EventRates.cpp][info] BeamFD_RHC_nue       : RHC_nue_x_nue        : 70.60               
+[EventRates.cpp][info] BeamFD_RHC_nue       : RHC_numubar_x_numubar : 24.53               
+[EventRates.cpp][info] BeamFD_RHC_nue       : RHC_nuebar_x_nuebar  : 77.62               
+[EventRates.cpp][info] BeamFD_RHC_nue       : RHC_numu_x_nue       : 91.57               
+[EventRates.cpp][info] BeamFD_RHC_nue       : RHC_numubar_x_nuebar : 180.21              
+[EventRates.cpp][info] BeamFD_RHC_nue       : RHC_nue_x_numu       : 0.01                
+[EventRates.cpp][info] BeamFD_RHC_nue       : RHC_nuebar_x_numubar : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : RHC_numu_x_nutau     : 11.68               
+[EventRates.cpp][info] BeamFD_RHC_nue       : RHC_nue_x_nutau      : 0.06                
+[EventRates.cpp][info] BeamFD_RHC_nue       : RHC_numubar_x_nutaubar : 12.09               
+[EventRates.cpp][info] BeamFD_RHC_nue       : RHC_nuebar_x_nutaubar : 0.01                
+[EventRates.cpp][info] BeamFD_RHC_nue       : 492.04              
+[EventRates.cpp][info] ======================
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : FHC_numu_x_numu      : 67998161.88         
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : FHC_nue_x_nue        : 12772.70            
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : FHC_numubar_x_numubar : 203524.51           
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : FHC_nuebar_x_nuebar  : 2324.15             
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : 68216783.24         
+[EventRates.cpp][info] ======================
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : RHC_numu_x_numu      : 232978.02           
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : RHC_nue_x_nue        : 2104.67             
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : RHC_numubar_x_numubar : 27536831.51         
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : RHC_nuebar_x_nuebar  : 2002.00             
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : 27773916.19         
+[EventRates.cpp][info] ========================================================================
+[EventRates.cpp][info] ========================================================================
+[EventRates.cpp][info] Interaction Mode Breakdown:
+[EventRates.cpp][info] ======================
+[EventRates.cpp][info] BeamFD_FHC_numu      : CCQE                 : 2132.31             
+[EventRates.cpp][info] BeamFD_FHC_numu      : CC1Kaon              : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : CCDIS                : 2878.17             
+[EventRates.cpp][info] BeamFD_FHC_numu      : CCRES                : 2415.25             
+[EventRates.cpp][info] BeamFD_FHC_numu      : CCCOH                : 52.48               
+[EventRates.cpp][info] BeamFD_FHC_numu      : CCDiff               : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : CCNuEl               : 0.80                
+[EventRates.cpp][info] BeamFD_FHC_numu      : CCIMD                : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : CCAnuGam             : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : CCMEC                : 583.90              
+[EventRates.cpp][info] BeamFD_FHC_numu      : CCCOHEL              : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : CCIBD                : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : CCGlRES              : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : CCIMDAnn             : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : NCQE                 : 0.84                
+[EventRates.cpp][info] BeamFD_FHC_numu      : NCDIS                : 164.89              
+[EventRates.cpp][info] BeamFD_FHC_numu      : NCRES                : 35.15               
+[EventRates.cpp][info] BeamFD_FHC_numu      : NCCOH                : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : NCDiff               : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : NCNuEl               : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : NCIMD                : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : NCAnuGam             : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : NCMEC                : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : NCCOHEL              : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : NCIBD                : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : NCGlRES              : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : NCIMDAnn             : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_numu      : 8263.78             
+[EventRates.cpp][info] ======================
+[EventRates.cpp][info] BeamFD_FHC_nue       : CCQE                 : 454.52              
+[EventRates.cpp][info] BeamFD_FHC_nue       : CC1Kaon              : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : CCDIS                : 506.36              
+[EventRates.cpp][info] BeamFD_FHC_nue       : CCRES                : 593.82              
+[EventRates.cpp][info] BeamFD_FHC_nue       : CCCOH                : 13.91               
+[EventRates.cpp][info] BeamFD_FHC_nue       : CCDiff               : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : CCNuEl               : 0.49                
+[EventRates.cpp][info] BeamFD_FHC_nue       : CCIMD                : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : CCAnuGam             : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : CCMEC                : 123.89              
+[EventRates.cpp][info] BeamFD_FHC_nue       : CCCOHEL              : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : CCIBD                : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : CCGlRES              : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : CCIMDAnn             : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : NCQE                 : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : NCDIS                : 69.47               
+[EventRates.cpp][info] BeamFD_FHC_nue       : NCRES                : 9.21                
+[EventRates.cpp][info] BeamFD_FHC_nue       : NCCOH                : 1.67                
+[EventRates.cpp][info] BeamFD_FHC_nue       : NCDiff               : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : NCNuEl               : 3.35                
+[EventRates.cpp][info] BeamFD_FHC_nue       : NCIMD                : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : NCAnuGam             : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : NCMEC                : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : NCCOHEL              : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : NCIBD                : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : NCGlRES              : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : NCIMDAnn             : 0.00                
+[EventRates.cpp][info] BeamFD_FHC_nue       : 1776.70             
+[EventRates.cpp][info] ======================
+[EventRates.cpp][info] BeamFD_RHC_numu      : CCQE                 : 945.37              
+[EventRates.cpp][info] BeamFD_RHC_numu      : CC1Kaon              : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : CCDIS                : 1677.35             
+[EventRates.cpp][info] BeamFD_RHC_numu      : CCRES                : 1270.67             
+[EventRates.cpp][info] BeamFD_RHC_numu      : CCCOH                : 43.75               
+[EventRates.cpp][info] BeamFD_RHC_numu      : CCDiff               : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : CCNuEl               : 0.41                
+[EventRates.cpp][info] BeamFD_RHC_numu      : CCIMD                : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : CCAnuGam             : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : CCMEC                : 318.64              
+[EventRates.cpp][info] BeamFD_RHC_numu      : CCCOHEL              : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : CCIBD                : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : CCGlRES              : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : CCIMDAnn             : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : NCQE                 : 0.42                
+[EventRates.cpp][info] BeamFD_RHC_numu      : NCDIS                : 84.45               
+[EventRates.cpp][info] BeamFD_RHC_numu      : NCRES                : 22.46               
+[EventRates.cpp][info] BeamFD_RHC_numu      : NCCOH                : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : NCDiff               : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : NCNuEl               : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : NCIMD                : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : NCAnuGam             : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : NCMEC                : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : NCCOHEL              : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : NCIBD                : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : NCGlRES              : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : NCIMDAnn             : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_numu      : 4363.52             
+[EventRates.cpp][info] ======================
+[EventRates.cpp][info] BeamFD_RHC_nue       : CCQE                 : 111.44              
+[EventRates.cpp][info] BeamFD_RHC_nue       : CC1Kaon              : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : CCDIS                : 143.49              
+[EventRates.cpp][info] BeamFD_RHC_nue       : CCRES                : 154.17              
+[EventRates.cpp][info] BeamFD_RHC_nue       : CCCOH                : 7.85                
+[EventRates.cpp][info] BeamFD_RHC_nue       : CCDiff               : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : CCNuEl               : 0.05                
+[EventRates.cpp][info] BeamFD_RHC_nue       : CCIMD                : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : CCAnuGam             : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : CCMEC                : 35.52               
+[EventRates.cpp][info] BeamFD_RHC_nue       : CCCOHEL              : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : CCIBD                : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : CCGlRES              : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : CCIMDAnn             : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : NCQE                 : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : NCDIS                : 34.11               
+[EventRates.cpp][info] BeamFD_RHC_nue       : NCRES                : 2.50                
+[EventRates.cpp][info] BeamFD_RHC_nue       : NCCOH                : 1.25                
+[EventRates.cpp][info] BeamFD_RHC_nue       : NCDiff               : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : NCNuEl               : 1.66                
+[EventRates.cpp][info] BeamFD_RHC_nue       : NCIMD                : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : NCAnuGam             : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : NCMEC                : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : NCCOHEL              : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : NCIBD                : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : NCGlRES              : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : NCIMDAnn             : 0.00                
+[EventRates.cpp][info] BeamFD_RHC_nue       : 492.04              
+[EventRates.cpp][info] ======================
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : CCQE                 : 20424358.56         
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : CC1Kaon              : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : CCDIS                : 15190341.72         
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : CCRES                : 24499843.85         
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : CCCOH                : 561291.60           
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : CCDiff               : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : CCNuEl               : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : CCIMD                : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : CCAnuGam             : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : CCMEC                : 6511411.02          
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : CCCOHEL              : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : CCIBD                : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : CCGlRES              : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : CCIMDAnn             : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : NCQE                 : 7497.90             
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : NCDIS                : 626468.77           
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : NCRES                : 395569.82           
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : NCCOH                : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : NCDiff               : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : NCNuEl               : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : NCIMD                : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : NCAnuGam             : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : NCMEC                : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : NCCOHEL              : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : NCIBD                : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : NCGlRES              : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : NCIMDAnn             : 0.00                
+[EventRates.cpp][info] BeamND_FHC_CCnumu    : 68216783.24         
+[EventRates.cpp][info] ======================
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : CCQE                 : 8139352.52          
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : CC1Kaon              : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : CCDIS                : 4809882.00          
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : CCRES                : 11002299.01         
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : CCCOH                : 469058.33           
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : CCDiff               : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : CCNuEl               : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : CCIMD                : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : CCAnuGam             : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : CCMEC                : 3151045.33          
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : CCCOHEL              : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : CCIBD                : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : CCGlRES              : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : CCIMDAnn             : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : NCQE                 : 1129.33             
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : NCDIS                : 115962.00           
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : NCRES                : 85187.67            
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : NCCOH                : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : NCDiff               : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : NCNuEl               : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : NCIMD                : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : NCAnuGam             : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : NCMEC                : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : NCCOHEL              : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : NCIBD                : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : NCGlRES              : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : NCIMDAnn             : 0.00                
+[EventRates.cpp][info] BeamND_RHC_CCnumu    : 27773916.19         
