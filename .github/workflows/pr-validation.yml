@@ -53,8 +53,8 @@ jobs:
           - name: Full Beam Event Rate Validation
             test_exe: EventRates
             test_exe_args: Configs/EventRates_Beam.yaml
-            old_output: Docs/EventRates_Beam_downsamplingStep_10.log.log
-            new_output: Docs/EventRates_Beam_downsamplingStep_10_New.log.log
+            old_output: Docs/EventRates_Beam_downsamplingStep_10.log
+            new_output: Docs/EventRates_Beam_downsamplingStep_10_New.log
 
     steps:
       - uses: actions/checkout@v4
