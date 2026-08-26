@@ -74,7 +74,7 @@ jobs:
       - name: test CVMFS Mount
         run: |
           ls /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v3/
-          DUNE_2023_FD_CAFs
+          ls /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v3/DUNE_2023_FD_CAFs/
 
 
       - uses: addnab/docker-run-action@v3
