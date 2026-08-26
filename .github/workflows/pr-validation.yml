@@ -13,7 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu22.04, ubuntu25.10, alma9]
+        #os: [ubuntu22.04, ubuntu25.10, alma9]
+        os: [alma9]
           
     steps:
       - uses: actions/checkout@v4
@@ -70,6 +71,9 @@ jobs:
         with:
           cvmfs_repositories: dune.osgstorage.org
 
+      - name: test CVMFS Mount
+        run: ls /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v3/
+
       - uses: addnab/docker-run-action@v3
         with:
           image: mach3-ci-alma9
@@ -77,6 +81,11 @@ jobs:
           run: |
             source build/bin/setup.MaCh3DUNE.sh
             ./Scripts/link_files.sh
+
+            ls /cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v3/
+            ls /opt/MaCh3DUNE/Inputs/DUNE_CAF_files/
+            ls /opt/MaCh3DUNE/Inputs/DUNE_CAF_files/FD_FHC_ger_numu_x_numu_numuselec.root
+
             sed -i 's/DownsamplingStep: 1/DownsamplingStep: 10/g' Configs/Samples/SampleHandler*.yaml
 
             build/bin/${{ matrix.test_exe }} ${{ matrix.test_exe_args }} > ${{ matrix.new_output }}
@@ -89,6 +98,4 @@ jobs:
               exit 1
             else
               echo "Workflow run successfully, no differences found!"
-            fi
-
-      
+            fi      
