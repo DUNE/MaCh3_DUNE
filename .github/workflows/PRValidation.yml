@@ -1,3 +1,4 @@
+---
 name: PR Validation
 
 on:
@@ -14,7 +15,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu22.04, ubuntu25.10, alma9]
-          
+
     steps:
       - uses: actions/checkout@v4
 
@@ -26,7 +27,7 @@ jobs:
             --build-arg MACH3_DUNE_VERSION=${{ github.event.pull_request.head.sha }} \
             --load \
             .
-        
+
       - name: Save image
         run: docker save mach3-ci-${{ matrix.os }} | gzip > ${{ matrix.os }}-image.tar.gz
 
@@ -103,4 +104,4 @@ jobs:
               exit 1
             else
               echo "Workflow run successfully, no differences found!"
-            fi      
+            fi
