@@ -3,7 +3,7 @@
 # A script to link required files to the proper place i.e. where the sample config files will look for them
 
 MACH3DIR=`pwd`
-FILESDIR=/vols/dune/LibanDUNEInputs/
+FILESDIR=/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v3/
 NDGAR_FILESDIR=/vols/dune/jmm224/data
 
 if [ ! -d "$MACH3DIR/Inputs/DUNE_CAF_files" ]
