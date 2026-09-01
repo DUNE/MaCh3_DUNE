@@ -5,11 +5,13 @@
 #include "Samples/SampleHandlerBeamND.h"
 #include "Samples/SampleHandlerBeamNDGAr.h"
 #include "Samples/SampleHandlerAtm.h"
+#include "Samples/SampleHandlerPDSP.h"
 
 // ###############################################################
 SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, std::unique_ptr<ParameterHandlerGeneric>& param_handler, const std::shared_ptr<OscillationHandler>&  BeamOscillator_, const std::shared_ptr<OscillationHandler>&  AtmOscillator_, BeamNDCov beamNDCov) {
 // ###############################################################
   SampleHandlerBase *Sample;
+
   if (SampleType == "BeamFD") {
     Sample = new SampleHandlerBeamFD(SampleConfig, param_handler.get(), BeamOscillator_);
   } else if (SampleType == "BeamND") {
@@ -23,6 +25,8 @@ SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string Samp
     Sample = new SampleHandlerAtm(SampleConfig, param_handler.get(), AtmOscillator_);
   } else if (SampleType == "BeamNDGAr") {
     Sample = new SampleHandlerBeamNDGAr(SampleConfig, param_handler.get());
+  } else if (SampleType == "PDSP") {
+    Sample = new SampleHandlerPDSP(SampleConfig, param_handler.get());
   }
   else {
     MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);

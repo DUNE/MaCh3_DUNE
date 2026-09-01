@@ -42,6 +42,10 @@ source build/bin/setup.MaCh3DUNE.sh
 
 This sets everything needed, and needs to be re-sourced on each terminal session when using MaCh3 (Along with any dependancies)
 
+## Analysis Workflows
+
+- [PDSP analysis workflow](Docs/PDSP.md): fitting, processing MCMC outputs, predictive checks, generator consistency checks, and fit-performance scans.
+
 ## Event Rates
 
 Once you've got setup you'll then need to setup some symlinks to point to your MC and spline files. You can do this by modifying `scripts/link_files.sh` script. You'll need to change the FILESDIR variable to point to the relevant folder on your machine. The places these files currently live are listed here:

@@ -14,6 +14,7 @@
 
 #include "Fitters/MaCh3Factory.h"
 #include "Samples/MaCh3DUNEFactory.h"
+#include "Samples/SampleHandlerPDSP.h"
 
 int main(int argc, char * argv[]) {
 
@@ -31,6 +32,9 @@ int main(int argc, char * argv[]) {
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
 
+  const bool UseData = GetFromManager(
+      FitManager->raw()["General"]["Data"], false, __FILE__, __LINE__);
+
   for (auto handler : samples) {
     for (unsigned iSample = 0; iSample < handler->GetNSamples(); ++iSample) {
 
@@ -39,7 +43,17 @@ int main(int argc, char * argv[]) {
       TString NameTString = TString(name.c_str());
 
       handler->Reweight();
-      PredictionHistograms.push_back(static_cast<TH1*>(handler->GetMCHist(iSample)->Clone(NameTString+"_DataHist")));
+      if (UseData) {
+        auto* PDSPHandler = dynamic_cast<SampleHandlerPDSP*>(handler);
+        if (PDSPHandler == nullptr) {
+          MACH3LOG_ERROR("General.Data is currently implemented for PDSP samples only");
+          throw MaCh3Exception(__FILE__, __LINE__);
+        }
+        PredictionHistograms.push_back(PDSPHandler->GetDataHistogramFromInputs(iSample));
+      } else {
+        PredictionHistograms.push_back(
+            static_cast<TH1*>(handler->GetMCHist(iSample)->Clone(NameTString+"_DataHist")));
+      }
 
       if (handler->GetNDim(iSample) == 1){
         handler->AddData(iSample, static_cast<TH1D*>(PredictionHistograms.back()));
