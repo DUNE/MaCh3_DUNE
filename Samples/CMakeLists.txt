@@ -10,6 +10,7 @@ set(SOURCE_FILES
   SampleHandlerBeamFD.cpp
   SampleHandlerBeamND.cpp
   SampleHandlerBeamNDGAr.cpp
+  SampleHandlerPDSP.cpp
   MaCh3DUNEFactory.cpp
 )
 
