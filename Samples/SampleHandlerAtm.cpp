@@ -38,6 +38,13 @@ void SampleHandlerAtm::Init() {
     fInputSplines = "";
   }
 
+  // Detector systematic ratio configuration (optional)
+  if (SampleManager->raw()["AnalysisOptions"]["InputSystRatios"]) {
+    fInputSystRatios = Get<std::string>(SampleManager->raw()["AnalysisOptions"]["InputSystRatios"],__FILE__, __LINE__);
+  } else {
+    fInputSystRatios = "";
+  }
+
   //DB Value used to determine selection criteria for FC and PC separation in function of 'walldist' variable
   FCPCSeparation = Get<double>(SampleManager->raw()["AnalysisOptions"]["FCPCSeparation"],__FILE__,__LINE__);
 
@@ -105,6 +112,34 @@ void SampleHandlerAtm::SetupSplines() {
   return;
 }
 
+
+void SampleHandlerAtm::RegisterFunctionalParameters() {
+  if (!ParHandler) {
+    return;
+  }
+
+  std::vector<std::string> det_syst_param_names;
+  det_syst_param_names.reserve(det_syst_ratios.size());
+
+  for (const auto& det_syst : det_syst_ratios) {
+    det_syst_param_names.push_back(det_syst.parameter_name);
+  }
+
+  if (!det_syst_param_names.empty()) {
+    RegisterIndividualFunctionalParameter(
+        dunemcSamples, det_syst_param_names,
+        [](std::vector<double> const &par_vals, dunemc_atm &ev) {
+          ev.total_det_sys_weight = 1.0;
+
+          for (size_t i = 0; i < par_vals.size(); ++i) {
+            ev.total_det_sys_weight *=
+                1 + (par_vals[i] *
+                     (ev.det_sys_1sigweights[i] - 1));
+          }
+        });
+  }
+}
+
 void SampleHandlerAtm::InitialiseSplineObjectPerEvent(){
   auto SplineHandlerDUNE = dynamic_cast<MonolithSplineHandlerDUNE*>(SplineHandler.get());
   if (!SplineHandlerDUNE){
@@ -116,14 +151,102 @@ void SampleHandlerAtm::InitialiseSplineObjectPerEvent(){
   }
 }
 
+
+void SampleHandlerAtm::get_syst_ratios(){
+   if (fInputSystRatios.empty()) {
+     MACH3LOG_INFO("No detector systematic ratio file specified");
+     return;
+   }
+
+   TFile input_file(fInputSystRatios.c_str(), "READ");
+
+   if (input_file.IsZombie()) {
+     MACH3LOG_ERROR(
+         "Could not open detector systematic ratio file: {}",
+         fInputSystRatios);
+     throw MaCh3Exception(__FILE__, __LINE__);
+   }
+
+   // load histogram in file
+   auto get_ratio = [&](const std::string& name) -> std::unique_ptr<TH1> {
+
+     TH1* hist = nullptr;
+     input_file.GetObject(name.c_str(), hist);
+
+     if (!hist) {
+       MACH3LOG_ERROR(
+           "Could not find detector systematic ratio histogram: {}",
+           name);
+       throw MaCh3Exception(__FILE__, __LINE__);
+     }
+
+     auto cloned = static_cast<TH1*>(hist->Clone());
+     cloned->SetDirectory(nullptr);
+
+     return std::unique_ptr<TH1>(cloned);
+   };
+   const YAML::Node systematics =
+       SampleManager->raw()["Systematics"];
+
+  if (!systematics) {
+     MACH3LOG_INFO("No Systematics section found in configuration");
+     return;
+   }
+   for (const auto& systematic_node : systematics) {
+
+     const YAML::Node systematic =
+         systematic_node["Systematic"];
+
+     if (!systematic) {
+       MACH3LOG_ERROR(
+           "Malformed systematic entry: missing 'Systematic'");
+       throw MaCh3Exception(__FILE__, __LINE__);
+     }
+
+     const std::string group =
+         Get<std::string>(
+             systematic["ParameterGroup"],
+             __FILE__, __LINE__);
+
+     if (group != "Detector") {
+       continue;
+     }
+
+     const std::string parameter_name =
+         Get<std::string>(
+             systematic["Names"]["ParameterName"],
+             __FILE__, __LINE__);
+
+     MACH3LOG_INFO(
+         "Loading detector systematic ratio for parameter {}",
+         parameter_name);
+
+     DetectorSystRatio ratio;
+     ratio.parameter_name = parameter_name;
+
+     ratio.cc_numu_ratio =
+         get_ratio(parameter_name + "_ccnumu");
+
+     ratio.cc_nue_ratio =
+         get_ratio(parameter_name + "_ccnue");
+
+     det_syst_ratios.push_back(std::move(ratio));
+   }
+
+   MACH3LOG_INFO("Loaded {} detector systematic ratio parameters", det_syst_ratios.size());
+} 
+
 void SampleHandlerAtm::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < dunemcSamples.size(); ++i) {
     MCEvents[i].total_weight_pointers.push_back(&(dunemcSamples[i].flux_w));
     MCEvents[i].total_weight_pointers.push_back(&(ExposureScaling));
+    MCEvents[i].total_weight_pointers.push_back(&(dunemcSamples[i].total_det_sys_weight));
   }  
 }
 
 int SampleHandlerAtm::SetupExperimentMC() {
+ 
+  std::cerr << "========== NEW SampleHandlerAtm CODE ==========" << std::endl;	
   int CurrErrorLevel = gErrorIgnoreLevel;
   gErrorIgnoreLevel = kFatal;  
 
@@ -166,6 +289,12 @@ int SampleHandlerAtm::SetupExperimentMC() {
 
   dunemcSamples.reserve(2 * nTreeEntries);
 
+
+  //For debugging
+  long nPandora = 0;
+  long nPreselection = 0;
+  long nSelected = 0;
+
   for (int iTreeEntry=0;iTreeEntry<nTreeEntries;iTreeEntry++) {
     weightsTree->GetEntry(iTreeEntry);
     
@@ -177,13 +306,19 @@ int SampleHandlerAtm::SetupExperimentMC() {
 
     if ((iTreeEntry % (nTreeEntries/10))==0) {
       MACH3LOG_INFO("\tProcessing entry: {}/{}",iTreeEntry,nTreeEntries);
+      if (dunemcSamples.empty())  MACH3LOG_INFO("Empty sample");
+      else  MACH3LOG_INFO("First event: SampleIndex={}, rw_erec={}, det weights={}",
+                          dunemcSamples.front().SampleIndex,
+                          dunemcSamples.front().rw_erec,
+                          dunemcSamples.front().det_sys_1sigweights.size());
     }
     
     if(sr->common.ixn.pandora.size() != 1) {
       MACH3LOG_TRACE("Skipping entry {}/{} -> Number of neutrino slices found in event: {}",iTreeEntry,nTreeEntries,sr->common.ixn.pandora.size());
       continue;
     }
-
+     
+    ++nPandora;
     /*
     int RunNumber = sr->meta.fd_hd.run;
     int SubRunNumber = sr->meta.fd_hd.subrun;
@@ -201,6 +336,8 @@ int SampleHandlerAtm::SetupExperimentMC() {
       continue;
     }
 
+    ++nPreselection;
+
     // Now, since the event has a valid candidate classification, we lazy-load and calculate MinDistToWall:
     double MinDistToWall = 1e8;
     auto const& pandora_parts = sr->common.ixn.pandora[0].part.pandora;
@@ -216,6 +353,8 @@ int SampleHandlerAtm::SetupExperimentMC() {
     if (SampleIndex == kEventSel_Unknown) {
       continue;
     }
+
+    ++nSelected;
 
     TVector3 RecoNuMomentumVector;
     double RecoENu;
@@ -263,6 +402,33 @@ int SampleHandlerAtm::SetupExperimentMC() {
     currentEvent_FromNuE.MinDistToWall = MinDistToWall;
     currentEvent_FromNuE.eid = static_cast<uint>(iTreeEntry);
     
+    currentEvent_FromNuE.det_sys_1sigweights.clear();
+    currentEvent_FromNuE.det_sys_1sigweights.reserve(det_syst_ratios.size());
+
+    for (const auto& det_syst : det_syst_ratios) {
+
+      const TH1* ratio_hist = nullptr;
+
+      if (IsELike[SampleIndex]) {
+        ratio_hist = det_syst.cc_nue_ratio.get();
+      } else {
+        ratio_hist = det_syst.cc_numu_ratio.get();
+      }
+
+      if (!ratio_hist) {
+        MACH3LOG_ERROR("Missing detector systematic ratio histogram for {}", det_syst.parameter_name);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+
+      const int bin = ratio_hist->FindFixBin(currentEvent_FromNuE.rw_erec);
+
+      const float ratio =
+          static_cast<float>(ratio_hist->GetBinContent(bin));
+
+      currentEvent_FromNuE.det_sys_1sigweights.push_back(ratio);
+    }
+    currentEvent_FromNuE.total_det_sys_weight = 1.0;
+
     struct dunemc_atm currentEvent_FromNuMu = currentEvent_FromNuE;
     
     currentEvent_FromNuMu.nupdgUnosc = (InteractingPDG > 0) ? 14 : -14;
@@ -285,7 +451,12 @@ int SampleHandlerAtm::SetupExperimentMC() {
   delete cafTree;
   delete weightsTree;
   delete InputFile;
-  
+
+  MACH3LOG_INFO("Events with exactly one Pandora slice: {}", nPandora);
+  MACH3LOG_INFO("Events passing preselection: {}", nPreselection);
+  MACH3LOG_INFO("Events passing final selection: {}", nSelected);
+  MACH3LOG_INFO("dunemcSamples.size(): {}", dunemcSamples.size());
+
   return static_cast<int>(dunemcSamples.size());
 }
 

@@ -19,7 +19,8 @@ General:
   # OscillationParameters: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.5]
 
   Systematics:
-    XsecCovFile: ["Configs/CovObjs/xsec_covariance_Atmospherics.yaml", "Configs/CovObjs/OscCov_PDG2021_v2_Atmospherics.yaml"]
+    #XsecCovFile: ["Configs/CovObjs/xsec_covariance_Atmospherics.yaml", "Configs/CovObjs/OscCov_PDG2021_v2_Atmospherics.yaml"]
+    XsecCovFile: ["Configs/CovObjs/OscCov_PDG2021_withDetSysts.yaml"]
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.1
     XsecAtGen: false

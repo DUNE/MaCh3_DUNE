@@ -5,6 +5,14 @@
 #include "Samples/SampleHandlerBase.h"
 
 #include "StructsDUNE.h"
+
+struct DetectorSystRatio{
+  std::string parameter_name;
+  std::unique_ptr<TH1> cc_nue_ratio;
+  std::unique_ptr<TH1> cc_numu_ratio;
+};
+
+
 /// @brief Base class for handling atmospheric samples
 class SampleHandlerAtm : virtual public SampleHandlerBase
 {
@@ -58,7 +66,7 @@ protected:
   /// @brief Cleanup memory
   void CleanMemoryBeforeFit() override {};
 
-  void RegisterFunctionalParameters() override {};
+  void RegisterFunctionalParameters() override;
   
   //DB functions which could be initialised to do something which is non-trivial
   
@@ -117,7 +125,12 @@ protected:
 
   /// Path to the input spline file (for per-event spline mode)
   std::string fInputSplines;
-  
+
+  /// TH1s storing the spectra ratio for detector systematics
+  void get_syst_ratios();
+  std::string fInputSystRatios;
+  std::vector<DetectorSystRatio> det_syst_ratios;
+
   /// Enums to define event selections
   enum EventSelectionIndices {
     kEventSel_Unknown = -1,    
