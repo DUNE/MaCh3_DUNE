@@ -45,6 +45,8 @@ void SampleHandlerAtm::Init() {
     fInputSystRatios = "";
   }
 
+  get_syst_ratios();
+
   //DB Value used to determine selection criteria for FC and PC separation in function of 'walldist' variable
   FCPCSeparation = Get<double>(SampleManager->raw()["AnalysisOptions"]["FCPCSeparation"],__FILE__,__LINE__);
 
@@ -185,9 +187,8 @@ void SampleHandlerAtm::get_syst_ratios(){
 
      return std::unique_ptr<TH1>(cloned);
    };
-   const YAML::Node systematics =
-       SampleManager->raw()["Systematics"];
-
+   //const YAML::Node systematics = SampleManager->raw()["Systematics"];
+  const YAML::Node systematics = ParHandler->GetConfig()["Systematics"];
   if (!systematics) {
      MACH3LOG_INFO("No Systematics section found in configuration");
      return;
