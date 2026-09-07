@@ -4,7 +4,7 @@ MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
 BinningFile: "Configs/Samples/AtmosphericParameterBinning.yaml"
 
 InputFiles:
-  FileName: "Inputs/Atmospherics/CAFs/caf_new_sum.2.6M_weighted.root"
+  FileName: "Inputs/Atmospherics/CAF/pgranger/caf_new_sum.2.6M_weighted.root"  #"Inputs/Atmospherics/CAFs/caf_new_sum.2.6M_weighted.root"
 
 NuOsc:
   NuOscConfigFile: "Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml"
@@ -15,6 +15,8 @@ AnalysisOptions:
   FCPCSeparation: 10.0
   # Per-event spline configuration
   InputSplines: "Inputs/Atmospherics/Splines/merged_new_systs_wmec_wheader.root"
+  # Detector systematics configuration
+  InputSystRatios: "Inputs/Atmospherics/ModBoxA_ratio.root"
   SampleId: 0
 
 InputFilesDefaults: &input_files_defaults
