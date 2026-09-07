@@ -83,6 +83,7 @@ int main(int argc, char * argv[]) {
 
           Hist->Write(Form("Variation_%i", (int)iSigVar));
         }
+        //File->Flush();
       }
     }
 
@@ -91,5 +92,9 @@ int main(int argc, char * argv[]) {
     MACH3LOG_INFO("=======================================================");
   }
 
+  File->Write();
+  File->Close();
+  delete File;
+  
   return 0;
 }
