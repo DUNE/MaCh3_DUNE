@@ -33,6 +33,8 @@ General:
     FitTestLikelihood: false
 
   MCMC:
+    Multicanonical:
+      Enabled: false
     NSteps: 20000
     AutoSave: 5000
 
