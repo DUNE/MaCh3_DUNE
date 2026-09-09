@@ -137,8 +137,8 @@ void SampleHandlerAtm::RegisterFunctionalParameters() {
             ev.total_det_sys_weight *=
                 1 + (par_vals[i] *
                      (ev.det_sys_1sigweights[i] - 1));
-          }
-        });
+	  }
+    });
   }
 }
 
@@ -247,7 +247,6 @@ void SampleHandlerAtm::AddAdditionalWeightPointers() {
 
 int SampleHandlerAtm::SetupExperimentMC() {
  
-  std::cerr << "========== NEW SampleHandlerAtm CODE ==========" << std::endl;	
   int CurrErrorLevel = gErrorIgnoreLevel;
   gErrorIgnoreLevel = kFatal;  
 
@@ -291,10 +290,6 @@ int SampleHandlerAtm::SetupExperimentMC() {
   dunemcSamples.reserve(2 * nTreeEntries);
 
 
-  //For debugging
-  long nPandora = 0;
-  long nPreselection = 0;
-  long nSelected = 0;
 
   for (int iTreeEntry=0;iTreeEntry<nTreeEntries;iTreeEntry++) {
     weightsTree->GetEntry(iTreeEntry);
@@ -319,12 +314,6 @@ int SampleHandlerAtm::SetupExperimentMC() {
       continue;
     }
      
-    ++nPandora;
-    /*
-    int RunNumber = sr->meta.fd_hd.run;
-    int SubRunNumber = sr->meta.fd_hd.subrun;
-    int EventNumber = sr->meta.fd_hd.event;
-    */
     
     std::vector<double> CVNScores = std::vector<double>(nCVN_Scores);
     CVNScores[kCVN_NuE] = sr->common.ixn.pandora[0].nuhyp.cvn.nue;
@@ -337,7 +326,6 @@ int SampleHandlerAtm::SetupExperimentMC() {
       continue;
     }
 
-    ++nPreselection;
 
     // Now, since the event has a valid candidate classification, we lazy-load and calculate MinDistToWall:
     double MinDistToWall = 1e8;
@@ -355,7 +343,6 @@ int SampleHandlerAtm::SetupExperimentMC() {
       continue;
     }
 
-    ++nSelected;
 
     TVector3 RecoNuMomentumVector;
     double RecoENu;
@@ -453,10 +440,6 @@ int SampleHandlerAtm::SetupExperimentMC() {
   delete weightsTree;
   delete InputFile;
 
-  MACH3LOG_INFO("Events with exactly one Pandora slice: {}", nPandora);
-  MACH3LOG_INFO("Events passing preselection: {}", nPreselection);
-  MACH3LOG_INFO("Events passing final selection: {}", nSelected);
-  MACH3LOG_INFO("dunemcSamples.size(): {}", dunemcSamples.size());
 
   return static_cast<int>(dunemcSamples.size());
 }

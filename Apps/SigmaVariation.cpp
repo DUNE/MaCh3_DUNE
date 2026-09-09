@@ -83,7 +83,6 @@ int main(int argc, char * argv[]) {
 
           Hist->Write(Form("Variation_%i", (int)iSigVar));
         }
-        //File->Flush();
       }
     }
 
