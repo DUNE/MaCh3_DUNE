@@ -36,7 +36,7 @@ TH1* rebinHist(TH1* hist) {
   }
   else if (std::string(hist->GetTitle()).find("LeptonBAngle_EPi0") != std::string::npos) {
     TH2D* hist2D = dynamic_cast<TH2D*>(hist);
-    if (hist2D) return (TH1*)hist2D->Rebin2D(3, 2);
+    if (hist2D) return (TH1*)hist2D->Rebin2D(1, 1);
   }
   else if (std::string(hist->GetTitle()).find("LepBAngle_vs_EPi0") != std::string::npos) {
     TH2D* hist2D = dynamic_cast<TH2D*>(hist);
@@ -112,8 +112,9 @@ void makeAcceptanceCorrectionPlots(const char* inputfilename) {
     if (obj->InheritsFrom(TH1D::Class())) {
       rawHist->Draw("HIST");
 
-      for (int i = 1; i <= rawHist->GetNbinsX(); i++) { // Undo width scaling
-        totEntries += rawHist->GetBinContent(i) * rawHist->GetBinWidth(i);
+      for (int i = 1; i <= rawHist->GetNbinsX(); i++) {
+        totEntries += rawHist->GetBinContent(i);
+        // totEntries += rawHist->GetBinContent(i) * rawHist->GetBinWidth(i); // To undo width scaling for normalised hists
       }
       totEntries += rawHist->GetBinContent(rawHist->GetNbinsX()+1);
     }

@@ -1,195 +1,212 @@
 #include "SampleHandlerBeamFD.h"
 
-SampleHandlerBeamFD::SampleHandlerBeamFD(std::string mc_version_, ParameterHandlerGeneric* ParHandler_,const std::shared_ptr<OscillationHandler>&  Oscillator_) : SampleHandlerFD(mc_version_, ParHandler_, Oscillator_) {
+SampleHandlerBeamFD::SampleHandlerBeamFD(std::string mc_version_, ParameterHandlerGeneric* ParHandler_,const std::shared_ptr<OscillationHandler>&  Oscillator_) : SampleHandlerBase(mc_version_, ParHandler_, Oscillator_) {
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
-  
+
   Initialise();
+
+  downsamplingStep = 1;
 }
 
 SampleHandlerBeamFD::~SampleHandlerBeamFD() {
 }
 
 void SampleHandlerBeamFD::Init() {
-  dunemcSamples.resize(nSamples,dunemc_beamfd());
-  
-  if (CheckNodeExists(SampleManager->raw(), "DUNESampleBools", "iselike" )) {
-    iselike = SampleManager->raw()["DUNESampleBools"]["iselike"].as<bool>();
-  } else{
-    MACH3LOG_ERROR("Did not find DUNESampleBools:iselike in {}, please add this", SampleManager->GetFileName());
-    throw MaCh3Exception(__FILE__, __LINE__);
+  beamFDSampleDetails.resize(GetNSamples());
+  // dunemcSamples.resize(nSamples,dunemc_beamfd());
+
+  auto EnabledSamples = Get<std::vector<std::string>>(SampleManager->raw()["Samples"], __FILE__ , __LINE__);
+
+  for(int i = 0; i < GetNSamples(); i++){
+    const auto TempTitle = EnabledSamples[i];
+    beamFDSampleDetails[i].isFHC = Get<double>(SampleManager->raw()[TempTitle]["DUNESampleBools"]["isFHC"], __FILE__ , __LINE__);
+    beamFDSampleDetails[i].iselike = Get<bool>(SampleManager->raw()[TempTitle]["DUNESampleBools"]["iselike"], __FILE__ , __LINE__);
+    beamFDSampleDetails[i].pot = Get<double>(SampleManager->raw()[TempTitle]["POT"], __FILE__ , __LINE__);
+
+    MACH3LOG_INFO("Setting up beam sample {}", GetSampleTitle(i));
+    MACH3LOG_INFO("- isFHC: {}", beamFDSampleDetails[i].isFHC);
+    MACH3LOG_INFO("- iselike: {}", beamFDSampleDetails[i].iselike);
   }
 
-  if (CheckNodeExists(SampleManager->raw(), "DUNESampleBools", "isFHC" )) {
-    isFHC = SampleManager->raw()["DUNESampleBools"]["isFHC"].as<double>();
-  } else{
-    MACH3LOG_ERROR("Did not find DUNESampleBools:isFHC in {}, please add this", SampleManager->GetFileName());
-    throw MaCh3Exception(__FILE__, __LINE__);
+  downsamplingStep = GetFromManager<unsigned int>(SampleManager->raw()["DownsamplingStep"], 1, __FILE__ , __LINE__);
+  if (downsamplingStep == 0) {
+    throw MaCh3Exception(__FILE__, __LINE__,
+      "Downsampling step cannot be zero. Please set it to a positive integer in the Beam FD sample config file."
+    );
   }
-  
-  if (CheckNodeExists(SampleManager->raw(), "POT")) {
-    pot = SampleManager->raw()["POT"].as<double>();
-  } else{
-    MACH3LOG_ERROR("POT not defined in {}, please add this!", SampleManager->GetFileName());
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-  
+  MACH3LOG_INFO("Beam FD downsampling step: {}", downsamplingStep);
+
   MACH3LOG_INFO("-------------------------------------------------------------------");
 }
+
+// ************************************************
+void SampleHandlerBeamFD::InititialiseData()
+{
+  // ************************************************
+  // Reweight MC to match
+  Reweight();
+  // set asimov data
+  for (int iSample = 0; iSample < GetNSamples(); iSample++)
+  {
+    AddData(iSample, GetMCArray(iSample));
+  }
+}
+
 
 void SampleHandlerBeamFD::SetupSplines() {
 
   ///@todo move all of the spline setup into core
-  if(ParHandler->GetNumParamsFromSampleName(SampleName, kSpline) > 0){
-    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", ParHandler->GetNumParamsFromSampleName(SampleName, kSpline));
+  if(ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline) > 0){
+    MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline));
     SplineHandler = std::unique_ptr<BinnedSplineHandler>(new BinnedSplineHandlerDUNE(ParHandler,Modes.get()));
     InitialiseSplineObject();
   }
   else{
-    MACH3LOG_INFO("Found {} splines for this sample so I will not load or evaluate splines", ParHandler->GetNumParamsFromSampleName(SampleName, kSpline));
+    MACH3LOG_INFO("Found {} splines for this sample so I will not load or evaluate splines", ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline));
     SplineHandler = nullptr;
   }
-  
+
   return;
 }
 
 
 // === HH: Functional parameters ===
-void SampleHandlerBeamFD::TotalEScale(const double * par, std::size_t iEvent) {
+void TotalEScale(double const & par_val, dunemc_beamfd &ev) {
   // Total energy scale uncertainties for anything but CC Numu, see:
   // https://github.com/DUNE/lblpwgtools/blob/3d475f50a998fbfa6266df9a0c4eb3056c0cdfe5/CAFAna/Systs/EnergySysts.h#L39
 
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * dunemcSamples[iEvent].rw_erec_had;
+  ev.rw_erec_shifted += par_val * ev.rw_erec_had;
 }
 
-void SampleHandlerBeamFD::TotalEScaleNotCCNumu(const double * par, std::size_t iEvent) {
+void TotalEScaleNotCCNumu(double const & par_val, dunemc_beamfd &ev) {
   // A special case for Not (CC Numu), where we also scale Erec by lepton energy
   // Since we reconstruct muon energy in a different way, see:
   // https://github.com/DUNE/lblpwgtools/blob/3d475f50a998fbfa6266df9a0c4eb3056c0cdfe5/CAFAna/Systs/EnergySysts.h#L39
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * dunemcSamples[iEvent].rw_erec_lep;
+  ev.rw_erec_shifted += par_val * ev.rw_erec_lep;
 }
 
-void SampleHandlerBeamFD::TotalEScaleSqrt(const double * par, std::size_t iEvent) {
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * dunemcSamples[iEvent].rw_erec_had * dunemcSamples[iEvent].rw_erec_had_sqrt;
+void TotalEScaleSqrt(double const & par_val, dunemc_beamfd &ev) {
+  ev.rw_erec_shifted += par_val * ev.rw_erec_had * ev.rw_erec_had_sqrt;
 }
 
-void SampleHandlerBeamFD::TotalEScaleSqrtNotCCNumu(const double * par, std::size_t iEvent) {
+void TotalEScaleSqrtNotCCNumu(double const & par_val, dunemc_beamfd &ev) {
   // See comments in TotalEScaleNotCCNumu
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * dunemcSamples[iEvent].rw_erec_lep * dunemcSamples[iEvent].rw_erec_lep_sqrt;
+  ev.rw_erec_shifted += par_val * ev.rw_erec_lep * ev.rw_erec_lep_sqrt;
 }
 
-void SampleHandlerBeamFD::TotalEScaleInvSqrt(const double * par, std::size_t iEvent) {
+void TotalEScaleInvSqrt(double const & par_val, dunemc_beamfd &ev) {
   // Erec/sqrt(Erec) = sqrt(Erec)
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * dunemcSamples[iEvent].rw_erec_had_sqrt;
+  ev.rw_erec_shifted += par_val * ev.rw_erec_had_sqrt;
 }
 
-void SampleHandlerBeamFD::TotalEScaleInvSqrtNotCCNumu(const double * par, std::size_t iEvent) {
+void TotalEScaleInvSqrtNotCCNumu(double const & par_val, dunemc_beamfd &ev) {
   // See comments in TotalEScaleNotCCNumu
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * dunemcSamples[iEvent].rw_erec_lep_sqrt;
+  ev.rw_erec_shifted += par_val * ev.rw_erec_lep_sqrt;
 }
 
-void SampleHandlerBeamFD::HadEScale(const double * par, std::size_t iEvent) {
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * dunemcSamples[iEvent].rw_sum_ehad;
+void HadEScale(double const & par_val, dunemc_beamfd &ev) {
+  ev.rw_erec_shifted += par_val * ev.rw_sum_ehad;
 }
 
-void SampleHandlerBeamFD::HadEScaleSqrt(const double * par, std::size_t iEvent) {
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * dunemcSamples[iEvent].rw_sum_ehad * dunemcSamples[iEvent].rw_sum_ehad_sqrt;
+void HadEScaleSqrt(double const & par_val, dunemc_beamfd &ev) {
+  ev.rw_erec_shifted += par_val * ev.rw_sum_ehad * ev.rw_sum_ehad_sqrt;
 }
 
-void SampleHandlerBeamFD::HadEScaleInvSqrt(const double * par, std::size_t iEvent) {
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * dunemcSamples[iEvent].rw_sum_ehad_sqrt;
+void HadEScaleInvSqrt(double const & par_val, dunemc_beamfd &ev) {
+  ev.rw_erec_shifted += par_val * ev.rw_sum_ehad_sqrt;
 }
 
-void SampleHandlerBeamFD::MuEScale(const double * par, std::size_t iEvent) {
+void MuEScale(double const & par_val, dunemc_beamfd &ev) {
   // HH TODO: Functionally this is the same as TotalEScaleNotCCNumu, not sure if this function is even needed
-  TotalEScaleNotCCNumu(par, iEvent);
+  TotalEScaleNotCCNumu(par_val, ev);
 }
 
-void SampleHandlerBeamFD::MuEScaleSqrt(const double * par, std::size_t iEvent) {
+void MuEScaleSqrt(double const & par_val, dunemc_beamfd &ev) {
   // See comments in MuEScale
-  TotalEScaleSqrtNotCCNumu(par, iEvent);
+  TotalEScaleSqrtNotCCNumu(par_val, ev);
 }
 
-void SampleHandlerBeamFD::MuEScaleInvSqrt(const double * par, std::size_t iEvent) {
+void MuEScaleInvSqrt(double const & par_val, dunemc_beamfd &ev) {
   // See comments in MuEScale
-  TotalEScaleInvSqrtNotCCNumu(par, iEvent);
+  TotalEScaleInvSqrtNotCCNumu(par_val, ev);
 }
 
-void SampleHandlerBeamFD::NEScale(const double * par, std::size_t iEvent) {
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * dunemcSamples[iEvent].rw_eRecoN;
+void NEScale(double const & par_val, dunemc_beamfd &ev) {
+  ev.rw_erec_shifted += par_val * ev.rw_eRecoN;
 }
 
-void SampleHandlerBeamFD::NEScaleSqrt(const double * par, std::size_t iEvent) {
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * dunemcSamples[iEvent].rw_eRecoN * dunemcSamples[iEvent].rw_eRecoN_sqrt;
+void NEScaleSqrt(double const & par_val, dunemc_beamfd &ev) {
+  ev.rw_erec_shifted += par_val * ev.rw_eRecoN * ev.rw_eRecoN_sqrt;
 }
 
-void SampleHandlerBeamFD::NEScaleInvSqrt(const double * par, std::size_t iEvent) {
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * dunemcSamples[iEvent].rw_eRecoN_sqrt;
+void NEScaleInvSqrt(double const & par_val, dunemc_beamfd &ev) {
+  ev.rw_erec_shifted += par_val * ev.rw_eRecoN_sqrt;
 }
 
-void SampleHandlerBeamFD::EMEScale(const double * par, std::size_t iEvent) {
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * dunemcSamples[iEvent].rw_eRecoPi0;
+void EMEScale(double const & par_val, dunemc_beamfd &ev) {
+  ev.rw_erec_shifted += par_val * ev.rw_eRecoPi0;
 }
 
-void SampleHandlerBeamFD::EMEScaleCCNue(const double * par, std::size_t iEvent) {
+void EMEScaleCCNue(double const & par_val, dunemc_beamfd &ev) {
   // Again this is the same as TotalEScaleNotCCNumu, not sure if this function is needed
-  TotalEScaleNotCCNumu(par, iEvent);
+  TotalEScaleNotCCNumu(par_val, ev);
 }
 
-void SampleHandlerBeamFD::EMEScaleSqrt(const double * par, std::size_t iEvent) {
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * dunemcSamples[iEvent].rw_eRecoPi0 * dunemcSamples[iEvent].rw_eRecoPi0_sqrt;
+void EMEScaleSqrt(double const & par_val, dunemc_beamfd &ev) {
+  ev.rw_erec_shifted += par_val * ev.rw_eRecoPi0 * ev.rw_eRecoPi0_sqrt;
 }
 
-void SampleHandlerBeamFD::EMEScaleSqrtCCNue(const double * par, std::size_t iEvent) {
+void EMEScaleSqrtCCNue(double const & par_val, dunemc_beamfd &ev) {
   // See comments in EMEScaleCCNue
-  TotalEScaleSqrtNotCCNumu(par, iEvent);
+  TotalEScaleSqrtNotCCNumu(par_val, ev);
 }
 
-void SampleHandlerBeamFD::EMEScaleInvSqrt(const double * par, std::size_t iEvent) {
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * dunemcSamples[iEvent].rw_eRecoPi0_sqrt;
+void EMEScaleInvSqrt(double const & par_val, dunemc_beamfd &ev) {
+  ev.rw_erec_shifted += par_val * ev.rw_eRecoPi0_sqrt;
 }
 
-void SampleHandlerBeamFD::EMEScaleInvSqrtCCNue(const double * par, std::size_t iEvent) {
+void EMEScaleInvSqrtCCNue(double const & par_val, dunemc_beamfd &ev) {
   // See comments in EMEScaleCCNue
-  TotalEScaleInvSqrtNotCCNumu(par, iEvent);
+  TotalEScaleInvSqrtNotCCNumu(par_val, ev);
 }
 
-void SampleHandlerBeamFD::HadRes(const double * par, std::size_t iEvent) {
+void HadRes(double const & par_val, dunemc_beamfd &ev) {
   // True sum - reco sum
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * (dunemcSamples[iEvent].rw_eP
-    + dunemcSamples[iEvent].rw_ePip
-    + dunemcSamples[iEvent].rw_ePim
-    - dunemcSamples[iEvent].rw_sum_ehad);
+  ev.rw_erec_shifted += par_val * (ev.rw_eP
+    + ev.rw_ePip
+    + ev.rw_ePim
+    - ev.rw_sum_ehad);
 }
 
-void SampleHandlerBeamFD::MuRes(const double * par, std::size_t iEvent) {
+void MuRes(double const & par_val, dunemc_beamfd &ev) {
   // True muon energy - reco muon energy
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * (dunemcSamples[iEvent].rw_LepE - dunemcSamples[iEvent].rw_erec_lep);
+  ev.rw_erec_shifted += par_val * (ev.rw_LepE - ev.rw_erec_lep);
 }
 
-void SampleHandlerBeamFD::NRes(const double * par, std::size_t iEvent) {
+void NRes(double const & par_val, dunemc_beamfd &ev) {
   // True neutron energy - reco neutron energy
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * (dunemcSamples[iEvent].rw_eN - dunemcSamples[iEvent].rw_eRecoN);
+  ev.rw_erec_shifted += par_val * (ev.rw_eN - ev.rw_eRecoN);
 }
 
-void SampleHandlerBeamFD::EMRes(const double * par, std::size_t iEvent) {
+void EMRes(double const & par_val, dunemc_beamfd &ev) {
   // True pi0 energy - reco pi0 energy
-  dunemcSamples[iEvent].rw_erec_shifted += (*par) * (dunemcSamples[iEvent].rw_ePi0 - dunemcSamples[iEvent].rw_eRecoPi0);
+  ev.rw_erec_shifted += par_val * (ev.rw_ePi0 - ev.rw_eRecoPi0);
 }
 
-void SampleHandlerBeamFD::EMResCCNue(const double * par, std::size_t iEvent) {
+void EMResCCNue(double const & par_val, dunemc_beamfd &ev) {
   // This is the same as MuRes, again not sure if this function is needed
-  MuRes(par, iEvent);
+  MuRes(par_val, ev);
 }
 
-void SampleHandlerBeamFD::RecoCVNNumu(const double * par, std::size_t iEvent) {
+void RecoCVNNumu(double const & par_val, dunemc_beamfd &ev) {
   // CVN numu uncertainty
-  dunemcSamples[iEvent].rw_cvnnumu_shifted += (*par);
+  ev.rw_cvnnumu_shifted += par_val;
 }
 
-void SampleHandlerBeamFD::RecoCVNNue(const double * par, std::size_t iEvent) {
+void RecoCVNNue(double const & par_val, dunemc_beamfd &ev) {
   // CVN nue uncertainty
-  dunemcSamples[iEvent].rw_cvnnue_shifted += (*par);
+  ev.rw_cvnnue_shifted += par_val;
 }
 
 void SampleHandlerBeamFD::RegisterFunctionalParameters() {
@@ -197,139 +214,101 @@ void SampleHandlerBeamFD::RegisterFunctionalParameters() {
   // This function manually populates the map of functional parameters
   // Maps the name of the functional parameter to the pointer of the function
 
-  // This is the part where we manually enter things
-  // A lambda function has to be used so we can refer to a non-static member function
-  RegisterIndividualFunctionalParameter("TotalEScaleFD",
-                            kTotalEScale,
-                            [this](const double * par, std::size_t iEvent) { this->TotalEScale(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "TotalEScaleFD",
+                                        TotalEScale);
 
-  RegisterIndividualFunctionalParameter("TotalEScaleNotCCNumuFD",
-                            kTotalEScaleNotCCNumu,
-                            [this](const double * par, std::size_t iEvent) { this->TotalEScaleNotCCNumu(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "TotalEScaleNotCCNumuFD",
+                                        TotalEScaleNotCCNumu);
 
-  RegisterIndividualFunctionalParameter("TotalEScaleSqrtFD",
-                            kTotalEScaleSqrt,
-                            [this](const double * par, std::size_t iEvent) { this->TotalEScaleSqrt(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "TotalEScaleSqrtFD",
+                                        TotalEScaleSqrt);
 
-  RegisterIndividualFunctionalParameter("TotalEScaleSqrtNotCCNumuFD",
-                            kTotalEScaleSqrtNotCCNumu,
-                            [this](const double * par, std::size_t iEvent) { this->TotalEScaleSqrtNotCCNumu(par, iEvent); });
+  RegisterIndividualFunctionalParameter(
+      dunemcSamples, "TotalEScaleSqrtNotCCNumuFD", TotalEScaleSqrtNotCCNumu);
 
-  RegisterIndividualFunctionalParameter("TotalEScaleInvSqrtFD",
-                            kTotalEScaleInvSqrt,
-                            [this](const double * par, std::size_t iEvent) { this->TotalEScaleInvSqrt(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "TotalEScaleInvSqrtFD",
+                                        TotalEScaleInvSqrt);
 
-  RegisterIndividualFunctionalParameter("TotalEScaleInvSqrtNotCCNumuFD",
-                            kTotalEScaleInvSqrtNotCCNumu,
-                            [this](const double * par, std::size_t iEvent) { this->TotalEScaleInvSqrtNotCCNumu(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples,
+                                        "TotalEScaleInvSqrtNotCCNumuFD",
+                                        TotalEScaleInvSqrtNotCCNumu);
 
-  RegisterIndividualFunctionalParameter("HadEScaleFD",
-                            kHadEScale,
-                            [this](const double * par, std::size_t iEvent) { this->HadEScale(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "HadEScaleFD",
+                                        HadEScale);
 
-  RegisterIndividualFunctionalParameter("HadEScaleSqrtFD",
-                            kHadEScaleSqrt,
-                            [this](const double * par, std::size_t iEvent) { this->HadEScaleSqrt(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "HadEScaleSqrtFD",
+                                        HadEScaleSqrt);
 
-  RegisterIndividualFunctionalParameter("HadEScaleInvSqrtFD",
-                            kHadEScaleInvSqrt,
-                            [this](const double * par, std::size_t iEvent) { this->HadEScaleInvSqrt(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "HadEScaleInvSqrtFD",
+                                        HadEScaleInvSqrt);
 
-  RegisterIndividualFunctionalParameter("MuEScaleFD",
-                            kMuEScale,
-                            [this](const double * par, std::size_t iEvent) { this->MuEScale(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "MuEScaleFD", MuEScale);
 
-  RegisterIndividualFunctionalParameter("MuEScaleSqrtFD",
-                            kMuEScaleSqrt,
-                            [this](const double * par, std::size_t iEvent) { this->MuEScaleSqrt(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "MuEScaleSqrtFD",
+                                        MuEScaleSqrt);
 
-  RegisterIndividualFunctionalParameter("MuEScaleInvSqrtFD",
-                            kMuEScaleInvSqrt,
-                            [this](const double * par, std::size_t iEvent) { this->MuEScaleInvSqrt(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "MuEScaleInvSqrtFD",
+                                        MuEScaleInvSqrt);
 
-  RegisterIndividualFunctionalParameter("NEScaleFD",
-                            kNEScale,
-                            [this](const double * par, std::size_t iEvent) { this->NEScale(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "NEScaleFD", NEScale);
 
-  RegisterIndividualFunctionalParameter("NEScaleSqrtFD",
-                            kNEScaleSqrt,
-                            [this](const double * par, std::size_t iEvent) { this->NEScaleSqrt(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "NEScaleSqrtFD",
+                                        NEScaleSqrt);
 
-  RegisterIndividualFunctionalParameter("NEScaleInvSqrtFD",
-                            kNEScaleInvSqrt,
-                            [this](const double * par, std::size_t iEvent) { this->NEScaleInvSqrt(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "NEScaleInvSqrtFD",
+                                        NEScaleInvSqrt);
 
-  RegisterIndividualFunctionalParameter("EMEScaleFD",
-                            kEMEScale,
-                            [this](const double * par, std::size_t iEvent) { this->EMEScale(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "EMEScaleFD", EMEScale);
 
-  RegisterIndividualFunctionalParameter("EMEScaleCCNueFD",
-                            kEMEScaleCCNue,
-                            [this](const double * par, std::size_t iEvent) { this->EMEScaleCCNue(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "EMEScaleCCNueFD",
+                                        EMEScaleCCNue);
 
-  RegisterIndividualFunctionalParameter("EMEScaleSqrtFD",
-                            kEMEScaleSqrt,
-                            [this](const double * par, std::size_t iEvent) { this->EMEScaleSqrt(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "EMEScaleSqrtFD",
+                                        EMEScaleSqrt);
 
-  RegisterIndividualFunctionalParameter("EMEScaleSqrtCCNueFD",
-                            kEMEScaleSqrtCCNue,
-                            [this](const double * par, std::size_t iEvent) { this->EMEScaleSqrtCCNue(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "EMEScaleSqrtCCNueFD",
+                                        EMEScaleSqrtCCNue);
 
-  RegisterIndividualFunctionalParameter("EMEScaleInvSqrtFD",
-                            kEMEScaleInvSqrt,
-                            [this](const double * par, std::size_t iEvent) { this->EMEScaleInvSqrt(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "EMEScaleInvSqrtFD",
+                                        EMEScaleInvSqrt);
 
-  RegisterIndividualFunctionalParameter("EMEScaleInvSqrtCCNueFD",
-                            kEMEScaleInvSqrtCCNue,
-                            [this](const double * par, std::size_t iEvent) { this->EMEScaleInvSqrtCCNue(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "EMEScaleInvSqrtCCNueFD",
+                                        EMEScaleInvSqrtCCNue);
 
-  RegisterIndividualFunctionalParameter("HadResFD",
-                            kHadRes,
-                            [this](const double * par, std::size_t iEvent) { this->HadRes(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "HadResFD", HadRes);
 
-  RegisterIndividualFunctionalParameter("MuResFD",
-                            kMuRes,
-                            [this](const double * par, std::size_t iEvent) { this->MuRes(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "MuResFD", MuRes);
 
-  RegisterIndividualFunctionalParameter("NResFD",
-                            kNRes,
-                            [this](const double * par, std::size_t iEvent) { this->NRes(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "NResFD", NRes);
 
-  RegisterIndividualFunctionalParameter("EMResFD",
-                            kEMRes,
-                            [this](const double * par, std::size_t iEvent) { this->EMRes(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "EMResFD", EMRes);
 
-  RegisterIndividualFunctionalParameter("EMResCCNueFD",
-                            kEMResCCNue,
-                            [this](const double * par, std::size_t iEvent) { this->EMResCCNue(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "EMResCCNueFD",
+                                        EMResCCNue);
 
-  RegisterIndividualFunctionalParameter("RecoCVNNumuFD",
-                            kRecoCVNNumu,
-                            [this](const double * par, std::size_t iEvent) { this->RecoCVNNumu(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "RecoCVNNumuFD",
+                                        RecoCVNNumu);
 
-  RegisterIndividualFunctionalParameter("RecoCVNNueFD",
-                            kRecoCVNNue,
-                            [this](const double * par, std::size_t iEvent) { this->RecoCVNNue(par, iEvent); });
+  RegisterIndividualFunctionalParameter(dunemcSamples, "RecoCVNNueFD",
+                                        RecoCVNNue);
 
   MACH3LOG_INFO("Finished registering functional parameters");
 }
 
 // HH: Reset the shifted values to the original values
-void SampleHandlerBeamFD::resetShifts(int iEvent) {
+void SampleHandlerBeamFD::ResetShifts(int iEvent) {
   dunemcSamples[iEvent].rw_erec_shifted = dunemcSamples[iEvent].rw_erec;
   dunemcSamples[iEvent].rw_cvnnumu_shifted = dunemcSamples[iEvent].rw_cvnnumu;
   dunemcSamples[iEvent].rw_cvnnue_shifted = dunemcSamples[iEvent].rw_cvnnue;
 }
 // =================================
 
-void SampleHandlerBeamFD::SetupWeightPointers() {
+void SampleHandlerBeamFD::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < dunemcSamples.size(); ++i) {
-    MCSamples[i].total_weight_pointers.push_back(&(dunemcSamples[i].pot_s));
-    MCSamples[i].total_weight_pointers.push_back( &(dunemcSamples[i].norm_s));
-    MCSamples[i].total_weight_pointers.push_back( MCSamples[i].osc_w_pointer);
-    MCSamples[i].total_weight_pointers.push_back( &(dunemcSamples[i].rw_berpaacvwgt));
-    MCSamples[i].total_weight_pointers.push_back( &(dunemcSamples[i].flux_w));
-    MCSamples[i].total_weight_pointers.push_back( &(MCSamples[i].xsec_w));
+    MCEvents[i].total_weight_pointers.push_back(&(dunemcSamples[i].pot_s));
+    MCEvents[i].total_weight_pointers.push_back( &(dunemcSamples[i].norm_s));
+    MCEvents[i].total_weight_pointers.push_back( &(dunemcSamples[i].rw_berpaacvwgt));
+    MCEvents[i].total_weight_pointers.push_back( &(dunemcSamples[i].flux_w));
   }
 }
 
@@ -337,31 +316,40 @@ void SampleHandlerBeamFD::SetupWeightPointers() {
 int SampleHandlerBeamFD::SetupExperimentMC() {
 
   // dunemc_base *duneobj = &(dunemcSamples[iSample]);
-  
+
   MACH3LOG_INFO("-------------------------------------------------------------------");
   TChain* _data = new TChain("caf");
-  for (size_t iSample=0;iSample<mc_files.size();iSample++) {
-    MACH3LOG_INFO("Adding file to TChain: {}", mc_files[iSample]);
-    TFile* _sampleFile = TFile::Open(mc_files[iSample].c_str(), "READ");
-    // HH: still have the read the individual ROOT file to get the norm histograms
-    TH1D* norm = _sampleFile->Get<TH1D>("norm");
-    if(!norm){
-      MACH3LOG_ERROR("Add a norm KEY to the root file using MakeNormHists.cxx");
-      throw MaCh3Exception(__FILE__, __LINE__);
-    }
-    // HH: currently storing the norm_s and POT_s in a map since this is a sample/file specific thing, maybe this could be done in a more elegant way
-    norm_map[mc_files[iSample]] = std::vector<double>{norm->GetBinContent(1), pot/norm->GetBinContent(2)};
+  // Maps the file index within the TChain (GetTreeNumber()) to its sample index and
+  // per-file norm values.
+  std::vector<size_t> fileIndexToSample;
+  std::vector<std::array<double, 2>> fileIndexToNorm; // [norm_s, pot_s]
+  for (size_t iSample=0; iSample<SampleDetails.size(); iSample++) {
+    for (const std::vector<std::string>& files : SampleDetails[iSample].mc_files) {
+      for (const std::string& filename : files){
 
-    // HH: Check whether the file exists, see https://root.cern/doc/master/classTChain.html#a78a896924ac6c7d3691b7e013bcbfb1c
-    int _add_rtn = _data->Add(mc_files[iSample].c_str(), -1);
-    if(_add_rtn == 0){
-      MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", mc_files[iSample]);
-      throw MaCh3Exception(__FILE__, __LINE__);
+        MACH3LOG_INFO("Adding file to TChain: {}", filename);
+
+        TFile* _sampleFile = TFile::Open(filename.c_str(), "READ");
+        // HH: still have the read the individual ROOT file to get the norm histograms
+        TH1D* norm = _sampleFile->Get<TH1D>("norm");
+        if(!norm){
+          MACH3LOG_ERROR("Add a norm KEY to the root file using MakeNormHists.cxx");
+          throw MaCh3Exception(__FILE__, __LINE__);
+        }
+        fileIndexToSample.push_back(iSample);
+        fileIndexToNorm.push_back({norm->GetBinContent(1), beamFDSampleDetails[iSample].pot / norm->GetBinContent(2)});
+        _sampleFile->Close();
+        // HH: Check whether the file exists, see https://root.cern/doc/master/classTChain.html#a78a896924ac6c7d3691b7e013bcbfb1c
+        int _add_rtn = _data->Add(filename.c_str(), -1);
+        if(_add_rtn == 0){
+          MACH3LOG_ERROR("Could not add file {} to TChain, please check the file exists and is readable", filename);
+          throw MaCh3Exception(__FILE__, __LINE__);
+        }
+      }
     }
-    _sampleFile->Close();
   }
-  
-  
+
+
   if(_data){
     MACH3LOG_INFO("Number of entries in TChain: {}", _data->GetEntries());
   }
@@ -391,7 +379,7 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   double _vtx_z;
 
   //Truth Variables
-  int _mode;  
+  int _mode;
   double _ev;
   double _LepE;
   double _eP;
@@ -403,7 +391,7 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   int _isCC;
   int _nuPDGunosc;
   int _nuPDG;
-  
+
   _data->SetBranchStatus("*", 0);
   _data->SetBranchStatus("Ev", 1);
   _data->SetBranchAddress("Ev", &_ev);
@@ -463,10 +451,17 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   _data->SetBranchStatus("vtx_y", 1);
   _data->SetBranchAddress("vtx_y", &_vtx_y);
   _data->SetBranchStatus("vtx_z", 1);
-  _data->SetBranchAddress("vtx_z", &_vtx_z);  
+  _data->SetBranchAddress("vtx_z", &_vtx_z);
 
   size_t nEntries = static_cast<size_t>(_data->GetEntries());
-  dunemcSamples.resize(nEntries);
+  size_t nDownsampledEntries = nEntries / downsamplingStep;
+  if (nDownsampledEntries == 0) {
+    throw MaCh3Exception(__FILE__, __LINE__,
+      "Downsampling step is too large, resulting in zero entries. Please set it to a smaller positive integer in the Beam FD sample config file."
+    );
+  }
+  size_t countwidth = nDownsampledEntries / 5;
+  dunemcSamples.resize(nDownsampledEntries);
   _data->GetEntry(0);
 
   // HH: A map to keep track of negative energies
@@ -477,46 +472,52 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
   negative_counts["rw_eRecoN"] = 0;
   negative_counts["rw_eRecoPi0"] = 0;
   negative_counts["rw_sum_ehad"] = 0;
-  
-  //FILL DUNE STRUCT
-  for (unsigned int i = 0; i < nEntries; ++i) { // Loop through tree
-    _data->GetEntry(i);
 
-    std::string CurrFileName = _data->GetCurrentFile()->GetName();
+  //FILL DUNE STRUCT
+  for (unsigned int i = 0; i < nDownsampledEntries; ++i) { // Loop through tree
+    _data->GetEntry(i * downsamplingStep);
+
+    if (i % countwidth == 0) {
+      M3::Utils::PrintProgressBar(i, static_cast<Long64_t>(nDownsampledEntries));
+    }
+
+    const size_t sample_index = fileIndexToSample[static_cast<size_t>(_data->GetTreeNumber())];
+    const bool iselike_temp = beamFDSampleDetails[sample_index].iselike;
+    dunemcSamples[i].SampleIndex = static_cast<int>(sample_index);
     dunemcSamples[i].nupdgUnosc = _nuPDGunosc;
     dunemcSamples[i].nupdg = _nuPDG;
-    dunemcSamples[i].OscChannelIndex = static_cast<double>(GetOscChannel(OscChannels, dunemcSamples[i].nupdgUnosc, dunemcSamples[i].nupdg));
+    dunemcSamples[i].OscChannelIndex = static_cast<double>(GetOscChannel(SampleDetails[sample_index].OscChannels, dunemcSamples[i].nupdgUnosc, dunemcSamples[i].nupdg));
 
     // POT stuff
-    dunemcSamples[i].norm_s = norm_map[CurrFileName][0]; // Norm in sample
-    dunemcSamples[i].pot_s = norm_map[CurrFileName][1]; // POT in sample
-    
+    dunemcSamples[i].norm_s = fileIndexToNorm[static_cast<size_t>(_data->GetTreeNumber())][0]; // Norm in sample
+    dunemcSamples[i].pot_s = fileIndexToNorm[static_cast<size_t>(_data->GetTreeNumber())][1] * downsamplingStep; // POT in sample
+
     dunemcSamples[i].rw_cvnnumu = (_cvnnumu);
     dunemcSamples[i].rw_cvnnue = (_cvnnue);
-    dunemcSamples[i].rw_cvnnumu_shifted = (_cvnnumu); 
+    dunemcSamples[i].rw_cvnnumu_shifted = (_cvnnumu);
     dunemcSamples[i].rw_cvnnue_shifted = (_cvnnue);
-    if (iselike) {
+    if (iselike_temp) {
       dunemcSamples[i].rw_erec = (_erec_nue);
-      dunemcSamples[i].rw_erec_shifted = (_erec_nue); 
+      dunemcSamples[i].rw_erec_shifted = (_erec_nue);
       dunemcSamples[i].rw_erec_had = (_erec_had_nue);
       dunemcSamples[i].rw_erec_lep = (_erec_lep_nue);
     } else {
-      dunemcSamples[i].rw_erec = (_erec); 
-      dunemcSamples[i].rw_erec_shifted = (_erec); 
-      dunemcSamples[i].rw_erec_had = (_erec_had); 
-      dunemcSamples[i].rw_erec_lep = (_erec_lep); 
+      dunemcSamples[i].rw_erec = (_erec);
+      dunemcSamples[i].rw_erec_shifted = (_erec);
+      dunemcSamples[i].rw_erec_had = (_erec_had);
+      dunemcSamples[i].rw_erec_lep = (_erec_lep);
     }
-    
-    dunemcSamples[i].rw_eRecoP = (_eRecoP); 
-    dunemcSamples[i].rw_eRecoPip = (_eRecoPip); 
-    dunemcSamples[i].rw_eRecoPim = (_eRecoPim); 
-    dunemcSamples[i].rw_eRecoPi0 = (_eRecoPi0); 
-    dunemcSamples[i].rw_eRecoN = (_eRecoN); 
-    dunemcSamples[i].rw_LepE = (_LepE); 
-    dunemcSamples[i].rw_eP = (_eP); 
-    dunemcSamples[i].rw_ePip = (_ePip); 
-    dunemcSamples[i].rw_ePim = (_ePim); 
-    dunemcSamples[i].rw_ePi0 = (_ePi0); 
+
+    dunemcSamples[i].rw_eRecoP = (_eRecoP);
+    dunemcSamples[i].rw_eRecoPip = (_eRecoPip);
+    dunemcSamples[i].rw_eRecoPim = (_eRecoPim);
+    dunemcSamples[i].rw_eRecoPi0 = (_eRecoPi0);
+    dunemcSamples[i].rw_eRecoN = (_eRecoN);
+    dunemcSamples[i].rw_LepE = (_LepE);
+    dunemcSamples[i].rw_eP = (_eP);
+    dunemcSamples[i].rw_ePip = (_ePip);
+    dunemcSamples[i].rw_ePim = (_ePim);
+    dunemcSamples[i].rw_ePi0 = (_ePi0);
     dunemcSamples[i].rw_eN = (_eN);
 
     // HH: Add checks to make sure the energies are not negative
@@ -535,7 +536,7 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
     if (dunemcSamples[i].rw_eRecoPi0 < 0) {
       dunemcSamples[i].rw_eRecoPi0 = 0;
       negative_counts["rw_eRecoPi0"]++;
-    } 
+    }
 
     dunemcSamples[i].rw_erec_had_sqrt = sqrt(dunemcSamples[i].rw_erec_had);
     dunemcSamples[i].rw_erec_lep_sqrt = sqrt(dunemcSamples[i].rw_erec_lep);
@@ -549,7 +550,7 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
     }
     dunemcSamples[i].rw_sum_ehad_sqrt = sqrt(dunemcSamples[i].rw_sum_ehad);
 
-    dunemcSamples[i].rw_etru = (_ev);
+    dunemcSamples[i].enu_true = (_ev);
     dunemcSamples[i].rw_isCC = _isCC;
     // dunemcSamples[i].rw_nuPDGunosc = _nuPDGunosc;
     // dunemcSamples[i].rw_nuPDG = _nuPDG;
@@ -560,108 +561,81 @@ int SampleHandlerBeamFD::SetupExperimentMC() {
 
     dunemcSamples[i].rw_trueccnumu = static_cast<double>(dunemcSamples[i].rw_isCC==1 && abs(dunemcSamples[i].nupdg)==14);
     dunemcSamples[i].rw_trueccnue = static_cast<double>(dunemcSamples[i].rw_isCC==1 && abs(dunemcSamples[i].nupdg)==12);
-    
+
     //Assume everything is on Argon40 for now....
     dunemcSamples[i].Target = kTarget_Ar;
-    
+
     int M3Mode = Modes->GetModeFromGenerator(std::abs(_mode));
     if (!_isCC) M3Mode += 14; //Account for no ability to distinguish CC/NC
     if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
     dunemcSamples[i].mode = M3Mode;
-    
+
     dunemcSamples[i].flux_w = 1.0;
   }
 
   // HH: Give a warning if any negative energies were found
   for (const auto& pair : negative_counts) {
     if (pair.second > 0) {
-      MACH3LOG_WARN("Found {} negative values for {} in sample {}", pair.second, pair.first, GetSampleName());
+      MACH3LOG_WARN("Found {} negative values for {}.", pair.second, pair.first);
     }
   }
-  
+
   delete _data;
-  return static_cast<int>(nEntries);
+  return static_cast<int>(nDownsampledEntries);
 }
 
-const double* SampleHandlerBeamFD::GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent) {
-  double* KinematicValue = nullptr;
-
+const double* SampleHandlerBeamFD::GetPointerToKinematicParameter(const int KinPar, const int iEvent) const {
   switch(KinPar){
   case kTrueNeutrinoEnergy:
-    KinematicValue = &(dunemcSamples[iEvent].rw_etru); 
-    break;
+    return &(dunemcSamples[iEvent].enu_true);
   case kRecoNeutrinoEnergy:
-    KinematicValue = &(dunemcSamples[iEvent].rw_erec_shifted);
+    return &(dunemcSamples[iEvent].rw_erec_shifted);
     break;
   case kTrueXPos:
-    KinematicValue = &(dunemcSamples[iEvent].rw_vtx_x);
-    break;
+    return &(dunemcSamples[iEvent].rw_vtx_x);
   case kTrueYPos:
-    KinematicValue = &(dunemcSamples[iEvent].rw_vtx_y);
-    break;
+    return &(dunemcSamples[iEvent].rw_vtx_y);
   case kTrueZPos:
-    KinematicValue = &(dunemcSamples[iEvent].rw_vtx_z);
-    break;
+    return &(dunemcSamples[iEvent].rw_vtx_z);
   case kCVNNumu:
-    KinematicValue = &(dunemcSamples[iEvent].rw_cvnnumu_shifted);
-    break;
+    return &(dunemcSamples[iEvent].rw_cvnnumu_shifted);
   case kCVNNue:
-    KinematicValue = &(dunemcSamples[iEvent].rw_cvnnue_shifted);
-    break;
+    return &(dunemcSamples[iEvent].rw_cvnnue_shifted);
   case kM3Mode:
-    KinematicValue = &(dunemcSamples[iEvent].mode);
-    break;
+    return &(dunemcSamples[iEvent].mode);
   case kOscChannel:
-    KinematicValue = &(dunemcSamples[iEvent].OscChannelIndex);
-    break;
+    return &(dunemcSamples[iEvent].OscChannelIndex);
   case kIsFHC:
-    KinematicValue = &(isFHC);
-    break;
-  case kTrueCCnue: 
-	KinematicValue = &(dunemcSamples[iEvent].rw_trueccnue);
- 	break;
-  case kTrueCCnumu: 
-	KinematicValue = &(dunemcSamples[iEvent].rw_trueccnumu);
- 	break;
+    return &(beamFDSampleDetails[MCEvents[iEvent].NominalSample].isFHC);
+  case kTrueCCnue:
+	return &(dunemcSamples[iEvent].rw_trueccnue);
+  case kTrueCCnumu:
+	  return &(dunemcSamples[iEvent].rw_trueccnumu);
+  case kTargetNucleus:
+    return &(dunemcSamples[iEvent].Target);
   default:
-    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
+    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type {}...", KinPar);
     throw MaCh3Exception(__FILE__, __LINE__);
   }
-  
-  return KinematicValue;
 }
 
-const double* SampleHandlerBeamFD::GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(ReturnKinematicParameterFromString(KinematicParameter)); 
-  return GetPointerToKinematicParameter(KinPar, iEvent);
-}
 
-const double* SampleHandlerBeamFD::GetPointerToKinematicParameter(double KinematicVariable, int iEvent) {
-  KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
-  return GetPointerToKinematicParameter(KinPar, iEvent);
-}
-
-double SampleHandlerBeamFD::ReturnKinematicParameter(int KinematicVariable, int iEvent) {
+double SampleHandlerBeamFD::ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const{
   KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
   return *GetPointerToKinematicParameter(KinPar, iEvent);
 }
 
-double SampleHandlerBeamFD::ReturnKinematicParameter(std::string KinematicParameter, int iEvent) {
- return *GetPointerToKinematicParameter(KinematicParameter, iEvent);
+void SampleHandlerBeamFD::SetupMC() {
+  // dunemc_base *duneobj = &(dunemcSamples[iSample]);
+  // FarDetectorCoreInfo *fdobj = &(MCEvents[iSample]);
+
+  for (unsigned int iEvent = 0; iEvent < GetNEvents(); ++iEvent) {
+    MCEvents[iEvent].enu_true = dunemcSamples[iEvent].enu_true;
+    MCEvents[iEvent].isNC = !(dunemcSamples[iEvent].rw_isCC);
+    MCEvents[iEvent].nupdg = dunemcSamples[iEvent].nupdg;
+    MCEvents[iEvent].nupdgUnosc = dunemcSamples[iEvent].nupdgUnosc;
+    MCEvents[iEvent].NominalSample = dunemcSamples[iEvent].SampleIndex;
+  }
+
 }
 
-void SampleHandlerBeamFD::SetupFDMC() {
-  // dunemc_base *duneobj = &(dunemcSamples[iSample]);
-  // FarDetectorCoreInfo *fdobj = &(MCSamples[iSample]);  
-  
-  for(int iEvent = 0 ;iEvent < int(GetNEvents()); ++iEvent) {
-    MCSamples[iEvent].rw_etru = &(dunemcSamples[iEvent].rw_etru);
-    MCSamples[iEvent].mode = &(dunemcSamples[iEvent].mode);
-    MCSamples[iEvent].Target = &(dunemcSamples[iEvent].Target); 
-    MCSamples[iEvent].isNC = !(dunemcSamples[iEvent].rw_isCC);
-    MCSamples[iEvent].nupdg = &(dunemcSamples[iEvent].nupdg);
-    MCSamples[iEvent].nupdgUnosc = &(dunemcSamples[iEvent].nupdgUnosc);
-  }
-  
-}
- 

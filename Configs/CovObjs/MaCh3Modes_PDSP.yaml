@@ -1,0 +1,31 @@
+---
+Title: "MaCh3 PDSP Sample Info"
+
+GeneratorName: "NA"
+
+MaCh3Modes: [
+  "Abs",
+  "Cex",
+  "Pip"
+]
+
+Abs:
+  Name: "Absorption"
+  GeneratorMaping: [1]
+  IsNC: false
+  PlotColor: 632
+  SplineSuffix: "abs"
+
+Cex:
+  Name: "Charge Exchange"
+  GeneratorMaping: [2]
+  IsNC: false
+  PlotColor: 618
+  SplineSuffix: "cex"
+
+Pip:
+  Name: "Pion production"
+  GeneratorMaping: [3]
+  IsNC: false
+  PlotColor: 840
+  SplineSuffix: "pip"

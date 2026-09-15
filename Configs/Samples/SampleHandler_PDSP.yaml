@@ -1,0 +1,166 @@
+---
+#Global Sample Handler setting
+SampleHandlerName: "PDSP"
+POT: 0
+MCGlobalScale: 0.592
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_PDSP.yaml"
+
+LikelihoodOptions:
+  #False means you calculate W2 histogram only during first reweight, advisable for Barlow-Beeston
+  UpdateW2: true
+  TestStatistic: "Poisson"
+
+BinningFile: "Configs/Samples/PDSPBinning.yaml"
+InputFiles:
+  PrepSplineFile: false
+
+#Settings for samples
+Samples: ["PDSP_Abs", "PDSP_CEx", "PDSP_Pip", "PDSP_Unc", "PDSP_Esc"]
+
+PDSP_Abs:
+  SelectionCuts:
+    - KinematicStr: "RecoEndZ"
+      Bounds: [30, 220]
+  SampleTitle: "PDSP_Abs"
+
+  Binning:
+    VarStr: ["RecoKEInt", "RecoKEIni"]
+    VarBins: [[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400],
+              [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400]]
+    Uniform: True
+
+  InputFiles:
+    mtupleprefix: "Inputs/PDSP/Set2-2026_07_03/pdsp_"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ""
+
+  OscChannels:
+    - Name: "absorption"
+      LatexName: "abs"
+      mtuplefile: ["Rabsorption"]
+      splinefile: ""
+      nutype: 1
+      oscnutype: 1
+
+PDSP_CEx:
+  SelectionCuts:
+    - KinematicStr: "RecoEndZ"
+      Bounds: [30, 220]
+  SampleTitle: "PDSP_CEx"
+
+  Binning:
+    VarStr: ["RecoKEInt", "RecoKEIni"]
+    VarBins: [[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400],
+              [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400]]
+    Uniform: True
+
+  InputFiles:
+    mtupleprefix: "Inputs/PDSP/Set2-2026_07_03/pdsp_"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ""
+
+  OscChannels:
+    - Name: "charge_exchange"
+      LatexName: "cex"
+      mtuplefile: ["Rcharge_exchange"]
+      splinefile: ""
+      nutype: 2
+      oscnutype: 2
+
+PDSP_Pip:
+  SelectionCuts:
+    - KinematicStr: "RecoEndZ"
+      Bounds: [30, 220]
+  SampleTitle: "PDSP_Pip"
+
+  Binning:
+    VarStr: ["RecoKEInt", "RecoKEIni"]
+    VarBins: [[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400],
+              [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400]]
+    Uniform: True
+
+  InputFiles:
+    mtupleprefix: "Inputs/PDSP/Set2-2026_07_03/pdsp_"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ""
+
+  OscChannels:
+    - Name: "pion_production"
+      LatexName: "pip"
+      mtuplefile: ["Rpion_production"]
+      splinefile: ""
+      nutype: 3
+      oscnutype: 3
+
+PDSP_Unc:
+  SelectionCuts:
+    - KinematicStr: "RecoEndZ"
+      Bounds: [30, 220]
+  SampleTitle: "PDSP_Unc"
+
+  Binning:
+    VarStr: ["RecoKEInt", "RecoKEIni"]
+    VarBins: [[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400],
+              [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400]]
+    Uniform: True
+
+  InputFiles:
+    mtupleprefix: "Inputs/PDSP/Set2-2026_07_03/pdsp_"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ""
+
+  OscChannels:
+    - Name: "uncategorised"
+      LatexName: "unc"
+      mtuplefile: ["Runcategorised"]
+      splinefile: ""
+      nutype: 4
+      oscnutype: 4
+
+PDSP_Esc:
+  SelectionCuts:
+    - KinematicStr: "RecoEndZ"
+      Bounds: [220, 999]
+  SampleTitle: "PDSP_Esc"
+
+  Binning:
+    VarStr: ["RecoKEInt", "RecoKEIni"]
+    VarBins: [[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400],
+              [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400]]
+    Uniform: True
+
+  InputFiles:
+    mtupleprefix: "Inputs/PDSP/Set2-2026_07_03/pdsp_"
+    mtuplesuffix: ".root"
+    splineprefix: ""
+    splinesuffix: ""
+
+  OscChannels:
+    - Name: "absorption"
+      LatexName: "abs"
+      mtuplefile: ["Rabsorption"]
+      splinefile: ""
+      nutype: 1
+      oscnutype: 1
+    - Name: "charge_exchange"
+      LatexName: "cex"
+      mtuplefile: ["Rcharge_exchange"]
+      splinefile: ""
+      nutype: 2
+      oscnutype: 2
+    - Name: "pion_production"
+      LatexName: "pip"
+      mtuplefile: ["Rpion_production"]
+      splinefile: ""
+      nutype: 3
+      oscnutype: 3
+    - Name: "uncategorised"
+      LatexName: "unc"
+      mtuplefile: ["Runcategorised"]
+      splinefile: ""
+      nutype: 4
+      oscnutype: 4

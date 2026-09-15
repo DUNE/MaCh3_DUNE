@@ -13,13 +13,13 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
         with:
           fetch-depth: 0
 
       - name: Run Super Linter
-        uses: github/super-linter@v7
-        continue-on-error: true
+        uses: github/super-linter@b807e99ddd37e444d189cfd2c2ca1274d8ae8ef1
+        continue-on-error: false
         env:
           LINTER_RULES_PATH: .github/linters
           VALIDATE_MARKDOWN: true  # Enable Markdown linting

@@ -1,0 +1,1258 @@
+---
+# ==============================================================================
+# REUSABLE ANCHORS & TEMPLATES
+# ==============================================================================
+x-anchors:
+  default-values: &default_values
+    Generated: 0.0
+    PreFitValue: 0.0
+
+  default-values-unit: &default_values_unit
+    Generated: 1.0
+    PreFitValue: 1.0
+
+  mcmc-step-scale: &default_step
+    MCMC: 0.4
+
+  spline-info: &default_spline
+    Mode:
+      - 0
+    Type: PerEvent
+
+  sample-names: &default_samples
+    - ND_*
+    - FD_*
+    - ATM
+
+  parameter-bounds: &default_bounds
+    - -9999.0
+    - 9999.0
+
+# ==============================================================================
+# MACH3 SYSTEMATICS CONFIGURATION
+# ==============================================================================
+Systematics:
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: AhtBY
+        ParameterName: AhtBY
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: AhtBY
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: BhtBY
+        ParameterName: BhtBY
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: BhtBY
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: CV1uBY
+        ParameterName: CV1uBY
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: CV1uBY
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: CV2uBY
+        ParameterName: CV2uBY
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: CV2uBY
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: EtaNCEL
+        ParameterName: EtaNCEL
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: EtaNCEL
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: FrAbs_N
+        ParameterName: FrAbs_N
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: FrAbs_N
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: FrAbs_pi
+        ParameterName: FrAbs_pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: FrAbs_pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: FrCEx_N
+        ParameterName: FrCEx_N
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: FrCEx_N
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: FrCEx_pi
+        ParameterName: FrCEx_pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: FrCEx_pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: FrInel_N
+        ParameterName: FrInel_N
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: FrInel_N
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: FrInel_pi
+        ParameterName: FrInel_pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: FrInel_pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: FrPiProd_N
+        ParameterName: FrPiProd_N
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: FrPiProd_N
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: FrPiProd_pi
+        ParameterName: FrPiProd_pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: FrPiProd_pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: MFP_N
+        ParameterName: MFP_N
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: MFP_N
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: MFP_pi
+        ParameterName: MFP_pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: MFP_pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: MaCCRES
+        ParameterName: MaCCRES
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: MaCCRES
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: MaNCEL
+        ParameterName: MaNCEL
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: MaNCEL
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: MaNCRES
+        ParameterName: MaNCRES
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: MaNCRES
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: MvCCRES
+        ParameterName: MvCCRES
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: MvCCRES
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: MvNCRES
+        ParameterName: MvNCRES
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: MvNCRES
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: NonRESBGvbarnCC1pi
+        ParameterName: NonRESBGvbarnCC1pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: NonRESBGvbarnCC1pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: NonRESBGvbarnCC2pi
+        ParameterName: NonRESBGvbarnCC2pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: NonRESBGvbarnCC2pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: NonRESBGvbarnNC1pi
+        ParameterName: NonRESBGvbarnNC1pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: NonRESBGvbarnNC1pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: NonRESBGvbarnNC2pi
+        ParameterName: NonRESBGvbarnNC2pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: NonRESBGvbarnNC2pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: NonRESBGvbarpCC1pi
+        ParameterName: NonRESBGvbarpCC1pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: NonRESBGvbarpCC1pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: NonRESBGvbarpCC2pi
+        ParameterName: NonRESBGvbarpCC2pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: NonRESBGvbarpCC2pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: NonRESBGvbarpNC1pi
+        ParameterName: NonRESBGvbarpNC1pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: NonRESBGvbarpNC1pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: NonRESBGvbarpNC2pi
+        ParameterName: NonRESBGvbarpNC2pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: NonRESBGvbarpNC2pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: NonRESBGvnCC1pi
+        ParameterName: NonRESBGvnCC1pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: NonRESBGvnCC1pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: NonRESBGvnCC2pi
+        ParameterName: NonRESBGvnCC2pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: NonRESBGvnCC2pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: NonRESBGvnNC1pi
+        ParameterName: NonRESBGvnNC1pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: NonRESBGvnNC1pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: NonRESBGvnNC2pi
+        ParameterName: NonRESBGvnNC2pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: NonRESBGvnNC2pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: NonRESBGvpCC1pi
+        ParameterName: NonRESBGvpCC1pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: NonRESBGvpCC1pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: NonRESBGvpCC2pi
+        ParameterName: NonRESBGvpCC2pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: NonRESBGvpCC2pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: NonRESBGvpNC1pi
+        ParameterName: NonRESBGvpNC1pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: NonRESBGvpNC1pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: NonRESBGvpNC2pi
+        ParameterName: NonRESBGvpNC2pi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: NonRESBGvpNC2pi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: RDecBR1eta
+        ParameterName: RDecBR1eta
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: RDecBR1eta
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: RDecBR1gamma
+        ParameterName: RDecBR1gamma
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: RDecBR1gamma
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values_unit
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: Theta_Delta2Npi
+        ParameterName: Theta_Delta2Npi
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: Theta_Delta2Npi
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values_unit
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: VecFFCCQEshape
+        ParameterName: VecFFCCQEshape
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: VecFFCCQEshape
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: ZExpA1CCQE
+        ParameterName: ZExpA1CCQE
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: ZExpA1CCQE
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: ZExpA2CCQE
+        ParameterName: ZExpA2CCQE
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: ZExpA2CCQE
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: ZExpA3CCQE
+        ParameterName: ZExpA3CCQE
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: ZExpA3CCQE
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: ZExpA4CCQE
+        ParameterName: ZExpA4CCQE
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: ZExpA4CCQE
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: DecayAng2MEC
+        ParameterName: DecayAng2MEC
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: DecayAng2MEC
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: DecayAngMEC
+        ParameterName: DecayAngMEC
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: DecayAngMEC
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: DecayAngMECVariationResponse
+        ParameterName: DecayAngMECVariationResponse
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: DecayAngMECVariationResponse
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: EnergyDependence_CCMEC
+        ParameterName: EnergyDependence_CCMEC
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: EnergyDependence_CCMEC
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: FracDelta_CCMEC
+        ParameterName: FracDelta_CCMEC
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: FracDelta_CCMEC
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: FracPN_CCMEC
+        ParameterName: FracPN_CCMEC
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: FracPN_CCMEC
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: XSecShape_CCMEC
+        ParameterName: XSecShape_CCMEC
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: XSecShape_CCMEC
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: XSecShape_CCMEC_Empirical
+        ParameterName: XSecShape_CCMEC_Empirical
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: XSecShape_CCMEC_Empirical
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: XSecShape_CCMEC_Martini
+        ParameterName: XSecShape_CCMEC_Martini
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: XSecShape_CCMEC_Martini
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: Fakedial
+        ParameterName: Fakedial
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: Fakedial
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: b1
+        ParameterName: b1
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: b1
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: b2
+        ParameterName: b2
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: b2
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: b3
+        ParameterName: b3
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: b3
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: b4
+        ParameterName: b4
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: b4
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: C12ToAr40_2p2hScaling_nu
+        ParameterName: C12ToAr40_2p2hScaling_nu
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: C12ToAr40_2p2hScaling_nu
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: C12ToAr40_2p2hScaling_nubar
+        ParameterName: C12ToAr40_2p2hScaling_nubar
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: C12ToAr40_2p2hScaling_nubar
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: nuenuebar_xsec_ratio
+        ParameterName: nuenuebar_xsec_ratio
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: nuenuebar_xsec_ratio
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: nuenumu_xsec_ratio
+        ParameterName: nuenumu_xsec_ratio
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: nuenumu_xsec_ratio
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: MaRes_ResCode0
+        ParameterName: MaRes_ResCode0
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: MaRes_ResCode0
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: MaRes_ResCode1
+        ParameterName: MaRes_ResCode1
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: MaRes_ResCode1
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: MvRes_ResCode0
+        ParameterName: MvRes_ResCode0
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: MvRes_ResCode0
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: MvRes_ResCode1
+        ParameterName: MvRes_ResCode1
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: MvRes_ResCode1
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: nucleus_radius
+        ParameterName: nucleus_radius
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: nucleus_radius
+
+  - Systematic:
+      FlatPrior: false
+      ParameterBounds: *default_bounds
+      ParameterValues: *default_values
+      StepScale: *default_step
+      Type: Spline
+      ParameterGroup: Xsec
+      SampleNames: *default_samples
+      Names:
+        FancyName: surface_thickness
+        ParameterName: surface_thickness
+      Error: 1.0
+      SplineInformation:
+        Type: PerEvent
+        Mode:
+          - 0
+        SplineName: surface_thickness

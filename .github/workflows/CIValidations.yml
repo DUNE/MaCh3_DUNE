@@ -33,7 +33,7 @@ jobs:
     name: Run Test ${{matrix.name}}
     steps:
       # Checkout the repository code
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
@@ -49,7 +49,7 @@ jobs:
 
       # Run event rates
       - name: Run Event Rates
-        uses: addnab/docker-run-action@v3
+        uses: addnab/docker-run-action@4f65fabd2431ebc8d299f8e5a018d79a769ae185
         with:
           image: ghcr.io/dune/mach3:alma9_ci
           shell: bash

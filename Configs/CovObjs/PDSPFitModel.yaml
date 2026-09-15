@@ -1,0 +1,1982 @@
+---
+Systematics:
+
+- Systematic:
+    Names:
+      FancyName: TrueAbs-Init_Under-End_Under
+      ParameterName: TrueAbs-Init_Under-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [0., 1500]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueCEx-Init_Under-End_Under
+      ParameterName: TrueCEx-Init_Under-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [0., 1500]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TruePip-Init_Under-End_Under
+      ParameterName: TruePip-Init_Under-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [0., 1500]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueDecay-Init_Under-End_Under
+      ParameterName: TrueDec-Init_Under-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [3]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [0., 1500]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueEsc-Init_Under-End_Under
+      ParameterName: TrueEsc-Init_Under-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [4]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [0., 1500]
+      - TrueEndZ: [220, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueImpure-Init_Under-End_Under
+      ParameterName: TrueImpure-Init_Under-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [999]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [0., 1500]
+      - TrueEndZ: [30, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueAbs-Init_0-End_Under
+      ParameterName: TrueAbs-Init_0-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1500, 1700]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueCEx-Init_0-End_Under
+      ParameterName: TrueCEx-Init_0-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1500, 1700]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TruePip-Init_0-End_Under
+      ParameterName: TruePip-Init_0-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1500, 1700]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueDecay-Init_0-End_Under
+      ParameterName: TrueDec-Init_0-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [3]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1500, 1700]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueEsc-Init_0-End_Under
+      ParameterName: TrueEsc-Init_0-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [4]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1500, 1700]
+      - TrueEndZ: [220, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueImpure-Init_0-End_Under
+      ParameterName: TrueImpure-Init_0-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [999]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1500, 1700]
+      - TrueEndZ: [30, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueAbs-Init_1-End_Under
+      ParameterName: TrueAbs-Init_1-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueCEx-Init_1-End_Under
+      ParameterName: TrueCEx-Init_1-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TruePip-Init_1-End_Under
+      ParameterName: TruePip-Init_1-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueDecay-Init_1-End_Under
+      ParameterName: TrueDec-Init_1-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [3]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueEsc-Init_1-End_Under
+      ParameterName: TrueEsc-Init_1-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [4]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [220, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueImpure-Init_1-End_Under
+      ParameterName: TrueImpure-Init_1-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [999]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [30, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueAbs-Init_2-End_Under
+      ParameterName: TrueAbs-Init_2-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueCEx-Init_2-End_Under
+      ParameterName: TrueCEx-Init_2-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TruePip-Init_2-End_Under
+      ParameterName: TruePip-Init_2-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueDecay-Init_2-End_Under
+      ParameterName: TrueDec-Init_2-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [3]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueEsc-Init_2-End_Under
+      ParameterName: TrueEsc-Init_2-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [4]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [220, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueImpure-Init_2-End_Under
+      ParameterName: TrueImpure-Init_2-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [999]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueAbs-Init_Over-End_Under
+      ParameterName: TrueAbs-Init_Over-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueCEx-Init_Over-End_Under
+      ParameterName: TrueCEx-Init_Over-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TruePip-Init_Over-End_Under
+      ParameterName: TruePip-Init_Over-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueDecay-Init_Over-End_Under
+      ParameterName: TrueDec-Init_Over-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [3]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueEsc-Init_Over-End_Under
+      ParameterName: TrueEsc-Init_Over-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [4]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [220, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueImpure-Init_Over-End_Under
+      ParameterName: TrueImpure-Init_Over-End_Under
+
+    SampleNames: ["PDSP"]
+    Mode: [999]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [0., 1500]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueAbs-Init_0-End_0
+      ParameterName: TrueAbs-Init_0-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1500, 1700]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueCEx-Init_0-End_0
+      ParameterName: TrueCEx-Init_0-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1500, 1700]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TruePip-Init_0-End_0
+      ParameterName: TruePip-Init_0-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1500, 1700]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueDecay-Init_0-End_0
+      ParameterName: TrueDec-Init_0-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [3]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1500, 1700]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueEsc-Init_0-End_0
+      ParameterName: TrueEsc-Init_0-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [4]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1500, 1700]
+      - TrueEndZ: [220, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueImpure-Init_0-End_0
+      ParameterName: TrueImpure-Init_0-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [999]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1500, 1700]
+      - TrueEndZ: [30, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueAbs-Init_1-End_0
+      ParameterName: TrueAbs-Init_1-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueCEx-Init_1-End_0
+      ParameterName: TrueCEx-Init_1-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TruePip-Init_1-End_0
+      ParameterName: TruePip-Init_1-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueDecay-Init_1-End_0
+      ParameterName: TrueDec-Init_1-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [3]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueEsc-Init_1-End_0
+      ParameterName: TrueEsc-Init_1-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [4]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [220, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueImpure-Init_1-End_0
+      ParameterName: TrueImpure-Init_1-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [999]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [30, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueAbs-Init_2-End_0
+      ParameterName: TrueAbs-Init_2-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueCEx-Init_2-End_0
+      ParameterName: TrueCEx-Init_2-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TruePip-Init_2-End_0
+      ParameterName: TruePip-Init_2-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueDecay-Init_2-End_0
+      ParameterName: TrueDec-Init_2-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [3]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueEsc-Init_2-End_0
+      ParameterName: TrueEsc-Init_2-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [4]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [220, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueImpure-Init_2-End_0
+      ParameterName: TrueImpure-Init_2-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [999]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueAbs-Init_Over-End_0
+      ParameterName: TrueAbs-Init_Over-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueCEx-Init_Over-End_0
+      ParameterName: TrueCEx-Init_Over-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TruePip-Init_Over-End_0
+      ParameterName: TruePip-Init_Over-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueDecay-Init_Over-End_0
+      ParameterName: TrueDec-Init_Over-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [3]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueEsc-Init_Over-End_0
+      ParameterName: TrueEsc-Init_Over-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [4]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [220, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueImpure-Init_Over-End_0
+      ParameterName: TrueImpure-Init_Over-End_0
+
+    SampleNames: ["PDSP"]
+    Mode: [999]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1500, 1700]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueAbs-Init_1-End_1
+      ParameterName: TrueAbs-Init_1-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueCEx-Init_1-End_1
+      ParameterName: TrueCEx-Init_1-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TruePip-Init_1-End_1
+      ParameterName: TruePip-Init_1-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueDecay-Init_1-End_1
+      ParameterName: TrueDec-Init_1-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [3]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueEsc-Init_1-End_1
+      ParameterName: TrueEsc-Init_1-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [4]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [220, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueImpure-Init_1-End_1
+      ParameterName: TrueImpure-Init_1-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [999]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [1700, 1900]
+      - TrueEndZ: [30, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueAbs-Init_2-End_1
+      ParameterName: TrueAbs-Init_2-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueCEx-Init_2-End_1
+      ParameterName: TrueCEx-Init_2-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TruePip-Init_2-End_1
+      ParameterName: TruePip-Init_2-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueDecay-Init_2-End_1
+      ParameterName: TrueDec-Init_2-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [3]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueEsc-Init_2-End_1
+      ParameterName: TrueEsc-Init_2-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [4]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [220, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueImpure-Init_2-End_1
+      ParameterName: TrueImpure-Init_2-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [999]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueAbs-Init_Over-End_1
+      ParameterName: TrueAbs-Init_Over-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueCEx-Init_Over-End_1
+      ParameterName: TrueCEx-Init_Over-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TruePip-Init_Over-End_1
+      ParameterName: TruePip-Init_Over-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueDecay-Init_Over-End_1
+      ParameterName: TrueDec-Init_Over-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [3]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueEsc-Init_Over-End_1
+      ParameterName: TrueEsc-Init_Over-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [4]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [220, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueImpure-Init_Over-End_1
+      ParameterName: TrueImpure-Init_Over-End_1
+
+    SampleNames: ["PDSP"]
+    Mode: [999]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1700, 1900]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueAbs-Init_2-End_2
+      ParameterName: TrueAbs-Init_2-End_2
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1900, 2100]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueCEx-Init_2-End_2
+      ParameterName: TrueCEx-Init_2-End_2
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1900, 2100]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TruePip-Init_2-End_2
+      ParameterName: TruePip-Init_2-End_2
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1900, 2100]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueDecay-Init_2-End_2
+      ParameterName: TrueDec-Init_2-End_2
+
+    SampleNames: ["PDSP"]
+    Mode: [3]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1900, 2100]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueEsc-Init_2-End_2
+      ParameterName: TrueEsc-Init_2-End_2
+
+    SampleNames: ["PDSP"]
+    Mode: [4]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1900, 2100]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [220, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueImpure-Init_2-End_2
+      ParameterName: TrueImpure-Init_2-End_2
+
+    SampleNames: ["PDSP"]
+    Mode: [999]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1900, 2100]
+      - TrueKEIni: [1900, 2100]
+      - TrueEndZ: [30, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueAbs-Init_Over-End_2
+      ParameterName: TrueAbs-Init_Over-End_2
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1900, 2100]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueCEx-Init_Over-End_2
+      ParameterName: TrueCEx-Init_Over-End_2
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1900, 2100]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TruePip-Init_Over-End_2
+      ParameterName: TruePip-Init_Over-End_2
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1900, 2100]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueDecay-Init_Over-End_2
+      ParameterName: TrueDec-Init_Over-End_2
+
+    SampleNames: ["PDSP"]
+    Mode: [3]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1900, 2100]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueEsc-Init_Over-End_2
+      ParameterName: TrueEsc-Init_Over-End_2
+
+    SampleNames: ["PDSP"]
+    Mode: [4]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1900, 2100]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [220, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueImpure-Init_Over-End_2
+      ParameterName: TrueImpure-Init_Over-End_2
+
+    SampleNames: ["PDSP"]
+    Mode: [999]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [1900, 2100]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueAbs-Init_Over-End_Over
+      ParameterName: TrueAbs-Init_Over-End_Over
+
+    SampleNames: ["PDSP"]
+    Mode: [0]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [2100, 999999]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueCEx-Init_Over-End_Over
+      ParameterName: TrueCEx-Init_Over-End_Over
+
+    SampleNames: ["PDSP"]
+    Mode: [1]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [2100, 999999]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TruePip-Init_Over-End_Over
+      ParameterName: TruePip-Init_Over-End_Over
+
+    SampleNames: ["PDSP"]
+    Mode: [2]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [2100, 999999]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueDecay-Init_Over-End_Over
+      ParameterName: TrueDec-Init_Over-End_Over
+
+    SampleNames: ["PDSP"]
+    Mode: [3]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [2100, 999999]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 220]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueEsc-Init_Over-End_Over
+      ParameterName: TrueEsc-Init_Over-End_Over
+
+    SampleNames: ["PDSP"]
+    Mode: [4]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [2100, 999999]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [220, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01
+
+- Systematic:
+    Names:
+      FancyName: TrueImpure-Init_Over-End_Over
+      ParameterName: TrueImpure-Init_Over-End_Over
+
+    SampleNames: ["PDSP"]
+    Mode: [999]
+    Error: 0.1
+    FlatPrior: true
+    ParameterBounds: [0, 4]
+    ParameterGroup: Fit
+    KinematicCuts:
+      - TrueKEInt: [2100, 999999]
+      - TrueKEIni: [2100, 999999]
+      - TrueEndZ: [30, 999]
+    ParameterValues:
+      Generator: 1.
+      PreFitValue: 1.
+    Type: Norm
+    StepScale:
+      MCMC: 0.01

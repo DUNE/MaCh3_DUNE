@@ -2,11 +2,11 @@
 #define _samplePDFDUNEBeamFD_h_
 
 #include "Splines/BinnedSplineHandlerDUNE.h"
-#include "Samples/SampleHandlerFD.h"
+#include "Samples/SampleHandlerBase.h"
 
 #include "StructsDUNE.h"
 /// @brief Base class for handling FD Beam samples
-class SampleHandlerBeamFD : virtual public SampleHandlerFD
+class SampleHandlerBeamFD : virtual public SampleHandlerBase
 {
 public:
 
@@ -22,132 +22,65 @@ public:
   ~SampleHandlerBeamFD();
 
   /// @brief Enum to identify kinematics
-  enum KinematicTypes {kTrueNeutrinoEnergy,kRecoNeutrinoEnergy,kTrueXPos,kTrueYPos,kTrueZPos,kCVNNumu,kCVNNue,kM3Mode,kOscChannel,kIsFHC, kTrueCCnue, kTrueCCnumu};
+  enum KinematicTypes
+  {
+    kTrueNeutrinoEnergy,
+    kRecoNeutrinoEnergy,
+    kTrueXPos,
+    kTrueYPos,
+    kTrueZPos,
+    kCVNNumu,
+    kCVNNue,
+    kM3Mode,
+    kOscChannel,
+    kIsFHC,
+    kTargetNucleus,
+    kTrueCCnue,
+    kTrueCCnumu
+  };
 
 protected:
   /// @brief Initialises object
   void Init();
+
+  /// @brief Initialise data hist (can be overridden)
+  void InititialiseData();
 
   /// @brief Function to setup MC from file
   /// @return Total number of events
   int SetupExperimentMC();
 
   /// @brief Tells FD base which variables to point to/be set to
-  void SetupFDMC();
+  void SetupMC();
 
   /// @brief Sets up pointers weights for each event (oscillation/xsec/etc.)
-  void SetupWeightPointers();
+  void AddAdditionalWeightPointers();
   void SetupSplines();
-	
-	// === HH: Functional parameters ===
-  enum FuncParEnum {kTotalEScale, kTotalEScaleNotCCNumu, 
-    kTotalEScaleSqrt, kTotalEScaleSqrtNotCCNumu, 
-    kTotalEScaleInvSqrt, kTotalEScaleInvSqrtNotCCNumu,
-    kHadEScale, kHadEScaleSqrt, kHadEScaleInvSqrt,
-    kMuEScale, kMuEScaleSqrt, kMuEScaleInvSqrt,
-    kNEScale, kNEScaleSqrt, kNEScaleInvSqrt,
-    kEMEScale, kEMEScaleCCNue, 
-    kEMEScaleSqrt, kEMEScaleSqrtCCNue,
-    kEMEScaleInvSqrt, kEMEScaleInvSqrtCCNue,
-    kHadRes, kMuRes, kNRes, kEMRes, kEMResCCNue,
-	kRecoCVNNumu, kRecoCVNNue
-  };
+
   void RegisterFunctionalParameters() override;
-  void resetShifts(int iEvent) override;
-
-  // Global energy scale systematics
-  void TotalEScale(const double * par, std::size_t iEvent);
-  void TotalEScaleNotCCNumu(const double * par, std::size_t iEvent);
-  void TotalEScaleSqrt(const double * par, std::size_t iEvent);
-  void TotalEScaleSqrtNotCCNumu(const double * par, std::size_t iEvent);
-  void TotalEScaleInvSqrt(const double * par, std::size_t iEvent);
-  void TotalEScaleInvSqrtNotCCNumu(const double * par, std::size_t iEvent);
-
-  // Particle specific energy uncertainties
-  // Charged hadron
-  void HadEScale(const double * par, std::size_t iEvent);
-  void HadEScaleSqrt(const double * par, std::size_t iEvent);
-  void HadEScaleInvSqrt(const double * par, std::size_t iEvent);
-  // Muons
-  void MuEScale(const double * par, std::size_t iEvent);
-  void MuEScaleSqrt(const double * par, std::size_t iEvent);
-  void MuEScaleInvSqrt(const double * par, std::size_t iEvent);
-  // Neutrons
-  void NEScale(const double * par, std::size_t iEvent);
-  void NEScaleSqrt(const double * par, std::size_t iEvent);
-  void NEScaleInvSqrt(const double * par, std::size_t iEvent);
-  // Electromagnetic showers
-  void EMEScale(const double * par, std::size_t iEvent);
-  void EMEScaleCCNue(const double * par, std::size_t iEvent);
-  void EMEScaleSqrt(const double * par, std::size_t iEvent);
-  void EMEScaleSqrtCCNue(const double * par, std::size_t iEvent);
-  void EMEScaleInvSqrt(const double * par, std::size_t iEvent);
-  void EMEScaleInvSqrtCCNue(const double * par, std::size_t iEvent);
-
-  // Resolution uncertainties
-  void HadRes(const double * par, std::size_t iEvent);
-  void MuRes(const double * par, std::size_t iEvent);
-  void NRes(const double * par, std::size_t iEvent);
-  void EMRes(const double * par, std::size_t iEvent);
-  void EMResCCNue(const double * par, std::size_t iEvent);
-
-  //Reconstruction (CVN) uncertainties
-  void RecoCVNNumu(const double * par, std::size_t iEvent);
-  void RecoCVNNue(const double * par, std::size_t iEvent);
-
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinematicVariable Kinematic parameter Type
-  /// @param iEvent Event ID
-  /// @return Value of kinematic parameter corresponding for a given event 
-  double ReturnKinematicParameter (KinematicTypes KinPar, int iEvent);
+  void ResetShifts(int iEvent) override;
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter ID as int
   /// @param iEvent Event ID
-  /// @return Value of kinematic parameter corresponding for a given event 
-  double ReturnKinematicParameter (int KinematicVariable, int iEvent);
-
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinematicParameter Kinematic parameter name as string (gets cast -> int)
-  /// @param iEvent Event ID
   /// @return Value of kinematic parameter corresponding for a given event
-  double ReturnKinematicParameter(std::string KinematicParameter, int iEvent);
-
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinPar Kinematic Parameter Type
-  /// @param iEvent Event ID
-  /// @return Pointer to KinPar for a given event
-  const double* GetPointerToKinematicParameter(KinematicTypes KinPar, int iEvent);
-
-  /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
-  /// @param KinematicParameter Kinematic parameter name as string (gets cast -> int)
-  /// @param iEvent Event ID
-  /// @return Pointer to KinPar for a given event
-  const double* GetPointerToKinematicParameter(std::string KinematicParameter, int iEvent);
+  double ReturnKinematicParameter (const int KinematicVariable, const int iEvent) const override;
 
   /// @brief Returns pointer to kinemtatic parameter for event in Structs DUNE
   /// @param KinematicVariable Kinematic parameter as double (gets cast -> int)
   /// @param iEvent Event ID
   /// @return Pointer to KinPar for a given event
-  const double* GetPointerToKinematicParameter(double KinematicVariable, int iEvent); 
+  const double* GetPointerToKinematicParameter(const int KinematicVariable, const int iEvent) const override;
 
-  // std::vector<double> ReturnKinematicParameterBinning(std::string KinematicParameter);
-  inline std::string ReturnStringFromKinematicParameter(int KinematicParameterStr);
-  
   //DB functions which could be initialised to do something which is non-trivial
-
   /// @brief NOT IMPLEMENTED: Dunder method to calculate xsec weights
   /// @param iEvent Event number
   double CalcXsecWeightFunc(int iEvent) {(void)iEvent; return 1.;}
 
   // dunemc
-  /// DUNE MC sampels
-  std::vector<struct dunemc_beamfd> dunemcSamples;
-
-  /// Value of POT used for sample
-  double pot;
-  bool iselike;
-  double isFHC;
+  /// DUNE MC samples
+  std::vector<dunemc_beamfd> dunemcSamples;
+  std::vector<BeamFDSampleInfo> beamFDSampleDetails;
 
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
@@ -160,6 +93,7 @@ protected:
     {"Mode",kM3Mode},
     {"OscillationChannel",kOscChannel},
     {"IsFHC",kIsFHC},
+    {"TargetNucleus", kTargetNucleus},
     {"IsTrueCCnue", kTrueCCnue},
     {"IsTrueCCnumu", kTrueCCnumu}
   };
@@ -175,15 +109,19 @@ protected:
     {kM3Mode,"Mode"},
     {kOscChannel,"OscillationChannel"},
     {kIsFHC,"IsFHC"},
+    {kTargetNucleus, "TargetNucleus"},
     {kTrueCCnue,"IsTrueCCnue"},
     {kTrueCCnumu,"IsTrueCCnumu"}
   };
   std::unordered_map<std::string, std::vector<double>> norm_map;
 
+  /// @brief Downsampling step (e.g. 10 means only every 10th event is used in the fit). Default is 1 (no downsampling).
+  unsigned int downsamplingStep;
+
   /// @brief Cleanup memory
   void CleanMemoryBeforeFit() override {};
 };
-  
+
 
 
 #endif

@@ -1,7 +1,7 @@
 # CMake version check
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
-SET(MaCh3DUNE_VERSION 1.0.0)
+SET(MaCh3DUNE_VERSION 1.2.0)
 
 # Create project (todo: set configurable CUDA)
 project(MaCh3DUNE VERSION ${MaCh3DUNE_VERSION} LANGUAGES CXX)
@@ -34,33 +34,17 @@ LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake/Modules)
 # download CPM.cmake
 file(
   DOWNLOAD
-  https://github.com/cpm-cmake/CPM.cmake/releases/download/v0.40.2/CPM.cmake
+  https://github.com/cpm-cmake/CPM.cmake/releases/download/v0.43.1/CPM.cmake
   ${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake
 )
 include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 
-CPMFindPackage(
-  NAME CMakeModules
-  GIT_TAG stable
-  GITHUB_REPOSITORY NuHepMC/CMakeModules
-  DOWNLOAD_ONLY
-)
-include(${CMakeModules_SOURCE_DIR}/NuHepMCModules.cmake)
-
 #=================== ROOT
-include(ROOT)
-
-if(NOT TARGET ROOT::ROOT)
-  cmessage(FATAL_ERROR "MaCh3 Expected dependency target: ROOT::ROOT")
-endif()
-
-if(DEFINED ROOT_CXX_STANDARD AND ROOT_CXX_STANDARD GREATER CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD ${ROOT_CXX_STANDARD})
-endif()
+find_package(ROOT 6 REQUIRED)
 
 #=================== DUNEAnaObj
 if(NOT DEFINED DUNE_ANAOBJ_BRANCH)
-  set(DUNE_ANAOBJ_BRANCH v03_06_00)
+  set(DUNE_ANAOBJ_BRANCH v03_14_00)
   set(DUNE_ANAOBJ_BRANCH ${DUNE_ANAOBJ_BRANCH} CACHE STRING "Specify which duneanaobj branch to use")
 endif()
 
@@ -68,7 +52,7 @@ option(MaCh3_DUNE_USE_SRProxy "Whether to build proxy classes for Standard Recor
 
 if(MaCh3_DUNE_USE_SRProxy)
   find_package(duneanaobj)
-	
+
   if(NOT duneanaobj_FOUND)
     CPMFindPackage(
       NAME duneanaobj
@@ -77,79 +61,46 @@ if(MaCh3_DUNE_USE_SRProxy)
       VERSION 4.0.0
     )
   endif()
-  
+
   if(NOT TARGET duneanaobj::all)
-    cmessage(FATAL_ERROR "MaCh3 DUNE Expected dependency target: duneanaobj::all")
+    message(FATAL_ERROR "MaCh3 DUNE Expected dependency target: duneanaobj::all")
   endif()
 else()
-  CPMAddPackage(
-    NAME duneanaobj
-    GIT_TAG ${DUNE_ANAOBJ_BRANCH}
-    GITHUB_REPOSITORY DUNE/duneanaobj 
-    DOWNLOAD_ONLY YES
-  )
-  include_directories(${duneanaobj_SOURCE_DIR})
-  
-  ROOT_GENERATE_DICTIONARY(StandardRecordDict ${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/StandardRecord.h
-    LINKDEF ${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/classes_def.xml)
-  
-  file(GLOB SR_IMPL_FILES "${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/*.cxx")
-  LIST(APPEND SR_IMPL_FILES ${CMAKE_CURRENT_BINARY_DIR}/StandardRecordDict.cxx)
-  
-  add_library(duneanaobj_StandardRecord SHARED ${SR_IMPL_FILES})
-  target_link_libraries(duneanaobj_StandardRecord PUBLIC ROOT::MathCore)
-  
-  target_include_directories(duneanaobj_StandardRecord PUBLIC 
-    $<BUILD_INTERFACE:${duneanaobj_SOURCE_DIR}> 
-    $<INSTALL_INTERFACE:include>)
-  target_include_directories(duneanaobj_StandardRecord PRIVATE 
-    $<BUILD_INTERFACE:${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord> #root puts this in the dictionary
-  )
-  
-  set_target_properties(duneanaobj_StandardRecord PROPERTIES EXPORT_NAME all)
-  install(TARGETS duneanaobj_StandardRecord EXPORT mach3dune-targets DESTINATION lib)
-  
-  file(GLOB SR_HEADER_FILES "${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/*.h")
-  
-  install(FILES ${SR_HEADER_FILES} DESTINATION include/duneanaobj/StandardRecord)
-  install(FILES 
-    ${CMAKE_CURRENT_BINARY_DIR}/libStandardRecordDict_rdict.pcm 
-    ${CMAKE_CURRENT_BINARY_DIR}/libStandardRecordDict.rootmap 
-    DESTINATION lib)
-  
-  add_library(duneanaobj::all ALIAS duneanaobj_StandardRecord)
-  
+  include(fetchduneanaobj)
+  fetchduneanaobj(${DUNE_ANAOBJ_BRANCH})
 endif()
 
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
-find_package(MaCh3 2.2.3 EXACT QUIET)
-set(MaCh3_CORE_BRANCH v2.2.3 CACHE STRING "Specify the MaCh3 core branch to use")
+# don't find mach3 core from a previous build in this directory or sad times occur
+LIST(APPEND CMAKE_IGNORE_PATH ${CMAKE_CURRENT_BINARY_DIR})
+find_package(MaCh3 2.6.0 EXACT QUIET)
+set(MaCh3_CORE_BRANCH v2.6.0 CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
-option(MaCh3DUNE_Atmos "Whether working with atmospherics or beam oscillations" OFF)
 
 if(NOT MaCh3_FOUND)
-  cmessage(STATUS "Didn't find MaCh3, attempting to use built in MaCh3")
-  
+  message(STATUS "Didn't find MaCh3, attempting to use built in MaCh3")
+
   if(NOT DEFINED MaCh3_GPU_ENABLED)
     set(MaCh3_GPU_ENABLED ON)
   endif()
-  
+
   if(NOT DEFINED MaCh3_DEBUG_ENABLED)
     set(MaCh3_DEBUG_ENABLED FALSE)
   endif()
-  
+
   if(NOT DEFINED MaCh3_MULTITHREAD_ENABLED)
     set(MaCh3_MULTITHREAD_ENABLED TRUE)
   endif()
-  
+
   # Options list construction
   set(MaCh3_OPTIONS
     "MaCh3_GPU_ENABLED ${MaCh3_GPU_ENABLED}"
     "MaCh3_DEBUG_ENABLED ${MaCh3_DEBUG_ENABLED}"
     "MaCh3_MULTITHREAD_ENABLED ${MaCh3_MULTITHREAD_ENABLED}"
     "MaCh3_CORE_BRANCH ${MaCh3_CORE_BRANCH}"
+    "MaCh3_WERROR_ENABLED OFF" #required due to small uninitialized issue in MaCh3Core 2.6.0, revert when fixed
   )
 
   # Add LOG_LEVEL if defined
@@ -158,13 +109,9 @@ if(NOT MaCh3_FOUND)
   endif()
 
   list(APPEND MaCh3_OPTIONS "NuFastLinear_ENABLED TRUE")
-  if (MaCh3DUNE_Atmos)
-    list(APPEND MaCh3_OPTIONS "CUDAProb3_ENABLED TRUE")
-    list(APPEND MaCh3_OPTIONS "CUDAProb3Linear_ENABLED FALSE")
-  else()
-    list(APPEND MaCh3_OPTIONS "CUDAProb3Linear_ENABLED TRUE")
-  endif()
-  
+  list(APPEND MaCh3_OPTIONS "CUDAProb3_ENABLED TRUE")
+  list(APPEND MaCh3_OPTIONS "CUDAProb3Linear_ENABLED TRUE")
+
   CPMAddPackage(
     NAME MaCh3
     GIT_TAG ${MaCh3_CORE_BRANCH}
@@ -176,13 +123,13 @@ else()
   ##KS: This ensure that all executables that are in core will be moved
   FILE(GLOB MaCh3Exe $ENV{MaCh3_ROOT}/Diagnostics/*)
   FILE(COPY ${MaCh3Exe} DESTINATION ${CMAKE_BINARY_DIR}/Diagnostics/)
-  
+
   FILE(GLOB MaCh3Exe $ENV{MaCh3_ROOT}/plotting/*)
   FILE(COPY ${MaCh3Exe} DESTINATION ${CMAKE_BINARY_DIR}/plotting/)
 endif()
 
 if(NOT TARGET MaCh3::All)
-  cmessage(FATAL_ERROR "MaCh3 DUNE Expected dependency target: MaCh3::All, did you source setup.MaCh3.sh")
+  message(FATAL_ERROR "MaCh3 DUNE Expected dependency target: MaCh3::All, did you source setup.MaCh3.sh")
 endif()
 
 ############################  C++ Compiler  ####################################
@@ -192,7 +139,7 @@ if(NOT DEFINED MACH3_CXX_STANDARD)
 else()
   SET(CMAKE_CXX_STANDARD ${MACH3_CXX_STANDARD})
 endif()
-cmessage(STATUS "CMAKE CXX Standard: ${CMAKE_CXX_STANDARD}")
+message(STATUS "CMAKE CXX Standard: ${CMAKE_CXX_STANDARD}")
 
 ############################  FLAGS  ####################################
 add_library(DUNEMaCh3Warnings INTERFACE)
@@ -224,9 +171,9 @@ target_compile_options(DUNEMaCh3Warnings INTERFACE
 
 LIST(APPEND ALL_FEATURES
 )
-cmessage(STATUS "MaCh3DUNE Features: ")
+message(STATUS "MaCh3DUNE Features: ")
 foreach(f ${ALL_FEATURES})
-  cmessage(STATUS "     ${f}: ${MaCh3DUNE_${f}_ENABLED}")
+  message(STATUS "     ${f}: ${MaCh3DUNE_${f}_ENABLED}")
 endforeach()
 
 #KS: Options to print dependency graph
@@ -244,6 +191,13 @@ endif()
 
 ################################# Build MaCh3 ##################################
 add_library(MaCh3DUNECompilerOptions INTERFACE)
+
+if(MaCh3_DUNE_USE_SRProxy)
+  target_compile_definitions(MaCh3DUNECompilerOptions INTERFACE MaCh3_DUNE_USE_SRProxy=1)
+else()
+  target_compile_definitions(MaCh3DUNECompilerOptions INTERFACE MaCh3_DUNE_USE_SRProxy=0)
+endif()
+
 set_target_properties(MaCh3DUNECompilerOptions PROPERTIES EXPORT_NAME CompilerOptions)
 
 target_include_directories(MaCh3DUNECompilerOptions
@@ -265,6 +219,49 @@ set_target_properties(MaCh3DUNEAll PROPERTIES EXPORT_NAME All)
 target_link_libraries(MaCh3DUNEAll INTERFACE SamplesDUNE SplinesDUNE MaCh3DUNECompilerOptions)
 add_library(MaCh3DUNE::All ALIAS MaCh3DUNEAll)
 
+if(NOT DEFINED MaCh3_PREFIX OR MaCh3_PREFIX STREQUAL "")
+    # Try to detect if MaCh3 was fetched by CPM
+    if(EXISTS "${CMAKE_BINARY_DIR}/_deps/mach3-src")
+        set(MaCh3_PREFIX "${CMAKE_BINARY_DIR}/_deps/mach3-src")
+        message(STATUS "Detected CPM-fetched MaCh3: ${MaCh3_PREFIX}")
+    # Try to get from MaCh3 package config
+    elseif(DEFINED MaCh3_DIR)
+        get_filename_component(MaCh3_PREFIX "${MaCh3_DIR}" DIRECTORY)
+        get_filename_component(MaCh3_PREFIX "${MaCh3_PREFIX}" DIRECTORY)
+        message(STATUS "Detected installed MaCh3 from MaCh3_DIR: ${MaCh3_PREFIX}")
+    # Try to get from target properties
+    elseif(TARGET MaCh3::All)
+        get_target_property(MACH3_INCLUDE_DIRS MaCh3::All INTERFACE_INCLUDE_DIRECTORIES)
+        if(MACH3_INCLUDE_DIRS)
+            list(GET MACH3_INCLUDE_DIRS 0 FIRST_INCLUDE_DIR)
+            get_filename_component(MaCh3_PREFIX "${FIRST_INCLUDE_DIR}" DIRECTORY)
+            message(STATUS "Detected MaCh3 from target include dirs: ${MaCh3_PREFIX}")
+        endif()
+    endif()
+
+    # Final validation
+    if(NOT DEFINED MaCh3_PREFIX OR MaCh3_PREFIX STREQUAL "")
+        message(FATAL_ERROR "Could not determine MaCh3_PREFIX. Please set it manually with -DMaCh3_PREFIX=<path>")
+    endif()
+
+    if(NOT EXISTS "${MaCh3_PREFIX}")
+        message(FATAL_ERROR "MaCh3_PREFIX does not exist: ${MaCh3_PREFIX}")
+    endif()
+
+    # Cache it for use in subdirectories
+    set(MaCh3_PREFIX "${MaCh3_PREFIX}" CACHE PATH "MaCh3 installation or source directory" FORCE)
+    message(STATUS "Set MaCh3_PREFIX: ${MaCh3_PREFIX}")
+endif()
+
+
+if(PYTHON_ENABLED)
+	message(STATUS "PYTHON IS ENABLED!!")
+	set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
+	message(STATUS "CMAKE_INSTALL_RPATH is ${CMAKE_INSTALL_RPATH}")
+	set(PYMACH3_PATH ${CMAKE_BINARY_DIR}/python/pyMaCh3)
+	add_subdirectory(python)
+endif()
+
 install(TARGETS MaCh3DUNEAll
   EXPORT mach3dune-targets
   LIBRARY DESTINATION lib/)
@@ -279,6 +276,7 @@ file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/output)
 ############################  Install  ####################################
 install(DIRECTORY Inputs DESTINATION ${CMAKE_BINARY_DIR})
 install(DIRECTORY Configs DESTINATION ${CMAKE_BINARY_DIR})
+install(DIRECTORY plotting DESTINATION ${CMAKE_BINARY_DIR})
 install(DIRECTORY Utils DESTINATION ${CMAKE_BINARY_DIR})
 
 install(EXPORT mach3dune-targets

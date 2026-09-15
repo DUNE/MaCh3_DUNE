@@ -1,7 +1,7 @@
 ---
 Systematics:
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -22,7 +22,7 @@ Systematics:
       MCMC: 0.002
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -43,7 +43,7 @@ Systematics:
       MCMC: 0.02
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 0.09
     FlatPrior: false
     Names:
@@ -64,7 +64,7 @@ Systematics:
       MCMC: 0.2
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -85,7 +85,7 @@ Systematics:
       MCMC: 0.003
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -106,7 +106,7 @@ Systematics:
       MCMC: 0.2
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -127,7 +127,7 @@ Systematics:
       MCMC: 6.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -149,7 +149,7 @@ Systematics:
       MCMC: 0.1
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -171,7 +171,7 @@ Systematics:
       MCMC: 2.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -193,7 +193,7 @@ Systematics:
       MCMC: 1.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -215,7 +215,7 @@ Systematics:
       MCMC: 1.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -237,7 +237,7 @@ Systematics:
       MCMC: 2.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -261,7 +261,7 @@ Systematics:
       MCMC: 3.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -285,7 +285,7 @@ Systematics:
       MCMC: 5.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -309,7 +309,7 @@ Systematics:
       MCMC: 2.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -333,7 +333,7 @@ Systematics:
       MCMC: 2.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -357,7 +357,7 @@ Systematics:
       MCMC: 7.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -383,7 +383,7 @@ Systematics:
       MCMC: 2.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -409,7 +409,7 @@ Systematics:
       MCMC: 4.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -435,7 +435,7 @@ Systematics:
       MCMC: 3.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -461,7 +461,7 @@ Systematics:
       MCMC: 4.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -487,7 +487,7 @@ Systematics:
       MCMC: 7.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -509,7 +509,7 @@ Systematics:
       MCMC: 0.03
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -531,7 +531,7 @@ Systematics:
       MCMC: 0.07
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -553,7 +553,7 @@ Systematics:
       MCMC: 0.02
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -575,7 +575,7 @@ Systematics:
       MCMC: 0.03
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -597,7 +597,7 @@ Systematics:
       MCMC: 0.3
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -619,7 +619,7 @@ Systematics:
       MCMC: 0.1
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -640,7 +640,7 @@ Systematics:
       MCMC: 0.03
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -661,7 +661,7 @@ Systematics:
       MCMC: 0.06
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -682,7 +682,7 @@ Systematics:
       MCMC: 0.04
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -703,7 +703,7 @@ Systematics:
       MCMC: 0.05
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 0.2
     FlatPrior: false
     Names:
@@ -724,7 +724,7 @@ Systematics:
       MCMC: 0.001
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -745,7 +745,7 @@ Systematics:
       MCMC: 10.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -766,7 +766,7 @@ Systematics:
       MCMC: 10.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -787,7 +787,7 @@ Systematics:
       MCMC: 30.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -808,7 +808,7 @@ Systematics:
       MCMC: 10.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -829,7 +829,7 @@ Systematics:
       MCMC: 10.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -850,7 +850,7 @@ Systematics:
       MCMC: 2.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -871,7 +871,7 @@ Systematics:
       MCMC: 4.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -892,7 +892,7 @@ Systematics:
       MCMC: 0.3
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -913,7 +913,7 @@ Systematics:
       MCMC: 1.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -934,7 +934,7 @@ Systematics:
       MCMC: 0.1
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -955,7 +955,7 @@ Systematics:
       MCMC: 1.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -976,7 +976,7 @@ Systematics:
       MCMC: 2.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -997,7 +997,7 @@ Systematics:
       MCMC: 10.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1018,7 +1018,7 @@ Systematics:
       MCMC: 2.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1039,7 +1039,7 @@ Systematics:
       MCMC: 4.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1060,7 +1060,7 @@ Systematics:
       MCMC: 10.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1081,7 +1081,7 @@ Systematics:
       MCMC: 10.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1102,7 +1102,7 @@ Systematics:
       MCMC: 5.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1123,7 +1123,7 @@ Systematics:
       MCMC: 0.01
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1144,7 +1144,7 @@ Systematics:
       MCMC: 0.01
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1165,7 +1165,7 @@ Systematics:
       MCMC: 0.04
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_*", "FD_*"]
+    SampleNames: ["BeamND*", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
@@ -1190,7 +1190,7 @@ Systematics:
       MCMC: 5.0
     Type: Spline
 - Systematic:
-    SampleNames: ["ND_LAr_FHC", "FD_*"]
+    SampleNames: ["BeamND_FHC_CCnumu", "BeamFD*"]
     Error: 1.0
     FlatPrior: false
     Names:
