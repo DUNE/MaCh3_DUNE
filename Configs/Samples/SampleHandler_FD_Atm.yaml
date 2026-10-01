@@ -4,14 +4,15 @@ MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
 BinningFile: "Configs/Samples/AtmosphericParameterBinning.yaml"
 
 InputFiles:
-  FileDirectory: "Inputs/Atmospherics/CAFs/"
+  FileDirectory: "" #"/exp/dune/data/users/barrowd/AtmInputs/"
   FileName: "" #"Inputs/Atmospherics/CAFs/caf_new_sum.2.6M_weighted.root"
 
-  EigenFile: "" #"AtmSample.eig"
-  EigenFileMD5Sum: "" #"4c813800b7aae3d7f54a1c98242a80e6"
+  EigenFile: "AtmSample.eig"
+  EigenFileMD5Sum: "749f8de473818b6f7919fe9e81f3dd3c"
 
   # Per-event spline configuration  
-  InputSplines: "Inputs/Atmospherics/Splines/merged_new_systs_wmec_wheader.root"
+  #InputSplines: "Inputs/Atmospherics/Splines/merged_new_systs_wmec_wheader.root"
+  InputSplines: ""
   
 NuOsc:
   NuOscConfigFile: "Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml"
