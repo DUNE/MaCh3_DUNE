@@ -5,8 +5,7 @@ BinningFile: "Configs/Samples/AtmosphericParameterBinning.yaml"
 
 InputFiles:
   FileDirectory: "Inputs/Atmospherics/CAFs/"
-
-  FileName: "Inputs/Atmospherics/CAFs/caf_new_sum.2.6M_weighted.root"
+  FileName: "" #"Inputs/Atmospherics/CAFs/caf_new_sum.2.6M_weighted.root"
 
   EigenFile: "" #"AtmSample.eig"
   EigenFileMD5Sum: "" #"4c813800b7aae3d7f54a1c98242a80e6"

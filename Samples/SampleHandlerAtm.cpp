@@ -11,6 +11,7 @@
 
 #pragma GCC diagnostic pop
 
+#include <filesystem>
 
 #include <Eigen/Dense>
 #include "DUNEUtils.h"
@@ -204,9 +205,25 @@ int SampleHandlerAtm::SetupExperimentMC() {
 
   TChain* cafTree = new TChain("cafTree");
   TChain* weightsTree = new TChain("weights");
-  
-  cafTree->Add(InputFileName.c_str());
-  weightsTree->Add(InputFileName.c_str());
+
+  if (InputFileName != "") {
+    cafTree->Add(InputFileName.c_str());
+    weightsTree->Add(InputFileName.c_str());
+  } else if (InputFileDirectory != "") {
+    std::filesystem::path directory = InputFileDirectory;
+
+    for (const auto& entry : std::filesystem::directory_iterator(directory)) {
+      if (entry.is_regular_file() && entry.path().extension()==".root") {
+	std::string FileName = entry.path();
+	std::cout << "Adding file:" << FileName << std::endl;
+	cafTree->Add(FileName.c_str());
+	weightsTree->Add(FileName.c_str());
+      }
+    }
+  } else {
+    std::cout << "Bad config file!" << std::endl;
+    throw;
+  }
   
   double xsec_w, flux_nue_w, flux_numu_w;
   weightsTree->SetBranchAddress("xsec",&xsec_w);
