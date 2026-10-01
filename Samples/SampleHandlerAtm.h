@@ -30,6 +30,9 @@ public:
     kMinDistToWall
   };
 
+  /// @brief Convert dunemc_atm struct object to Eigen::MatrixXd and write to binary file
+  void TransferToEigen(std::string FileName);
+
 protected:
   /// @brief Initialises object
   void Init();
@@ -41,6 +44,9 @@ protected:
   /// @param iSample sample ID
   /// @return Total number of events
   int SetupExperimentMC();
+
+  /// @brief Read binary file into Eigen::MatrixXd and transfer into dunemc_atm struct
+  int ReadFromEigen();
 
   /// @brief Tells FD base which variables to point to/be set to
   /// @param iSample Sample ID
@@ -144,6 +150,14 @@ protected:
   int ReturnSampleIdentifier(std::vector<double> CVNScores, double MinDistanceToWall);
   std::vector<std::string> EventSelectionNames = std::vector<std::string>(nEventSelections);
   std::vector<int> EventSelection_to_SampleIndex_Map = std::vector<int>(nEventSelections,kEventSel_Unknown);
+
+  /// Enum defining CAF->Eigen transformation
+  enum Variables{rw_erec,rw_theta,SampleIndex,nupdg,nupdgUnosc,OscChannelIndex,mode,rw_isCC,Target,enu_true,coszenith_true,flux_w,MinDistToWall,eid,nVariables};
+
+  /// File path to binary file which contains Eigen::MatrixXd
+  std::string EigenInputFile;
+  /// Known MD5 Checksum of the binary file
+  std::string EigenInputFileMD5Sum;
 };
 
 #endif

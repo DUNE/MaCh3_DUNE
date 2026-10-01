@@ -11,6 +11,10 @@
 
 #pragma GCC diagnostic pop
 
+
+#include <Eigen/Dense>
+#include "DUNEUtils.h"
+
 SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGeneric* xsec_cov_, const std::shared_ptr<OscillationHandler>&  Oscillator_) : SampleHandlerBase(mc_version_, xsec_cov_, Oscillator_) {
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
@@ -41,6 +45,13 @@ void SampleHandlerAtm::Init() {
   //DB Value used to determine selection criteria for FC and PC separation in function of 'walldist' variable
   FCPCSeparation = Get<double>(SampleManager->raw()["AnalysisOptions"]["FCPCSeparation"],__FILE__,__LINE__);
 
+  if (SampleManager->raw()["InputFiles"]["EigenFile"]) {
+    EigenInputFile = Get<std::string>(SampleManager->raw()["InputFiles"]["EigenFile"],__FILE__,__LINE__);
+    EigenInputFileMD5Sum = Get<std::string>(SampleManager->raw()["InputFiles"]["EigenFileMD5Sum"],__FILE__,__LINE__);
+  } else {
+    EigenInputFile = "";
+  }
+
   //DB Define the names of the samples we're performing event selection for
   EventSelectionNames[kEventSel_FC_NuE]  = "FC_nueselec";
   EventSelectionNames[kEventSel_FC_NuMu] = "FC_numuselec";
@@ -70,6 +81,7 @@ void SampleHandlerAtm::Init() {
     MACH3LOG_ERROR("No Event Selections match Defined Samples from Config");
     throw MaCh3Exception(__FILE__, __LINE__);
   }
+
 }
 
 void SampleHandlerAtm::InititialiseData() {
@@ -123,7 +135,68 @@ void SampleHandlerAtm::AddAdditionalWeightPointers() {
   }  
 }
 
+
+int SampleHandlerAtm::ReadFromEigen() {
+  Eigen::MatrixXd Matrix;
+
+  MACH3LOG_INFO("Reading Eigen matrix from:{}",EigenInputFile);
+  CompareMD5Sum(EigenInputFileMD5Sum,EigenInputFile);
+  ReadEigenMatrixFromFile(EigenInputFile.c_str(),Matrix);
+
+  int nEntries = static_cast<int>(Matrix.rows());
+  dunemcSamples.resize(nEntries);
+
+  for (size_t iEvent=0;iEvent<dunemcSamples.size();++iEvent) {
+    dunemcSamples[iEvent].rw_erec = Matrix(iEvent,Variables::rw_erec);
+    dunemcSamples[iEvent].rw_theta = Matrix(iEvent,Variables::rw_theta);    
+    dunemcSamples[iEvent].SampleIndex = static_cast<int>(Matrix(iEvent,Variables::SampleIndex));
+    dunemcSamples[iEvent].nupdg = static_cast<int>(Matrix(iEvent,Variables::nupdg));
+    dunemcSamples[iEvent].nupdgUnosc = static_cast<int>(Matrix(iEvent,Variables::nupdgUnosc));
+    dunemcSamples[iEvent].OscChannelIndex = Matrix(iEvent,Variables::OscChannelIndex);
+    dunemcSamples[iEvent].mode = Matrix(iEvent,Variables::mode);
+    dunemcSamples[iEvent].rw_isCC = static_cast<int>(Matrix(iEvent,Variables::rw_isCC));
+    dunemcSamples[iEvent].Target = static_cast<int>(Matrix(iEvent,Variables::Target));
+    dunemcSamples[iEvent].enu_true = Matrix(iEvent,Variables::enu_true);
+    dunemcSamples[iEvent].coszenith_true = Matrix(iEvent,Variables::coszenith_true);    
+    dunemcSamples[iEvent].flux_w = Matrix(iEvent,Variables::flux_w);
+    dunemcSamples[iEvent].MinDistToWall = Matrix(iEvent,Variables::MinDistToWall);
+    dunemcSamples[iEvent].eid = static_cast<uint>(Matrix(iEvent,Variables::eid));
+  }
+
+  return nEntries;
+}
+
+void SampleHandlerAtm::TransferToEigen(std::string FileName) {
+  Eigen::MatrixXd Matrix = Eigen::MatrixXd(dunemcSamples.size(),Variables::nVariables);
+
+  for (size_t iEvent=0;iEvent<dunemcSamples.size();++iEvent) {
+    Matrix(iEvent,Variables::rw_erec) = dunemcSamples[iEvent].rw_erec;
+    Matrix(iEvent,Variables::rw_theta) = dunemcSamples[iEvent].rw_theta;
+    Matrix(iEvent,Variables::SampleIndex) = dunemcSamples[iEvent].SampleIndex;
+    Matrix(iEvent,Variables::nupdg) = dunemcSamples[iEvent].nupdg;
+    Matrix(iEvent,Variables::nupdgUnosc) = dunemcSamples[iEvent].nupdgUnosc;
+    Matrix(iEvent,Variables::OscChannelIndex) = dunemcSamples[iEvent].OscChannelIndex;
+    Matrix(iEvent,Variables::mode) = dunemcSamples[iEvent].mode;
+    Matrix(iEvent,Variables::rw_isCC) = dunemcSamples[iEvent].rw_isCC;    
+    Matrix(iEvent,Variables::Target) = dunemcSamples[iEvent].Target;
+    Matrix(iEvent,Variables::enu_true) = dunemcSamples[iEvent].enu_true;
+    Matrix(iEvent,Variables::coszenith_true) = dunemcSamples[iEvent].coszenith_true;    
+    Matrix(iEvent,Variables::flux_w) = dunemcSamples[iEvent].flux_w;
+    Matrix(iEvent,Variables::MinDistToWall) = dunemcSamples[iEvent].MinDistToWall;
+    Matrix(iEvent,Variables::eid) = dunemcSamples[iEvent].eid;        
+  }
+
+  MACH3LOG_INFO("Writing Eigen matrix to:{}",FileName);
+  WriteEigenMatrixToFile(FileName.c_str(),Matrix);
+}
+
 int SampleHandlerAtm::SetupExperimentMC() {
+  // If the Eigen input file is define, read from that. Otherwise read from CAF file
+  if (EigenInputFile != "") {
+    int nEntries = ReadFromEigen();
+    return nEntries;
+  }
+  
   int CurrErrorLevel = gErrorIgnoreLevel;
   gErrorIgnoreLevel = kFatal;  
 
@@ -201,25 +274,25 @@ int SampleHandlerAtm::SetupExperimentMC() {
       continue;
     }
 
-    // Now, since the event has a valid candidate classification, we lazy-load and calculate MinDistToWall:
-    double MinDistToWall = 1e8;
+    // Now, since the event has a valid candidate classification, we lazy-load and calculate MinDist:
+    double MinDist = 1e8;
     auto const& pandora_parts = sr->common.ixn.pandora[0].part.pandora;
     size_t nParts = pandora_parts.size();
     for (size_t iPart = 0; iPart < nParts; ++iPart) {
       auto const& part = pandora_parts[iPart];
       //DB Info from PG -- ignore any hits associated with HitCollection classified objects
       if (part.origRecoObjType == caf::RecoObjType::kHitCollection) {continue;}
-      if (part.walldist < MinDistToWall) {MinDistToWall = part.walldist;}
+      if (part.walldist < MinDist) {MinDist = part.walldist;}
     }
     
-    int SampleIndex = ReturnSampleIdentifier(CVNScores, MinDistToWall);
-    if (SampleIndex == kEventSel_Unknown) {
+    int SampIndex = ReturnSampleIdentifier(CVNScores, MinDist);
+    if (SampIndex == kEventSel_Unknown) {
       continue;
     }
 
     TVector3 RecoNuMomentumVector;
     double RecoENu;
-    if (IsELike[SampleIndex]) {
+    if (IsELike[SampIndex]) {
       RecoENu = sr->common.ixn.pandora[0].Enu.e_calo;
       RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.heshw.x,sr->common.ixn.pandora[0].dir.heshw.y,sr->common.ixn.pandora[0].dir.heshw.z)).Unit();
     } else {
@@ -236,7 +309,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
       continue;
     }
 
-    auto& OscillationChannels = SampleDetails[SampleIndex].OscChannels;    
+    auto& OscillationChannels = SampleDetails[SampIndex].OscChannels;    
     int InteractingPDG = sr->mc.nu[0].pdg;
 
     int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
@@ -250,7 +323,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
     
     currentEvent_FromNuE.rw_erec = RecoENu;
     currentEvent_FromNuE.rw_theta = RecoCZ;
-    currentEvent_FromNuE.SampleIndex = SampleIndex;
+    currentEvent_FromNuE.SampleIndex = SampIndex;
     currentEvent_FromNuE.nupdg = InteractingPDG;
     currentEvent_FromNuE.nupdgUnosc = (InteractingPDG > 0) ? 12 : -12;
     currentEvent_FromNuE.OscChannelIndex = static_cast<double>(GetOscChannel(OscillationChannels, currentEvent_FromNuE.nupdgUnosc, currentEvent_FromNuE.nupdg));
@@ -260,7 +333,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
     currentEvent_FromNuE.enu_true = TrueNeutrinoEnergy;
     currentEvent_FromNuE.coszenith_true = -TrueNuMomentumVector.y(); // +Y in CAF files translates to +Z in typical CosZ
     currentEvent_FromNuE.flux_w = xsec_w*flux_nue_w;
-    currentEvent_FromNuE.MinDistToWall = MinDistToWall;
+    currentEvent_FromNuE.MinDistToWall = MinDist;
     currentEvent_FromNuE.eid = static_cast<uint>(iTreeEntry);
     
     struct dunemc_atm currentEvent_FromNuMu = currentEvent_FromNuE;
@@ -351,16 +424,16 @@ int SampleHandlerAtm::ReturnSampleIdentifier(std::vector<double> CVNScores, doub
     EventSelection = kCVN_NuE;
   }
 
-  int SampleIndex = kEventSel_Unknown;
+  int SampIndex = kEventSel_Unknown;
   if (IsFullyContained) {
-    if (EventSelection == kCVN_NuE)  {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NuE]; }
-    if (EventSelection == kCVN_NuMu) {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NuMu];}
-    if (EventSelection == kCVN_NC)   {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NC];  }    
+    if (EventSelection == kCVN_NuE)  {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NuE]; }
+    if (EventSelection == kCVN_NuMu) {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NuMu];}
+    if (EventSelection == kCVN_NC)   {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NC];  }    
   } else {
-    if (EventSelection == kCVN_NuE)  {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_PC_NuE]; }
-    if (EventSelection == kCVN_NuMu) {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_PC_NuMu];}
-    if (EventSelection == kCVN_NC)   {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_PC_NC];  }    
+    if (EventSelection == kCVN_NuE)  {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_PC_NuE]; }
+    if (EventSelection == kCVN_NuMu) {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_PC_NuMu];}
+    if (EventSelection == kCVN_NC)   {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_PC_NC];  }    
   }
   
-  return SampleIndex;
+  return SampIndex;
 }

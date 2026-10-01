@@ -42,6 +42,22 @@ include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 #=================== ROOT
 find_package(ROOT 6 REQUIRED)
 
+#=================== SSL
+find_package(OpenSSL REQUIRED)
+
+#=================== EIGEN
+CPMAddPackage(
+  NAME Eigen
+  VERSION 3.4.0
+  URL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz
+  DOWNLOAD_ONLY YES
+)
+
+if(Eigen_ADDED)
+  add_library(Eigen INTERFACE IMPORTED)
+  target_include_directories(Eigen INTERFACE ${Eigen_SOURCE_DIR})
+endif()
+
 #=================== DUNEAnaObj
 if(NOT DEFINED DUNE_ANAOBJ_BRANCH)
   set(DUNE_ANAOBJ_BRANCH v03_14_00)

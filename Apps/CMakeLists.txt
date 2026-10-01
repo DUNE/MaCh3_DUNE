@@ -8,6 +8,7 @@ foreach(app
 	LikelihoodScan
 	Variations
 	Predictive
+	ConvertToEigen
       )
 
     add_executable(${app} ${app}.cpp)
