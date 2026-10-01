@@ -4,10 +4,16 @@ MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
 BinningFile: "Configs/Samples/AtmosphericParameterBinning.yaml"
 
 InputFiles:
-  FileName: "Inputs/Atmospherics/CAFs/caf_new_sum.2.6M_weighted.root"
-  EigenFile: "AtmSample.eig"
-  EigenFileMD5Sum: "4c813800b7aae3d7f54a1c98242a80e6"
+  FileDirectory: "Inputs/Atmospherics/CAFs/"
 
+  FileName: "" #"Inputs/Atmospherics/CAFs/caf_new_sum.2.6M_weighted.root"
+
+  EigenFile: "" #"AtmSample.eig"
+  EigenFileMD5Sum: "" #"4c813800b7aae3d7f54a1c98242a80e6"
+
+  # Per-event spline configuration  
+  InputSplines: "Inputs/Atmospherics/Splines/merged_new_systs_wmec_wheader.root"
+  
 NuOsc:
   NuOscConfigFile: "Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml"
   EqualBinningPerOscChannel: true
@@ -15,9 +21,6 @@ NuOsc:
 AnalysisOptions:
   ExposureScaling: 1.0
   FCPCSeparation: 10.0
-  # Per-event spline configuration
-  InputSplines: "Inputs/Atmospherics/Splines/merged_new_systs_wmec_wheader.root"
-  SampleId: 0
 
 InputFilesDefaults: &input_files_defaults
   mtupleprefix: ""

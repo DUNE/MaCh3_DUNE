@@ -28,28 +28,31 @@ SampleHandlerAtm::~SampleHandlerAtm() {
 void SampleHandlerAtm::Init() {
   std::vector<std::string> EnabledSamples = Get<std::vector<std::string>>(SampleManager->raw()["Samples"], __FILE__ , __LINE__);
   IsELike.resize(GetNSamples());
-  
-  ExposureScaling = Get<double>(SampleManager->raw()["AnalysisOptions"]["ExposureScaling"],__FILE__,__LINE__);
   for(int iSample=0;iSample<GetNSamples();iSample++){
     const std::string TempTitle = EnabledSamples[iSample];
     IsELike[iSample] = Get<int>(SampleManager->raw()[TempTitle]["SampleOptions"]["IsELike"],__FILE__,__LINE__);
   }
 
-  // Per-event spline configuration (optional)
-  if (SampleManager->raw()["AnalysisOptions"]["InputSplines"]) {
-    fInputSplines = Get<std::string>(SampleManager->raw()["AnalysisOptions"]["InputSplines"],__FILE__,__LINE__);
-  } else {
-    fInputSplines = "";
-  }
-
+  ExposureScaling = Get<double>(SampleManager->raw()["AnalysisOptions"]["ExposureScaling"],__FILE__,__LINE__);
+ 
   //DB Value used to determine selection criteria for FC and PC separation in function of 'walldist' variable
   FCPCSeparation = Get<double>(SampleManager->raw()["AnalysisOptions"]["FCPCSeparation"],__FILE__,__LINE__);
 
+  InputFileDirectory = Get<std::string>(SampleManager->raw()["InputFiles"]["FileDirectory"],__FILE__,__LINE__);
+  InputFileName = Get<std::string>(SampleManager->raw()["InputFiles"]["FileName"],__FILE__,__LINE__);
+  
   if (SampleManager->raw()["InputFiles"]["EigenFile"]) {
     EigenInputFile = Get<std::string>(SampleManager->raw()["InputFiles"]["EigenFile"],__FILE__,__LINE__);
     EigenInputFileMD5Sum = Get<std::string>(SampleManager->raw()["InputFiles"]["EigenFileMD5Sum"],__FILE__,__LINE__);
   } else {
     EigenInputFile = "";
+  }
+
+  // Per-event spline configuration (optional)
+  if (SampleManager->raw()["InputFiles"]["InputSplines"]) {
+    fInputSplines = Get<std::string>(SampleManager->raw()["InputFiles"]["InputSplines"],__FILE__,__LINE__);
+  } else {
+    fInputSplines = "";
   }
 
   //DB Define the names of the samples we're performing event selection for
@@ -199,8 +202,6 @@ int SampleHandlerAtm::SetupExperimentMC() {
   
   int CurrErrorLevel = gErrorIgnoreLevel;
   gErrorIgnoreLevel = kFatal;  
-
-  std::string InputFileName = Get<std::string>(SampleManager->raw()["InputFiles"]["FileName"],__FILE__,__LINE__);
 
   TFile *InputFile = TFile::Open(InputFileName.c_str(),"READ");
   if (!InputFile || InputFile->IsZombie()) {
