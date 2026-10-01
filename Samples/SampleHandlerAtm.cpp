@@ -138,7 +138,6 @@ void SampleHandlerAtm::AddAdditionalWeightPointers() {
   }  
 }
 
-
 int SampleHandlerAtm::ReadFromEigen() {
   Eigen::MatrixXd Matrix;
 
@@ -203,24 +202,12 @@ int SampleHandlerAtm::SetupExperimentMC() {
   int CurrErrorLevel = gErrorIgnoreLevel;
   gErrorIgnoreLevel = kFatal;  
 
-  TFile *InputFile = TFile::Open(InputFileName.c_str(),"READ");
-  if (!InputFile || InputFile->IsZombie()) {
-    MACH3LOG_ERROR("Could not open input CAF file: {}",InputFileName);
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-
-  TTree *cafTree, *weightsTree;
-  InputFile->GetObject("cafTree",cafTree);
-  if (!cafTree) {
-    MACH3LOG_ERROR("Could not find cafTree in input CAF file: {}",InputFileName);
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-  InputFile->GetObject("weights",weightsTree);
-  if (!weightsTree) {
-    MACH3LOG_ERROR("Could not find weights tree in input CAF file: {}",InputFileName);
-    throw MaCh3Exception(__FILE__, __LINE__);
-  }
-
+  TChain* cafTree = new TChain("cafTree");
+  TChain* weightsTree = new TChain("weights");
+  
+  cafTree->Add(InputFileName.c_str());
+  weightsTree->Add(InputFileName.c_str());
+  
   double xsec_w, flux_nue_w, flux_numu_w;
   weightsTree->SetBranchAddress("xsec",&xsec_w);
   weightsTree->SetBranchAddress("flux_nue",&flux_nue_w);
@@ -358,7 +345,6 @@ int SampleHandlerAtm::SetupExperimentMC() {
   delete sr;
   delete cafTree;
   delete weightsTree;
-  delete InputFile;
   
   return static_cast<int>(dunemcSamples.size());
 }

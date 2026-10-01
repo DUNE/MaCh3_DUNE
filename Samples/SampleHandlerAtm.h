@@ -155,6 +155,7 @@ protected:
   enum Variables{rw_erec,rw_theta,SampleIndex,nupdg,nupdgUnosc,OscChannelIndex,mode,rw_isCC,Target,enu_true,coszenith_true,flux_w,MinDistToWall,eid,nVariables};
 
   std::string InputFileName;
+  std::string InputFileDirectory;  
   
   /// File path to binary file which contains Eigen::MatrixXd
   std::string EigenInputFile;
