@@ -70,7 +70,7 @@ Systematics:
 - Systematic:
     Names:
       FancyName: TrueDecay-Init_Under-End_Under
-      ParameterName: TrueDec-Init_Under-End_Under
+      ParameterName: TrueDecay-Init_Under-End_Under
 
     SampleNames: ["PDSP"]
     Mode: [3]
@@ -202,7 +202,7 @@ Systematics:
 - Systematic:
     Names:
       FancyName: TrueDecay-Init_0-End_Under
-      ParameterName: TrueDec-Init_0-End_Under
+      ParameterName: TrueDecay-Init_0-End_Under
 
     SampleNames: ["PDSP"]
     Mode: [3]
@@ -334,7 +334,7 @@ Systematics:
 - Systematic:
     Names:
       FancyName: TrueDecay-Init_1-End_Under
-      ParameterName: TrueDec-Init_1-End_Under
+      ParameterName: TrueDecay-Init_1-End_Under
 
     SampleNames: ["PDSP"]
     Mode: [3]
@@ -466,7 +466,7 @@ Systematics:
 - Systematic:
     Names:
       FancyName: TrueDecay-Init_2-End_Under
-      ParameterName: TrueDec-Init_2-End_Under
+      ParameterName: TrueDecay-Init_2-End_Under
 
     SampleNames: ["PDSP"]
     Mode: [3]
@@ -598,7 +598,7 @@ Systematics:
 - Systematic:
     Names:
       FancyName: TrueDecay-Init_Over-End_Under
-      ParameterName: TrueDec-Init_Over-End_Under
+      ParameterName: TrueDecay-Init_Over-End_Under
 
     SampleNames: ["PDSP"]
     Mode: [3]
@@ -730,7 +730,7 @@ Systematics:
 - Systematic:
     Names:
       FancyName: TrueDecay-Init_0-End_0
-      ParameterName: TrueDec-Init_0-End_0
+      ParameterName: TrueDecay-Init_0-End_0
 
     SampleNames: ["PDSP"]
     Mode: [3]
@@ -862,7 +862,7 @@ Systematics:
 - Systematic:
     Names:
       FancyName: TrueDecay-Init_1-End_0
-      ParameterName: TrueDec-Init_1-End_0
+      ParameterName: TrueDecay-Init_1-End_0
 
     SampleNames: ["PDSP"]
     Mode: [3]
@@ -994,7 +994,7 @@ Systematics:
 - Systematic:
     Names:
       FancyName: TrueDecay-Init_2-End_0
-      ParameterName: TrueDec-Init_2-End_0
+      ParameterName: TrueDecay-Init_2-End_0
 
     SampleNames: ["PDSP"]
     Mode: [3]
@@ -1126,7 +1126,7 @@ Systematics:
 - Systematic:
     Names:
       FancyName: TrueDecay-Init_Over-End_0
-      ParameterName: TrueDec-Init_Over-End_0
+      ParameterName: TrueDecay-Init_Over-End_0
 
     SampleNames: ["PDSP"]
     Mode: [3]
@@ -1258,7 +1258,7 @@ Systematics:
 - Systematic:
     Names:
       FancyName: TrueDecay-Init_1-End_1
-      ParameterName: TrueDec-Init_1-End_1
+      ParameterName: TrueDecay-Init_1-End_1
 
     SampleNames: ["PDSP"]
     Mode: [3]
@@ -1390,7 +1390,7 @@ Systematics:
 - Systematic:
     Names:
       FancyName: TrueDecay-Init_2-End_1
-      ParameterName: TrueDec-Init_2-End_1
+      ParameterName: TrueDecay-Init_2-End_1
 
     SampleNames: ["PDSP"]
     Mode: [3]
@@ -1522,7 +1522,7 @@ Systematics:
 - Systematic:
     Names:
       FancyName: TrueDecay-Init_Over-End_1
-      ParameterName: TrueDec-Init_Over-End_1
+      ParameterName: TrueDecay-Init_Over-End_1
 
     SampleNames: ["PDSP"]
     Mode: [3]
@@ -1654,7 +1654,7 @@ Systematics:
 - Systematic:
     Names:
       FancyName: TrueDecay-Init_2-End_2
-      ParameterName: TrueDec-Init_2-End_2
+      ParameterName: TrueDecay-Init_2-End_2
 
     SampleNames: ["PDSP"]
     Mode: [3]
@@ -1786,7 +1786,7 @@ Systematics:
 - Systematic:
     Names:
       FancyName: TrueDecay-Init_Over-End_2
-      ParameterName: TrueDec-Init_Over-End_2
+      ParameterName: TrueDecay-Init_Over-End_2
 
     SampleNames: ["PDSP"]
     Mode: [3]
@@ -1918,7 +1918,7 @@ Systematics:
 - Systematic:
     Names:
       FancyName: TrueDecay-Init_Over-End_Over
-      ParameterName: TrueDec-Init_Over-End_Over
+      ParameterName: TrueDecay-Init_Over-End_Over
 
     SampleNames: ["PDSP"]
     Mode: [3]
