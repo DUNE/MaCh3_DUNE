@@ -58,9 +58,8 @@ General:
     # KeepFlippingOnReject: True
   Systematics:
     XsecCovName: "xsec_cov"
-    XsecFix: [] # any of these are fixed
-    XsecCovFile: ["Configs/CovObjs/PDSPFitModel_Impure_init.yaml",
-]
+    XsecFix: []
+    XsecCovFile: ["Configs/CovObjs/PDSPFitModel_Impure_init_Functional.yaml"]
     # Optional fake-data tune for Data: false. For example, set to "Generator"
     # after editing ParameterValues:Generator in the xsec config to inject a
     # known Asimov shift while the fit still starts from PreFitValue.

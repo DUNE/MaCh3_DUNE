@@ -10,7 +10,7 @@ class SampleHandlerPDSP : virtual public SampleHandlerBase
   SampleHandlerPDSP(const std::string& config_name, ParameterHandlerGeneric* parameter_handler);
   virtual ~SampleHandlerPDSP();
 
-  enum KinematicTypes {kTrueKEIni, kTrueKEInt, kRecoKEIni, kRecoKEInt, kMode, kOscChannel, kTargetNucleus, kTrueEndZ, kRecoEndZ};
+  enum KinematicTypes {kTrueKEIni, kTrueKEInt, kRecoKEIni, kRecoKEInt, kMode, kOscChannel, kTargetNucleus, kTrueEndZ, kRecoEndZ, kRecoPinst, kRecoTrackLength};
 
   TH1* GetDataHistogramFromInputs(const int Sample) const;
   
@@ -37,6 +37,7 @@ class SampleHandlerPDSP : virtual public SampleHandlerBase
   const double* GetPointerToKinematicParameter(const int KinematicVariable, const int iEvent) const override;
 
   void CalcWeightFunc(const int iEvent) override {return; (void)iEvent;}
+  void ResetShifts(const int iEvent) override;
 
   std::vector<MetaData> PDSPSampleMetaData;
   std::vector<PDSPMCInfo> PDSPSamples;
@@ -51,7 +52,9 @@ class SampleHandlerPDSP : virtual public SampleHandlerBase
     {"OscillationChannel", kOscChannel},
     {"TargetNucleus", kTargetNucleus},
     {"TrueEndZ", kTrueEndZ},
-    {"RecoEndZ", kRecoEndZ}
+    {"RecoEndZ", kRecoEndZ},
+    {"RecoPinst", kRecoPinst},
+    {"RecoTrackLength", kRecoTrackLength}
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersPDSP = {
@@ -63,7 +66,9 @@ class SampleHandlerPDSP : virtual public SampleHandlerBase
     {kOscChannel, "OscillationChannel"},
     {kTargetNucleus, "TargetNucleus"},
     {kTrueEndZ, "TrueEndZ"},
-    {kRecoEndZ, "RecoEndZ"}
+    {kRecoEndZ, "RecoEndZ"},
+    {kRecoPinst, "RecoPinst"},
+    {kRecoTrackLength, "RecoTrackLength"}
   };
 
   // functional parameters, currently have none for the time being

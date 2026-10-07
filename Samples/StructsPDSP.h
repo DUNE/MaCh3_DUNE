@@ -31,6 +31,20 @@ struct PDSPMCInfo {
   /// Reconstructed track length (cm), from track_length_reco
   double RecoEndZ = M3::_BAD_DOUBLE_;
 
+  /// Instrumental reconstructed beam momentum (MeV/c).
+  double RecoPinst = M3::_BAD_DOUBLE_;
+  double RecoPinstShifted = M3::_BAD_DOUBLE_;
+  /// Reconstructed trajectory length (cm), distinct from the endpoint z.
+  double RecoTrackLength = M3::_BAD_DOUBLE_;
+  double RecoTrackLengthShifted = M3::_BAD_DOUBLE_;
+  /// Fixed N(0,1) deviate used to make resolution smearing deterministic.
+  double TrackLengthSmearZ = 0.0;
+  /// Shifted fit observables used by functional systematics.
+  double RecoKEIniShifted = M3::_BAD_DOUBLE_;
+  double RecoKEIntShifted = M3::_BAD_DOUBLE_;
+  /// Multiplicative beam-spectrum correction.
+  M3::float_t BeamMomentumWeight = 1.0;
+
 };
 
 struct MetaData {

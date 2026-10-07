@@ -4,6 +4,36 @@
 #include <TKey.h>
 #include <TString.h>
 
+#include <algorithm>
+#include <cstdint>
+#include <cmath>
+
+namespace {
+
+// SplitMix64 gives each event a stable pseudo-random value without keeping a
+// mutable RNG in the likelihood calculation.
+std::uint64_t SplitMix64(std::uint64_t value) {
+  value += 0x9e3779b97f4a7c15ULL;
+  value = (value ^ (value >> 30U)) * 0xbf58476d1ce4e5b9ULL;
+  value = (value ^ (value >> 27U)) * 0x94d049bb133111ebULL;
+  return value ^ (value >> 31U);
+}
+
+double UniformFromHash(const std::uint64_t value) {
+  // Use the upper 53 bits and offset by half a bin so log(u) is always safe.
+  return (static_cast<double>(value >> 11U) + 0.5) *
+         (1.0 / 9007199254740992.0);
+}
+
+double FixedGaussianDeviate(const std::uint64_t eventIndex) {
+  const double u1 = UniformFromHash(SplitMix64(2U * eventIndex));
+  const double u2 = UniformFromHash(SplitMix64(2U * eventIndex + 1U));
+  constexpr double twoPi = 6.28318530717958647692;
+  return std::sqrt(-2.0 * std::log(u1)) * std::cos(twoPi * u2);
+}
+
+} // namespace
+
 // ************************************************
 SampleHandlerPDSP::SampleHandlerPDSP(const std::string& config_name, ParameterHandlerGeneric* parameter_handler)
     : SampleHandlerBase(config_name, parameter_handler), MCGlobalScale(1.0) {
@@ -106,8 +136,9 @@ void SampleHandlerPDSP::SetupSplines() {
 // ************************************************
 void SampleHandlerPDSP::AddAdditionalWeightPointers() {
 // ************************************************
-  for (auto& sample : MCEvents) {
-    sample.total_weight_pointers.push_back(&MCGlobalScale);
+  for (std::size_t iEvent = 0; iEvent < MCEvents.size(); ++iEvent) {
+    MCEvents[iEvent].total_weight_pointers.push_back(&MCGlobalScale);
+    MCEvents[iEvent].total_weight_pointers.push_back(&PDSPSamples[iEvent].BeamMomentumWeight);
   }
 }
 
@@ -206,6 +237,8 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       double recoKEIni;
       double recoKEInt;
       double recoEndZ;
+      double recoPinst;
+      double recoTrackLength;
 
       _data->SetBranchStatus("KE_ff_reco", true);
       _data->SetBranchAddress("KE_ff_reco", &recoKEIni);
@@ -215,6 +248,12 @@ int SampleHandlerPDSP::SetupExperimentMC() {
 
       _data->SetBranchStatus("end_z_reco", true);
       _data->SetBranchAddress("end_z_reco", &recoEndZ);
+
+      _data->SetBranchStatus("P_inst_reco", true);
+      _data->SetBranchAddress("P_inst_reco", &recoPinst);
+
+      _data->SetBranchStatus("track_length_reco", true);
+      _data->SetBranchAddress("track_length_reco", &recoTrackLength);
 
       for (int i = 0; i < _data->GetEntries(); ++i) { // Loop through tree (events)
         _data->GetEntry(i);
@@ -227,6 +266,14 @@ int SampleHandlerPDSP::SetupExperimentMC() {
         PDSPSamples[TotalEventCounter].RecoKEIni = recoKEIni;
         PDSPSamples[TotalEventCounter].RecoKEInt = recoKEInt;
         PDSPSamples[TotalEventCounter].RecoEndZ = recoEndZ;
+        PDSPSamples[TotalEventCounter].RecoPinst = recoPinst;
+        PDSPSamples[TotalEventCounter].RecoPinstShifted = recoPinst;
+        PDSPSamples[TotalEventCounter].RecoTrackLength = recoTrackLength;
+        PDSPSamples[TotalEventCounter].RecoTrackLengthShifted = recoTrackLength;
+        PDSPSamples[TotalEventCounter].TrackLengthSmearZ =
+            FixedGaussianDeviate(static_cast<std::uint64_t>(TotalEventCounter));
+        PDSPSamples[TotalEventCounter].RecoKEIniShifted = recoKEIni;
+        PDSPSamples[TotalEventCounter].RecoKEIntShifted = recoKEInt;
 
 
         bool isPion = true_abs == 1 || true_cex == 1 || true_pip == 1 || true_decay == 1;
@@ -277,9 +324,9 @@ const double* SampleHandlerPDSP::GetPointerToKinematicParameter(const int KinPar
     case kTrueKEInt:
       return &PDSPSamples[iEvent].TrueKEInt;
     case kRecoKEIni:
-      return &PDSPSamples[iEvent].RecoKEIni;
+      return &PDSPSamples[iEvent].RecoKEIniShifted;
     case kRecoKEInt:
-      return &PDSPSamples[iEvent].RecoKEInt;
+      return &PDSPSamples[iEvent].RecoKEIntShifted;
     case kMode:
       return &PDSPSamples[iEvent].Mode;
     case kOscChannel:
@@ -290,6 +337,10 @@ const double* SampleHandlerPDSP::GetPointerToKinematicParameter(const int KinPar
       return &PDSPSamples[iEvent].TrueEndZ;
     case kRecoEndZ:
       return &PDSPSamples[iEvent].RecoEndZ;
+    case kRecoPinst:
+      return &PDSPSamples[iEvent].RecoPinstShifted;
+    case kRecoTrackLength:
+      return &PDSPSamples[iEvent].RecoTrackLengthShifted;
     default:
       MACH3LOG_ERROR("Unrecognized Kinematic Parameter type: {}", KinPar);
       throw MaCh3Exception(__FILE__, __LINE__);
@@ -303,6 +354,92 @@ void SampleHandlerPDSP::SetupMC() {
 }
 
 void SampleHandlerPDSP::RegisterFunctionalParameters() {
-  MACH3LOG_INFO("No functional parameters");
+  MACH3LOG_INFO("Registering PDSP systematic response functions");
 
+  // 1.2% beam-instrument momentum scale.  Propagate the corresponding change
+  // in relativistic kinetic energy to both reconstructed energy estimators.
+  RegisterIndividualFunctionalParameter(
+      PDSPSamples, "BeamMomentumMeasurement",
+      [](const double& theta, PDSPMCInfo& event) {
+        const double shiftedP = event.RecoPinst * (1.0 + 0.012 * theta);
+        const auto kineticEnergy = [](double p) {
+          constexpr double mass = 139.57039;
+          return std::sqrt(p * p + mass * mass) - mass;
+        };
+        const double deltaKE = kineticEnergy(shiftedP) - kineticEnergy(event.RecoPinst);
+        event.RecoPinstShifted = shiftedP;
+        event.RecoKEIniShifted += deltaKE;
+        event.RecoKEIntShifted += deltaKE;
+      });
+
+  // Beam sideband Gaussian.  Apply this spectrum correction before the
+  // upstream-energy response, matching the analysis correction sequence.
+  // A single standard-normal envelope parameter moves all three fit
+  // coefficients coherently by their quoted one-sigma errors.
+  RegisterIndividualFunctionalParameter(
+      PDSPSamples, "BeamMomentumReweight",
+      [](const double& theta, PDSPMCInfo& event) {
+        const double p0 = 1.38 + 0.07 * theta;
+        const double p1 = 2000.0 + 9.0 * theta;
+        const double p2 = 150.0 + 9.0 * theta;
+        if (p0 <= 0.0 || p2 <= 0.0) {
+          event.BeamMomentumWeight = 1.8;
+          return;
+        }
+        const double pull = (event.RecoPinstShifted - p1) / p2;
+        const double ratio = p0 * std::exp(-0.5 * pull * pull);
+        event.BeamMomentumWeight = (!std::isfinite(ratio) || ratio <= 0.0)
+            ? 1.8
+            : static_cast<M3::float_t>(std::min(1.8, 1.0 / ratio));
+      });
+
+  // Vary the externally fitted upstream correction relative to the central
+  // correction already present in the nominal reconstructed energies.
+  RegisterIndividualFunctionalParameter(
+      PDSPSamples, "UpstreamEnergyCorrection",
+      [](const double& theta, PDSPMCInfo& event) {
+        constexpr double p0 = -25.0;
+        constexpr double p1 = 0.23;
+        constexpr double p2 = 2.75e-3;
+        constexpr double e0 = 1.0;
+        constexpr double e1 = 0.03;
+        constexpr double e2 = 0.06e-3;
+        const auto kineticEnergy = [](double p) {
+          constexpr double mass = 139.57039;
+          return std::sqrt(p * p + mass * mass) - mass;
+        };
+        const double nominalX = kineticEnergy(event.RecoPinst);
+        const double shiftedX = kineticEnergy(event.RecoPinstShifted);
+        const double nominal = p0 + p1 * std::exp(p2 * nominalX);
+        const double varied = (p0 + theta * e0) +
+                              (p1 + theta * e1) * std::exp((p2 + theta * e2) * shiftedX);
+        const double deltaCorrection = varied - nominal;
+        event.RecoKEIniShifted -= deltaCorrection;
+        event.RecoKEIntShifted -= deltaCorrection;
+      });
+
+  // At one nuisance sigma, smear every event by a fixed N(0,1) draw with a
+  // 2.6% width.  Approximate the corresponding in-TPC energy loss as linear
+  // in track length.  Fixing the draw keeps the likelihood deterministic.
+  RegisterIndividualFunctionalParameter(
+      PDSPSamples, "TrackLengthResolution",
+      [](const double& theta, PDSPMCInfo& event) {
+        const double scale = std::max(
+            0.01, 1.0 + 0.026 * theta * event.TrackLengthSmearZ);
+        event.RecoTrackLengthShifted = event.RecoTrackLength * scale;
+        const double nominalLoss = event.RecoKEIni - event.RecoKEInt;
+        event.RecoKEIntShifted =
+            event.RecoKEIniShifted - nominalLoss * scale;
+      });
+
+  MACH3LOG_INFO("Finished registering PDSP systematic response functions");
+}
+
+void SampleHandlerPDSP::ResetShifts(const int iEvent) {
+  auto& event = PDSPSamples[iEvent];
+  event.RecoPinstShifted = event.RecoPinst;
+  event.RecoTrackLengthShifted = event.RecoTrackLength;
+  event.RecoKEIniShifted = event.RecoKEIni;
+  event.RecoKEIntShifted = event.RecoKEInt;
+  event.BeamMomentumWeight = 1.0;
 }
