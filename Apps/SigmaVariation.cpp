@@ -91,5 +91,9 @@ int main(int argc, char * argv[]) {
     MACH3LOG_INFO("=======================================================");
   }
 
+  File->Write();
+  File->Close();
+  delete File;
+
   return 0;
 }

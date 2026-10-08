@@ -1,0 +1,169 @@
+---
+General:
+  # Predictive output; this must differ from Predictive.PosteriorFile.
+  OutputFile: "Test.root"
+  DUNESamples: ["Configs/Samples/SampleHandler_PDSP.yaml"]
+  OscillationParameters: []
+  FittingAlgorithm: "MR2T2"
+  ProcessMCMC: No
+  Debug: No
+  Seed: 0
+  # If false, the fit uses the nominal MC prediction as Asimov data.
+  # If true, the fit loads *_DataHist from the configured sample input files.
+  Data: false
+  # For a nominal closure test, start from the prefit CV instead of a random prior throw.
+  # Remove this or set false for a production fit where you want a randomized chain start.
+  StatOnly: true
+  Fitter:
+    FitTestLikelihood: false
+  Minuit2:
+    # Maximal allowed number of iterations for Minuit2
+    NSteps: 100000
+  PSO:
+    Constriction: 1
+    Inertia: 1.
+    One: 1.
+    Two: 1.
+    Particles: 10
+    Iterations: 10000
+    Convergence: 1.
+    TestLikelihoodDim: 9
+
+  MCMC:
+    # Number of MCMC steps that will be performed
+    NSteps: 20000
+    #KS: Sets how frequent (number of steps) you want to autosave your chain, if you autosave rarely chain will be slightly faster, if you job wall is small you might want more frequent autosave to reduce number of lost steps
+    AutoSave: 2000
+
+    # Disable multicanonical/umbrella sampling for the standard PDSP fit.
+    Multicanonical:
+      Enabled: false
+
+    # Example Delayed Rejection settings [use FittingAlgorithm=DelayedMR2T2]
+    PrintSummary: False
+    # Delayed rejection MCMC
+    # Step scale for first delayed step = initial_scale * scale in parameter handler
+    initial_scale: 0.1
+    # Each delayed step is previous scale * decay rate
+    DecayRate: 0.1
+    # Delayed only if steps are OOB [recommend False]
+    DelayOnlyOutBounds: False
+    # Only do delayed rejection if step is out of bounds (less efficient)
+    DelayProbability: 1.0
+    # Number times to propose additional steps/full step
+    MaxRejections: 1
+    # Initial step size scale (relative to parameter sigma) for first proposal
+    # InitialScale: 1
+    # If a step is rejected, do we want to keep flipping for delayed steps?
+    # KeepFlippingOnReject: True
+  Systematics:
+    XsecCovName: "xsec_cov"
+    XsecFix: [] # any of these are fixed
+    XsecCovFile: ["Configs/CovObjs/PDSPFitModel_Impure_init.yaml",
+]
+    # Optional fake-data tune for Data: false. For example, set to "Generator"
+    # after editing ParameterValues:Generator in the xsec config to inject a
+    # known Asimov shift while the fit still starts from PreFitValue.
+    XsecTune: "Generator"
+    XsecPCAThreshold: -1
+    XsecPCAParams: [-999, -999]
+    XsecStepScale: 1
+
+# Prior/Posterior predictive settings
+Predictive:
+  # Number of throws from MCMC you want to perform (aim for something like 2k/5k)
+  Ntoy: 1000
+  #Use Full LLH or only sample contribution based on discussion with Asher we almost always only want the sample likelihood
+  FullLLH: false
+  # If false will run posterior predictive
+  PriorPredictive: false
+  # number of burn in steps
+  BurnInSteps: 10000
+  # Name of file from which we are sampling
+  PosteriorFile: "Test.root"
+  # Allow to specify to throw/vary only params coming from single group like Xsec. Allow to evaluate errors coming from this group. Can't be mixed with throw single param
+  ThrowParamGroupOnly: []
+  # Allow to specify to throw/vary only params coming with specified names. Cannot be connected with ThrowParamGroupOnly
+  ThrowSinlgeParams: []
+  # When calculating pvalue there are two ways of applying Poissonian fluctuations, both are conceptually identical however standard scales with number of bins while non-standard scales with number of events (making it slow)
+  StandardFluctuation: true
+  # Whether to print distribution of number of events in every bin, useful only for debug
+  DebugHistograms: true
+
+# LLH Scan settings
+LLHScan:
+  # don't make LLH for certain systematic groups
+  #LLHScanSkipVector: []
+  # Save individual sample contributions to the LLH
+  LLHScanBySample: true
+  # Number of points we run LLH scans for each systematic
+  #LLHScanPoints: 50
+  # Number of points for 2D scan in each direction
+  #2DLLHScanPoints: 20
+  # Add parameters to scan over in LLHMap
+  # LLHParameters: ['TrueAbs-Init_Under-End_Under', 'TrueAbs-Init_0-End_Under', 'TrueAbs-Init_0-End_0',
+  #                 'TrueAbs-Init_1-End_Under', 'TrueAbs-Init_1-End_0', 'TrueAbs-Init_1-End_1',
+  #                 'TrueAbs-Init_2-End_Under', 'TrueAbs-Init_2-End_0', 'TrueAbs-Init_2-End_1', 'TrueAbs-Init_2-End_2',
+  #                 'TrueAbs-Init_Over-End_Under', 'TrueAbs-Init_Over-End_0', 'TrueAbs-Init_Over-End_1',
+  #                 'TrueAbs-Init_Over-End_2', 'TrueAbs-Init_Over-End_Over'] # example LLH scan, should expand to add more if needed.
+  # Add physical ranges for special params whose priors/errors may not be well well-defined
+  # ScanRanges:
+  #   TrueAbs-Init_Under-End_Under: [0, 4]
+  #   TrueAbs-Init_0-End_Under: [0, 4]
+  #   TrueAbs-Init_0-End_0: [0, 4]
+  #   TrueAbs-Init_1-End_Under: [0, 4]
+  #   TrueAbs-Init_1-End_0: [0, 4]
+  #   TrueAbs-Init_1-End_1: [0, 4]
+  #   TrueAbs-Init_2-End_Under: [0, 4]
+  #   TrueAbs-Init_2-End_0: [0, 4]
+  #   TrueAbs-Init_2-End_1: [0, 4]
+  #   TrueAbs-Init_2-End_2: [0, 4]
+  #   TrueAbs-Init_Over-End_Under: [0, 4]
+  #   TrueAbs-Init_Over-End_0: [0, 4]
+  #   TrueAbs-Init_Over-End_1: [0, 4]
+  #   TrueAbs-Init_Over-End_2: [0, 4]
+  #   TrueAbs-Init_Over-End_Over: [0, 4]
+
+SigmaVar:
+  # Values of sigma you want to perform, it must contain 0!
+  SigmaArray: [-3, -1, 0, 1, 3]
+  # name of params you want to skip
+  SkipVector: []
+
+  # Allows to overwrite default 1, 3 sigma range, useful for cross-fitter comparison
+  CustomRange:
+    Abs_TrueEBin_0: {"-3": 0.25, "-1": 0.5, "1": 1.25, "3": 1.5}
+
+AdaptionOptions:
+  Settings:
+    StartThrow: 1000     # [int] At which step do we start throwing from our new matrix?
+    StartUpdate: 1    # [int] At which step do we start adding steps to the covariance matrix?
+    EndUpdate: 150000     # [int] At which step do we stop adding steps + fix the covariance matrix?
+    UpdateStep: 1000     # [int] How often do we want to update i.e. change matrix we're throwing from?
+    SaveNIterations: 200000  # [int] How often do we want to save this to file
+    OutputFileName: "Adapt.root" # [str] Name of the file containing the matrix
+
+    # Robbins Monroe adaption settings
+    UseRobbinsMonro: True # Do we use this along with adaption
+    TargetAcceptance: 0.234 # Target acceptance rate
+    TotalRobbinsMonroRestarts: 5 # How many times do we restart the Robbins Monroe count
+    AcceptanceRateBatchSize: 5000 # How often do we restart the Robbins Monroe count
+
+  Covariance:
+    xsec_cov: # Name of covariance matrix
+      DoAdaption: True   # [bool] Adapt this parameter
+
+#KinemDistribution extra plots to draw
+KinematicDistributionPlots:
+- Name: "True Initial Kinetic Energy"
+  VarStrings: ["TrueKEIni"]
+  VarBins: [[50, 0, 3000]]
+- Name: "True Interacting Kinetic Energy"
+  VarStrings: ["TrueKEInt"]
+  VarBins: [[50, 0, 3000]]
+- Name: "Reconstructed Initial Kinetic Energy"
+  VarStrings: ["RecoKEIni"]
+  VarBins: [[50, 0, 3000]]
+- Name: "Reconstructed Interacting Kinetic Energy"
+  VarStrings: ["RecoKEInt"]
+  VarBins: [[50, 0, 3000]]

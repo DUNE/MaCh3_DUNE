@@ -276,6 +276,7 @@ file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/output)
 ############################  Install  ####################################
 install(DIRECTORY Inputs DESTINATION ${CMAKE_BINARY_DIR})
 install(DIRECTORY Configs DESTINATION ${CMAKE_BINARY_DIR})
+install(DIRECTORY plotting DESTINATION ${CMAKE_BINARY_DIR})
 install(DIRECTORY Utils DESTINATION ${CMAKE_BINARY_DIR})
 
 install(EXPORT mach3dune-targets
