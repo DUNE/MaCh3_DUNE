@@ -33,7 +33,7 @@ General:
     # Number of MCMC steps that will be performed
     NSteps: 20000
     #KS: Sets how frequent (number of steps) you want to autosave your chain, if you autosave rarely chain will be slightly faster, if you job wall is small you might want more frequent autosave to reduce number of lost steps
-    AutoSave: 2000
+    AutoSave: 5000
 
     # Disable multicanonical/umbrella sampling for the standard PDSP fit.
     Multicanonical:
@@ -77,7 +77,7 @@ Predictive:
   # If false will run posterior predictive
   PriorPredictive: false
   # number of burn in steps
-  BurnInSteps: 10000
+  BurnInSteps: 3000
   # Name of file from which we are sampling
   PosteriorFile: "Test.root"
   # Allow to specify to throw/vary only params coming from single group like Xsec. Allow to evaluate errors coming from this group. Can't be mixed with throw single param
@@ -135,18 +135,18 @@ SigmaVar:
 
 AdaptionOptions:
   Settings:
-    StartThrow: 1000     # [int] At which step do we start throwing from our new matrix?
-    StartUpdate: 1    # [int] At which step do we start adding steps to the covariance matrix?
-    EndUpdate: 150000     # [int] At which step do we stop adding steps + fix the covariance matrix?
-    UpdateStep: 1000     # [int] How often do we want to update i.e. change matrix we're throwing from?
-    SaveNIterations: 200000  # [int] How often do we want to save this to file
+    StartThrow: 5000     # [int] At which step do we start throwing from our new matrix?
+    StartUpdate: 2000    # [int] At which step do we start adding steps to the covariance matrix?
+    EndUpdate: 3000     # [int] At which step do we stop adding steps + fix the covariance matrix?
+    UpdateStep: 100     # [int] How often do we want to update i.e. change matrix we're throwing from?
+    SaveNIterations: 20000  # [int] How often do we want to save this to file
     OutputFileName: "Adapt.root" # [str] Name of the file containing the matrix
 
     # Robbins Monroe adaption settings
     UseRobbinsMonro: True # Do we use this along with adaption
     TargetAcceptance: 0.234 # Target acceptance rate
     TotalRobbinsMonroRestarts: 5 # How many times do we restart the Robbins Monroe count
-    AcceptanceRateBatchSize: 5000 # How often do we restart the Robbins Monroe count
+    AcceptanceRateBatchSize: 1000 # How often do we restart the Robbins Monroe count
 
   Covariance:
     xsec_cov: # Name of covariance matrix

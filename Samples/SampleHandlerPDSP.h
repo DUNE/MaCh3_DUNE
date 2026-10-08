@@ -38,6 +38,7 @@ class SampleHandlerPDSP : virtual public SampleHandlerBase
 
   void CalcWeightFunc(const int iEvent) override {return; (void)iEvent;}
   void ResetShifts(const int iEvent) override;
+  void FinaliseShifts(const int iEvent) override;
 
   std::vector<MetaData> PDSPSampleMetaData;
   std::vector<PDSPMCInfo> PDSPSamples;

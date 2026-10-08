@@ -24,7 +24,10 @@ struct PDSPMCInfo {
   /// True track end psoition, from track_length_reco
   double TrueEndZ = M3::_BAD_DOUBLE_;
 
-  /// Reconstructed Initial Kinetic Energy
+  /// Reconstructed kinetic energy at the TPC front face.
+  double RecoKEFF = M3::_BAD_DOUBLE_;
+  double RecoKEFFShifted = M3::_BAD_DOUBLE_;
+  /// Reconstructed kinetic energy at the start of the fiducial volume.
   double RecoKEIni = M3::_BAD_DOUBLE_;
   /// Reconstructed Interacting Kinetic Energy
   double RecoKEInt = M3::_BAD_DOUBLE_;

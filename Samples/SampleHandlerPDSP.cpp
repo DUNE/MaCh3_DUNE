@@ -32,6 +32,68 @@ double FixedGaussianDeviate(const std::uint64_t eventIndex) {
   return std::sqrt(-2.0 * std::log(u1)) * std::cos(twoPi * u2);
 }
 
+double PionMeanDEDX(const double kineticEnergy) {
+  if (!std::isfinite(kineticEnergy) || kineticEnergy <= 0.0) return 0.0;
+
+  // Liquid-argon Bethe--Bloch constants used by the analysis production.
+  constexpr double rho = 1.39;
+  constexpr double K = 0.307075;
+  constexpr double Z = 18.0;
+  constexpr double atomicMass = 39.948;
+  constexpr double excitationEnergy = 188.0e-6;
+  constexpr double electronMass = 0.51099895;
+  constexpr double pionMass = 139.57039;
+  constexpr double densityC = 5.2146;
+  constexpr double densityY0 = 0.2;
+  constexpr double densityY1 = 3.0;
+  constexpr double densityA = 0.19559;
+  constexpr double densityK = 3.0;
+
+  const double gamma = kineticEnergy / pionMass + 1.0;
+  const double beta2 = 1.0 - 1.0 / (gamma * gamma);
+  if (beta2 <= 0.0) return 0.0;
+
+  const double betaGamma = std::sqrt(beta2) * gamma;
+  const double massRatio = electronMass / pionMass;
+  const double wMax = 2.0 * electronMass * betaGamma * betaGamma /
+      (1.0 + 2.0 * massRatio * gamma + massRatio * massRatio);
+
+  const double y = std::log10(betaGamma);
+  double densityCorrection = 0.0;
+  const double delta0 = 2.0 * std::log(10.0) * y - densityC;
+  if (y >= densityY1) {
+    densityCorrection = delta0;
+  } else if (y >= densityY0) {
+    densityCorrection =
+        delta0 + densityA * std::pow(densityY1 - y, densityK);
+  }
+
+  const double normalisation = rho * K * Z / (atomicMass * beta2);
+  const double logTerm = 0.5 * std::log(
+      2.0 * electronMass * gamma * gamma * beta2 * wMax /
+      (excitationEnergy * excitationEnergy));
+  const double dedx = normalisation *
+      (logTerm - beta2 - 0.5 * densityCorrection);
+  return std::isfinite(dedx) && dedx > 0.0 ? dedx : 0.0;
+}
+
+double PropagatePionKE(const double initialKE, const double length,
+                       const int numberOfSteps) {
+  if (!std::isfinite(initialKE) || initialKE <= 0.0) return 0.0;
+  if (!std::isfinite(length) || length <= 0.0 || numberOfSteps <= 0) {
+    return initialKE;
+  }
+
+  const double stepLength = length / numberOfSteps;
+  double kineticEnergy = initialKE;
+  for (int step = 0; step < numberOfSteps && kineticEnergy > 0.0; ++step) {
+    const double dedx = PionMeanDEDX(kineticEnergy);
+    if (dedx <= 0.0) break;
+    kineticEnergy = std::max(0.0, kineticEnergy - dedx * stepLength);
+  }
+  return kineticEnergy;
+}
+
 } // namespace
 
 // ************************************************
@@ -234,6 +296,7 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       _data->SetBranchAddress("exclusive_process_decay", &true_decay);
 
       // Reco variables
+      double recoKEFF;
       double recoKEIni;
       double recoKEInt;
       double recoEndZ;
@@ -241,7 +304,10 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       double recoTrackLength;
 
       _data->SetBranchStatus("KE_ff_reco", true);
-      _data->SetBranchAddress("KE_ff_reco", &recoKEIni);
+      _data->SetBranchAddress("KE_ff_reco", &recoKEFF);
+
+      _data->SetBranchStatus("KE_init_reco", true);
+      _data->SetBranchAddress("KE_init_reco", &recoKEIni);
       
       _data->SetBranchStatus("KE_int_reco", true);
       _data->SetBranchAddress("KE_int_reco", &recoKEInt);
@@ -263,6 +329,8 @@ int SampleHandlerPDSP::SetupExperimentMC() {
         PDSPSamples[TotalEventCounter].TrueKEIni = trueKEIni;
         PDSPSamples[TotalEventCounter].TrueKEInt = trueKEInt;
         PDSPSamples[TotalEventCounter].TrueEndZ = trueEndZ;
+        PDSPSamples[TotalEventCounter].RecoKEFF = recoKEFF;
+        PDSPSamples[TotalEventCounter].RecoKEFFShifted = recoKEFF;
         PDSPSamples[TotalEventCounter].RecoKEIni = recoKEIni;
         PDSPSamples[TotalEventCounter].RecoKEInt = recoKEInt;
         PDSPSamples[TotalEventCounter].RecoEndZ = recoEndZ;
@@ -356,8 +424,8 @@ void SampleHandlerPDSP::SetupMC() {
 void SampleHandlerPDSP::RegisterFunctionalParameters() {
   MACH3LOG_INFO("Registering PDSP systematic response functions");
 
-  // 1.2% beam-instrument momentum scale.  Propagate the corresponding change
-  // in relativistic kinetic energy to both reconstructed energy estimators.
+  // 1.2% beam-instrument momentum scale.  Shift KE at the TPC front face;
+  // FinaliseShifts derives KE_init and KE_int from the completed KE_ff shift.
   RegisterIndividualFunctionalParameter(
       PDSPSamples, "BeamMomentumMeasurement",
       [](const double& theta, PDSPMCInfo& event) {
@@ -368,8 +436,7 @@ void SampleHandlerPDSP::RegisterFunctionalParameters() {
         };
         const double deltaKE = kineticEnergy(shiftedP) - kineticEnergy(event.RecoPinst);
         event.RecoPinstShifted = shiftedP;
-        event.RecoKEIniShifted += deltaKE;
-        event.RecoKEIntShifted += deltaKE;
+        event.RecoKEFFShifted += deltaKE;
       });
 
   // Beam sideband Gaussian.  Apply this spectrum correction before the
@@ -408,28 +475,25 @@ void SampleHandlerPDSP::RegisterFunctionalParameters() {
           constexpr double mass = 139.57039;
           return std::sqrt(p * p + mass * mass) - mass;
         };
-        const double nominalX = kineticEnergy(event.RecoPinst);
         const double shiftedX = kineticEnergy(event.RecoPinstShifted);
-        const double nominal = p0 + p1 * std::exp(p2 * nominalX);
+        // KE_ff_reco already contains the central upstream correction.  Use
+        // the same current beam energy for the central and varied functions,
+        // so theta=0 is exactly an identity even if the beam scale has moved.
+        const double nominal = p0 + p1 * std::exp(p2 * shiftedX);
         const double varied = (p0 + theta * e0) +
                               (p1 + theta * e1) * std::exp((p2 + theta * e2) * shiftedX);
         const double deltaCorrection = varied - nominal;
-        event.RecoKEIniShifted -= deltaCorrection;
-        event.RecoKEIntShifted -= deltaCorrection;
+        event.RecoKEFFShifted -= deltaCorrection;
       });
 
-  // At one nuisance sigma, smear every event by a fixed N(0,1) draw with a
-  // 2.6% width.  Approximate the corresponding in-TPC energy loss as linear
-  // in track length.  Fixing the draw keeps the likelihood deterministic.
+  // track_length_reco starts at the TPC front face.  This functional changes
+  // only that length; FinaliseShifts propagates KE_ff over the shifted length.
   RegisterIndividualFunctionalParameter(
       PDSPSamples, "TrackLengthResolution",
       [](const double& theta, PDSPMCInfo& event) {
         const double scale = std::max(
             0.01, 1.0 + 0.026 * theta * event.TrackLengthSmearZ);
         event.RecoTrackLengthShifted = event.RecoTrackLength * scale;
-        const double nominalLoss = event.RecoKEIni - event.RecoKEInt;
-        event.RecoKEIntShifted =
-            event.RecoKEIniShifted - nominalLoss * scale;
       });
 
   MACH3LOG_INFO("Finished registering PDSP systematic response functions");
@@ -439,7 +503,21 @@ void SampleHandlerPDSP::ResetShifts(const int iEvent) {
   auto& event = PDSPSamples[iEvent];
   event.RecoPinstShifted = event.RecoPinst;
   event.RecoTrackLengthShifted = event.RecoTrackLength;
+  event.RecoKEFFShifted = event.RecoKEFF;
   event.RecoKEIniShifted = event.RecoKEIni;
   event.RecoKEIntShifted = event.RecoKEInt;
   event.BeamMomentumWeight = 1.0;
+}
+
+void SampleHandlerPDSP::FinaliseShifts(const int iEvent) {
+  auto& event = PDSPSamples[iEvent];
+
+  // The reconstructed FV begins 30 cm downstream of the TPC front face.
+  // Match the analysis production: 25 steps to the FV boundary and 50 steps
+  // over the full reconstructed trajectory to the interaction point.
+  constexpr double fiducialVolumeStart = 30.0;
+  event.RecoKEIniShifted = PropagatePionKE(
+      event.RecoKEFFShifted, fiducialVolumeStart, 25);
+  event.RecoKEIntShifted = PropagatePionKE(
+      event.RecoKEFFShifted, event.RecoTrackLengthShifted, 50);
 }
