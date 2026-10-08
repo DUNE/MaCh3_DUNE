@@ -40,8 +40,8 @@ struct PDSPMCInfo {
   /// Reconstructed trajectory length (cm), distinct from the endpoint z.
   double RecoTrackLength = M3::_BAD_DOUBLE_;
   double RecoTrackLengthShifted = M3::_BAD_DOUBLE_;
-  /// Fixed N(0,1) deviate used to make resolution smearing deterministic.
-  double TrackLengthSmearZ = 0.0;
+  /// Fixed fractional N(0, 0.026) track-length smear drawn once per event.
+  double TrackLengthSmearFraction = 0.0;
   /// Shifted fit observables used by functional systematics.
   double RecoKEIniShifted = M3::_BAD_DOUBLE_;
   double RecoKEIntShifted = M3::_BAD_DOUBLE_;

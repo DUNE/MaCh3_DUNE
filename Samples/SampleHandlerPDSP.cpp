@@ -5,32 +5,10 @@
 #include <TString.h>
 
 #include <algorithm>
-#include <cstdint>
 #include <cmath>
+#include <random>
 
 namespace {
-
-// SplitMix64 gives each event a stable pseudo-random value without keeping a
-// mutable RNG in the likelihood calculation.
-std::uint64_t SplitMix64(std::uint64_t value) {
-  value += 0x9e3779b97f4a7c15ULL;
-  value = (value ^ (value >> 30U)) * 0xbf58476d1ce4e5b9ULL;
-  value = (value ^ (value >> 27U)) * 0x94d049bb133111ebULL;
-  return value ^ (value >> 31U);
-}
-
-double UniformFromHash(const std::uint64_t value) {
-  // Use the upper 53 bits and offset by half a bin so log(u) is always safe.
-  return (static_cast<double>(value >> 11U) + 0.5) *
-         (1.0 / 9007199254740992.0);
-}
-
-double FixedGaussianDeviate(const std::uint64_t eventIndex) {
-  const double u1 = UniformFromHash(SplitMix64(2U * eventIndex));
-  const double u2 = UniformFromHash(SplitMix64(2U * eventIndex + 1U));
-  constexpr double twoPi = 6.28318530717958647692;
-  return std::sqrt(-2.0 * std::log(u1)) * std::cos(twoPi * u2);
-}
 
 double PionMeanDEDX(const double kineticEnergy) {
   if (!std::isfinite(kineticEnergy) || kineticEnergy <= 0.0) return 0.0;
@@ -242,6 +220,11 @@ int SampleHandlerPDSP::SetupExperimentMC() {
   PDSPPlottingSamples.resize(nEntries);
 
   int TotalEventCounter = 0;
+  // Draw each event's fractional resolution smear once. The fixed seed keeps
+  // the stored toy-smearing pattern reproducible between complete runs.
+  std::mt19937_64 trackLengthRng(42);
+  std::normal_distribution<double> trackLengthSmear(0.0, 0.026);
+
   // loop over all Samples
   for(size_t iSample = 0; iSample < SampleDetails.size(); iSample++)
   {
@@ -338,8 +321,8 @@ int SampleHandlerPDSP::SetupExperimentMC() {
         PDSPSamples[TotalEventCounter].RecoPinstShifted = recoPinst;
         PDSPSamples[TotalEventCounter].RecoTrackLength = recoTrackLength;
         PDSPSamples[TotalEventCounter].RecoTrackLengthShifted = recoTrackLength;
-        PDSPSamples[TotalEventCounter].TrackLengthSmearZ =
-            FixedGaussianDeviate(static_cast<std::uint64_t>(TotalEventCounter));
+        PDSPSamples[TotalEventCounter].TrackLengthSmearFraction =
+            trackLengthSmear(trackLengthRng);
         PDSPSamples[TotalEventCounter].RecoKEIniShifted = recoKEIni;
         PDSPSamples[TotalEventCounter].RecoKEIntShifted = recoKEInt;
 
@@ -492,7 +475,7 @@ void SampleHandlerPDSP::RegisterFunctionalParameters() {
       PDSPSamples, "TrackLengthResolution",
       [](const double& theta, PDSPMCInfo& event) {
         const double scale = std::max(
-            0.01, 1.0 + 0.026 * theta * event.TrackLengthSmearZ);
+            0.01, 1.0 + theta * event.TrackLengthSmearFraction);
         event.RecoTrackLengthShifted = event.RecoTrackLength * scale;
       });
 
