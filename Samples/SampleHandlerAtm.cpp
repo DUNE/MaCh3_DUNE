@@ -173,6 +173,8 @@ int SampleHandlerAtm::ReadFromEigen() {
 
   for (size_t iEvent=0;iEvent<dunemcSamples.size();++iEvent) {
     dunemcSamples[iEvent].rw_erec = Matrix(iEvent,Variables::rw_erec);
+    dunemcSamples[iEvent].rw_ehad = Matrix(iEvent,Variables::rw_ehad);
+    dunemcSamples[iEvent].rw_elep = Matrix(iEvent,Variables::rw_elep);
     dunemcSamples[iEvent].rw_theta = Matrix(iEvent,Variables::rw_theta);    
     dunemcSamples[iEvent].SampleIndex = static_cast<int>(Matrix(iEvent,Variables::SampleIndex));
     dunemcSamples[iEvent].nupdg = static_cast<int>(Matrix(iEvent,Variables::nupdg));
@@ -196,6 +198,8 @@ void SampleHandlerAtm::TransferToEigen(std::string FileName) {
 
   for (size_t iEvent=0;iEvent<dunemcSamples.size();++iEvent) {
     Matrix(iEvent,Variables::rw_erec) = dunemcSamples[iEvent].rw_erec;
+    Matrix(iEvent,Variables::rw_ehad) = dunemcSamples[iEvent].rw_ehad;
+    Matrix(iEvent,Variables::rw_elep) = dunemcSamples[iEvent].rw_elep;
     Matrix(iEvent,Variables::rw_theta) = dunemcSamples[iEvent].rw_theta;
     Matrix(iEvent,Variables::SampleIndex) = dunemcSamples[iEvent].SampleIndex;
     Matrix(iEvent,Variables::nupdg) = dunemcSamples[iEvent].nupdg;
@@ -252,13 +256,20 @@ int SampleHandlerAtm::SetupExperimentMC() {
     weightsTree->SetBranchAddress("flux_numu",&flux_numu_w);
     
 #if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)
-    caf::StandardRecordProxy* sr = new caf::StandardRecordProxy(cafTree, "rec");    
-#else  
-    caf::StandardRecord* sr = new caf::StandardRecord();
-    cafTree->SetBranchStatus("*", 1);
-    cafTree->SetBranchAddress("rec", &sr);
+  std::cout << "Using SR Proxy!" << std::endl;
+  caf::StandardRecordProxy* sr = new caf::StandardRecordProxy(cafTree, "rec");
+
+  //Need to know the offsets to deal with the manual file changing within the chain
+  int currentTreeNumber = 0;
+  Long64_t *treeOffsets = cafTree->GetTreeOffset();
+  int nbTrees = cafTree->GetTreeOffsetLen();
+#else
+  std::cout << "Using standard CAF reader!" << std::endl;
+  caf::StandardRecord* sr = new caf::StandardRecord();
+  cafTree->SetBranchStatus("*", 1);
+  cafTree->SetBranchAddress("rec", &sr);
 #endif
-    
+  
     int nTreeEntries = static_cast<int>(cafTree->GetEntries());
     
     //================================================================================================
@@ -268,8 +279,15 @@ int SampleHandlerAtm::SetupExperimentMC() {
     for (int iTreeEntry=0;iTreeEntry<nTreeEntries;iTreeEntry++) {
       weightsTree->GetEntry(iTreeEntry);
       
-#if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)      
+#if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)
       cafTree->LoadTree(iTreeEntry);
+
+      if (currentTreeNumber < nbTrees - 1 && iTreeEntry == treeOffsets[currentTreeNumber+1]) {
+	//We are changing tree and due to the inability of SRProxy to handle it correctly, we do it manually
+	currentTreeNumber++;
+	delete sr;
+	sr = new caf::StandardRecordProxy(cafTree->GetTree(), "rec");
+      }
 #else
       cafTree->GetEntry(iTreeEntry);
 #endif
@@ -332,6 +350,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
 	RecoELep = RecoENu-RecoEHad;	
 	RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.x,sr->common.ixn.pandora[0].dir.lngtrk.y,sr->common.ixn.pandora[0].dir.lngtrk.z)).Unit();      
       }
+      
       double RecoCZ = -RecoNuMomentumVector.y(); // +Y in CAF files translates to +Z in typical CosZ
       if (std::isnan(RecoCZ)) {
 	MACH3LOG_WARN("Skipping entry {}/{} -> Reconstructed Cosine Z is NAN",iTreeEntry,nTreeEntries);
@@ -351,7 +370,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
       
       double TrueNeutrinoEnergy = static_cast<double>(sr->mc.nu[0].E);
       TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.x,sr->mc.nu[0].momentum.y,sr->mc.nu[0].momentum.z)).Unit();
-      
+
       struct dunemc_atm currentEvent_FromNuE;
       
       currentEvent_FromNuE.rw_erec = RecoENu;
@@ -412,6 +431,11 @@ void SampleHandlerAtm::SetupMC() {
 }
 
 void SampleHandlerAtm::SetupDetectorSystematicRatios() {
+  //DB Firstly set weight to 1.0
+  for (size_t iEvent=0;iEvent<dunemcSamples.size();iEvent++) {
+    dunemcSamples[iEvent].TotalDetectorSystematicWeight = 1.0;
+  }
+  
   //DB Figure out whether we have detector systematics configured
   int NParams = ParHandler->GetNParameters();
   for (int iParam=0;iParam<NParams;iParam++) {
@@ -482,8 +506,6 @@ void SampleHandlerAtm::SetupDetectorSystematicRatios() {
       double Weight = RatioHistograms[iSyst][SampIndex]->GetBinContent(HistogramBinIndex);
       dunemcSamples[iEvent].DetectorSystematicRatios[iSyst] = Weight;
     }
-
-    dunemcSamples[iEvent].TotalDetectorSystematicWeight = 1.0;
   }
 
   /*

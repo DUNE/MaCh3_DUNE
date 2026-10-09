@@ -162,7 +162,7 @@ protected:
   std::vector<std::string> DetectorSystematicParameterNames;
   
   /// Enum defining CAF->Eigen transformation
-  enum Variables{rw_erec,rw_theta,SampleIndex,nupdg,nupdgUnosc,OscChannelIndex,mode,rw_isCC,Target,enu_true,coszenith_true,flux_w,MinDistToWall,eid,nVariables};
+  enum Variables{rw_erec,rw_ehad,rw_elep,rw_theta,SampleIndex,nupdg,nupdgUnosc,OscChannelIndex,mode,rw_isCC,Target,enu_true,coszenith_true,flux_w,MinDistToWall,eid,nVariables};
 
   std::string InputFileName;
   std::string InputFileDirectory;  

@@ -21,7 +21,7 @@ General:
   Systematics:
     XsecCovFile:
       - "Configs/CovObjs/OscCov_PDG2021_v2_Atmospherics.yaml"
-      - "Configs/CovObjs/DetectorSystematicVariations.yaml"
+#      - "Configs/CovObjs/DetectorSystematicVariations.yaml"
 #      - "Configs/CovObjs/xsec_covariance_Atmospherics.yaml"
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.1

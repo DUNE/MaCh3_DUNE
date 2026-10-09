@@ -5,16 +5,15 @@ BinningFile: "Configs/Samples/AtmosphericParameterBinning.yaml"
 
 InputFiles:
   FileDirectory: "" #"/exp/dune/data/users/barrowd/AtmInputs/"
-  FileName: "Inputs/Atmospherics/CAFs/caf_new_sum.2.6M_weighted.root"
+  FileName: "" #"/exp/dune/data/users/barrowd/AtmInputs/prodgenie_atmnu_max_weighted_randompolicy_dune10kt_1x2x6_fdhd_he_2026a_reco2_v10_20_09d01_cafmaker_atmos_dune10kt_1x2x6_runreco-nuenergy-nuangular_geov5_caf_102005d01_v1_s039000_l001000_20260624T135206_caf_wWeights.root" #"Inputs/Atmospherics/CAFs/caf_new_sum.2.6M_weighted.root"
 
-  EigenFile: "" #"AtmSample.eig"
-  EigenFileMD5Sum: "" #"749f8de473818b6f7919fe9e81f3dd3c"
+  EigenFile: "AtmSample.eig"
+  EigenFileMD5Sum: "f1dd030957ce0fdc2b935619cdb08c59"
 
   # Per-event spline configuration  
-  #InputSplines: "Inputs/Atmospherics/Splines/merged_new_systs_wmec_wheader.root"
-  InputSplines: ""
+  InputSplines: "" #"Inputs/Atmospherics/Splines/merged_new_systs_wmec_wheader.root"
 
-  DetectorSystematicsFileName: "Inputs/Atmospherics/ModBoxA_ratio.root"
+  DetectorSystematicsFileName: "" #"Inputs/Atmospherics/ModBoxA_ratio.root"
   
 NuOsc:
   NuOscConfigFile: "Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml"
