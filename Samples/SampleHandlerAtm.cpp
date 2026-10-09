@@ -56,6 +56,12 @@ void SampleHandlerAtm::Init() {
     fInputSplines = "";
   }
 
+  if (SampleManager->raw()["InputFiles"]["DetectorSystematicsFileName"]) {
+    fDetectorSystematicsFileName = Get<std::string>(SampleManager->raw()["InputFiles"]["DetectorSystematicsFileName"],__FILE__,__LINE__);
+  } else {
+    fDetectorSystematicsFileName = "";
+  }
+  
   //DB Define the names of the samples we're performing event selection for
   EventSelectionNames[kEventSel_FC_NuE]  = "FC_nueselec";
   EventSelectionNames[kEventSel_FC_NuMu] = "FC_numuselec";
@@ -132,10 +138,26 @@ void SampleHandlerAtm::InitialiseSplineObjectPerEvent(){
   }
 }
 
+void SampleHandlerAtm::RegisterFunctionalParameters() {
+  if (!ParHandler) {return;}
+
+  //DB Throw all the detector systematics into a single weight
+  if (DetectorSystematicParameterNames.size()!=0) {
+    RegisterIndividualFunctionalParameter(dunemcSamples, DetectorSystematicParameterNames, [](std::vector<double> const &ParVals, dunemc_atm &Event) {
+      Event.TotalDetectorSystematicWeight = 1.0;
+      
+      for (size_t iSyst = 0;iSyst<ParVals.size();iSyst++) {
+	Event.TotalDetectorSystematicWeight *= 1.0 + ParVals[iSyst]*(Event.DetectorSystematicRatios[iSyst] - 1.0);
+      }
+    });
+  }
+}
+
 void SampleHandlerAtm::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < dunemcSamples.size(); ++i) {
     MCEvents[i].total_weight_pointers.push_back(&(dunemcSamples[i].flux_w));
     MCEvents[i].total_weight_pointers.push_back(&(ExposureScaling));
+    MCEvents[i].total_weight_pointers.push_back(&(dunemcSamples[i].TotalDetectorSystematicWeight));    
   }  
 }
 
@@ -196,172 +218,174 @@ void SampleHandlerAtm::TransferToEigen(std::string FileName) {
 int SampleHandlerAtm::SetupExperimentMC() {
   // If the Eigen input file is define, read from that. Otherwise read from CAF file
   if (EigenInputFile != "") {
-    int nEntries = ReadFromEigen();
-    return nEntries;
-  }
-  
-  int CurrErrorLevel = gErrorIgnoreLevel;
-  gErrorIgnoreLevel = kFatal;  
-
-  TChain* cafTree = new TChain("cafTree");
-  TChain* weightsTree = new TChain("weights");
-
-  if (InputFileName != "") {
-    cafTree->Add(InputFileName.c_str());
-    weightsTree->Add(InputFileName.c_str());
-  } else if (InputFileDirectory != "") {
-    std::filesystem::path directory = InputFileDirectory;
-
-    for (const auto& entry : std::filesystem::directory_iterator(directory)) {
-      if (entry.is_regular_file() && entry.path().extension()==".root") {
-	std::string FileName = entry.path();
-	std::cout << "Adding file:" << FileName << std::endl;
-	cafTree->Add(FileName.c_str());
-	weightsTree->Add(FileName.c_str());
-      }
-    }
+    ReadFromEigen();
   } else {
-    std::cout << "Bad config file!" << std::endl;
-    throw;
-  }
-  
-  double xsec_w, flux_nue_w, flux_numu_w;
-  weightsTree->SetBranchAddress("xsec",&xsec_w);
-  weightsTree->SetBranchAddress("flux_nue",&flux_nue_w);
-  weightsTree->SetBranchAddress("flux_numu",&flux_numu_w);
-
-#if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)
-  caf::StandardRecordProxy* sr = new caf::StandardRecordProxy(cafTree, "rec");    
-#else  
-  caf::StandardRecord* sr = new caf::StandardRecord();
-  cafTree->SetBranchStatus("*", 1);
-  cafTree->SetBranchAddress("rec", &sr);
-#endif
-  
-  int nTreeEntries = static_cast<int>(cafTree->GetEntries());
-  
-  //================================================================================================
-
-  dunemcSamples.reserve(2 * nTreeEntries);
-
-  for (int iTreeEntry=0;iTreeEntry<nTreeEntries;iTreeEntry++) {
-    weightsTree->GetEntry(iTreeEntry);
     
-#if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)      
-    cafTree->LoadTree(iTreeEntry);
-#else
-    cafTree->GetEntry(iTreeEntry);
-#endif
-
-    if ((iTreeEntry % (nTreeEntries/10))==0) {
-      MACH3LOG_INFO("\tProcessing entry: {}/{}",iTreeEntry,nTreeEntries);
-    }
+    int CurrErrorLevel = gErrorIgnoreLevel;
+    gErrorIgnoreLevel = kFatal;  
     
-    if(sr->common.ixn.pandora.size() != 1) {
-      MACH3LOG_TRACE("Skipping entry {}/{} -> Number of neutrino slices found in event: {}",iTreeEntry,nTreeEntries,sr->common.ixn.pandora.size());
-      continue;
-    }
-
-    /*
-    int RunNumber = sr->meta.fd_hd.run;
-    int SubRunNumber = sr->meta.fd_hd.subrun;
-    int EventNumber = sr->meta.fd_hd.event;
-    */
+    TChain* cafTree = new TChain("cafTree");
+    TChain* weightsTree = new TChain("weights");
     
-    std::vector<double> CVNScores = std::vector<double>(nCVN_Scores);
-    CVNScores[kCVN_NuE] = sr->common.ixn.pandora[0].nuhyp.cvn.nue;
-    CVNScores[kCVN_NuMu] = sr->common.ixn.pandora[0].nuhyp.cvn.numu;
-    CVNScores[kCVN_NC] = sr->common.ixn.pandora[0].nuhyp.cvn.nc;    
-
-    // Pre-check: If this event cannot pass selection cuts under either Fully Contained or Partially Contained assumption, skip it!
-    if (ReturnSampleIdentifier(CVNScores, 1e8) == kEventSel_Unknown &&
-        ReturnSampleIdentifier(CVNScores, 0.0) == kEventSel_Unknown) {
-      continue;
-    }
-
-    // Now, since the event has a valid candidate classification, we lazy-load and calculate MinDist:
-    double MinDist = 1e8;
-    auto const& pandora_parts = sr->common.ixn.pandora[0].part.pandora;
-    size_t nParts = pandora_parts.size();
-    for (size_t iPart = 0; iPart < nParts; ++iPart) {
-      auto const& part = pandora_parts[iPart];
-      //DB Info from PG -- ignore any hits associated with HitCollection classified objects
-      if (part.origRecoObjType == caf::RecoObjType::kHitCollection) {continue;}
-      if (part.walldist < MinDist) {MinDist = part.walldist;}
-    }
-    
-    int SampIndex = ReturnSampleIdentifier(CVNScores, MinDist);
-    if (SampIndex == kEventSel_Unknown) {
-      continue;
-    }
-
-    TVector3 RecoNuMomentumVector;
-    double RecoENu;
-    if (IsELike[SampIndex]) {
-      RecoENu = sr->common.ixn.pandora[0].Enu.e_calo;
-      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.heshw.x,sr->common.ixn.pandora[0].dir.heshw.y,sr->common.ixn.pandora[0].dir.heshw.z)).Unit();
+    if (InputFileName != "") {
+      cafTree->Add(InputFileName.c_str());
+      weightsTree->Add(InputFileName.c_str());
+    } else if (InputFileDirectory != "") {
+      std::filesystem::path directory = InputFileDirectory;
+      
+      for (const auto& entry : std::filesystem::directory_iterator(directory)) {
+	if (entry.is_regular_file() && entry.path().extension()==".root") {
+	  std::string FileName = entry.path();
+	  std::cout << "Adding file:" << FileName << std::endl;
+	  cafTree->Add(FileName.c_str());
+	  weightsTree->Add(FileName.c_str());
+	}
+      }
     } else {
-      RecoENu = sr->common.ixn.pandora[0].Enu.lep_calo;
-      RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.x,sr->common.ixn.pandora[0].dir.lngtrk.y,sr->common.ixn.pandora[0].dir.lngtrk.z)).Unit();      
+      std::cout << "Bad config file!" << std::endl;
+      throw;
     }
-    double RecoCZ = -RecoNuMomentumVector.y(); // +Y in CAF files translates to +Z in typical CosZ
-    if (std::isnan(RecoCZ)) {
-      MACH3LOG_WARN("Skipping entry {}/{} -> Reconstructed Cosine Z is NAN",iTreeEntry,nTreeEntries);
-      continue;
+    
+    double xsec_w, flux_nue_w, flux_numu_w;
+    weightsTree->SetBranchAddress("xsec",&xsec_w);
+    weightsTree->SetBranchAddress("flux_nue",&flux_nue_w);
+    weightsTree->SetBranchAddress("flux_numu",&flux_numu_w);
+    
+#if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)
+    caf::StandardRecordProxy* sr = new caf::StandardRecordProxy(cafTree, "rec");    
+#else  
+    caf::StandardRecord* sr = new caf::StandardRecord();
+    cafTree->SetBranchStatus("*", 1);
+    cafTree->SetBranchAddress("rec", &sr);
+#endif
+    
+    int nTreeEntries = static_cast<int>(cafTree->GetEntries());
+    
+    //================================================================================================
+    
+    dunemcSamples.reserve(2 * nTreeEntries);
+    
+    for (int iTreeEntry=0;iTreeEntry<nTreeEntries;iTreeEntry++) {
+      weightsTree->GetEntry(iTreeEntry);
+      
+#if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)      
+      cafTree->LoadTree(iTreeEntry);
+#else
+      cafTree->GetEntry(iTreeEntry);
+#endif
+      
+      if ((iTreeEntry % (nTreeEntries/10))==0) {
+	MACH3LOG_INFO("\tProcessing entry: {}/{}",iTreeEntry,nTreeEntries);
+      }
+      
+      if(sr->common.ixn.pandora.size() != 1) {
+	MACH3LOG_TRACE("Skipping entry {}/{} -> Number of neutrino slices found in event: {}",iTreeEntry,nTreeEntries,sr->common.ixn.pandora.size());
+	continue;
+      }
+      
+      /*
+	int RunNumber = sr->meta.fd_hd.run;
+	int SubRunNumber = sr->meta.fd_hd.subrun;
+	int EventNumber = sr->meta.fd_hd.event;
+      */
+      
+      std::vector<double> CVNScores = std::vector<double>(nCVN_Scores);
+      CVNScores[kCVN_NuE] = sr->common.ixn.pandora[0].nuhyp.cvn.nue;
+      CVNScores[kCVN_NuMu] = sr->common.ixn.pandora[0].nuhyp.cvn.numu;
+      CVNScores[kCVN_NC] = sr->common.ixn.pandora[0].nuhyp.cvn.nc;    
+      
+      // Pre-check: If this event cannot pass selection cuts under either Fully Contained or Partially Contained assumption, skip it!
+      if (ReturnSampleIdentifier(CVNScores, 1e8) == kEventSel_Unknown &&
+	  ReturnSampleIdentifier(CVNScores, 0.0) == kEventSel_Unknown) {
+	continue;
+      }
+      
+      // Now, since the event has a valid candidate classification, we lazy-load and calculate MinDist:
+      double MinDist = 1e8;
+      auto const& pandora_parts = sr->common.ixn.pandora[0].part.pandora;
+      size_t nParts = pandora_parts.size();
+      for (size_t iPart = 0; iPart < nParts; ++iPart) {
+	auto const& part = pandora_parts[iPart];
+	//DB Info from PG -- ignore any hits associated with HitCollection classified objects
+	if (part.origRecoObjType == caf::RecoObjType::kHitCollection) {continue;}
+	if (part.walldist < MinDist) {MinDist = part.walldist;}
+      }
+      
+      int SampIndex = ReturnSampleIdentifier(CVNScores, MinDist);
+      if (SampIndex == kEventSel_Unknown) {
+	continue;
+      }
+      
+      TVector3 RecoNuMomentumVector;
+      double RecoENu;
+      if (IsELike[SampIndex]) {
+	RecoENu = sr->common.ixn.pandora[0].Enu.e_calo;
+	RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.heshw.x,sr->common.ixn.pandora[0].dir.heshw.y,sr->common.ixn.pandora[0].dir.heshw.z)).Unit();
+      } else {
+	RecoENu = sr->common.ixn.pandora[0].Enu.lep_calo;
+	RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.x,sr->common.ixn.pandora[0].dir.lngtrk.y,sr->common.ixn.pandora[0].dir.lngtrk.z)).Unit();      
+      }
+      double RecoCZ = -RecoNuMomentumVector.y(); // +Y in CAF files translates to +Z in typical CosZ
+      if (std::isnan(RecoCZ)) {
+	MACH3LOG_WARN("Skipping entry {}/{} -> Reconstructed Cosine Z is NAN",iTreeEntry,nTreeEntries);
+	continue;
+      }
+      if (std::isnan(RecoENu)) {
+	MACH3LOG_WARN("Skipping entry {}/{} -> Reconstructed Neutrino Energy is NAN",iTreeEntry,nTreeEntries);
+	continue;
+      }
+      
+      auto& OscillationChannels = SampleDetails[SampIndex].OscChannels;    
+      int InteractingPDG = sr->mc.nu[0].pdg;
+      
+      int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
+      if (!sr->mc.nu[0].iscc) M3Mode += 14; //Account for no ability to distinguish CC/NC
+      if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
+      
+      double TrueNeutrinoEnergy = static_cast<double>(sr->mc.nu[0].E);
+      TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.x,sr->mc.nu[0].momentum.y,sr->mc.nu[0].momentum.z)).Unit();
+      
+      struct dunemc_atm currentEvent_FromNuE;
+      
+      currentEvent_FromNuE.rw_erec = RecoENu;
+      currentEvent_FromNuE.rw_theta = RecoCZ;
+      currentEvent_FromNuE.SampleIndex = SampIndex;
+      currentEvent_FromNuE.nupdg = InteractingPDG;
+      currentEvent_FromNuE.nupdgUnosc = (InteractingPDG > 0) ? 12 : -12;
+      currentEvent_FromNuE.OscChannelIndex = static_cast<double>(GetOscChannel(OscillationChannels, currentEvent_FromNuE.nupdgUnosc, currentEvent_FromNuE.nupdg));
+      currentEvent_FromNuE.mode = M3Mode;
+      currentEvent_FromNuE.rw_isCC = sr->mc.nu[0].iscc;
+      currentEvent_FromNuE.Target = kTarget_Ar;
+      currentEvent_FromNuE.enu_true = TrueNeutrinoEnergy;
+      currentEvent_FromNuE.coszenith_true = -TrueNuMomentumVector.y(); // +Y in CAF files translates to +Z in typical CosZ
+      currentEvent_FromNuE.flux_w = xsec_w*flux_nue_w;
+      currentEvent_FromNuE.MinDistToWall = MinDist;
+      currentEvent_FromNuE.eid = static_cast<uint>(iTreeEntry);
+      
+      struct dunemc_atm currentEvent_FromNuMu = currentEvent_FromNuE;
+      
+      currentEvent_FromNuMu.nupdgUnosc = (InteractingPDG > 0) ? 14 : -14;
+      currentEvent_FromNuMu.OscChannelIndex = static_cast<double>(GetOscChannel(OscillationChannels, currentEvent_FromNuMu.nupdgUnosc, currentEvent_FromNuMu.nupdg));
+      currentEvent_FromNuMu.flux_w = xsec_w*flux_numu_w;
+      
+      dunemcSamples.emplace_back(std::move(currentEvent_FromNuE));
+      dunemcSamples.emplace_back(std::move(currentEvent_FromNuMu));    
     }
-    if (std::isnan(RecoENu)) {
-      MACH3LOG_WARN("Skipping entry {}/{} -> Reconstructed Neutrino Energy is NAN",iTreeEntry,nTreeEntries);
-      continue;
-    }
-
-    auto& OscillationChannels = SampleDetails[SampIndex].OscChannels;    
-    int InteractingPDG = sr->mc.nu[0].pdg;
-
-    int M3Mode = Modes->GetModeFromGenerator(std::abs(sr->mc.nu[0].mode));
-    if (!sr->mc.nu[0].iscc) M3Mode += 14; //Account for no ability to distinguish CC/NC
-    if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
-
-    double TrueNeutrinoEnergy = static_cast<double>(sr->mc.nu[0].E);
-    TVector3 TrueNuMomentumVector = (TVector3(sr->mc.nu[0].momentum.x,sr->mc.nu[0].momentum.y,sr->mc.nu[0].momentum.z)).Unit();
-
-    struct dunemc_atm currentEvent_FromNuE;
     
-    currentEvent_FromNuE.rw_erec = RecoENu;
-    currentEvent_FromNuE.rw_theta = RecoCZ;
-    currentEvent_FromNuE.SampleIndex = SampIndex;
-    currentEvent_FromNuE.nupdg = InteractingPDG;
-    currentEvent_FromNuE.nupdgUnosc = (InteractingPDG > 0) ? 12 : -12;
-    currentEvent_FromNuE.OscChannelIndex = static_cast<double>(GetOscChannel(OscillationChannels, currentEvent_FromNuE.nupdgUnosc, currentEvent_FromNuE.nupdg));
-    currentEvent_FromNuE.mode = M3Mode;
-    currentEvent_FromNuE.rw_isCC = sr->mc.nu[0].iscc;
-    currentEvent_FromNuE.Target = kTarget_Ar;
-    currentEvent_FromNuE.enu_true = TrueNeutrinoEnergy;
-    currentEvent_FromNuE.coszenith_true = -TrueNuMomentumVector.y(); // +Y in CAF files translates to +Z in typical CosZ
-    currentEvent_FromNuE.flux_w = xsec_w*flux_nue_w;
-    currentEvent_FromNuE.MinDistToWall = MinDist;
-    currentEvent_FromNuE.eid = static_cast<uint>(iTreeEntry);
+    //================================================================================================
+    gErrorIgnoreLevel = CurrErrorLevel;
     
-    struct dunemc_atm currentEvent_FromNuMu = currentEvent_FromNuE;
+#if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)  
+    //PG Need to clear that static vector to avoid double free errors when exiting the program
+    caf::SRBranchRegistry::clear();
+#endif
     
-    currentEvent_FromNuMu.nupdgUnosc = (InteractingPDG > 0) ? 14 : -14;
-    currentEvent_FromNuMu.OscChannelIndex = static_cast<double>(GetOscChannel(OscillationChannels, currentEvent_FromNuMu.nupdgUnosc, currentEvent_FromNuMu.nupdg));
-    currentEvent_FromNuMu.flux_w = xsec_w*flux_numu_w;
-
-    dunemcSamples.emplace_back(std::move(currentEvent_FromNuE));
-    dunemcSamples.emplace_back(std::move(currentEvent_FromNuMu));    
+    delete sr;
+    delete cafTree;
+    delete weightsTree;
   }
 
-  //================================================================================================
-  gErrorIgnoreLevel = CurrErrorLevel;
-
-#if defined(MaCh3_DUNE_USE_SRProxy) && (MaCh3_DUNE_USE_SRProxy==1)  
-  //PG Need to clear that static vector to avoid double free errors when exiting the program
-  caf::SRBranchRegistry::clear();
-#endif
-  
-  delete sr;
-  delete cafTree;
-  delete weightsTree;
+  SetupDetectorSystematicRatios();
   
   return static_cast<int>(dunemcSamples.size());
 }
@@ -376,6 +400,123 @@ void SampleHandlerAtm::SetupMC() {
     
     MCEvents[iEvent].coszenith_true = dunemcSamples[iEvent].coszenith_true;
   }
+}
+
+void SampleHandlerAtm::SetupDetectorSystematicRatios() {
+  //DB Figure out whether we have detector systematics configured
+  int NParams = ParHandler->GetNParameters();
+  for (int iParam=0;iParam<NParams;iParam++) {
+    if (ParHandler->IsParFromGroup(iParam,"DetectorSystematic")) {
+      std::string ParamName = ParHandler->GetParFancyName(iParam);
+      DetectorSystematicParameterNames.push_back(ParamName);
+    }
+  }
+
+  if (DetectorSystematicParameterNames.size()==0 && fDetectorSystematicsFileName!="") {
+    std::cerr << "Detector Systematic Input file provided but no detector systematics (Group=\"DetectorSystematic\") found" << std::endl;
+    throw;
+  }
+  if (DetectorSystematicParameterNames.size()!=0 && fDetectorSystematicsFileName=="") {
+    std::cerr << "Detector systematics configured (Group=\"DetectorSystematic\") but no input file provided" << std::endl;
+    throw;
+  }
+  if (DetectorSystematicParameterNames.size()==0) {
+    return;
+  }
+      
+  TFile* DetectorSystematicsFile = new TFile(fDetectorSystematicsFileName.c_str());
+  if (!DetectorSystematicsFile || DetectorSystematicsFile->IsZombie()) {
+    std::cerr << "Could not find file:" << fDetectorSystematicsFileName << std::endl;
+    throw;
+  }
+
+  //DB Load histograms with title SystematicName_SampleName into vector indexed [Systematic][Sample]
+  std::vector<std::vector<TH1*>> RatioHistograms;
+  RatioHistograms.resize(DetectorSystematicParameterNames.size());
+  for (size_t iRatioHist=0;iRatioHist<RatioHistograms.size();iRatioHist++) {
+    RatioHistograms[iRatioHist].resize(SampleDetails.size());
+  }
+  
+  for (size_t iParam=0;iParam<DetectorSystematicParameterNames.size();iParam++) {
+    for (size_t iSample=0;iSample<SampleDetails.size();iSample++) {
+      std::string ExpectedHistogramName = DetectorSystematicParameterNames[iParam]+"_"+SampleDetails[iSample].SampleTitle;
+      TH1* Histogram = DetectorSystematicsFile->Get<TH1>(ExpectedHistogramName.c_str());
+      if (!Histogram) {
+	std::cerr << "Did not find histogram:" << ExpectedHistogramName << " in file:" << fDetectorSystematicsFileName << std::endl;
+	DetectorSystematicsFile->ls();
+	throw;
+      }
+      RatioHistograms[iParam][iSample] = Histogram;
+    }
+  }
+
+  //DB Now assign systematic weights
+  for (size_t iEvent=0;iEvent<dunemcSamples.size();iEvent++) {
+    int SampIndex = dunemcSamples[iEvent].SampleIndex;
+    
+    dunemcSamples[iEvent].DetectorSystematicRatios.resize(DetectorSystematicParameterNames.size());
+    for (size_t iSyst=0;iSyst<DetectorSystematicParameterNames.size();iSyst++) {
+      TH1* Histogram = RatioHistograms[iSyst][SampIndex];
+      int HistogramBinIndex = -1;
+
+      //DB Added support for 2D ratio histograms (and extension to 3D if we get that far). Current inputs are only in 1D so higher-D needs validating
+      if (Histogram->InheritsFrom(TH1::Class())) {
+	HistogramBinIndex = Histogram->FindBin(dunemcSamples[iEvent].rw_erec);
+      } else if (Histogram->InheritsFrom(TH2::Class())) {
+	TH2* Histogram2D = static_cast<TH2*>(Histogram);
+	HistogramBinIndex = Histogram2D->FindBin(dunemcSamples[iEvent].rw_erec,dunemcSamples[iEvent].rw_theta);
+      } else {
+	std::cerr << "Do not have support for 3D detector systematic binning yet" << std::endl;
+	throw;
+      }
+      
+      double Weight = RatioHistograms[iSyst][SampIndex]->GetBinContent(HistogramBinIndex);
+      dunemcSamples[iEvent].DetectorSystematicRatios[iSyst] = Weight;
+    }
+  }
+
+  /*
+  for (size_t iEvent=0;iEvent<dunemcSamples.size();iEvent++) {
+    std::cout << "iEvent: " << iEvent << ", ";
+    for (size_t iSyst=0;iSyst<dunemcSamples[iEvent].DetectorSystematicRatios.size();iSyst++) {
+      std::cout << dunemcSamples[iEvent].DetectorSystematicRatios[iSyst] << ", " << std::endl;
+    }
+  }
+  */
+}
+
+int SampleHandlerAtm::ReturnSampleIdentifier(std::vector<double> CVNScores, double MinDistanceToWall) {
+  bool IsFullyContained = false;
+  
+  if (MinDistanceToWall > 1e4 || MinDistanceToWall < 0) { //DB: ToDo Work out theoretical maximum
+    return kEventSel_Unknown;
+  } else if (MinDistanceToWall > FCPCSeparation) {
+    IsFullyContained = true;
+  } else {
+    IsFullyContained = false;
+  }
+
+  //DB Not making the 0.55 and 0.56 magic numbers config-read because will eventually move to the argmax style selection (commented out on line above...)
+  //int EventSelection = static_cast<int>(std::distance(CVNScores.begin(), max_element(CVNScores.begin(), CVNScores.end())));
+  int EventSelection = kCVN_NC;
+  if (CVNScores[kCVN_NuMu] > 0.56) { 
+    EventSelection = kCVN_NuMu;
+  } else if (CVNScores[kCVN_NuE] > 0.55) {
+    EventSelection = kCVN_NuE;
+  }
+
+  int SampIndex = kEventSel_Unknown;
+  if (IsFullyContained) {
+    if (EventSelection == kCVN_NuE)  {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NuE]; }
+    if (EventSelection == kCVN_NuMu) {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NuMu];}
+    if (EventSelection == kCVN_NC)   {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NC];  }    
+  } else {
+    if (EventSelection == kCVN_NuE)  {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_PC_NuE]; }
+    if (EventSelection == kCVN_NuMu) {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_PC_NuMu];}
+    if (EventSelection == kCVN_NC)   {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_PC_NC];  }    
+  }
+  
+  return SampIndex;
 }
 
 const double* SampleHandlerAtm::GetPointerToKinematicParameter(const int KinPar, int iEvent) const {
@@ -402,42 +543,7 @@ const double* SampleHandlerAtm::GetPointerToKinematicParameter(const int KinPar,
   }
 }
 
-
 double SampleHandlerAtm::ReturnKinematicParameter(const int KinematicVariable, const int iEvent) const {
   KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
   return *GetPointerToKinematicParameter(KinPar, iEvent);
-}
-
-int SampleHandlerAtm::ReturnSampleIdentifier(std::vector<double> CVNScores, double MinDistanceToWall) {
-  bool IsFullyContained = false;
-  
-  if (MinDistanceToWall > 1e4 || MinDistanceToWall < 0) { //DB: ToDo Work out theoretical maximum
-    return kEventSel_Unknown;
-  } else if (MinDistanceToWall > FCPCSeparation) {
-    IsFullyContained = true;
-  } else {
-    IsFullyContained = false;
-  }
-
-  //int EventSelection = static_cast<int>(std::distance(CVNScores.begin(), max_element(CVNScores.begin(), CVNScores.end())));
-  //DB Not making the 0.55 and 0.56 magic numbers config-read because will eventually move to the argmax style selection (commented out on line above...)
-  int EventSelection = kCVN_NC;
-  if (CVNScores[kCVN_NuMu] > 0.56) { 
-    EventSelection = kCVN_NuMu;
-  } else if (CVNScores[kCVN_NuE] > 0.55) {
-    EventSelection = kCVN_NuE;
-  }
-
-  int SampIndex = kEventSel_Unknown;
-  if (IsFullyContained) {
-    if (EventSelection == kCVN_NuE)  {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NuE]; }
-    if (EventSelection == kCVN_NuMu) {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NuMu];}
-    if (EventSelection == kCVN_NC)   {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_FC_NC];  }    
-  } else {
-    if (EventSelection == kCVN_NuE)  {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_PC_NuE]; }
-    if (EventSelection == kCVN_NuMu) {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_PC_NuMu];}
-    if (EventSelection == kCVN_NC)   {SampIndex = EventSelection_to_SampleIndex_Map[kEventSel_PC_NC];  }    
-  }
-  
-  return SampIndex;
 }

@@ -64,7 +64,7 @@ protected:
   /// @brief Cleanup memory
   void CleanMemoryBeforeFit() override {};
 
-  void RegisterFunctionalParameters() override {};
+  void RegisterFunctionalParameters();
   
   //DB functions which could be initialised to do something which is non-trivial
   
@@ -151,6 +151,10 @@ protected:
   std::vector<std::string> EventSelectionNames = std::vector<std::string>(nEventSelections);
   std::vector<int> EventSelection_to_SampleIndex_Map = std::vector<int>(nEventSelections,kEventSel_Unknown);
 
+  void SetupDetectorSystematicRatios();
+  std::string fDetectorSystematicsFileName;
+  std::vector<std::string> DetectorSystematicParameterNames;
+  
   /// Enum defining CAF->Eigen transformation
   enum Variables{rw_erec,rw_theta,SampleIndex,nupdg,nupdgUnosc,OscChannelIndex,mode,rw_isCC,Target,enu_true,coszenith_true,flux_w,MinDistToWall,eid,nVariables};
 
