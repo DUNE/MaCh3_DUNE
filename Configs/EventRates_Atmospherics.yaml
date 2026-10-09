@@ -49,6 +49,20 @@ General:
   StartFromPos: false
   PosFileName: "chain_0.root"
 
+# LLH Scan settings
+LLHScan:
+    # don't make LLH for certain systematic groups
+    # LLHScanSkipVector: ["b_"]
+    # Save individual sample contributions to the LLH
+  LLHScanBySample: true
+    # Number of points we run LLH scans for each systematic
+  LLHScanPoints: 10
+    # Number of points for 2D scan in each direction
+  2DLLHScanPoints: 20
+    # Add physical ranges for special params whose priors/errors may not be well well-defined
+  ScanRanges:
+    delta_cp: [-3.14,3.14]
+
 ProcessMCMC:
   BurnInSteps: 80000
   Thinning: [false, 100]
