@@ -18,37 +18,27 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false  # KS: Prevents cancellation of remaining jobs if one fails
       matrix:
-        include:
-          - os: alma9
-            file: Docs/MaCh3DockerFiles/Alma9/Dockerfile
-            tag_latest: alma9latest
-          - os: Ubuntu22.04
-            file: Docs/MaCh3DockerFiles/Ubuntu22.04/Dockerfile
-            tag_latest: ubuntulatest
-
-    name: Image CD ${{ matrix.os }}
+        os: [ubuntu22.04, ubuntu25.10, alma9]
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
+      - uses: actions/checkout@v4
 
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Build Docker image
+      - name: Build ${{ matrix.os }} image
         run: |
           if [ "${{ github.ref_type }}" == "tag" ]; then
             docker build . \
-              --file "${{ matrix.file }}" \
+              --file Docs/MaCh3DockerFiles/${{ matrix.os }}/Dockerfile \
               --tag "ghcr.io/dune/mach3:${{ matrix.os }}${{ github.ref_name }}" \
               --build-arg MACH3_DUNE_VERSION="${{ github.ref_name }}" \
               --build-arg MACH3_DUNE_BUILD_ARGS="-DCUDAProb3Linear_ENABLED=ON"
           else
             docker build . \
-              --file "${{ matrix.file }}" \
-              --tag "ghcr.io/dune/mach3:${{ matrix.tag_latest }}" \
+              --file Docs/MaCh3DockerFiles/${{ matrix.os }}/Dockerfile \
+              --tag "ghcr.io/dune/mach3:${{ matrix.os }}latest" \
               --build-arg MACH3_DUNE_VERSION="develop" \
               --build-arg MACH3_DUNE_BUILD_ARGS="-DCUDAProb3Linear_ENABLED=ON"
           fi
@@ -58,7 +48,7 @@ jobs:
           if [ "${{ github.ref_type }}" == "tag" ]; then
             docker push "ghcr.io/dune/mach3:${{ matrix.os }}${{ github.ref_name }}"
           else
-            docker push "ghcr.io/dune/mach3:${{ matrix.tag_latest }}"
+            docker push "ghcr.io/dune/mach3:${{ matrix.os }}latest"
           fi
 
       - name: Delete old images
