@@ -473,6 +473,8 @@ void SampleHandlerAtm::SetupDetectorSystematicRatios() {
       double Weight = RatioHistograms[iSyst][SampIndex]->GetBinContent(HistogramBinIndex);
       dunemcSamples[iEvent].DetectorSystematicRatios[iSyst] = Weight;
     }
+
+    dunemcSamples[iEvent].TotalDetectorSystematicWeight = 1.0;
   }
 
   /*
