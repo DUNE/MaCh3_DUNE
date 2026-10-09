@@ -16,6 +16,8 @@
 #include "Samples/StructsDUNE.h"
 #include "Fitters/MaCh3Factory.h"
 
+bool PrintIntegral = true;
+
 void Write1DHistogramsToFile(std::string OutFileName, std::vector<std::unique_ptr<TH1>>& Histograms) {
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutFileName.c_str(), "RECREATE"));
   OutputFile->cd();
@@ -41,8 +43,17 @@ void Write1DHistogramsToPdf(std::string OutFileName, std::vector<std::unique_ptr
 }
 
 int main(int argc, char * argv[]) {
-  M3::Utils::MaCh3Usage(argc, argv);
-  auto FitManager = MaCh3ManagerFactory(argc, argv);
+  if (argc < 2) {
+    MACH3LOG_ERROR("Wrong usage of MaCh3 executable!");
+    MACH3LOG_ERROR("Syntax is $: {} conf.yaml [PrintIntegral]", argv[0]);
+    MACH3LOG_ERROR("Where conf.yaml is a valid config file, compatible with the manager class (manager/manager.cpp/h) and PrintIntegral is a boolean [0/1] which defines if the OscChan/Mode breakdown is printed");
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  auto FitManager = std::make_unique<Manager>(M3OpenConfig(argv[1]));
+
+  if (argc == 3) {
+    PrintIntegral = std::stoi(argv[2]);
+  }
 
   //###############################################################################################################################
   //Create SampleHandlerBase objects
@@ -63,7 +74,7 @@ int main(int argc, char * argv[]) {
 
       std::string EventRateString = fmt::format("{:.2f}", handler->GetMCHist(iSample)->Integral());
       MACH3LOG_INFO("Event rate for {} : {:<5}", handler->GetSampleTitle(iSample), EventRateString);
-      handler->PrintIntegral(iSample);
+      if (PrintIntegral) {handler->PrintIntegral(iSample);}
     }
   }
 
