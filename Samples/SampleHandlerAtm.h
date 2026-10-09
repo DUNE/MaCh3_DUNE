@@ -21,6 +21,8 @@ public:
   enum KinematicTypes
   {
     kTrueNeutrinoEnergy,
+    kRecoHadronEnergy,
+    kRecoLeptonEnergy,
     kRecoNeutrinoEnergy,
     kTrueCosZ,
     kRecoCosZ,
@@ -93,6 +95,8 @@ protected:
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
     {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},
+    {"RecoHadronEnergy",kRecoHadronEnergy},
+    {"RecoLeptonEnergy",kRecoLeptonEnergy},    
     {"TrueCosineZ",kTrueCosZ},
     {"RecoCosineZ",kRecoCosZ},
     {"OscillationChannel",kOscChannel},
@@ -104,6 +108,8 @@ protected:
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
     {kTrueNeutrinoEnergy,"TrueNeutrinoEnergy"},
     {kRecoNeutrinoEnergy,"RecoNeutrinoEnergy"},
+    {kRecoHadronEnergy,"RecoHadronEnergy"},
+    {kRecoLeptonEnergy,"RecoLeptonEnergy"},
     {kTrueCosZ,"TrueCosineZ"},    
     {kRecoCosZ,"RecoCosineZ"},
     {kOscChannel,"OscillationChannel"},
