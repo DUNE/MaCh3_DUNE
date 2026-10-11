@@ -29,7 +29,6 @@ struct CategoryCut {
 struct ProjectionVariable {
   std::string Name;
   std::vector<std::string> VarStrings;
-  std::vector<std::vector<double>> BinEdges;
 
   std::vector<ProjectionKinematicCut> KinematicCuts;
   std::vector<CategoryCut> CategoryCuts;
@@ -145,34 +144,9 @@ int main(int argc, char *argv[]) {
     //JM now a vector of size 1 (for 1d hists) or 2 (for 2d hists)
     std::vector<std::string> VarStrings = ProjectionConfig["VarStrings"].as< std::vector<std::string> >();
 
-    //Could replace this with uniform [lbin, hbin, nbins] for example
-    //JM have included this option (as [nbins, lbin, hbin])
-    std::vector<std::vector<double>> VarBinnings = ProjectionConfig["VarBins"].as<std::vector<std::vector<double>>>();
-
     std::vector<ProjectionKinematicCut> KinematicCuts;
     std::vector<CategoryCut> CategoryCuts;
 
-    if ((VarStrings.size()!=1 && VarStrings.size()!=2) || VarStrings.size() != VarBinnings.size()) {
-      MACH3LOG_ERROR("Projections: {} VarStrings specified, {} VarBinnings specified. Specify 1 or 2 of both.", VarStrings.size(), VarBinnings.size());
-      throw MaCh3Exception(__FILE__,__LINE__);
-    }
-    for (int iBinning=0; iBinning<VarBinnings.size(); iBinning++) {
-      if (VarBinnings[iBinning].size() == 3) {
-        double nbins = VarBinnings[iBinning][0];
-        double xmin = VarBinnings[iBinning][1];
-        double xmax = VarBinnings[iBinning][2];
-        double step = (xmax-xmin)/nbins;
-        VarBinnings[iBinning] = {};
-        for (double iBinEdge=xmin; iBinEdge<=xmax; iBinEdge+=step) {
-          VarBinnings[iBinning].push_back(iBinEdge);
-        }
-        if (VarBinnings[iBinning].size() == nbins+1) {
-          VarBinnings[iBinning].back() = xmax;
-        } else {
-          VarBinnings[iBinning].push_back(xmax);
-        }
-      }
-    }
     for (auto &KinematicCutConfig: FitManager->raw()["GeneralKinematicCuts"]) {
       std::string KinematicCutName = KinematicCutConfig["Name"].as<std::string>();
       std::string KinematicCutVarString = KinematicCutConfig["VarString"].as<std::string>();
@@ -224,7 +198,7 @@ int main(int argc, char *argv[]) {
       CategoryCuts.emplace_back(Cut);
     }
 
-    ProjectionVariable Proj = ProjectionVariable{VarName,VarStrings,VarBinnings,KinematicCuts,CategoryCuts};
+    ProjectionVariable Proj = ProjectionVariable{VarName,VarStrings,KinematicCuts,CategoryCuts};
     Projections.emplace_back(Proj);
   }
 
@@ -236,14 +210,13 @@ int main(int argc, char *argv[]) {
     int histdim = Projections[iProj].VarStrings.size();
 
     if (histdim == 1) {
-      MACH3LOG_INFO("Projection {:<2} - Name : {} \nVarString : {} , Binning : {}, {}, {}"
-          ,iProj,Projections[iProj].Name,
-          Projections[iProj].VarStrings[0],Projections[iProj].BinEdges[0].size()-1,Projections[iProj].BinEdges[0][0],Projections[iProj].BinEdges[0].back());
+      MACH3LOG_INFO("Projection {:<2} - Name : {} \nVarString : {}"
+          ,iProj,Projections[iProj].Name, Projections[iProj].VarStrings[0]);
     } else {
-      MACH3LOG_INFO("Projection {:<2} - Name : {} \nVarString1 : {} , Binning : {} , {} , {} \nVarString2 : {} , Binning : {}, {}, {}"
+      MACH3LOG_INFO("Projection {:<2} - Name : {} \nVarString1 : {}\nVarString2 : {}"
           ,iProj,Projections[iProj].Name,
-          Projections[iProj].VarStrings[0],Projections[iProj].BinEdges[0].size()-1,Projections[iProj].BinEdges[0][0],Projections[iProj].BinEdges[0].back(),
-          Projections[iProj].VarStrings[1],Projections[iProj].BinEdges[1].size()-1,Projections[iProj].BinEdges[1][0],Projections[iProj].BinEdges[1].back());
+          Projections[iProj].VarStrings[0],
+          Projections[iProj].VarStrings[1]);
     }
 
     if (Projections[iProj].KinematicCuts.size() > 0) {
