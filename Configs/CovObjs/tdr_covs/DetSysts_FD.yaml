@@ -582,7 +582,7 @@ Systematics:
     Correlations:
     - NumuFVFD: 0.5
     - NueFVFD: 0.5
-    SampleNames: ["BeamFD_FHC_nue", "FHC_RHC_nue"]
+    SampleNames: ["BeamFD_FHC_nue", "BeamFD_RHC_nue"]
     Error: 0.01
     FlatPrior: false
     Names:
