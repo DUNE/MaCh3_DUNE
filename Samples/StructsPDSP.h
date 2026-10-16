@@ -18,6 +18,7 @@ struct PDSPMCInfo {
   double Target = kTarget_Ar;
 
   /// True Initial Kinetic Energy
+  double TrueKEFF = M3::_BAD_DOUBLE_;
   double TrueKEIni = M3::_BAD_DOUBLE_;
   /// True Interacting Kinetic Energy
   double TrueKEInt = M3::_BAD_DOUBLE_;

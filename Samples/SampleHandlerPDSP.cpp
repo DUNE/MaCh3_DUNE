@@ -250,6 +250,7 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       
       // Truth variables
       double trueKEIni;
+      double trueKEFF;
       double trueKEInt;
       double trueEndZ;
       bool true_abs;
@@ -258,8 +259,10 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       bool true_decay;
 
       _data->SetBranchStatus("KE_ff_true", true);
-      _data->SetBranchAddress("KE_ff_true", &trueKEIni);
+      _data->SetBranchAddress("KE_ff_true", &trueKEFF);
 
+      _data->SetBranchStatus("KE_init_true", true);
+      _data->SetBranchAddress("KE_init_true", &trueKEIni);
       _data->SetBranchStatus("KE_int_true", true);
       _data->SetBranchAddress("KE_int_true", &trueKEInt);
 
@@ -310,6 +313,7 @@ int SampleHandlerPDSP::SetupExperimentMC() {
         PDSPSampleMetaData[TotalEventCounter].SampleIndex = static_cast<int>(iSample);
 
         PDSPSamples[TotalEventCounter].TrueKEIni = trueKEIni;
+        PDSPSamples[TotalEventCounter].TrueKEFF = trueKEFF;
         PDSPSamples[TotalEventCounter].TrueKEInt = trueKEInt;
         PDSPSamples[TotalEventCounter].TrueEndZ = trueEndZ;
         PDSPSamples[TotalEventCounter].RecoKEFF = recoKEFF;
@@ -495,12 +499,9 @@ void SampleHandlerPDSP::ResetShifts(const int iEvent) {
 void SampleHandlerPDSP::FinaliseShifts(const int iEvent) {
   auto& event = PDSPSamples[iEvent];
 
-  // The reconstructed FV begins 30 cm downstream of the TPC front face.
-  // Match the analysis production: 25 steps to the FV boundary and 50 steps
-  // over the full reconstructed trajectory to the interaction point.
   constexpr double fiducialVolumeStart = 30.0;
   event.RecoKEIniShifted = PropagatePionKE(
-      event.RecoKEFFShifted, fiducialVolumeStart, 25);
+      event.RecoKEFFShifted, fiducialVolumeStart, 50);
   event.RecoKEIntShifted = PropagatePionKE(
       event.RecoKEFFShifted, event.RecoTrackLengthShifted, 50);
 }
