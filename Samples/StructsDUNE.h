@@ -56,6 +56,8 @@ struct dunemc_atm : public dunemc_base { // Store variables used by SampleHandle
   //Detector systematics weights
   std::vector<float> det_sys_1sigweights;
   double total_det_sys_weight = 1.0;
+  double selectedFlavour = -1.0;
+
 };
 
 struct dunemc_beamfd : public dunemc_base { // Store variables used by SampleHandlerBeamFD

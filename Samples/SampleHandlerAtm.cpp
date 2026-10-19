@@ -344,6 +344,29 @@ int SampleHandlerAtm::SetupExperimentMC() {
     }
 
 
+    double SelectedTopology = -1.0;
+
+    switch (SampleIndex) {
+      case 1:
+      case 3:
+        SelectedTopology = 0.0;
+        break;
+
+      case 0:
+      case 2:
+        SelectedTopology = 1.0;
+        break;
+
+      case -1:
+        SelectedTopology = 2.0;
+        break;
+
+      default:
+        MACH3LOG_ERROR("Unexpected atmospheric event selection: {}", SampleIndex);
+        throw MaCh3Exception(__FILE__, __LINE__);
+    }
+    
+
     TVector3 RecoNuMomentumVector;
     double RecoENu;
     if (IsELike[SampleIndex]) {
@@ -388,6 +411,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
     currentEvent_FromNuE.coszenith_true = -TrueNuMomentumVector.y(); // +Y in CAF files translates to +Z in typical CosZ
     currentEvent_FromNuE.flux_w = xsec_w*flux_nue_w;
     currentEvent_FromNuE.MinDistToWall = MinDistToWall;
+    currentEvent_FromNuE.selectedFlavour = SelectedTopology;
     currentEvent_FromNuE.eid = static_cast<uint>(iTreeEntry);
     
     currentEvent_FromNuE.det_sys_1sigweights.clear();
@@ -424,7 +448,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
     currentEvent_FromNuMu.flux_w = xsec_w*flux_numu_w;
 
     dunemcSamples.emplace_back(std::move(currentEvent_FromNuE));
-    dunemcSamples.emplace_back(std::move(currentEvent_FromNuMu));    
+    dunemcSamples.emplace_back(std::move(currentEvent_FromNuMu));  
   }
 
   //================================================================================================
@@ -474,6 +498,8 @@ const double* SampleHandlerAtm::GetPointerToKinematicParameter(const int KinPar,
     return &(dunemcSamples[iEvent].Target);
   case kMinDistToWall:
     return &(dunemcSamples[iEvent].MinDistToWall);
+  case kSelFlavour:
+    return &(dunemcSamples[iEvent].selectedFlavour);
   default:
     MACH3LOG_ERROR("Unknown KinPar: {}",static_cast<int>(KinPar));
     throw MaCh3Exception(__FILE__, __LINE__);
@@ -500,7 +526,7 @@ int SampleHandlerAtm::ReturnSampleIdentifier(std::vector<double> CVNScores, doub
   //int EventSelection = static_cast<int>(std::distance(CVNScores.begin(), max_element(CVNScores.begin(), CVNScores.end())));
   //DB Not making the 0.55 and 0.56 magic numbers config-read because will eventually move to the argmax style selection (commented out on line above...)
   int EventSelection = kCVN_NC;
-  if (CVNScores[kCVN_NuMu] > 0.56) { 
+  if (CVNScores[kCVN_NuMu] > 0.56) {
     EventSelection = kCVN_NuMu;
   } else if (CVNScores[kCVN_NuE] > 0.55) {
     EventSelection = kCVN_NuE;
@@ -516,6 +542,5 @@ int SampleHandlerAtm::ReturnSampleIdentifier(std::vector<double> CVNScores, doub
     if (EventSelection == kCVN_NuMu) {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_PC_NuMu];}
     if (EventSelection == kCVN_NC)   {SampleIndex = EventSelection_to_SampleIndex_Map[kEventSel_PC_NC];  }    
   }
-  
   return SampleIndex;
 }

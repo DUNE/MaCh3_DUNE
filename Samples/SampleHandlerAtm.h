@@ -35,7 +35,8 @@ public:
     kOscChannel,
     kMode,
     kTargetNucleus,
-    kMinDistToWall
+    kMinDistToWall,
+    kSelFlavour
   };
 
 protected:
@@ -100,7 +101,8 @@ protected:
     {"OscillationChannel",kOscChannel},
     {"Mode",kMode},
     {"TargetNucleus", kTargetNucleus},
-    {"MinDistToWall", kMinDistToWall}    
+    {"MinDistToWall", kMinDistToWall},    
+    {"SelFlavour", kSelFlavour}
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -111,7 +113,8 @@ protected:
     {kOscChannel,"OscillationChannel"},
     {kMode,"Mode"},
     {kTargetNucleus, "TargetNucleus"},
-    {kMinDistToWall, "MinDistToWall"}
+    {kMinDistToWall, "MinDistToWall"},
+    {kSelFlavour, "SelFlavour"}
   };
   
   /// Array filled with MC samples for each oscillation channel
@@ -142,6 +145,13 @@ protected:
     kEventSel_PC_NC,    
     nEventSelections,
   };
+
+
+  enum SelFlavour {
+  kSelectedNuE  = 0,
+  kSelectedNuMu = 1,
+  kSelectedNC   = 2
+};
 
   /// Enums to define ordering of the CVN scores from the CAF files
   enum CVNScoreIndices {
