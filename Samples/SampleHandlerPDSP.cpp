@@ -1,14 +1,21 @@
 #include "SampleHandlerPDSP.h"
+#include "Splines/SplineStructs.h"
 
 #include <TFile.h>
+#include <TGraph.h>
 #include <TKey.h>
 #include <TString.h>
 
 #include <algorithm>
 #include <cmath>
+#include <memory>
 #include <random>
+#include <utility>
+#include <vector>
 
 namespace {
+
+constexpr double fiducialVolumeStart = 30.0; // cm
 
 double PionMeanDEDX(const double kineticEnergy) {
   if (!std::isfinite(kineticEnergy) || kineticEnergy <= 0.0) return 0.0;
@@ -55,21 +62,70 @@ double PionMeanDEDX(const double kineticEnergy) {
   return std::isfinite(dedx) && dedx > 0.0 ? dedx : 0.0;
 }
 
-double PropagatePionKE(const double initialKE, const double length,
-                       const int numberOfSteps) {
-  if (!std::isfinite(initialKE) || initialKE <= 0.0) return 0.0;
-  if (!std::isfinite(length) || length <= 0.0 || numberOfSteps <= 0) {
-    return initialKE;
+class PionRangeSpline {
+ public:
+  static const PionRangeSpline& Instance() {
+    static const PionRangeSpline spline;
+    return spline;
   }
 
-  const double stepLength = length / numberOfSteps;
-  double kineticEnergy = initialKE;
-  for (int step = 0; step < numberOfSteps && kineticEnergy > 0.0; ++step) {
-    const double dedx = PionMeanDEDX(kineticEnergy);
-    if (dedx <= 0.0) break;
-    kineticEnergy = std::max(0.0, kineticEnergy - dedx * stepLength);
+  double Propagate(const double initialKE, const double length) const {
+    if (!std::isfinite(initialKE) || initialKE <= 0.0) return 0.0;
+    if (!std::isfinite(length) || length <= 0.0) return initialKE;
+
+    const double initialRange = energyToRange->Eval(initialKE);
+    if (length >= initialRange) return 0.0;
+    return rangeToEnergy->Eval(initialRange - length);
   }
-  return kineticEnergy;
+
+ private:
+  static constexpr double knotStep = 0.5; // MeV
+  static constexpr double maximumEnergy = 3000.0; // MeV
+
+  static std::pair<std::vector<double>, std::vector<double>> MakeKnots() {
+    const size_t numberOfKnots =
+        static_cast<size_t>(maximumEnergy / knotStep) + 1;
+    std::vector<double> energies(numberOfKnots);
+    std::vector<double> ranges(numberOfKnots, 0.0);
+
+    double range = 0.0;
+    for (size_t i = 1; i < numberOfKnots; ++i) {
+      const double energy = static_cast<double>(i) * knotStep;
+      const double midpointEnergy =
+          energy - 0.5 * knotStep;
+      const double dedx = PionMeanDEDX(midpointEnergy);
+      if (dedx > 0.0) range += knotStep / dedx;
+      energies[i] = energy;
+      ranges[i] = range;
+    }
+    return {std::move(energies), std::move(ranges)};
+  }
+
+  static std::unique_ptr<TResponseFunction_red> MakeSpline(
+      const std::vector<double>& x, const std::vector<double>& y,
+      const std::string& name) {
+    TGraph graph(static_cast<int>(x.size()), x.data(), y.data());
+    TGraph* graphPointer = &graph;
+    std::unique_ptr<TResponseFunction_red> spline(CreateResponseFunction(
+        graphPointer, kTSpline3_red, kMonotonic, name));
+    return spline;
+  }
+
+  PionRangeSpline() : PionRangeSpline(MakeKnots()) {}
+
+  explicit PionRangeSpline(
+      std::pair<std::vector<double>, std::vector<double>> knots)
+      : energyToRange(MakeSpline(
+            knots.first, knots.second, "PionEnergyToRange")),
+        rangeToEnergy(MakeSpline(
+            knots.second, knots.first, "PionRangeToEnergy")) {}
+
+  std::unique_ptr<TResponseFunction_red> energyToRange;
+  std::unique_ptr<TResponseFunction_red> rangeToEnergy;
+};
+
+double PropagatePionKE(const double initialKE, const double length) {
+  return PionRangeSpline::Instance().Propagate(initialKE, length);
 }
 
 } // namespace
@@ -330,6 +386,10 @@ int SampleHandlerPDSP::SetupExperimentMC() {
         PDSPSamples[TotalEventCounter].RecoPinstShifted = recoPinst;
         PDSPSamples[TotalEventCounter].RecoTrackLength = recoTrackLength;
         PDSPSamples[TotalEventCounter].RecoTrackLengthShifted = recoTrackLength;
+        PDSPSamples[TotalEventCounter].NominalPropagatedKEIni =
+            PropagatePionKE(recoKEFF, fiducialVolumeStart);
+        PDSPSamples[TotalEventCounter].NominalPropagatedKEInt =
+            PropagatePionKE(recoKEFF, recoTrackLength);
         PDSPSamples[TotalEventCounter].TrackLengthSmearFraction =
             trackLengthSmear(trackLengthRng);
         PDSPSamples[TotalEventCounter].RecoKEIniShifted = recoKEIni;
@@ -506,9 +566,13 @@ void SampleHandlerPDSP::ResetShifts(const int iEvent) {
 void SampleHandlerPDSP::FinaliseShifts(const int iEvent) {
   auto& event = PDSPSamples[iEvent];
 
-  constexpr double fiducialVolumeStart = 30.0;
-  event.RecoKEIniShifted = PropagatePionKE(
-      event.RecoKEFFShifted, fiducialVolumeStart, 30);
-  event.RecoKEIntShifted = PropagatePionKE(
-      event.RecoKEFFShifted, event.RecoTrackLengthShifted, 50);
+  const double propagatedKEIni = PropagatePionKE(
+      event.RecoKEFFShifted, fiducialVolumeStart);
+  const double propagatedKEInt = PropagatePionKE(
+      event.RecoKEFFShifted, event.RecoTrackLengthShifted);
+
+  event.RecoKEIniShifted = event.RecoKEIni +
+      (propagatedKEIni - event.NominalPropagatedKEIni);
+  event.RecoKEIntShifted = event.RecoKEInt +
+      (propagatedKEInt - event.NominalPropagatedKEInt);
 }

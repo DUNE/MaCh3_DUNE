@@ -43,6 +43,9 @@ struct PDSPMCInfo {
   /// Reconstructed trajectory length (cm), distinct from the endpoint z.
   double RecoTrackLength = M3::_BAD_DOUBLE_;
   double RecoTrackLengthShifted = M3::_BAD_DOUBLE_;
+  /// Nominal spline-propagated energies cached for relative systematic shifts.
+  double NominalPropagatedKEIni = M3::_BAD_DOUBLE_;
+  double NominalPropagatedKEInt = M3::_BAD_DOUBLE_;
   /// Fixed fractional N(0, 0.026) track-length smear drawn once per event.
   double TrackLengthSmearFraction = 0.0;
   /// Shifted fit observables used by functional systematics.
