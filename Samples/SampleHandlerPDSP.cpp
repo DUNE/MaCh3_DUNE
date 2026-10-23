@@ -253,6 +253,7 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       double trueKEFF;
       double trueKEInt;
       double trueEndZ;
+      double trueTrackLength;
       bool true_abs;
       bool true_cex;
       bool true_pip;
@@ -266,8 +267,11 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       _data->SetBranchStatus("KE_int_true", true);
       _data->SetBranchAddress("KE_int_true", &trueKEInt);
 
+      _data->SetBranchStatus("end_z_true", true);
+      _data->SetBranchAddress("end_z_true", &trueEndZ);
+
       _data->SetBranchStatus("track_length_true", true);
-      _data->SetBranchAddress("track_length_true", &trueEndZ);
+      _data->SetBranchAddress("track_length_true", &trueTrackLength);
 
       _data->SetBranchStatus("exclusive_process_absorption", true);
       _data->SetBranchAddress("exclusive_process_absorption", &true_abs);
@@ -316,6 +320,7 @@ int SampleHandlerPDSP::SetupExperimentMC() {
         PDSPSamples[TotalEventCounter].TrueKEFF = trueKEFF;
         PDSPSamples[TotalEventCounter].TrueKEInt = trueKEInt;
         PDSPSamples[TotalEventCounter].TrueEndZ = trueEndZ;
+        PDSPSamples[TotalEventCounter].TrueTrackLength = trueTrackLength;
         PDSPSamples[TotalEventCounter].RecoKEFF = recoKEFF;
         PDSPSamples[TotalEventCounter].RecoKEFFShifted = recoKEFF;
         PDSPSamples[TotalEventCounter].RecoKEIni = recoKEIni;
@@ -396,6 +401,8 @@ const double* SampleHandlerPDSP::GetPointerToKinematicParameter(const int KinPar
       return &PDSPSamples[iEvent].RecoPinstShifted;
     case kRecoTrackLength:
       return &PDSPSamples[iEvent].RecoTrackLengthShifted;
+    case kTrueTrackLength:
+      return &PDSPSamples[iEvent].TrueTrackLength;
     default:
       MACH3LOG_ERROR("Unrecognized Kinematic Parameter type: {}", KinPar);
       throw MaCh3Exception(__FILE__, __LINE__);
@@ -501,7 +508,7 @@ void SampleHandlerPDSP::FinaliseShifts(const int iEvent) {
 
   constexpr double fiducialVolumeStart = 30.0;
   event.RecoKEIniShifted = PropagatePionKE(
-      event.RecoKEFFShifted, fiducialVolumeStart, 50);
+      event.RecoKEFFShifted, fiducialVolumeStart, 30);
   event.RecoKEIntShifted = PropagatePionKE(
       event.RecoKEFFShifted, event.RecoTrackLengthShifted, 50);
 }

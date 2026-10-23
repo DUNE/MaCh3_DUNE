@@ -22,8 +22,10 @@ struct PDSPMCInfo {
   double TrueKEIni = M3::_BAD_DOUBLE_;
   /// True Interacting Kinetic Energy
   double TrueKEInt = M3::_BAD_DOUBLE_;
-  /// True track end psoition, from track_length_reco
+  /// True track endpoint z coordinate (cm), from end_z_true.
   double TrueEndZ = M3::_BAD_DOUBLE_;
+  /// True trajectory length (cm), from track_length_true.
+  double TrueTrackLength = M3::_BAD_DOUBLE_;
 
   /// Reconstructed kinetic energy at the TPC front face.
   double RecoKEFF = M3::_BAD_DOUBLE_;
@@ -32,7 +34,7 @@ struct PDSPMCInfo {
   double RecoKEIni = M3::_BAD_DOUBLE_;
   /// Reconstructed Interacting Kinetic Energy
   double RecoKEInt = M3::_BAD_DOUBLE_;
-  /// Reconstructed track length (cm), from track_length_reco
+  /// Reconstructed track endpoint z coordinate (cm), from end_z_reco.
   double RecoEndZ = M3::_BAD_DOUBLE_;
 
   /// Instrumental reconstructed beam momentum (MeV/c).
