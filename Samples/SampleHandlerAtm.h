@@ -29,7 +29,8 @@ public:
     kOscChannel,
     kMode,
     kTargetNucleus,
-    kMinDistToWall
+    kMinDistToWall,
+    kRecoInelasticity
   };
 
   /// @brief Convert dunemc_atm struct object to Eigen::MatrixXd and write to binary file
@@ -110,7 +111,8 @@ protected:
     {"OscillationChannel",kOscChannel},
     {"Mode",kMode},
     {"TargetNucleus", kTargetNucleus},
-    {"MinDistToWall", kMinDistToWall}    
+    {"MinDistToWall", kMinDistToWall},
+    {"RecoInelasticity", kRecoInelasticity}
   };
 
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
@@ -123,7 +125,8 @@ protected:
     {kOscChannel,"OscillationChannel"},
     {kMode,"Mode"},
     {kTargetNucleus, "TargetNucleus"},
-    {kMinDistToWall, "MinDistToWall"}
+    {kMinDistToWall, "MinDistToWall"},
+    {kRecoInelasticity, "RecoInelasticity"}
   };
   
   /// Array filled with MC samples for each oscillation channel
@@ -137,6 +140,36 @@ protected:
 
   /// Path to the input spline file (for per-event spline mode)
   std::vector<std::string> fInputSplines;
+  
+  /// Build the per-event splines from the xsec variations stored in the CAFs (SRTrueInteraction::xsec_systs)
+  bool fSplinesFromCAF;
+
+  /// Knot layout of one CAF xsec dial used as a spline parameter
+  struct CAFSplineDial {
+    /// Position of the dial in SRWeightGlobal::xsec_params and SRTrueInteraction::xsec_systs
+    size_t CAFIndex;
+    /// Number of variations stored in the CAF for this dial
+    size_t nCAFVariations;
+    /// For each sorted knot, the CAF variation it comes from (-1 for an added nominal knot with weight 1)
+    std::vector<int> KnotSource;
+    /// Sorted knot positions
+    std::vector<double> Knots;
+    /// Weight capping from the spline parameter config
+    double KnotLowBound;
+    double KnotUpBound;
+  };
+  std::vector<CAFSplineDial> fCAFSplineDials;
+  /// Names and variations of the CAF xsec dials, used to check every input file has the same dials
+  std::vector<std::pair<std::string, std::vector<float>>> fCAFDialHeaders;
+  /// Per-event splines built while reading the CAFs, handed over to MonolithSplineHandlerDUNE in SetupSplines
+  std::vector<std::vector<TResponseFunction_red*>> fCAFSplines;
+  /// Memory of the CAF splines (objects and knots), released once MonolithSplineHandlerDUNE has packed them
+  SplineArena fCAFSplineArena;
+
+  /// Read the xsec dial headers from the globalTree of a CAF file
+  std::vector<std::pair<std::string, std::vector<float>>> ReadCAFDialHeaders(TFile* File) const;
+  /// Match the spline parameters of this sample to the CAF xsec dials
+  void SetupCAFSplineDials(TFile* File);
   
   /// Enums to define event selections
   enum EventSelectionIndices {
@@ -161,7 +194,7 @@ protected:
   /// Cut value to separate Fully Contained and Partially Contained events
   double FCPCSeparation;
   
-  int ReturnSampleIdentifier(std::vector<double> CVNScores, double MinDistanceToWall);
+  int ReturnSampleIdentifier(const std::vector<double>& CVNScores, double MinDistanceToWall);
   std::vector<std::string> EventSelectionNames = std::vector<std::string>(nEventSelections);
   std::vector<int> EventSelection_to_SampleIndex_Map = std::vector<int>(nEventSelections,kEventSel_Unknown);
 

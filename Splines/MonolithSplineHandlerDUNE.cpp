@@ -29,6 +29,9 @@ MonolithSplineHandlerDUNE::MonolithSplineHandlerDUNE(const std::vector<SplinePar
 MonolithSplineHandlerDUNE::MonolithSplineHandlerDUNE(std::pair<std::vector<std::vector<TResponseFunction_red*> >, std::vector<RespFuncType>> initParams)
 : UnbinnedSplineHandler(initParams.first, initParams.second) {}
 
+MonolithSplineHandlerDUNE::MonolithSplineHandlerDUNE(std::vector<std::vector<TResponseFunction_red*> >& splinesPerEvent, const std::vector<RespFuncType>& splineTypes)
+: UnbinnedSplineHandler(splinesPerEvent, splineTypes) {}
+
 std::pair<std::vector<std::vector<TResponseFunction_red*> >, std::vector<RespFuncType>>
 MonolithSplineHandlerDUNE::GetInitParamsFromConfig(const std::vector<SplineParameter>& splinePars, const std::vector<uint>& eventIndices, const std::vector<std::string>& spline_filename) {
 

@@ -72,7 +72,7 @@ if(MaCh3_DUNE_USE_SRProxy)
   if(NOT duneanaobj_FOUND)
     CPMFindPackage(
       NAME duneanaobj
-      GIT_TAG Clingification_v03_12_00
+      GIT_TAG Clingification_v04_01_00
       GITHUB_REPOSITORY pgranger23/duneanaobj
       VERSION 4.0.0
     )

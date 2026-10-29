@@ -1,5 +1,8 @@
 #pragma once
+#include <algorithm>
 #include <cmath>
+#include <memory>
+#include <vector>
 #include "TFile.h"  // Used only for per-file systsHeader metadata validation
 #include "Splines/UnbinnedSplineHandler.h"
 
@@ -13,6 +16,10 @@ struct SplineHeader {
 class MonolithSplineHandlerDUNE : virtual public UnbinnedSplineHandler {
 public:
   MonolithSplineHandlerDUNE(const std::vector<SplineParameter>& splinePars, const std::vector<uint>& eventIndices, const std::vector<std::string>& spline_filename);
+  /// @brief Construct from per-event splines built by the caller (e.g. straight from the CAF xsec_systs)
+  /// @param splinesPerEvent [event][parameter] splines, nullptr for a flat response. Ownership is taken (and the objects deleted) by UnbinnedSplineHandler
+  /// @param splineTypes Response function type of each parameter
+  MonolithSplineHandlerDUNE(std::vector<std::vector<TResponseFunction_red*> >& splinesPerEvent, const std::vector<RespFuncType>& splineTypes);
   virtual ~MonolithSplineHandlerDUNE();
   
 private:
@@ -135,4 +142,97 @@ public:
     }
   }
 
+};
+
+/// @brief PG Chunked bump allocator for splines built in bulk (hundreds of millions of small objects for a full
+///        atmospheric sample): one allocation per chunk instead of several per spline, all released at once.
+class SplineArena {
+public:
+  explicit SplineArena(std::size_t ChunkSize = 64 << 20) : fChunkSize(ChunkSize) {}
+
+  void* Allocate(std::size_t Size, std::size_t Alignment) {
+    std::size_t Offset = (fUsed + Alignment - 1) & ~(Alignment - 1);
+    if (fChunks.empty() || Offset + Size > fCurrentChunkSize) {
+      fCurrentChunkSize = std::max(fChunkSize, Size);
+      fChunks.emplace_back(new char[fCurrentChunkSize]);
+      fAllocatedBytes += fCurrentChunkSize;
+      Offset = 0;
+    }
+    fUsed = Offset + Size;
+    return fChunks.back().get() + Offset;
+  }
+
+  /// @brief Release all the memory (every object allocated in the arena must be unused by then)
+  void Clear() {
+    fChunks.clear();
+    fChunks.shrink_to_fit();
+    fUsed = fCurrentChunkSize = fAllocatedBytes = 0;
+  }
+
+  std::size_t GetAllocatedBytes() const { return fAllocatedBytes; }
+
+private:
+  std::size_t fChunkSize;
+  std::size_t fCurrentChunkSize = 0;
+  std::size_t fUsed = 0;
+  std::size_t fAllocatedBytes = 0;
+  std::vector<std::unique_ptr<char[]>> fChunks;
+};
+
+/// @brief PG TSpline3_red living in a SplineArena, whose knots can be shared by several events (e.g. the nue- and
+///        numu-flux copies of a CAF entry). UnbinnedSplineHandler deletes every spline it is given: here that only
+///        runs the destructor, the memory goes away with the arena.
+class TSpline3_redShared : public TSpline3_red {
+public:
+  /// @brief Copy the coefficients of a TSpline3 into the arena
+  static TSpline3_redShared* Create(SplineArena& Arena, TSpline3* Spline) {
+    const int n = Spline->GetNp();
+    auto** ParArray = static_cast<M3::float_t**>(Arena.Allocate(n * sizeof(M3::float_t*), alignof(M3::float_t*)));
+    //PG x and y of each knot, followed by the b, c, d coefficients of each knot
+    auto* Data = static_cast<M3::float_t*>(Arena.Allocate(5 * n * sizeof(M3::float_t), alignof(M3::float_t)));
+    for (int i = 0; i < n; ++i) {
+      double x = -999.99, y = -999.99, b = -999.99, c = -999.99, d = -999.99;
+      Spline->GetCoeff(i, x, y, b, c, d);
+      // Clean up any NaNs or infinities to prevent propagation to event weights
+      if (!std::isfinite(x)) x = 0.0;
+      if (!std::isfinite(y)) y = 1.0;
+      if (!std::isfinite(b)) b = 0.0;
+      if (!std::isfinite(c)) c = 0.0;
+      if (!std::isfinite(d)) d = 0.0;
+      Data[i] = x;
+      Data[n + i] = y;
+      ParArray[i] = Data + 2 * n + 3 * i;
+      ParArray[i][0] = b;
+      ParArray[i][1] = c;
+      ParArray[i][2] = d;
+    }
+    return new (Arena.Allocate(sizeof(TSpline3_redShared), alignof(TSpline3_redShared))) TSpline3_redShared(n, ParArray, Data, Data + n);
+  }
+
+  /// @brief Another spline object using the same knots
+  static TSpline3_redShared* Share(SplineArena& Arena, const TSpline3_redShared& Other) {
+    return new (Arena.Allocate(sizeof(TSpline3_redShared), alignof(TSpline3_redShared))) TSpline3_redShared(Other.nPoints, Other.Par, Other.XPos, Other.YResp);
+  }
+
+  ~TSpline3_redShared() override {
+    // The knots belong to the arena: leave nothing for ~TSpline3_red to free
+    Par = nullptr;
+    XPos = nullptr;
+    YResp = nullptr;
+    nPoints = 0;
+  }
+
+  // The object itself lives in the arena too: it can only be placed there, and deleting it releases nothing
+  static void* operator new(std::size_t) = delete;
+  static void* operator new(std::size_t, void* Where) noexcept { return Where; }
+  static void operator delete(void*) noexcept {}
+  static void operator delete(void*, void*) noexcept {}
+
+private:
+  TSpline3_redShared(M3::int_t n, M3::float_t** ParArray, M3::float_t* X, M3::float_t* Y) : TSpline3_red() {
+    nPoints = n;
+    Par = ParArray;
+    XPos = X;
+    YResp = Y;
+  }
 };

@@ -1710,7 +1710,10 @@ Systematics:
   - Systematic:
       FlatPrior: false
       ParameterBounds: *default_bounds
-      ParameterValues: *default_values
+      # The CAF variations of this dial are in physical units: nominal 3.53
+      ParameterValues:
+        Generated: 3.53
+        PreFitValue: 3.53
       StepScale: *default_step
       Type: Spline
       ParameterGroup: Xsec
@@ -1728,7 +1731,10 @@ Systematics:
   - Systematic:
       FlatPrior: false
       ParameterBounds: *default_bounds
-      ParameterValues: *default_values
+      # The CAF variations of this dial are in physical units: nominal 0.54
+      ParameterValues:
+        Generated: 0.54
+        PreFitValue: 0.54
       StepScale: *default_step
       Type: Spline
       ParameterGroup: Xsec

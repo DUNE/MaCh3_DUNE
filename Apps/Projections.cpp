@@ -277,7 +277,6 @@ int main(int argc, char *argv[]) {
   MACH3LOG_INFO("Building Projections..");
 
   std::unique_ptr<TH1> Hist;
-  THStack* Stack;
 
   for (size_t iProj=0;iProj<Projections.size();iProj++) {
     MACH3LOG_INFO("================================");
@@ -327,9 +326,11 @@ int main(int argc, char *argv[]) {
         for (size_t iCat=0;iCat<Projections[iProj].CategoryCuts.size();iCat++) {
           MACH3LOG_INFO("\t\tCategory: {:<10} - Name : {:<20}",iCat,Projections[iProj].CategoryCuts[iCat].Name);
 
-          Stack = new THStack(Projections[iProj].CategoryCuts[iCat].Name.c_str(), ReturnFormattedHistogramNameFromProjection(Projections[iProj]).c_str());
-          TLegend *leg = new TLegend(0.6, 0.7, 0.88, 0.88);
-          leg->SetHeader(Projections[iProj].CategoryCuts[iCat].Name.c_str());
+          auto Stack = std::make_unique<THStack>(Projections[iProj].CategoryCuts[iCat].Name.c_str(), ReturnFormattedHistogramNameFromProjection(Projections[iProj]).c_str());
+          TLegend leg(0.6, 0.7, 0.88, 0.88);
+          leg.SetHeader(Projections[iProj].CategoryCuts[iCat].Name.c_str());
+          //PG The stack and the legend only point to their histograms, which must stay alive until both are written
+          std::vector<std::unique_ptr<TH1>> BreakdownHists;
 
           for (size_t iBreak = 0; iBreak < Projections[iProj].CategoryCuts[iCat].Breakdown.size(); iBreak++) {
 
@@ -365,16 +366,18 @@ int main(int argc, char *argv[]) {
               } else {
                 BreakdownHist->Add(Hist.get());
               }
-              leg->AddEntry(Hist.get(), Projections[iProj].CategoryCuts[iCat].CategoryNames[iBreak].c_str(), "f");
             }
 
+            BreakdownHist->SetName(Projections[iProj].CategoryCuts[iCat].CategoryNames[iBreak].c_str());
             MACH3LOG_INFO("\t\t\tBreakdown: {:<10} - Integral: {:<10}", iBreak, BreakdownHist->Integral());
+            leg.AddEntry(BreakdownHist.get(), Projections[iProj].CategoryCuts[iCat].CategoryNames[iBreak].c_str(), "f");
             Stack->Add(BreakdownHist.get());
+            BreakdownHists.push_back(std::move(BreakdownHist));
           }
           // HH: Add the stack to the file
           TCanvas Canv = TCanvas();
           Stack->Draw("HIST");
-          leg->Draw();
+          leg.Draw();
           std::string histstackname;
           if (histdim==1) {
             histstackname = handler->GetSampleTitle(iSample)+"_"+ProjectionVar_Str[0]+"_"+Projections[iProj].CategoryCuts[iCat].Name+"_Stack";
@@ -385,7 +388,7 @@ int main(int argc, char *argv[]) {
           //PrintTHStackHistogram(Stack,histstackname+".png");
           Canv.Write((histstackname+"_Canvas").c_str());
           //WriteTHStackHistogram(Stack, histstackname, dir);
-          WriteTHStackHistogram(Stack, histstackname);
+          WriteTHStackHistogram(Stack.get(), histstackname);
         }
 
       }

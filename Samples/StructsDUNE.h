@@ -56,6 +56,7 @@ struct dunemc_atm : public dunemc_base { // Store variables used by SampleHandle
 
   double hadronicenergy_reco;
   double leptonicenergy_reco;
+  double inelasticity_reco; //Reconstructed hadronic energy / reconstructed neutrino energy
   
   double TotalDetectorSystematicWeight;
   std::vector<double> DetectorSystematicRatios;
