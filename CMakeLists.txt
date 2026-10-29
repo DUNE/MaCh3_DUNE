@@ -290,8 +290,18 @@ install(FILES
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/output)
 
 ############################  Install  ####################################
-install(DIRECTORY Inputs DESTINATION ${CMAKE_BINARY_DIR})
-install(DIRECTORY Configs DESTINATION ${CMAKE_BINARY_DIR})
+if (EXISTS "${CMAKE_BINARY_DIR}/Inputs")
+  cmessage(STATUS "Deleting ${CMAKE_BINARY_DIR}/Inputs to allow making symlink")
+  execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/Inputs)
+endif()
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/Inputs ${CMAKE_BINARY_DIR}/Inputs)
+
+if (EXISTS "${CMAKE_BINARY_DIR}/Configs")
+  cmessage(STATUS "Deleting ${CMAKE_BINARY_DIR}/Configs to allow making symlink")
+  execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/Configs)
+endif()
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/Configs ${CMAKE_BINARY_DIR}/Configs)
+
 install(DIRECTORY plotting DESTINATION ${CMAKE_BINARY_DIR})
 install(DIRECTORY Utils DESTINATION ${CMAKE_BINARY_DIR})
 

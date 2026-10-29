@@ -746,7 +746,7 @@ void SampleHandlerAtm::SetupAtmFluxSplineSystematics() {
 
     for (int iParam=0;iParam<NParams;iParam++) {
       if (ParHandler->GetParFancyName(iParam) == "HondaFlux_TotalUncertainty_Below1GeV") LowEnergySystParIndex = iParam;
-      if (ParHandler->GetParFancyName(iParam) == "HondaFlux_TotalUncertainty_After1GeV") HighEnergySystParIndex = iParam;      
+      if (ParHandler->GetParFancyName(iParam) == "HondaFlux_TotalUncertainty_Above1GeV") HighEnergySystParIndex = iParam;      
     }
 
     for (size_t iEvent=0;iEvent<dunemcSamples.size();iEvent++) {
