@@ -62,7 +62,9 @@ struct dunemc_atm : public dunemc_base { // Store variables used by SampleHandle
 
   double TotalAtmFluxSystematicWeight;
   std::vector<double> AtmFluxSystFactors;
-  std::vector<const M3::float_t*> AtmFluxSystParVals;  
+  std::vector<const M3::float_t*> AtmFluxSystParVals;
+
+  std::vector<double*> atmflux_w_pointers;
 };
 
 struct dunemc_beamfd : public dunemc_base { // Store variables used by SampleHandlerBeamFD

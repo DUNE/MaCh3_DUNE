@@ -40,7 +40,11 @@ InputFiles:
   HONDAFluxUncerSplineFileName: "Inputs/Atmospherics/HondaFluxTotalUncertaintySplines.root"
   HONDAFluxUncerSplineFileMD5Sum: "bfb45900294955449ca205cd3ea93b8f"
   HONDAFluxUncerSeparationValue: 1.0 #In GeV
-  
+
+  AtmFluxShapeSystematics:
+    InputFileName: "Inputs/Atmospherics/AtmosphericFluxShapeSplines.root"
+    TemplateHistogram: "HistogramTemplate_Interp"
+    
 AnalysisOptions:
   # Multiplicative factor which scales the base exposure
   ExposureScaling: 1.0

@@ -77,7 +77,7 @@ LLHScan:
 # Prior/Posterior predictive settings
 Predictive:
   # Number of throws from MCMC you want to perform (aim for something like 2k/5k)
-  Ntoy: 10
+  Ntoy: 100
 
   # If false will run posterior predictive
   PriorPredictive: true
@@ -86,7 +86,7 @@ Predictive:
   ThrowParamGroupOnly: []
   
   # Allow to specify to throw/vary only params coming with specified names. Cannot be connected with ThrowParamGroupOnly
-  ThrowSingleParams: []
+  ThrowSingleParams: ["TotalRatio"]
 
   # Apply additional bounds allowing to do post pred only in normal ordering etc
   ParameterBounds: []

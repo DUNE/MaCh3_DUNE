@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
   }
 
   MaCh3Fitter->ProduceToys();
-  MaCh3Fitter->RunPredictiveAnalysis();
+  //MaCh3Fitter->RunPredictiveAnalysis();
 
   for (auto Sample : samples) {
     delete Sample;

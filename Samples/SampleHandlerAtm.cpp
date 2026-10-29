@@ -160,6 +160,14 @@ void SampleHandlerAtm::Init() {
       }
     }
   }
+
+  //=============================================================
+  if (SampleManager->raw()["InputFiles"]["AtmFluxShapeSystematics"]) {
+    AtmFluxShapeSystNode = SampleManager->raw()["InputFiles"]["AtmFluxShapeSystematics"];
+    AtmFluxShapeSplines = new SetHandler(AtmFluxShapeSystNode);
+  } else {
+    MACH3LOG_INFO("No AtmFluxShapeSystematics information found");
+  }
   
   //=============================================================
   //DB Define the names of the samples we're performing event selection for
@@ -243,6 +251,19 @@ void SampleHandlerAtm::InitialiseSplineObjectPerEvent(){
   }
 }
 
+void SampleHandlerAtm::PrepFunctionalParameters() {
+  if (AtmFluxShapeSplines) {
+    std::vector<double> AtmFluxShapeSystDialValues;
+    for (int iPar=0;iPar<ParHandler->GetNParameters();iPar++) {
+      if (ParHandler->IsParFromGroup(iPar,"AtmFluxShape")) {
+	AtmFluxShapeSystDialValues.push_back(ParHandler->GetParProp(iPar));
+      }
+    }
+    
+    AtmFluxShapeSplines->EvaluateSplines(AtmFluxShapeSystDialValues);
+  }
+}
+
 void SampleHandlerAtm::RegisterFunctionalParameters() {
   if (!ParHandler) {return;}
 
@@ -257,13 +278,17 @@ void SampleHandlerAtm::RegisterFunctionalParameters() {
       }
     });
   }
-
+  
   if (AtmFluxParameterNames.size()!=0) {
     RegisterIndividualFunctionalParameter(dunemcSamples, AtmFluxParameterNames, [](std::vector<double> const &, dunemc_atm &Event) {      
       Event.TotalAtmFluxSystematicWeight = 1.0;
-
+      
       for (size_t iWeight=0;iWeight<Event.AtmFluxSystFactors.size();iWeight++) {
 	Event.TotalAtmFluxSystematicWeight *= 1.0 + *Event.AtmFluxSystParVals[iWeight] * (Event.AtmFluxSystFactors[iWeight] - 1.0);
+      }
+
+      for (size_t iWeight=0;iWeight<Event.atmflux_w_pointers.size();iWeight++) {
+	Event.TotalAtmFluxSystematicWeight *= *(Event.atmflux_w_pointers[iWeight]);
       }
     });
   }
@@ -706,7 +731,15 @@ void SampleHandlerAtm::SetupAtmFluxSplineSystematics() {
     }
   }
 
-  if (AtmFluxParameterNames.size()==0) {
+  std::vector<std::string> AtmFluxShapeParameterNames = {"XBin","YBin"};
+  std::vector<std::string> AtmFluxShapeSystDialNames;
+  for (int iPar=0;iPar<ParHandler->GetNParameters();iPar++) {
+    if (ParHandler->IsParFromGroup(iPar,"AtmFluxShape")) {
+      AtmFluxShapeSystDialNames.push_back(ParHandler->GetParFancyName(iPar));
+    }
+  }  
+
+  if (AtmFluxParameterNames.size()==0 && AtmFluxShapeSystDialNames.size()==0) {
     return;
   }
 
@@ -769,7 +802,26 @@ void SampleHandlerAtm::SetupAtmFluxSplineSystematics() {
     }
   }
 
-  //====================================================================    
+  //====================================================================
+
+  if (AtmFluxShapeSplines) {
+    MACH3LOG_INFO("Setting up AtmFluxShapeSysts spline pointers...");
+    TFile* AtmFluxShapeTemplateHistogramFile = TFile::Open((AtmFluxShapeSystNode["InputFileName"].as<std::string>()).c_str());
+    TH2D* AtmFluxShapeTemplateHistogram = AtmFluxShapeTemplateHistogramFile->Get<TH2D>((AtmFluxShapeSystNode["TemplateHistogram"].as<std::string>()).c_str());
+    AtmFluxShapeTemplateHistogram->SetDirectory(0);
+    delete AtmFluxShapeTemplateHistogramFile;
+    
+    for (size_t iEvent=0;iEvent<dunemcSamples.size();iEvent++) {
+      std::vector<double> AtmFluxShapeParameterValues(2);
+      AtmFluxShapeParameterValues[0] = AtmFluxShapeTemplateHistogram->GetXaxis()->FindBin(dunemcSamples[iEvent].neutrinoenergy_true);
+      AtmFluxShapeParameterValues[1] = AtmFluxShapeTemplateHistogram->GetYaxis()->FindBin(dunemcSamples[iEvent].coszenith_true);
+      
+      dunemcSamples[iEvent].atmflux_w_pointers = AtmFluxShapeSplines->ReturnSplineWeightPointers(AtmFluxShapeSystDialNames,AtmFluxShapeParameterNames,AtmFluxShapeParameterValues);
+    }
+  } else {
+    MACH3LOG_INFO("Not setting up AtmFluxShapeSysts");
+  }
+  
 }
 
 int SampleHandlerAtm::ReturnSampleIdentifier(std::vector<double> CVNScores, double MinDistanceToWall) {

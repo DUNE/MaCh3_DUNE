@@ -4,6 +4,8 @@
 #include "Splines/SplineHandlerFactoryDUNE.h"
 #include "Samples/SampleHandlerBase.h"
 
+#include "SetHandler/SetHandler.h"
+
 #include "StructsDUNE.h"
 /// @brief Base class for handling atmospheric samples
 class SampleHandlerAtm : virtual public SampleHandlerBase
@@ -75,6 +77,7 @@ protected:
   void CleanMemoryBeforeFit() override {};
 
   void RegisterFunctionalParameters();
+  void PrepFunctionalParameters();
   
   //DB functions which could be initialised to do something which is non-trivial
   
@@ -185,6 +188,9 @@ protected:
   std::string EigenInputFile;
 
   std::vector<std::vector<std::string>> BinningVariables;
+
+  SetHandler* AtmFluxShapeSplines;
+  YAML::Node AtmFluxShapeSystNode;
 };
 
 #endif

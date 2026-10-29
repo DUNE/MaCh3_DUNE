@@ -23,7 +23,7 @@ set_target_properties(SamplesDUNE PROPERTIES
   PUBLIC_HEADER "${HEADERS}"
   EXPORT_NAME SamplesDUNE)
 
-target_link_libraries(SamplesDUNE PUBLIC SplinesDUNE MaCh3::All Eigen OpenSSL::SSL MaCh3DUNECompilerOptions)
+target_link_libraries(SamplesDUNE PUBLIC SplinesDUNE MaCh3::All SplineEvaluator::All Eigen OpenSSL::SSL MaCh3DUNECompilerOptions)
 target_link_libraries(SamplesDUNE PRIVATE duneanaobj::StandardRecord DUNEMaCh3Warnings)
 
 if(MaCh3_DUNE_USE_SRProxy)

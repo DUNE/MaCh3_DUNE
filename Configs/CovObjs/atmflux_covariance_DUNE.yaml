@@ -36,3 +36,63 @@ Systematics:
     StepScale:
       MCMC: 0.3
     Type: Functional
+
+- Systematic:
+    SampleNames: ["ATM"]
+    Error: 3.0
+    FlatPrior: true
+    Names:
+      FancyName: TotalRatio
+      ParameterName: TotalRatio
+    SpecialProposal:
+      CircularBounds: [3.0,6.0]
+    ParameterBounds:
+    - 3.0
+    - 6.0
+    ParameterGroup: AtmFluxShape
+    ParameterValues:
+      Generated: 4.0
+      PreFitValue: 6.0
+    StepScale:
+      MCMC: 0.3
+    Type: Functional
+
+- Systematic:
+    SampleNames: ["ATM"]
+    Error: 3.0
+    FlatPrior: true
+    Names:
+      FancyName: NuERatio
+      ParameterName: NuERatio
+    SpecialProposal:
+      CircularBounds: [3.0,6.0]
+    ParameterBounds:
+    - 3.0
+    - 6.0
+    ParameterGroup: AtmFluxShape
+    ParameterValues:
+      Generated: 4.0
+      PreFitValue: 6.0
+    StepScale:
+      MCMC: 0.3
+    Type: Functional
+
+- Systematic:
+    SampleNames: ["ATM"]
+    Error: 3.0
+    FlatPrior: true
+    Names:
+      FancyName: NuMuRatio
+      ParameterName: NuMuRatio
+    SpecialProposal:
+      CircularBounds: [3.0,6.0]
+    ParameterBounds:
+    - 3.0
+    - 6.0
+    ParameterGroup: AtmFluxShape
+    ParameterValues:
+      Generated: 4.0
+      PreFitValue: 6.0
+    StepScale:
+      MCMC: 0.3
+    Type: Functional

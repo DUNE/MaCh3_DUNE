@@ -86,6 +86,17 @@ else()
   fetchduneanaobj(${DUNE_ANAOBJ_BRANCH})
 endif()
 
+#=================== SplineEvaluator
+CPMAddPackage(
+    NAME SplineEvaluator
+    GIT_TAG "develop"
+    GITHUB_REPOSITORY dbarrow257/SplineEvaluator
+  )
+
+if (NOT TARGET SplineEvaluator::All)
+  cmessage(FATAL_ERROR "MaCh3 DUNE Expected dependency target: SplineEvaluator::All")
+endif()
+
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
