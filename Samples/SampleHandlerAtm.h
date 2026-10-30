@@ -174,9 +174,12 @@ protected:
   std::unordered_map<std::string,std::vector<int>> DetectorSystematicDimensionMap;
 
   void SetupAtmFluxSplineSystematics();
+  std::vector<std::string> AtmFluxSystematicParameterNames;
   std::string fHONDAFluxUncerSplineFileName;
   double fHONDAFluxUncerSeparationValue;
-  std::vector<std::string> AtmFluxParameterNames;  
+
+  SetHandler* AtmFluxShapeSplines;
+  YAML::Node AtmFluxShapeSystNode;  
   
   /// Enum defining CAF->Eigen transformation
   enum Variables{neutrinoenergy_reco,hadronicenergy_reco,leptonicenergy_reco,coszenith_reco,SampleIndex,neutrinoflavour_interacting,neutrinoflavour_generated,OscChannelIndex,mode,IsCC,Target,neutrinoenergy_true,coszenith_true,weights_flux,MinDistToWall,eventID,nVariables};
@@ -188,9 +191,6 @@ protected:
   std::string EigenInputFile;
 
   std::vector<std::vector<std::string>> BinningVariables;
-
-  SetHandler* AtmFluxShapeSplines;
-  YAML::Node AtmFluxShapeSystNode;
 };
 
 #endif

@@ -25,7 +25,9 @@ SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGene
   //DB Register the kinematic parameter maps
   KinematicParameters = &KinematicParametersDUNE;
   ReversedKinematicParameters = &ReversedKinematicParametersDUNE;
-  
+
+  AtmFluxShapeSplines = nullptr;
+
   Initialise();
 }
 
@@ -164,7 +166,6 @@ void SampleHandlerAtm::Init() {
   //=============================================================
   if (SampleManager->raw()["InputFiles"]["AtmFluxShapeSystematics"]) {
     AtmFluxShapeSystNode = SampleManager->raw()["InputFiles"]["AtmFluxShapeSystematics"];
-    AtmFluxShapeSplines = new SetHandler(AtmFluxShapeSystNode);
   } else {
     MACH3LOG_INFO("No AtmFluxShapeSystematics information found");
   }
@@ -279,13 +280,9 @@ void SampleHandlerAtm::RegisterFunctionalParameters() {
     });
   }
   
-  if (AtmFluxParameterNames.size()!=0) {
-    RegisterIndividualFunctionalParameter(dunemcSamples, AtmFluxParameterNames, [](std::vector<double> const &, dunemc_atm &Event) {      
-      Event.TotalAtmFluxSystematicWeight = 1.0;
-      
-      for (size_t iWeight=0;iWeight<Event.AtmFluxSystFactors.size();iWeight++) {
-	Event.TotalAtmFluxSystematicWeight *= 1.0 + *Event.AtmFluxSystParVals[iWeight] * (Event.AtmFluxSystFactors[iWeight] - 1.0);
-      }
+  if (AtmFluxSystematicParameterNames.size()!=0) {
+    RegisterIndividualFunctionalParameter(dunemcSamples, AtmFluxSystematicParameterNames, [](std::vector<double> const &, dunemc_atm &Event) {      
+      Event.TotalAtmFluxSystematicWeight = 1.0 + *Event.AtmFluxSystParVal * (Event.AtmFluxSystFactor - 1.0);
 
       for (size_t iWeight=0;iWeight<Event.atmflux_w_pointers.size();iWeight++) {
 	Event.TotalAtmFluxSystematicWeight *= *(Event.atmflux_w_pointers[iWeight]);
@@ -502,7 +499,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
 	RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.heshw.x,sr->common.ixn.pandora[0].dir.heshw.y,sr->common.ixn.pandora[0].dir.heshw.z)).Unit();
       } else {
 	RecoENu = sr->common.ixn.pandora[0].Enu.lep_calo;
-	RecoEHad = sr->common.ixn.pandora[0].Enu.e_had;
+	RecoEHad = sr->common.ixn.pandora[0].Enu.mu_had;
 	RecoELep = RecoENu-RecoEHad;	
 	RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.x,sr->common.ixn.pandora[0].dir.lngtrk.y,sr->common.ixn.pandora[0].dir.lngtrk.z)).Unit();      
       }
@@ -722,37 +719,43 @@ void SampleHandlerAtm::SetupAtmFluxSplineSystematics() {
     dunemcSamples[iEvent].TotalAtmFluxSystematicWeight = 1.0;
   }
 
-  //DB Figure out whether we have detector systematics configured -- required that any Detector Systematic parameter's group is "AtmFlux"                                                                  
+  std::vector<std::string> AtmFluxModelToModelDimensionNames = {"XBin","YBin"};
+  std::string HONDALowEnergyParameterName = "HondaFlux_TotalUncertainty_Below1GeV";
+  std::string HONDALowEnergySplineName = "HondaTotalUncertainty_EnergyBin_0";
+  std::string HONDAHighEnergyParameterName = "HondaFlux_TotalUncertainty_Above1GeV";
+  std::string HONDAHighEnergySplineName = "HondaTotalUncertainty_EnergyBin_1";  
+  
+  std::vector<std::string> AtmFluxModelToModelParamNames;
+  std::vector<std::string> HONDAFluxUncerParamNames;
+  
+  //DB Figure out whether we have atmospheric flux parameters configured -- required that any parameter's group is "AtmFlux" or "AtmFluxShape"
   int NParams = ParHandler->GetNParameters();
   for (int iParam=0;iParam<NParams;iParam++) {
     if (ParHandler->IsParFromGroup(iParam,"AtmFlux")) {
-      std::string ParamName = ParHandler->GetParFancyName(iParam);
-      AtmFluxParameterNames.push_back(ParamName);
-    }
-  }
-
-  std::vector<std::string> AtmFluxShapeParameterNames = {"XBin","YBin"};
-  std::vector<std::string> AtmFluxShapeSystDialNames;
-  for (int iPar=0;iPar<ParHandler->GetNParameters();iPar++) {
-    if (ParHandler->IsParFromGroup(iPar,"AtmFluxShape")) {
-      AtmFluxShapeSystDialNames.push_back(ParHandler->GetParFancyName(iPar));
+      std::string ParName = ParHandler->GetParFancyName(iParam);
+      HONDAFluxUncerParamNames.push_back(ParName);
+      AtmFluxSystematicParameterNames.push_back(ParName);
+    } else if (ParHandler->IsParFromGroup(iParam,"AtmFluxShape")) {
+      std::string ParName = ParHandler->GetParFancyName(iParam);      
+      AtmFluxModelToModelParamNames.push_back(ParName); 
+      AtmFluxSystematicParameterNames.push_back(ParName);     
     }
   }  
 
-  if (AtmFluxParameterNames.size()==0 && AtmFluxShapeSystDialNames.size()==0) {
+  if (AtmFluxSystematicParameterNames.size()==0) {
     return;
   }
 
   //====================================================================
   
   bool HasHondaFluxUncertainty =
-    std::find(AtmFluxParameterNames.begin(), AtmFluxParameterNames.end(),
-              "HondaFlux_TotalUncertainty_Below1GeV") != AtmFluxParameterNames.end() &&
-    std::find(AtmFluxParameterNames.begin(), AtmFluxParameterNames.end(),
-              "HondaFlux_TotalUncertainty_Above1GeV") != AtmFluxParameterNames.end();
+    std::find(HONDAFluxUncerParamNames.begin(), HONDAFluxUncerParamNames.end(),
+              HONDALowEnergyParameterName) != HONDAFluxUncerParamNames.end() &&
+    std::find(HONDAFluxUncerParamNames.begin(), HONDAFluxUncerParamNames.end(),
+              HONDAHighEnergyParameterName) != HONDAFluxUncerParamNames.end();
   
   if ((HasHondaFluxUncertainty && fHONDAFluxUncerSplineFileName=="") || (!HasHondaFluxUncertainty && fHONDAFluxUncerSplineFileName!="")) {
-    MACH3LOG_ERROR("Bad config");
+    MACH3LOG_ERROR("Bad configuation - HONDA Flux systematics specified but inputs not provided in Sample (or vice versa)");
     throw MaCh3Exception(__FILE__, __LINE__);      
   }
 
@@ -763,14 +766,14 @@ void SampleHandlerAtm::SetupAtmFluxSplineSystematics() {
       throw MaCh3Exception(__FILE__, __LINE__);      
     }
 
-    TSpline3* LowEnergySpline = File->Get<TSpline3>("HondaTotalUncertainty_EnergyBin_0");
+    TSpline3* LowEnergySpline = File->Get<TSpline3>(HONDALowEnergySplineName.c_str());
     if (!LowEnergySpline) {
-      MACH3LOG_ERROR("Did not find Honda Flux Uncertainty Spline: {}","HondaTotalUncertainty_EnergyBin_0");
+      MACH3LOG_ERROR("Did not find Honda Flux Uncertainty Spline: {}",HONDALowEnergySplineName);
       throw MaCh3Exception(__FILE__, __LINE__);            
     }
-    TSpline3* HighEnergySpline = File->Get<TSpline3>("HondaTotalUncertainty_EnergyBin_1");
+    TSpline3* HighEnergySpline = File->Get<TSpline3>(HONDAHighEnergySplineName.c_str());
     if (!HighEnergySpline) {
-      MACH3LOG_ERROR("Did not find Honda Flux Uncertainty Spline: {}","HondaTotalUncertainty_EnergyBin_1");
+      MACH3LOG_ERROR("Did not find Honda Flux Uncertainty Spline: {}",HONDAHighEnergySplineName);
       throw MaCh3Exception(__FILE__, __LINE__);            
     }
 
@@ -778,14 +781,11 @@ void SampleHandlerAtm::SetupAtmFluxSplineSystematics() {
     int HighEnergySystParIndex = -1;
 
     for (int iParam=0;iParam<NParams;iParam++) {
-      if (ParHandler->GetParFancyName(iParam) == "HondaFlux_TotalUncertainty_Below1GeV") LowEnergySystParIndex = iParam;
-      if (ParHandler->GetParFancyName(iParam) == "HondaFlux_TotalUncertainty_Above1GeV") HighEnergySystParIndex = iParam;      
+      if (ParHandler->GetParFancyName(iParam) == HONDALowEnergyParameterName) LowEnergySystParIndex = iParam;
+      if (ParHandler->GetParFancyName(iParam) == HONDAHighEnergyParameterName) HighEnergySystParIndex = iParam;      
     }
 
     for (size_t iEvent=0;iEvent<dunemcSamples.size();iEvent++) {
-      dunemcSamples[iEvent].AtmFluxSystFactors.resize(1);
-      dunemcSamples[iEvent].AtmFluxSystParVals.resize(1);      
-      
       double Factor = -1;
       int ParIndex = -1;
       
@@ -797,14 +797,18 @@ void SampleHandlerAtm::SetupAtmFluxSplineSystematics() {
 	ParIndex = HighEnergySystParIndex;	
       }
       
-      dunemcSamples[iEvent].AtmFluxSystFactors[0] = Factor;
-      dunemcSamples[iEvent].AtmFluxSystParVals[0] = ParHandler->RetPointer(ParIndex);
+      dunemcSamples[iEvent].AtmFluxSystFactor = Factor;
+      dunemcSamples[iEvent].AtmFluxSystParVal = ParHandler->RetPointer(ParIndex);
     }
+  } else {
+    MACH3LOG_INFO("Not setting up HONDA Flux Uncertainty Splines");
   }
 
   //====================================================================
 
-  if (AtmFluxShapeSplines) {
+  if (!AtmFluxShapeSystNode.IsNull()) {
+    AtmFluxShapeSplines = new SetHandler(AtmFluxShapeSystNode);
+    
     MACH3LOG_INFO("Setting up AtmFluxShapeSysts spline pointers...");
     TFile* AtmFluxShapeTemplateHistogramFile = TFile::Open((AtmFluxShapeSystNode["InputFileName"].as<std::string>()).c_str());
     TH2D* AtmFluxShapeTemplateHistogram = AtmFluxShapeTemplateHistogramFile->Get<TH2D>((AtmFluxShapeSystNode["TemplateHistogram"].as<std::string>()).c_str());
@@ -816,12 +820,11 @@ void SampleHandlerAtm::SetupAtmFluxSplineSystematics() {
       AtmFluxShapeParameterValues[0] = AtmFluxShapeTemplateHistogram->GetXaxis()->FindBin(dunemcSamples[iEvent].neutrinoenergy_true);
       AtmFluxShapeParameterValues[1] = AtmFluxShapeTemplateHistogram->GetYaxis()->FindBin(dunemcSamples[iEvent].coszenith_true);
       
-      dunemcSamples[iEvent].atmflux_w_pointers = AtmFluxShapeSplines->ReturnSplineWeightPointers(AtmFluxShapeSystDialNames,AtmFluxShapeParameterNames,AtmFluxShapeParameterValues);
+      dunemcSamples[iEvent].atmflux_w_pointers = AtmFluxShapeSplines->ReturnSplineWeightPointers(AtmFluxModelToModelParamNames,AtmFluxModelToModelDimensionNames,AtmFluxShapeParameterValues);
     }
   } else {
     MACH3LOG_INFO("Not setting up AtmFluxShapeSysts");
   }
-  
 }
 
 int SampleHandlerAtm::ReturnSampleIdentifier(std::vector<double> CVNScores, double MinDistanceToWall) {

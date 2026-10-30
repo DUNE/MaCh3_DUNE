@@ -52,7 +52,7 @@ Systematics:
     ParameterGroup: AtmFluxShape
     ParameterValues:
       Generated: 4.0
-      PreFitValue: 6.0
+      PreFitValue: 4.0
     StepScale:
       MCMC: 0.3
     Type: Functional
@@ -72,7 +72,7 @@ Systematics:
     ParameterGroup: AtmFluxShape
     ParameterValues:
       Generated: 4.0
-      PreFitValue: 6.0
+      PreFitValue: 4.0
     StepScale:
       MCMC: 0.3
     Type: Functional
@@ -82,8 +82,8 @@ Systematics:
     Error: 3.0
     FlatPrior: true
     Names:
-      FancyName: NuMuRatio
-      ParameterName: NuMuRatio
+      FancyName: NuMRatio
+      ParameterName: NuMRatio
     SpecialProposal:
       CircularBounds: [3.0,6.0]
     ParameterBounds:
@@ -92,7 +92,7 @@ Systematics:
     ParameterGroup: AtmFluxShape
     ParameterValues:
       Generated: 4.0
-      PreFitValue: 6.0
+      PreFitValue: 4.0
     StepScale:
       MCMC: 0.3
     Type: Functional
