@@ -44,6 +44,8 @@ int main(int argc, char * argv[]) {
   M3::Utils::MaCh3Usage(argc, argv);
   auto FitManager = MaCh3ManagerFactory(argc, argv);
 
+  bool PrintIntegral = GetFromManager<bool>(FitManager->raw()["EventRates"]["PrintIntegral"],true,__FILE__,__LINE__);
+  
   //###############################################################################################################################
   //Create SampleHandlerBase objects
   auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
@@ -63,7 +65,7 @@ int main(int argc, char * argv[]) {
 
       std::string EventRateString = fmt::format("{:.2f}", handler->GetMCHist(iSample)->Integral());
       MACH3LOG_INFO("Event rate for {} : {:<5}", handler->GetSampleTitle(iSample), EventRateString);
-      handler->PrintIntegral(iSample);
+      if (PrintIntegral) handler->PrintIntegral(iSample);
     }
   }
 

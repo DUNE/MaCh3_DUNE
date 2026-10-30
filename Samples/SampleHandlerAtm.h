@@ -4,6 +4,8 @@
 #include "Splines/SplineHandlerFactoryDUNE.h"
 #include "Samples/SampleHandlerBase.h"
 
+#include "SetHandler/SetHandler.h"
+
 #include "StructsDUNE.h"
 /// @brief Base class for handling atmospheric samples
 class SampleHandlerAtm : virtual public SampleHandlerBase
@@ -21,6 +23,8 @@ public:
   enum KinematicTypes
   {
     kTrueNeutrinoEnergy,
+    kRecoHadronEnergy,
+    kRecoLeptonEnergy,
     kRecoNeutrinoEnergy,
     kTrueCosZ,
     kRecoCosZ,
@@ -29,6 +33,17 @@ public:
     kTargetNucleus,
     kMinDistToWall
   };
+
+  /// @brief Convert dunemc_atm struct object to Eigen::MatrixXd and write to binary file
+  void TransferToEigen(std::string FileName);
+
+  BinningHandler* GetBinningHandler() const {
+    return Binning.get();
+  }
+
+  std::vector<std::string> GetSampleBinningVariables(int iSample) {
+    return BinningVariables.at(iSample);
+  }
 
 protected:
   /// @brief Initialises object
@@ -41,6 +56,9 @@ protected:
   /// @param iSample sample ID
   /// @return Total number of events
   int SetupExperimentMC();
+
+  /// @brief Read binary file into Eigen::MatrixXd and transfer into dunemc_atm struct
+  int ReadFromEigen();
 
   /// @brief Tells FD base which variables to point to/be set to
   /// @param iSample Sample ID
@@ -58,7 +76,8 @@ protected:
   /// @brief Cleanup memory
   void CleanMemoryBeforeFit() override {};
 
-  void RegisterFunctionalParameters() override {};
+  void RegisterFunctionalParameters();
+  void PrepFunctionalParameters();
   
   //DB functions which could be initialised to do something which is non-trivial
   
@@ -87,6 +106,8 @@ protected:
   const std::unordered_map<std::string, int> KinematicParametersDUNE = {
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
     {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},
+    {"RecoHadronEnergy",kRecoHadronEnergy},
+    {"RecoLeptonEnergy",kRecoLeptonEnergy},    
     {"TrueCosineZ",kTrueCosZ},
     {"RecoCosineZ",kRecoCosZ},
     {"OscillationChannel",kOscChannel},
@@ -98,6 +119,8 @@ protected:
   const std::unordered_map<int, std::string> ReversedKinematicParametersDUNE = {
     {kTrueNeutrinoEnergy,"TrueNeutrinoEnergy"},
     {kRecoNeutrinoEnergy,"RecoNeutrinoEnergy"},
+    {kRecoHadronEnergy,"RecoHadronEnergy"},
+    {kRecoLeptonEnergy,"RecoLeptonEnergy"},
     {kTrueCosZ,"TrueCosineZ"},    
     {kRecoCosZ,"RecoCosineZ"},
     {kOscChannel,"OscillationChannel"},
@@ -116,7 +139,7 @@ protected:
   double ExposureScaling;
 
   /// Path to the input spline file (for per-event spline mode)
-  std::string fInputSplines;
+  std::vector<std::string> fInputSplines;
   
   /// Enums to define event selections
   enum EventSelectionIndices {
@@ -144,6 +167,30 @@ protected:
   int ReturnSampleIdentifier(std::vector<double> CVNScores, double MinDistanceToWall);
   std::vector<std::string> EventSelectionNames = std::vector<std::string>(nEventSelections);
   std::vector<int> EventSelection_to_SampleIndex_Map = std::vector<int>(nEventSelections,kEventSel_Unknown);
+
+  void SetupDetectorSystematicRatios();
+  std::string fDetectorSystematicsFileName;
+  std::vector<std::string> DetectorSystematicParameterNames;
+  std::unordered_map<std::string,std::vector<int>> DetectorSystematicDimensionMap;
+
+  void SetupAtmFluxSplineSystematics();
+  std::vector<std::string> AtmFluxSystematicParameterNames;
+  std::string fHONDAFluxUncerSplineFileName;
+  double fHONDAFluxUncerSeparationValue;
+
+  SetHandler* AtmFluxShapeSplines;
+  YAML::Node AtmFluxShapeSystNode;  
+  
+  /// Enum defining CAF->Eigen transformation
+  enum Variables{neutrinoenergy_reco,hadronicenergy_reco,leptonicenergy_reco,coszenith_reco,SampleIndex,neutrinoflavour_interacting,neutrinoflavour_generated,OscChannelIndex,mode,IsCC,Target,neutrinoenergy_true,coszenith_true,weights_flux,MinDistToWall,eventID,nVariables};
+
+  std::string InputFileName;
+  std::string InputFileDirectory;  
+  
+  /// File path to binary file which contains Eigen::MatrixXd
+  std::string EigenInputFile;
+
+  std::vector<std::vector<std::string>> BinningVariables;
 };
 
 #endif

@@ -1,25 +1,21 @@
 ---
+#=============================================================================
+
 General:
   OutputFile: "DuneEventRates.root"
 
   DUNESamples:
     - "Configs/Samples/SampleHandler_FD_Atm.yaml"
 
-  # Nu-FIT
-  # OscillationParameters: [0.310, 0.582, 0.224, 7.39E-5, 2.5254E-3, -2.498, 25]
-
   # Nu-FIT 5.2 w. SK atm
   OscillationParameters: [0.303, 0.452, 0.0223, 7.41E-5, 2.51E-3, -2.233, 25, 1221.5, 3480., 5701., 6371., 1., 1., 1., 1., 0.468, 0.468, 0.496, 0.496]
-  #OscillationParameters: [0.303, 0.452, 0.0223, 7.41E-5, 2.51E-3, -2.233, 25]
-
-  # T2K-like best-fit
-  # OscillationParameters: [0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 25]
-
-  # Unoscillated
-  # OscillationParameters: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.5]
 
   Systematics:
-    XsecCovFile: ["Configs/CovObjs/xsec_covariance_Atmospherics.yaml", "Configs/CovObjs/OscCov_PDG2021_v2_Atmospherics.yaml"]
+    XsecCovFile:
+      - "Configs/CovObjs/OscCov_PDG2021_v2_Atmospherics.yaml"
+      - "Configs/CovObjs/DetectorSystematicVariations.yaml"
+#      - "Configs/CovObjs/xsec_covariance_Atmospherics.yaml"
+      - "Configs/CovObjs/atmflux_covariance_DUNE.yaml"
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.1
     XsecAtGen: false
@@ -32,17 +28,90 @@ General:
     FitTestLikelihood: false
 
   MCMC:
-    NSteps: 20000
+    NSteps: 10000
     AutoSave: 5000
-
-  Output:
-    FileName: "TestEventRates.root"
-    OUTPUTNAME: "TestLLH.root"
+    Multicanonical:
+      Enabled: false
 
   Seed: 0
   Debug: No
   StartFromPos: false
   PosFileName: "chain_0.root"
+
+#=============================================================================
+
+EventRates:
+  PrintIntegral: false
+
+#=============================================================================
+
+PlotSliceHistograms:
+  InputHistogramFileName: "DuneEventRates.root"
+  SliceAxis: 2
+  LogX: true
+  LogY: true
+  NumColumns: 5
+  FancyTitles:
+    RecoCosineZ: "Reco. cos(#theta_{Z})"
+    RecoHadronEnergy: "Reco. Hadronic Energy (GeV)"
+    RecoLeptonEnergy: "Reco. Leptonic Energy (GeV)"
+
+#=============================================================================
+
+# LLH Scan settings
+LLHScan:
+    # don't make LLH for certain systematic groups
+    # LLHScanSkipVector: ["b_"]
+    # Save individual sample contributions to the LLH
+  LLHScanBySample: true
+    # Number of points we run LLH scans for each systematic
+  LLHScanPoints: 10
+    # Number of points for 2D scan in each direction
+  2DLLHScanPoints: 20
+    # Add physical ranges for special params whose priors/errors may not be well well-defined
+  ScanRanges:
+    delta_cp: [-3.14,3.14]
+
+#=============================================================================
+
+# Prior/Posterior predictive settings
+Predictive:
+  # Number of throws from MCMC you want to perform (aim for something like 2k/5k)
+  Ntoy: 100
+
+  # If false will run posterior predictive
+  PriorPredictive: true
+
+  # Allow to specify to throw/vary only params coming from single group like Xsec. Allow to evaluate errors coming from this group. Can't be mixed with throw single param
+  ThrowParamGroupOnly: []
+  
+  # Allow to specify to throw/vary only params coming with specified names. Cannot be connected with ThrowParamGroupOnly
+  ThrowSingleParams: ["TotalRatio"]
+
+  # Apply additional bounds allowing to do post pred only in normal ordering etc
+  ParameterBounds: []
+  # Example with normal ordering and upper octant
+  #ParameterBounds: [ ["delm2_23", [0, 999]], ["sin2th_23", [0.5, 1] ] ]
+  
+  #Use Full LLH or only sample contribution based on discussion with Asher we almost always only want the sample likelihood
+  FullLLH: false
+  
+  # number of burn in steps
+  BurnInSteps: 1000
+  
+  # Name of file from which we are sampling
+  PosteriorFile: "DuneEventRates.root"
+  
+  # When calculating pvalue there are two ways of applying Poissonian fluctuations, both are conceptually identical however standard scales with number of bins while non-standard scales with number of events (making it slow)
+  StandardFluctuation: true
+  
+  # Whether to print distribution of number of events in every bin, useful only for debug
+  DebugHistograms: false
+  
+  # Will produce posterior predictive distributions with by mode breakdown, can be heavy on RAM
+  ByMode: false
+
+#=============================================================================
 
 ProcessMCMC:
   BurnInSteps: 80000
@@ -65,8 +134,6 @@ ProcessMCMC:
   MakeSubOptimality: ["false", 100]
 
   DiagnoseCovarianceMatrix: false
-
-  #=============================================================================
 
   MakeCredibleIntervals: true
   CredibleRegions: [0.99, 0.90, 0.68]

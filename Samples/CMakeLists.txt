@@ -4,6 +4,7 @@ set(HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerBeamND.h
   ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerBeamNDGAr.h
   ${CMAKE_CURRENT_SOURCE_DIR}/MaCh3DUNEFactory.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/DUNEUtils.h
 )
 set(SOURCE_FILES
   SampleHandlerAtm.cpp
@@ -22,8 +23,12 @@ set_target_properties(SamplesDUNE PROPERTIES
   PUBLIC_HEADER "${HEADERS}"
   EXPORT_NAME SamplesDUNE)
 
-target_link_libraries(SamplesDUNE PUBLIC SplinesDUNE MaCh3::All MaCh3DUNECompilerOptions)
+target_link_libraries(SamplesDUNE PUBLIC SplinesDUNE MaCh3::All SplineEvaluator::All Eigen OpenSSL::SSL MaCh3DUNECompilerOptions)
 target_link_libraries(SamplesDUNE PRIVATE duneanaobj::StandardRecord DUNEMaCh3Warnings)
+
+if(MaCh3_DUNE_USE_SRProxy)
+  target_link_libraries(SamplesDUNE PRIVATE duneanaobj_StandardRecordProxy)
+endif()
 
 target_include_directories(SamplesDUNE PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../>
