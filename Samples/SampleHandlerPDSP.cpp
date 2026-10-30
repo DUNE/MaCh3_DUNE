@@ -16,16 +16,21 @@
 namespace {
 
 constexpr double fiducialVolumeStart = 30.0; // cm
+constexpr double nominalExcitationEnergy = 198.0; // eV
+constexpr double excitationEnergyUncertainty = 4.0; // eV
 
-double PionMeanDEDX(const double kineticEnergy) {
+double PionMeanDEDX(const double kineticEnergy,
+                    const double meanExcitationEnergy) {
   if (!std::isfinite(kineticEnergy) || kineticEnergy <= 0.0) return 0.0;
+  if (!std::isfinite(meanExcitationEnergy) ||
+      meanExcitationEnergy <= 0.0) return 0.0;
 
   // Liquid-argon Bethe--Bloch constants used by the analysis production.
   constexpr double rho = 1.39;
   constexpr double K = 0.307075;
   constexpr double Z = 18.0;
   constexpr double atomicMass = 39.948;
-  constexpr double excitationEnergy = 188.0e-6;
+  const double excitationEnergy = meanExcitationEnergy * 1.0e-6;
   constexpr double electronMass = 0.51099895;
   constexpr double pionMass = 139.57039;
   constexpr double densityC = 5.2146;
@@ -69,20 +74,57 @@ class PionRangeSpline {
     return spline;
   }
 
-  double Propagate(const double initialKE, const double length) const {
+  double Propagate(const double initialKE, const double length,
+                   const double excitationEnergyShifted) const {
     if (!std::isfinite(initialKE) || initialKE <= 0.0) return 0.0;
     if (!std::isfinite(length) || length <= 0.0) return initialKE;
 
-    const double initialRange = energyToRange->Eval(initialKE);
+    const double requestedExcitationEnergy =
+        std::isfinite(excitationEnergyShifted)
+            ? excitationEnergyShifted
+            : nominalExcitationEnergy;
+    const double excitationEnergy = std::clamp(
+        requestedExcitationEnergy, minimumExcitationEnergy,
+        maximumExcitationEnergy);
+    const double slicePosition =
+        (excitationEnergy - minimumExcitationEnergy) / excitationEnergyStep;
+    const size_t lowerSlice = std::min(
+        static_cast<size_t>(slicePosition), slices.size() - 1);
+    const size_t upperSlice = std::min(lowerSlice + 1, slices.size() - 1);
+    const double upperSliceWeight =
+        slicePosition - static_cast<double>(lowerSlice);
+
+    const double initialRange = Interpolate(
+        slices[lowerSlice].energyToRange->Eval(initialKE),
+        slices[upperSlice].energyToRange->Eval(initialKE), upperSliceWeight);
     if (length >= initialRange) return 0.0;
-    return rangeToEnergy->Eval(initialRange - length);
+
+    const double remainingRange = initialRange - length;
+    return Interpolate(
+        slices[lowerSlice].rangeToEnergy->Eval(remainingRange),
+        slices[upperSlice].rangeToEnergy->Eval(remainingRange),
+        upperSliceWeight);
   }
 
  private:
-  static constexpr double knotStep = 0.5; // MeV
-  static constexpr double maximumEnergy = 3000.0; // MeV
+  static constexpr double knotStep = 5.0; // MeV
+  static constexpr double maximumEnergy = 2800.0; // MeV
+  static constexpr double minimumExcitationEnergy = 160.0; // eV
+  static constexpr double maximumExcitationEnergy = 210.0; // eV
+  static constexpr double excitationEnergyStep = 1.0; // eV
 
-  static std::pair<std::vector<double>, std::vector<double>> MakeKnots() {
+  struct SplineSlice {
+    std::unique_ptr<TResponseFunction_red> energyToRange;
+    std::unique_ptr<TResponseFunction_red> rangeToEnergy;
+  };
+
+  static double Interpolate(const double lower, const double upper,
+                            const double fraction) {
+    return lower + fraction * (upper - lower);
+  }
+
+  static std::pair<std::vector<double>, std::vector<double>> MakeKnots(
+      const double meanExcitationEnergy) {
     const size_t numberOfKnots =
         static_cast<size_t>(maximumEnergy / knotStep) + 1;
     std::vector<double> energies(numberOfKnots);
@@ -93,8 +135,15 @@ class PionRangeSpline {
       const double energy = static_cast<double>(i) * knotStep;
       const double midpointEnergy =
           energy - 0.5 * knotStep;
-      const double dedx = PionMeanDEDX(midpointEnergy);
-      if (dedx > 0.0) range += knotStep / dedx;
+      const double dedx =
+          PionMeanDEDX(midpointEnergy, meanExcitationEnergy);
+      if (!std::isfinite(dedx) || dedx <= 0.0) {
+        MACH3LOG_ERROR(
+            "Invalid pion dE/dx={} MeV/cm at KE={} MeV and I={} eV",
+            dedx, midpointEnergy, meanExcitationEnergy);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+      range += knotStep / dedx;
       energies[i] = energy;
       ranges[i] = range;
     }
@@ -111,21 +160,32 @@ class PionRangeSpline {
     return spline;
   }
 
-  PionRangeSpline() : PionRangeSpline(MakeKnots()) {}
+  PionRangeSpline() {
+    const size_t numberOfSlices = static_cast<size_t>(
+        (maximumExcitationEnergy - minimumExcitationEnergy) /
+        excitationEnergyStep) + 1;
+    slices.reserve(numberOfSlices);
+    for (size_t i = 0; i < numberOfSlices; ++i) {
+      const double excitationEnergy = minimumExcitationEnergy +
+          static_cast<double>(i) * excitationEnergyStep;
+      auto knots = MakeKnots(excitationEnergy);
+      const std::string suffix =
+          std::to_string(static_cast<int>(excitationEnergy));
+      slices.push_back({
+          MakeSpline(knots.first, knots.second,
+                     "PionEnergyToRange_I" + suffix),
+          MakeSpline(knots.second, knots.first,
+                     "PionRangeToEnergy_I" + suffix)});
+    }
+  }
 
-  explicit PionRangeSpline(
-      std::pair<std::vector<double>, std::vector<double>> knots)
-      : energyToRange(MakeSpline(
-            knots.first, knots.second, "PionEnergyToRange")),
-        rangeToEnergy(MakeSpline(
-            knots.second, knots.first, "PionRangeToEnergy")) {}
-
-  std::unique_ptr<TResponseFunction_red> energyToRange;
-  std::unique_ptr<TResponseFunction_red> rangeToEnergy;
+  std::vector<SplineSlice> slices;
 };
 
-double PropagatePionKE(const double initialKE, const double length) {
-  return PionRangeSpline::Instance().Propagate(initialKE, length);
+double PropagatePionKE(const double initialKE, const double length,
+                       const double excitationEnergyShifted) {
+  return PionRangeSpline::Instance().Propagate(
+      initialKE, length, excitationEnergyShifted);
 }
 
 } // namespace
@@ -387,9 +447,11 @@ int SampleHandlerPDSP::SetupExperimentMC() {
         PDSPSamples[TotalEventCounter].RecoTrackLength = recoTrackLength;
         PDSPSamples[TotalEventCounter].RecoTrackLengthShifted = recoTrackLength;
         PDSPSamples[TotalEventCounter].NominalPropagatedKEIni =
-            PropagatePionKE(recoKEFF, fiducialVolumeStart);
+            PropagatePionKE(recoKEFF, fiducialVolumeStart,
+                            nominalExcitationEnergy);
         PDSPSamples[TotalEventCounter].NominalPropagatedKEInt =
-            PropagatePionKE(recoKEFF, recoTrackLength);
+            PropagatePionKE(recoKEFF, recoTrackLength,
+                            nominalExcitationEnergy);
         PDSPSamples[TotalEventCounter].TrackLengthSmearFraction =
             trackLengthSmear(trackLengthRng);
         PDSPSamples[TotalEventCounter].RecoKEIniShifted = recoKEIni;
@@ -550,6 +612,16 @@ void SampleHandlerPDSP::RegisterFunctionalParameters() {
         event.RecoTrackLengthShifted = event.RecoTrackLength * scale;
       });
 
+  // Convert the standard-normal nuisance theta_I into the shifted liquid-argon
+  // mean excitation energy used by the range-energy surface:
+  // I_shifted = I_nominal + sigma_I * theta_I.
+  RegisterIndividualFunctionalParameter(
+      PDSPSamples, "MeanExcitationEnergy",
+      [](const double& theta, PDSPMCInfo& event) {
+        event.ExcitationEnergyShifted =
+            nominalExcitationEnergy + excitationEnergyUncertainty * theta;
+      });
+
   MACH3LOG_INFO("Finished registering PDSP systematic response functions");
 }
 
@@ -560,6 +632,7 @@ void SampleHandlerPDSP::ResetShifts(const int iEvent) {
   event.RecoKEFFShifted = event.RecoKEFF;
   event.RecoKEIniShifted = event.RecoKEIni;
   event.RecoKEIntShifted = event.RecoKEInt;
+  event.ExcitationEnergyShifted = nominalExcitationEnergy;
   event.BeamMomentumWeight = 1.0;
 }
 
@@ -567,9 +640,11 @@ void SampleHandlerPDSP::FinaliseShifts(const int iEvent) {
   auto& event = PDSPSamples[iEvent];
 
   const double propagatedKEIni = PropagatePionKE(
-      event.RecoKEFFShifted, fiducialVolumeStart);
+      event.RecoKEFFShifted, fiducialVolumeStart,
+      event.ExcitationEnergyShifted);
   const double propagatedKEInt = PropagatePionKE(
-      event.RecoKEFFShifted, event.RecoTrackLengthShifted);
+      event.RecoKEFFShifted, event.RecoTrackLengthShifted,
+      event.ExcitationEnergyShifted);
 
   event.RecoKEIniShifted = event.RecoKEIni +
       (propagatedKEIni - event.NominalPropagatedKEIni);

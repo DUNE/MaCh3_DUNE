@@ -3,13 +3,30 @@ Systematics:
 
 - Systematic:
     Names:
+      FancyName: MeanExcitationEnergy
+      ParameterName: MeanExcitationEnergy
+    SampleNames: ["PDSP"]
+    Mode: []
+    Error: 1.0
+    FlatPrior: false
+    ParameterBounds: [-2.0, 2.0]
+    ParameterGroup: Reconstruction
+    ParameterValues:
+      Generator: 0.0
+      PreFitValue: 0.0
+    Type: Functional
+    StepScale:
+      MCMC: 0.1
+
+- Systematic:
+    Names:
       FancyName: BeamMomentumMeasurement
       ParameterName: BeamMomentumMeasurement
     SampleNames: ["PDSP"]
     Mode: []
     Error: 1.0
     FlatPrior: false
-    ParameterBounds: [-3.0, 3.0]
+    ParameterBounds: [-2.0, 2.0]
     ParameterGroup: Beam
     ParameterValues:
       Generator: 0.0
@@ -27,7 +44,7 @@ Systematics:
     Mode: []
     Error: 1.0
     FlatPrior: false
-    ParameterBounds: [-3.0, 3.0]
+    ParameterBounds: [-2.0, 2.0]
     ParameterGroup: Beam
     ParameterValues:
       Generator: 0.0
@@ -44,7 +61,7 @@ Systematics:
     Mode: []
     Error: 1.0
     FlatPrior: false
-    ParameterBounds: [-3.0, 3.0]
+    ParameterBounds: [-2.0, 2.0]
     ParameterGroup: Reconstruction
     ParameterValues:
       Generator: 0.0
@@ -62,7 +79,7 @@ Systematics:
     Mode: []
     Error: 1.0
     FlatPrior: false
-    ParameterBounds: [-3.0, 3.0]
+    ParameterBounds: [-2.0, 2.0]
     ParameterGroup: Reconstruction
     ParameterValues:
       Generator: 0.0
