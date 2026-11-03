@@ -253,16 +253,7 @@ void SampleHandlerAtm::InitialiseSplineObjectPerEvent(){
 }
 
 void SampleHandlerAtm::PrepFunctionalParameters() {
-  if (AtmFluxShapeSplines) {
-    std::vector<double> AtmFluxShapeSystDialValues;
-    for (int iPar=0;iPar<ParHandler->GetNParameters();iPar++) {
-      if (ParHandler->IsParFromGroup(iPar,"AtmFluxShape")) {
-	AtmFluxShapeSystDialValues.push_back(ParHandler->GetParProp(iPar));
-      }
-    }
-    
-    AtmFluxShapeSplines->EvaluateSplines(AtmFluxShapeSystDialValues);
-  }
+  if (AtmFluxShapeSplines) {AtmFluxShapeSplines->EvaluateSplines();}
 }
 
 void SampleHandlerAtm::RegisterFunctionalParameters() {
@@ -726,6 +717,7 @@ void SampleHandlerAtm::SetupAtmFluxSplineSystematics() {
   std::string HONDAHighEnergySplineName = "HondaTotalUncertainty_EnergyBin_1";  
   
   std::vector<std::string> AtmFluxModelToModelParamNames;
+  std::vector<const double*> AtmFluxModelToModelParamPointers;  
   std::vector<std::string> HONDAFluxUncerParamNames;
   
   //DB Figure out whether we have atmospheric flux parameters configured -- required that any parameter's group is "AtmFlux" or "AtmFluxShape"
@@ -737,7 +729,8 @@ void SampleHandlerAtm::SetupAtmFluxSplineSystematics() {
       AtmFluxSystematicParameterNames.push_back(ParName);
     } else if (ParHandler->IsParFromGroup(iParam,"AtmFluxShape")) {
       std::string ParName = ParHandler->GetParFancyName(iParam);      
-      AtmFluxModelToModelParamNames.push_back(ParName); 
+      AtmFluxModelToModelParamNames.push_back(ParName);
+      AtmFluxModelToModelParamPointers.push_back(ParHandler->RetPointer(iParam));
       AtmFluxSystematicParameterNames.push_back(ParName);     
     }
   }  
@@ -808,6 +801,7 @@ void SampleHandlerAtm::SetupAtmFluxSplineSystematics() {
 
   if (!AtmFluxShapeSystNode.IsNull()) {
     AtmFluxShapeSplines = new SetHandler(AtmFluxShapeSystNode);
+    AtmFluxShapeSplines->SetDialValuePointers(AtmFluxModelToModelParamNames, AtmFluxModelToModelParamPointers);
     
     MACH3LOG_INFO("Setting up AtmFluxShapeSysts spline pointers...");
     TFile* AtmFluxShapeTemplateHistogramFile = TFile::Open((AtmFluxShapeSystNode["InputFileName"].as<std::string>()).c_str());
