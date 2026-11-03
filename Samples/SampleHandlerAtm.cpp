@@ -809,7 +809,7 @@ void SampleHandlerAtm::SetupAtmFluxSplineSystematics() {
     AtmFluxShapeTemplateHistogram->SetDirectory(0);
     delete AtmFluxShapeTemplateHistogramFile;
     
-    for (size_t iEvent=0;iEvent<dunemcSamples.size();iEvent++) {
+    for (size_t iEvent=0;iEvent<dunemcSamples.size();iEvent+=2) {
       if ((iEvent % (dunemcSamples.size()/5))==0) {
         MACH3LOG_INFO("\tProcessing entry: {}/{}",iEvent,dunemcSamples.size());
       }
@@ -817,8 +817,10 @@ void SampleHandlerAtm::SetupAtmFluxSplineSystematics() {
       std::vector<double> AtmFluxShapeParameterValues(2);
       AtmFluxShapeParameterValues[0] = AtmFluxShapeTemplateHistogram->GetXaxis()->FindBin(dunemcSamples[iEvent].neutrinoenergy_true);
       AtmFluxShapeParameterValues[1] = AtmFluxShapeTemplateHistogram->GetYaxis()->FindBin(dunemcSamples[iEvent].coszenith_true);
-      
-      dunemcSamples[iEvent].atmflux_w_pointers = AtmFluxShapeSplines->ReturnSplineWeightPointers(AtmFluxModelToModelParamNames,AtmFluxModelToModelDimensionNames,AtmFluxShapeParameterValues);
+
+      std::vector<const double*> Pointers = AtmFluxShapeSplines->ReturnSplineWeightPointers(AtmFluxModelToModelParamNames,AtmFluxModelToModelDimensionNames,AtmFluxShapeParameterValues);
+      dunemcSamples[iEvent].atmflux_w_pointers = Pointers;
+      dunemcSamples[iEvent+1].atmflux_w_pointers = Pointers;
     }
   } else {
     MACH3LOG_INFO("Not setting up AtmFluxShapeSysts");

@@ -64,7 +64,7 @@ struct dunemc_atm : public dunemc_base { // Store variables used by SampleHandle
   double AtmFluxSystFactor;
   const M3::float_t* AtmFluxSystParVal;
 
-  std::vector<double*> atmflux_w_pointers;
+  std::vector<const double*> atmflux_w_pointers;
 };
 
 struct dunemc_beamfd : public dunemc_base { // Store variables used by SampleHandlerBeamFD
