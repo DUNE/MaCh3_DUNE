@@ -816,6 +816,10 @@ void SampleHandlerAtm::SetupAtmFluxSplineSystematics() {
     delete AtmFluxShapeTemplateHistogramFile;
     
     for (size_t iEvent=0;iEvent<dunemcSamples.size();iEvent++) {
+      if ((iEvent % (dunemcSamples.size()/5))==0) {
+        MACH3LOG_INFO("\tProcessing entry: {}/{}",iEvent,dunemcSamples.size());
+      }
+
       std::vector<double> AtmFluxShapeParameterValues(2);
       AtmFluxShapeParameterValues[0] = AtmFluxShapeTemplateHistogram->GetXaxis()->FindBin(dunemcSamples[iEvent].neutrinoenergy_true);
       AtmFluxShapeParameterValues[1] = AtmFluxShapeTemplateHistogram->GetYaxis()->FindBin(dunemcSamples[iEvent].coszenith_true);
