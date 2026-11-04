@@ -417,7 +417,6 @@ int SampleHandlerAtm::SetupExperimentMC() {
 	sr = new caf::StandardRecordProxy(cafTree->GetTree(), "rec");
       }
 #else
-i
       cafTree->GetEntry(iTreeEntry);
 #endif
       

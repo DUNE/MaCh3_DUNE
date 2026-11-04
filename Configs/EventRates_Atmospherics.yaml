@@ -2,7 +2,7 @@
 #=============================================================================
 
 General:
-  OutputFile: "DuneEventRates_Y_wrong.root"
+  OutputFile: "DuneEventRates.root"
 
   DUNESamples:
     - "Configs/Samples/SampleHandler_FD_Atm.yaml"
@@ -46,7 +46,7 @@ EventRates:
 #=============================================================================
 
 PlotSliceHistograms:
-  InputHistogramFileName: "DuneEventRates_Y.root"
+  InputHistogramFileName: "DuneEventRates.root"
   SliceAxis: 2
   LogX: false
   LogY: true
