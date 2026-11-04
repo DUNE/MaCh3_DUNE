@@ -309,6 +309,7 @@ int SampleHandlerAtm::ReadFromEigen() {
     dunemcSamples[iEvent].neutrinoenergy_reco = Matrix(iEvent,Variables::neutrinoenergy_reco);
     dunemcSamples[iEvent].hadronicenergy_reco = Matrix(iEvent,Variables::hadronicenergy_reco);
     dunemcSamples[iEvent].leptonicenergy_reco = Matrix(iEvent,Variables::leptonicenergy_reco);
+    dunemcSamples[iEvent].inelasticity_reco = Matrix(iEvent,Variables::inelasticity_reco);
     dunemcSamples[iEvent].coszenith_reco = Matrix(iEvent,Variables::coszenith_reco);    
     dunemcSamples[iEvent].SampleIndex = static_cast<int>(Matrix(iEvent,Variables::SampleIndex));
     dunemcSamples[iEvent].neutrinoflavour_interacting = static_cast<int>(Matrix(iEvent,Variables::neutrinoflavour_interacting));
@@ -335,6 +336,7 @@ void SampleHandlerAtm::TransferToEigen(std::string FileName) {
     Matrix(iEvent,Variables::neutrinoenergy_reco) = dunemcSamples[iEvent].neutrinoenergy_reco;
     Matrix(iEvent,Variables::hadronicenergy_reco) = dunemcSamples[iEvent].hadronicenergy_reco;
     Matrix(iEvent,Variables::leptonicenergy_reco) = dunemcSamples[iEvent].leptonicenergy_reco;
+    Matrix(iEvent,Variables::inelasticity_reco) = dunemcSamples[iEvent].inelasticity_reco;
     Matrix(iEvent,Variables::coszenith_reco) = dunemcSamples[iEvent].coszenith_reco;
     Matrix(iEvent,Variables::SampleIndex) = dunemcSamples[iEvent].SampleIndex;
     Matrix(iEvent,Variables::neutrinoflavour_interacting) = dunemcSamples[iEvent].neutrinoflavour_interacting;
@@ -476,24 +478,22 @@ int SampleHandlerAtm::SetupExperimentMC() {
       if (SampIndex == kEventSel_Unknown) {
 	continue;
       }
-      
+
+      //DB Calculate the reconstructed information depending on the requested reconstructed algorithms      
       TVector3 RecoNuMomentumVector;
       double RecoENu;
       double RecoEHad;
-      double RecoELep;
-
-      //DB Calculate the reconstructed information depending on the requested reconstructed algorithms
       if (IsELike[SampIndex]) {
 	RecoENu = sr->common.ixn.pandora[0].Enu.e_calo;
 	RecoEHad = sr->common.ixn.pandora[0].Enu.e_had;
-	RecoELep = RecoENu-RecoEHad;
 	RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.heshw.x,sr->common.ixn.pandora[0].dir.heshw.y,sr->common.ixn.pandora[0].dir.heshw.z)).Unit();
       } else {
 	RecoENu = sr->common.ixn.pandora[0].Enu.lep_calo;
 	RecoEHad = sr->common.ixn.pandora[0].Enu.mu_had;
-	RecoELep = RecoENu-RecoEHad;	
 	RecoNuMomentumVector = (TVector3(sr->common.ixn.pandora[0].dir.lngtrk.x,sr->common.ixn.pandora[0].dir.lngtrk.y,sr->common.ixn.pandora[0].dir.lngtrk.z)).Unit();      
       }
+      double RecoELep = RecoENu-RecoEHad;      
+      double RecoY = RecoEHad/RecoENu;
       double RecoCZ = -RecoNuMomentumVector.y(); // +Y in CAF files translates to +Z in typical CosZ
 
       //DB Check if all the values are sensible
@@ -512,7 +512,11 @@ int SampleHandlerAtm::SetupExperimentMC() {
       if (std::isnan(RecoELep)) {
 	MACH3LOG_WARN("Skipping entry {}/{} -> Reconstructed Leptonic Energy is NAN",iTreeEntry,nTreeEntries);
 	continue;
-      }            
+      }
+      if (std::isnan(RecoY)) {
+      	MACH3LOG_WARN("Skipping entry {}/{} -> Reconstructed inelasticity is NAN",iTreeEntry,nTreeEntries);
+      	continue;
+      }      
 
       //DB Calculate the true kinematic information
       double TrueNeutrinoEnergy = static_cast<double>(sr->mc.nu[0].E);
@@ -531,7 +535,8 @@ int SampleHandlerAtm::SetupExperimentMC() {
       
       currentEvent_FromNuE.neutrinoenergy_reco = RecoENu;
       currentEvent_FromNuE.hadronicenergy_reco = RecoEHad;
-      currentEvent_FromNuE.leptonicenergy_reco = RecoELep;            
+      currentEvent_FromNuE.leptonicenergy_reco = RecoELep;
+      currentEvent_FromNuE.inelasticity_reco = RecoY;      
       currentEvent_FromNuE.coszenith_reco = RecoCZ;
       currentEvent_FromNuE.SampleIndex = SampIndex;
       currentEvent_FromNuE.neutrinoflavour_interacting = InteractingPDG;
@@ -875,7 +880,9 @@ const double* SampleHandlerAtm::GetPointerToKinematicParameter(const int KinPar,
   case kRecoHadronEnergy:
     return &(dunemcSamples[iEvent].hadronicenergy_reco);
   case kRecoLeptonEnergy:
-    return &(dunemcSamples[iEvent].leptonicenergy_reco);    
+    return &(dunemcSamples[iEvent].leptonicenergy_reco);
+  case kRecoY:
+    return &(dunemcSamples[iEvent].inelasticity_reco);
   case kTrueCosZ:
     return &(dunemcSamples[iEvent].coszenith_true);
   case kRecoCosZ:
