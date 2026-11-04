@@ -8,6 +8,8 @@ foreach(app
 	LikelihoodScan
 	Variations
 	Predictive
+	ConvertToEigen
+	PlotSliceHistograms
       )
 
     add_executable(${app} ${app}.cpp)

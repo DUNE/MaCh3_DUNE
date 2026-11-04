@@ -88,7 +88,7 @@ void SampleHandlerBeamND::AddAdditionalWeightPointers() {
     MCEvents[i].total_weight_pointers.push_back(&(dunendmcSamples[i].pot_s));
     MCEvents[i].total_weight_pointers.push_back(&(dunendmcSamples[i].norm_s));
     MCEvents[i].total_weight_pointers.push_back(&(dunendmcSamples[i].rw_berpaacvwgt));
-    MCEvents[i].total_weight_pointers.push_back(&(dunendmcSamples[i].flux_w));
+    MCEvents[i].total_weight_pointers.push_back(&(dunendmcSamples[i].weights_flux));
   }
 }
 
@@ -176,22 +176,22 @@ int SampleHandlerBeamND::SetupExperimentMC() {
     }
     const size_t sample_index = fileIndexToSample[static_cast<size_t>(treeNum)];
     dunendmcSamples[i].SampleIndex = static_cast<unsigned int>(sample_index);
-    dunendmcSamples[i].nupdgUnosc = _nuPDGunosc;
-    dunendmcSamples[i].nupdg = _nuPDG;
-    dunendmcSamples[i].OscChannelIndex = static_cast<double>(GetOscChannel(SampleDetails[sample_index].OscChannels, dunendmcSamples[i].nupdgUnosc, dunendmcSamples[i].nupdg));
+    dunendmcSamples[i].neutrinoflavour_generated = _nuPDGunosc;
+    dunendmcSamples[i].neutrinoflavour_interacting = _nuPDG;
+    dunendmcSamples[i].OscChannelIndex = static_cast<double>(GetOscChannel(SampleDetails[sample_index].OscChannels, dunendmcSamples[i].neutrinoflavour_generated, dunendmcSamples[i].neutrinoflavour_interacting));
 
     // POT stuff
     dunendmcSamples[i].norm_s = beamNDSampleDetails[sample_index].norm_s;
     dunendmcSamples[i].pot_s = beamNDSampleDetails[sample_index].pot_s * downsamplingStep;
 
-    dunendmcSamples[i].rw_erec = _erec;
+    dunendmcSamples[i].neutrinoenergy_reco = _erec;
     dunendmcSamples[i].rw_erec_shifted = _erec;
     dunendmcSamples[i].rw_erec_lep = _erec_lep;
     dunendmcSamples[i].rw_erec_had = (_erec - _erec_lep);
     dunendmcSamples[i].rw_yrec = ((_erec - _erec_lep)/_erec);
-    dunendmcSamples[i].enu_true = _ev; // in GeV
+    dunendmcSamples[i].neutrinoenergy_true = _ev; // in GeV
     dunendmcSamples[i].rw_theta = _LepNuAngle;
-    dunendmcSamples[i].rw_isCC = _isCC;
+    dunendmcSamples[i].IsCC = _isCC;
     dunendmcSamples[i].rw_reco_q = _reco_q;
     dunendmcSamples[i].rw_berpaacvwgt = _BeRPA_cvwgt;
 
@@ -203,7 +203,7 @@ int SampleHandlerBeamND::SetupExperimentMC() {
     if (M3Mode > 15) M3Mode -= 1; //Account for no NCSingleKaon
     dunendmcSamples[i].mode = M3Mode;
 
-    dunendmcSamples[i].flux_w = 1.0;
+    dunendmcSamples[i].weights_flux = 1.0;
   }
 
   //_sampleFile->Close();
@@ -217,7 +217,7 @@ int SampleHandlerBeamND::SetupExperimentMC() {
 const double* SampleHandlerBeamND::GetPointerToKinematicParameter(const int KinPar, const int iEvent) const{
   switch(KinPar){
   case kTrueNeutrinoEnergy:
-    return &(dunendmcSamples[iEvent].enu_true);
+    return &(dunendmcSamples[iEvent].neutrinoenergy_true);
   case kRecoNeutrinoEnergy:
     return &(dunendmcSamples[iEvent].rw_erec_shifted);
   case kyRec:
@@ -250,10 +250,10 @@ void SampleHandlerBeamND::SetupMC() {
   // FarDetectorCoreInfo *fdobj = &(MCEvents[iSample]);
 
   for (unsigned int iEvent = 0; iEvent < GetNEvents(); ++iEvent) {
-    MCEvents[iEvent].enu_true = dunendmcSamples[iEvent].enu_true;
-    MCEvents[iEvent].isNC = !(dunendmcSamples[iEvent].rw_isCC);
-    MCEvents[iEvent].nupdgUnosc = dunendmcSamples[iEvent].nupdgUnosc;
-    MCEvents[iEvent].nupdg = dunendmcSamples[iEvent].nupdg;
+    MCEvents[iEvent].enu_true = dunendmcSamples[iEvent].neutrinoenergy_true;
+    MCEvents[iEvent].isNC = !(dunendmcSamples[iEvent].IsCC);
+    MCEvents[iEvent].nupdgUnosc = dunendmcSamples[iEvent].neutrinoflavour_generated;
+    MCEvents[iEvent].nupdg = dunendmcSamples[iEvent].neutrinoflavour_interacting;
     MCEvents[iEvent].NominalSample = dunendmcSamples[iEvent].SampleIndex;
   }
 }

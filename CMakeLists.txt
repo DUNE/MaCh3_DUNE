@@ -42,6 +42,22 @@ include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 #=================== ROOT
 find_package(ROOT 6 REQUIRED)
 
+#=================== SSL
+find_package(OpenSSL REQUIRED)
+
+#=================== EIGEN
+CPMAddPackage(
+  NAME Eigen
+  VERSION 3.4.0
+  URL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz
+  DOWNLOAD_ONLY YES
+)
+
+if(Eigen_ADDED)
+  add_library(Eigen INTERFACE IMPORTED)
+  target_include_directories(Eigen INTERFACE ${Eigen_SOURCE_DIR})
+endif()
+
 #=================== DUNEAnaObj
 if(NOT DEFINED DUNE_ANAOBJ_BRANCH)
   set(DUNE_ANAOBJ_BRANCH v03_14_00)
@@ -56,8 +72,8 @@ if(MaCh3_DUNE_USE_SRProxy)
   if(NOT duneanaobj_FOUND)
     CPMFindPackage(
       NAME duneanaobj
-      GIT_TAG feature/Clingification_rebase2024
-      GITHUB_REPOSITORY luketpickering/duneanaobj
+      GIT_TAG Clingification_v03_12_00
+      GITHUB_REPOSITORY pgranger23/duneanaobj
       VERSION 4.0.0
     )
   endif()
@@ -70,13 +86,24 @@ else()
   fetchduneanaobj(${DUNE_ANAOBJ_BRANCH})
 endif()
 
+#=================== SplineEvaluator
+CPMAddPackage(
+    NAME SplineEvaluator
+    GIT_TAG "develop"
+    GITHUB_REPOSITORY dbarrow257/SplineEvaluator
+  )
+
+if (NOT TARGET SplineEvaluator::All)
+  cmessage(FATAL_ERROR "MaCh3 DUNE Expected dependency target: SplineEvaluator::All")
+endif()
+
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
 # don't find mach3 core from a previous build in this directory or sad times occur
 LIST(APPEND CMAKE_IGNORE_PATH ${CMAKE_CURRENT_BINARY_DIR})
 find_package(MaCh3 2.6.0 EXACT QUIET)
-set(MaCh3_CORE_BRANCH v2.6.0 CACHE STRING "Specify the MaCh3 core branch to use")
+set(MaCh3_CORE_BRANCH v2.6.0_patches CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 
 if(NOT MaCh3_FOUND)
@@ -274,8 +301,18 @@ install(FILES
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/output)
 
 ############################  Install  ####################################
-install(DIRECTORY Inputs DESTINATION ${CMAKE_BINARY_DIR})
-install(DIRECTORY Configs DESTINATION ${CMAKE_BINARY_DIR})
+if (EXISTS "${CMAKE_BINARY_DIR}/Inputs")
+  cmessage(STATUS "Deleting ${CMAKE_BINARY_DIR}/Inputs to allow making symlink")
+  execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/Inputs)
+endif()
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/Inputs ${CMAKE_BINARY_DIR}/Inputs)
+
+if (EXISTS "${CMAKE_BINARY_DIR}/Configs")
+  cmessage(STATUS "Deleting ${CMAKE_BINARY_DIR}/Configs to allow making symlink")
+  execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/Configs)
+endif()
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/Configs ${CMAKE_BINARY_DIR}/Configs)
+
 install(DIRECTORY plotting DESTINATION ${CMAKE_BINARY_DIR})
 install(DIRECTORY Utils DESTINATION ${CMAKE_BINARY_DIR})
 

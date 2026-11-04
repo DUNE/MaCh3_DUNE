@@ -1,0 +1,18 @@
+---
+
+Systematics:
+- Systematic:
+    Names:
+      FancyName: ModBoxA
+      ParameterName: ModBoxA
+    SampleNames: ["ATM"]
+    Error: 1.0
+    FlatPrior: false
+    ParameterBounds: [-999, 999]
+    ParameterGroup: DetectorSystematic
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 1.0
+    Type: Functional

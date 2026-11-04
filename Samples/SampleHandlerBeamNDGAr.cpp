@@ -80,11 +80,11 @@ void SampleHandlerBeamNDGAr::SetupSplines() {
 
 void SampleHandlerBeamNDGAr::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < dunendgarmcFitting.size(); ++i) {
-    MACH3LOG_INFO("pot: {}\nnorm: {}\nberpa: {}\nflux: {}\ngeom: {}", dunendgarmcFitting[i].pot_s, dunendgarmcFitting[i].norm_s, dunendgarmcFitting[i].rw_berpaacvwgt, dunendgarmcFitting[i].flux_w, dunendgarmcPlotting[i].geometric_correction);
+    MACH3LOG_INFO("pot: {}\nnorm: {}\nberpa: {}\nflux: {}\ngeom: {}", dunendgarmcFitting[i].pot_s, dunendgarmcFitting[i].norm_s, dunendgarmcFitting[i].rw_berpaacvwgt, dunendgarmcFitting[i].weights_flux, dunendgarmcPlotting[i].geometric_correction);
     MCEvents[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].pot_s));
     MCEvents[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].norm_s));
     MCEvents[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].rw_berpaacvwgt));
-    MCEvents[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].flux_w));
+    MCEvents[i].total_weight_pointers.push_back(&(dunendgarmcFitting[i].weights_flux));
     MCEvents[i].total_weight_pointers.push_back(&(dunendgarmcPlotting[i].geometric_correction));
   }
 }
@@ -881,18 +881,18 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
     const size_t sample_index = fileIndexToSample[static_cast<size_t>(treeNum)];
 
     dunendgarmcFitting[i_event].SampleIndex = static_cast<unsigned int>(sample_index);
-    dunendgarmcFitting[i_event].enu_true = _Enu;
-    dunendgarmcFitting[i_event].rw_isCC = _isCC;
-    dunendgarmcFitting[i_event].nupdg = _nuPDG;
-    dunendgarmcFitting[i_event].nupdgUnosc = _nuPDG;
-    dunendgarmcFitting[i_event].OscChannelIndex = static_cast<double>(GetOscChannel(SampleDetails[sample_index].OscChannels, dunendgarmcFitting[i_event].nupdgUnosc, dunendgarmcFitting[i_event].nupdg));
+    dunendgarmcFitting[i_event].neutrinoenergy_true = _Enu;
+    dunendgarmcFitting[i_event].IsCC = _isCC;
+    dunendgarmcFitting[i_event].neutrinoflavour_interacting = _nuPDG;
+    dunendgarmcFitting[i_event].neutrinoflavour_generated = _nuPDG;
+    dunendgarmcFitting[i_event].OscChannelIndex = static_cast<double>(GetOscChannel(SampleDetails[sample_index].OscChannels, dunendgarmcFitting[i_event].neutrinoflavour_generated, dunendgarmcFitting[i_event].neutrinoflavour_interacting));
     dunendgarmcFitting[i_event].rw_berpaacvwgt = _BeRPA_cvwgt;
     dunendgarmcFitting[i_event].Target = 40; // Assume everything is Argon
     dunendgarmcFitting[i_event].rw_Q0 = _Enu - _Elep;
     dunendgarmcFitting[i_event].rw_Q3 = std::sqrt((_PXnu-_PXlep)*(_PXnu-_PXlep) + (_PYnu-_PYlep)*(_PYnu-_PYlep) + (_PZnu-_PZlep)*(_PZnu-_PZlep));
     dunendgarmcFitting[i_event].norm_s = 1.;
     dunendgarmcFitting[i_event].pot_s = beamNDGArSampleDetails[sample_index].pot/(downsampling*1e21);
-    dunendgarmcFitting[i_event].flux_w = 1.;
+    dunendgarmcFitting[i_event].weights_flux = 1.;
 
     int M3Mode = Modes->GetModeFromGenerator(std::abs(_neut_code));
     if (!_isCC) M3Mode += 14; //Account for no ability to distinguish CC/NC
@@ -1143,7 +1143,7 @@ int SampleHandlerBeamNDGAr::SetupExperimentMC() {
 const double* SampleHandlerBeamNDGAr::GetPointerToKinematicParameter(const int KinematicParameter, const int iEvent) const{
   switch(KinematicParameter) {
     case kTrueNeutrinoEnergy:
-      return &dunendgarmcFitting[iEvent].enu_true; 
+      return &dunendgarmcFitting[iEvent].neutrinoenergy_true; 
     case kMode:
       return &dunendgarmcFitting[iEvent].mode;
     case kOscChannel:
@@ -1196,7 +1196,7 @@ double SampleHandlerBeamNDGAr::ReturnKinematicParameter(const int KinPar, const 
     case kEvent_IsAccepted:
       return static_cast<double>(dunendgarmcPlotting[iEvent].is_accepted);
     case kIsCC:
-      return static_cast<double>(dunendgarmcFitting[iEvent].rw_isCC);
+      return static_cast<double>(dunendgarmcFitting[iEvent].IsCC);
     case kInFDV:
       return static_cast<double>(dunendgarmcPlotting[iEvent].in_fdv);
     case kNPi0:
@@ -1330,10 +1330,10 @@ std::vector<double> SampleHandlerBeamNDGAr::ReturnKinematicVector(const int KinV
 
 void SampleHandlerBeamNDGAr::SetupMC() {
   for(size_t iEvent = 0 ;iEvent < GetNEvents() ; ++iEvent){
-    MCEvents[iEvent].enu_true = dunendgarmcFitting[iEvent].enu_true;
-    MCEvents[iEvent].isNC = !dunendgarmcFitting[iEvent].rw_isCC;
-    MCEvents[iEvent].nupdg = dunendgarmcFitting[iEvent].nupdg;
-    MCEvents[iEvent].nupdgUnosc = dunendgarmcFitting[iEvent].nupdgUnosc;
+    MCEvents[iEvent].enu_true = dunendgarmcFitting[iEvent].neutrinoenergy_true;
+    MCEvents[iEvent].isNC = !dunendgarmcFitting[iEvent].IsCC;
+    MCEvents[iEvent].nupdg = dunendgarmcFitting[iEvent].neutrinoflavour_interacting;
+    MCEvents[iEvent].nupdgUnosc = dunendgarmcFitting[iEvent].neutrinoflavour_generated;
     MCEvents[iEvent].NominalSample = static_cast<int>(dunendgarmcFitting[iEvent].SampleIndex);
   }
 }
