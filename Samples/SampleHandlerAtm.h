@@ -23,6 +23,7 @@ public:
     kTrueNeutrinoEnergy,
     kRecoHadronEnergy,
     kRecoLeptonEnergy,
+    kRecoY,
     kRecoNeutrinoEnergy,
     kTrueCosZ,
     kRecoCosZ,
@@ -104,7 +105,8 @@ protected:
     {"TrueNeutrinoEnergy",kTrueNeutrinoEnergy},
     {"RecoNeutrinoEnergy",kRecoNeutrinoEnergy},
     {"RecoHadronEnergy",kRecoHadronEnergy},
-    {"RecoLeptonEnergy",kRecoLeptonEnergy},    
+    {"RecoLeptonEnergy",kRecoLeptonEnergy},
+    {"RecoY",kRecoY},    
     {"TrueCosineZ",kTrueCosZ},
     {"RecoCosineZ",kRecoCosZ},
     {"OscillationChannel",kOscChannel},
@@ -118,6 +120,7 @@ protected:
     {kRecoNeutrinoEnergy,"RecoNeutrinoEnergy"},
     {kRecoHadronEnergy,"RecoHadronEnergy"},
     {kRecoLeptonEnergy,"RecoLeptonEnergy"},
+    {kRecoY,"RecoY"},
     {kTrueCosZ,"TrueCosineZ"},    
     {kRecoCosZ,"RecoCosineZ"},
     {kOscChannel,"OscillationChannel"},
@@ -176,7 +179,7 @@ protected:
   std::vector<std::string> AtmFluxParameterNames;  
   
   /// Enum defining CAF->Eigen transformation
-  enum Variables{neutrinoenergy_reco,hadronicenergy_reco,leptonicenergy_reco,coszenith_reco,SampleIndex,neutrinoflavour_interacting,neutrinoflavour_generated,OscChannelIndex,mode,IsCC,Target,neutrinoenergy_true,coszenith_true,weights_flux,MinDistToWall,eventID,nVariables};
+  enum Variables{neutrinoenergy_reco,hadronicenergy_reco,leptonicenergy_reco,inelasticity_reco,coszenith_reco,SampleIndex,neutrinoflavour_interacting,neutrinoflavour_generated,OscChannelIndex,mode,IsCC,Target,neutrinoenergy_true,coszenith_true,weights_flux,MinDistToWall,eventID,nVariables};
 
   std::string InputFileName;
   std::string InputFileDirectory;  
