@@ -1,0 +1,40 @@
+
+SampleHandlerName: "OffAxisND"
+
+SampleType: "OffAxisND"
+
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
+
+BinningFile: "Configs/TutorialConfigs/TutorialBinning.yaml"
+
+
+InputFiles:
+  #CovarianceMatrix: ["bla.root", "NDCovMatrix"]
+
+Samples: ["OffAxis0m_numuCC_numode_true"]
+
+OffAxis0m_numuCC_numode_true:
+  SampleTitle: "OffAxis0m_numuCC_numode_true"
+
+  POT: 1.1e21
+  is_numode: True
+
+  SelectionCuts:
+    - KinematicStr: "IsCC"
+      Bounds: [0.5,1.5]
+
+  Binning:
+    VarStr : ["Enuproxy", "RecoNeutrinoEnergy"]
+    VarBins: [[0, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.2, 3.4, 3.6, 3.8, 4.0, 4.5, 5.0, 6.0, 7, 8, 9, 10], [0, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.2, 3.4, 3.6, 3.8, 4.0, 4.5, 5.0, 6.0, 7, 8, 9, 10]]
+    Uniform: True
+  InputFiles:
+    mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
+    mtuplesuffix: ".root"
+    splineprefix: "/home/abipeake/scratch/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Analysis_splines/Reco_Truesplies/"
+    splinesuffix: ".root"
+
+  SubSamples:
+    - Name: "OnAxis_numuCC_numode_true1"
+      LatexName: "On Axis Numu CC Neutrino Mode"
+      mtuplefile: "CAFv7_0m_*"
+      splinefile: #"OffAxis0m_numuCC_numode_true_splines"

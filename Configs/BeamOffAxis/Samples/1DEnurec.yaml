@@ -7,7 +7,7 @@ MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
 BinningFile: "Configs/TutorialConfigs/TutorialBinning.yaml"
 
 InputFiles:
-CovarianceMatrix: []
+CovarianceMatrix: ["/home/abipeake/scratch/MaCh3DUNE_LukesVersion/MaCh3_DUNE/testcovinv.root"  ,"NDCovMatrix"]
 
 
 Samples: ["OnAxis_numuCC_numode"]
@@ -38,7 +38,7 @@ OnAxis_numuCC_numode:
 
   Binning:
     VarStr : [ "RecoNeutrinoEnergy" ] 
-    VarBins: [[0.00, 0.25, 0.5 ,0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75,4,4.5, 5, 6,7, 8,10.0]]
+    VarBins: [[0,1,2,3,4,5]]
     Uniform: true
 
   InputFiles:

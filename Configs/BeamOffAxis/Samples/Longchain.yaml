@@ -1,0 +1,67 @@
+General:
+
+  OutputFile: "/scratch/abipeake/July2026/Onplusoff_nonadaptive_allpositionsnew2/Onplusoff_nonadaptive_allpositionsnew2_chain_0_job_0.root"
+
+  DUNESamples:
+    #- "/home/abipeake/scratch/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/OffAxis_1DEnureco_0m.yaml"
+    - "/home/abipeake/scratch/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/Samples/OffAxis_1DEnureco_offaxistest.yaml"
+    
+  OscillationParameters: []
+
+  Systematics:
+    XsecCovFile:
+      - "/home/abipeake/scratch/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/templateparams_flat.yaml"
+      #- "/home/abipeake/scratch/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/templateparams_flat_postfit.yaml"
+      - "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Configs/BeamOffAxis/FakeDataSysts.yml"
+    XsecCovName: "xsec_cov"
+
+    XsecStepScale: 0.1
+
+    XsecAtGen: false
+    xsec_var1: "TrueNeutrinoEnergy"
+    xsec_var2: "Enubias"
+    Parameter_fixing_threshold: 1e-50
+
+  Fitter:
+    FitTestLikelihood: false
+
+
+  MCMC:
+    NSteps: 1000000
+    AutoSave: 10000
+    BurnInSteps: 0
+
+  ProcessMCMC: No
+  Seed: 0
+  Debug: Yes
+  ThrowMatrixName: "26540000_xsec_cov_throw_matrix"
+  ThrowMatrixFile: "/home/abipeake/scratch/July2026/Onaxis_fds_cov_flatpriors_noreg2_longerchain/Onaxis_fds_cov_flatpriors_noreg2_longerchain_adaptive_chain_0_job_0.root"
+LLHScan:
+  ParPoints: 50
+
+AdaptionOptions:
+  Settings:
+    StartThrow: 2000000
+    StartUpdate: 500000
+    UpdateStep: 5000
+    EndUpdate: 30000000
+    SaveNIterations: 1
+    OutputFileName: "/scratch/abipeake/July2026/Onplusoff_nonadaptive_allpositionsnew2/Onplusoff_nonadaptive_allpositionsnew2_adaptive_chain_0_job_0.root"
+    UseRobbinsMonroe: True # Do we use this along with adaption 
+    TargetAcceptance: 0.234 # Target acceptanc e rate
+    TotalRobbinsMonroRestarts: 2 # How many times do we restart the Robbins Monro count
+    AcceptanceRateBatchSize: 20000 # How often do we restart the Robbins Monro count
+
+
+  Covariance:
+    xsec_cov:
+      DoAdaption: False
+      UseExternalMatrix: False
+      PrincipalComponentThreshold: 0.995
+
+
+Predictive:
+  PosteriorFiles: "/home/abipeake/scratch/July2026/Onplusoffaxis_useonaxispropsalmatrix_plusbestfitvalues/Onplusoffaxis_useonaxispropsalmatrix_plusbestfitvalues_chain_0_job_0copy.root" #"/home/abipeake/scratch/July2026/OnplusOffAxis_test0.25_longer/OnplusOffAxis_test0.25_longer_chain_0_job_0copy.root" #"/home/abipeake/scratch/July2026/OnplusOffAxis_covmat_fds_longfit/OnplusOffAxis_covmat_fds_longfit_chain_0_job_0.root"
+  FixXSec: false
+  FixFlux: false
+  SamplePosterior: 1000

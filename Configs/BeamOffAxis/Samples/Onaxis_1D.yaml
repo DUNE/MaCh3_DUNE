@@ -53,6 +53,8 @@ OnAxis_numuCC_numode:
       LatexName: "On Axis Numu CC Neutrino Mode"
       mtuplefile: "CAFv7_0m_13*"
       splinefile: ""
+      nutype: 14
+      oscnutype: 14
     # - Name: "OnAxis_numuCC_numode2"
     #   LatexName: "On Axis Numu CC Neutrino Mode"
     #   mtuplefile: "131"

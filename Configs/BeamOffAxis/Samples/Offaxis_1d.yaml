@@ -199,7 +199,7 @@ OffAxis0m_numuCC_numode:
   SubSamples:
     - Name: "OnAxis_numuCC_numode1"
       LatexName: "On Axis Numu CC Neutrino Mode"
-      mtuplefile: "CAFv7_0m_1*"
+      mtuplefile: "CAFv7_0m_130_FHC"
       splinefile: ""
 
 OffAxis1.75m_numuCC_numode:
@@ -226,7 +226,7 @@ OffAxis1.75m_numuCC_numode:
   SubSamples:
     - Name: "OnAxis_numuCC_numode1"
       LatexName: "On Axis Numu CC Neutrino Mode"
-      mtuplefile: "CAFv7_1.75m_*"
+      mtuplefile: "CAFv7_1.75m_00_FHC" #"CAFv7_1.75m_*"
       splinefile: ""
 
 OffAxis2m_numuCC_numode:
@@ -253,7 +253,7 @@ OffAxis2m_numuCC_numode:
   SubSamples:
     - Name: "OffAxis2m_numuCC_numode"
       LatexName: "2 m Off Axis Numu CC Neutrino Mode"
-      mtuplefile: "CAFv7_2m_*"
+      mtuplefile: "CAFv7_2m_subset10"
       splinefile: ""
 
 OffAxis4m_numuCC_numode:
@@ -280,7 +280,7 @@ OffAxis4m_numuCC_numode:
   SubSamples:
     - Name: "OffAxis4m_numuCC_numode"
       LatexName: "4 m Off Axis Numu CC Neutrino Mode"
-      mtuplefile: "CAFv7_4m_*"
+      mtuplefile: "CAFv7_4m_subset12"
       splinefile: ""
 
 
@@ -308,7 +308,7 @@ OffAxis5.75m_numuCC_numode:
   SubSamples:
     - Name: "OffAxis5.75m_numuCC_numode"
       LatexName: "5.75 m Off Axis Numu CC Neutrino Mode"
-      mtuplefile: "CAFv7_5.75m_*"
+      mtuplefile: "CAFv7_5.75m_01_FHC"
       splinefile: ""
 
 OffAxis8m_numuCC_numode:
@@ -335,7 +335,7 @@ OffAxis8m_numuCC_numode:
   SubSamples:
     - Name: "OffAxis8m_numuCC_numode"
       LatexName: "8 m Off Axis Numu CC Neutrino Mode"
-      mtuplefile: "CAFv7_8m_subset*"
+      mtuplefile: "CAFv7_8m_subset10"
       splinefile: ""
 
 OffAxis9.75m_numuCC_numode:
@@ -362,7 +362,7 @@ OffAxis9.75m_numuCC_numode:
   SubSamples:
     - Name: "OffAxis9.75m_numuCC_numode"
       LatexName: "9.75 m Off Axis Numu CC Neutrino Mode"
-      mtuplefile: "CAFv7_9.75m_*"
+      mtuplefile: "CAFv7_9.75m_20_FHC"
       splinefile: ""
 
 OffAxis12m_numuCC_numode:
@@ -389,7 +389,7 @@ OffAxis12m_numuCC_numode:
   SubSamples:
     - Name: "OffAxis12m_numuCC_numode"
       LatexName: "12 m Off Axis Numu CC Neutrino Mode"
-      mtuplefile: "CAFv7_12m_subset*"
+      mtuplefile: "CAFv7_CM_12m_subset08"
       splinefile: ""
 
 OffAxis13.75m_numuCC_numode:

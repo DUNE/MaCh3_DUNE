@@ -1,0 +1,231 @@
+---
+
+SampleHandlerName: "BeamFD"
+SampleType: "BeamFD"
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
+BinningFile: "Configs/TutorialConfigs/TutorialBinning.yaml"
+InputFiles:
+  PrepSplineFile: false
+
+NuOsc:
+  NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
+  EqualBinningPerOscChannel: false
+
+Samples: [
+  "BeamFD_FHC_numu"
+]
+
+BeamFD_FHC_numu:
+  SampleName: "BeamFD_FHC_numu"
+  SampleTitle: "BeamFD_FHC_numu"
+  POT: 1.3628319e+23
+
+  SelectionCuts:
+    - KinematicStr: "TrueXPos"
+      Bounds: [-310.0, 310.0]
+    - KinematicStr: "TrueYPos"
+      Bounds: [-550.0, 550.0]
+    - KinematicStr: "TrueZPos"
+      Bounds: [50.0, 1244.0]
+    - KinematicStr: "RecoNeutrinoEnergy"
+      Bounds: [0.1,1000]
+    - KinematicStr: "TrueNeutrinoEnergy"
+      Bounds: [0.1,1000]
+
+    # - KinematicStr: "CVNNumu"
+    #   Bounds: [0.5, 999]
+
+  Binning:
+    VarStr: "TrueNeutrinoEnergy"
+    Uniform: true
+    BinEdges: [0, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.2, 3.4, 3.6, 3.8, 4.0, 4.5, 5.0, 6.0, 7, 8, 9, 10]
+    Uniform: True
+
+  DUNESampleBools:
+    iselike: no
+    isFHC: 1
+    is_numode: true
+
+  InputFiles:
+    mtupleprefix: "/project/def-deborahh/MaCh3_Inputs/DUNE_2023_FD_CAFs/FD_FHC_ger_"
+    mtuplesuffix: "_numuselec.root"
+    splineprefix: "" #"/project/def-deborahh/MaCh3_Inputs/DUNE_2023_FD_splines/FD_FHC_ger_" #"/project/def-deborahh/MaCh3_Inputs/DUNE_2023_FD_CAFs/FD_FHC_ger_" # "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Splines_foranalysis/OffAxis1D/OffAxis0m_numuCC_numode_splines.root"
+    nutype: 14
+    splinesuffix: "" #"_numuselec_splines.root" #"_numuselec_splines.root"
+
+  SubSamples:
+  - Name: "FHC_numu_x_numu"
+    LatexName: "FHC_numu_x_numu"
+    mtuplefile: "numu_x_numu"
+    splinefile: ""
+    nutype: 14
+    oscnutype: 14
+
+  # - Name: "FHC_nue_x_nue"
+  #   LatexName: "FHC_nue_x_nue"
+  #   mtuplefile: "nue_x_nue"
+  #   splinefile: ""
+  #   nutype: 12
+  #   oscnutype: 12
+
+  # - Name: "FHC_numubar_x_numubar"
+  #   LatexName: "FHC_numubar_x_numubar"
+  #   mtuplefile: "numubar_x_numubar"
+  #   splinefile: ""
+  #   nutype: -14
+  #   oscnutype: -14
+
+  # - Name: "FHC_nuebar_x_nuebar"
+  #   LatexName: "FHC_nuebar_x_nuebar"
+  #   mtuplefile: "nuebar_x_nuebar"
+  #   splinefile: ""
+  #   nutype: -12
+  #   oscnutype: -12
+
+  # - Name: "FHC_numu_x_nue"
+  #   LatexName: "FHC_numu_x_nue"
+  #   mtuplefile: "numu_x_nue"
+  #   splinefile: ""
+  #   nutype: 14
+  #   oscnutype: 12
+
+  # - Name: "FHC_numubar_x_nuebar"
+  #   LatexName: "FHC_numubar_x_nuebar"
+  #   mtuplefile: "numubar_x_nuebar"
+  #   splinefile: ""
+  #   nutype: -14
+  #   oscnutype: -12
+
+  # - Name: "FHC_nue_x_numu"
+  #   LatexName: "FHC_nue_x_numu"
+  #   mtuplefile: "nue_x_numu"
+  #   splinefile: ""
+  #   nutype: 12
+  #   oscnutype: 14
+
+  # - Name: "FHC_nuebar_x_numubar"
+  #   LatexName: "FHC_nuebar_x_numubar"
+  #   mtuplefile: "nuebar_x_numubar"
+  #   splinefile: ""
+  #   nutype: -12
+  #   oscnutype: -14
+
+  # - Name: "FHC_numu_x_nutau"
+  #   LatexName: "FHC_numu_x_nutau"
+  #   mtuplefile: "numu_x_nutau"
+  #   splinefile: ""
+  #   nutype: 14
+  #   oscnutype: 16
+
+  # - Name: "FHC_nue_x_nutau"
+  #   LatexName: "FHC_nue_x_nutau"
+  #   mtuplefile: "nue_x_nutau"
+  #   splinefile: ""
+  #   nutype: 12
+  #   oscnutype: 16
+
+  # - Name: "FHC_numubar_x_nutaubar"
+  #   LatexName: "FHC_numubar_x_nutaubar"
+  #   mtuplefile: "numubar_x_nutaubar"
+  #   splinefile: ""
+  #   nutype: -14
+  #   oscnutype: -16
+
+  # - Name: "FHC_nuebar_x_nutaubar"
+  #   LatexName: "FHC_nuebar_x_nutaubar"
+  #   mtuplefile: "nuebar_x_nutaubar"
+  #   splinefile: ""
+  #   nutype: -12
+  #   oscnutype: -16
+  # SubSamples:
+  #   - Name: "FHC_numu_x_numu"
+  #     LatexName: "FHC_numu_x_numu"
+  #     mtuplefile: "numu_x_numu"
+  #     splinefile: ""
+  #     nutype: 14
+  #     oscnutype: 14
+  #   - Name: "FHC_numu_x_numu"
+  #     LatexName: "FHC_numu_x_numu"
+  #     mtuplefile: "numu_x_numu"
+  #     splinefile: #"numu_x_numu"
+  #     nutype: 14
+  #     oscnutype: -14
+  #   - Name: "FHC_numu_x_numu"
+  #     LatexName: "FHC_numu_x_numu"
+  #     mtuplefile: "numu_x_numu"
+  #     splinefile: #"numu_x_numu"
+  #     nutype: -14
+  #     oscnutype: -14
+  #   - Name: "FHC_numu_x_numu"
+  #     LatexName: "FHC_numu_x_numu"
+  #     mtuplefile: "numu_x_numu"
+  #     splinefile: #"numu_x_numu"
+  #     nutype: -14
+  #     oscnutype: 14
+  #   - Name: "FHC_nue_x_nue"
+  #     LatexName: "FHC_nue_x_nue"
+  #     mtuplefile: ["nue_x_nue"]
+  #     splinefile: "nue_x_nue"
+  #     nutype: 12
+  #     oscnutype: 12
+  #   - Name: "FHC_numubar_x_numubar"
+  #     LatexName: "FHC_numubar_x_numubar"
+  #     mtuplefile: ["numubar_x_numubar"]
+  #     splinefile: #"numubar_x_numubar"
+  #     nutype: -14
+  #     oscnutype: -14
+  #   - Name: "FHC_nuebar_x_nuebar"
+  #     LatexName: "FHC_nuebar_x_nuebar"
+  #     mtuplefile: ["nuebar_x_nuebar"]
+  #     splinefile: #"nuebar_x_nuebar"
+  #     nutype: -12
+  #     oscnutype: -12
+  #   - Name: "FHC_numu_x_nue"
+  #     LatexName: "FHC_numu_x_nue"
+  #     mtuplefile: ["numu_x_nue"]
+  #     splinefile: #"numu_x_nue"
+  #     nutype: 14
+  #     oscnutype: 12
+  #   - Name: "FHC_numubar_x_nuebar"
+  #     LatexName: "FHC_numubar_x_nuebar"
+  #     mtuplefile: ["numubar_x_nuebar"]
+  #     splinefile: #"numubar_x_nuebar"
+  #     nutype: -14
+  #     oscnutype: -12
+  #   - Name: "FHC_nue_x_numu"
+  #     LatexName: "FHC_nue_x_numu"
+  #     mtuplefile: ["nue_x_numu"]
+  #     splinefile: #"nue_x_numu"
+  #     nutype: 12
+  #     oscnutype: 14
+  #   - Name: "FHC_nuebar_x_numubar"
+  #     LatexName: "FHC_nuebar_x_numubar"
+  #     mtuplefile: ["nuebar_x_numubar"]
+  #     splinefile: #"nuebar_x_numubar"
+  #     nutype: -12
+  #     oscnutype: -14
+  #   - Name: "FHC_numu_x_nutau"
+  #     LatexName: "FHC_numu_x_nutau"
+  #     mtuplefile: ["numu_x_nutau"]
+  #     splinefile: #"numu_x_nutau"
+  #     nutype: 14
+  #     oscnutype: 16
+  #   - Name: "FHC_nue_x_nutau"
+  #     LatexName: "FHC_nue_x_nutau"
+  #     mtuplefile: ["nue_x_nutau"]
+  #     splinefile: #"nue_x_nutau"
+  #     nutype: 12
+  #     oscnutype: 16
+  #   - Name: "FHC_numubar_x_nutaubar"
+  #     LatexName: "FHC_numubar_x_nutaubar"
+  #     mtuplefile: ["numubar_x_nutaubar"]
+  #     splinefile: #"numubar_x_nutaubar"
+  #     nutype: -14
+  #     oscnutype: -16
+  #   - Name: "FHC_nuebar_x_nutaubar"
+  #     LatexName: "FHC_nuebar_x_nutaubar"
+  #     mtuplefile: ["nuebar_x_nutaubar"]
+  #     splinefile: #"nuebar_x_nutaubar"
+  #     nutype: -12
+  #     oscnutype: -16
+

@@ -170,9 +170,16 @@ MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
 
 BinningFile: "Configs/TutorialConfigs/TutorialBinning.yaml"
 
+LikelihoodOptions:
+#   #False means you calculate W2 histogram only during first reweight, advisable for Barlow-Beeston
+ # UpdateW2: false
+  #TestStatistic: "Barlow-Beeston"
+
 
 InputFiles:
-  #CovarianceMatrix: ["combined_cov.root", "NDCovMatrix"]
+  CovarianceMatrix: ["/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/covmat_2606detsysts1D/giantcovmat.root", "NDCovMatrix"] #/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Analysis_splines/OnAxis_1Dfit/OffAxis0m_numuCC_numode_splines.root 
+  
+  #CovarianceMatrix: ["/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/covmat_0m_1D/combined_cov.root", "NDCovMatrix" ] #["/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/covmat_0m_1D/combined_cov.root", "NDCovMatrix"]
 
 Samples: ["OffAxis0m_numuCC_numode"] #,"OffAxis1.75m_numuCC_numode"ls ,"OffAxis2m_numuCC_numode","OffAxis4m_numuCC_numode","OffAxis5.75m_numuCC_numode","OffAxis8m_numuCC_numode","OffAxis9.75m_numuCC_numode","OffAxis12m_numuCC_numode","OffAxis13.75m_numuCC_numode","OffAxis16m_numuCC_numode","OffAxis17.75m_numuCC_numode","OffAxis20m_numuCC_numode","OffAxis21.75m_numuCC_numode","OffAxis24m_numuCC_numode","OffAxis25.75m_numuCC_numode","OffAxis26.25m_numuCC_numode","OffAxis28.25m_numuCC_numode","OffAxis28.5m_numuCC_numode"]
 
@@ -187,8 +194,8 @@ OffAxis0m_numuCC_numode:
       Bounds: [0.5,1.5]
 
   Binning:
-    VarStr : [ "RecoNeutrinoEnergy"]
-    VarBins: [[0, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.2, 3.4, 3.6, 3.8, 4.0, 4.5, 5.0, 6.0, 7, 8, 9, 10]] #[[0,0.15,0.35, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.2, 3.4, 3.6, 3.8, 4.0, 4.5, 5.0, 6.0, 7, 8, 9, 10]]
+    VarStr : ["RecoNeutrinoEnergy", "TrueNeutrinoEnergy"] #[ "RecoNeutrinoEnergy"]
+    VarBins: [[0, 0.2, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.575, 1.65, 1.725, 1.8, 1.875, 1.95, 2.025, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3, 3.1, 3.225, 3.35, 3.475, 3.6, 3.75, 3.9, 4.075, 4.25, 4.425, 4.6, 4.8, 5, 5.5, 6, 7, 8, 10] , [0, 0.2, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.575, 1.65, 1.725, 1.8, 1.875, 1.95, 2.025, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3, 3.1, 3.225, 3.35, 3.475, 3.6, 3.75, 3.9, 4.075, 4.25, 4.425, 4.6, 4.8, 5, 5.5, 6, 7, 8, 10] ] #[[0, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.2, 3.4, 3.6, 3.8, 4.0, 4.5, 5.0, 6.0, 7, 8, 9, 10]] #[[0,0.15,0.35, 0.5, 0.6556, 0.8111, 0.9667, 1.1222, 1.2778, 1.4333, 1.5889, 1.7444, 1.9, 2.0556, 2.2111, 2.3667, 2.5222, 2.6778, 2.8333, 2.9889, 3.2, 3.4, 3.6, 3.8, 4.0, 4.5, 5.0, 6.0, 7, 8, 9, 10]]
     Uniform: True
 
   InputFiles:
@@ -200,8 +207,8 @@ OffAxis0m_numuCC_numode:
   SubSamples:
   - Name: "OnAxis_numuCC_numode1"
     LatexName: "On Axis Numu CC Neutrino Mode"
-    mtuplefile: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/CAFv7_0m_*_FHC.root"
-    splinefile: "" # "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Splines_foranalysis/OffAxis1D/OffAxis0m_numuCC_numode_splines.root"
+    mtuplefile: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/CAFv7_0m_13*_FHC.root"
+    splinefile: "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Analysis_splines/OnAxis_1Dfit/OffAxis0m_numuCC_numode_splines.root" # "/scratch/abipeake/MaCh3DUNE_LukesVersion/MaCh3_DUNE/Splines_foranalysis/OffAxis1D/OffAxis0m_numuCC_numode_splines.root"
     nutype: 14
     oscnutype: 14
 

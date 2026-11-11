@@ -78,7 +78,7 @@
 
 #   Binning:
 #     VarStr: [ "TrueNeutrinoEnergy" ]
-#     VarBins: [[0.0,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0,3.2,3.4,3.6,3.8,4.0,4.25,4.5,4.75,5.2,5.4,5.6,5.8,6.0,6.5,7,7.5,8,8.5,9,10]]
+#     VarBins: [[0.0,0, 0.15, 0.325,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0,3.2,3.4,3.6,3.8,4.0,4.25,4.5,4.75,5.2,5.4,5.6,5.8,6.0,6.5,7,7.5,8,8.5,9,10]]
 #     Uniform: true
 
 #   InputFiles:
@@ -105,7 +105,7 @@
 
 #   Binning:
 #     VarStr: [ "TrueNeutrinoEnergy" ]
-#     VarBins: [[0.0,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0,3.2,3.4,3.6,3.8,4.0,4.25,4.5,4.75,5.2,5.4,5.6,5.8,6.0,6.5,7,7.5,8,8.5,9,10]]
+#     VarBins: [[0.0,0, 0.15, 0.325,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0,3.2,3.4,3.6,3.8,4.0,4.25,4.5,4.75,5.2,5.4,5.6,5.8,6.0,6.5,7,7.5,8,8.5,9,10]]
 #     Uniform: true
 
 #   InputFiles:
@@ -133,7 +133,7 @@
 
 #   Binning:
 #     VarStr: [ "TrueNeutrinoEnergy" ]
-#     VarBins: [[0.0,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0,3.2,3.4,3.6,3.8,4.0,4.25,4.5,4.75,5.2,5.4,5.6,5.8,6.0,6.5,7,7.5,8,8.5,9,10]]
+#     VarBins: [[0.0,0, 0.15, 0.325,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0,3.2,3.4,3.6,3.8,4.0,4.25,4.5,4.75,5.2,5.4,5.6,5.8,6.0,6.5,7,7.5,8,8.5,9,10]]
 #     Uniform: true
 
 #   InputFiles:
@@ -172,6 +172,7 @@ BinningFile: "Configs/TutorialConfigs/TutorialBinning.yaml"
 
 NuOsc:
   NuOscConfigFile: "Configs/NuOsc/NuFASTLinear.yaml"
+  EqualBinningPerOscChannel: true
 
 InputFiles:
   #CovarianceMatrix: ["bla.root", "NDCovMatrix"]
@@ -190,7 +191,7 @@ OffAxis0m_numuCC_numode_true:
 
   Binning:
     VarStr : [ "TrueNeutrinoEnergy"]
-    VarBins: [[ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
+    VarBins: [[ 0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
     Uniform: True
   InputFiles:
     mtupleprefix: "/project/rpp-nilic/abipeake/PRISM_CAFs/FHC/"
@@ -216,7 +217,7 @@ OffAxis1.75m_numuCC_numode_true:
 
   Binning:
     VarStr : [ "TrueNeutrinoEnergy" ]
-    VarBins: [[ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
+    VarBins: [[ 0,0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
     Uniform: true
 
   InputFiles:
@@ -224,6 +225,7 @@ OffAxis1.75m_numuCC_numode_true:
     mtuplesuffix: ".root"
     splineprefix: ""
     splinesuffix: ".root"
+    
 
   SubSamples:
     - Name: "OnAxis_numuCC_numode_true1"
@@ -243,7 +245,7 @@ OffAxis2m_numuCC_numode_true:
 
   Binning:
     VarStr: [ "TrueNeutrinoEnergy" ]
-    VarBins: [[ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
+    VarBins: [[ 0, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
     Uniform: true
 
   InputFiles:
@@ -270,7 +272,7 @@ OffAxis4m_numuCC_numode_true:
 
   Binning:
     VarStr: [ "TrueNeutrinoEnergy" ]
-    VarBins: [[ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
+    VarBins: [[ 0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
     Uniform: true
 
   InputFiles:
@@ -298,7 +300,7 @@ OffAxis5.75m_numuCC_numode_true:
 
   Binning:
     VarStr: [ "TrueNeutrinoEnergy" ]
-    VarBins: [[ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
+    VarBins: [[ 0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
     Uniform: true
 
   InputFiles:
@@ -325,7 +327,7 @@ OffAxis8m_numuCC_numode_true:
 
   Binning:
     VarStr: [ "TrueNeutrinoEnergy" ]
-    VarBins: [[ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
+    VarBins: [[ 0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
     Uniform: true
 
   InputFiles:
@@ -352,7 +354,7 @@ OffAxis9.75m_numuCC_numode_true:
 
   Binning:
     VarStr: [ "TrueNeutrinoEnergy" ]
-    VarBins: [[ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
+    VarBins: [[ 0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
     Uniform: true
 
   InputFiles:
@@ -379,7 +381,7 @@ OffAxis12m_numuCC_numode_true:
 
   Binning:
     VarStr: [ "TrueNeutrinoEnergy" ]
-    VarBins: [[ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
+    VarBins: [[ 0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
     Uniform: true
 
   InputFiles:
@@ -406,7 +408,7 @@ OffAxis13.75m_numuCC_numode_true:
 
   Binning:
     VarStr: [ "TrueNeutrinoEnergy" ]
-    VarBins: [[ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
+    VarBins: [[ 0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
     Uniform: true
 
   InputFiles:
@@ -433,7 +435,7 @@ OffAxis16m_numuCC_numode_true:
 
   Binning:
     VarStr: [ "TrueNeutrinoEnergy" ]
-    VarBins: [[ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
+    VarBins: [[ 0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
     Uniform: true
 
   InputFiles:
@@ -460,7 +462,7 @@ OffAxis17.75m_numuCC_numode_true:
 
   Binning:
     VarStr: [ "TrueNeutrinoEnergy" ]
-    VarBins: [[ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
+    VarBins: [[ 0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
     Uniform: true
 
   InputFiles:
@@ -487,7 +489,7 @@ OffAxis20m_numuCC_numode_true:
 
   Binning:
     VarStr: [ "TrueNeutrinoEnergy" ]
-    VarBins: [[ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
+    VarBins: [[ 0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]]
     Uniform: true
 
   InputFiles:
@@ -514,7 +516,7 @@ OffAxis21.75m_numuCC_numode_true:
 
   Binning:
     VarStr: [ "TrueNeutrinoEnergy" ]
-    VarBins: [ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]
+    VarBins: [ 0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]
     Uniform: true
 
   InputFiles:
@@ -541,7 +543,7 @@ OffAxis24m_numuCC_numode_true:
 
   Binning:
     VarStr: [ "TrueNeutrinoEnergy" ]
-    VarBins: [ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]
+    VarBins: [ 0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]
     Uniform: true
 
   InputFiles:
@@ -568,7 +570,7 @@ OffAxis25.75m_numuCC_numode_true:
 
   Binning:
     VarStr: [ "TrueNeutrinoEnergy" ]
-    VarBins: [ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]
+    VarBins: [ 0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]
     Uniform: true
 
   InputFiles:
@@ -595,7 +597,7 @@ OffAxis26.25m_numuCC_numode_true:
 
   Binning:
     VarStr: [ "TrueNeutrinoEnergy" ]
-    VarBins: [ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]
+    VarBins: [ 0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]
     Uniform: true
 
   InputFiles:
@@ -622,7 +624,7 @@ OffAxis28m_numuCC_numode_true:
 
   Binning:
     VarStr: [ "TrueNeutrinoEnergy" ]
-    VarBins: [ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]
+    VarBins: [ 0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]
     Uniform: true
 
   InputFiles:
@@ -649,7 +651,7 @@ OffAxis28.25m_numuCC_numode_true:
 
   Binning:
     VarStr: [ "TrueNeutrinoEnergy" ]
-    VarBins: [ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]
+    VarBins: [ 0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]
     Uniform: true
 
   InputFiles:
@@ -676,7 +678,7 @@ OffAxis28.5m_numuCC_numode_true:
 
   Binning:
     VarStr: [ "TrueNeutrinoEnergy" ]
-    VarBins: [ 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]
+    VarBins: [ 0, 0.15, 0.325, { linspace: { nb: 19, low: 0.5, up: 3.3 } }, 3.5,4,4.5,5,6,7,8,9,10 ]
     Uniform: true
 
   InputFiles:
