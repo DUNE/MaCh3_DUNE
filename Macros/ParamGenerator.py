@@ -44,56 +44,6 @@ bin_width = (Emax - Emin) / NumBins
 
 #for sample in samples:
 
-for (nu_unosc, nu_osc) in channels:
-
-    unosc_name = flavour_names[nu_unosc]
-    osc_name   = flavour_names[nu_osc]
-
-    for b in range(NumBins):
-        E_low = Emin + b * bin_width
-        E_high = E_low + bin_width
-
-            # Format energy nicely for names
-        E_low_str = f"{E_low:.2f}"
-        E_high_str = f"{E_high:.2f}"
-
-            # Construct descriptive parameter name:
-            #   sample_unosc_osc_0.00_0.25
-            # pname = f"{sample}_{unosc_name}_{osc_name}_{E_low_str}_{E_high_str}"
-        pname = f"{unosc_name}_{osc_name}_{E_low_str}_{E_high_str}"
-
-        block = {
-            "Systematic": {
-                "SampleNames": [
-                   "BeamFD"
-                ],
-                "Error": 1.0,
-                "FlatPrior": True,
-                "FixParam": False,
-                "RegParam": True,
-                "KinematicCuts": [
-                    {"TrueNeutrinoEnergy": [round(E_low, 6), round(E_high, 6)]}
-                ],
-                "Names": {
-                    "FancyName": pname,
-                    "ParameterName": pname,
-                },
-                "NeutrinoFlavourUnosc": [nu_unosc],
-                "NeutrinoFlavour": [nu_osc],
-                "ParameterBounds": [0.0, 2.0],
-                "ParameterGroup": "EParam",
-                "ParameterValues": {
-                    "Generated": 1.0,
-                    "PreFitValue": 1.0,
-                },
-                "StepScale": {"MCMC": 1.0},
-                "Type": "Norm",
-            }
-        }
-        
-
-        systematics.append(block)
-
 # for (nu_unosc, nu_osc) in channels:
 
 #     unosc_name = flavour_names[nu_unosc]
@@ -103,16 +53,66 @@ for (nu_unosc, nu_osc) in channels:
 #         E_low = Emin + b * bin_width
 #         E_high = E_low + bin_width
 
-#         # Format energy nicely for names
+#             # Format energy nicely for names
 #         E_low_str = f"{E_low:.2f}"
 #         E_high_str = f"{E_high:.2f}"
 
-#         # Construct descriptive parameter name:
-#         #   sample_unosc_osc_0.00_0.25
-#         # pname = f"{sample}_{unosc_name}_{osc_name}_{E_low_str}_{E_high_str}"
+#             # Construct descriptive parameter name:
+#             #   sample_unosc_osc_0.00_0.25
+#             # pname = f"{sample}_{unosc_name}_{osc_name}_{E_low_str}_{E_high_str}"
 #         pname = f"{unosc_name}_{osc_name}_{E_low_str}_{E_high_str}"
 
-#         systematics.append(f"{pname}")
+#         block = {
+#             "Systematic": {
+#                 "SampleNames": [
+#                    "BeamFD"
+#                 ],
+#                 "Error": 1.0,
+#                 "FlatPrior": True,
+#                 "FixParam": False,
+#                 "RegParam": True,
+#                 "KinematicCuts": [
+#                     {"TrueNeutrinoEnergy": [round(E_low, 6), round(E_high, 6)]}
+#                 ],
+#                 "Names": {
+#                     "FancyName": pname,
+#                     "ParameterName": pname,
+#                 },
+#                 "NeutrinoFlavourUnosc": [nu_unosc],
+#                 "NeutrinoFlavour": [nu_osc],
+#                 "ParameterBounds": [0.0, 2.0],
+#                 "ParameterGroup": "EParam",
+#                 "ParameterValues": {
+#                     "Generated": 1.0,
+#                     "PreFitValue": 1.0,
+#                 },
+#                 "StepScale": {"MCMC": 1.0},
+#                 "Type": "Norm",
+#             }
+#         }
+        
+
+#         systematics.append(block)
+
+for (nu_unosc, nu_osc) in channels:
+
+    unosc_name = flavour_names[nu_unosc]
+    osc_name   = flavour_names[nu_osc]
+
+    for b in range(NumBins):
+        E_low = Emin + b * bin_width
+        E_high = E_low + bin_width
+
+        # Format energy nicely for names
+        E_low_str = f"{E_low:.2f}"
+        E_high_str = f"{E_high:.2f}"
+
+        # Construct descriptive parameter name:
+        #   sample_unosc_osc_0.00_0.25
+        # pname = f"{sample}_{unosc_name}_{osc_name}_{E_low_str}_{E_high_str}"
+        pname = f"{unosc_name}_{osc_name}_{E_low_str}_{E_high_str}"
+
+        systematics.append(f"{pname}")
 
 # -----------------------------
 # Write YAML

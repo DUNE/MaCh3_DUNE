@@ -16,14 +16,14 @@
 
 const int NParams = 480; // Number of energy normalisation parameters
 
-const int NEBins = 40; // Number of energy bins per channel
+const int NEBins = 80; // Number of energy bins per channel
 const double EMin = 0.0;
-const double EMax = 10.0;
+const double EMax = 20.0;
 const double BinWidth = (EMax - EMin) / NEBins;
 
-const int NProbBins = 200; // Number of probability bins in the colour plots
+const int NProbBins = 1000; // Number of probability bins in the colour plots
 const double ProbMin = 0.0;
-const double ProbMax = 0.2;
+const double ProbMax = 2.0;
 const double ProbBinWidth = (ProbMax - ProbMin)/ NProbBins;
 
 // ############## INITIAL VECTORS/MAPPINGS ############## //
@@ -33,7 +33,7 @@ std::vector<double> NormParams(NParams, 0.0); // Creating empty vector to store 
 std::map<int, std::string> NuTypes = {{12, "nue"}, {14, "numu"}, {16, "nutau"}, {-12, "nuebar"}, {-14, "numubar"}, {-16, "nutaubar"}}; // Creating map between neutrino "value" and "name"
 std::vector<std::pair<int,int>> OscChans = {{14, 14}, {12, 12}, {-14, -14}, {-12, -12}, {14, 12}, {-14, -12}, {12, 14}, {-12, -14}, {14, 16}, {12, 16}, {-14, -16}, {-12, -16}}; // Creating all oscillation channels as pairs of neutrino "value"
 
-std::vector<std::string> SampleTitles = {"FHCs"};
+std::vector<std::string> SampleTitles = {"AllSamples"};
 //std::vector<std::string> SampleTitles = {"FHC_numu", "FHC_nue", "RHC_numu", "RHC_nue"}; // Creating vector of sample titles
 
 std::vector<TH2D*> EventHistos; // Creating empty vector to store histograms
@@ -60,7 +60,7 @@ void SetupBinning(){
 
 // ############## READING DATA AND CREATING PLOTS TO PRINT ############## //
 
-void NormaliseAndPlot(TH2D* Histo, TString HistoName, int PlotEntries) // Create a script to column normalise and then plot a given histogram with a given name
+void NormaliseAndPlot(TH2D* Histo, TString HistoName, int PlotEntries, TString File_To_Plot) // Create a script to column normalise and then plot a given histogram with a given name
 {
     for (int x = 1; x <= Histo->GetNbinsX(); x++) { // For all energy bins, avoiding underflow bin
         bool FixedCol = true; // Assume a column is for a fixed parameter to start
@@ -87,25 +87,30 @@ void NormaliseAndPlot(TH2D* Histo, TString HistoName, int PlotEntries) // Create
         }
     }
 
-    auto Canvas = new TCanvas(); // Create a canvas to plot
+    std::string HistNam = HistoName.Data();
+    std::string FileName = File_To_Plot.Data();
+    std::string PlotFile = FileName.substr(0, FileName.size() - 5);
+    TCanvas *Canvas = new TCanvas(HistNam.c_str(),"Overlay"); // Create a canvas to plot
     Canvas->Draw(); // Draw the canvas
     Canvas->cd();
-    //Canvas->SetLogy(); // Set log scale
+    if(HistoName.EndsWith("mu)") || HistoName.EndsWith("mubar)")) Canvas->SetLogy();
     Histo->Draw("COLZ"); // Draw colour scale histogram
-    Histo->GetXaxis()->SetTitle("Reconstructed Neutrino Energy (GeV)"); // Setting axes properties
-    //Histo->GetXaxis()->SetRangeUser(0, 10);
+    Histo->GetXaxis()->SetTitle("True Neutrino Energy (GeV)"); // Setting axes properties
+    Histo->GetXaxis()->SetRangeUser(0, 10);
     Histo->GetYaxis()->SetTitle("Oscillation Probability");
+    if(HistoName.EndsWith("e)") || HistoName.EndsWith("ebar)")) Histo->GetYaxis()->SetRangeUser(0, 0.2);
     Histo->GetZaxis()->SetTitle(("Number of Events (Total = " + std::to_string(PlotEntries) + ")").c_str());
     Histo->GetZaxis()->SetTitleOffset(1.5);
     Histo->SetStats(0); // Cosmetics of plot
     Canvas->SetRightMargin(0.15);
     Canvas->Update();
-    Canvas->Print(HistoName + "OscProbCol.pdf"); // Print colour histogram to pdf
+    Canvas->Print((PlotFile + HistNam + "OscProbCol.png").c_str()); // Print colour histogram to pdf
+    //Canvas->Print(HistoName + "OscProbCol.root");
 }
 
 // ############## LOADING BIN SCHEME, DATA, AND PLOTTING ############## //
 
-void ChanColPlot(TString File_To_Plot, int Chan_To_Plot) // Create a script to produce colour plots for each oscillation channel from a given root file
+void ChanColPlot(TString File_To_Plot)//, int Chan_To_Plot) // Create a script to produce colour plots for each oscillation channel from a given root file
 {
     SetupBinning();
 
@@ -126,7 +131,7 @@ void ChanColPlot(TString File_To_Plot, int Chan_To_Plot) // Create a script to p
         for (const auto& channel : OscChans) { // For each channel in our pairing of oscillation channels
             std::string UnoscName = NuTypes[channel.first]; // Unoscillated neutrino type is first value in pairing
             std::string OscName   = NuTypes[channel.second]; // Oscillated neutrino type is second value in pairing
-            std::string HistName = sample + "(" + UnoscName + "_to_" + OscName + ")"; // Create name for each histogram using sample name and oscillation channel
+            std::string HistName = "(" + UnoscName + "_to_" + OscName + ")"; // Create name for each histogram using sample name and oscillation channel
             EventHistos.push_back(new TH2D(HistName.c_str(), ("Oscillation Probability for " + HistName).c_str(), NEBins, BinLowEdges.data(), NProbBins, ProbBinLowEdges.data())); // Create histogram for each channel in each sample
         }
     }
@@ -135,12 +140,12 @@ void ChanColPlot(TString File_To_Plot, int Chan_To_Plot) // Create a script to p
 
     const int BurnInCut = 0.25 * MCEntries; // Number of steps to cut out for burn in
     const int PlotEntries = MCEntries - BurnInCut; // Number of steps to plot after burn in
-    const int StartParam = Chan_To_Plot * NEBins;
-    const int EndParam = (Chan_To_Plot + 1) * NEBins;
+    //const int StartParam = Chan_To_Plot * NEBins;
+    //const int EndParam = (Chan_To_Plot + 1) * NEBins;
 
     for (Long64_t i = BurnInCut; i < MCEntries; i++) { // Start at some burn-in cut, run for rest of entries
         Posteriors->GetEntry(i); // Get the relevant information
-        for (int p = StartParam; p < EndParam; p++) { // For each parameter
+        for (int p = 0; p < 960; p++) { // For each parameter
             int k = p % NEBins; // Find the value of param index modulo 40 (each value corresponds to a different energy bin (40))
             int g = p / NEBins; // Find the integer division of param index / 48 (each value corresponds to a different histogram (48))
             EventHistos[g]->Fill(BinCentres[k], NormParams[p]); // Fill each histogram with the relevant parameter from the desired energy bin
@@ -148,12 +153,15 @@ void ChanColPlot(TString File_To_Plot, int Chan_To_Plot) // Create a script to p
     }
 
     // for (auto* IndChan : EventHistos){ // For each histogram in our list
-    //     NormaliseAndPlot(IndChan, IndChan->GetName()); // Normalise by column and plot, getting names as required
+    //     NormaliseAndPlot(IndChan, IndChan->GetName(), PlotEntries); // Normalise by column and plot, getting names as required
     // }
 
     // 0 for numu->numu, 2 for numubar->numubar, 4 for numu->nue, 5 for numubar->nuebar
 
-    NormaliseAndPlot(EventHistos[Chan_To_Plot], EventHistos[Chan_To_Plot]->GetName(), PlotEntries); // FHC_numu: numu -> numu
+    NormaliseAndPlot(EventHistos[0], EventHistos[0]->GetName(), PlotEntries, File_To_Plot);
+    NormaliseAndPlot(EventHistos[2], EventHistos[2]->GetName(), PlotEntries, File_To_Plot);
+    NormaliseAndPlot(EventHistos[4], EventHistos[4]->GetName(), PlotEntries, File_To_Plot);
+    NormaliseAndPlot(EventHistos[5], EventHistos[5]->GetName(), PlotEntries, File_To_Plot); // FHC_numu: numu -> numu
 }
 
 // ###################################################################### //

@@ -62,8 +62,8 @@ void ChanOnlyParams()
 
 void BinVals() // Create a script to print ratio of bins (params) for specific criteria
 {
-    TFile* Osc = TFile::Open("EventRates/CCIndChanOsc.root"); // Loading in histograms
-    TFile* Unosc = TFile::Open("EventRates/CCIndChanUnosc.root"); // Note that any "Reweight" file has the energy normalisation parameters already applied
+    TFile* Osc = TFile::Open("EventRates/AllSampleTwentyTrueIndChanOsc.root"); // Loading in histograms
+    TFile* Unosc = TFile::Open("EventRates/AllSampleTwentyTrueIndChanUnosc.root"); // Note that any "Reweight" file has the energy normalisation parameters already applied
 
     std::ofstream out("Macros/ParamsOutput.txt"); // Creating output text file
 
@@ -71,7 +71,6 @@ void BinVals() // Create a script to print ratio of bins (params) for specific c
     TKey* key; 
     auto KeyIndex = 0.0;
     while ((key = (TKey*)next())) { 
-        if (KeyIndex == 24.0) break;
         KeyIndex++;
         auto HistoOsc = Osc->Get<TH1D>(key->GetName()); // Get titles of individual histograms
         auto HistoUnosc = Unosc->Get<TH1D>(key->GetName());
@@ -86,14 +85,14 @@ void BinVals() // Create a script to print ratio of bins (params) for specific c
             if(BinSizeUnosc == 0) { // If no unoscillated data, set value to 0, print output statement
                 Param = 0;
                 Params.push_back(Param);
-                //out << Param << "\n";
-                out << "Param in range " << HistoOsc->GetXaxis()->GetBinLowEdge(j) << " to " << HistoOsc->GetXaxis()->GetBinUpEdge(j) << " has a value of " << Param << " where the ratio is given by " << BinSizeOsc << " divided by " << BinSizeUnosc << "\n";
+                out << Param << "\n";
+                //out << "Param in range " << HistoOsc->GetXaxis()->GetBinLowEdge(j) << " to " << HistoOsc->GetXaxis()->GetBinUpEdge(j) << " has a value of " << Param << " where the ratio is given by " << BinSizeOsc << " divided by " << BinSizeUnosc << "\n";
             }
             else { // If unoscillated data, find ratio, print output statement
                 Param = BinSizeOsc / BinSizeUnosc;
                 Params.push_back(Param);
-                out << "Param in range " << HistoOsc->GetXaxis()->GetBinLowEdge(j) << " to " << HistoOsc->GetXaxis()->GetBinUpEdge(j) << " has a value of " << Param << " where the ratio is given by " << BinSizeOsc << " divided by " << BinSizeUnosc << "\n";
-                //out << Param << "\n";
+                //out << "Param in range " << HistoOsc->GetXaxis()->GetBinLowEdge(j) << " to " << HistoOsc->GetXaxis()->GetBinUpEdge(j) << " has a value of " << Param << " where the ratio is given by " << BinSizeOsc << " divided by " << BinSizeUnosc << "\n";
+                out << Param << "\n";
                 //out << "Param " << j << " has a value of " << Param << "\n";
                 //out << "Param in range " << HistoOsc->GetXaxis()->GetBinLowEdge(j) << " to " << HistoOsc->GetXaxis()->GetBinUpEdge(j) << " has a value of " << Param << "\n";
                 //out << Param << "\n";
@@ -110,7 +109,7 @@ void BinVals() // Create a script to print ratio of bins (params) for specific c
 
 void IntegralComp() // Create a script to print ratio of integrals for two histograms
 {
-    TFile* Osc = TFile::Open("EventRates/CCIndChanOsc.root"); // Loading in histograms
+    TFile* Osc = TFile::Open("EventRates/RHCsTwentyOsc.root"); // Loading in histograms
     //TFile* Unosc = TFile::Open("CCIndChanReweight.root"); // Note that any "Reweight" file has the energy normalisation parameters already applied
 
     std::ofstream out("IntComp.txt"); // Creating output text file
