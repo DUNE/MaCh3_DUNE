@@ -214,6 +214,7 @@ Systematics:
     - ND_*
     Error: 0.125273361158
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.0
@@ -450,6 +451,7 @@ Systematics:
     - ND_*
     Error: 0.0926120290447
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.5
@@ -686,6 +688,7 @@ Systematics:
     - ND_*
     Error: 0.0804767043985
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.0
@@ -922,6 +925,7 @@ Systematics:
     - ND_*
     Error: 0.0774468678958
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.5
@@ -1158,6 +1162,7 @@ Systematics:
     - ND_*
     Error: 0.0801585961159
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.0
@@ -1394,6 +1399,7 @@ Systematics:
     - ND_*
     Error: 0.0767549557896
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.5
@@ -1630,6 +1636,7 @@ Systematics:
     - ND_*
     Error: 0.0738976671906
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.0
@@ -1866,6 +1873,7 @@ Systematics:
     - ND_*
     Error: 0.0753765092052
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.5
@@ -2102,6 +2110,7 @@ Systematics:
     - ND_*
     Error: 0.0754754390019
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.0
@@ -2338,6 +2347,7 @@ Systematics:
     - ND_*
     Error: 0.0789796908757
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.5
@@ -2574,6 +2584,7 @@ Systematics:
     - ND_*
     Error: 0.0898401873206
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.0
@@ -2810,6 +2821,7 @@ Systematics:
     - ND_*
     Error: 0.0883663024722
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.5
@@ -3046,6 +3058,7 @@ Systematics:
     - ND_*
     Error: 0.0863581148799
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 6.0
@@ -3282,6 +3295,7 @@ Systematics:
     - ND_*
     Error: 0.0957909278003
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 7.0
@@ -3518,6 +3532,7 @@ Systematics:
     - ND_*
     Error: 0.0853907781146
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 8.0
@@ -3754,6 +3769,7 @@ Systematics:
     - ND_*
     Error: 0.118445839742
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 12.0
@@ -3990,6 +4006,7 @@ Systematics:
     - ND_*
     Error: 0.175350220656
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 16.0
@@ -4226,6 +4243,7 @@ Systematics:
     - ND_*
     Error: 0.185646424801
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 20.0
@@ -4462,6 +4480,7 @@ Systematics:
     - ND_*
     Error: 0.347006205066
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 40.0
@@ -4698,6 +4717,7 @@ Systematics:
     - ND_*
     Error: 0.153199620714
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.0
@@ -4934,6 +4954,7 @@ Systematics:
     - ND_*
     Error: 0.104531334342
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.5
@@ -5170,6 +5191,7 @@ Systematics:
     - ND_*
     Error: 0.103605563829
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.0
@@ -5406,6 +5428,7 @@ Systematics:
     - ND_*
     Error: 0.102497513369
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.5
@@ -5642,6 +5665,7 @@ Systematics:
     - ND_*
     Error: 0.102943383631
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.0
@@ -5878,6 +5902,7 @@ Systematics:
     - ND_*
     Error: 0.101857930208
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.5
@@ -6114,6 +6139,7 @@ Systematics:
     - ND_*
     Error: 0.0985017454341
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.0
@@ -6350,6 +6376,7 @@ Systematics:
     - ND_*
     Error: 0.10266107887
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.5
@@ -6586,6 +6613,7 @@ Systematics:
     - ND_*
     Error: 0.0950780750528
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.0
@@ -6822,6 +6850,7 @@ Systematics:
     - ND_*
     Error: 0.0992667829062
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.5
@@ -7058,6 +7087,7 @@ Systematics:
     - ND_*
     Error: 0.106433821513
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.0
@@ -7294,6 +7324,7 @@ Systematics:
     - ND_*
     Error: 0.102909691851
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.5
@@ -7530,6 +7561,7 @@ Systematics:
     - ND_*
     Error: 0.0994042176524
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 6.0
@@ -7766,6 +7798,7 @@ Systematics:
     - ND_*
     Error: 0.107849552145
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 7.0
@@ -8002,6 +8035,7 @@ Systematics:
     - ND_*
     Error: 0.132078471898
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 8.0
@@ -8238,6 +8272,7 @@ Systematics:
     - ND_*
     Error: 0.15924116036
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 12.0
@@ -8474,6 +8509,7 @@ Systematics:
     - ND_*
     Error: 0.22479737126
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 16.0
@@ -8710,6 +8746,7 @@ Systematics:
     - ND_*
     Error: 0.215033791076
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 20.0
@@ -8946,6 +8983,7 @@ Systematics:
     - ND_*
     Error: 0.594284639504
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 40.0
@@ -9182,6 +9220,7 @@ Systematics:
     - ND_*
     Error: 0.0883315241115
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.0
@@ -9418,6 +9457,7 @@ Systematics:
     - ND_*
     Error: 0.0709513400342
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.0
@@ -9654,6 +9694,7 @@ Systematics:
     - ND_*
     Error: 0.0795096818781
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.0
@@ -9890,6 +9931,7 @@ Systematics:
     - ND_*
     Error: 0.0913606273956
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 6.0
@@ -10126,6 +10168,7 @@ Systematics:
     - ND_*
     Error: 0.1145125855
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 8.0
@@ -10362,6 +10405,7 @@ Systematics:
     - ND_*
     Error: 0.148054923254
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 10.0
@@ -10598,6 +10642,7 @@ Systematics:
     - ND_*
     Error: 0.255360042724
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 20.0
@@ -10834,6 +10879,7 @@ Systematics:
     - ND_*
     Error: 0.108389443607
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.0
@@ -11070,6 +11116,7 @@ Systematics:
     - ND_*
     Error: 0.0983768747454
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.0
@@ -11306,6 +11353,7 @@ Systematics:
     - ND_*
     Error: 0.114267462176
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.0
@@ -11542,6 +11590,7 @@ Systematics:
     - ND_*
     Error: 0.137986953478
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 6.0
@@ -11778,6 +11827,7 @@ Systematics:
     - ND_*
     Error: 0.152545464064
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 8.0
@@ -12014,6 +12064,7 @@ Systematics:
     - ND_*
     Error: 0.160069302489
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 10.0
@@ -12250,6 +12301,7 @@ Systematics:
     - ND_*
     Error: 0.209431444838
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 20.0
@@ -12486,6 +12538,7 @@ Systematics:
     - ND_*
     Error: 0.1612193214
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.0
@@ -12722,6 +12775,7 @@ Systematics:
     - ND_*
     Error: 0.107714786765
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.5
@@ -12958,6 +13012,7 @@ Systematics:
     - ND_*
     Error: 0.0958234513258
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.0
@@ -13194,6 +13249,7 @@ Systematics:
     - ND_*
     Error: 0.0999305646731
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.5
@@ -13430,6 +13486,7 @@ Systematics:
     - ND_*
     Error: 0.102185750196
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.0
@@ -13666,6 +13723,7 @@ Systematics:
     - ND_*
     Error: 0.10312950082
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.5
@@ -13902,6 +13960,7 @@ Systematics:
     - ND_*
     Error: 0.106154976254
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.0
@@ -14138,6 +14197,7 @@ Systematics:
     - ND_*
     Error: 0.108834546614
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.5
@@ -14374,6 +14434,7 @@ Systematics:
     - ND_*
     Error: 0.111352585732
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.0
@@ -14610,6 +14671,7 @@ Systematics:
     - ND_*
     Error: 0.110317302578
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.5
@@ -14846,6 +14908,7 @@ Systematics:
     - ND_*
     Error: 0.10791622741
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.0
@@ -15082,6 +15145,7 @@ Systematics:
     - ND_*
     Error: 0.105977079735
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.5
@@ -15318,6 +15382,7 @@ Systematics:
     - ND_*
     Error: 0.126040076925
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 6.0
@@ -15554,6 +15619,7 @@ Systematics:
     - ND_*
     Error: 0.123444801438
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 7.0
@@ -15790,6 +15856,7 @@ Systematics:
     - ND_*
     Error: 0.116662604907
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 8.0
@@ -16026,6 +16093,7 @@ Systematics:
     - ND_*
     Error: 0.146041746228
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 12.0
@@ -16262,6 +16330,7 @@ Systematics:
     - ND_*
     Error: 0.18290662659
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 16.0
@@ -16498,6 +16567,7 @@ Systematics:
     - ND_*
     Error: 0.194623999144
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 20.0
@@ -16734,6 +16804,7 @@ Systematics:
     - ND_*
     Error: 0.365017881095
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 40.0
@@ -16970,6 +17041,7 @@ Systematics:
     - ND_*
     Error: 0.120635257733
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.0
@@ -17206,6 +17278,7 @@ Systematics:
     - ND_*
     Error: 0.0888025452482
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.5
@@ -17442,6 +17515,7 @@ Systematics:
     - ND_*
     Error: 0.0777255922407
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.0
@@ -17678,6 +17752,7 @@ Systematics:
     - ND_*
     Error: 0.0740336925141
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.5
@@ -17914,6 +17989,7 @@ Systematics:
     - ND_*
     Error: 0.075020282706
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.0
@@ -18150,6 +18226,7 @@ Systematics:
     - ND_*
     Error: 0.0698300677849
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.5
@@ -18386,6 +18463,7 @@ Systematics:
     - ND_*
     Error: 0.0650617530281
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.0
@@ -18622,6 +18700,7 @@ Systematics:
     - ND_*
     Error: 0.0652173360008
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.5
@@ -18858,6 +18937,7 @@ Systematics:
     - ND_*
     Error: 0.067013857191
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.0
@@ -19094,6 +19174,7 @@ Systematics:
     - ND_*
     Error: 0.072106899348
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.5
@@ -19330,6 +19411,7 @@ Systematics:
     - ND_*
     Error: 0.0822802356682
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.0
@@ -19566,6 +19648,7 @@ Systematics:
     - ND_*
     Error: 0.0779165821275
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.5
@@ -19802,6 +19885,7 @@ Systematics:
     - ND_*
     Error: 0.0801278105923
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 6.0
@@ -20038,6 +20122,7 @@ Systematics:
     - ND_*
     Error: 0.0983192374144
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 7.0
@@ -20274,6 +20359,7 @@ Systematics:
     - ND_*
     Error: 0.0900200657746
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 8.0
@@ -20510,6 +20596,7 @@ Systematics:
     - ND_*
     Error: 0.134035329171
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 12.0
@@ -20746,6 +20833,7 @@ Systematics:
     - ND_*
     Error: 0.210272444664
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 16.0
@@ -20982,6 +21070,7 @@ Systematics:
     - ND_*
     Error: 0.213486017244
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 20.0
@@ -21218,6 +21307,7 @@ Systematics:
     - ND_*
     Error: 0.649167360483
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 40.0
@@ -21454,6 +21544,7 @@ Systematics:
     - ND_*
     Error: 0.108367353345
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.0
@@ -21690,6 +21781,7 @@ Systematics:
     - ND_*
     Error: 0.0930550373398
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.0
@@ -21926,6 +22018,7 @@ Systematics:
     - ND_*
     Error: 0.114330236084
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.0
@@ -22162,6 +22255,7 @@ Systematics:
     - ND_*
     Error: 0.128955833776
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 6.0
@@ -22398,6 +22492,7 @@ Systematics:
     - ND_*
     Error: 0.15951467851
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 8.0
@@ -22634,6 +22729,7 @@ Systematics:
     - ND_*
     Error: 0.161724572019
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 10.0
@@ -22870,6 +22966,7 @@ Systematics:
     - ND_*
     Error: 0.236872655124
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 20.0
@@ -23106,6 +23203,7 @@ Systematics:
     - ND_*
     Error: 0.087955395682
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.0
@@ -23342,6 +23440,7 @@ Systematics:
     - ND_*
     Error: 0.0691974666559
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.0
@@ -23578,6 +23677,7 @@ Systematics:
     - ND_*
     Error: 0.0844609146932
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.0
@@ -23814,6 +23914,7 @@ Systematics:
     - ND_*
     Error: 0.128874841305
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 6.0
@@ -24050,6 +24151,7 @@ Systematics:
     - ND_*
     Error: 0.132257068909
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 8.0
@@ -24286,6 +24388,7 @@ Systematics:
     - ND_*
     Error: 0.148582318316
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 10.0
@@ -24522,6 +24625,7 @@ Systematics:
     - ND_*
     Error: 0.193734459966
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 20.0
@@ -24758,6 +24862,7 @@ Systematics:
     - FD_*
     Error: 0.123224219401
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.0
@@ -24994,6 +25099,7 @@ Systematics:
     - FD_*
     Error: 0.0919918430785
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.5
@@ -25230,6 +25336,7 @@ Systematics:
     - FD_*
     Error: 0.0802415242014
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.0
@@ -25466,6 +25573,7 @@ Systematics:
     - FD_*
     Error: 0.0772539480878
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.5
@@ -25702,6 +25810,7 @@ Systematics:
     - FD_*
     Error: 0.0784638953031
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.0
@@ -25938,6 +26047,7 @@ Systematics:
     - FD_*
     Error: 0.0785373241597
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.5
@@ -26174,6 +26284,7 @@ Systematics:
     - FD_*
     Error: 0.0753665087782
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.0
@@ -26410,6 +26521,7 @@ Systematics:
     - FD_*
     Error: 0.0760384558939
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.5
@@ -26646,6 +26758,7 @@ Systematics:
     - FD_*
     Error: 0.0756908107654
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.0
@@ -26882,6 +26995,7 @@ Systematics:
     - FD_*
     Error: 0.0776430657652
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.5
@@ -27118,6 +27232,7 @@ Systematics:
     - FD_*
     Error: 0.0862654553181
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.0
@@ -27354,6 +27469,7 @@ Systematics:
     - FD_*
     Error: 0.08898115163
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.5
@@ -27590,6 +27706,7 @@ Systematics:
     - FD_*
     Error: 0.0840024699312
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 6.0
@@ -27826,6 +27943,7 @@ Systematics:
     - FD_*
     Error: 0.0950422221091
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 7.0
@@ -28062,6 +28180,7 @@ Systematics:
     - FD_*
     Error: 0.0880469563124
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 8.0
@@ -28298,6 +28417,7 @@ Systematics:
     - FD_*
     Error: 0.111680294472
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 12.0
@@ -28534,6 +28654,7 @@ Systematics:
     - FD_*
     Error: 0.166335506531
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 16.0
@@ -28770,6 +28891,7 @@ Systematics:
     - FD_*
     Error: 0.175355411847
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 20.0
@@ -29006,6 +29128,7 @@ Systematics:
     - FD_*
     Error: 0.322609599348
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 40.0
@@ -29242,6 +29365,7 @@ Systematics:
     - FD_*
     Error: 0.148567101318
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.0
@@ -29478,6 +29602,7 @@ Systematics:
     - FD_*
     Error: 0.102081519068
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.5
@@ -29714,6 +29839,7 @@ Systematics:
     - FD_*
     Error: 0.101315339656
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.0
@@ -29950,6 +30076,7 @@ Systematics:
     - FD_*
     Error: 0.103906099616
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.5
@@ -30186,6 +30313,7 @@ Systematics:
     - FD_*
     Error: 0.105285456989
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.0
@@ -30422,6 +30550,7 @@ Systematics:
     - FD_*
     Error: 0.10071126015
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.5
@@ -30658,6 +30787,7 @@ Systematics:
     - FD_*
     Error: 0.10107213865
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.0
@@ -30894,6 +31024,7 @@ Systematics:
     - FD_*
     Error: 0.102252045769
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.5
@@ -31130,6 +31261,7 @@ Systematics:
     - FD_*
     Error: 0.098317152216
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.0
@@ -31366,6 +31498,7 @@ Systematics:
     - FD_*
     Error: 0.0977261159832
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.5
@@ -31602,6 +31735,7 @@ Systematics:
     - FD_*
     Error: 0.105837848757
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.0
@@ -31838,6 +31972,7 @@ Systematics:
     - FD_*
     Error: 0.114467628591
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.5
@@ -32074,6 +32209,7 @@ Systematics:
     - FD_*
     Error: 0.0998471512565
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 6.0
@@ -32310,6 +32446,7 @@ Systematics:
     - FD_*
     Error: 0.106740781753
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 7.0
@@ -32546,6 +32683,7 @@ Systematics:
     - FD_*
     Error: 0.120723958605
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 8.0
@@ -32782,6 +32920,7 @@ Systematics:
     - FD_*
     Error: 0.161174300575
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 12.0
@@ -33018,6 +33157,7 @@ Systematics:
     - FD_*
     Error: 0.226198470406
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 16.0
@@ -33254,6 +33394,7 @@ Systematics:
     - FD_*
     Error: 0.218724600379
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 20.0
@@ -33490,6 +33631,7 @@ Systematics:
     - FD_*
     Error: 0.876585568248
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 40.0
@@ -33726,6 +33868,7 @@ Systematics:
     - FD_*
     Error: 0.084932612534
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.0
@@ -33962,6 +34105,7 @@ Systematics:
     - FD_*
     Error: 0.0679864204842
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.0
@@ -34198,6 +34342,7 @@ Systematics:
     - FD_*
     Error: 0.075441973537
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.0
@@ -34434,6 +34579,7 @@ Systematics:
     - FD_*
     Error: 0.0853839574578
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 6.0
@@ -34670,6 +34816,7 @@ Systematics:
     - FD_*
     Error: 0.108801713212
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 8.0
@@ -34906,6 +35053,7 @@ Systematics:
     - FD_*
     Error: 0.139492097845
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 10.0
@@ -35142,6 +35290,7 @@ Systematics:
     - FD_*
     Error: 0.226805353458
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 20.0
@@ -35378,6 +35527,7 @@ Systematics:
     - FD_*
     Error: 0.10146513306
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.0
@@ -35614,6 +35764,7 @@ Systematics:
     - FD_*
     Error: 0.0930336214323
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.0
@@ -35850,6 +36001,7 @@ Systematics:
     - FD_*
     Error: 0.112741652929
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.0
@@ -36086,6 +36238,7 @@ Systematics:
     - FD_*
     Error: 0.128663792758
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 6.0
@@ -36322,6 +36475,7 @@ Systematics:
     - FD_*
     Error: 0.145672602693
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 8.0
@@ -36558,6 +36712,7 @@ Systematics:
     - FD_*
     Error: 0.155969277676
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 10.0
@@ -36794,6 +36949,7 @@ Systematics:
     - FD_*
     Error: 0.229443910222
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 20.0
@@ -37030,6 +37186,7 @@ Systematics:
     - FD_*
     Error: 0.156114583904
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.0
@@ -37266,6 +37423,7 @@ Systematics:
     - FD_*
     Error: 0.102593642381
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.5
@@ -37502,6 +37660,7 @@ Systematics:
     - FD_*
     Error: 0.0923182099511
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.0
@@ -37738,6 +37897,7 @@ Systematics:
     - FD_*
     Error: 0.0967089335474
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.5
@@ -37974,6 +38134,7 @@ Systematics:
     - FD_*
     Error: 0.101134743759
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.0
@@ -38210,6 +38371,7 @@ Systematics:
     - FD_*
     Error: 0.104246041387
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.5
@@ -38446,6 +38608,7 @@ Systematics:
     - FD_*
     Error: 0.105620505343
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.0
@@ -38682,6 +38845,7 @@ Systematics:
     - FD_*
     Error: 0.113292572118
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.5
@@ -38918,6 +39082,7 @@ Systematics:
     - FD_*
     Error: 0.111672329236
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.0
@@ -39154,6 +39319,7 @@ Systematics:
     - FD_*
     Error: 0.117202581003
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.5
@@ -39390,6 +39556,7 @@ Systematics:
     - FD_*
     Error: 0.112319933805
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.0
@@ -39626,6 +39793,7 @@ Systematics:
     - FD_*
     Error: 0.108966363232
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.5
@@ -39862,6 +40030,7 @@ Systematics:
     - FD_*
     Error: 0.118607377738
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 6.0
@@ -40098,6 +40267,7 @@ Systematics:
     - FD_*
     Error: 0.121507250422
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 7.0
@@ -40334,6 +40504,7 @@ Systematics:
     - FD_*
     Error: 0.113958744146
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 8.0
@@ -40570,6 +40741,7 @@ Systematics:
     - FD_*
     Error: 0.142894497859
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 12.0
@@ -40806,6 +40978,7 @@ Systematics:
     - FD_*
     Error: 0.194107360503
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 16.0
@@ -41042,6 +41215,7 @@ Systematics:
     - FD_*
     Error: 0.181542659311
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 20.0
@@ -41278,6 +41452,7 @@ Systematics:
     - FD_*
     Error: 0.31924067114
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 40.0
@@ -41514,6 +41689,7 @@ Systematics:
     - FD_*
     Error: 0.119323524094
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.0
@@ -41750,6 +41926,7 @@ Systematics:
     - FD_*
     Error: 0.0881785384035
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.5
@@ -41986,6 +42163,7 @@ Systematics:
     - FD_*
     Error: 0.0775096471758
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.0
@@ -42222,6 +42400,7 @@ Systematics:
     - FD_*
     Error: 0.0739511879664
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 1.5
@@ -42458,6 +42637,7 @@ Systematics:
     - FD_*
     Error: 0.0739234595837
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.0
@@ -42694,6 +42874,7 @@ Systematics:
     - FD_*
     Error: 0.0716676699533
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.5
@@ -42930,6 +43111,7 @@ Systematics:
     - FD_*
     Error: 0.0665602134795
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.0
@@ -43166,6 +43348,7 @@ Systematics:
     - FD_*
     Error: 0.0660309536093
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 3.5
@@ -43402,6 +43585,7 @@ Systematics:
     - FD_*
     Error: 0.0665488842619
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.0
@@ -43638,6 +43822,7 @@ Systematics:
     - FD_*
     Error: 0.068320900554
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.5
@@ -43874,6 +44059,7 @@ Systematics:
     - FD_*
     Error: 0.0759986457421
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.0
@@ -44110,6 +44296,7 @@ Systematics:
     - FD_*
     Error: 0.0803969281245
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 5.5
@@ -44346,6 +44533,7 @@ Systematics:
     - FD_*
     Error: 0.0794696719707
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 6.0
@@ -44582,6 +44770,7 @@ Systematics:
     - FD_*
     Error: 0.0931328939462
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 7.0
@@ -44818,6 +45007,7 @@ Systematics:
     - FD_*
     Error: 0.0904542234871
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 8.0
@@ -45054,6 +45244,7 @@ Systematics:
     - FD_*
     Error: 0.125686510068
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 12.0
@@ -45290,6 +45481,7 @@ Systematics:
     - FD_*
     Error: 0.1976242631
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 16.0
@@ -45526,6 +45718,7 @@ Systematics:
     - FD_*
     Error: 0.21069746735
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 20.0
@@ -45762,6 +45955,7 @@ Systematics:
     - FD_*
     Error: 0.839550788657
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 40.0
@@ -45998,6 +46192,7 @@ Systematics:
     - FD_*
     Error: 0.103263736633
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.0
@@ -46234,6 +46429,7 @@ Systematics:
     - FD_*
     Error: 0.0890224428233
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.0
@@ -46470,6 +46666,7 @@ Systematics:
     - FD_*
     Error: 0.108163370625
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.0
@@ -46706,6 +46903,7 @@ Systematics:
     - FD_*
     Error: 0.124204493911
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 6.0
@@ -46942,6 +47140,7 @@ Systematics:
     - FD_*
     Error: 0.146830957451
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 8.0
@@ -47178,6 +47377,7 @@ Systematics:
     - FD_*
     Error: 0.158357027131
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 10.0
@@ -47414,6 +47614,7 @@ Systematics:
     - FD_*
     Error: 0.191606685339
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 20.0
@@ -47650,6 +47851,7 @@ Systematics:
     - FD_*
     Error: 0.0850143376668
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 0.0
@@ -47886,6 +48088,7 @@ Systematics:
     - FD_*
     Error: 0.0678272409999
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 2.0
@@ -48122,6 +48325,7 @@ Systematics:
     - FD_*
     Error: 0.0789826067963
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 4.0
@@ -48358,6 +48562,7 @@ Systematics:
     - FD_*
     Error: 0.11790005798
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 6.0
@@ -48594,6 +48799,7 @@ Systematics:
     - FD_*
     Error: 0.120569006222
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 8.0
@@ -48830,6 +49036,7 @@ Systematics:
     - FD_*
     Error: 0.143373459782
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 10.0
@@ -49066,6 +49273,7 @@ Systematics:
     - FD_*
     Error: 0.196693899466
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - TrueNeutrinoEnergy:
       - 20.0

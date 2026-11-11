@@ -10,6 +10,7 @@ Systematics:
     SampleNames: ["FD_*"]
     Error: 0.02
     FlatPrior: false
+    RegParam: false
     Names:
       FancyName: TotalEScaleFD
       ParameterName: TotalEScaleFD
@@ -35,6 +36,7 @@ Systematics:
     SampleNames: ["FD_FHC_nue", "FD_RHC_nue"]
     Error: 0.02
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - IsTrueCCnumu: [-0.1, 0.1]
     Names:
@@ -58,6 +60,7 @@ Systematics:
     SampleNames: ["FD_*"]
     Error: 0.01
     FlatPrior: false
+    RegParam: false
     Names:
       FancyName: TotalEScaleSqrtFD
       ParameterName: TotalEScaleSqrtFD
@@ -79,6 +82,7 @@ Systematics:
     SampleNames: ["FD_FHC_nue", "FD_RHC_nue"]
     Error: 0.01
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - IsTrueCCnumu: [-0.1, 0.1]
     Names:
@@ -102,6 +106,7 @@ Systematics:
     SampleNames: ["FD_*"]
     Error: 0.02
     FlatPrior: false
+    RegParam: false
     Names:
       FancyName: TotalEScaleInvSqrtFD
       ParameterName: TotalEScaleInvSqrtFD
@@ -123,6 +128,7 @@ Systematics:
     SampleNames: ["FD_FHC_nue", "FD_RHC_nue"]
     Error: 0.02
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - IsTrueCCnumu: [-0.1, 0.1]
     Names:
@@ -145,6 +151,7 @@ Systematics:
     SampleNames: ["FD_*"]
     Error: 0.05
     FlatPrior: false
+    RegParam: false
     Names:
       FancyName: HadEScaleFD
       ParameterName: HadEScaleFD
@@ -162,6 +169,7 @@ Systematics:
     SampleNames: ["FD_*"]
     Error: 0.05
     FlatPrior: false
+    RegParam: false
     Names:
       FancyName: HadEScaleSqrtFD
       ParameterName: HadEScaleSqrtFD
@@ -179,6 +187,7 @@ Systematics:
     SampleNames: ["FD_*"]
     Error: 0.05
     FlatPrior: false
+    RegParam: false
     Names:
       FancyName: HadEScaleInvSqrtFD
       ParameterName: HadEScaleInvSqrtFD
@@ -196,6 +205,7 @@ Systematics:
     SampleNames: ["FD_FHC_numu", "FD_RHC_numu"]
     Error: 0.02
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - IsTrueCCnumu: [0.9, 1.1]
     Names:
@@ -215,6 +225,7 @@ Systematics:
     SampleNames: ["FD_FHC_numu", "FD_RHC_numu"]
     Error: 0.005
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - IsTrueCCnumu: [0.9, 1.1]
     Names:
@@ -234,6 +245,7 @@ Systematics:
     SampleNames: ["FD_FHC_numu", "FD_RHC_numu"]
     Error: 0.02
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - IsTrueCCnumu: [0.9, 1.1]
     Names:
@@ -253,6 +265,7 @@ Systematics:
     SampleNames: ["FD_*"]
     Error: 0.2
     FlatPrior: false
+    RegParam: false
     Names:
       FancyName: NEScaleFD
       ParameterName: NEScaleFD
@@ -270,6 +283,7 @@ Systematics:
     SampleNames: ["FD_*"]
     Error: 0.3
     FlatPrior: false
+    RegParam: false
     Names:
       FancyName: NEScaleSqrtFD
       ParameterName: NEScaleSqrtFD
@@ -287,6 +301,7 @@ Systematics:
     SampleNames: ["FD_*"]
     Error: 0.3
     FlatPrior: false
+    RegParam: false
     Names:
       FancyName: NEScaleInvSqrtFD
       ParameterName: NEScaleInvSqrtFD
@@ -307,6 +322,7 @@ Systematics:
     SampleNames: ["FD_*"]
     Error: 0.025
     FlatPrior: false
+    RegParam: false
     Names:
       FancyName: EMEScaleFD
       ParameterName: EMEScaleFD
@@ -327,6 +343,7 @@ Systematics:
     SampleNames: ["FD_FHC_nue", "FD_RHC_nue"]
     Error: 0.025
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - IsTrueCCnue: [0.9, 1.1]
     Names:
@@ -349,6 +366,7 @@ Systematics:
     SampleNames: ["FD_*"]
     Error: 0.025
     FlatPrior: false
+    RegParam: false
     Names:
       FancyName: EMEScaleSqrtFD
       ParameterName: EMEScaleSqrtFD
@@ -369,6 +387,7 @@ Systematics:
     SampleNames: ["FD_FHC_nue", "FD_RHC_nue"]
     Error: 0.025
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - IsTrueCCnue: [0.9, 1.1]
     Names:
@@ -391,6 +410,7 @@ Systematics:
     SampleNames: ["FD_*"]
     Error: 0.025
     FlatPrior: false
+    RegParam: false
     Names:
       FancyName: EMEScaleInvSqrtFD
       ParameterName: EMEScaleInvSqrtFD
@@ -411,6 +431,7 @@ Systematics:
     SampleNames: ["FD_FHC_nue", "FD_RHC_nue"]
     Error: 0.025
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - IsTrueCCnue: [0.9, 1.1]
     Names:
@@ -430,6 +451,7 @@ Systematics:
     SampleNames: ["FD_*"]
     Error: 0.02
     FlatPrior: false
+    RegParam: false
     Names:
       FancyName: HadResFD
       ParameterName: HadResFD
@@ -447,6 +469,7 @@ Systematics:
     SampleNames: ["FD_FHC_numu", "FD_RHC_numu"]
     Error: 0.02
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - IsTrueCCnumu: [0.9, 1.1]
     Names:
@@ -466,6 +489,7 @@ Systematics:
     SampleNames: ["FD_*"]
     Error: 0.1
     FlatPrior: false
+    RegParam: false
     Names:
       FancyName: NResFD
       ParameterName: NResFD
@@ -486,6 +510,7 @@ Systematics:
     SampleNames: ["FD_*"]
     Error: 0.02
     FlatPrior: false
+    RegParam: false
     Names:
       FancyName: EMResFD
       ParameterName: EMResFD
@@ -506,6 +531,7 @@ Systematics:
     SampleNames: ["FD_FHC_nue", "FD_RHC_nue"]
     Error: 0.02
     FlatPrior: false
+    RegParam: false
     KinematicCuts:
     - IsTrueCCnue: [0.9, 1.1]
     Names:
@@ -525,6 +551,8 @@ Systematics:
     SampleNames: ["FD_FHC_numu", "FD_RHC_numu"]
     Error: 0.01
     FlatPrior: false
+    RegParam: false
+    FixParam: true
     Names:
       FancyName: RecoCVNNumuFD
       ParameterName: RecoCVNNumuFD
@@ -542,6 +570,8 @@ Systematics:
     SampleNames: ["FD_FHC_nue", "FD_RHC_nue"]
     Error: 0.01
     FlatPrior: false
+    RegParam: false
+    FixParam: true
     Names:
       FancyName: RecoCVNNueFD
       ParameterName: RecoCVNNueFD
@@ -565,6 +595,7 @@ Systematics:
     SampleNames: ["FD_FHC_numu", "FD_RHC_numu"]
     Error: 0.01
     FlatPrior: false
+    RegParam: false
     Names:
       FancyName: NumuFVFD
       ParameterName: NumuFVFD
@@ -585,6 +616,7 @@ Systematics:
     SampleNames: ["FD_FHC_nue", "FHC_RHC_nue"]
     Error: 0.01
     FlatPrior: false
+    RegParam: false
     Names:
       FancyName: NueFVFD
       ParameterName: NueFVFD
