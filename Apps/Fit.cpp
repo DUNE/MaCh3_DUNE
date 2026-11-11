@@ -14,7 +14,10 @@
 
 #include "Fitters/MaCh3Factory.h"
 #include "Samples/MaCh3DUNEFactory.h"
-
+#include "Parameters/ParameterHandlerRegularised.h"
+#include "Samples/SampleHandlerBeamOffAxis.h"
+#include "Samples/SampleHandlerBeamOffAxis.h"
+using dune::beamoffaxis::SampleHandlerBeamOffAxis;
 int main(int argc, char * argv[]) {
 
   auto FitManager = MaCh3ManagerFactory(argc, argv);
@@ -28,6 +31,20 @@ int main(int argc, char * argv[]) {
   std::vector<SampleHandlerFD*> DUNEPdfs;
   MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
 
+  if (auto* xsecReg = dynamic_cast<ParameterHandlerRegularised*>(xsec)) {
+    if (FitManager->raw()["General"]["BeamOffAxisRegularisation"]) {
+        double lambda = FitManager->raw()["General"]["BeamOffAxisRegularisation"]["Lambda"].as<double>();
+        for (auto* handler : DUNEPdfs) {
+            if (auto* boaHandler = dynamic_cast<SampleHandlerBeamOffAxis*>(handler)) {
+                boaHandler->BuildRegularisationMatrix(xsecReg, lambda);
+            }
+        }
+    } else {
+        MACH3LOG_WARN("No BeamOffAxisRegularisation config found, skipping regularisation");
+    }
+} else {
+    MACH3LOG_ERROR("xsec is not a ParameterHandlerRegularised - regularisation will not be applied");
+}
   //Some place to store the histograms
   std::vector<TH1*> PredictionHistograms;
   std::vector<std::string> sample_names;

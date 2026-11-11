@@ -1472,7 +1472,7 @@ int main(int argc, char * argv[]) {
   std::string ChainPdfName = GetFromManager<std::string>(fitMan->raw()["General"]["PosteriorChain"]["OutputPdf"], "PosteriorChainCheck.pdf");
 
   // <-- Edit this to whichever chain steps you want to check
-  std::vector<Long64_t> StepsToProcess = {0, 155229};
+  std::vector<Long64_t> StepsToProcess = {0, 15000000, 2000000, 22000000, 24000000};
 
   if (!ChainFileName.empty()) {
     RunPosteriorChainCheck(ChainFileName, ChainTreeName, LogLBranchName, StepsToProcess, xsec, DUNEPdfs, ChainPdfName);

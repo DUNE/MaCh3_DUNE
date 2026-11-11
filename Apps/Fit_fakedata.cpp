@@ -55,11 +55,11 @@ int main(int argc, char * argv[]) {
   // Adjust missing proton parameter only if it exists
 
     
-  
-    int idx = xsec->GetParIndex("MissingProtonFD");
 
-    xsec->SetSingleParameter(idx, 0.2);
-    xsec->SetFixParameter(idx);
+  int idx = xsec->GetParIndex("MissingProtonFD");
+
+  xsec->SetSingleParameter(idx, 0.2);
+  xsec->SetFixParameter(idx);
       
   for (auto handler : DUNEPdfs) {
     for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
@@ -102,32 +102,63 @@ int main(int argc, char * argv[]) {
     MACH3LOG_INFO("--------------");
   }
   
+  // //###########################################################################################################
+  // //MCMC
+
+  // auto MaCh3Fitter = MaCh3FitterFactory(FitManager.get());
+
+  // bool StartFromPreviousChain = GetFromManager(FitManager->raw()["General"]["StartFromPos"], false);
+  // //Start chain from random position unless continuing a chain
+  // if (!StartFromPreviousChain) {
+  //   if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false)) {
+
+  //     const int nPars = xsec->GetNParameters();
+  //     std::vector<double> startPars(nPars);
+
+  //     for (int i = 0; i < nPars; ++i) {
+  //       startPars[i] = xsec->GetParInit(i);  // this is 1.0
+  //     }
+
+  //     xsec->SetParameters(startPars);
+  //     MACH3LOG_INFO("Initialized xsec parameters to prior values");
+  //   }
+  // }
+ 
+  // //Add systematic objects
+  // MaCh3Fitter->AddSystObj(xsec);
+  
   //###########################################################################################################
   //MCMC
 
   auto MaCh3Fitter = MaCh3FitterFactory(FitManager.get());
 
   bool StartFromPreviousChain = GetFromManager(FitManager->raw()["General"]["StartFromPos"], false);
+  bool ThrowStartingPosition  = GetFromManager(FitManager->raw()["General"]["ThrowStartingPosition"], false); 
+
   //Start chain from random position unless continuing a chain
   if (!StartFromPreviousChain) {
     if (!GetFromManager(FitManager->raw()["General"]["StatOnly"], false)) {
 
-      const int nPars = xsec->GetNParameters();
-      std::vector<double> startPars(nPars);
+      if (ThrowStartingPosition) {                                   // <-- NEW
+        xsec->ThrowParameters();                                     // <-- NEW
+        MACH3LOG_INFO("Threw xsec parameters from the prior covariance for a randomized MCMC start"); // <-- NEW
+      } else {                                                       // <-- NEW
+        const int nPars = xsec->GetNParameters();
+        std::vector<double> startPars(nPars);
 
-      for (int i = 0; i < nPars; ++i) {
-        startPars[i] = xsec->GetParInit(i);  // this is 1.0
-      }
+        for (int i = 0; i < nPars; ++i) {
+          startPars[i] = xsec->GetParInit(i);  // this is 1.0
+        }
 
-      xsec->SetParameters(startPars);
-      MACH3LOG_INFO("Initialized xsec parameters to prior values");
+        xsec->SetParameters(startPars);
+        MACH3LOG_INFO("Initialized xsec parameters to prior values");
+      }                                                               // <-- NEW
     }
   }
  
   //Add systematic objects
   MaCh3Fitter->AddSystObj(xsec);
   
-
   if (StartFromPreviousChain) {
     std::string PreviousChainPath = FitManager->raw()["General"]["PosFileName"].as<std::string>();
     MACH3LOG_INFO("MCMC getting starting position from: {}",PreviousChainPath);

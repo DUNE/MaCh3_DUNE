@@ -32,6 +32,16 @@ int main(int argc, char * argv[]) {
   std::vector<SampleHandlerFD*> DUNEPdfs;
   MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec);
 
+
+  int idx = xsec->GetParIndex("MissingProtonFD");
+  if (idx >= 0) {
+    MACH3LOG_INFO("Setting MissingProtonFD to 0.2 and fixing it");
+    xsec->SetSingleParameter(idx, 0.2);
+    xsec->SetFixParameter(idx);
+  } else {
+    MACH3LOG_WARN("MissingProtonFD not found in xsec, running without fake data shift");
+  }
+
   //###############################################################################################################################
   //Perform reweight and print total integral
 
