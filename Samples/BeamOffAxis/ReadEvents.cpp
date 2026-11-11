@@ -111,8 +111,10 @@ std::vector<EventInfo> ReadEvents(TTree &tree) {
         std::isfinite(*ePi0) && std::isfinite(*eOther)) {
       ev.truth.had.e_available =
           *eP + *ePip + *ePim + *ePi0 + *eOther + (*nipi0) * 0.1349;
+      ev.truth.had.e_nuproxy = (*eP + *ePip + *ePim + *ePi0 + *eOther + (*nipi0) * 0.1349) + *LepE;;
     } else {
       ev.truth.had.e_available = -999;
+      ev.truth.had.e_nuproxy = -999;
     }
 
     ev.truth.had.n_proton = *nP;

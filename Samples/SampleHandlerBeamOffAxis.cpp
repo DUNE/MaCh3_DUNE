@@ -19,7 +19,6 @@ namespace dune::beamoffaxis {
 
   unweighted_mc = GetUnweightedMCRate();
 }
-
 void SampleHandlerBeamOffAxis::Init() {
   subsample_analysispot.resize(GetNsamples());
   subsample_is_numode.resize(GetNsamples());
@@ -32,24 +31,83 @@ void SampleHandlerBeamOffAxis::Init() {
         Get<bool>(sample_conf["is_numode"], __FILE__, __LINE__);
   }
 
+  // --- NEW: optional likelihood-type selection ---
+  if (SampleManager->raw()["CovLikelihoodType"]) {
+    auto type_str = Get<std::string>(SampleManager->raw()["CovLikelihoodType"],
+                                      __FILE__, __LINE__);
+    SetCovLikelihoodType(CovLikelihoodTypeFromString(type_str));
+  }
+  MACH3LOG_INFO("Using {} covariance likelihood", GetCovLikelihoodTypeString());
+
   if (SampleManager->raw()["InputFiles"]["CovarianceMatrix"]) {
     auto cvmx_details = Get<std::vector<std::string>>(
-        SampleManager->raw()["InputFiles"]["CovarianceMatrix"], __FILE__,
-        __LINE__);
+        SampleManager->raw()["InputFiles"]["CovarianceMatrix"], __FILE__, __LINE__);
 
     TFile cvmx_file(cvmx_details[0].c_str(), "READ");
     auto *rcvmx = cvmx_file.Get<TMatrixD>(cvmx_details[1].c_str());
 
     cvmx = Eigen::Map<Eigen::MatrixXd>(rcvmx->GetMatrixArray(),
-                                       rcvmx->GetNrows(), rcvmx->GetNcols());
+                                        rcvmx->GetNrows(), rcvmx->GetNcols());
 
-    MACH3LOG_INFO("Using ND Covariance Matrix({},{}):", cvmx.rows(),
-                  cvmx.cols());
+    MACH3LOG_INFO("Using ND Covariance Matrix({},{}):", cvmx.rows(), cvmx.cols());
     std::stringstream ss;
     ss << cvmx;
     MACH3LOG_INFO("\n{}", ss.str());
   }
+
+  // --- NEW: relative (fractional) covariance matrix ---
+  if (SampleManager->raw()["InputFiles"]["RelativeCovarianceMatrix"]) {
+    auto rel_details = Get<std::vector<std::string>>(
+        SampleManager->raw()["InputFiles"]["RelativeCovarianceMatrix"],
+        __FILE__, __LINE__);
+
+    TFile rel_file(rel_details[0].c_str(), "READ");
+    auto *rrel = rel_file.Get<TMatrixD>(rel_details[1].c_str());
+
+    relative_cvmx = Eigen::Map<Eigen::MatrixXd>(rrel->GetMatrixArray(),
+                                                 rrel->GetNrows(), rrel->GetNcols());
+
+    MACH3LOG_INFO("Using ND Relative Covariance Matrix({},{}):",
+                  relative_cvmx.rows(), relative_cvmx.cols());
+  }
+
+  if (fCovLikelihoodType == ECovLikelihoodType::kFractional &&
+      !relative_cvmx.size()) {
+    MACH3LOG_ERROR("CovLikelihoodType is Fractional but no "
+                    "RelativeCovarianceMatrix was provided in InputFiles");
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
 }
+// void SampleHandlerBeamOffAxis::Init() {
+//   subsample_analysispot.resize(GetNsamples());
+//   subsample_is_numode.resize(GetNsamples());
+
+//   for (int iSubSample = 0; iSubSample < GetNsamples(); iSubSample++) {
+//     auto const &sample_conf = SampleManager->raw()[GetSampleTitle(iSubSample)];
+//     subsample_analysispot[iSubSample] =
+//         Get<double>(sample_conf["POT"], __FILE__, __LINE__);
+//     subsample_is_numode[iSubSample] =
+//         Get<bool>(sample_conf["is_numode"], __FILE__, __LINE__);
+//   }
+
+//   if (SampleManager->raw()["InputFiles"]["CovarianceMatrix"]) {
+//     auto cvmx_details = Get<std::vector<std::string>>(
+//         SampleManager->raw()["InputFiles"]["CovarianceMatrix"], __FILE__,
+//         __LINE__);
+
+//     TFile cvmx_file(cvmx_details[0].c_str(), "READ");
+//     auto *rcvmx = cvmx_file.Get<TMatrixD>(cvmx_details[1].c_str());
+
+//     cvmx = Eigen::Map<Eigen::MatrixXd>(rcvmx->GetMatrixArray(),
+//                                        rcvmx->GetNrows(), rcvmx->GetNcols());
+
+//     MACH3LOG_INFO("Using ND Covariance Matrix({},{}):", cvmx.rows(),
+//                   cvmx.cols());
+//     std::stringstream ss;
+//     ss << cvmx;
+//     MACH3LOG_INFO("\n{}", ss.str());
+//   }
+// }
 
 void SampleHandlerBeamOffAxis::SetupSplines() {
   if (!ParHandler) {
@@ -455,5 +513,186 @@ RegParHandler->SetPenalty(
         return penalty;
     });
 }
+
+
+TH2D* SampleHandlerBeamOffAxis::MakeFancyPlot() {
+  const int nGlobalBins = Binning->GetNBins();
+
+  // ---- Rebuild the same template-parameter binning used in BuildRegularisationMatrix ----
+  struct TemplateParameterBins {
+    int index;
+    double enu_lo, enu_hi;
+    double enubias_lo, enubias_hi;
+  };
+  std::vector<TemplateParameterBins> template_parameters;
+
+  auto normPars = ParHandler->GetNormParsFromSampleName(SampleHandlerName);
+  for (auto const &np : normPars) {
+    if (!ParHandler->IsParFromGroup(np.index, "Xsec")) continue;
+
+    double enu_lo = -1e10, enu_hi = 1e10;
+    double enubias_lo = -1e10, enubias_hi = 1e10;
+
+    for (size_t iVar = 0; iVar < np.KinematicVarStr.size(); ++iVar) {
+      if (np.KinematicVarStr[iVar] == "TrueNeutrinoEnergy") {
+        enu_lo = np.Selection[iVar][0][0];
+        enu_hi = np.Selection[iVar][0][1];
+      } else if (np.KinematicVarStr[iVar] == "Enubias") {
+        enubias_lo = np.Selection[iVar][0][0];
+        enubias_hi = np.Selection[iVar][0][1];
+      }
+    }
+    template_parameters.push_back({np.index, enu_lo, enu_hi, enubias_lo, enubias_hi});
+  }
+
+  const int nParamBins = ParHandler->GetNumParams();
+  TH2D* hist = new TH2D("FancyPlot","Fancy Plot;Global Bin;Template Parameter Bin",
+                         nGlobalBins, 0, nGlobalBins, nParamBins, 0, nParamBins);
+
+  if (template_parameters.empty()) {
+    MACH3LOG_WARN("MakeFancyPlot: no Xsec Norm parameters found, plot will be empty");
+    hist->Draw("COLZ");
+    hist->SaveAs("FancyPlot.pdf");
+    TFile* outputFile = TFile::Open("FancyPlot.root", "RECREATE");
+    if (outputFile && !outputFile->IsZombie()) { hist->Write(); outputFile->Close(); delete outputFile; }
+    return hist;
+  }
+
+  auto round6 = [](double x) { return std::round(x * 1e6) / 1e6; };
+
+  std::set<double> enu_edges_set, enubias_edges_set;
+  for (auto const &p : template_parameters) {
+    enu_edges_set.insert(round6(p.enu_lo));
+    enubias_edges_set.insert(round6(p.enubias_lo));
+  }
+  std::vector<double> enu_edges(enu_edges_set.begin(), enu_edges_set.end());
+  std::vector<double> enubias_edges(enubias_edges_set.begin(), enubias_edges_set.end());
+
+  auto edge_index = [&](std::vector<double> const &edges, double val) -> int {
+    auto it = std::lower_bound(edges.begin(), edges.end(), round6(val));
+    if (it == edges.end()) return -1;
+    return int(std::distance(edges.begin(), it));
+  };
+
+  std::map<std::pair<int,int>, int> bin_to_global;
+  for (auto const &p : template_parameters) {
+    int iEnu     = edge_index(enu_edges, p.enu_lo);
+    int iEnubias = edge_index(enubias_edges, p.enubias_lo);
+    bin_to_global[{iEnu, iEnubias}] = p.index;
+  }
+
+  // ---- Fill histogram using each event's true kinematics ----
+  int nFilled = 0, nNoMatch = 0;
+  for (unsigned int iEvent = 0; iEvent < GetNEvents(); ++iEvent) {
+    const auto* MCEvent = &MCEvents[iEvent];
+
+    const int GlobalBin = Binning->FindGlobalBin(MCEvent->NominalSample, MCEvent->KinVar, MCEvent->NomBin);
+
+    double enuTrue = ReturnKinematicParameter(std::string("TrueNeutrinoEnergy"), iEvent);
+    double enubias = ReturnKinematicParameter(std::string("Enubias"), iEvent);
+
+    int iEnu     = edge_index(enu_edges, enuTrue);
+    int iEnubias = edge_index(enubias_edges, enubias);
+
+    auto it = bin_to_global.find({iEnu, iEnubias});
+    if (it != bin_to_global.end()) {
+      hist->Fill(GlobalBin, it->second);
+      ++nFilled;
+    } else {
+      ++nNoMatch;
+    }
+  }
+
+  std::cout << "[MakeFancyPlot] nFilled=" << nFilled << " nNoMatch=" << nNoMatch << std::endl;
+
+  hist->Draw("COLZ");
+  hist->SaveAs("FancyPlot.pdf");
+
+  TFile* outputFile = TFile::Open("FancyPlot.root", "RECREATE");
+  if (outputFile && !outputFile->IsZombie()) {
+    hist->Write();
+    outputFile->Close();
+    delete outputFile;
+  }
+
+  return hist;
+}
+// TH2D* SampleHandlerBeamOffAxis::MakeFancyPlot() {
+//   const int nGlobalBins = Binning->GetNBins();
+//   const int nParamBins  = ParHandler->GetNumParams();
+
+//   std::cout << "[MakeFancyPlot] nGlobalBins=" << nGlobalBins
+//              << " nParamBins=" << nParamBins
+//              << " nEvents=" << GetNEvents()
+//              << " ParHandler=" << ParHandler << std::endl;
+
+//   TH2D* hist = new TH2D("FancyPlot","Fancy Plot;Global Bin;Template Parameter Bin", nGlobalBins, 0, nGlobalBins,
+//                          nParamBins, 0, nParamBins);
+
+//   int nFilled = 0;
+//   int nNoWeightPointers = 0;
+//   int nNoMatch = 0;
+
+//   for (unsigned int iEvent = 0; iEvent < GetNEvents(); ++iEvent) {
+//     const auto* MCEvent = &MCEvents[iEvent];
+
+//     if (iEvent < 5) {
+//       std::cout << "[MakeFancyPlot] event " << iEvent
+//                  << " total_weight_pointers.size()=" << MCEvent->total_weight_pointers.size()
+//                  << std::endl;
+//     }
+
+//     if (MCEvent->total_weight_pointers.empty()) {
+//       ++nNoWeightPointers;
+//     }
+
+//     const int GlobalBin = Binning->FindGlobalBin(MCEvent->NominalSample, MCEvent->KinVar, MCEvent->NomBin);
+
+//     int TemplateParamBin = -1;
+//     for (int iParam = 0; iParam < ParHandler->GetNumParams(); ++iParam) {
+//       const double* paramPtr = ParHandler->RetPointer(iParam);
+//       if (iEvent == 0) {
+//         std::cout << "[MakeFancyPlot] ParHandler param " << iParam << " ptr=" << paramPtr << std::endl;
+//       }
+//       for (unsigned int iWeight = 0; iWeight < MCEvent->total_weight_pointers.size(); ++iWeight) {
+//         if (iEvent == 0) {
+//           std::cout << "[MakeFancyPlot] event0 weight_ptr[" << iWeight << "]="
+//                      << MCEvent->total_weight_pointers[iWeight] << std::endl;
+//         }
+//         if (MCEvent->total_weight_pointers[iWeight] == paramPtr) {
+//           TemplateParamBin = iParam;
+//           break;
+//         }
+//       }
+//       if (TemplateParamBin >= 0)
+//         break;
+//     }
+
+//     if (TemplateParamBin >= 0) {
+//       hist->Fill(GlobalBin, TemplateParamBin);
+//       ++nFilled;
+//     } else {
+//       ++nNoMatch;
+//     }
+//   }
+
+//   std::cout << "[MakeFancyPlot] SUMMARY: nFilled=" << nFilled
+//              << " nNoMatch=" << nNoMatch
+//              << " nNoWeightPointers=" << nNoWeightPointers
+//              << " hist->GetEntries()=" << hist->GetEntries()
+//              << std::endl;
+
+//   hist->Draw("COLZ");
+//   hist->SaveAs("FancyPlot.pdf");
+
+//   TFile* outputFile = TFile::Open("FancyPlot.root", "RECREATE");
+//   if (outputFile && !outputFile->IsZombie()) {
+//     hist->Write();
+//     outputFile->Close();
+//     delete outputFile;
+//   }
+
+//   return hist;
+// }
 
 } // namespace dune::beamoffaxis

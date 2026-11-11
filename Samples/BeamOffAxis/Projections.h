@@ -20,6 +20,7 @@ namespace dune::beamoffaxis {
   X(OscillationChannel)                                                        \
   X(ELepRec)                                                                   \
   X(Enubias)                                                                   \
+  X(Enuproxy)                                                                  \
   X(IsCC)                                                                      \
   X(OffAxisPosition)                                                           \
   X(ENuRes)                                                                    \
@@ -29,7 +30,7 @@ namespace dune::beamoffaxis {
   X(EEMRes)                                                                    \
   X(EChgHadRes)                                                                \
   X(ENeutronRes)                                                               \
-  X(RecoNumu)
+  X(RecoNumu)                                                                   
 #define X(a) k##a,
 
 /// @brief Enum to identify kinematics
@@ -74,7 +75,8 @@ inline const double *ResolveKinematicEventMember(KinematicTypes KinPar,
     return &ev.truth.kine.invariant_mass;
   case kEnubias:
     return &ev.varied_truth.enurec_hadavailable_missed;
-
+  case kEnuproxy:
+    return &ev.truth.kine.enurec_hadav;
   case kRecoNeutrinoEnergy:
     return &ev.varied_reco.enu;
   case kELepRec:

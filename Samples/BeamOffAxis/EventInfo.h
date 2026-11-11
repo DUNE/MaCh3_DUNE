@@ -34,6 +34,7 @@ struct CAFEventInfo {
       double e_pi0;
 
       double e_available;
+      double e_nuproxy;
 
       int n_proton;
       int n_neutron;
