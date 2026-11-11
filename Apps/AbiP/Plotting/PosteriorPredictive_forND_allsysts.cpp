@@ -131,7 +131,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    
+    TH1::AddDirectory(kFALSE);
 
     // -----------------------------------------------------------------------
     // Configuration

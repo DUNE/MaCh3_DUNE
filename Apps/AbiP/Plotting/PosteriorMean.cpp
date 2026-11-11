@@ -54,9 +54,17 @@ std::string AddTimestampToROOTFilename(const std::string& baseName) {
     return oss.str();
 }
 
-void setRedWhiteBluePalette() {
+// -------------------------
+// Palettes
+// -------------------------
+void setViridisPalette() {
+    gStyle->SetPalette(kViridis);
+    gStyle->SetNumberContours(255);
+}
+
+void setBlueWhiteRedPalette(double whiteStop) {
     const Int_t nRGBs = 3;
-    Double_t stops[nRGBs] = {0.00, 0.50, 1.00};
+    Double_t stops[nRGBs] = {0.00, whiteStop, 1.00};
     Double_t red[nRGBs]   = {0.00, 1.00, 1.00};
     Double_t green[nRGBs] = {0.00, 1.00, 0.00};
     Double_t blue[nRGBs]  = {1.00, 1.00, 0.00};
@@ -64,16 +72,90 @@ void setRedWhiteBluePalette() {
     TColor::CreateGradientColorTable(nRGBs, stops, red, green, blue, nColors);
     gStyle->SetNumberContours(nColors);
 }
-void setOrangePalette() {
-    const Int_t nRGBs = 5;
-    Double_t stops[nRGBs] = { 0.00, 0.25, 0.50, 0.75, 1.00 };
-    Double_t red[nRGBs]   = { 1.00, 1.00, 0.95, 0.85, 0.55 };
-    Double_t green[nRGBs] = { 0.98, 0.75, 0.50, 0.25, 0.00 };
-    Double_t blue[nRGBs]  = { 0.92, 0.35, 0.10, 0.00, 0.00 };
-    const Int_t nColors = 255;
-    TColor::CreateGradientColorTable(nRGBs, stops, red, green, blue, nColors);
-    gStyle->SetNumberContours(nColors);
+
+// -------------------------
+// Thesis-quality style
+// -------------------------
+void setThesisStyle() {
+    gStyle->Reset();
+    gStyle->SetOptStat(0);
+    gStyle->SetOptTitle(0);           // titles drawn manually via TLatex for full control
+
+    // Fonts: 132 = Times, precision 2 (scales cleanly at any zoom).
+    // Use 42 instead of 132 everywhere below if your thesis uses a sans-serif font.
+    const int font = 132;
+    gStyle->SetTextFont(font);
+    gStyle->SetLabelFont(font, "XYZ");
+    gStyle->SetTitleFont(font, "XYZ");
+    gStyle->SetLegendFont(font);
+
+    gStyle->SetLabelSize(0.035, "XYZ");
+    gStyle->SetTitleSize(0.045, "XYZ");
+    gStyle->SetTitleOffset(1.1, "X");
+    gStyle->SetTitleOffset(1.3, "Y");
+    gStyle->SetTitleOffset(1.4, "Z");
+
+    // Margins: leave room for the z-axis colour bar title
+    gStyle->SetPadTopMargin(0.08);
+    gStyle->SetPadBottomMargin(0.13);
+    gStyle->SetPadLeftMargin(0.14);
+    gStyle->SetPadRightMargin(0.18);
+
+    gStyle->SetPadTickX(1);
+    gStyle->SetPadTickY(1);
+    gStyle->SetTickLength(0.02, "XYZ");
+
+    gStyle->SetCanvasColor(kWhite);
+    gStyle->SetPadColor(kWhite);
+    gStyle->SetFrameBorderMode(0);
+    gStyle->SetCanvasBorderMode(0);
 }
+
+// Draw a manual title above the frame (replaces SetOptTitle(1) titles)
+void drawTitle(const std::string& text) {
+    TLatex latex;
+    latex.SetNDC();
+    latex.SetTextFont(132);
+    latex.SetTextSize(0.045);
+    latex.SetTextAlign(21); // centered
+    latex.DrawLatex(0.5, 0.94, text.c_str());
+}
+
+// -------------------------
+// Style helper for 1D error-bar plots (thesis-quality)
+// -------------------------
+void styleThesis1D(TH1D* h) {
+    h->SetLineColor(kBlack);
+    h->SetLineWidth(2);
+    h->SetMarkerStyle(20);      // filled circle
+    h->SetMarkerSize(0.9);
+    h->SetMarkerColor(kBlack);
+    h->SetStats(0);
+    h->GetXaxis()->SetNdivisions(505);
+    h->GetYaxis()->SetNdivisions(505);
+    // Give a bit of vertical headroom above the tallest bin (incl. error bar)
+    double ymax = h->GetMaximum() + h->GetBinError(h->GetMaximumBin());
+    h->GetYaxis()->SetRangeUser(0.0, 1.15 * ymax);
+}
+
+// Divide every bin (content AND error) by its bin width, turning an event
+// count histogram into a differential ("per unit x") distribution. This is
+// the standard treatment for variable-width bins so that bin height is
+// directly comparable across bins of different widths.
+void normalizeByBinWidth(TH1D* h) {
+    h->Scale(1.0, "width");
+}
+
+// -------------------------
+// LaTeX-style axis labels for known MaCh3-DUNE kinematic variables
+// -------------------------
+std::string toLatexLabel(const std::string& var) {
+    if (var == "TrueNeutrinoEnergy") return "E_{#nu}^{True} [GeV]";
+    if (var == "Enubias")            return "E_{#nu}^{Bias} [GeV]";
+    // add further mappings here as new variables come up
+    return var; // fallback: raw variable name
+}
+
 // -------------------------
 // Helper: get latest non-empty posteriors tree
 // -------------------------
@@ -156,10 +238,16 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    setThesisStyle();
+
     std::string mcmc_file   = argv[1];
     std::string config_file = argv[2];
 
-    std::string rootOut = AddTimestampToROOTFilename("mcmc_diagnostics.root");
+    std::filesystem::path mcmcPath(mcmc_file);
+std::string outDir = mcmcPath.parent_path().string();
+if (!outDir.empty()) outDir += "/";
+
+std::string rootOut = outDir + AddTimestampToROOTFilename("mcmc_diagnostics.root");
     std::string pdfOut  = mcmc_file.substr(0, mcmc_file.find_last_of('.')) + "_diagnostics.pdf";
 
     // --- Open MCMC file ---
@@ -229,35 +317,36 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    h_xsecvar_eventratehist->GetXaxis()->SetTitle(xsec_var1.c_str());
-    h_xsecvar_eventratehist->GetYaxis()->SetTitle(xsec_var2.c_str());
+    // Make sure per-bin errors are tracked so that ProjectionX/Y propagate
+    // statistical uncertainty correctly. If Sumw2 was never called upstream
+    // (e.g. the PDF fills unweighted), this call sets each bin's error to
+    // sqrt(content), i.e. the standard Poisson counting uncertainty.
+    if (h_xsecvar_eventratehist->GetSumw2N() == 0) {
+        h_xsecvar_eventratehist->Sumw2();
+    }
 
-    // // --- Setup posterior parameter reading ---
-    // int nParams = 0;
-    // TObjArray* branches = post->GetListOfBranches();
-    // for (int i = 0; i < branches->GetEntries(); ++i) {
-    //     std::string name = branches->At(i)->GetName();
-    //     if (name.rfind("param_", 0) == 0) {
-    //         std::string suffix = name.substr(6);
-    //         try {
-    //             size_t pos;
-    //             int idx = std::stoi(suffix, &pos);
-    //             if (pos == suffix.size())
-    //                 nParams = std::max(nParams, idx + 1);
-    //         } catch (const std::invalid_argument&) {
-    //             std::cout << "[Info] Skipping non-numeric param branch: " << name << "\n";
-    //         }
-    //     }
-    // }
-    // std::cout << "[Info] Found " << nParams << " param_* parameters\n";
+    h_xsecvar_eventratehist->GetXaxis()->SetTitle(toLatexLabel(xsec_var1).c_str());
+    h_xsecvar_eventratehist->GetYaxis()->SetTitle(toLatexLabel(xsec_var2).c_str());
+    h_xsecvar_eventratehist->GetZaxis()->SetTitle("Events");
 
-    // std::vector<double> xsec_vals(nParams, 0.0);
-    // post->SetBranchStatus("*", 0);
-    // for (int i = 0; i < nParams; ++i) {
-    //     std::string bname = "param_" + std::to_string(i);
-    //     post->SetBranchStatus(bname.c_str(), 1);
-    //     post->SetBranchAddress(bname.c_str(), &xsec_vals[i]);
-    // }
+    // --- 1D projections of the event-rate histogram, with stat. uncertainty ---
+    // ProjectionX sums over q3 (var2) for each q0 (var1) bin; ProjectionY does the reverse.
+    // Errors are propagated automatically from the 2D Sumw2 array above.
+    TH1D* h_proj_q0 = h_xsecvar_eventratehist->ProjectionX("h_proj_q0");
+    TH1D* h_proj_q3 = h_xsecvar_eventratehist->ProjectionY("h_proj_q3");
+
+    // Divide by bin width (Scale propagates the errors correctly too),
+    // since the q0/q3 binning is non-uniform.
+    normalizeByBinWidth(h_proj_q0);
+    normalizeByBinWidth(h_proj_q3);
+
+    h_proj_q0->GetXaxis()->SetTitle(toLatexLabel(xsec_var1).c_str());
+    h_proj_q0->GetYaxis()->SetTitle("Events / bin width");
+    styleThesis1D(h_proj_q0);
+
+    h_proj_q3->GetXaxis()->SetTitle(toLatexLabel(xsec_var2).c_str());
+    h_proj_q3->GetYaxis()->SetTitle("Events / bin width");
+    styleThesis1D(h_proj_q3);
 
     // --- Setup posterior parameter reading ---
     // Only read the param_N branches that correspond to parameters defined
@@ -284,23 +373,47 @@ int main(int argc, char* argv[]) {
     }
 
     // --- Compute posterior mean and stddev per bin ---
-    setRedWhiteBluePalette();
-    TH2D* h_mean = new TH2D("h_param_mean", "Posterior Mean",
+    TH2D* h_mean = new TH2D("h_param_mean", "",
                             q0_edges.size()-1, q0_edges.data(),
                             q3_edges.size()-1, q3_edges.data());
-    TH2D* h_stddev = new TH2D("h_param_stddev", "Posterior StdDev",
+    TH2D* h_stddev = new TH2D("h_param_stddev", "",
                               q0_edges.size()-1, q0_edges.data(),
                               q3_edges.size()-1, q3_edges.data());
-    h_mean->GetXaxis()->SetTitle(xsec_var1.c_str());
-    h_mean->GetYaxis()->SetTitle(xsec_var2.c_str());
-    h_stddev->GetXaxis()->SetTitle(xsec_var1.c_str());
-    h_stddev->GetYaxis()->SetTitle(xsec_var2.c_str());
+
+    h_mean->GetXaxis()->SetTitle(toLatexLabel(xsec_var1).c_str());
+    h_mean->GetYaxis()->SetTitle(toLatexLabel(xsec_var2).c_str());
+    h_mean->GetZaxis()->SetTitle("Posterior mean (relative to prior)");
+
+    h_stddev->GetXaxis()->SetTitle(toLatexLabel(xsec_var1).c_str());
+    h_stddev->GetYaxis()->SetTitle(toLatexLabel(xsec_var2).c_str());
+    h_stddev->GetZaxis()->SetTitle("Posterior std. dev.");
+
+    h_mean->GetXaxis()->SetNdivisions(505);
+    h_mean->GetYaxis()->SetNdivisions(505);
+    h_stddev->GetXaxis()->SetNdivisions(505);
+    h_stddev->GetYaxis()->SetNdivisions(505);
 
     std::vector<double> sum(nParams, 0.0);
     std::vector<double> sq_sum(nParams, 0.0);
 
     Long64_t nEntries = post->GetEntries();
-    for (Long64_t i = 0; i < nEntries; ++i) {
+
+    // --- Burn-in cut ---
+    Long64_t burnIn = 0;
+    if (FitManager->raw()["General"]["MCMC"]["BurnInSteps"]) {
+        burnIn = FitManager->raw()["General"]["MCMC"]["BurnInSteps"].as<Long64_t>();
+    }
+    if (burnIn <= 0 || burnIn >= nEntries) {
+        std::cout << "[Info] BurnInSteps not set, zero, or exceeds chain length; "
+                     "defaulting to 20% of the chain.\n";
+        burnIn = static_cast<Long64_t>(0.2 * nEntries);
+    }
+    std::cout << "[Info] Applying burn-in cut: discarding first " << burnIn
+              << " of " << nEntries << " entries ("
+              << 100.0 * burnIn / nEntries << "%).\n";
+
+    Long64_t nUsed = nEntries - burnIn;
+    for (Long64_t i = burnIn; i < nEntries; ++i) {
         post->GetEntry(i);
         for (const auto& bin : binDefs) {
             if (bin.index >= nParams) continue;
@@ -312,8 +425,8 @@ int main(int argc, char* argv[]) {
 
     for (const auto& bin : binDefs) {
         if (bin.index >= nParams) continue;
-        double mean   = sum[bin.index] / nEntries;
-        double var    = std::max(0.0, (sq_sum[bin.index] / nEntries) - mean * mean);
+        double mean   = sum[bin.index] / nUsed;
+        double var    = std::max(0.0, (sq_sum[bin.index] / nUsed) - mean * mean);
         double stddev = std::sqrt(var);
 
         double q0_center = 0.5 * (bin.q0_min + bin.q0_max);
@@ -335,37 +448,56 @@ int main(int argc, char* argv[]) {
     OutputFile->cd();
 
     h_xsecvar_eventratehist->Write("xsec_eventrate_histo");
+    h_proj_q0->Write("xsec_eventrate_proj_q0");
+    h_proj_q3->Write("xsec_eventrate_proj_q3");
     h_mean->Write("xsec_param_mean");
     h_stddev->Write("xsec_param_stddev");
 
     // --- Save to PDF ---
-    TCanvas* c = new TCanvas("c", "c", 1200, 800);
+    TCanvas* c = new TCanvas("c", "c", 1000, 750);
     c->Print((pdfOut + "[").c_str());  // open PDF
 
-    setRedWhiteBluePalette();
+    setViridisPalette();
     h_xsecvar_eventratehist->Draw("COLZ");
+    drawTitle("Event Rate");
     c->Print(pdfOut.c_str());
     c->Clear();
 
-    h_mean->GetZaxis()->SetRangeUser(0.0, 4.0);
-    h_mean->SetTitle("Posterior post-fit mean");
+    // 1D projections: histogram bars with statistical error bars on top
+    h_proj_q0->Draw("HIST");
+    h_proj_q0->Draw("E1 SAME");
+    drawTitle((toLatexLabel(xsec_var1)).c_str());
+    c->Print(pdfOut.c_str());
+    c->Clear();
+
+    h_proj_q3->Draw("HIST");
+    h_proj_q3->Draw("E1 SAME");
+    drawTitle(("Event rate projection: " + toLatexLabel(xsec_var2)).c_str());
+    c->Print(pdfOut.c_str());
+    c->Clear();
+
+    double meanZmin = 0.0, meanZmax = 4.0, whiteCenter = 1.0;
+    double whiteStop = (whiteCenter - meanZmin) / (meanZmax - meanZmin);
+    setBlueWhiteRedPalette(whiteStop);
+    h_mean->GetZaxis()->SetRangeUser(meanZmin, meanZmax);
     h_mean->Draw("COLZ");
+    drawTitle("Posterior post-fit mean, #LT#theta#GT");
     c->Print(pdfOut.c_str());
     c->Clear();
 
-    // With:
-    setOrangePalette();                              // <-- switch palette
-    h_stddev->GetZaxis()->SetRangeUser(0.0, 0.45);
-    h_stddev->SetTitle("Posterior post-fit std dev");
+    setViridisPalette();
+    h_stddev->GetZaxis()->SetRangeUser(0.0, 0.5);
     h_stddev->Draw("COLZ");
+    drawTitle("Posterior post-fit std. dev., #sigma_{#theta}");
     c->Print(pdfOut.c_str());
     c->Clear();
-    setRedWhiteBluePalette();                        // <-- restore for any later plots
 
     c->Print((pdfOut + "]").c_str());  // close PDF
 
     // --- Cleanup ---
     delete h_xsecvar_eventratehist;
+    delete h_proj_q0;
+    delete h_proj_q3;
     delete h_mean;
     delete h_stddev;
     delete axisX;
