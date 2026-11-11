@@ -15,7 +15,7 @@
 
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/StructsDUNE.h"
-#include "Fitters/MaCh3Factory.h"
+#include "Fitters/Algorithms/MaCh3Factory.h"
 
 //CS YAML "Variations" node expects to be given each parameter to vary with :
 // - "Name": name of the parameter as written in the CovObjs YAML file 

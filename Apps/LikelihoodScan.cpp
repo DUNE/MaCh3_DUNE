@@ -14,7 +14,7 @@
 
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/StructsDUNE.h"
-#include "Fitters/MaCh3Factory.h"
+#include "Fitters/Algorithms/MaCh3Factory.h"
 
 int main(int argc, char * argv[]) {
   auto FitManager = MaCh3ManagerFactory(argc, argv);
@@ -35,12 +35,22 @@ int main(int argc, char * argv[]) {
   //###############################################################################################################################
   //Perform reweight, print total integral, and set data
 
+  // MaCh3DuneFactory has already set every sample's data from General.DataFile, and AddData would
+  // overwrite it with the nominal prediction, so the scan would be around Asimov either way
+  const bool DataFromFile = UsingDataFromFile(FitManager);
+  if (DataFromFile) {
+    MACH3LOG_INFO("Scanning against the data loaded from General.DataFile, no Asimov set will be built");
+  }
+
   std::vector<std::unique_ptr<TH1>> DUNEHists;
   for(auto handler : samples){
     for (unsigned iSample = 0; iSample < handler->GetNSamples(); ++iSample) {
       handler->Reweight();
       DUNEHists.push_back(M3::Clone(handler->GetMCHist(iSample)));
       MACH3LOG_INFO("Event rate for {} : {:<5.2f}", handler->GetSampleTitle(iSample), handler->GetMCHist(iSample)->Integral());
+
+      // The sample's data is already the real thing, leave it alone
+      if (DataFromFile) continue;
 
       if (handler->GetNDim(iSample) == 1) {
         handler->AddData(iSample, static_cast<TH1D*>(DUNEHists.back().get()));

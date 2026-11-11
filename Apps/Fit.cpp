@@ -12,7 +12,7 @@
 #include <TColor.h>
 #include <TMath.h>
 
-#include "Fitters/MaCh3Factory.h"
+#include "Fitters/Algorithms/MaCh3Factory.h"
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/SampleHandlerPDSP.h"
 
@@ -35,6 +35,19 @@ int main(int argc, char * argv[]) {
   const bool UseData = GetFromManager(
       FitManager->raw()["General"]["Data"], false, __FILE__, __LINE__);
 
+  // MaCh3DuneFactory has already set every sample's data from General.DataFile. AddData overwrites
+  // whatever a sample holds, so going on to build Asimov data here would throw that away and fit
+  // the nominal prediction instead
+  const bool DataFromFile = UsingDataFromFile(FitManager);
+  if (DataFromFile) {
+    if (UseData) {
+      MACH3LOG_ERROR("General.Data and General.DataFile both ask for real data, and they disagree "
+                     "on where it comes from. Set only one of them");
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+    MACH3LOG_INFO("Fitting the data loaded from General.DataFile, no Asimov set will be built");
+  }
+
   for (auto handler : samples) {
     for (unsigned iSample = 0; iSample < handler->GetNSamples(); ++iSample) {
 
@@ -43,6 +56,19 @@ int main(int argc, char * argv[]) {
       TString NameTString = TString(name.c_str());
 
       handler->Reweight();
+
+      if (handler->GetNDim(iSample) != 1 && handler->GetNDim(iSample) != 2) {
+        MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting");
+        throw MaCh3Exception(__FILE__ , __LINE__ );
+      }
+
+      MACH3LOG_INFO("Integrals of nominal hists: ");
+      MACH3LOG_INFO("{} : {}", name.c_str(), handler->GetMCHist(iSample)->Integral());
+      MACH3LOG_INFO("--------------");
+
+      // The sample's data is already the real thing, leave it alone
+      if (DataFromFile) continue;
+
       if (UseData) {
         auto* PDSPHandler = dynamic_cast<SampleHandlerPDSP*>(handler);
         if (PDSPHandler == nullptr) {
@@ -57,18 +83,9 @@ int main(int argc, char * argv[]) {
 
       if (handler->GetNDim(iSample) == 1){
         handler->AddData(iSample, static_cast<TH1D*>(PredictionHistograms.back()));
-      } else if (handler->GetNDim(iSample) == 2){
+      } else {
         handler->AddData(iSample, static_cast<TH2D*>(PredictionHistograms.back()));
       }
-
-      else {
-        MACH3LOG_ERROR("Unsupported number of dimensions > 2 - Quitting");
-        throw MaCh3Exception(__FILE__ , __LINE__ );
-      }
-
-      MACH3LOG_INFO("Integrals of nominal hists: ");
-      MACH3LOG_INFO("{} : {}",name.c_str(),PredictionHistograms.back()->Integral());
-      MACH3LOG_INFO("--------------");
     }
   }
 

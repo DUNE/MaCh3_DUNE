@@ -1,15 +1,23 @@
 #!/bin/sh
 
-if ! type add_to_PATH &> /dev/null; then
+# NB: these helpers are defined unconditionally, on purpose. Guarding them with
+# `if ! type add_to_PATH` means a definition left over in the shell from an
+# earlier source -- or one belonging to a different project -- silently wins
+# over ours, and re-sourcing this script can then never repair it.
 
 ### Adapted from https://unix.stackexchange.com/questions/4965/keep-duplicates-out-of-path-on-source
-function add_to_PATH () {
+add_to_PATH() {
   for d; do
 
-    d=$(cd -- "$d" && { pwd -P || pwd; }) 2>/dev/null  # canonicalize symbolic links
+    # canonicalize symbolic links; the redirect has to sit INSIDE the
+    # substitution, or cd's error for a missing dir (e.g. no lib64 on macOS)
+    # escapes to the terminal
+    d=$(cd -- "$d" 2>/dev/null && { pwd -P || pwd; })
     if [ -z "$d" ]; then continue; fi  # skip nonexistent directory
 
-    if [ "$d" == "/usr/bin" ] || [ "$d" == "/usr/bin64" ] || [ "$d" == "/usr/local/bin" ] || [ "$d" == "/usr/local/bin64" ]; then
+    # NB: POSIX test only has `=`. With `==`, zsh treats the bare `==` word as
+    # an =command expansion and fails with "= not found".
+    if [ "$d" = "/usr/bin" ] || [ "$d" = "/usr/bin64" ] || [ "$d" = "/usr/local/bin" ] || [ "$d" = "/usr/local/bin64" ]; then
       case ":$PATH:" in
         *":$d:"*) :;;
         *) export PATH=$PATH:$d;;
@@ -23,17 +31,13 @@ function add_to_PATH () {
   done
 }
 
-fi
-
-if ! type add_to_LD_LIBRARY_PATH &> /dev/null; then
-
-function add_to_LD_LIBRARY_PATH () {
+add_to_LD_LIBRARY_PATH() {
   for d; do
 
-    d=$(cd -- "$d" && { pwd -P || pwd; }) 2>/dev/null  # canonicalize symbolic links
+    d=$(cd -- "$d" 2>/dev/null && { pwd -P || pwd; })
     if [ -z "$d" ]; then continue; fi  # skip nonexistent directory
 
-    if [ "$d" == "/usr/lib" ] || [ "$d" == "/usr/lib64" ] || [ "$d" == "/usr/local/lib" ] || [ "$d" == "/usr/local/lib64" ]; then
+    if [ "$d" = "/usr/lib" ] || [ "$d" = "/usr/lib64" ] || [ "$d" = "/usr/local/lib" ] || [ "$d" = "/usr/local/lib64" ]; then
       case ":$LD_LIBRARY_PATH:" in
         *":$d:"*) :;;
         *) export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$d;;
@@ -47,18 +51,12 @@ function add_to_LD_LIBRARY_PATH () {
   done
 }
 
-fi
-
-if ! type is_in_PATH &> /dev/null; then
-
-function is_in_PATH () {
+is_in_PATH() {
   case ":$PATH:" in
   *:${1}:*) return 0 ;;
   *) return 1 ;;
   esac
 }
-
-fi
 
 export MACH3DUNE_ROOT=@CMAKE_INSTALL_PREFIX@
 export MACH3=@CMAKE_INSTALL_PREFIX@

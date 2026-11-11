@@ -16,7 +16,8 @@ macro(fetchduneanaobj DUNE_ANAOBJ_BRANCH)
 
   endif()
 
-  include_directories(${duneanaobj_SOURCE_DIR})
+  # SYSTEM: duneanaobj's headers aren't ours to fix, don't warn about them
+  include_directories(SYSTEM ${duneanaobj_SOURCE_DIR})
 
   ROOT_GENERATE_DICTIONARY(StandardRecordDict
     ${duneanaobj_SOURCE_DIR}/duneanaobj/StandardRecord/classes.h
@@ -26,6 +27,10 @@ macro(fetchduneanaobj DUNE_ANAOBJ_BRANCH)
   add_library(libStandardRecordDict SHARED ${CMAKE_CURRENT_BINARY_DIR}/StandardRecordDict.cxx)
   target_link_libraries(libStandardRecordDict PUBLIC ROOT::RIO)
   set_target_properties(libStandardRecordDict PROPERTIES OUTPUT_NAME "StandardRecordDict")
+
+  if(APPLE)
+    target_link_options(libStandardRecordDict PRIVATE "LINKER:-undefined,dynamic_lookup")
+  endif()
 
   target_include_directories(libStandardRecordDict PUBLIC
     $<BUILD_INTERFACE:${duneanaobj_SOURCE_DIR}>

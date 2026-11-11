@@ -75,8 +75,8 @@ endif()
 SET(MaCh3_FOUND FALSE)
 # don't find mach3 core from a previous build in this directory or sad times occur
 LIST(APPEND CMAKE_IGNORE_PATH ${CMAKE_CURRENT_BINARY_DIR})
-find_package(MaCh3 2.6.0 EXACT QUIET)
-set(MaCh3_CORE_BRANCH v2.6.0 CACHE STRING "Specify the MaCh3 core branch to use")
+find_package(MaCh3 2.7.1 EXACT QUIET)
+set(MaCh3_CORE_BRANCH v2.7.1 CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 
 if(NOT MaCh3_FOUND)
@@ -142,10 +142,27 @@ endif()
 message(STATUS "CMAKE CXX Standard: ${CMAKE_CXX_STANDARD}")
 
 ############################  FLAGS  ####################################
+include(CheckCXXCompilerFlag)
+
+# KS: Treat warnings as errors. Only sensible with GCC: clang/AppleClang
+# (and the macOS toolchain in general) diagnose things GCC doesn't, and warnings
+# leaking out of our dependencies' headers would then break the build.
+if(NOT DEFINED MaCh3DUNE_WERROR_ENABLED)
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(MaCh3DUNE_WERROR_ENABLED ON)
+  else()
+    set(MaCh3DUNE_WERROR_ENABLED OFF)
+  endif()
+endif()
+set(MaCh3DUNE_WERROR_ENABLED ${MaCh3DUNE_WERROR_ENABLED} CACHE BOOL "Treat compiler warnings as errors")
+message(STATUS "MaCh3DUNE_WERROR_ENABLED: ${MaCh3DUNE_WERROR_ENABLED} (compiler: ${CMAKE_CXX_COMPILER_ID})")
+
 add_library(DUNEMaCh3Warnings INTERFACE)
 
-target_compile_options(DUNEMaCh3Warnings INTERFACE
-  -Werror                 # Treat Warnings as Errors
+# Candidate warning flags. Not every compiler knows all of them (e.g. clang has
+# no -Wuseless-cast), and with -Werror an unknown -W... option is itself a hard
+# error, so each one is probed before being used.
+set(MaCh3DUNE_WARNING_FLAGS
   -Wextra                 # Enable extra warning flags
   -Wall                   # Enable all standard warning flags
   -Wshadow                # Warn when a variable declaration shadows one from an outer scope
@@ -166,6 +183,76 @@ target_compile_options(DUNEMaCh3Warnings INTERFACE
   #-Wfloat-equal          # Warn if floating-point values are compared directly
   #-Wpadded               # Warn when padding is added to a structure or class for alignment
 )
+
+foreach(flag ${MaCh3DUNE_WARNING_FLAGS})
+  # make a variable name that is safe to use as a cache entry
+  string(REGEX REPLACE "[^A-Za-z0-9]" "_" flag_var "HAVE_CXX_FLAG${flag}")
+  check_cxx_compiler_flag("${flag}" ${flag_var})
+  if(${flag_var})
+    target_compile_options(DUNEMaCh3Warnings INTERFACE ${flag})
+  else()
+    message(STATUS "Compiler does not support ${flag}, skipping it")
+  endif()
+endforeach()
+
+if(MaCh3DUNE_WERROR_ENABLED)
+  target_compile_options(DUNEMaCh3Warnings INTERFACE -Werror)
+endif()
+
+# KS: Warnings coming out of our dependencies' headers are not ours to fix, so
+# consume those headers as system includes. Imported targets already behave
+# that way; targets we build ourselves (MaCh3 core and duneanaobj, both pulled
+# in at configure time) have to be marked by hand.
+function(MaCh3DUNEMarkTargetSystem tgt)
+  if(NOT TARGET ${tgt})
+    return()
+  endif()
+
+  # properties can't be set through an ALIAS, so resolve it first
+  get_target_property(tgt_real ${tgt} ALIASED_TARGET)
+  if(NOT tgt_real)
+    set(tgt_real ${tgt})
+  endif()
+
+  get_target_property(tgt_imported ${tgt_real} IMPORTED)
+  if(tgt_imported) # imported targets are treated as system already
+    return()
+  endif()
+
+  if(NOT CMAKE_VERSION VERSION_LESS 3.25)
+    set_target_properties(${tgt_real} PROPERTIES SYSTEM TRUE)
+  else()
+    # older CMake has no SYSTEM target property, so declare the interface
+    # include dirs as system ones explicitly
+    get_target_property(tgt_includes ${tgt_real} INTERFACE_INCLUDE_DIRECTORIES)
+    if(tgt_includes)
+      set_property(TARGET ${tgt_real} APPEND PROPERTY
+        INTERFACE_SYSTEM_INCLUDE_DIRECTORIES ${tgt_includes})
+    endif()
+  endif()
+endfunction()
+
+function(MaCh3DUNEMarkDirectorySystem dir)
+  get_property(dir_targets DIRECTORY ${dir} PROPERTY BUILDSYSTEM_TARGETS)
+  foreach(tgt ${dir_targets})
+    MaCh3DUNEMarkTargetSystem(${tgt})
+  endforeach()
+
+  get_property(subdirs DIRECTORY ${dir} PROPERTY SUBDIRECTORIES)
+  foreach(subdir ${subdirs})
+    MaCh3DUNEMarkDirectorySystem(${subdir})
+  endforeach()
+endfunction()
+
+if(MaCh3_SOURCE_DIR AND IS_DIRECTORY "${MaCh3_SOURCE_DIR}")
+  message(STATUS "Treating headers under ${MaCh3_SOURCE_DIR} as system headers")
+  MaCh3DUNEMarkDirectorySystem(${MaCh3_SOURCE_DIR})
+endif()
+
+# targets defined outside their own subdirectory (e.g. by fetchduneanaobj)
+foreach(dep duneanaobj::StandardRecord duneanaobj::all)
+  MaCh3DUNEMarkTargetSystem(${dep})
+endforeach()
 
 ################################# Features ##################################
 
@@ -220,8 +307,14 @@ target_link_libraries(MaCh3DUNEAll INTERFACE SamplesDUNE SplinesDUNE MaCh3DUNECo
 add_library(MaCh3DUNE::All ALIAS MaCh3DUNEAll)
 
 if(NOT DEFINED MaCh3_PREFIX OR MaCh3_PREFIX STREQUAL "")
+    # CPMAddPackage sets MaCh3_SOURCE_DIR wherever the source actually came
+    # from, so this also covers a local checkout supplied via
+    # CPM_MaCh3_SOURCE, which does not land in _deps/mach3-src.
+    if(MaCh3_SOURCE_DIR AND IS_DIRECTORY "${MaCh3_SOURCE_DIR}")
+        set(MaCh3_PREFIX "${MaCh3_SOURCE_DIR}")
+        message(STATUS "Detected MaCh3 source dir from CPM: ${MaCh3_PREFIX}")
     # Try to detect if MaCh3 was fetched by CPM
-    if(EXISTS "${CMAKE_BINARY_DIR}/_deps/mach3-src")
+    elseif(EXISTS "${CMAKE_BINARY_DIR}/_deps/mach3-src")
         set(MaCh3_PREFIX "${CMAKE_BINARY_DIR}/_deps/mach3-src")
         message(STATUS "Detected CPM-fetched MaCh3: ${MaCh3_PREFIX}")
     # Try to get from MaCh3 package config
@@ -256,7 +349,14 @@ endif()
 
 if(PYTHON_ENABLED)
 	message(STATUS "PYTHON IS ENABLED!!")
-	set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
+	# $ORIGIN is the ELF spelling and means nothing to dyld, which would look
+	# for a directory literally named '$ORIGIN'. macOS spells it @loader_path.
+	if(APPLE)
+		set(MaCh3DUNE_RPATH_ORIGIN "@loader_path")
+	else()
+		set(MaCh3DUNE_RPATH_ORIGIN "$ORIGIN")
+	endif()
+	set(CMAKE_INSTALL_RPATH "${MaCh3DUNE_RPATH_ORIGIN}/../lib")
 	message(STATUS "CMAKE_INSTALL_RPATH is ${CMAKE_INSTALL_RPATH}")
 	set(PYMACH3_PATH ${CMAKE_BINARY_DIR}/python/pyMaCh3)
 	add_subdirectory(python)

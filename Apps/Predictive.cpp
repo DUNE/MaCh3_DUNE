@@ -1,6 +1,6 @@
 // MaCh3 includes
-#include "Fitters/MaCh3Factory.h"
-#include "Fitters/PredictiveThrower.h"
+#include "Fitters/Algorithms/MaCh3Factory.h"
+#include "Fitters/Algorithms/PredictiveThrower.h"
 #include "Samples/MaCh3DUNEFactory.h"
 
 #include <TH1D.h>

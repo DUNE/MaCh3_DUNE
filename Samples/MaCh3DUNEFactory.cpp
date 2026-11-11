@@ -51,8 +51,14 @@ std::shared_ptr<OscillationHandler> SetupOscillationHandler(std::unique_ptr<Mana
     MACH3LOG_ERROR("Tried to set up oscillator {} but found 0 oscillation parameters!", sample_name);
     throw MaCh3Exception("Oscillator has no oscillation parameters" __FILE__, __LINE__);
   }
+  std::vector<const M3::float_t*> par_values(osc_params.size());
+  std::vector<std::string> nu_osc_name(osc_params.size());
+  for(size_t ij = 0; ij < osc_params.size(); ij++){
+    par_values[ij] = param_handler->RetPointer(osc_params[ij].index);
+    nu_osc_name[ij] = osc_params[ij].NuOscName;
+  }
 
-  return std::make_shared<OscillationHandler>(osc_config, true, osc_params, 12);
+  return std::make_shared<OscillationHandler>(osc_config, true, par_values, nu_osc_name, 12);
 }
 
 // ###############################################################
@@ -144,6 +150,11 @@ std::vector<SampleHandlerBase *> MaCh3DuneSampleFactory(std::unique_ptr<Manager>
   return DUNEPdfs;
 }
 
+bool UsingDataFromFile(std::unique_ptr<Manager>& FitManager) {
+  const auto data_file_name = GetFromManager<std::string>(FitManager->raw()["General"]["DataFile"], "", __FILE__, __LINE__);
+  return !data_file_name.empty();
+}
+
 std::pair<std::unique_ptr<ParameterHandlerGeneric>, std::vector<SampleHandlerBase*>> MaCh3DuneFactory(std::unique_ptr<Manager> &FitManager) {
   /// Generates a MaCh3 DUNE instance
   auto param_handler = MaCh3CovarianceFactory<ParameterHandlerGeneric>(FitManager.get(), "Xsec");
@@ -157,6 +168,40 @@ std::pair<std::unique_ptr<ParameterHandlerGeneric>, std::vector<SampleHandlerBas
 
   if(samples.empty()){
     MACH3LOG_WARN("Cannot find any samples, doing prior-only fit");
+  }
+
+  if(!UsingDataFromFile(FitManager)){
+    MACH3LOG_INFO("General.DataFile is not set, so the samples hold no data yet");
+    return {std::move(param_handler), samples};
+  }
+
+  auto data_file_name = Get<std::string>(FitManager->raw()["General"]["DataFile"], __FILE__, __LINE__);
+
+  auto data_file = M3::Open(data_file_name, "READ", __FILE__, __LINE__);
+  if(!data_file){
+    MACH3LOG_ERROR("Cannot open data file: {}", data_file_name);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+
+  for(auto& handler : samples){
+    for (int iSample=0; iSample<handler->GetNSamples(); iSample++) {
+      auto sample_name = handler->GetSampleName(iSample);
+      // Histograms are the sample name with h at the front, e.g. hFD_FHC_numu_cc_1Recoil
+      // Remove Beam from the sample name if it exists, as the histograms in the data file don't have this prefix
+      if (sample_name.find("Beam") == 0) {
+        sample_name = sample_name.substr(4);
+      }
+      std::string hist_name = "h" + sample_name;
+      auto hist = data_file->Get<TH1>(hist_name.c_str());
+      if(!hist){
+        MACH3LOG_ERROR("Cannot find histogram {} in data file: {}", hist_name, data_file_name);
+        throw MaCh3Exception(__FILE__, __LINE__); 
+      }
+      handler->AddData(iSample, hist);
+      MACH3LOG_INFO("Data for {} taken from {}:{}, integral {:.2f}",
+                    handler->GetSampleTitle(iSample), data_file_name, hist_name, hist->Integral());
+    }
+
   }
 
   return {std::move(param_handler), samples};

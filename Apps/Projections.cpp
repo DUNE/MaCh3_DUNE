@@ -7,7 +7,7 @@
 #include <TLegend.h>
 
 #include "Samples/MaCh3DUNEFactory.h"
-#include "Fitters/MaCh3Factory.h"
+#include "Fitters/Algorithms/MaCh3Factory.h"
 
 bool IncludeKinematicCutsInTitle = true;
 bool Scale1DHistsByBinWidth = false;
