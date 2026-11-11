@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=MakeCovMatrix
-#SBATCH --account=def-deborahh
+#SBATCH --account=rpp-dune
 #SBATCH --output=MakeCovMatrix_%j.out
 #SBATCH --error=MakeCovMatrix_%j.err
 #SBATCH --time=12:00:00
@@ -27,7 +27,7 @@ BIN=$BASE_DIR/build/Apps/MakeCovarianceMatrix
 EVENT_CFG=$BASE_DIR/Configs/BeamOffAxis/EventRate.yml
 SYST_CFG=$BASE_DIR/Configs/BeamOffAxis/NDDetSysts.yml
 
-OUTPUT=normalbinning_covmat.root
+OUTPUT=COVARIANCEMATRIX_ONAXIS_1DEnu_25thjunereallyoneparam.root
 
 # ---------------- Run ---------------- #
 echo "[INFO] Starting covariance matrix generation"
@@ -35,6 +35,6 @@ echo "[INFO] Using configs:"
 echo "  Event: $EVENT_CFG"
 echo "  Systs: $SYST_CFG"
 
-$BIN $EVENT_CFG $SYST_CFG 1000000 $OUTPUT
+$BIN $EVENT_CFG $SYST_CFG 50000 $OUTPUT
 
 echo "[INFO] Finished"
