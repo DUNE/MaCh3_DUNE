@@ -34,14 +34,16 @@ int main(int argc, char * argv[]) {
   // #########################################################################
   // Load in and create all relevant energy parameters
 
-  TFile* Osc = TFile::Open("EventRates/CCIndChanOsc.root"); // Loading in histograms
-  TFile* Unosc = TFile::Open("EventRates/CCIndChanUnosc.root");
+  TFile* Osc = TFile::Open("EventRates/AllSampleTwentyTrueIndChanOsc.root"); // Loading in histograms
+  TFile* Unosc = TFile::Open("EventRates/AllSampleTwentyTrueIndChanUnosc.root");
 
   TIter next(Osc->GetListOfKeys()); // Get list of different items within oscillated data histograms (48 in total, 12 channels in 4 samples)
   TKey* key;  // Initialise
 
   std::vector<std::string> KeyNames;
-  std::vector<int> SelectedKeys = {0, 13, 2, 15, 16, 17, 6, 7, 20, 9, 22, 11};
+  //std::vector<int> SelectedKeys = {0, 13, 2, 15, 16, 17, 6, 7, 20, 9, 22, 11};
+  std::vector<int> SelectedKeys = {0, 13, 26, 39, 16, 41, 6, 31, 20, 9, 46, 35};
+  //std::vector<int> SelectedKeys = {12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23}; 
   int ParIndex = 0.0;
   //int KeyIndex = 12.0;
 
@@ -71,6 +73,11 @@ int main(int argc, char * argv[]) {
       ParIndex++; // Increment parameter index to keep amending in sequence
     }
   }
+
+  // for (int k = 336; k < 400; k++){
+  //   xsec->SetPar(k, 0.0);
+  //   xsec->ToggleFixParameter(k);
+  // }
 
   // for (int i = 0; i < 12; i++) {
   //   key = (TKey*) next();
@@ -110,9 +117,9 @@ int main(int argc, char * argv[]) {
 
   std::vector<std::string> sample_names; // Create vector to store names of each sample
   std::vector<TH1*> DUNEHists;
-  std::vector<std::string> MySamples{"FHC_numu", "FHC_nue"}; 
-  
-  TFile* PMNSData = TFile::Open("EventRates/OscPMNSNoNC.root"); // Load in the data we want to fit our Posterior Predictive to
+  std::vector<std::string> MySamples{"FHC_numu", "FHC_nue", "RHC_numu", "RHC_nue"};
+
+  TFile* PMNSData = TFile::Open("EventRates/AllSampleTwentyOsc.root"); // Load in the data we want to fit our Posterior Predictive to
   for (auto handler : DUNEPdfs) {
     for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
     
@@ -123,10 +130,15 @@ int main(int argc, char * argv[]) {
 
     handler->Reweight();
 
-    TString HistName = "hRecoNeutrinoEnergy" + MyNameTString; // Name the histograms as they appear in PMNSData
-    //TString HistName = "hFD_" + MyNameTString;
-    TH1D* blarbHist = PMNSData->Get<TH1D>(HistName); // Get the histogram from our data
-    TH1D* CloneHist = (TH1D*) blarbHist->Clone(); // Create clone of data
+    //TString HistName = "hRecoNeutrinoEnergy" + MyNameTString; // Name the histograms as they appear in PMNSData
+    TString HistName = "hFD_" + MyNameTString;
+    std::string newHisto = std::string("h40_") + MyNameTString.Data();
+    TH1D* blarbHist = PMNSData->Get<TH1D>(HistName);  // Get the histogram from our data
+    TH1D* blarb40 = new TH1D(newHisto.c_str(), MySamples[iSample].c_str(), 40, 0, 10); 
+    for (int bin = 1; bin <= 40; bin++){
+      blarb40->SetBinContent(bin, blarbHist->GetBinContent(bin));
+    }
+    TH1D* CloneHist = (TH1D*) blarb40->Clone(); // Create clone of data
     CloneHist->SetDirectory(nullptr);
 
     DUNEHists.push_back(static_cast<TH1*>(CloneHist->Clone(NameTString+"_unosc"))); // Add our data histograms to the DUNE histograms

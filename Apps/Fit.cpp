@@ -30,14 +30,16 @@ int main(int argc, char * argv[]) {
   // #########################################################################
   // Load in and create all relevant energy parameters
 
-  TFile* Osc = TFile::Open("EventRates/FHCsTwentyIndChanOsc.root"); // Loading in histograms
-  TFile* Unosc = TFile::Open("EventRates/FHCsTwentyIndChanUnosc.root");
+  TFile* Osc = TFile::Open("EventRates/AllSampleTwentyTrueIndChanOsc.root"); // Loading in histograms
+  TFile* Unosc = TFile::Open("EventRates/AllSampleTwentyTrueIndChanUnosc.root");
 
   TIter next(Osc->GetListOfKeys()); // Get list of different items within oscillated data histograms (48 in total, 12 channels in 4 samples)
   TKey* key;  // Initialise
 
   std::vector<std::string> KeyNames;
-  std::vector<int> SelectedKeys = {0, 13, 2, 15, 16, 17, 6, 7, 20, 9, 22, 11};
+  // std::vector<int> SelectedKeys = {0, 13, 2, 15, 16, 17, 6, 7, 20, 9, 22, 11}; // Keys for when using both FHC or both RHC samples
+  std::vector<int> SelectedKeys = {0, 13, 26, 39, 16, 41, 6, 31, 20, 9, 46, 35}; // Keys for using all four samples
+  //std::vector<int> SelectedKeys = {12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23}; 
   int ParIndex = 0;
   //int KeyIndex = 0;
 
@@ -67,6 +69,12 @@ int main(int argc, char * argv[]) {
       ParIndex++; // Increment parameter index to keep amending in sequence
     }
   }
+
+  // for(int k = 0; k < xsec->GetNumParams(); k++){ // For every param in the xsec group
+  //   if(xsec->IsParameterFixed(k) == true || k < 80 || (k > 159 && k < 240) || (k > 319 && k < 480)) continue; // If it has a value of 0 and is an energy normalisation parameter
+  //   xsec->ToggleFixParameter(k); 
+  // }
+
 
   // for (int i = 0; i < 12; i++) {
   //   key = (TKey*) next();
@@ -107,12 +115,12 @@ int main(int argc, char * argv[]) {
   //Some place to store the histograms
   std::vector<TH1*> PredictionHistograms;
   std::vector<std::string> sample_names;
-  std::vector<std::string> MySamples{"FHC_numu", "FHC_nue"}; 
+  std::vector<std::string> MySamples{"FHC_numu", "FHC_nue", "RHC_numu", "RHC_nue"}; 
 
   auto OutputFile = std::unique_ptr<TFile>(TFile::Open(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
 
-  TFile* PMNSData = TFile::Open("EventRates/FHCsTwentyOsc.root"); // Loading in the oscillated data we want to fit to
+  TFile* PMNSData = TFile::Open("EventRates/AllSampleTwentyOsc.root"); // Loading in the oscillated data we want to fit to
   for (auto handler : DUNEPdfs) {
     for (unsigned iSample = 0; iSample < handler->GetNsamples(); ++iSample) {
     

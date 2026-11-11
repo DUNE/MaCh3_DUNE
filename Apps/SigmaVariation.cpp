@@ -35,6 +35,44 @@ int main(int argc, char * argv[]) {
   //###############################################################################################################################
   //Perform reweight and print total integral
 
+    TFile* Osc = TFile::Open("EventRates/FHCsTwentyIndChanOsc.root"); // Loading in histograms
+  TFile* Unosc = TFile::Open("EventRates/FHCsTwentyIndChanUnosc.root");
+
+  TIter next(Osc->GetListOfKeys()); // Get list of different items within oscillated data histograms (48 in total, 12 channels in 4 samples)
+  TKey* key;  // Initialise
+
+  std::vector<std::string> KeyNames;
+  std::vector<int> SelectedKeys = {0, 13, 2, 15, 16, 17, 6, 7, 20, 9, 22, 11};
+  int ParIndex = 0.0;
+  //int KeyIndex = 12.0;
+
+  for(int i = 0; i < xsec->GetNumParams(); i++){ // For every param in the xsec group
+    if(xsec->IsParFromGroup(i, "EParam")){ // If param is from our energy normalisation parameter group
+      ParIndex = i; // Set the index of first parameter
+      break;
+    }
+  }
+
+  while((key = (TKey*)next())) {
+    KeyNames.push_back(key->GetName()); 
+  }
+
+  //for (int index = 0; index < 12; index++) {
+  for (int index : SelectedKeys) {
+    const std::string& name = KeyNames[index];
+    auto HistoOsc = Osc->Get<TH1D>(name.c_str()); // Getting names of histograms
+    auto HistoUnosc = Unosc->Get<TH1D>(name.c_str()); 
+    int NumBins = HistoOsc->GetNbinsX();
+    for(int j = 1; j <= NumBins; j++) { // For each energy bin, starting from 1 to avoid the overflow bin
+      double BinSizeOsc = HistoOsc->GetBinContent(j); // Get the number of events in specific energy bin
+      double BinSizeUnosc = HistoUnosc->GetBinContent(j);
+      double Param = (BinSizeUnosc == 0.0 ? 0.0 : BinSizeOsc/BinSizeUnosc);
+      xsec->SetPar(ParIndex, Param);
+      if (BinSizeUnosc == 0.0) xsec->ToggleFixParameter(ParIndex);
+      ParIndex++; // Increment parameter index to keep amending in sequence
+    }
+  }
+
   MACH3LOG_INFO("=======================================================");
   for(SampleHandlerFD* handler: DUNEPdfs){
     handler->Reweight();
