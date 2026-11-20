@@ -185,3 +185,40 @@ y-axis. Vertical error bars show `posterior_rms / injected`, i.e. the posterior
 width on the same relative scale. If the top-level summary CSV is missing or
 does not contain the requested target, the plotter rebuilds it from the
 per-point `*_recovery.csv` files.
+
+## Initial detector-response geometry model
+
+`SampleHandlerPDSP` provides two standard-normal functional parameters for the
+initial spatial detector response:
+
+- `SCEGeometry` scales the nominal reconstructed-minus-true track-length and
+  endpoint-z residuals with one shared pull. Its current one-sigma response is
+  30% of each event's residual. Thus length and endpoint-z are 100% correlated
+  within this mode; the shifted endpoint is used by the 30/220 cm selection and
+  the shifted length is propagated to `RecoKEInt`.
+- `TrackLengthResolution` changes only the width of the existing length
+  residual, using
+  `L' = L_true + (1 + 0.026 theta_L) (L_reco - L_true)`. It does not draw an
+  additional random smear.
+
+The two nuisance priors are independent in the initial covariance model. Do
+not add separate endpoint-z, SCE track-length, or interacting-energy
+uncertainties: those effects are already propagated by `SCEGeometry`.
+
+The 30% SCE width is an explicit provisional envelope, not a final calibration
+result. ProtoDUNE-SP observed position distortions as large as 40 cm and uses
+data-driven face-crossing/cosmic-track maps (DUNE, *JINST* 15 (2020) P12004,
+[arXiv:2007.06722](https://arxiv.org/abs/2007.06722), section 6.1). Replace the envelope with event responses from
+nominal and alternative maps, and set the pull covariance from their ensemble,
+when those samples are available. If flattened inputs contain
+`end_z_sce_response` and `track_length_sce_response`, these are interpreted as
+the calibrated +1 sigma alternative-minus-nominal responses in cm and replace
+the fallback independently for each observable. The current inputs expose
+endpoint-z and track length but not endpoint-x/y, so those coordinates are not
+varied yet.
+
+For validation, run nominal and `SCEGeometry=+/-1` predictions and compare at
+least `RecoEndZ`, `RecoTrackLength`, `RecoKEInt`, and the event yields migrating
+across 30 and 220 cm. The corresponding `TrackLengthResolution=+/-1` check
+should broaden/narrow the `RecoTrackLength - TrueTrackLength` distribution
+without changing its central value or introducing event-to-event randomness.

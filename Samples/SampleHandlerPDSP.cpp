@@ -9,7 +9,6 @@
 #include <algorithm>
 #include <cmath>
 #include <memory>
-#include <random>
 #include <utility>
 #include <vector>
 
@@ -18,6 +17,17 @@ namespace {
 constexpr double fiducialVolumeStart = 30.0; // cm
 constexpr double nominalExcitationEnergy = 198.0; // eV
 constexpr double excitationEnergyUncertainty = 4.0; // eV
+
+// Initial detector-response envelope. A single standard-normal pull changes
+// the size of the reconstructed-minus-true geometry residual coherently for
+// every geometry quantity. Replace this conservative width with the RMS of
+// nominal-minus-alternative SCE maps when event-level variations are available.
+constexpr double sceGeometryResidualScaleUncertainty = 0.30;
+
+// Relative one-sigma uncertainty assigned to the width of the existing track
+// length residual. This changes the residual already present in the MC; it is
+// deliberately not an additional random smearing.
+constexpr double trackLengthResolutionWidthUncertainty = 0.026;
 
 double PionMeanDEDX(const double kineticEnergy,
                     const double meanExcitationEnergy) {
@@ -336,11 +346,6 @@ int SampleHandlerPDSP::SetupExperimentMC() {
   PDSPPlottingSamples.resize(nEntries);
 
   int TotalEventCounter = 0;
-  // Draw each event's fractional resolution smear once. The fixed seed keeps
-  // the stored toy-smearing pattern reproducible between complete runs.
-  std::mt19937_64 trackLengthRng(42);
-  std::normal_distribution<double> trackLengthSmear(0.0, 0.026);
-
   // loop over all Samples
   for(size_t iSample = 0; iSample < SampleDetails.size(); iSample++)
   {
@@ -408,6 +413,8 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       double recoEndZ;
       double recoPinst;
       double recoTrackLength;
+      double sceEndZResponse = 0.0;
+      double sceTrackLengthResponse = 0.0;
 
       _data->SetBranchStatus("KE_ff_reco", true);
       _data->SetBranchAddress("KE_ff_reco", &recoKEFF);
@@ -427,6 +434,23 @@ int SampleHandlerPDSP::SetupExperimentMC() {
       _data->SetBranchStatus("track_length_reco", true);
       _data->SetBranchAddress("track_length_reco", &recoTrackLength);
 
+      // Optional calibrated event responses. Their convention is the +1 sigma
+      // alternative minus nominal reconstruction, in cm. Older flattened
+      // ntuples do not contain them and use the residual-envelope fallback.
+      const bool hasSCEEndZResponse =
+          _data->GetBranch("end_z_sce_response") != nullptr;
+      const bool hasSCETrackLengthResponse =
+          _data->GetBranch("track_length_sce_response") != nullptr;
+      if (hasSCEEndZResponse) {
+        _data->SetBranchStatus("end_z_sce_response", true);
+        _data->SetBranchAddress("end_z_sce_response", &sceEndZResponse);
+      }
+      if (hasSCETrackLengthResponse) {
+        _data->SetBranchStatus("track_length_sce_response", true);
+        _data->SetBranchAddress("track_length_sce_response",
+                                &sceTrackLengthResponse);
+      }
+
       for (int i = 0; i < _data->GetEntries(); ++i) { // Loop through tree (events)
         _data->GetEntry(i);
 
@@ -442,18 +466,27 @@ int SampleHandlerPDSP::SetupExperimentMC() {
         PDSPSamples[TotalEventCounter].RecoKEIni = recoKEIni;
         PDSPSamples[TotalEventCounter].RecoKEInt = recoKEInt;
         PDSPSamples[TotalEventCounter].RecoEndZ = recoEndZ;
+        PDSPSamples[TotalEventCounter].RecoEndZShifted = recoEndZ;
         PDSPSamples[TotalEventCounter].RecoPinst = recoPinst;
         PDSPSamples[TotalEventCounter].RecoPinstShifted = recoPinst;
         PDSPSamples[TotalEventCounter].RecoTrackLength = recoTrackLength;
         PDSPSamples[TotalEventCounter].RecoTrackLengthShifted = recoTrackLength;
+        PDSPSamples[TotalEventCounter].SCEEndZResponse =
+            hasSCEEndZResponse
+                ? sceEndZResponse
+                : sceGeometryResidualScaleUncertainty *
+                    (recoEndZ - trueEndZ);
+        PDSPSamples[TotalEventCounter].SCETrackLengthResponse =
+            hasSCETrackLengthResponse
+                ? sceTrackLengthResponse
+                : sceGeometryResidualScaleUncertainty *
+                    (recoTrackLength - trueTrackLength);
         PDSPSamples[TotalEventCounter].NominalPropagatedKEIni =
             PropagatePionKE(recoKEFF, fiducialVolumeStart,
                             nominalExcitationEnergy);
         PDSPSamples[TotalEventCounter].NominalPropagatedKEInt =
             PropagatePionKE(recoKEFF, recoTrackLength,
                             nominalExcitationEnergy);
-        PDSPSamples[TotalEventCounter].TrackLengthSmearFraction =
-            trackLengthSmear(trackLengthRng);
         PDSPSamples[TotalEventCounter].RecoKEIniShifted = recoKEIni;
         PDSPSamples[TotalEventCounter].RecoKEIntShifted = recoKEInt;
 
@@ -518,7 +551,7 @@ const double* SampleHandlerPDSP::GetPointerToKinematicParameter(const int KinPar
     case kTrueEndZ:
       return &PDSPSamples[iEvent].TrueEndZ;
     case kRecoEndZ:
-      return &PDSPSamples[iEvent].RecoEndZ;
+      return &PDSPSamples[iEvent].RecoEndZShifted;
     case kRecoPinst:
       return &PDSPSamples[iEvent].RecoPinstShifted;
     case kRecoTrackLength:
@@ -602,14 +635,28 @@ void SampleHandlerPDSP::RegisterFunctionalParameters() {
         event.RecoKEFFShifted -= deltaCorrection;
       });
 
-  // track_length_reco starts at the TPC front face.  This functional changes
-  // only that length; FinaliseShifts propagates KE_ff over the shifted length.
+  // Correlated spatial-calibration/SCE envelope. The same pull changes the
+  // endpoint and length residuals, so their covariance and the induced sample
+  // migration are retained. FinaliseShifts propagates the shifted length to
+  // KE_int. Do not add independent endpoint or SCE length nuisances on top of
+  // this mode.
+  RegisterIndividualFunctionalParameter(
+      PDSPSamples, "SCEGeometry",
+      [](const double& theta, PDSPMCInfo& event) {
+        event.RecoTrackLengthShifted +=
+            theta * event.SCETrackLengthResponse;
+        event.RecoEndZShifted += theta * event.SCEEndZResponse;
+      });
+
+  // Scale the resolution residual already present in the simulation:
+  // L' = L_true + (1 + a_L theta) (L_reco - L_true). Written as an
+  // additive response so it composes with SCEGeometry without order effects.
   RegisterIndividualFunctionalParameter(
       PDSPSamples, "TrackLengthResolution",
       [](const double& theta, PDSPMCInfo& event) {
-        const double scale = std::max(
-            0.01, 1.0 + theta * event.TrackLengthSmearFraction);
-        event.RecoTrackLengthShifted = event.RecoTrackLength * scale;
+        event.RecoTrackLengthShifted +=
+            trackLengthResolutionWidthUncertainty * theta *
+            (event.RecoTrackLength - event.TrueTrackLength);
       });
 
   // Convert the standard-normal nuisance theta_I into the shifted liquid-argon
@@ -629,6 +676,7 @@ void SampleHandlerPDSP::ResetShifts(const int iEvent) {
   auto& event = PDSPSamples[iEvent];
   event.RecoPinstShifted = event.RecoPinst;
   event.RecoTrackLengthShifted = event.RecoTrackLength;
+  event.RecoEndZShifted = event.RecoEndZ;
   event.RecoKEFFShifted = event.RecoKEFF;
   event.RecoKEIniShifted = event.RecoKEIni;
   event.RecoKEIntShifted = event.RecoKEInt;
@@ -638,6 +686,11 @@ void SampleHandlerPDSP::ResetShifts(const int iEvent) {
 
 void SampleHandlerPDSP::FinaliseShifts(const int iEvent) {
   auto& event = PDSPSamples[iEvent];
+
+  // Guard the range-energy propagator against unphysical lengths at extreme
+  // nuisance values while leaving endpoint migration unconstrained.
+  event.RecoTrackLengthShifted =
+      std::max(0.0, event.RecoTrackLengthShifted);
 
   const double propagatedKEIni = PropagatePionKE(
       event.RecoKEFFShifted, fiducialVolumeStart,

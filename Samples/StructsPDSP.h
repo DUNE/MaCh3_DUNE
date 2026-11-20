@@ -36,6 +36,7 @@ struct PDSPMCInfo {
   double RecoKEInt = M3::_BAD_DOUBLE_;
   /// Reconstructed track endpoint z coordinate (cm), from end_z_reco.
   double RecoEndZ = M3::_BAD_DOUBLE_;
+  double RecoEndZShifted = M3::_BAD_DOUBLE_;
 
   /// Instrumental reconstructed beam momentum (MeV/c).
   double RecoPinst = M3::_BAD_DOUBLE_;
@@ -43,13 +44,14 @@ struct PDSPMCInfo {
   /// Reconstructed trajectory length (cm), distinct from the endpoint z.
   double RecoTrackLength = M3::_BAD_DOUBLE_;
   double RecoTrackLengthShifted = M3::_BAD_DOUBLE_;
+  /// Event response (alternative minus nominal) for the correlated SCE mode.
+  double SCETrackLengthResponse = 0.0;
+  double SCEEndZResponse = 0.0;
   /// Nominal spline-propagated energies cached for relative systematic shifts.
   double NominalPropagatedKEIni = M3::_BAD_DOUBLE_;
   double NominalPropagatedKEInt = M3::_BAD_DOUBLE_;
   /// Shifted mean excitation energy I (eV) used by Bethe--Bloch propagation.
   double ExcitationEnergyShifted = M3::_BAD_DOUBLE_;
-  /// Fixed fractional N(0, 0.026) track-length smear drawn once per event.
-  double TrackLengthSmearFraction = 0.0;
   /// Shifted fit observables used by functional systematics.
   double RecoKEIniShifted = M3::_BAD_DOUBLE_;
   double RecoKEIntShifted = M3::_BAD_DOUBLE_;
