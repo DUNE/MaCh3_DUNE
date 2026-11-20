@@ -42,41 +42,13 @@ include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 #=================== ROOT
 find_package(ROOT 6 REQUIRED)
 
-#=================== DUNEAnaObj
-if(NOT DEFINED DUNE_ANAOBJ_BRANCH)
-  set(DUNE_ANAOBJ_BRANCH v03_14_00)
-  set(DUNE_ANAOBJ_BRANCH ${DUNE_ANAOBJ_BRANCH} CACHE STRING "Specify which duneanaobj branch to use")
-endif()
-
-option(MaCh3_DUNE_USE_SRProxy "Whether to build proxy classes for Standard Record objects" OFF)
-
-if(MaCh3_DUNE_USE_SRProxy)
-  find_package(duneanaobj)
-
-  if(NOT duneanaobj_FOUND)
-    CPMFindPackage(
-      NAME duneanaobj
-      GIT_TAG feature/Clingification_rebase2024
-      GITHUB_REPOSITORY luketpickering/duneanaobj
-      VERSION 4.0.0
-    )
-  endif()
-
-  if(NOT TARGET duneanaobj::all)
-    message(FATAL_ERROR "MaCh3 DUNE Expected dependency target: duneanaobj::all")
-  endif()
-else()
-  include(fetchduneanaobj)
-  fetchduneanaobj(${DUNE_ANAOBJ_BRANCH})
-endif()
-
 ##################################  MaCh3  ######################################
 #If MaCh3 was sourced find it, otherwise use CPM
 SET(MaCh3_FOUND FALSE)
 # don't find mach3 core from a previous build in this directory or sad times occur
 LIST(APPEND CMAKE_IGNORE_PATH ${CMAKE_CURRENT_BINARY_DIR})
-find_package(MaCh3 2.6.0 EXACT QUIET)
-set(MaCh3_CORE_BRANCH v2.6.0 CACHE STRING "Specify the MaCh3 core branch to use")
+find_package(MaCh3 2.6.1 EXACT QUIET)
+set(MaCh3_CORE_BRANCH v2.6.1 CACHE STRING "Specify the MaCh3 core branch to use")
 message(STATUS "Using MaCh3_CORE_BRANCH: ${MaCh3_CORE_BRANCH}")
 
 if(NOT MaCh3_FOUND)
@@ -130,6 +102,33 @@ endif()
 
 if(NOT TARGET MaCh3::All)
   message(FATAL_ERROR "MaCh3 DUNE Expected dependency target: MaCh3::All, did you source setup.MaCh3.sh")
+endif()
+
+#=================== DUNEAnaObj
+if(NOT DEFINED DUNE_ANAOBJ_BRANCH)
+  set(DUNE_ANAOBJ_BRANCH cmake/fetchcontentcompatibility)
+  set(DUNE_ANAOBJ_BRANCH ${DUNE_ANAOBJ_BRANCH} CACHE STRING "Specify which duneanaobj branch to use")
+endif()
+
+find_package(duneanaobj 4 QUIET)
+if(NOT duneanaobj_FOUND)
+  include(FetchContent)
+  FetchContent_Declare(
+      SRProxy
+      GIT_REPOSITORY https://github.com/luketpickering/SRProxy.git
+      GIT_TAG        feature/Clingification_rebase3
+    )
+  FetchContent_Declare(
+      duneanaobj
+      GIT_REPOSITORY https://github.com/DUNE/duneanaobj.git
+      GIT_TAG        ${DUNE_ANAOBJ_BRANCH}
+    )
+  SET(SKIP_CET ON)
+  FetchContent_MakeAvailable(SRProxy duneanaobj)
+endif()
+
+if(NOT TARGET duneanaobj::StandardRecord)
+  message(FATAL_ERROR "duneanasel Expected dependency target: duneanaobj::StandardRecord")
 endif()
 
 ############################  C++ Compiler  ####################################

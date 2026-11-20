@@ -7,6 +7,8 @@
 #include "Samples/SampleHandlerAtm.h"
 #include "Samples/SampleHandlerPDSP.h"
 
+#include "Samples/SampleHandlerBeamWinter26/SampleHandlerBeamWinter26.h"
+
 // ###############################################################
 SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, std::unique_ptr<ParameterHandlerGeneric>& param_handler, const std::shared_ptr<OscillationHandler>&  BeamOscillator_, const std::shared_ptr<OscillationHandler>&  AtmOscillator_, BeamNDCov beamNDCov) {
 // ###############################################################
@@ -27,8 +29,10 @@ SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string Samp
     Sample = new SampleHandlerBeamNDGAr(SampleConfig, param_handler.get());
   } else if (SampleType == "PDSP") {
     Sample = new SampleHandlerPDSP(SampleConfig, param_handler.get());
-  }
-  else {
+  } else if (SampleType == "BeamWinter26") {
+    Sample = new dune::beam::SampleHandlerBeamWinter26(
+        SampleConfig, param_handler.get(), BeamOscillator_);
+  } else {
     MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
     throw MaCh3Exception(__FILE__, __LINE__);
   }

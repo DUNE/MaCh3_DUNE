@@ -1,3 +1,5 @@
+add_subdirectory(SampleHandlerBeamWinter26)
+
 set(HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerAtm.h
   ${CMAKE_CURRENT_SOURCE_DIR}/SampleHandlerBeamFD.h
@@ -23,7 +25,7 @@ set_target_properties(SamplesDUNE PROPERTIES
   EXPORT_NAME SamplesDUNE)
 
 target_link_libraries(SamplesDUNE PUBLIC SplinesDUNE MaCh3::All MaCh3DUNECompilerOptions)
-target_link_libraries(SamplesDUNE PRIVATE duneanaobj::StandardRecord DUNEMaCh3Warnings)
+target_link_libraries(SamplesDUNE PRIVATE SampleHandlerBeamWinter26 duneanaobj::StandardRecord DUNEMaCh3Warnings)
 
 target_include_directories(SamplesDUNE PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../>
