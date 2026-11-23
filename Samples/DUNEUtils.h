@@ -5,6 +5,8 @@
 #include <iomanip>
 #include <vector>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 #include <Eigen/Dense>
 #include <openssl/evp.h>
@@ -94,18 +96,45 @@ inline std::string ToHex(const unsigned char* data, size_t len) {
   return oss.str();
 }
 
-inline bool CompareMD5Sum(std::string KnownSum, std::string FilePathToCheck) {
-  MACH3LOG_INFO("Determining MD5 Sum for File:{}",FilePathToCheck);
-  
-  std::vector<unsigned char> Data;
-  if (!ReadFileIntoVector(FilePathToCheck,Data)) {
+// The MD5 is computed while streaming the file in 64 MB blocks.
+// The original read the whole file into memory first (23.5 GB for merged_syst.root); the digest is identical.
+inline bool ComputeFileMD5(const std::string& path, std::string& hex) {
+  std::ifstream ifs(path, std::ios::binary);
+  if (!ifs) return false;
+  EVP_MD_CTX *ctx = EVP_MD_CTX_new();
+  if (!ctx || 1 != EVP_DigestInit_ex(ctx, EVP_md5(), nullptr)) {
+    std::cerr << "EVP MD5 initialisation failed\n";
     throw MaCh3Exception(__FILE__, __LINE__);
   }
-  
+  std::vector<char> buf(size_t(64) << 20);
+  while (ifs) {
+    ifs.read(buf.data(), static_cast<std::streamsize>(buf.size()));
+    const std::streamsize got = ifs.gcount();
+    if (got > 0 && 1 != EVP_DigestUpdate(ctx, buf.data(), static_cast<size_t>(got))) {
+      std::cerr << "EVP_DigestUpdate failed\n";
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+  }
+  if (!ifs.eof()) { EVP_MD_CTX_free(ctx); return false; }
   unsigned char Digest[EVP_MAX_MD_SIZE];
   unsigned int Digest_len = 0;
-  ComputeMD5(Data.data(), Data.size(), Digest, Digest_len);
-  std::string CalculatedMD5Sum = ToHex(Digest, Digest_len);
+  if (1 != EVP_DigestFinal_ex(ctx, Digest, &Digest_len)) {
+    std::cerr << "EVP_DigestFinal_ex failed\n";
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  EVP_MD_CTX_free(ctx);
+  hex = ToHex(Digest, Digest_len);
+  return true;
+}
+
+inline bool CompareMD5Sum(std::string KnownSum, std::string FilePathToCheck) {
+  MACH3LOG_INFO("Determining MD5 Sum for File:{}",FilePathToCheck);
+
+  std::string CalculatedMD5Sum;
+  if (!ComputeFileMD5(FilePathToCheck, CalculatedMD5Sum)) {
+    MACH3LOG_ERROR("Could not read file {} for the MD5 check", FilePathToCheck);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
 
   MACH3LOG_INFO("Comparing to known MD5 Sum: {}",KnownSum);
   if (KnownSum != CalculatedMD5Sum) {

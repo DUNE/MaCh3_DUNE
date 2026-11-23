@@ -10,6 +10,8 @@ foreach(app
 	Predictive
 	ConvertToEigen
 	PlotSliceHistograms
+	FastCompare
+	MakeAtmSplineCache
       )
 
     add_executable(${app} ${app}.cpp)

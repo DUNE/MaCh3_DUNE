@@ -19,6 +19,10 @@
 #include "TH2.h"
 #include "TH3.h"
 
+#include <malloc.h>   // malloc_trim
+#include <map>
+#include <cstdlib>
+
 #pragma GCC diagnostic pop
 
 SampleHandlerAtm::SampleHandlerAtm(std::string mc_version_, ParameterHandlerGeneric* xsec_cov_, const std::shared_ptr<OscillationHandler>&  Oscillator_) : SampleHandlerBase(mc_version_, xsec_cov_, Oscillator_) {
@@ -33,6 +37,9 @@ SampleHandlerAtm::~SampleHandlerAtm() {
 }
 
 void SampleHandlerAtm::Init() {
+  //Fast atmospheric engine options (FastOptions)
+  ReadFastOptions();
+
   //=============================================================
   //DB IsELike determines which reconstruction algorithm gets applied to which samples
   std::vector<std::string> EnabledSamples = Get<std::vector<std::string>>(SampleManager->raw()["Samples"], __FILE__ , __LINE__);
@@ -83,9 +90,12 @@ void SampleHandlerAtm::Init() {
   std::string SplineInputFileDirectory = Get<std::string>(SampleManager->raw()["InputFiles"]["InputSplineDirectory"],__FILE__,__LINE__);
   
   if (InputSplineFile!="") {
-    std::string InputSplinesMD5Sum = Get<std::string>(SampleManager->raw()["InputFiles"]["InputSplinesMD5Sum"],__FILE__,__LINE__);
+    InputSplinesMD5Sum = Get<std::string>(SampleManager->raw()["InputFiles"]["InputSplinesMD5Sum"],__FILE__,__LINE__);
+    FastSplineOptions.SourceMD5 = InputSplinesMD5Sum;
 
-    if (InputSplineFile!="") {
+    //The fast spline engine checks the MD5 itself (against its cache, or streaming the ROOT file
+    //only when it has to read it), so the 23.5 GB file is not read twice and need not be present with a cache
+    if (InputSplineFile!="" && !UseFastSplines) {
       if (!CompareMD5Sum(InputSplinesMD5Sum, InputSplineFile)) {
 	MACH3LOG_ERROR("Input Splines MD5Sum does not match the expectation from the config file");
 	throw MaCh3Exception(__FILE__, __LINE__);
@@ -103,6 +113,8 @@ void SampleHandlerAtm::Init() {
 	 fInputSplines.push_back(FileName);
       }
     }
+  } else if (!FastSplineOptions.CacheFile.empty()) {
+    MACH3LOG_INFO("No ROOT spline files provided; splines come from SplineCacheFile {}", FastSplineOptions.CacheFile);
   } else {
     MACH3LOG_INFO("No spline files provided");
   }
@@ -195,6 +207,10 @@ void SampleHandlerAtm::Init() {
 }
 
 void SampleHandlerAtm::InititialiseData() {
+  //Compact arrays for the fast reweight, then give memory freed during loading back to the OS
+  if (UseFastReweight) BuildFastEventArrays();
+  malloc_trim(0);
+
   //DB By default, set the data to be the "nominal" MC spectrum - This can be overwritten at executable level
   Reweight();
   for (int iSample = 0; iSample < GetNSamples(); iSample++) {
@@ -205,13 +221,14 @@ void SampleHandlerAtm::InititialiseData() {
 void SampleHandlerAtm::SetupSplines() {
   //DB Because the event-by-event spline weight load-in is not "easily" supported by Core, do manual load-in using DUNE tools
   if(ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline) > 0) {
-    if (fInputSplines.size() == 0) {
+    if (fInputSplines.size() == 0 && !(UseFastSplines && !FastSplineOptions.CacheFile.empty())) {
       MACH3LOG_ERROR("Spline parameters defined in the config but no spline input files specified");
       throw MaCh3Exception(__FILE__, __LINE__);
     }
     
     MACH3LOG_INFO("Found {} splines for this sample so I will create a spline object", ParHandler->GetNumParamsFromSampleName(SampleHandlerName, kSpline));
-    auto SplineFactory = SplineHandlerFactoryDUNE(ParHandler, Modes.get(), dunemcSamples, fInputSplines, SampleHandlerName);
+    auto SplineFactory = SplineHandlerFactoryDUNE(ParHandler, Modes.get(), dunemcSamples, fInputSplines, SampleHandlerName,
+                                                  UseFastSplines, FastSplineOptions);
 
     SplineHandler = std::move(SplineFactory.GetSplineHandler());
     if (SplineFactory.GetSplineType() == kBinned) {
@@ -231,6 +248,14 @@ void SampleHandlerAtm::SetupSplines() {
 
 void SampleHandlerAtm::InitialiseSplineObjectPerEvent(){
   //DB Do the manual hand-holding of intialising the event-by-event spline and setting the event weights
+  if (auto FastSplines = dynamic_cast<FastAtmSplineHandler*>(SplineHandler.get())) {
+    //Events with the same eventID share one weight
+    for (size_t i = 0; i < dunemcSamples.size(); ++i) {
+      MCEvents[i].total_weight_pointers.push_back(FastSplines->RetPointer(static_cast<int>(i)));
+    }
+    return;
+  }
+
   auto SplineHandlerDUNE = dynamic_cast<MonolithSplineHandlerDUNE*>(SplineHandler.get());
   
   if (!SplineHandlerDUNE) {
@@ -599,6 +624,7 @@ void SampleHandlerAtm::SetupDetectorSystematicRatios() {
     if (ParHandler->IsParFromGroup(iParam,"DetectorSystematic")) {
       std::string ParamName = ParHandler->GetParFancyName(iParam);
       DetectorSystematicParameterNames.push_back(ParamName);
+      DetectorSystematicParameterIndices.push_back(iParam);
 
       //DB Check that the dimensions for this parameter are in the configured map
       if (DetectorSystematicDimensionMap.count(ParamName) == 0) {
@@ -615,6 +641,12 @@ void SampleHandlerAtm::SetupDetectorSystematicRatios() {
   }
   if (DetectorSystematicParameterNames.size()!=0 && fDetectorSystematicsFileName=="") {
     MACH3LOG_ERROR("Detector systematics configured (Group=\"DetectorSystematic\") but no input file provided");
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  //The per-event ratios are stored inline (StructsDUNE.h SmallVecDUNE capacity 4)
+  if (DetectorSystematicParameterNames.size() > 4) {
+    MACH3LOG_ERROR("{} detector systematics configured; the fast build stores at most 4 ratios per event (raise the SmallVecDUNE capacity in StructsDUNE.h)",
+                   DetectorSystematicParameterNames.size());
     throw MaCh3Exception(__FILE__, __LINE__);
   }
   //DB If no parameters are configured, we can return early
@@ -713,6 +745,7 @@ void SampleHandlerAtm::SetupAtmFluxSplineSystematics() {
     if (ParHandler->IsParFromGroup(iParam,"AtmFlux")) {
       std::string ParamName = ParHandler->GetParFancyName(iParam);
       AtmFluxParameterNames.push_back(ParamName);
+      AtmFluxParameterIndices.push_back(iParam);
     }
   }
 
@@ -855,4 +888,285 @@ double SampleHandlerAtm::ReturnKinematicParameter(const int KinematicVariable, c
   //DB Use the above function just for ease
   KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
   return *GetPointerToKinematicParameter(KinPar, iEvent);
+}
+
+//=============================================================================
+// Fast atmospheric engine
+//=============================================================================
+
+namespace {
+  // Environment override helper: returns true and sets val if the variable is set and non-empty
+  bool EnvOverride(const char* name, std::string& val) {
+    const char* e = std::getenv(name);
+    if (e == nullptr || std::string(e).empty()) return false;
+    val = e;
+    return true;
+  }
+}
+
+// ************************************************
+void SampleHandlerAtm::ReadFastOptions() {
+// ************************************************
+  const YAML::Node Raw = SampleManager->raw();
+  const YAML::Node FastNode = Raw["FastOptions"];
+  auto getStr = [&](const char* key, const std::string& def) {
+    return (FastNode && FastNode[key]) ? FastNode[key].as<std::string>() : def;
+  };
+  UseFastReweight = (FastNode && FastNode["FastReweight"]) ? FastNode["FastReweight"].as<bool>() : true;
+  std::string Engine = getStr("SplineEngine", "Fast");
+  std::string Fixed = getStr("SplineFixedParams", "Freeze");
+  FastSplineOptions.NThreads = (FastNode && FastNode["SplineReadThreads"]) ? FastNode["SplineReadThreads"].as<int>() : 0;
+  FastSplineOptions.WriteCache = (FastNode && FastNode["WriteSplineCache"]) ? FastNode["WriteSplineCache"].as<bool>() : true;
+  std::string Precision = getStr("SplinePrecision", "Double");
+  FastSplineOptions.CacheFile = (Raw["InputFiles"] && Raw["InputFiles"]["SplineCacheFile"]) ?
+    Raw["InputFiles"]["SplineCacheFile"].as<std::string>() : "";
+
+  // Environment overrides (handy for A/B tests with one config)
+  std::string Env;
+  if (EnvOverride("M3_FAST_REWEIGHT", Env)) UseFastReweight = (Env != "0" && Env != "false" && Env != "False");
+  if (EnvOverride("M3_SPLINE_ENGINE", Env)) Engine = Env;
+  if (EnvOverride("M3_SPLINE_FIXED", Env)) Fixed = Env;
+  if (EnvOverride("M3_SPLINE_CACHE", Env)) FastSplineOptions.CacheFile = (Env == "none" ? "" : Env);
+  if (EnvOverride("M3_SPLINE_THREADS", Env)) FastSplineOptions.NThreads = std::stoi(Env);
+  if (EnvOverride("M3_SPLINE_PRECISION", Env)) Precision = Env;
+  if (Precision == "Double") FastSplineOptions.DoublePrecision = true;
+  else if (Precision == "Float") FastSplineOptions.DoublePrecision = false;
+  else {
+    MACH3LOG_ERROR("FastOptions:SplinePrecision must be Double or Float, got {}", Precision);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+
+  if (Engine == "Fast") UseFastSplines = true;
+  else if (Engine == "Legacy") UseFastSplines = false;
+  else {
+    MACH3LOG_ERROR("FastOptions:SplineEngine must be Fast or Legacy, got {}", Engine);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  if (Fixed == "Free") FastSplineOptions.FixedMode = 0;
+  else if (Fixed == "Freeze") FastSplineOptions.FixedMode = 1;
+  else if (Fixed == "Drop") FastSplineOptions.FixedMode = 2;
+  else {
+    MACH3LOG_ERROR("FastOptions:SplineFixedParams must be Free, Freeze or Drop, got {}", Fixed);
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  MACH3LOG_INFO("Fast atmospheric engine: FastReweight {}, SplineEngine {}, SplineFixedParams {}, SplinePrecision {}, SplineCacheFile '{}'",
+                UseFastReweight, Engine, Fixed, Precision, FastSplineOptions.CacheFile);
+}
+
+// ************************************************
+bool SampleHandlerAtm::FunctionalShiftApplies(const std::vector<std::string>& ParNames, const int iEvent) {
+// ************************************************
+  // Same conditions as SampleHandlerBase::RegisterIndividualFunctionalParameter: mode, sample and kinematic
+  // selection of every parameter must match (core throws if only some match)
+  int nmatch = 0;
+  for (const auto& Name : ParNames) {
+    const FunctionalParameter* fp = nullptr;
+    std::vector<int> Samples;
+    std::vector<FunctionalParameter> found;
+    for (int iSample = 0; iSample < GetNSamples(); ++iSample) {
+      auto pars = ParHandler->GetFunctionalParametersFromSampleName(GetSampleName(iSample));
+      for (auto& p : pars) {
+        if (p.name == Name) {
+          if (found.empty()) found.push_back(p);
+          Samples.push_back(iSample);
+        }
+      }
+    }
+    if (found.empty()) return false;
+    fp = &found[0];
+    const int Mode = static_cast<int>(std::round(ReturnKinematicParameter(kMode, iEvent)));
+    if (!MatchCondition(fp->modes, Mode)) break;
+    if (!MatchCondition(Samples, MCEvents[iEvent].NominalSample)) break;
+    if (!PassesSelection(*fp, iEvent)) break;
+    nmatch++;
+  }
+  return nmatch == static_cast<int>(ParNames.size()) && nmatch > 0;
+}
+
+// ************************************************
+size_t SampleHandlerAtm::FastEventArrays::Bytes() const {
+// ************************************************
+  return Bin.capacity()*sizeof(int) + Const.capacity()*sizeof(double) + DynOff.capacity()*sizeof(uint32_t)
+    + DynPtr.capacity()*sizeof(void*) + DetRm1.capacity()*sizeof(double) + FluxFm1.capacity()*sizeof(double) + FluxPar.capacity();
+}
+
+// ************************************************
+void SampleHandlerAtm::BuildFastEventArrays() {
+// ************************************************
+  TStopwatch clock; clock.Start();
+  const unsigned int NEv = GetNEvents();
+  const size_t NDet = DetectorSystematicParameterIndices.size();
+  FastArraysReady = false;
+  Fast = FastEventArrays();
+
+  // Which events the detector / flux functional shifts apply to. The test only depends on the event's mode,
+  // sample and kinematics, so it is done once per distinct (mode, sample) and per event only if a kinematic
+  // selection exists.
+  FunctionalApplies.assign(NEv, 0);
+  auto fillApplies = [&](const std::vector<std::string>& Names, uint8_t bit) {
+    if (Names.empty()) return;
+    bool hasKin = false;
+    for (int iSample = 0; iSample < GetNSamples(); ++iSample) {
+      for (auto& p : ParHandler->GetFunctionalParametersFromSampleName(GetSampleName(iSample))) {
+        if (std::find(Names.begin(), Names.end(), p.name) != Names.end() && p.hasKinBounds) hasKin = true;
+      }
+    }
+    std::map<std::pair<int,int>, bool> memo;
+    for (unsigned int i = 0; i < NEv; ++i) {
+      bool a;
+      if (hasKin) {
+        a = FunctionalShiftApplies(Names, static_cast<int>(i));
+      } else {
+        const auto key = std::make_pair(static_cast<int>(std::round(ReturnKinematicParameter(kMode, static_cast<int>(i)))), MCEvents[i].NominalSample);
+        auto it = memo.find(key);
+        if (it == memo.end()) it = memo.emplace(key, FunctionalShiftApplies(Names, static_cast<int>(i))).first;
+        a = it->second;
+      }
+      if (a) FunctionalApplies[i] |= bit;
+    }
+  };
+  fillApplies(DetectorSystematicParameterNames, 1);
+  fillApplies(AtmFluxParameterNames, 2);
+
+  Selection = StoredSelection;
+  Fast.Bin.reserve(NEv); Fast.Const.reserve(NEv); Fast.DynOff.reserve(NEv + 1);
+  Fast.DynPtr.reserve(size_t(2)*NEv); Fast.DetRm1.reserve(NDet*NEv); Fast.FluxFm1.reserve(NEv); Fast.FluxPar.reserve(NEv);
+  Fast.DynOff.push_back(0);
+  size_t nZero = 0, nNotSelected = 0, nOutside = 0;
+  for (unsigned int i = 0; i < NEv; ++i) {
+    const EventInfo& ev = MCEvents[i];
+    const auto& dm = dunemcSamples[i];
+    // NC events whose flavour changed get oscillation weight exactly 0 in core (GetNuOscillatorPointers)
+    if (ev.isNC && ev.nupdg != ev.nupdgUnosc) { ++nZero; continue; }
+    if (!IsEventSelected(ev.NominalSample, static_cast<int>(i))) { ++nNotSelected; continue; }
+    const int Bin = Binning->FindGlobalBin(ev.NominalSample, ev.KinVar, ev.NomBin);
+    if (Bin <= M3::UnderOverFlowBin) { ++nOutside; continue; }
+
+    double Const = 1.0;
+    bool HasDet = false, HasFlux = false;
+    for (const M3::float_t* ptr : ev.total_weight_pointers) {
+      if (ptr == &dm.weights_flux || ptr == &ExposureScaling) Const *= static_cast<double>(*ptr);
+      else if (ptr == &dm.TotalDetectorSystematicWeight) HasDet = true;
+      else if (ptr == &dm.TotalAtmFluxSystematicWeight) HasFlux = true;
+      else Fast.DynPtr.push_back(ptr);
+    }
+    Fast.Bin.push_back(Bin);
+    Fast.Const.push_back(Const);
+    Fast.DynOff.push_back(static_cast<uint32_t>(Fast.DynPtr.size()));
+    const bool DetOn = HasDet && (FunctionalApplies[i] & 1);
+    for (size_t k = 0; k < NDet; ++k) {
+      Fast.DetRm1.push_back(DetOn ? (dm.DetectorSystematicRatios[k] - 1.0) : 0.0);
+    }
+    const bool FluxOn = HasFlux && (FunctionalApplies[i] & 2) && !dm.AtmFluxSystFactors.empty();
+    if (FluxOn) {
+      if (dm.AtmFluxSystFactors.size() != 1) {
+        MACH3LOG_WARN("Fast reweight supports one flux factor per event (found {}); using the core reweight", dm.AtmFluxSystFactors.size());
+        UseFastReweight = false;
+        Fast = FastEventArrays();
+        return;
+      }
+      uint8_t ip = 255;
+      for (size_t k = 0; k < AtmFluxParameterIndices.size(); ++k) {
+        if (ParHandler->RetPointer(AtmFluxParameterIndices[k]) == dm.AtmFluxSystParVals[0]) ip = static_cast<uint8_t>(k);
+      }
+      if (ip == 255) {
+        MACH3LOG_ERROR("Could not match the flux systematic parameter of event {}", i);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+      Fast.FluxFm1.push_back(dm.AtmFluxSystFactors[0] - 1.0);
+      Fast.FluxPar.push_back(ip);
+    } else {
+      Fast.FluxFm1.push_back(0.0);
+      Fast.FluxPar.push_back(255);
+    }
+  }
+  Fast.N = Fast.Bin.size();
+  Fast.Bin.shrink_to_fit(); Fast.Const.shrink_to_fit(); Fast.DynOff.shrink_to_fit(); Fast.DynPtr.shrink_to_fit();
+  Fast.DetRm1.shrink_to_fit(); Fast.FluxFm1.shrink_to_fit(); Fast.FluxPar.shrink_to_fit();
+  FastArraysReady = true;
+  clock.Stop();
+  MACH3LOG_INFO("Fast reweight arrays: {} of {} events can enter a histogram ({} NC with zero oscillation weight, {} fail the selection, {} outside the binning); {} changing weights per event; {:.1f} MB; built in {:.1f} s",
+                Fast.N, NEv, nZero, nNotSelected, nOutside, Fast.N ? double(Fast.DynPtr.size())/double(Fast.N) : 0.,
+                double(Fast.Bytes())/1e6, clock.RealTime());
+}
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Walloca"
+// ************************************************
+void SampleHandlerAtm::FillArrayFast() {
+// ************************************************
+  const int NB = Binning->GetNBins();
+  double* _restrict_ Arr = SampleHandler_array.data();
+  double* _restrict_ W2 = SampleHandler_array_w2.data();
+  const bool DoW2 = FirstTimeW2;
+  const size_t NDet = DetectorSystematicParameterIndices.size();
+  double PDet[8];
+  if (NDet > 8) {
+    MACH3LOG_ERROR("Fast reweight supports at most 8 detector systematics");
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  for (size_t k = 0; k < NDet; ++k) PDet[k] = static_cast<double>(*ParHandler->RetPointer(DetectorSystematicParameterIndices[k]));
+  double PFlux[256];
+  for (size_t k = 0; k < AtmFluxParameterIndices.size() && k < 255; ++k) PFlux[k] = static_cast<double>(*ParHandler->RetPointer(AtmFluxParameterIndices[k]));
+
+  const long long N = static_cast<long long>(Fast.N);
+  const int* Bin = Fast.Bin.data();
+  const double* Const = Fast.Const.data();
+  const uint32_t* DynOff = Fast.DynOff.data();
+  const M3::float_t* const* DynPtr = Fast.DynPtr.data();
+  const double* DetRm1 = Fast.DetRm1.data();
+  const double* FluxFm1 = Fast.FluxFm1.data();
+  const uint8_t* FluxPar = Fast.FluxPar.data();
+
+  #ifdef MULTITHREAD
+  #pragma omp parallel for schedule(static) reduction(+:Arr[:NB], W2[:NB])
+  #endif
+  for (long long e = 0; e < N; ++e) {
+    double w = Const[e];
+    for (uint32_t k = DynOff[e]; k < DynOff[e+1]; ++k) w *= static_cast<double>(*DynPtr[k]);
+    for (size_t d = 0; d < NDet; ++d) w *= 1.0 + PDet[d]*DetRm1[e*NDet + d];
+    const uint8_t fp = FluxPar[e];
+    if (fp != 255) w *= 1.0 + PFlux[fp]*FluxFm1[e];
+    //DB Catch negative total weights and skip any event with a negative weight (as SampleHandlerBase::FillArray)
+    if (w <= 0.) continue;
+    Arr[Bin[e]] += w;
+    if (DoW2) W2[Bin[e]] += w*w;
+  }
+}
+#pragma GCC diagnostic pop
+
+// ************************************************
+void SampleHandlerAtm::Reweight() {
+// ************************************************
+  if (!UseFastReweight || !FastArraysReady) {
+    SampleHandlerBase::Reweight();
+    return;
+  }
+  ResetHistograms();
+  if (Oscillator) Oscillator->Evaluate();
+  if (SplineHandler) SplineHandler->Evaluate();
+  if (SplineHandler) SplineHandler->SynchroniseMemTransfer();
+  FillArrayFast();
+  if(!UpdateW2) FirstTimeW2 = false;
+}
+
+// ************************************************
+void SampleHandlerAtm::CalcWeightFunc(const int iEvent) {
+// ************************************************
+  // With the core reweight the functional shifts set these fields during FillArray (original behaviour)
+  if (!UseFastReweight || !FastArraysReady) return;
+  auto& Event = dunemcSamples[iEvent];
+  if (FunctionalApplies[iEvent] & 1) {
+    Event.TotalDetectorSystematicWeight = 1.0;
+    for (size_t iSyst = 0; iSyst < DetectorSystematicParameterIndices.size(); iSyst++) {
+      Event.TotalDetectorSystematicWeight *= 1.0 + static_cast<double>(*ParHandler->RetPointer(DetectorSystematicParameterIndices[iSyst]))
+        *(Event.DetectorSystematicRatios[iSyst] - 1.0);
+    }
+  }
+  if (FunctionalApplies[iEvent] & 2) {
+    Event.TotalAtmFluxSystematicWeight = 1.0;
+    for (size_t iWeight = 0; iWeight < Event.AtmFluxSystFactors.size(); iWeight++) {
+      Event.TotalAtmFluxSystematicWeight *= 1.0 + *Event.AtmFluxSystParVals[iWeight] * (Event.AtmFluxSystFactors[iWeight] - 1.0);
+    }
+  }
 }

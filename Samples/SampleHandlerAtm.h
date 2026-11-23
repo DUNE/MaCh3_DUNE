@@ -75,6 +75,50 @@ protected:
   /// @brief Cleanup memory
   void CleanMemoryBeforeFit() override {};
 
+  //=============================================================================
+  // Fast atmospheric reweight (FastOptions)
+  //=============================================================================
+public:
+  /// @brief Fast reweight: same weights and histograms as SampleHandlerBase::Reweight, computed from compact
+  ///        per-event arrays built once (selection and bin are fixed because no kinematic shifts exist here)
+  void Reweight() override;
+protected:
+  /// @brief Keeps GetEventWeight (plots, projections) correct when the fast reweight is used: recomputes this
+  ///        event's detector and flux systematic weights from the current parameter values
+  void CalcWeightFunc(const int iEvent) override;
+  /// @brief Read the fast-build options (FastOptions node, InputFiles:SplineCacheFile, M3_* environment overrides)
+  void ReadFastOptions();
+  /// @brief Build the compact arrays used by the fast reweight
+  void BuildFastEventArrays();
+  /// @brief Fill SampleHandler_array from the compact arrays
+  void FillArrayFast();
+  /// @brief Whether the functional shift with these parameters applies to event iEvent (same test as core registration)
+  bool FunctionalShiftApplies(const std::vector<std::string>& ParNames, const int iEvent);
+
+  bool UseFastReweight = true;
+  bool UseFastSplines = true;
+  bool FastArraysReady = false;
+  FastAtmSplineOptions FastSplineOptions;
+  std::string InputSplinesMD5Sum;
+  std::vector<int> DetectorSystematicParameterIndices;
+  std::vector<int> AtmFluxParameterIndices;
+  /// Per event: bit 0 = detector shift applies, bit 1 = flux shift applies (same test as core registration)
+  std::vector<uint8_t> FunctionalApplies;
+
+  /// Compact per-event information (only events that can enter a histogram)
+  struct FastEventArrays {
+    std::vector<int> Bin;                    ///< global bin
+    std::vector<double> Const;               ///< product of the constant weight pointers (flux weight, exposure)
+    std::vector<uint32_t> DynOff;            ///< offsets into DynPtr (size N+1)
+    std::vector<const M3::float_t*> DynPtr;  ///< changing weights: oscillation, splines, norms
+    std::vector<double> DetRm1;              ///< [iSyst*N + e]: detector ratio - 1 (0 if the shift does not apply)
+    std::vector<double> FluxFm1;             ///< flux factor - 1 (0 if none)
+    std::vector<uint8_t> FluxPar;            ///< index into AtmFluxParameterIndices, 255 = none
+    size_t N = 0;
+    size_t Bytes() const;
+  } Fast;
+
+
   void RegisterFunctionalParameters();
   
   //DB functions which could be initialised to do something which is non-trivial

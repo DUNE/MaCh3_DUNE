@@ -2,6 +2,8 @@
 #define _StructsDUNE_h_
 
 #include "TMatrixD.h"
+#include <stdexcept>
+#include <cstddef>
 
 // HH: A little struct to store the ND covariance matrices together, to avoid having to pass multiple TMatrixD* around in the code. 
 // Also includes a bool to specify whether to use a combined ND covariance matrix or separate ones for FHC and RHC
@@ -24,6 +26,30 @@ struct BeamFDSampleInfo : public BeamSampleInfo {
 struct BeamNDSampleInfo : public BeamSampleInfo {
   double pot_s;
   double norm_s;
+};
+
+/// @brief Fixed-capacity inline vector used for the few per-event systematic factors of the
+///        atmospheric MC. Same interface as the std::vector it replaces (size, resize, [], begin/end), but no heap
+///        block per event (3 per event before: ~2 GB and 45M allocations for 15M events).
+template <typename T, size_t N>
+struct SmallVecDUNE {
+  T fData[N] = {};
+  unsigned char fSize = 0;
+  size_t size() const { return fSize; }
+  bool empty() const { return fSize == 0; }
+  void resize(const size_t n) {
+    if (n > N) throw std::length_error("SmallVecDUNE: more per-event systematic factors than its capacity (see StructsDUNE.h)");
+    for (size_t i = fSize; i < n; ++i) fData[i] = T();
+    fSize = static_cast<unsigned char>(n);
+  }
+  void push_back(const T& v) { resize(fSize + 1u); fData[fSize - 1] = v; }
+  void clear() { fSize = 0; }
+  T& operator[](const size_t i) { return fData[i]; }
+  const T& operator[](const size_t i) const { return fData[i]; }
+  T* begin() { return fData; }
+  T* end() { return fData + fSize; }
+  const T* begin() const { return fData; }
+  const T* end() const { return fData + fSize; }
 };
 
 struct dunemc_base { // Store variables used in fitting
@@ -59,11 +85,11 @@ struct dunemc_atm : public dunemc_base { // Store variables used by SampleHandle
   double inelasticity_reco;
 
   double TotalDetectorSystematicWeight;
-  std::vector<double> DetectorSystematicRatios;
+  SmallVecDUNE<double, 4> DetectorSystematicRatios;  ///< one per detector systematic (inline, max 4)
 
   double TotalAtmFluxSystematicWeight;
-  std::vector<double> AtmFluxSystFactors;
-  std::vector<const M3::float_t*> AtmFluxSystParVals;  
+  SmallVecDUNE<double, 2> AtmFluxSystFactors;         ///< inline, max 2
+  SmallVecDUNE<const M3::float_t*, 2> AtmFluxSystParVals;
 };
 
 struct dunemc_beamfd : public dunemc_base { // Store variables used by SampleHandlerBeamFD

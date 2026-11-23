@@ -2,7 +2,8 @@
 
 // Factory constructor: inspects configuration to instantiate the appropriate spline handler
 SplineHandlerFactoryDUNE::SplineHandlerFactoryDUNE(ParameterHandlerGeneric* xsec_params, MaCh3Modes* Modes_, const std::vector<dunemc_atm>& dunemcSamples,
-						   const std::vector<std::string>& inputSplinesFile, const std::string& sampleName) : fXsecParams(xsec_params) {
+						   const std::vector<std::string>& inputSplinesFile, const std::string& sampleName,
+						   bool useFastEngine, const FastAtmSplineOptions& fastOptions) : fXsecParams(xsec_params) {
   
   YAML::Node ConfigCurrent = fXsecParams->GetConfig();
   fSplineType = kUndef;
@@ -55,20 +56,26 @@ SplineHandlerFactoryDUNE::SplineHandlerFactoryDUNE(ParameterHandlerGeneric* xsec
     
   case kMonolith:
     {
+    // Collect event IDs for per-event response function mapping
+    std::vector<uint> eventIndices(dunemcSamples.size());
+    for (size_t i = 0; i < dunemcSamples.size(); ++i) {
+      eventIndices[i] = dunemcSamples[i].eventID;
+    }
+    // Fetch spline parameters applicable to this sample
+    const std::vector<SplineParameter> samplePars = xsec_params->GetSplineParsFromSampleName(sampleName);
+
+    if (useFastEngine) {
+      MACH3LOG_INFO("Using FastAtmSplineHandler");
+      fSplineHandler = std::make_unique<FastAtmSplineHandler>(xsec_params, samplePars, eventIndices, inputSplinesFile, fastOptions);
+      break;
+    }
+
     MACH3LOG_INFO("Using MonolithSplineHandlerDUNE");
     if (inputSplinesFile.empty()) {
       MACH3LOG_ERROR("Input spline file must be provided for MonolithSplineHandlerDUNE under SampleOptions/InputSplines");
       throw MaCh3Exception(__FILE__, __LINE__);
     }
     
-    // Collect event IDs for per-event response function mapping
-    std::vector<uint> eventIndices(dunemcSamples.size());
-    for (size_t i = 0; i < dunemcSamples.size(); ++i) {
-      eventIndices[i] = dunemcSamples[i].eventID;
-    }
-    
-    // Fetch spline parameters applicable to this sample
-    const std::vector<SplineParameter> samplePars = xsec_params->GetSplineParsFromSampleName(sampleName);
     std::unique_ptr<MonolithSplineHandlerDUNE> monolith = std::make_unique<MonolithSplineHandlerDUNE>(samplePars, eventIndices, inputSplinesFile);
     
     // Bind parameter evaluation memory pointers from the cross-section handler
