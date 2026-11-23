@@ -5,6 +5,7 @@
 #include <limits>
 #include <map>
 #include <memory>
+#include <numeric>
 #include <set>
 #include "TChain.h"
 #include "TChainElement.h"
@@ -149,6 +150,7 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(const std::vector<SplineParam
   TTreeReader reader(&weights);
   std::vector<std::unique_ptr<TTreeReaderArray<double>>> splineValuesPtrs;
   std::vector<std::unique_ptr<ReusableSpline>> splines;
+  std::vector<std::vector<size_t>> knotOrder;
 
   for (const SplineParameter& splineParam : splinePars) {
     const std::string& name = splineParam.name;
@@ -166,6 +168,7 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(const std::vector<SplineParam
     
     splineValuesPtrs.emplace_back(new TTreeReaderArray<double>(reader, name.c_str()));
     splines.emplace_back(new ReusableSpline(it->knots));
+    knotOrder.push_back(it->order);
   }
   
   Long64_t currentEventIdx = 0;
@@ -184,12 +187,23 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(const std::vector<SplineParam
 
       for (size_t i = 0; i < splines.size(); ++i) {
 	const auto& splineValues = *splineValuesPtrs[i];
-	std::vector<double> values;
+	std::vector<double> rawValues;
 	for (auto val : splineValues) {
-	  if (std::isnan(val)) {
+	  rawValues.push_back(val);
+	}
+	if (rawValues.size() != knotOrder[i].size()) {
+	  MACH3LOG_ERROR("Spline '{}' has {} weights but {} knots at global event index {}", splinePars[i].name, rawValues.size(), knotOrder[i].size(), currentEventIdx);
+	  throw MaCh3Exception(__FILE__, __LINE__);
+	}
+	// Reorder the weights to match the sorted knots; treat inf like NaN
+	std::vector<double> values;
+	values.reserve(rawValues.size());
+	for (auto idx : knotOrder[i]) {
+	  const double val = rawValues[idx];
+	  if (!std::isfinite(val)) {
 	    const std::string& paramName = splinePars[i].name;
 	    if (nanCounts[paramName] == 0) {
-	      MACH3LOG_WARN("First NaN in spline '{}' at global event index {}; replacing with 1.0", paramName, currentEventIdx);
+	      MACH3LOG_WARN("First non-finite value in spline '{}' at global event index {}; replacing with 1.0", paramName, currentEventIdx);
 	    }
 	    ++nanCounts[paramName];
 	    values.push_back(1.0);
@@ -237,7 +251,7 @@ MonolithSplineHandlerDUNE::GetInitParamsFromConfig(const std::vector<SplineParam
   MACH3LOG_INFO("Total number of events processed for splines: {}", splinesReduced.size());
   
   if (!nanCounts.empty()) {
-    MACH3LOG_WARN("Summary of NaN spline values replaced with 1.0:");
+    MACH3LOG_WARN("Summary of non-finite (NaN/inf) spline values replaced with 1.0:");
     for (const auto& item : nanCounts) {
       MACH3LOG_WARN("  - {}: {} NaN values replaced", item.first, item.second);
     }
@@ -288,6 +302,21 @@ std::vector<struct SplineHeader> MonolithSplineHandlerDUNE::GetSplineParametersF
       for (auto knot : splineKnots) {
 	param.knots.push_back(knot);
       }
+
+      // The header may list the knots as [0, 1, -1, 2, -2, ...]. TSpline3 and the
+      // reduced spline's FindX need increasing x, so sort the knots and remember the
+      // permutation so the per-event weights can be reordered the same way.
+      param.order.resize(param.knots.size());
+      std::iota(param.order.begin(), param.order.end(), 0);
+      std::sort(param.order.begin(), param.order.end(),
+		[&](size_t lhs, size_t rhs) { return param.knots[lhs] < param.knots[rhs]; });
+      std::vector<double> sortedKnots;
+      sortedKnots.reserve(param.knots.size());
+      for (auto idx : param.order) sortedKnots.push_back(param.knots[idx]);
+      if (sortedKnots != param.knots) {
+	MACH3LOG_WARN("Spline '{}' lists its knots out of order ({}); sorting them", param.name, fmt::join(param.knots, ", "));
+      }
+      param.knots = sortedKnots;
       
       splineParams.push_back(std::move(param));
     }

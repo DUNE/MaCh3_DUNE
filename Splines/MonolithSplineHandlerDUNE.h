@@ -5,7 +5,8 @@
 
 struct SplineHeader {
     std::string name;
-    std::vector<double> knots;
+    std::vector<double> knots;   // sorted in increasing x
+    std::vector<size_t> order;   // order[i] = index in the file's variation array of sorted knot i
     bool isCorrection;
     double cv = 0.0;
 };
