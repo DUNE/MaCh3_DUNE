@@ -19,7 +19,9 @@ General:
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.1
     XsecAtGen: false
-    XsecFix: []
+    # ProdH has no effect on the likelihood with production-height averaging on (ΔLLH ~1e-12 over ±1σ) and a flat prior,
+    # so a free ProdH only random-walks; keep it fixed
+    XsecFix: [ProdH]
 
   SharedNuOscillatorObject:
     ATM: "Configs/NuOsc/CUDAProb3_SubSampling_ProdHAvg_EarthSysts.yaml"

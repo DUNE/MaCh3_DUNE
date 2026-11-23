@@ -1708,9 +1708,18 @@ Systematics:
         SplineName: ResIso_ResIso_ResonanceIsolation_MvRes_ResCode1
 
   - Systematic:
+      # The spline knots for this dial are in physical units
+      # (2.5 to 4.5 fm, nominal 3.53), not in prior sigmas. Evaluating it at 0 extrapolated
+      # the cubic spline far outside its range and inflated the event rates by ~3.1x.
+      # Nominal and bounds now follow the spline file. The Error (one knot spacing) is a
+      # placeholder until the spline producer confirms the intended prior width.
       FlatPrior: false
-      ParameterBounds: *default_bounds
-      ParameterValues: *default_values
+      ParameterBounds:
+        - 2.5
+        - 4.5
+      ParameterValues:
+        Generated: 3.53
+        PreFitValue: 3.53
       StepScale: *default_step
       Type: Spline
       ParameterGroup: Xsec
@@ -1718,7 +1727,7 @@ Systematics:
       Names:
         FancyName: WSReweight_v1_nucleus_radius
         ParameterName: WSReweight_v1_nucleus_radius
-      Error: 1.0
+      Error: 0.5
       SplineInformation:
         Type: PerEvent
         Mode:
@@ -1726,9 +1735,18 @@ Systematics:
         SplineName: WSReweight_v1_nucleus_radius
 
   - Systematic:
+      # The spline knots for this dial are in physical units
+      # (0.45 to 0.64 fm, nominal 0.54), not in prior sigmas. Evaluating it at 0 extrapolated
+      # the cubic spline far outside its range and inflated the event rates by ~3.1x.
+      # Nominal and bounds now follow the spline file. The Error (one knot spacing) is a
+      # placeholder until the spline producer confirms the intended prior width.
       FlatPrior: false
-      ParameterBounds: *default_bounds
-      ParameterValues: *default_values
+      ParameterBounds:
+        - 0.45
+        - 0.64
+      ParameterValues:
+        Generated: 0.54
+        PreFitValue: 0.54
       StepScale: *default_step
       Type: Spline
       ParameterGroup: Xsec
@@ -1736,7 +1754,7 @@ Systematics:
       Names:
         FancyName: WSReweight_v1_surface_thickness
         ParameterName: WSReweight_v1_surface_thickness
-      Error: 1.0
+      Error: 0.05
       SplineInformation:
         Type: PerEvent
         Mode:

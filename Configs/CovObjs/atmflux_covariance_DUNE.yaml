@@ -8,8 +8,8 @@ Systematics:
     Names:
       FancyName: HondaFlux_TotalUncertainty_Below1GeV
       ParameterName: HondaFlux_TotalUncertainty_Below1GeV
-    ParameterBounds:
-    - 0.0
+    ParameterBounds:  # nominal is 0 since e5e802a, so a lower bound of 0 rejected half the proposals per dial
+    - -999.0
     - 999.0
     ParameterGroup: AtmFlux
     ParameterValues:
@@ -26,8 +26,8 @@ Systematics:
     Names:
       FancyName: HondaFlux_TotalUncertainty_Above1GeV
       ParameterName: HondaFlux_TotalUncertainty_Above1GeV
-    ParameterBounds:
-    - 0.0
+    ParameterBounds:  # nominal is 0 since e5e802a, so a lower bound of 0 rejected half the proposals per dial
+    - -999.0
     - 999.0
     ParameterGroup: AtmFlux
     ParameterValues:
