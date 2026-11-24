@@ -144,13 +144,13 @@ cd .. && source build/bin/setup.MaCh3DUNE.sh
 
 ### 3. Inputs
 
-The small atmospheric inputs (binning, Earth model, the 1D detector ratios) are in `Inputs/Atmospherics/`. Link in the large ones. On FNAL they are here:
+The small atmospheric inputs (binning, Earth model, the detector ratios) are in `Inputs/Atmospherics/`. The ModBoxA detector systematic uses `ModBoxA_3D_Claire_Ereco_y_RecoCZ.root`: 3D ratios in reco E_ν × reco y × reco cos θ_z, one histogram `ModBoxA_<SampleTitle>` per sample. The old `DetectorSystematicRatioHistograms_3D.root` (E_had × E_lep × cos θ_z) is a dummy that doesn't match this MC, so it's no longer used. Link in the large ones. On FNAL they are here:
 
 ```bash
 SRC=/exp/dune/data/users/barrowd/WorkshopDevelopments/WorkshopTutorial/Inputs/Atmospherics
 mkdir -p Inputs/Atmospherics/CAFs Inputs/Atmospherics/Splines
 ln -s $SRC/CAFs/AtmSample.eig Inputs/Atmospherics/CAFs/          # MC events, 17 columns (2.1 GB)
-ln -s $SRC/DetectorSystematicRatioHistograms_3D.root $SRC/HondaFluxTotalUncertaintySplines.root \
+ln -s $SRC/HondaFluxTotalUncertaintySplines.root \
       $SRC/ProdHeightDist_E561_cZ520_N1_hbin2.5.root Inputs/Atmospherics/
 ln -s $SRC/Splines/merged_syst.root Inputs/Atmospherics/Splines/ # xsec splines (23.5 GB), only if you switch them on
 ```
