@@ -50,4 +50,10 @@ struct EventInfo : public CAFEventInfo {
   } weights;
 };
 
+struct EventInfoSplines : public EventInfo {
+
+  std::vector<std::vector<float>> knot_responses;
+
+};
+
 } // namespace dune::beam

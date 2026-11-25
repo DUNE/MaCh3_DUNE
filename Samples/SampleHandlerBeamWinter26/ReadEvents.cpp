@@ -32,8 +32,11 @@ _MaCh3_Safe_Include_Start_ //{
     return float(*meta.pot_processed);
   }
 
-  std::pair<std::vector<EventInfo>, size_t> ReadEvents(
-      TDirectory & dir, float downsamplefraction) {
+  template <bool READ_EVENT_SPLINES>
+  auto ReadEvents_impl(TDirectory & dir, float downsamplefraction)
+      -> std::pair<std::vector<std::conditional_t<READ_EVENT_SPLINES,
+                                                  EventInfoSplines, EventInfo>>,
+                   size_t> {
 
     std::random_device r;
     std::default_random_engine e1(r());
@@ -44,16 +47,19 @@ _MaCh3_Safe_Include_Start_ //{
     auto rdr = ROOT::RNTupleReader::Open(std::move(event.model),
                                          *dir.Get<ROOT::RNTuple>("event"));
 
-    std::vector<EventInfo> events;
+    std::vector<
+        std::conditional_t<READ_EVENT_SPLINES, EventInfoSplines, EventInfo>>
+        events;
 
     for (auto entryId : *rdr) {
       rdr->LoadEntry(entryId);
 
+      // skip events with probability downsamplefraction
       if (dis(e1) < downsamplefraction) {
         continue;
       }
 
-      EventInfo ev;
+      std::conditional_t<READ_EVENT_SPLINES, EventInfoSplines, EventInfo> ev;
 
       ev.reco.sample = *event.reco.sample;
       ev.reco.e_nu = *event.reco.enu_GeV;
@@ -67,8 +73,23 @@ _MaCh3_Safe_Include_Start_ //{
       ev.truth.nu.pdg_unosc = *event.truth.pdgnu_original;
       ev.truth.nu.e = *event.truth.enu_GeV;
 
+      if constexpr (READ_EVENT_SPLINES) {
+        ev.knot_responses = *event.truth.param_responses;
+      }
+
       events.push_back(ev);
     }
     return {events, rdr->GetNEntries()};
   }
+
+  std::pair<std::vector<EventInfo>, size_t> ReadEvents(
+      TDirectory & dir, float downsamplefraction) {
+    return ReadEvents_impl<false>(dir, downsamplefraction);
+  }
+
+  std::pair<std::vector<EventInfoSplines>, size_t> ReadEventsWithSplines(
+      TDirectory & dir, float downsamplefraction) {
+    return ReadEvents_impl<true>(dir, downsamplefraction);
+  }
+
 } // namespace dune::beam

@@ -10,7 +10,8 @@
 
 namespace dune::beam {
 
-SampleHandlerBeamWinter26::SampleHandlerBeamWinter26(
+template <bool READ_EVENT_SPLINES>
+SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SampleHandlerBeamWinter26(
     std::string mc_version_, ParameterHandlerGeneric *ParHandler_,
     const std::shared_ptr<OscillationHandler> &Oscillator_)
     : SampleHandlerBase(mc_version_, ParHandler_, Oscillator_) {
@@ -21,9 +22,11 @@ SampleHandlerBeamWinter26::SampleHandlerBeamWinter26(
   Initialise();
 }
 
-void SampleHandlerBeamWinter26::Init() {}
+template <bool READ_EVENT_SPLINES>
+void SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::Init() {}
 
-void SampleHandlerBeamWinter26::SetupSplines() {
+template <bool READ_EVENT_SPLINES>
+void SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SetupSplines() {
   if (!ParHandler) {
     return;
   }
@@ -52,13 +55,16 @@ void SampleHandlerBeamWinter26::SetupSplines() {
   }
 }
 
-void SampleHandlerBeamWinter26::AddAdditionalWeightPointers() {
+template <bool READ_EVENT_SPLINES>
+void SampleHandlerBeamWinter26<
+    READ_EVENT_SPLINES>::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < DUNEMCEvents.size(); ++i) {
     MCEvents[i].total_weight_pointers.push_back(&(DUNEMCEvents[i].weights.pot));
   }
 }
 
-int SampleHandlerBeamWinter26::SetupExperimentMC() {
+template <bool READ_EVENT_SPLINES>
+int SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SetupExperimentMC() {
 
   MACH3LOG_INFO(
       "-------------------------------------------------------------------");
@@ -142,7 +148,8 @@ int SampleHandlerBeamWinter26::SetupExperimentMC() {
 
       std::unique_ptr<TFile> eventf(TFile::Open(filename.c_str(), "READ"));
 
-      auto [sample_evs, entries] = ReadEvents(*eventf, downsamplefraction);
+      auto [sample_evs, entries] =
+          ReadEvents<READ_EVENT_SPLINES>(*eventf, downsamplefraction);
       MACH3LOG_INFO(
           "-- -- Read: {}/{} events (with downsample fraction of: {:.2f})",
           sample_evs.size(), entries, downsamplefraction);
@@ -188,7 +195,8 @@ int SampleHandlerBeamWinter26::SetupExperimentMC() {
   return int(DUNEMCEvents.size());
 }
 
-void SampleHandlerBeamWinter26::SetupMC() {
+template <bool READ_EVENT_SPLINES>
+void SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SetupMC() {
 
   size_t iEvent = 0;
   for (auto const &ev : DUNEMCEvents) {
@@ -204,7 +212,8 @@ void SampleHandlerBeamWinter26::SetupMC() {
   }
 }
 
-void SampleHandlerBeamWinter26::InititialiseData() {
+template <bool READ_EVENT_SPLINES>
+void SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::InititialiseData() {
   // Reweight MC to match
   Reweight();
   // set asimov data
@@ -213,18 +222,22 @@ void SampleHandlerBeamWinter26::InititialiseData() {
   }
 }
 
+template <bool READ_EVENT_SPLINES>
 const double *
-SampleHandlerBeamWinter26::GetPointerToKinematicParameter(int KinematicVariable,
-                                                          int iEvent) const {
+SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::GetPointerToKinematicParameter(
+    int KinematicVariable, int iEvent) const {
   KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
   return ResolveKinematicEventMember(KinPar, DUNEMCEvents[iEvent]);
 }
 
-double
-SampleHandlerBeamWinter26::ReturnKinematicParameter(int KinematicVariable,
-                                                    int iEvent) const {
+template <bool READ_EVENT_SPLINES>
+double SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::ReturnKinematicParameter(
+    int KinematicVariable, int iEvent) const {
   KinematicTypes KinPar = static_cast<KinematicTypes>(KinematicVariable);
   return *GetPointerToKinematicParameter(KinPar, iEvent);
 }
+
+template class SampleHandlerBeamWinter26<true>;
+template class SampleHandlerBeamWinter26<false>;
 
 } // namespace dune::beam

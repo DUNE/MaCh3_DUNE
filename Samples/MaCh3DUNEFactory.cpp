@@ -34,6 +34,9 @@ SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string Samp
   } else if (SampleType == "BeamWinter26") {
     Sample = new dune::beam::SampleHandlerBeamWinter26(
         SampleConfig, param_handler.get(), BeamOscillator_);
+  } else if (SampleType == "BeamWinter26EventSplines") {
+    Sample = new dune::beam::SampleHandlerBeamWinter26<true>(
+        SampleConfig, param_handler.get(), BeamOscillator_);
   } else {
     MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
     throw MaCh3Exception(__FILE__, __LINE__);

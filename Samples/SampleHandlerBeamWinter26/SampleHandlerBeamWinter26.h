@@ -7,6 +7,7 @@
 
 namespace dune::beam {
 
+template <bool READ_EVENT_SPLINES = false>
 class SampleHandlerBeamWinter26 : public SampleHandlerBase {
 
 public:
@@ -16,7 +17,10 @@ public:
 
   ~SampleHandlerBeamWinter26() {}
 
-  std::vector<dune::beam::EventInfo> DUNEMCEvents;
+  using TEvent =
+      std::conditional_t<READ_EVENT_SPLINES, EventInfoSplines, EventInfo>;
+
+  std::vector<TEvent> DUNEMCEvents;
 
   struct MCTag {
     std::string name;
@@ -24,10 +28,10 @@ public:
   };
   std::vector<MCTag> mc_tags;
 
-  int GetTagIndex(std::string const &tag){
+  int GetTagIndex(std::string const &tag) {
     int index = 0;
-    for(auto const &t : mc_tags){
-      if(t.name == tag){
+    for (auto const &t : mc_tags) {
+      if (t.name == tag) {
         return index;
       }
       index++;
