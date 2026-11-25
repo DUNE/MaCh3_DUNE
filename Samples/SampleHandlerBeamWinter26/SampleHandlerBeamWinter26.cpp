@@ -60,6 +60,57 @@ void SampleHandlerBeamWinter26<
     READ_EVENT_SPLINES>::AddAdditionalWeightPointers() {
   for (size_t i = 0; i < DUNEMCEvents.size(); ++i) {
     MCEvents[i].total_weight_pointers.push_back(&(DUNEMCEvents[i].weights.pot));
+    if constexpr (READ_EVENT_SPLINES) {
+      MCEvents[i].total_weight_pointers.push_back(
+          &(DUNEMCEvents[i].response_weight));
+      MCEvents[i].total_weight_pointers.push_back(
+          &(DUNEMCEvents[i].mode_weight));
+      MCEvents[i].total_weight_pointers.push_back(
+          &(DUNEMCEvents[i].enutrue_weight));
+    }
+  }
+}
+
+template <bool READ_EVENT_SPLINES>
+void SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SetEventResponseWeights(
+    int pr_i, int kt_i) {
+  if constexpr (READ_EVENT_SPLINES) {
+    for (size_t i = 0; i < DUNEMCEvents.size(); ++i) {
+      DUNEMCEvents[i].response_weight =
+          (pr_i == -1) ? 1 : DUNEMCEvents[i].knot_responses[pr_i][kt_i];
+    }
+  }
+}
+
+template <bool READ_EVENT_SPLINES>
+void SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SelectMode(int mode) {
+  if constexpr (READ_EVENT_SPLINES) {
+    for (size_t i = 0; i < DUNEMCEvents.size(); ++i) {
+      if (mode == -1) {
+        DUNEMCEvents[i].mode_weight = 1.0;
+      } else {
+        DUNEMCEvents[i].mode_weight =
+            (mode == DUNEMCEvents[i].truth.mach3_mode) ? 1 : 0;
+      }
+    }
+  }
+}
+
+template <bool READ_EVENT_SPLINES>
+void SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SelectTrueEnu(
+    double enu_min, double enu_max) {
+  if constexpr (READ_EVENT_SPLINES) {
+    for (size_t i = 0; i < DUNEMCEvents.size(); ++i) {
+      if (enu_max < 0) {
+        DUNEMCEvents[i].enutrue_weight = 1.0;
+      } else {
+        DUNEMCEvents[i].enutrue_weight =
+            ((DUNEMCEvents[i].truth.nu.e_GeV >= enu_min) &&
+             (DUNEMCEvents[i].truth.nu.e_GeV < enu_max))
+                ? 1
+                : 0;
+      }
+    }
   }
 }
 
@@ -71,13 +122,14 @@ int SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SetupExperimentMC() {
 
   std::vector<std::array<float, 2>> RecoSampleRanges;
 
-  auto sample_name = Get<std::vector<std::string>>(
-      SampleManager->raw()["Samples"], __FILE__, __LINE__);
+  auto const &ydoc = SampleManager->raw();
+
+  auto sample_name =
+      Get<std::vector<std::string>>(ydoc["Samples"], __FILE__, __LINE__);
 
   for (int i = 0; i < GetNSamples(); i++) {
-    auto first_cut = Get<YAML::Node>(
-        SampleManager->raw()[sample_name[i]]["SelectionCuts"][0], __FILE__,
-        __LINE__);
+    auto first_cut = Get<YAML::Node>(ydoc[sample_name[i]]["SelectionCuts"][0],
+                                     __FILE__, __LINE__);
     auto kinstr =
         Get<std::string>(first_cut["KinematicStr"], __FILE__, __LINE__);
 
@@ -95,8 +147,7 @@ int SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SetupExperimentMC() {
   std::map<std::string, std::vector<std::pair<std::string, float>>>
       input_mc_event_descriptors;
 
-  for (auto const &file_descriptor :
-       SampleManager->raw()["InputFiles"]["MCEvents"]) {
+  for (auto const &file_descriptor : ydoc["InputFiles"]["MCEvents"]) {
 
     auto tag = Get<std::string>(file_descriptor["Tag"], __FILE__, __LINE__);
     auto file_location =
@@ -114,8 +165,7 @@ int SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SetupExperimentMC() {
 
   for (auto const &[tag, input_files] : input_mc_event_descriptors) {
 
-    float tag_pot =
-        Get<float>(SampleManager->raw()["POT"][tag], __FILE__, __LINE__);
+    float tag_pot = Get<float>(ydoc["POT"][tag], __FILE__, __LINE__);
     size_t tag_id = mc_tags.size();
     mc_tags.push_back(MCTag{tag, tag_pot});
 
@@ -129,6 +179,12 @@ int SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SetupExperimentMC() {
         continue;
       }
       std::unique_ptr<TFile> metaf(TFile::Open(filename.c_str(), "READ"));
+
+      if (!metaf) {
+        MACH3LOG_ERROR("Could not open {}", filename);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+
       float file_descriptor_pot = GetPOT(*metaf);
       tag_input_pot += file_descriptor_pot * (1 - downsamplefraction);
       MACH3LOG_INFO(
@@ -147,6 +203,19 @@ int SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SetupExperimentMC() {
       }
 
       std::unique_ptr<TFile> eventf(TFile::Open(filename.c_str(), "READ"));
+
+      if (!eventf) {
+        MACH3LOG_ERROR("Could not open {}", filename);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+
+      if constexpr (READ_EVENT_SPLINES) {
+        if (!EventSplineMetadata.size()) {
+          EventSplineMetadata = ReadEventSplineMetadata(*eventf);
+        } else {
+          // check that it matches
+        }
+      }
 
       auto [sample_evs, entries] =
           ReadEvents<READ_EVENT_SPLINES>(*eventf, downsamplefraction);
@@ -176,6 +245,7 @@ int SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SetupExperimentMC() {
 
         ev.truth.mach3_mode =
             Modes->GetModeFromGenerator(std::abs(ev.truth.generator_mode));
+
         if (!ev.truth.is_cc) {
           // Account for no ability to distinguish CC/NC
           ev.truth.mach3_mode += 14;
@@ -202,7 +272,7 @@ void SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SetupMC() {
   for (auto const &ev : DUNEMCEvents) {
     MCEvents[iEvent].isNC = !ev.truth.is_cc;
 
-    MCEvents[iEvent].enu_true = ev.truth.nu.e;
+    MCEvents[iEvent].enu_true = ev.truth.nu.e_GeV;
     MCEvents[iEvent].nupdg = ev.truth.nu.pdg;
     MCEvents[iEvent].nupdgUnosc = ev.truth.nu.pdg_unosc;
 

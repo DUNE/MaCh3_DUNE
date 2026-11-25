@@ -19,7 +19,7 @@ struct CAFEventInfo {
 
     struct Neutrino {
       int pdg, pdg_unosc;
-      double e;
+      double e_GeV;
     } nu;
 
   } truth;
@@ -28,7 +28,8 @@ struct CAFEventInfo {
 
     double sample;
 
-    double e_nu;
+    double e_nu_GeV;
+    double e_mu_GeV;
 
     ROOT::Math::XYZPoint vtx_pos_cm;
 
@@ -53,7 +54,9 @@ struct EventInfo : public CAFEventInfo {
 struct EventInfoSplines : public EventInfo {
 
   std::vector<std::vector<float>> knot_responses;
-
+  double response_weight = 1.0;
+  double mode_weight = 1.0;
+  double enutrue_weight = 1.0;
 };
 
 } // namespace dune::beam

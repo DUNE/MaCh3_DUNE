@@ -32,6 +32,25 @@ _MaCh3_Safe_Include_Start_ //{
     return float(*meta.pot_processed);
   }
 
+  std::vector<std::pair<std::string, std::vector<float>>>
+  ReadEventSplineMetadata(TDirectory & dir) {
+    mach3winter26::Meta meta;
+
+    auto rdr = ROOT::RNTupleReader::Open(std::move(meta.model),
+                                         *dir.Get<ROOT::RNTuple>("meta"));
+
+    rdr->LoadEntry(0);
+
+    std::vector<std::pair<std::string, std::vector<float>>> param_metadata;
+
+    for (size_t i = 0; i < meta.param_names->size(); ++i) {
+      param_metadata.emplace_back(meta.param_names->at(i),
+                                  meta.param_knots->at(i));
+    }
+
+    return param_metadata;
+  }
+
   template <bool READ_EVENT_SPLINES>
   auto ReadEvents_impl(TDirectory & dir, float downsamplefraction)
       -> std::pair<std::vector<std::conditional_t<READ_EVENT_SPLINES,
@@ -62,7 +81,8 @@ _MaCh3_Safe_Include_Start_ //{
       std::conditional_t<READ_EVENT_SPLINES, EventInfoSplines, EventInfo> ev;
 
       ev.reco.sample = *event.reco.sample;
-      ev.reco.e_nu = *event.reco.enu_GeV;
+      ev.reco.e_nu_GeV = *event.reco.enu_GeV;
+      ev.reco.e_mu_GeV = *event.reco.mu_e_GeV;
       ev.reco.vtx_pos_cm = *event.reco.vtx_pos_cm;
 
       ev.truth.generator_mode = *event.truth.mode;
@@ -71,7 +91,7 @@ _MaCh3_Safe_Include_Start_ //{
 
       ev.truth.nu.pdg = *event.truth.pdgnu;
       ev.truth.nu.pdg_unosc = *event.truth.pdgnu_original;
-      ev.truth.nu.e = *event.truth.enu_GeV;
+      ev.truth.nu.e_GeV = *event.truth.enu_GeV;
 
       if constexpr (READ_EVENT_SPLINES) {
         ev.knot_responses = *event.truth.param_responses;

@@ -36,3 +36,5 @@ install(TARGETS SampleHandlerBeamWinter26
 target_link_libraries(SampleHandlerBeamWinter26 PUBLIC SplinesDUNE MaCh3::All MaCh3DUNECompilerOptions)
 target_link_libraries(SampleHandlerBeamWinter26 PRIVATE duneanaobj::StandardRecordProxy duneanasel::all DUNEMaCh3Warnings ROOT::ROOTNTuple)
 
+add_executable(BeamWinter26BinSpliner BeamWinter26BinSpliner.cpp)
+target_link_libraries(BeamWinter26BinSpliner PRIVATE SamplesDUNE SampleHandlerBeamWinter26)

@@ -1,0 +1,65 @@
+---
+SampleHandlerName: "BeamWinter26"
+
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
+BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
+
+InputFiles:
+  PrepSplineFile: false
+  MCEvents:
+    - Tag: numode_nd
+      FileLocation: "../Inputs/BeamWinter26/ND_numu_skimmed.root"
+    # If set to greater than 0, then events are skipped during reading with
+    #   probability DownsampleFraction
+      # DownsampleFraction: 0.5
+    # uncomment this if you just want to run with all the files
+    # - tag: "fhc_nonswap"
+    #   file_location: "Inputs/DUNE_CAF_files/fardet-vd_mc_list-merge_physics_cafmaker_dunevd10kt_1x8x6_3view_30deg_runreco-nuenergy_geov3_root-tuple_merged_skip*.root"}
+
+NuOsc:
+  NuOscConfigFile: "Configs/NuOsc/CUDAProb3Linear.yaml"
+  EqualBinningPerOscChannel: false
+
+Samples: [
+  BeamND_numode_CCNumuLike,
+]
+
+POT:
+  numode_nd: 1E18
+
+BeamND_numode_CCNumuLike:
+  SampleName: BeamND_numode_CCNumuLike
+  SampleTitle: BeamND_numode_CCNumuLike
+
+  MCEventsTags: [ numode_nd, ]
+
+  SelectionCuts:
+    # enum Sample { kRejected = 0, kNuMuCCLike, kNuECCLike, kNCLike };
+    - KinematicStr: RecoSample
+      Bounds: [0.5, 1.5]
+
+  EnuBinning:
+    VarStr: [ RecoNeutrinoEnergy, RecoLeptonEnergy ]
+    Uniform: true
+    BinEdges: [
+      [ { linspace: { nb: 10, low: 0, up: 10 } } ],
+      [ { linspace: { nb: 10, low: 0, up: 10 } } ]
+    ]
+
+  Binning:
+    VarStr: [ RecoNeutrinoEnergy ]
+    Uniform: true
+    BinEdges: { linspace: { nb: 10, low: 0, up: 10 } }
+
+  InputFiles:
+    mtupleprefix: ""
+    mtuplesuffix: ""
+    splineprefix: ""
+    splinesuffix: ""
+
+  OscChannels:
+    - Name: "FHC_numu_x_numu"
+      LatexName: "FHC_numu_x_numu"
+      mtuplefile: [""]
+      splinefile: ""
+

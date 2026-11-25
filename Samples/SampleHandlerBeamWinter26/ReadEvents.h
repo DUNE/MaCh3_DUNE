@@ -4,9 +4,16 @@
 
 #include "TDirectory.h"
 
+#include <map>
+#include <string>
+#include <vector>
+
 namespace dune::beam {
 
 float GetPOT(TDirectory &dir);
+
+std::vector<std::pair<std::string, std::vector<float>>>
+ReadEventSplineMetadata(TDirectory &dir);
 
 std::pair<std::vector<EventInfo>, size_t>
 ReadEvents(TDirectory &dir, float downsamplefraction = 0);
