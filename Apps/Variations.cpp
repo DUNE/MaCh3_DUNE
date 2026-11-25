@@ -15,13 +15,13 @@
 
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/StructsDUNE.h"
-#include "Fitters/MaCh3Factory.h"
+#include "Fitters/Algorithms/MaCh3Factory.h"
 
 //CS YAML "Variations" node expects to be given each parameter to vary with :
-// - "Name": name of the parameter as written in the CovObjs YAML file 
-// - "OscParDefault" array: values that oscillation parameters should be given as a default for this specific parameter variation 
+// - "Name": name of the parameter as written in the CovObjs YAML file
+// - "OscParDefault" array: values that oscillation parameters should be given as a default for this specific parameter variation
 //    ex : put sterile mixing angles to non zero values to test variations of sterile cp phases
-//    If "OscParDefault" not given, will use the "OscillationParameters" values specified in "General" node 
+//    If "OscParDefault" not given, will use the "OscillationParameters" values specified in "General" node
 // - "VarValues" array: values we want the parameter to take
 
 //TODO: Consider merging with SigmaVariations app at some point
@@ -29,11 +29,11 @@
 int main(int argc, char * argv[]) {
   auto FitManager = MaCh3ManagerFactory(argc, argv);
 
-  
+
   //###############################################################################################################################
   //Create sample handler + parameter_handler objects
   auto [param_handler, samples] = MaCh3DuneFactory(FitManager);
-  
+
   //###############################################################################################################################
   //Perform reweight and print total integral
 
@@ -57,7 +57,7 @@ int main(int argc, char * argv[]) {
   //DB Can't use the core sigma variations as it's entirely set up around the concept of multiple selections per samplePDF object
   //   Thats not the case in the FD code, which has one selection per samplePDF object
   //   Consequently have to write out own code
-  
+
   // std::vector<ParameterHandlerBase*> CovObjs;
   // CovObjs.emplace_back(xsec);
 

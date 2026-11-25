@@ -7,7 +7,7 @@
 #include <TLegend.h>
 
 #include "Samples/MaCh3DUNEFactory.h"
-#include "Fitters/MaCh3Factory.h"
+#include "Fitters/Algorithms/MaCh3Factory.h"
 
 bool IncludeKinematicCutsInTitle = true;
 bool Scale1DHistsByBinWidth = false;
@@ -37,7 +37,7 @@ struct ProjectionVariable {
 
 std::string ReturnFormattedHistogramNameFromProjection(ProjectionVariable Proj) {
   std::string ReturnStr = Proj.Name;
-  
+
   if (IncludeKinematicCutsInTitle) {
     for (size_t iKinematicCut=0;iKinematicCut<Proj.KinematicCuts.size();iKinematicCut++) {
       if (iKinematicCut > 0) {
@@ -296,7 +296,7 @@ int main(int argc, char *argv[]) {
         KinematicCut Selection;
         Selection.LowerBound = Projections[iProj].KinematicCuts[iCut].Range[0];
         Selection.UpperBound = Projections[iProj].KinematicCuts[iCut].Range[1];
-        
+
         if (handler->IsSubEventVarString(Projections[iProj].KinematicCuts[iCut].VarString)) {
           Selection.ParamToCutOnIt = handler->ReturnKinematicVectorFromString(Projections[iProj].KinematicCuts[iCut].VarString);
           SubEventSelectionVector.emplace_back(Selection);
@@ -313,7 +313,7 @@ int main(int argc, char *argv[]) {
           Hist = handler->Get1DVarHist(iSample, ProjectionVar_Str[0],EventSelectionVector,WeightStyle ,SubEventSelectionVector);
           outputname = handler->GetSampleTitle(iSample)+"_"+Projections[iProj].Name;
           if (Scale1DHistsByBinWidth) Hist->Scale(1.0,"Width");
-        } 
+        }
         else {
           Hist = handler->Get2DVarHist(iSample, ProjectionVar_Str[0],ProjectionVar_Str[1],EventSelectionVector,WeightStyle,SubEventSelectionVector);
           outputname = handler->GetSampleTitle(iSample)+"_"+Projections[iProj].Name;

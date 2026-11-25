@@ -8,7 +8,6 @@
 
 // Include the SampleHandlers
 #include "Samples/SampleHandlerBase.h"
-#include "Fitters/MaCh3Factory.h"
 
 /// @brief Factory function that generates MaCh3 DUNE instance including configured samples
 /// @param fitMan Configuration Manager

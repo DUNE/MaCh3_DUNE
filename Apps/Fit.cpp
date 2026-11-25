@@ -12,7 +12,7 @@
 #include <TColor.h>
 #include <TMath.h>
 
-#include "Fitters/MaCh3Factory.h"
+#include "Fitters/Algorithms/MaCh3Factory.h"
 #include "Samples/MaCh3DUNEFactory.h"
 #include "Samples/SampleHandlerPDSP.h"
 

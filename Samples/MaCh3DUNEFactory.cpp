@@ -9,6 +9,8 @@
 
 #include "Samples/SampleHandlerBeamWinter26/SampleHandlerBeamWinter26.h"
 
+#include "Fitters/Algorithms/MaCh3Factory.h"
+
 // ###############################################################
 SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string SampleConfig, std::unique_ptr<ParameterHandlerGeneric>& param_handler, const std::shared_ptr<OscillationHandler>&  BeamOscillator_, const std::shared_ptr<OscillationHandler>&  AtmOscillator_, BeamNDCov beamNDCov) {
 // ###############################################################
@@ -43,20 +45,35 @@ SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string Samp
 std::shared_ptr<OscillationHandler> SetupOscillationHandler(std::unique_ptr<Manager> &FitManager, std::unique_ptr<ParameterHandlerGeneric>& param_handler,
                                                             const std::string& osc_config_file, const std::string& sample_name){
 
-  if (!CheckNodeExists(FitManager->raw(), "General", "SharedNuOscillatorObject", osc_config_file))
-  {
-    MACH3LOG_INFO("No SharedNuOscillatorObject for {} found, so not creating one", osc_config_file);
+  if (!CheckNodeExists(FitManager->raw(), "General", "SharedNuOscillatorObject",
+                       osc_config_file)) {
+    MACH3LOG_INFO(
+        "No SharedNuOscillatorObject for {} found, so not creating one",
+        osc_config_file);
     return nullptr;
   }
 
-  auto osc_config = Get<std::string>(FitManager->raw()["General"]["SharedNuOscillatorObject"][osc_config_file], __FILE__, __LINE__);
+  auto osc_config = Get<std::string>(
+      FitManager->raw()["General"]["SharedNuOscillatorObject"][osc_config_file],
+      __FILE__, __LINE__);
   auto osc_params = param_handler->GetOscParsFromSampleName(sample_name);
-  if (osc_params.size()==0){
-    MACH3LOG_ERROR("Tried to set up oscillator {} but found 0 oscillation parameters!", sample_name);
-    throw MaCh3Exception("Oscillator has no oscillation parameters" __FILE__, __LINE__);
+  if (osc_params.size() == 0) {
+    MACH3LOG_ERROR(
+        "Tried to set up oscillator {} but found 0 oscillation parameters!",
+        sample_name);
+    throw MaCh3Exception("Oscillator has no oscillation parameters" __FILE__,
+                         __LINE__);
   }
 
-  return std::make_shared<OscillationHandler>(osc_config, true, osc_params, 12);
+  std::vector<const M3::float_t *> OscParamsValues(osc_params.size());
+  std::vector<std::string> NuOscName(osc_params.size());
+  for (size_t ij = 0; ij < osc_params.size(); ij++) {
+    OscParamsValues[ij] = param_handler->RetPointer(osc_params[ij].index);
+    NuOscName[ij] = osc_params[ij].NuOscName;
+  }
+
+  return std::make_shared<OscillationHandler>(osc_config, true, OscParamsValues,
+                                              NuOscName, 12);
 }
 
 // ###############################################################
