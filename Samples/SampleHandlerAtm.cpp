@@ -253,7 +253,8 @@ void SampleHandlerAtm::RegisterFunctionalParameters() {
       
       for (size_t iSyst=0;iSyst<ParVals.size();iSyst++) {
 	//DB The minus accounts for the fact we only want the "difference" in ratio
-	Event.TotalDetectorSystematicWeight *= 1.0 + ParVals[iSyst]*(Event.DetectorSystematicRatios[iSyst] - 1.0);
+	if (ParVals[iSyst]>0) Event.TotalDetectorSystematicWeight *= 1.0 + ParVals[iSyst]*(Event.DetectorSystematicRatiosPlus[iSyst] - 1.0);
+	else Event.TotalDetectorSystematicWeight *= 1.0 - ParVals[iSyst]*(Event.DetectorSystematicRatiosMinus[iSyst] - 1.0);
       }
     });
   }
@@ -417,7 +418,7 @@ int SampleHandlerAtm::SetupExperimentMC() {
 	sr = new caf::StandardRecordProxy(cafTree->GetTree(), "rec");
       }
 #else
-i
+
       cafTree->GetEntry(iTreeEntry);
 #endif
       
@@ -631,23 +632,49 @@ void SampleHandlerAtm::SetupDetectorSystematicRatios() {
   }
 
   //DB Load histograms with title SystematicName_SampleName into vector indexed [Systematic][Sample]
-  std::vector<std::vector<TH1*>> RatioHistograms;
+  /*std::vector<std::vector<TH1*>> RatioHistograms;
   RatioHistograms.resize(DetectorSystematicParameterNames.size());
   for (size_t iRatioHist=0;iRatioHist<RatioHistograms.size();iRatioHist++) {
     RatioHistograms[iRatioHist].resize(SampleDetails.size());
+  }*/
+  std::vector<std::vector<TH1*>> RatioHistogramsPlus;
+  RatioHistogramsPlus.resize(DetectorSystematicParameterNames.size());
+  for (size_t iRatioHist=0;iRatioHist<RatioHistogramsPlus.size();iRatioHist++) {
+    RatioHistogramsPlus[iRatioHist].resize(SampleDetails.size());
+  }
+  std::vector<std::vector<TH1*>> RatioHistogramsMinus;
+  RatioHistogramsMinus.resize(DetectorSystematicParameterNames.size());
+  for (size_t iRatioHist=0;iRatioHist<RatioHistogramsMinus.size();iRatioHist++) {
+    RatioHistogramsMinus[iRatioHist].resize(SampleDetails.size());
   }
 
   //DB Push the histograms into the vector
   for (size_t iParam=0;iParam<DetectorSystematicParameterNames.size();iParam++) {
     for (size_t iSample=0;iSample<SampleDetails.size();iSample++) {
-      std::string ExpectedHistogramName = DetectorSystematicParameterNames[iParam]+"_"+SampleDetails[iSample].SampleTitle;
-      TH1* Histogram = DetectorSystematicsFile->Get<TH1>(ExpectedHistogramName.c_str());
+      //std::string ExpectedHistogramName = DetectorSystematicParameterNames[iParam]+"_"+SampleDetails[iSample].SampleTitle;
+      std::string ExpectedHistogramNamePos = DetectorSystematicParameterNames[iParam]+"_"+SampleDetails[iSample].SampleTitle+"_positive";
+      std::string ExpectedHistogramNameNeg = DetectorSystematicParameterNames[iParam]+"_"+SampleDetails[iSample].SampleTitle+"_negative";
+      /*TH1* Histogram = DetectorSystematicsFile->Get<TH1>(ExpectedHistogramName.c_str());
       if (!Histogram) {
 	MACH3LOG_ERROR("Did not find histogram: {} in file: {}",ExpectedHistogramName,fDetectorSystematicsFileName);
 	DetectorSystematicsFile->ls();
 	throw MaCh3Exception(__FILE__, __LINE__);
       }
-      RatioHistograms[iParam][iSample] = Histogram;
+      RatioHistograms[iParam][iSample] = Histogram;*/
+      TH1* HistogramPos = DetectorSystematicsFile->Get<TH1>(ExpectedHistogramNamePos.c_str());
+      if (!HistogramPos) {
+        MACH3LOG_ERROR("Did not find histogram: {} in file: {}",ExpectedHistogramNamePos,fDetectorSystematicsFileName);
+        DetectorSystematicsFile->ls();
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+      RatioHistogramsPlus[iParam][iSample] = HistogramPos;
+      TH1* HistogramNeg = DetectorSystematicsFile->Get<TH1>(ExpectedHistogramNameNeg.c_str());
+      if (!HistogramNeg) {
+        MACH3LOG_ERROR("Did not find histogram: {} in file: {}",ExpectedHistogramNameNeg,fDetectorSystematicsFileName);
+        DetectorSystematicsFile->ls();
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
+      RatioHistogramsMinus[iParam][iSample] = HistogramNeg;
     }
   }
 
@@ -656,10 +683,20 @@ void SampleHandlerAtm::SetupDetectorSystematicRatios() {
     int SampIndex = dunemcSamples[iEvent].SampleIndex;
 
     //DB Save each systematics ratio factor
-    dunemcSamples[iEvent].DetectorSystematicRatios.resize(DetectorSystematicParameterNames.size());
+    //dunemcSamples[iEvent].DetectorSystematicRatios.resize(DetectorSystematicParameterNames.size());
+    dunemcSamples[iEvent].DetectorSystematicRatiosPlus.resize(DetectorSystematicParameterNames.size());
+    dunemcSamples[iEvent].DetectorSystematicRatiosMinus.resize(DetectorSystematicParameterNames.size());
     for (size_t iSyst=0;iSyst<DetectorSystematicParameterNames.size();iSyst++) {
-      TH1* Histogram = RatioHistograms[iSyst][SampIndex];
-      int HistogramBinIndex = -1;
+      TH1* HistogramPlus = RatioHistogramsPlus[iSyst][SampIndex];
+      TH1* HistogramMinus = RatioHistogramsMinus[iSyst][SampIndex];
+
+      if (HistogramPlus->GetDimension()!=HistogramMinus->GetDimension()){
+          MACH3LOG_ERROR("Positive and negative variations of detector systematics do not have the same number of dimensions!");
+	  throw MaCh3Exception(__FILE__, __LINE__);
+      }
+
+      int HistogramBinIndexPlus = -1;
+      int HistogramBinIndexMinus = -1;
 
       //DB Check how many dimensions were configured
       std::vector<int> ConfiguredDimensions = DetectorSystematicDimensionMap.at(DetectorSystematicParameterNames[iSyst]);
@@ -669,34 +706,43 @@ void SampleHandlerAtm::SetupDetectorSystematicRatios() {
       //   Assumes that 1D is reconstructed neutrino energy
       //   Assumes that 2D is reconstructed neutrino energy and direction
       //   Assumes that 3D is reconstructed hadronic energy, leptonic energy, and direction      
-      if (Histogram->GetDimension() == 1) {
+      if (HistogramPlus->GetDimension() == 1) {
 	if (nConfiguredDimensions != 1) {
 	  MACH3LOG_ERROR("Misconfigured Detector Systematics Parameter {} - Config has given {} dimension for the spectra histogram, whereas the histogram itself has 1 dimension",DetectorSystematicParameterNames[iSyst],nConfiguredDimensions);
 	  throw MaCh3Exception(__FILE__, __LINE__);
 	}
-	HistogramBinIndex = Histogram->FindBin(*GetPointerToKinematicParameter(ConfiguredDimensions[0],static_cast<int>(iEvent)));
-      } else if (Histogram->GetDimension() == 2) {
+	HistogramBinIndexPlus = HistogramPlus->FindBin(*GetPointerToKinematicParameter(ConfiguredDimensions[0],static_cast<int>(iEvent)));
+	HistogramBinIndexMinus = HistogramMinus->FindBin(*GetPointerToKinematicParameter(ConfiguredDimensions[0],static_cast<int>(iEvent)));
+      } else if (HistogramPlus->GetDimension() == 2) {
 	if (nConfiguredDimensions != 2) {
           MACH3LOG_ERROR("Misconfigured Detector Systematics Parameter {} - Config has given {} dimension for the spectra histogram, whereas the histogram itself has 2 dimensions",DetectorSystematicParameterNames[iSyst],nConfiguredDimensions);
           throw MaCh3Exception(__FILE__, __LINE__);
 	}
-	TH2* Histogram2D = static_cast<TH2*>(Histogram);
-	HistogramBinIndex = Histogram2D->FindBin(*GetPointerToKinematicParameter(ConfiguredDimensions[0],static_cast<int>(iEvent)),*GetPointerToKinematicParameter(ConfiguredDimensions[1],static_cast<int>(iEvent)));
-      } else if (Histogram->GetDimension() == 3) {
+	TH2* Histogram2DPlus = static_cast<TH2*>(HistogramPlus);
+	HistogramBinIndexPlus = Histogram2DPlus->FindBin(*GetPointerToKinematicParameter(ConfiguredDimensions[0],static_cast<int>(iEvent)),*GetPointerToKinematicParameter(ConfiguredDimensions[1],static_cast<int>(iEvent)));
+	TH2* Histogram2DMinus = static_cast<TH2*>(HistogramMinus);
+        HistogramBinIndexMinus = Histogram2DMinus->FindBin(*GetPointerToKinematicParameter(ConfiguredDimensions[0],static_cast<int>(iEvent)),*GetPointerToKinematicParameter(ConfiguredDimensions[1],static_cast<int>(iEvent)));
+      } else if (HistogramPlus->GetDimension() == 3) {
 	if (nConfiguredDimensions != 3) {
           MACH3LOG_ERROR("Misconfigured Detector Systematics Parameter {} - Config has given {} dimension for the spectra histogram, whereas the histogram itself has 3 dimensions",DetectorSystematicParameterNames[iSyst],nConfiguredDimensions);
           throw MaCh3Exception(__FILE__, __LINE__);
 	}
-	TH3* Histogram3D = static_cast<TH3*>(Histogram);
-	HistogramBinIndex = Histogram3D->FindBin(*GetPointerToKinematicParameter(ConfiguredDimensions[0],static_cast<int>(iEvent)),*GetPointerToKinematicParameter(ConfiguredDimensions[1],static_cast<int>(iEvent)),*GetPointerToKinematicParameter(ConfiguredDimensions[2],static_cast<int>(iEvent)));
+	TH3* Histogram3DPlus = static_cast<TH3*>(HistogramPlus);
+	HistogramBinIndexPlus = Histogram3DPlus->FindBin(*GetPointerToKinematicParameter(ConfiguredDimensions[0],static_cast<int>(iEvent)),*GetPointerToKinematicParameter(ConfiguredDimensions[1],static_cast<int>(iEvent)),*GetPointerToKinematicParameter(ConfiguredDimensions[2],static_cast<int>(iEvent)));
+	TH3* Histogram3DMinus = static_cast<TH3*>(HistogramMinus);
+        HistogramBinIndexMinus = Histogram3DMinus->FindBin(*GetPointerToKinematicParameter(ConfiguredDimensions[0],static_cast<int>(iEvent)),*GetPointerToKinematicParameter(ConfiguredDimensions[1],static_cast<int>(iEvent)),*GetPointerToKinematicParameter(ConfiguredDimensions[2],static_cast<int>(iEvent)));
       } else {
 	MACH3LOG_ERROR("Found detector systematic ratio histogram which has more than 3 dimensions");
 	throw MaCh3Exception(__FILE__, __LINE__);
       }
 
       //DB Could probably do something smarter than just using ROOT histogram bin finding
-      double Weight = RatioHistograms[iSyst][SampIndex]->GetBinContent(HistogramBinIndex);
-      dunemcSamples[iEvent].DetectorSystematicRatios[iSyst] = Weight;
+      /*double Weight = RatioHistograms[iSyst][SampIndex]->GetBinContent(HistogramBinIndex);
+      dunemcSamples[iEvent].DetectorSystematicRatios[iSyst] = Weight;*/
+      double WeightPlus = RatioHistogramsPlus[iSyst][SampIndex]->GetBinContent(HistogramBinIndexPlus);
+      dunemcSamples[iEvent].DetectorSystematicRatiosPlus[iSyst] = WeightPlus;
+      double WeightMinus = RatioHistogramsMinus[iSyst][SampIndex]->GetBinContent(HistogramBinIndexMinus);
+      dunemcSamples[iEvent].DetectorSystematicRatiosMinus[iSyst] = WeightMinus;
     }
   }
   

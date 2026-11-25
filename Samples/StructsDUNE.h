@@ -59,7 +59,9 @@ struct dunemc_atm : public dunemc_base { // Store variables used by SampleHandle
   double inelasticity_reco;
 
   double TotalDetectorSystematicWeight;
-  std::vector<double> DetectorSystematicRatios;
+  //std::vector<double> DetectorSystematicRatios;
+  std::vector<double> DetectorSystematicRatiosPlus;
+  std::vector<double> DetectorSystematicRatiosMinus;
 
   double TotalAtmFluxSystematicWeight;
   std::vector<double> AtmFluxSystFactors;
