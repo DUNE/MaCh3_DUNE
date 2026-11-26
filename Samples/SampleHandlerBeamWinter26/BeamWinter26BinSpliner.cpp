@@ -4,6 +4,9 @@
 #include "Fitters/Algorithms/MaCh3Factory.h"
 
 #include "TH3.h"
+#include "TSpline.h"
+
+static const std::string SplineName = "Winter26Xsec";
 
 void EmitXSecConfig(
     std::vector<std::pair<std::string, std::vector<float>>> const
@@ -36,13 +39,13 @@ void EmitXSecConfig(
       Generated: 0.0
       PreFitValue: 0.0
     SplineInformation:
-      Mode: [ -1 ]
-      SplineName: {0}
+      Mode: [ 0 ]
+      SplineName: {1}
     StepScale: 0.4
     Type: Spline
-    ParameterGroup: {1}
+    ParameterGroup: {2}
 )""",
-        pname, group);
+        pname, SplineName, group);
     break;
   }
 }
@@ -52,7 +55,7 @@ int main(int argc, char *argv[]) {
   auto sh = std::make_unique<dune::beam::SampleHandlerBeamWinter26<true>>(
       argv[1], nullptr, nullptr);
 
-  auto const &modes = *sh->GetMaCh3Modes();
+  auto &modes = *sh->GetMaCh3Modes();
 
   auto &Binning = sh->GetBinning();
   if (!Binning->IsUniform(0)) {
@@ -138,8 +141,9 @@ int main(int argc, char *argv[]) {
                   y = fmt::format("_{}", yi);
                 }
                 splnm[gbin] =
-                    fmt::format("dev_{}_{}_sp_{}_{}{}", pname,
-                                modes.GetMaCh3ModeName(mi), ei, xi, y);
+                    fmt::format("dev_{}_{}_sp_{}_{}{}", SplineName,
+                                modes.GetSplineSuffixFromMaCh3Mode(mi), ei, xi,
+                                y);
               }
             }
           }
@@ -152,7 +156,9 @@ int main(int argc, char *argv[]) {
       // if (!splines[si].GetN()) {
       //   continue;
       // }
-      fout.WriteTObject(&splines[si], splnm[si].c_str());
+      TSpline3 spline(splnm[si].c_str(), splines[si].GetX(),
+                      splines[si].GetY(), splines[si].GetN());
+      fout.WriteTObject(&spline, splnm[si].c_str());
       written_sp++;
     }
 
