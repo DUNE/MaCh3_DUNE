@@ -63,10 +63,6 @@ void SampleHandlerBeamWinter26<
     if constexpr (READ_EVENT_SPLINES) {
       MCEvents[i].total_weight_pointers.push_back(
           &(DUNEMCEvents[i].response_weight));
-      MCEvents[i].total_weight_pointers.push_back(
-          &(DUNEMCEvents[i].mode_weight));
-      MCEvents[i].total_weight_pointers.push_back(
-          &(DUNEMCEvents[i].enutrue_weight));
     }
   }
 }
@@ -78,38 +74,6 @@ void SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SetEventResponseWeights(
     for (size_t i = 0; i < DUNEMCEvents.size(); ++i) {
       DUNEMCEvents[i].response_weight =
           (pr_i == -1) ? 1 : DUNEMCEvents[i].knot_responses[pr_i][kt_i];
-    }
-  }
-}
-
-template <bool READ_EVENT_SPLINES>
-void SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SelectMode(int mode) {
-  if constexpr (READ_EVENT_SPLINES) {
-    for (size_t i = 0; i < DUNEMCEvents.size(); ++i) {
-      if (mode == -1) {
-        DUNEMCEvents[i].mode_weight = 1.0;
-      } else {
-        DUNEMCEvents[i].mode_weight =
-            (mode == DUNEMCEvents[i].truth.mach3_mode) ? 1 : 0;
-      }
-    }
-  }
-}
-
-template <bool READ_EVENT_SPLINES>
-void SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SelectTrueEnu(
-    double enu_min, double enu_max) {
-  if constexpr (READ_EVENT_SPLINES) {
-    for (size_t i = 0; i < DUNEMCEvents.size(); ++i) {
-      if (enu_max < 0) {
-        DUNEMCEvents[i].enutrue_weight = 1.0;
-      } else {
-        DUNEMCEvents[i].enutrue_weight =
-            ((DUNEMCEvents[i].truth.nu.e_GeV >= enu_min) &&
-             (DUNEMCEvents[i].truth.nu.e_GeV < enu_max))
-                ? 1
-                : 0;
-      }
     }
   }
 }

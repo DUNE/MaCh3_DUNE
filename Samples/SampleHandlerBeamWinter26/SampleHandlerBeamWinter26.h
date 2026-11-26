@@ -44,13 +44,6 @@ public:
 
   // if READ_EVENT_SPLINES == true, apply knot response kt_i for param pr_i
   void SetEventResponseWeights(int pr_i = -1, int kt_i = -1);
-  void SelectMode(int mode = -1);
-  void SelectTrueEnu(double enu_min = -1, double enu_max = -1);
-  void UnsetWeights() {
-    SetEventResponseWeights();
-    SelectMode();
-    SelectTrueEnu();
-  }
 
   auto const &GetBinning() { return Binning; }
 

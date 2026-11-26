@@ -55,8 +55,6 @@ struct EventInfoSplines : public EventInfo {
 
   std::vector<std::vector<float>> knot_responses;
   double response_weight = 1.0;
-  double mode_weight = 1.0;
-  double enutrue_weight = 1.0;
 };
 
 } // namespace dune::beam
