@@ -243,17 +243,11 @@ int SampleHandlerBeamWinter26<READ_EVENT_SPLINES>::SetupExperimentMC() {
           continue;
         }
 
-        ev.truth.mach3_mode =
-            Modes->GetModeFromGenerator(std::abs(ev.truth.generator_mode));
+        auto gen_mode_ccnc = ev.truth.generator_mode + (!ev.truth.is_cc) * 14;
+        gen_mode_ccnc =
+            (gen_mode_ccnc > 15) ? gen_mode_ccnc - 1 : gen_mode_ccnc;
 
-        if (!ev.truth.is_cc) {
-          // Account for no ability to distinguish CC/NC
-          ev.truth.mach3_mode += 14;
-        }
-        if (ev.truth.mach3_mode > 15) {
-          // Account for no NCSingleKaon
-          ev.truth.mach3_mode -= 1;
-        }
+        ev.truth.mach3_mode = Modes->GetModeFromGenerator(gen_mode_ccnc);
 
         ev.weights.pot = tag_pot / tag_input_pot;
 

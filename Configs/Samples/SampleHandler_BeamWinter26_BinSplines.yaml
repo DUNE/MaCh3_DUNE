@@ -38,18 +38,15 @@ BeamND_numode_CCNumuLike:
     - KinematicStr: RecoSample
       Bounds: [0.5, 1.5]
 
-  EnuBinning:
-    VarStr: [ RecoNeutrinoEnergy, RecoLeptonEnergy ]
+  Binning:
+    VarStr: [ Mode, TrueNeutrinoEnergy, RecoNeutrinoEnergy, RecoLeptonEnergy ]
     Uniform: true
     BinEdges: [
       [ { linspace: { nb: 10, low: 0, up: 10 } } ],
+      [ { logspace: { nb: 15, low: 0.01, up: 10 } } ],
+      [ { linspace: { nb: 10, low: 0, up: 10 } } ],
       [ { linspace: { nb: 10, low: 0, up: 10 } } ]
     ]
-
-  Binning:
-    VarStr: [ RecoNeutrinoEnergy ]
-    Uniform: true
-    BinEdges: { linspace: { nb: 10, low: 0, up: 10 } }
 
   InputFiles:
     mtupleprefix: ""
