@@ -143,9 +143,28 @@ void SampleHandlerAtm::Init() {
       }
       MACH3LOG_INFO("Detector systematic {} configured with the following dimensions: {}",key,tmpString);
     }
+
+    //CD Read the expected number of templates per detector systematic parameter
+    YAML::Node const& DetectorSystematicTemplateManager = (SampleManager->raw()["InputFiles"]["DetectorSystematicsDoubleTemplate"]);
+    if (!DetectorSystematicTemplateManager) {
+      MACH3LOG_ERROR("[\"InputFiles\"][\"DetectorSystematicsDoubleTemplate\"] not provided in Sample Config");
+      throw MaCh3Exception(__FILE__, __LINE__);
+    }
+
+    for (const auto& item : DetectorSystematicTemplateManager) {
+      std::string Key = item.first.as<std::string>();
+      bool doubleTemplate = item.second.as<bool>();
+      DetectorSystematicTemplateMap[Key] = doubleTemplate;
+    }
+    for (const auto& [key, values] :  DetectorSystematicTemplateMap){
+      if (!values)
+        MACH3LOG_INFO("Detector systematic {} will use one single template. Is this intentional???",key);
+    }
+
   } else {
     fDetectorSystematicsFileName = "";
   }
+
 
   //=============================================================
   if (SampleManager->raw()["InputFiles"]["HONDAFluxUncerSplineFileName"]) {
@@ -607,6 +626,11 @@ void SampleHandlerAtm::SetupDetectorSystematicRatios() {
 	MACH3LOG_ERROR("Detector Systematic Parameter {} has no configuration to determine what the dimensions of the ratio spectra are binned in",ParamName);
 	throw MaCh3Exception(__FILE__, __LINE__);
       }
+      //CD Check that the number of templates for this parameter are in the configured map
+      if (DetectorSystematicTemplateMap.count(ParamName) == 0) {
+        MACH3LOG_ERROR("Detector Systematic Parameter {} has no configuration to determine how many templates to load",ParamName);
+        throw MaCh3Exception(__FILE__, __LINE__);
+      }
     }
   }
 
@@ -632,11 +656,6 @@ void SampleHandlerAtm::SetupDetectorSystematicRatios() {
   }
 
   //DB Load histograms with title SystematicName_SampleName into vector indexed [Systematic][Sample]
-  /*std::vector<std::vector<TH1*>> RatioHistograms;
-  RatioHistograms.resize(DetectorSystematicParameterNames.size());
-  for (size_t iRatioHist=0;iRatioHist<RatioHistograms.size();iRatioHist++) {
-    RatioHistograms[iRatioHist].resize(SampleDetails.size());
-  }*/
   std::vector<std::vector<TH1*>> RatioHistogramsPlus;
   RatioHistogramsPlus.resize(DetectorSystematicParameterNames.size());
   for (size_t iRatioHist=0;iRatioHist<RatioHistogramsPlus.size();iRatioHist++) {
@@ -650,31 +669,29 @@ void SampleHandlerAtm::SetupDetectorSystematicRatios() {
 
   //DB Push the histograms into the vector
   for (size_t iParam=0;iParam<DetectorSystematicParameterNames.size();iParam++) {
+    std::string paramName = DetectorSystematicParameterNames[iParam];
+    bool useDoubleTemplates = DetectorSystematicTemplateMap.at(paramName);
     for (size_t iSample=0;iSample<SampleDetails.size();iSample++) {
-      //std::string ExpectedHistogramName = DetectorSystematicParameterNames[iParam]+"_"+SampleDetails[iSample].SampleTitle;
+      std::string ExpectedHistogramName = DetectorSystematicParameterNames[iParam]+"_"+SampleDetails[iSample].SampleTitle;
       std::string ExpectedHistogramNamePos = DetectorSystematicParameterNames[iParam]+"_"+SampleDetails[iSample].SampleTitle+"_positive";
       std::string ExpectedHistogramNameNeg = DetectorSystematicParameterNames[iParam]+"_"+SampleDetails[iSample].SampleTitle+"_negative";
-      /*TH1* Histogram = DetectorSystematicsFile->Get<TH1>(ExpectedHistogramName.c_str());
-      if (!Histogram) {
-	MACH3LOG_ERROR("Did not find histogram: {} in file: {}",ExpectedHistogramName,fDetectorSystematicsFileName);
-	DetectorSystematicsFile->ls();
-	throw MaCh3Exception(__FILE__, __LINE__);
-      }
-      RatioHistograms[iParam][iSample] = Histogram;*/
+      TH1* Histogram = DetectorSystematicsFile->Get<TH1>(ExpectedHistogramName.c_str()); 
       TH1* HistogramPos = DetectorSystematicsFile->Get<TH1>(ExpectedHistogramNamePos.c_str());
-      if (!HistogramPos) {
-        MACH3LOG_ERROR("Did not find histogram: {} in file: {}",ExpectedHistogramNamePos,fDetectorSystematicsFileName);
+      if (!HistogramPos && !Histogram) {
+        MACH3LOG_ERROR("Did not find histogram: {} nor {} in file: {}",ExpectedHistogramName,ExpectedHistogramNamePos,fDetectorSystematicsFileName);
         DetectorSystematicsFile->ls();
         throw MaCh3Exception(__FILE__, __LINE__);
       }
-      RatioHistogramsPlus[iParam][iSample] = HistogramPos;
+      if (!HistogramPos) RatioHistogramsPlus[iParam][iSample] = Histogram;
+      else RatioHistogramsPlus[iParam][iSample] = HistogramPos;
       TH1* HistogramNeg = DetectorSystematicsFile->Get<TH1>(ExpectedHistogramNameNeg.c_str());
-      if (!HistogramNeg) {
+      if (!HistogramNeg && useDoubleTemplates) {
         MACH3LOG_ERROR("Did not find histogram: {} in file: {}",ExpectedHistogramNameNeg,fDetectorSystematicsFileName);
         DetectorSystematicsFile->ls();
         throw MaCh3Exception(__FILE__, __LINE__);
       }
-      RatioHistogramsMinus[iParam][iSample] = HistogramNeg;
+      if (useDoubleTemplates) RatioHistogramsMinus[iParam][iSample] = HistogramNeg;
+      else RatioHistogramsMinus[iParam][iSample] = RatioHistogramsPlus[iParam][iSample];
     }
   }
 
@@ -687,6 +704,8 @@ void SampleHandlerAtm::SetupDetectorSystematicRatios() {
     dunemcSamples[iEvent].DetectorSystematicRatiosPlus.resize(DetectorSystematicParameterNames.size());
     dunemcSamples[iEvent].DetectorSystematicRatiosMinus.resize(DetectorSystematicParameterNames.size());
     for (size_t iSyst=0;iSyst<DetectorSystematicParameterNames.size();iSyst++) {
+      std::string paramName = DetectorSystematicParameterNames[iSyst];
+      bool useDoubleTemplates = DetectorSystematicTemplateMap.at(paramName);
       TH1* HistogramPlus = RatioHistogramsPlus[iSyst][SampIndex];
       TH1* HistogramMinus = RatioHistogramsMinus[iSyst][SampIndex];
 
@@ -742,6 +761,7 @@ void SampleHandlerAtm::SetupDetectorSystematicRatios() {
       double WeightPlus = RatioHistogramsPlus[iSyst][SampIndex]->GetBinContent(HistogramBinIndexPlus);
       dunemcSamples[iEvent].DetectorSystematicRatiosPlus[iSyst] = WeightPlus;
       double WeightMinus = RatioHistogramsMinus[iSyst][SampIndex]->GetBinContent(HistogramBinIndexMinus);
+      if (!useDoubleTemplates) WeightMinus = 2 - WeightPlus;
       dunemcSamples[iEvent].DetectorSystematicRatiosMinus[iSyst] = WeightMinus;
     }
   }

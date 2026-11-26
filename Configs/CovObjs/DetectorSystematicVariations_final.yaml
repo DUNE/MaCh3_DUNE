@@ -1,0 +1,50 @@
+---
+
+Systematics:
+- Systematic:
+    Names:
+      FancyName: Lifetime #swicth to LifetimeWireMod to use WireMod input
+      ParameterName: Lifetime #swicth to LifetimeWireMod to use WireMod input
+    SampleNames: ["ATM"]
+    Error: 1.0
+    FlatPrior: false
+    ParameterBounds: [-999, 999]
+    ParameterGroup: DetectorSystematic
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 1.0
+    Type: Functional
+
+- Systematic:
+    Names:
+      FancyName: ModBox
+      ParameterName: ModBox
+    SampleNames: ["ATM"]
+    Error: 1.0
+    FlatPrior: false
+    ParameterBounds: [-999, 999]
+    ParameterGroup: DetectorSystematic
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    StepScale:
+      MCMC: 1.0
+    Type: Functional
+
+- Systematic:
+    Names:
+      FancyName: TransverseDiffusion
+      ParameterName: TransverseDiffusion
+    SampleNames: ["ATM"]
+    Error: 1.0
+    FlatPrior: false
+    ParameterBounds: [-999, 999]
+    ParameterGroup: DetectorSystematic
+    ParameterValues:
+      Generated: -1.0
+      PreFitValue: -1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Functional

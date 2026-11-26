@@ -172,6 +172,7 @@ protected:
   std::string fDetectorSystematicsFileName;
   std::vector<std::string> DetectorSystematicParameterNames;
   std::unordered_map<std::string,std::vector<int>> DetectorSystematicDimensionMap;
+  std::unordered_map<std::string,bool> DetectorSystematicTemplateMap;
 
   void SetupAtmFluxSplineSystematics();
   std::string fHONDAFluxUncerSplineFileName;
