@@ -1,7 +1,7 @@
 ---
 SampleHandlerName: "BeamWinter26ND"
 
-MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes.yaml"
+MaCh3ModeConfig: "Configs/CovObjs/MaCh3Modes_GENIE.yaml"
 BinningFile: "Configs/Samples/BeamParameterBinning.yaml"
 
 InputFiles:
