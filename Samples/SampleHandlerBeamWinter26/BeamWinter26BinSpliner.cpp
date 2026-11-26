@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
     auto const &[pname, pknots] = sh->EventSplineMetadata[pi];
 
     std::vector<TGraph> splines(Binning->GetNBins());
-    std::vector<std::string> splnm;
+    std::vector<std::string> splnm(Binning->GetNBins());
 
     for (int ki = 0; ki < pknots.size(); ++ki) {
       sh->SetEventResponseWeights(pi, ki);
@@ -77,6 +77,12 @@ int main(int argc, char *argv[]) {
 
               auto gbin = Binning->GetBinSafe(0, binidxs);
               double wght = response[gbin] / nominal[gbin];
+
+              if (response[gbin] <= 0 ||
+                  !std::isnormal(response[gbin])) { // skip empty bins
+                continue;
+              }
+
               splines[gbin].SetPoint(ki, pknots[ki],
                                      std::isnormal(wght) ? wght : 1);
 
@@ -85,9 +91,9 @@ int main(int argc, char *argv[]) {
                 if (havey) {
                   y = fmt::format("_{}", yi);
                 }
-                splnm.push_back(fmt::format("{}_{}_{}_{}{}", pname,
-                                            modes.GetMaCh3ModeName(mi), ei, xi,
-                                            y));
+                splnm[gbin] =
+                    fmt::format("dev_{}_{}_sp_{}_{}{}", pname,
+                                modes.GetMaCh3ModeName(mi), ei, xi, y);
               }
             }
           }
@@ -95,11 +101,18 @@ int main(int argc, char *argv[]) {
       }
     }
 
+    size_t written_sp = 0;
     for (int si = 0; si < splines.size(); ++si) {
+      if (!splines[si].GetN()) {
+        continue;
+      }
       fout.WriteTObject(&splines[si], splnm[si].c_str());
+      written_sp++;
     }
 
-    fmt::print("\n");
+    fmt::print(
+        "Done {}, wrote {}/{} splines which covered bins containing events.\n",
+        pname, written_sp, splines.size());
     // break;
   }
   fout.Close();
