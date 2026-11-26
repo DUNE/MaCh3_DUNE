@@ -5,6 +5,48 @@
 
 #include "TH3.h"
 
+void EmitXSecConfig(
+    std::vector<std::pair<std::string, std::vector<float>>> const
+        &EventSplineMetadata) {
+  std::ofstream fout("cfg.yml");
+
+  fout << "---\nSystematics:";
+
+  std::string group = "Xsec";
+  for (int pi = 0; pi < EventSplineMetadata.size(); ++pi) {
+    auto const &[pname, pknots] = EventSplineMetadata[pi];
+
+    if (pname.substr(0, 6) == "Target") {
+      group = "Flux";
+    }
+
+    fout << fmt::format(
+        R"""(
+- Systematic:
+    SampleNames: ["Beam*", ]
+    Error: 1.0
+    FlatPrior: false
+    Names:
+      FancyName: {0}
+      ParameterName: {0}
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterValues:
+      Generated: 0.0
+      PreFitValue: 0.0
+    SplineInformation:
+      Mode: [ -1 ]
+      SplineName: {0}
+    StepScale: 0.4
+    Type: Spline
+    ParameterGroup: {1}
+)""",
+        pname, group);
+    break;
+  }
+}
+
 int main(int argc, char *argv[]) {
 
   auto sh = std::make_unique<dune::beam::SampleHandlerBeamWinter26<true>>(
@@ -18,6 +60,8 @@ int main(int argc, char *argv[]) {
   }
   int ndims = Binning->GetNDim(0);
 
+  EmitXSecConfig(sh->EventSplineMetadata);
+
   // would be nice to check that these are the right projections, but
   // BinningHandler doesn't provide that info in the public interface
   auto mode_bins = Binning->GetBinEdges(0, 0);
@@ -29,15 +73,17 @@ int main(int argc, char *argv[]) {
   switch (ndims - 2) {
   case 1: {
     TH2F *BinningHist =
-        new TH2F("dev_tmp.0.0", "dev_tmp.0.0", enu_bins.size() - 1,
+        new TH2F("dev_tmp_0_0", "dev_tmp_0_0", enu_bins.size() - 1,
                  enu_bins.data(), xbins.size() - 1, xbins.data());
+    fout.WriteTObject(BinningHist, "dev_tmp_0_0");
     break;
   }
   case 2: {
     ybins = Binning->GetBinEdges(0, 3);
     TH3F *BinningHist = new TH3F(
-        "dev_tmp.0.0", "dev_tmp.0.0", enu_bins.size() - 1, enu_bins.data(),
+        "dev_tmp_0_0", "dev_tmp_0_0", enu_bins.size() - 1, enu_bins.data(),
         xbins.size() - 1, xbins.data(), ybins.size() - 1, ybins.data());
+    fout.WriteTObject(BinningHist, "dev_tmp_0_0");
     break;
   }
   default:
@@ -78,10 +124,10 @@ int main(int argc, char *argv[]) {
               auto gbin = Binning->GetBinSafe(0, binidxs);
               double wght = response[gbin] / nominal[gbin];
 
-              if (response[gbin] <= 0 ||
-                  !std::isnormal(response[gbin])) { // skip empty bins
-                continue;
-              }
+              // if (response[gbin] <= 0 ||
+              //     !std::isnormal(response[gbin])) { // skip empty bins
+              //   continue;
+              // }
 
               splines[gbin].SetPoint(ki, pknots[ki],
                                      std::isnormal(wght) ? wght : 1);
@@ -103,9 +149,9 @@ int main(int argc, char *argv[]) {
 
     size_t written_sp = 0;
     for (int si = 0; si < splines.size(); ++si) {
-      if (!splines[si].GetN()) {
-        continue;
-      }
+      // if (!splines[si].GetN()) {
+      //   continue;
+      // }
       fout.WriteTObject(&splines[si], splnm[si].c_str());
       written_sp++;
     }
@@ -113,7 +159,7 @@ int main(int argc, char *argv[]) {
     fmt::print(
         "Done {}, wrote {}/{} splines which covered bins containing events.\n",
         pname, written_sp, splines.size());
-    // break;
+    break;
   }
   fout.Close();
 }
