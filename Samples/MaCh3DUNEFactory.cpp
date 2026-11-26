@@ -31,12 +31,15 @@ SampleHandlerBase* GetMaCh3DuneInstance(std::string SampleType, std::string Samp
     Sample = new SampleHandlerBeamNDGAr(SampleConfig, param_handler.get());
   } else if (SampleType == "PDSP") {
     Sample = new SampleHandlerPDSP(SampleConfig, param_handler.get());
-  } else if (SampleType == "BeamWinter26") {
+  } else if (SampleType == "BeamWinter26ND") {
+    Sample = new dune::beam::SampleHandlerBeamWinter26(
+        SampleConfig, param_handler.get(), nullptr);
+  } else if (SampleType == "BeamWinter26FD") {
     Sample = new dune::beam::SampleHandlerBeamWinter26(
         SampleConfig, param_handler.get(), BeamOscillator_);
   } else if (SampleType == "BeamWinter26EventSplines") {
     Sample = new dune::beam::SampleHandlerBeamWinter26<true>(
-        SampleConfig, param_handler.get(), BeamOscillator_);
+        SampleConfig, param_handler.get(), nullptr);
   } else {
     MACH3LOG_ERROR("Invalid SampleType: {} defined in {}", SampleType, SampleConfig);
     throw MaCh3Exception(__FILE__, __LINE__);

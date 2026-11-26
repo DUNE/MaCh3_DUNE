@@ -15,6 +15,12 @@ General:
 
   Systematics:
     XsecCovFile:
+      - "cfg.yml"
+      - "../Configs/CovObjs/OscCov_PDG2021_v2.yaml"
+    XsecCovName: "xsec_cov"
+    XsecStepScale: 0.05
+    XsecAtGen: false
+    XsecFix: ["baseline", "density"]
 
   # Shared nuosc objects for all BeamFD samples to reduce binned calculations
   # SharedNuOscillatorObject:
