@@ -17,7 +17,13 @@ void EmitXSecConfig(
 
   std::string group = "Xsec";
   for (int pi = 0; pi < EventSplineMetadata.size(); ++pi) {
-    auto const &[pname, pknots] = EventSplineMetadata[pi];
+    auto [pname, pknots] = EventSplineMetadata[pi];
+
+    for (auto &c : pname) {
+      if (c == '_') {
+        c = '-';
+      }
+    }
 
     if (pname.substr(0, 6) == "Target") {
       group = "Flux";
